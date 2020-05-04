@@ -1,0 +1,16 @@
+WHILE boilerIsolationValve is OPEN
+	SET leadPump = ON
+	WHILE leadPump is ON
+		SET error = maxHotWaterDifferentialPressure -..
+		measuredHotWaterDifferentialPressure
+		pumpSpeed = kp * error +..
+		ki * integral(error, dt)
+		
+		SET hotWaterFlowRateRatio =..
+		measuredFlowRate / designFlowRate
+		
+		IF hotWaterFlowRateRatio > 0.47
+			SET lagPump = ON
+		ENDIF
+	ENDWHILE
+ENDWHILE

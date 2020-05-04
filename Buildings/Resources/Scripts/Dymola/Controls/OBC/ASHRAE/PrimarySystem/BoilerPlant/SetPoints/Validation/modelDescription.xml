@@ -1,0 +1,2333 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<fmiModelDescription
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  fmiVersion="2.0"
+  modelName="Buildings.Controls.OBC.ASHRAE.G36_PR1.Generic.SetPoints.Validation.TrimAndRespond"
+  guid="{fd1dfbea-c7f4-42a5-acb8-7570768a48c4}"
+  description="Model validates the trim and respond block"
+  version="7.0.0"
+  generationTool="Dymola Version 2020x (64-bit), 2019-10-10 (requires license to execute)"
+  generationDateAndTime="2020-03-31T20:28:03Z"
+  variableNamingConvention="structured"
+  numberOfEventIndicators="22">
+  <ModelExchange
+    modelIdentifier="Buildings_Controls_OBC_ASHRAE_G36_0PR1_Generic_SetPoints_Validation_TrimAndRespond"
+    canGetAndSetFMUstate="true"
+    canSerializeFMUstate="true"
+    providesDirectionalDerivative="true"/>
+  <UnitDefinitions>
+    <Unit
+      name="1"/>
+    <Unit
+      name="Hz">
+      <BaseUnit s="-1"/>
+    </Unit>
+    <Unit
+      name="rad">
+      <BaseUnit rad="1"/>
+      <DisplayUnit
+        name="deg"
+        factor="57.29577951308232"/>
+    </Unit>
+    <Unit
+      name="s">
+      <BaseUnit s="1"/>
+    </Unit>
+  </UnitDefinitions>
+  <TypeDefinitions>
+    <SimpleType
+      name="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput">
+      <Boolean/>
+    </SimpleType>
+    <SimpleType
+      name="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput">
+      <Boolean/>
+    </SimpleType>
+    <SimpleType
+      name="Buildings.Controls.OBC.CDL.Interfaces.IntegerInput">
+      <Integer/>
+    </SimpleType>
+    <SimpleType
+      name="Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput">
+      <Integer/>
+    </SimpleType>
+    <SimpleType
+      name="Buildings.Controls.OBC.CDL.Interfaces.RealInput">
+      <Real/>
+    </SimpleType>
+    <SimpleType
+      name="Buildings.Controls.OBC.CDL.Interfaces.RealOutput">
+      <Real/>
+    </SimpleType>
+    <SimpleType
+      name="Modelica.SIunits.Angle">
+      <Real
+        quantity="Angle"
+        unit="rad"
+        displayUnit="deg"/>
+    </SimpleType>
+    <SimpleType
+      name="Modelica.SIunits.Frequency">
+      <Real
+        quantity="Frequency"
+        unit="Hz"/>
+    </SimpleType>
+    <SimpleType
+      name="Modelica.SIunits.Time">
+      <Real
+        quantity="Time"
+        unit="s"/>
+    </SimpleType>
+  </TypeDefinitions>
+  <DefaultExperiment startTime="0.0"
+    stopTime="7200.0"
+    tolerance="1E-06"/>
+  <ModelVariables>
+    <!-- Index for next variable = 1 -->
+    <ScalarVariable
+      name="trimRespondLogic.iniSet"
+      valueReference="100663296"
+      description="Initial setpoint"
+      variability="constant">
+      <Real start="120"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 2 -->
+    <ScalarVariable
+      name="trimRespondLogic.minSet"
+      valueReference="100663297"
+      description="Minimum setpoint"
+      variability="constant">
+      <Real start="37"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 3 -->
+    <ScalarVariable
+      name="trimRespondLogic.maxSet"
+      valueReference="100663298"
+      description="Maximum setpoint"
+      variability="constant">
+      <Real start="370"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 4 -->
+    <ScalarVariable
+      name="trimRespondLogic.delTim"
+      valueReference="100663299"
+      description="Delay time"
+      variability="constant">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        min="1E-13"
+        start="300"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 5 -->
+    <ScalarVariable
+      name="trimRespondLogic.samplePeriod"
+      valueReference="100663300"
+      description="Sample period of component"
+      variability="constant">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        min="0.001"
+        start="120"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 6 -->
+    <ScalarVariable
+      name="trimRespondLogic.numIgnReq"
+      valueReference="100663301"
+      description="Number of ignored requests"
+      variability="constant">
+      <Integer start="2"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 7 -->
+    <ScalarVariable
+      name="trimRespondLogic.triAmo"
+      valueReference="100663302"
+      description="Trim amount"
+      variability="constant">
+      <Real start="-10"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 8 -->
+    <ScalarVariable
+      name="trimRespondLogic.resAmo"
+      valueReference="100663303"
+      description="Respond amount (must have opposite sign of triAmo)"
+      variability="constant">
+      <Real start="15"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 9 -->
+    <ScalarVariable
+      name="trimRespondLogic.maxRes"
+      valueReference="100663304"
+      description="Maximum response per time interval (must have same sign as resAmo)"
+      variability="constant">
+      <Real start="37"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 10 -->
+    <ScalarVariable
+      name="trimRespondLogic.numOfReq"
+      valueReference="905969673"
+      description="Number of requests from zones/systems"
+      variability="discrete">
+      <Integer
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.IntegerInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 11 -->
+    <ScalarVariable
+      name="trimRespondLogic.uDevSta"
+      valueReference="100663306"
+      description="On/Off status of the associated device"
+      variability="constant">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"
+        start="true"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 12 -->
+    <ScalarVariable
+      name="trimRespondLogic.y"
+      valueReference="905969675"
+      description="Setpoint that have been reset">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 13 -->
+    <ScalarVariable
+      name="trimRespondLogic.tim.delayTime"
+      valueReference="100663308"
+      description="Delay time"
+      variability="constant">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        start="420.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 14 -->
+    <ScalarVariable
+      name="trimRespondLogic.tim.delayOnInit"
+      valueReference="16777216"
+      description="Set to true to delay initial true input"
+      causality="parameter"
+      variability="tunable">
+      <Boolean start="false"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 15 -->
+    <ScalarVariable
+      name="trimRespondLogic.tim.u"
+      valueReference="905969677"
+      description="Connector of Boolean input signal"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 16 -->
+    <ScalarVariable
+      name="trimRespondLogic.tim.y"
+      valueReference="905969678"
+      description="Connector of Boolean output signal"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 17 -->
+    <ScalarVariable
+      name="trimRespondLogic.greThr.threshold"
+      valueReference="16777217"
+      description="Comparison with respect to threshold"
+      causality="parameter"
+      variability="tunable">
+      <Real start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 18 -->
+    <ScalarVariable
+      name="trimRespondLogic.greThr.u"
+      valueReference="905969681"
+      description="Connector of Real input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 19 -->
+    <ScalarVariable
+      name="trimRespondLogic.greThr.y"
+      valueReference="905969682"
+      description="Connector of Boolean output signal"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 20 -->
+    <ScalarVariable
+      name="trimRespondLogic.netRes.u1"
+      valueReference="905969683"
+      description="Real input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 21 -->
+    <ScalarVariable
+      name="trimRespondLogic.netRes.u2"
+      valueReference="905969684"
+      description="Boolean switch input signal, if true, y=u1, else y=u3"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 22 -->
+    <ScalarVariable
+      name="trimRespondLogic.netRes.u3"
+      valueReference="905969685"
+      description="Real input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 23 -->
+    <ScalarVariable
+      name="trimRespondLogic.netRes.y"
+      valueReference="905969686"
+      description="Real output signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 24 -->
+    <ScalarVariable
+      name="trimRespondLogic.resAmoCon.k"
+      valueReference="100663319"
+      description="Constant output value"
+      variability="constant">
+      <Real start="15.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 25 -->
+    <ScalarVariable
+      name="trimRespondLogic.resAmoCon.y"
+      valueReference="100663320"
+      description="Connector of Real output signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"
+        start="15.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 26 -->
+    <ScalarVariable
+      name="trimRespondLogic.pro.u1"
+      valueReference="905969681"
+      description="Connector of Real input signal 1">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 27 -->
+    <ScalarVariable
+      name="trimRespondLogic.pro.u2"
+      valueReference="100663321"
+      description="Connector of Real input signal 2"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="15.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 28 -->
+    <ScalarVariable
+      name="trimRespondLogic.pro.y"
+      valueReference="905969690"
+      description="Connector of Real output signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 29 -->
+    <ScalarVariable
+      name="trimRespondLogic.pro1.u1"
+      valueReference="100663323"
+      description="Connector of Real input signal 1"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="-10.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 30 -->
+    <ScalarVariable
+      name="trimRespondLogic.pro1.u2"
+      valueReference="100663324"
+      description="Connector of Real input signal 2"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="15.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 31 -->
+    <ScalarVariable
+      name="trimRespondLogic.pro1.y"
+      valueReference="100663325"
+      description="Connector of Real output signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"
+        start="-150.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 32 -->
+    <ScalarVariable
+      name="trimRespondLogic.pro2.u1"
+      valueReference="100663326"
+      description="Connector of Real input signal 1"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="15.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 33 -->
+    <ScalarVariable
+      name="trimRespondLogic.pro2.u2"
+      valueReference="100663327"
+      description="Connector of Real input signal 2"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="37.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 34 -->
+    <ScalarVariable
+      name="trimRespondLogic.pro2.y"
+      valueReference="100663328"
+      description="Connector of Real output signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"
+        start="555.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 35 -->
+    <ScalarVariable
+      name="trimRespondLogic.uniDel.samplePeriod"
+      valueReference="100663329"
+      description="Sample period of component"
+      variability="constant">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        min="0.001"
+        start="120.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 36 -->
+    <ScalarVariable
+      name="trimRespondLogic.uniDel.y_start"
+      valueReference="100663330"
+      description="Initial value of output signal"
+      variability="constant">
+      <Real start="120.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 37 -->
+    <ScalarVariable
+      name="trimRespondLogic.uniDel.u"
+      valueReference="905969699"
+      description="Continuous input signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 38 -->
+    <ScalarVariable
+      name="trimRespondLogic.uniDel.y"
+      valueReference="905969700"
+      description="Continuous output signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 39 -->
+    <ScalarVariable
+      name="trimRespondLogic.swi.u1"
+      valueReference="905969699"
+      description="Real input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 40 -->
+    <ScalarVariable
+      name="trimRespondLogic.swi.u2"
+      valueReference="905969678"
+      description="Boolean switch input signal, if true, y=u1, else y=u3"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 41 -->
+    <ScalarVariable
+      name="trimRespondLogic.swi.u3"
+      valueReference="100663336"
+      description="Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="120.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 42 -->
+    <ScalarVariable
+      name="trimRespondLogic.swi.y"
+      valueReference="905969675"
+      description="Real output signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 43 -->
+    <ScalarVariable
+      name="trimRespondLogic.swi1.u1"
+      valueReference="100663337"
+      description="Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="-10.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 44 -->
+    <ScalarVariable
+      name="trimRespondLogic.swi1.u2"
+      valueReference="905969678"
+      description="Boolean switch input signal, if true, y=u1, else y=u3"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 45 -->
+    <ScalarVariable
+      name="trimRespondLogic.swi1.u3"
+      valueReference="234881029"
+      description="Real input signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 46 -->
+    <ScalarVariable
+      name="trimRespondLogic.swi1.y"
+      valueReference="905969685"
+      description="Real output signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 47 -->
+    <ScalarVariable
+      name="trimRespondLogic.swi2.u1"
+      valueReference="100663338"
+      description="Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="120.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 48 -->
+    <ScalarVariable
+      name="trimRespondLogic.swi2.u2"
+      valueReference="100663339"
+      description="Boolean switch input signal, if true, y=u1, else y=u3"
+      variability="constant">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"
+        start="false"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 49 -->
+    <ScalarVariable
+      name="trimRespondLogic.swi2.u3"
+      valueReference="905969699"
+      description="Real input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 50 -->
+    <ScalarVariable
+      name="trimRespondLogic.swi2.y"
+      valueReference="905969699"
+      description="Real output signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 51 -->
+    <ScalarVariable
+      name="trimRespondLogic.swi3.u1"
+      valueReference="905969708"
+      description="Real input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 52 -->
+    <ScalarVariable
+      name="trimRespondLogic.swi3.u2"
+      valueReference="100663341"
+      description="Boolean switch input signal, if true, y=u1, else y=u3"
+      variability="tunable">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 53 -->
+    <ScalarVariable
+      name="trimRespondLogic.swi3.u3"
+      valueReference="905969723"
+      description="Real input signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 54 -->
+    <ScalarVariable
+      name="trimRespondLogic.swi3.y"
+      valueReference="905969710"
+      description="Real output signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 55 -->
+    <ScalarVariable
+      name="trimRespondLogic.sampler.samplePeriod"
+      valueReference="100663343"
+      description="Sample period of component"
+      variability="constant">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        min="0.001"
+        start="120.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 56 -->
+    <ScalarVariable
+      name="trimRespondLogic.sampler.u"
+      valueReference="905969712"
+      description="Continuous input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        unit="1"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 57 -->
+    <ScalarVariable
+      name="trimRespondLogic.sampler.y"
+      valueReference="905969713"
+      description="Continuous output signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"
+        unit="1"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 58 -->
+    <ScalarVariable
+      name="trimRespondLogic.lesEquThr1.threshold"
+      valueReference="16777218"
+      description="Comparison with respect to threshold"
+      causality="parameter"
+      variability="fixed">
+      <Real start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 59 -->
+    <ScalarVariable
+      name="trimRespondLogic.lesEquThr1.u"
+      valueReference="100663349"
+      description="Connector of Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="-150.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 60 -->
+    <ScalarVariable
+      name="trimRespondLogic.lesEquThr1.y"
+      valueReference="100663350"
+      description="Connector of Boolean output signal"
+      variability="fixed">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 61 -->
+    <ScalarVariable
+      name="trimRespondLogic.greEquThr.threshold"
+      valueReference="16777219"
+      description="Comparison with respect to threshold"
+      causality="parameter"
+      variability="fixed">
+      <Real start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 62 -->
+    <ScalarVariable
+      name="trimRespondLogic.greEquThr.u"
+      valueReference="100663351"
+      description="Connector of Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="555.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 63 -->
+    <ScalarVariable
+      name="trimRespondLogic.greEquThr.y"
+      valueReference="100663352"
+      description="Connector of Boolean output signal"
+      variability="fixed">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 64 -->
+    <ScalarVariable
+      name="trimRespondLogic.greEquThr1.threshold"
+      valueReference="16777220"
+      description="Comparison with respect to threshold"
+      causality="parameter"
+      variability="tunable">
+      <Real start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 65 -->
+    <ScalarVariable
+      name="trimRespondLogic.greEquThr1.u"
+      valueReference="100663353"
+      description="Connector of Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="15.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 66 -->
+    <ScalarVariable
+      name="trimRespondLogic.greEquThr1.y"
+      valueReference="100663341"
+      description="Connector of Boolean output signal"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 67 -->
+    <ScalarVariable
+      name="trimRespondLogic.gai.k"
+      valueReference="100663354"
+      description="Gain value multiplied with input signal"
+      variability="constant">
+      <Real start="-1"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 68 -->
+    <ScalarVariable
+      name="trimRespondLogic.gai.u"
+      valueReference="905969708"
+      description="Input signal connector">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 69 -->
+    <ScalarVariable
+      name="trimRespondLogic.gai.y"
+      valueReference="905969723"
+      description="Output signal connector">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 70 -->
+    <ScalarVariable
+      name="trimRespondLogic1.iniSet"
+      valueReference="100663381"
+      description="Initial setpoint"
+      variability="constant">
+      <Real start="120"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 71 -->
+    <ScalarVariable
+      name="trimRespondLogic1.minSet"
+      valueReference="100663382"
+      description="Minimum setpoint"
+      variability="constant">
+      <Real start="37"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 72 -->
+    <ScalarVariable
+      name="trimRespondLogic1.maxSet"
+      valueReference="100663383"
+      description="Maximum setpoint"
+      variability="constant">
+      <Real start="370"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 73 -->
+    <ScalarVariable
+      name="trimRespondLogic1.delTim"
+      valueReference="100663384"
+      description="Delay time"
+      variability="constant">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        min="1E-13"
+        start="300"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 74 -->
+    <ScalarVariable
+      name="trimRespondLogic1.samplePeriod"
+      valueReference="100663385"
+      description="Sample period of component"
+      variability="constant">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        min="0.001"
+        start="120"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 75 -->
+    <ScalarVariable
+      name="trimRespondLogic1.numIgnReq"
+      valueReference="100663386"
+      description="Number of ignored requests"
+      variability="constant">
+      <Integer start="2"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 76 -->
+    <ScalarVariable
+      name="trimRespondLogic1.triAmo"
+      valueReference="100663387"
+      description="Trim amount"
+      variability="constant">
+      <Real start="10"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 77 -->
+    <ScalarVariable
+      name="trimRespondLogic1.resAmo"
+      valueReference="100663388"
+      description="Respond amount (must have opposite sign of triAmo)"
+      variability="constant">
+      <Real start="-15"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 78 -->
+    <ScalarVariable
+      name="trimRespondLogic1.maxRes"
+      valueReference="100663389"
+      description="Maximum response per time interval (must have same sign as resAmo)"
+      variability="constant">
+      <Real start="-37"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 79 -->
+    <ScalarVariable
+      name="trimRespondLogic1.numOfReq"
+      valueReference="905969673"
+      description="Number of requests from zones/systems"
+      variability="discrete">
+      <Integer
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.IntegerInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 80 -->
+    <ScalarVariable
+      name="trimRespondLogic1.uDevSta"
+      valueReference="100663390"
+      description="On/Off status of the associated device"
+      variability="constant">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"
+        start="true"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 81 -->
+    <ScalarVariable
+      name="trimRespondLogic1.y"
+      valueReference="905969759"
+      description="Setpoint that have been reset">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 82 -->
+    <ScalarVariable
+      name="trimRespondLogic1.tim.delayTime"
+      valueReference="100663392"
+      description="Delay time"
+      variability="constant">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        start="420.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 83 -->
+    <ScalarVariable
+      name="trimRespondLogic1.tim.delayOnInit"
+      valueReference="16777228"
+      description="Set to true to delay initial true input"
+      causality="parameter"
+      variability="tunable">
+      <Boolean start="false"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 84 -->
+    <ScalarVariable
+      name="trimRespondLogic1.tim.u"
+      valueReference="905969761"
+      description="Connector of Boolean input signal"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 85 -->
+    <ScalarVariable
+      name="trimRespondLogic1.tim.y"
+      valueReference="905969762"
+      description="Connector of Boolean output signal"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 86 -->
+    <ScalarVariable
+      name="trimRespondLogic1.greThr.threshold"
+      valueReference="16777229"
+      description="Comparison with respect to threshold"
+      causality="parameter"
+      variability="tunable">
+      <Real start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 87 -->
+    <ScalarVariable
+      name="trimRespondLogic1.greThr.u"
+      valueReference="905969765"
+      description="Connector of Real input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 88 -->
+    <ScalarVariable
+      name="trimRespondLogic1.greThr.y"
+      valueReference="905969766"
+      description="Connector of Boolean output signal"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 89 -->
+    <ScalarVariable
+      name="trimRespondLogic1.netRes.u1"
+      valueReference="905969767"
+      description="Real input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 90 -->
+    <ScalarVariable
+      name="trimRespondLogic1.netRes.u2"
+      valueReference="905969768"
+      description="Boolean switch input signal, if true, y=u1, else y=u3"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 91 -->
+    <ScalarVariable
+      name="trimRespondLogic1.netRes.u3"
+      valueReference="905969769"
+      description="Real input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 92 -->
+    <ScalarVariable
+      name="trimRespondLogic1.netRes.y"
+      valueReference="905969770"
+      description="Real output signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 93 -->
+    <ScalarVariable
+      name="trimRespondLogic1.resAmoCon.k"
+      valueReference="100663403"
+      description="Constant output value"
+      variability="constant">
+      <Real start="-15.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 94 -->
+    <ScalarVariable
+      name="trimRespondLogic1.resAmoCon.y"
+      valueReference="100663404"
+      description="Connector of Real output signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"
+        start="-15.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 95 -->
+    <ScalarVariable
+      name="trimRespondLogic1.pro.u1"
+      valueReference="905969765"
+      description="Connector of Real input signal 1">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 96 -->
+    <ScalarVariable
+      name="trimRespondLogic1.pro.u2"
+      valueReference="100663405"
+      description="Connector of Real input signal 2"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="15.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 97 -->
+    <ScalarVariable
+      name="trimRespondLogic1.pro.y"
+      valueReference="905969774"
+      description="Connector of Real output signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 98 -->
+    <ScalarVariable
+      name="trimRespondLogic1.pro1.u1"
+      valueReference="100663407"
+      description="Connector of Real input signal 1"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="10.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 99 -->
+    <ScalarVariable
+      name="trimRespondLogic1.pro1.u2"
+      valueReference="100663408"
+      description="Connector of Real input signal 2"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="-15.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 100 -->
+    <ScalarVariable
+      name="trimRespondLogic1.pro1.y"
+      valueReference="100663409"
+      description="Connector of Real output signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"
+        start="-150.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 101 -->
+    <ScalarVariable
+      name="trimRespondLogic1.pro2.u1"
+      valueReference="100663410"
+      description="Connector of Real input signal 1"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="-15.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 102 -->
+    <ScalarVariable
+      name="trimRespondLogic1.pro2.u2"
+      valueReference="100663411"
+      description="Connector of Real input signal 2"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="-37.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 103 -->
+    <ScalarVariable
+      name="trimRespondLogic1.pro2.y"
+      valueReference="100663412"
+      description="Connector of Real output signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"
+        start="555.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 104 -->
+    <ScalarVariable
+      name="trimRespondLogic1.uniDel.samplePeriod"
+      valueReference="100663413"
+      description="Sample period of component"
+      variability="constant">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        min="0.001"
+        start="120.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 105 -->
+    <ScalarVariable
+      name="trimRespondLogic1.uniDel.y_start"
+      valueReference="100663414"
+      description="Initial value of output signal"
+      variability="constant">
+      <Real start="120.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 106 -->
+    <ScalarVariable
+      name="trimRespondLogic1.uniDel.u"
+      valueReference="905969783"
+      description="Continuous input signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 107 -->
+    <ScalarVariable
+      name="trimRespondLogic1.uniDel.y"
+      valueReference="905969784"
+      description="Continuous output signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 108 -->
+    <ScalarVariable
+      name="trimRespondLogic1.swi.u1"
+      valueReference="905969783"
+      description="Real input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 109 -->
+    <ScalarVariable
+      name="trimRespondLogic1.swi.u2"
+      valueReference="905969762"
+      description="Boolean switch input signal, if true, y=u1, else y=u3"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 110 -->
+    <ScalarVariable
+      name="trimRespondLogic1.swi.u3"
+      valueReference="100663420"
+      description="Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="120.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 111 -->
+    <ScalarVariable
+      name="trimRespondLogic1.swi.y"
+      valueReference="905969759"
+      description="Real output signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 112 -->
+    <ScalarVariable
+      name="trimRespondLogic1.swi1.u1"
+      valueReference="100663421"
+      description="Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="10.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 113 -->
+    <ScalarVariable
+      name="trimRespondLogic1.swi1.u2"
+      valueReference="905969762"
+      description="Boolean switch input signal, if true, y=u1, else y=u3"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 114 -->
+    <ScalarVariable
+      name="trimRespondLogic1.swi1.u3"
+      valueReference="234881041"
+      description="Real input signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 115 -->
+    <ScalarVariable
+      name="trimRespondLogic1.swi1.y"
+      valueReference="905969769"
+      description="Real output signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 116 -->
+    <ScalarVariable
+      name="trimRespondLogic1.swi2.u1"
+      valueReference="100663422"
+      description="Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="120.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 117 -->
+    <ScalarVariable
+      name="trimRespondLogic1.swi2.u2"
+      valueReference="100663423"
+      description="Boolean switch input signal, if true, y=u1, else y=u3"
+      variability="constant">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"
+        start="false"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 118 -->
+    <ScalarVariable
+      name="trimRespondLogic1.swi2.u3"
+      valueReference="905969783"
+      description="Real input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 119 -->
+    <ScalarVariable
+      name="trimRespondLogic1.swi2.y"
+      valueReference="905969783"
+      description="Real output signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 120 -->
+    <ScalarVariable
+      name="trimRespondLogic1.swi3.u1"
+      valueReference="905969792"
+      description="Real input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 121 -->
+    <ScalarVariable
+      name="trimRespondLogic1.swi3.u2"
+      valueReference="100663425"
+      description="Boolean switch input signal, if true, y=u1, else y=u3"
+      variability="tunable">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 122 -->
+    <ScalarVariable
+      name="trimRespondLogic1.swi3.u3"
+      valueReference="905969807"
+      description="Real input signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 123 -->
+    <ScalarVariable
+      name="trimRespondLogic1.swi3.y"
+      valueReference="905969794"
+      description="Real output signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 124 -->
+    <ScalarVariable
+      name="trimRespondLogic1.sampler.samplePeriod"
+      valueReference="100663427"
+      description="Sample period of component"
+      variability="constant">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        min="0.001"
+        start="120.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 125 -->
+    <ScalarVariable
+      name="trimRespondLogic1.sampler.u"
+      valueReference="905969796"
+      description="Continuous input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        unit="1"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 126 -->
+    <ScalarVariable
+      name="trimRespondLogic1.sampler.y"
+      valueReference="905969797"
+      description="Continuous output signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"
+        unit="1"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 127 -->
+    <ScalarVariable
+      name="trimRespondLogic1.lesEquThr1.threshold"
+      valueReference="16777230"
+      description="Comparison with respect to threshold"
+      causality="parameter"
+      variability="fixed">
+      <Real start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 128 -->
+    <ScalarVariable
+      name="trimRespondLogic1.lesEquThr1.u"
+      valueReference="100663433"
+      description="Connector of Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="-150.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 129 -->
+    <ScalarVariable
+      name="trimRespondLogic1.lesEquThr1.y"
+      valueReference="100663434"
+      description="Connector of Boolean output signal"
+      variability="fixed">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 130 -->
+    <ScalarVariable
+      name="trimRespondLogic1.greEquThr.threshold"
+      valueReference="16777231"
+      description="Comparison with respect to threshold"
+      causality="parameter"
+      variability="fixed">
+      <Real start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 131 -->
+    <ScalarVariable
+      name="trimRespondLogic1.greEquThr.u"
+      valueReference="100663435"
+      description="Connector of Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="555.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 132 -->
+    <ScalarVariable
+      name="trimRespondLogic1.greEquThr.y"
+      valueReference="100663436"
+      description="Connector of Boolean output signal"
+      variability="fixed">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 133 -->
+    <ScalarVariable
+      name="trimRespondLogic1.greEquThr1.threshold"
+      valueReference="16777232"
+      description="Comparison with respect to threshold"
+      causality="parameter"
+      variability="tunable">
+      <Real start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 134 -->
+    <ScalarVariable
+      name="trimRespondLogic1.greEquThr1.u"
+      valueReference="100663437"
+      description="Connector of Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="-15.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 135 -->
+    <ScalarVariable
+      name="trimRespondLogic1.greEquThr1.y"
+      valueReference="100663425"
+      description="Connector of Boolean output signal"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 136 -->
+    <ScalarVariable
+      name="trimRespondLogic1.gai.k"
+      valueReference="100663438"
+      description="Gain value multiplied with input signal"
+      variability="constant">
+      <Real start="-1"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 137 -->
+    <ScalarVariable
+      name="trimRespondLogic1.gai.u"
+      valueReference="905969792"
+      description="Input signal connector">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 138 -->
+    <ScalarVariable
+      name="trimRespondLogic1.gai.y"
+      valueReference="905969807"
+      description="Output signal connector">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 139 -->
+    <ScalarVariable
+      name="trimRespondLogic2.iniSet"
+      valueReference="100663465"
+      description="Initial setpoint"
+      variability="constant">
+      <Real start="120"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 140 -->
+    <ScalarVariable
+      name="trimRespondLogic2.minSet"
+      valueReference="100663466"
+      description="Minimum setpoint"
+      variability="constant">
+      <Real start="37"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 141 -->
+    <ScalarVariable
+      name="trimRespondLogic2.maxSet"
+      valueReference="100663467"
+      description="Maximum setpoint"
+      variability="constant">
+      <Real start="370"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 142 -->
+    <ScalarVariable
+      name="trimRespondLogic2.delTim"
+      valueReference="100663468"
+      description="Delay time"
+      variability="constant">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        min="1E-13"
+        start="300"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 143 -->
+    <ScalarVariable
+      name="trimRespondLogic2.samplePeriod"
+      valueReference="100663469"
+      description="Sample period of component"
+      variability="constant">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        min="0.001"
+        start="120"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 144 -->
+    <ScalarVariable
+      name="trimRespondLogic2.numIgnReq"
+      valueReference="100663470"
+      description="Number of ignored requests"
+      variability="constant">
+      <Integer start="2"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 145 -->
+    <ScalarVariable
+      name="trimRespondLogic2.triAmo"
+      valueReference="100663471"
+      description="Trim amount"
+      variability="constant">
+      <Real start="-10"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 146 -->
+    <ScalarVariable
+      name="trimRespondLogic2.resAmo"
+      valueReference="100663472"
+      description="Respond amount (must have opposite sign of triAmo)"
+      variability="constant">
+      <Real start="15"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 147 -->
+    <ScalarVariable
+      name="trimRespondLogic2.maxRes"
+      valueReference="100663473"
+      description="Maximum response per time interval (must have same sign as resAmo)"
+      variability="constant">
+      <Real start="37"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 148 -->
+    <ScalarVariable
+      name="trimRespondLogic2.numOfReq"
+      valueReference="905969842"
+      description="Number of requests from zones/systems"
+      variability="discrete">
+      <Integer
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.IntegerInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 149 -->
+    <ScalarVariable
+      name="trimRespondLogic2.uDevSta"
+      valueReference="905969845"
+      description="On/Off status of the associated device"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 150 -->
+    <ScalarVariable
+      name="trimRespondLogic2.y"
+      valueReference="905969843"
+      description="Setpoint that have been reset">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 151 -->
+    <ScalarVariable
+      name="trimRespondLogic2.tim.delayTime"
+      valueReference="100663476"
+      description="Delay time"
+      variability="constant">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        start="420.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 152 -->
+    <ScalarVariable
+      name="trimRespondLogic2.tim.delayOnInit"
+      valueReference="16777240"
+      description="Set to true to delay initial true input"
+      causality="parameter"
+      variability="tunable">
+      <Boolean start="false"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 153 -->
+    <ScalarVariable
+      name="trimRespondLogic2.tim.u"
+      valueReference="905969845"
+      description="Connector of Boolean input signal"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 154 -->
+    <ScalarVariable
+      name="trimRespondLogic2.tim.y"
+      valueReference="905969846"
+      description="Connector of Boolean output signal"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 155 -->
+    <ScalarVariable
+      name="trimRespondLogic2.greThr.threshold"
+      valueReference="16777241"
+      description="Comparison with respect to threshold"
+      causality="parameter"
+      variability="tunable">
+      <Real start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 156 -->
+    <ScalarVariable
+      name="trimRespondLogic2.greThr.u"
+      valueReference="905969849"
+      description="Connector of Real input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 157 -->
+    <ScalarVariable
+      name="trimRespondLogic2.greThr.y"
+      valueReference="905969850"
+      description="Connector of Boolean output signal"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 158 -->
+    <ScalarVariable
+      name="trimRespondLogic2.netRes.u1"
+      valueReference="905969851"
+      description="Real input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 159 -->
+    <ScalarVariable
+      name="trimRespondLogic2.netRes.u2"
+      valueReference="905969852"
+      description="Boolean switch input signal, if true, y=u1, else y=u3"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 160 -->
+    <ScalarVariable
+      name="trimRespondLogic2.netRes.u3"
+      valueReference="905969853"
+      description="Real input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 161 -->
+    <ScalarVariable
+      name="trimRespondLogic2.netRes.y"
+      valueReference="905969854"
+      description="Real output signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 162 -->
+    <ScalarVariable
+      name="trimRespondLogic2.resAmoCon.k"
+      valueReference="100663487"
+      description="Constant output value"
+      variability="constant">
+      <Real start="15.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 163 -->
+    <ScalarVariable
+      name="trimRespondLogic2.resAmoCon.y"
+      valueReference="100663488"
+      description="Connector of Real output signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"
+        start="15.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 164 -->
+    <ScalarVariable
+      name="trimRespondLogic2.pro.u1"
+      valueReference="905969849"
+      description="Connector of Real input signal 1">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 165 -->
+    <ScalarVariable
+      name="trimRespondLogic2.pro.u2"
+      valueReference="100663489"
+      description="Connector of Real input signal 2"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="15.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 166 -->
+    <ScalarVariable
+      name="trimRespondLogic2.pro.y"
+      valueReference="905969858"
+      description="Connector of Real output signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 167 -->
+    <ScalarVariable
+      name="trimRespondLogic2.pro1.u1"
+      valueReference="100663491"
+      description="Connector of Real input signal 1"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="-10.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 168 -->
+    <ScalarVariable
+      name="trimRespondLogic2.pro1.u2"
+      valueReference="100663492"
+      description="Connector of Real input signal 2"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="15.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 169 -->
+    <ScalarVariable
+      name="trimRespondLogic2.pro1.y"
+      valueReference="100663493"
+      description="Connector of Real output signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"
+        start="-150.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 170 -->
+    <ScalarVariable
+      name="trimRespondLogic2.pro2.u1"
+      valueReference="100663494"
+      description="Connector of Real input signal 1"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="15.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 171 -->
+    <ScalarVariable
+      name="trimRespondLogic2.pro2.u2"
+      valueReference="100663495"
+      description="Connector of Real input signal 2"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="37.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 172 -->
+    <ScalarVariable
+      name="trimRespondLogic2.pro2.y"
+      valueReference="100663496"
+      description="Connector of Real output signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"
+        start="555.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 173 -->
+    <ScalarVariable
+      name="trimRespondLogic2.uniDel.samplePeriod"
+      valueReference="100663497"
+      description="Sample period of component"
+      variability="constant">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        min="0.001"
+        start="120.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 174 -->
+    <ScalarVariable
+      name="trimRespondLogic2.uniDel.y_start"
+      valueReference="100663498"
+      description="Initial value of output signal"
+      variability="constant">
+      <Real start="120.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 175 -->
+    <ScalarVariable
+      name="trimRespondLogic2.uniDel.u"
+      valueReference="905969867"
+      description="Continuous input signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 176 -->
+    <ScalarVariable
+      name="trimRespondLogic2.uniDel.y"
+      valueReference="905969868"
+      description="Continuous output signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 177 -->
+    <ScalarVariable
+      name="trimRespondLogic2.swi.u1"
+      valueReference="905969867"
+      description="Real input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 178 -->
+    <ScalarVariable
+      name="trimRespondLogic2.swi.u2"
+      valueReference="905969846"
+      description="Boolean switch input signal, if true, y=u1, else y=u3"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 179 -->
+    <ScalarVariable
+      name="trimRespondLogic2.swi.u3"
+      valueReference="100663504"
+      description="Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="120.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 180 -->
+    <ScalarVariable
+      name="trimRespondLogic2.swi.y"
+      valueReference="905969843"
+      description="Real output signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 181 -->
+    <ScalarVariable
+      name="trimRespondLogic2.swi1.u1"
+      valueReference="100663505"
+      description="Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="-10.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 182 -->
+    <ScalarVariable
+      name="trimRespondLogic2.swi1.u2"
+      valueReference="905969846"
+      description="Boolean switch input signal, if true, y=u1, else y=u3"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 183 -->
+    <ScalarVariable
+      name="trimRespondLogic2.swi1.u3"
+      valueReference="234881053"
+      description="Real input signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 184 -->
+    <ScalarVariable
+      name="trimRespondLogic2.swi1.y"
+      valueReference="905969853"
+      description="Real output signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 185 -->
+    <ScalarVariable
+      name="trimRespondLogic2.swi2.u1"
+      valueReference="100663506"
+      description="Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="120.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 186 -->
+    <ScalarVariable
+      name="trimRespondLogic2.swi2.u2"
+      valueReference="905969875"
+      description="Boolean switch input signal, if true, y=u1, else y=u3"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 187 -->
+    <ScalarVariable
+      name="trimRespondLogic2.swi2.u3"
+      valueReference="905969876"
+      description="Real input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 188 -->
+    <ScalarVariable
+      name="trimRespondLogic2.swi2.y"
+      valueReference="905969867"
+      description="Real output signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 189 -->
+    <ScalarVariable
+      name="trimRespondLogic2.swi3.u1"
+      valueReference="905969877"
+      description="Real input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 190 -->
+    <ScalarVariable
+      name="trimRespondLogic2.swi3.u2"
+      valueReference="100663510"
+      description="Boolean switch input signal, if true, y=u1, else y=u3"
+      variability="tunable">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 191 -->
+    <ScalarVariable
+      name="trimRespondLogic2.swi3.u3"
+      valueReference="905969892"
+      description="Real input signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 192 -->
+    <ScalarVariable
+      name="trimRespondLogic2.swi3.y"
+      valueReference="905969879"
+      description="Real output signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 193 -->
+    <ScalarVariable
+      name="trimRespondLogic2.sampler.samplePeriod"
+      valueReference="100663512"
+      description="Sample period of component"
+      variability="constant">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        min="0.001"
+        start="120.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 194 -->
+    <ScalarVariable
+      name="trimRespondLogic2.sampler.u"
+      valueReference="905969881"
+      description="Continuous input signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        unit="1"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 195 -->
+    <ScalarVariable
+      name="trimRespondLogic2.sampler.y"
+      valueReference="905969882"
+      description="Continuous output signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"
+        unit="1"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 196 -->
+    <ScalarVariable
+      name="trimRespondLogic2.lesEquThr1.threshold"
+      valueReference="16777242"
+      description="Comparison with respect to threshold"
+      causality="parameter"
+      variability="fixed">
+      <Real start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 197 -->
+    <ScalarVariable
+      name="trimRespondLogic2.lesEquThr1.u"
+      valueReference="100663518"
+      description="Connector of Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="-150.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 198 -->
+    <ScalarVariable
+      name="trimRespondLogic2.lesEquThr1.y"
+      valueReference="100663519"
+      description="Connector of Boolean output signal"
+      variability="fixed">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 199 -->
+    <ScalarVariable
+      name="trimRespondLogic2.greEquThr.threshold"
+      valueReference="16777243"
+      description="Comparison with respect to threshold"
+      causality="parameter"
+      variability="fixed">
+      <Real start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 200 -->
+    <ScalarVariable
+      name="trimRespondLogic2.greEquThr.u"
+      valueReference="100663520"
+      description="Connector of Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="555.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 201 -->
+    <ScalarVariable
+      name="trimRespondLogic2.greEquThr.y"
+      valueReference="100663521"
+      description="Connector of Boolean output signal"
+      variability="fixed">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 202 -->
+    <ScalarVariable
+      name="trimRespondLogic2.greEquThr1.threshold"
+      valueReference="16777244"
+      description="Comparison with respect to threshold"
+      causality="parameter"
+      variability="tunable">
+      <Real start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 203 -->
+    <ScalarVariable
+      name="trimRespondLogic2.greEquThr1.u"
+      valueReference="100663522"
+      description="Connector of Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="15.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 204 -->
+    <ScalarVariable
+      name="trimRespondLogic2.greEquThr1.y"
+      valueReference="100663510"
+      description="Connector of Boolean output signal"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 205 -->
+    <ScalarVariable
+      name="trimRespondLogic2.gai.k"
+      valueReference="100663523"
+      description="Gain value multiplied with input signal"
+      variability="constant">
+      <Real start="-1"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 206 -->
+    <ScalarVariable
+      name="trimRespondLogic2.gai.u"
+      valueReference="905969877"
+      description="Input signal connector">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 207 -->
+    <ScalarVariable
+      name="trimRespondLogic2.gai.y"
+      valueReference="905969892"
+      description="Output signal connector">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 208 -->
+    <ScalarVariable
+      name="con.k"
+      valueReference="100663548"
+      description="Constant output value"
+      variability="constant">
+      <Boolean start="true"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 209 -->
+    <ScalarVariable
+      name="con.y"
+      valueReference="100663549"
+      description="Connector of Boolean output signal"
+      variability="constant">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput"
+        start="true"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 210 -->
+    <ScalarVariable
+      name="sine.amplitude"
+      valueReference="100663550"
+      description="Amplitude of sine wave"
+      variability="constant">
+      <Real start="6"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 211 -->
+    <ScalarVariable
+      name="sine.freqHz"
+      valueReference="100663551"
+      description="Frequency of sine wave"
+      variability="constant">
+      <Real
+        declaredType="Modelica.SIunits.Frequency"
+        start="0.00018518518518518518"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 212 -->
+    <ScalarVariable
+      name="sine.phase"
+      valueReference="16777252"
+      description="Phase of sine wave"
+      causality="parameter"
+      variability="tunable">
+      <Real
+        declaredType="Modelica.SIunits.Angle"
+        start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 213 -->
+    <ScalarVariable
+      name="sine.offset"
+      valueReference="16777253"
+      description="Offset of output signal"
+      causality="parameter"
+      variability="tunable">
+      <Real start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 214 -->
+    <ScalarVariable
+      name="sine.startTime"
+      valueReference="16777254"
+      description="Output = offset for time &lt; startTime"
+      causality="parameter"
+      variability="tunable">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 215 -->
+    <ScalarVariable
+      name="sine.y"
+      valueReference="905969920"
+      description="Connector of Real output signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 216 -->
+    <ScalarVariable
+      name="abs.u"
+      valueReference="905969920"
+      description="Connector of Real input signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 217 -->
+    <ScalarVariable
+      name="abs.y"
+      valueReference="905969921"
+      description="Connector of Real output signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 218 -->
+    <ScalarVariable
+      name="sine1.amplitude"
+      valueReference="100663554"
+      description="Amplitude of sine wave"
+      variability="constant">
+      <Real start="6"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 219 -->
+    <ScalarVariable
+      name="sine1.freqHz"
+      valueReference="16777255"
+      description="Frequency of sine wave"
+      causality="parameter"
+      variability="tunable">
+      <Real
+        declaredType="Modelica.SIunits.Frequency"
+        start="0.00018518518518518518"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 220 -->
+    <ScalarVariable
+      name="sine1.phase"
+      valueReference="16777256"
+      description="Phase of sine wave"
+      causality="parameter"
+      variability="tunable">
+      <Real
+        declaredType="Modelica.SIunits.Angle"
+        start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 221 -->
+    <ScalarVariable
+      name="sine1.offset"
+      valueReference="16777257"
+      description="Offset of output signal"
+      causality="parameter"
+      variability="tunable">
+      <Real start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 222 -->
+    <ScalarVariable
+      name="sine1.startTime"
+      valueReference="16777258"
+      description="Output = offset for time &lt; startTime"
+      causality="parameter"
+      variability="tunable">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 223 -->
+    <ScalarVariable
+      name="sine1.y"
+      valueReference="905969923"
+      description="Connector of Real output signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 224 -->
+    <ScalarVariable
+      name="abs1.u"
+      valueReference="905969924"
+      description="Connector of Real input signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 225 -->
+    <ScalarVariable
+      name="abs1.y"
+      valueReference="905969925"
+      description="Connector of Real output signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 226 -->
+    <ScalarVariable
+      name="booPul.width"
+      valueReference="100663558"
+      description="Width of pulse in fraction of period"
+      variability="constant">
+      <Real
+        unit="1"
+        min="1E-60"
+        max="1.0"
+        start="0.18333333"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 227 -->
+    <ScalarVariable
+      name="booPul.period"
+      valueReference="100663559"
+      description="Time for one period"
+      variability="constant">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        min="1E-60"
+        start="3600"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 228 -->
+    <ScalarVariable
+      name="booPul.startTime"
+      valueReference="16777259"
+      description="Time instant of first pulse"
+      causality="parameter"
+      variability="tunable">
+      <Real
+        declaredType="Modelica.SIunits.Time"
+        start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 229 -->
+    <ScalarVariable
+      name="booPul.y"
+      valueReference="905969928"
+      description="Connector of Boolean output signal"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 230 -->
+    <ScalarVariable
+      name="not1.u"
+      valueReference="905969928"
+      description="Connector of Boolean input signal"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 231 -->
+    <ScalarVariable
+      name="not1.y"
+      valueReference="905969845"
+      description="Connector of Boolean output signal"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 232 -->
+    <ScalarVariable
+      name="swi.u1"
+      valueReference="100663563"
+      description="Real input signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"
+        start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 233 -->
+    <ScalarVariable
+      name="swi.u2"
+      valueReference="905969928"
+      description="Boolean switch input signal, if true, y=u1, else y=u3"
+      variability="discrete">
+      <Boolean
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.BooleanInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 234 -->
+    <ScalarVariable
+      name="swi.u3"
+      valueReference="905969923"
+      description="Real input signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 235 -->
+    <ScalarVariable
+      name="swi.y"
+      valueReference="905969924"
+      description="Real output signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 236 -->
+    <ScalarVariable
+      name="con1.k"
+      valueReference="100663564"
+      description="Constant output value"
+      variability="constant">
+      <Real start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 237 -->
+    <ScalarVariable
+      name="con1.y"
+      valueReference="100663565"
+      description="Connector of Real output signal"
+      variability="constant">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"
+        start="0.0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 238 -->
+    <ScalarVariable
+      name="round2.n"
+      valueReference="100663566"
+      description="Number of digits being round to"
+      variability="constant">
+      <Integer start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 239 -->
+    <ScalarVariable
+      name="round2.u"
+      valueReference="905969921"
+      description="Connector of Real input signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 240 -->
+    <ScalarVariable
+      name="round2.y"
+      valueReference="905969935"
+      description="Connector of Real output signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 241 -->
+    <ScalarVariable
+      name="reaToInt1.u"
+      valueReference="905969935"
+      description="Connector of Real input signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 242 -->
+    <ScalarVariable
+      name="reaToInt1.y"
+      valueReference="905969673"
+      description="Connector of Integer output signal"
+      variability="discrete">
+      <Integer
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 243 -->
+    <ScalarVariable
+      name="round1.n"
+      valueReference="100663569"
+      description="Number of digits being round to"
+      variability="constant">
+      <Integer start="0"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 244 -->
+    <ScalarVariable
+      name="round1.u"
+      valueReference="905969925"
+      description="Connector of Real input signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 245 -->
+    <ScalarVariable
+      name="round1.y"
+      valueReference="905969938"
+      description="Connector of Real output signal"
+      variability="discrete">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealOutput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 246 -->
+    <ScalarVariable
+      name="reaToInt2.u"
+      valueReference="905969938"
+      description="Connector of Real input signal">
+      <Real
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.RealInput"/>
+    </ScalarVariable>
+    <!-- Index for next variable = 247 -->
+    <ScalarVariable
+      name="reaToInt2.y"
+      valueReference="905969842"
+      description="Connector of Integer output signal"
+      variability="discrete">
+      <Integer
+        declaredType="Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput"/>
+    </ScalarVariable>
+  </ModelVariables>
+  <ModelStructure/>
+</fmiModelDescription>

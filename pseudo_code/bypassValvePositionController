@@ -1,0 +1,10 @@
+SET bypassValvePosition = 100% OPEN
+
+WHILE pumpStatus is ON
+	error = boilerMinimumFlowSetpoint -..
+	primaryCircuitFlowrate
+	bypassValvePosition = k_p * error +..
+	k_i * integral(error, dt)
+ENDWHILE
+
+SET bypassValvePosition = 100% OPEN

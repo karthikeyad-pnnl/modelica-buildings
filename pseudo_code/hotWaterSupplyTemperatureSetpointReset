@@ -1,0 +1,14 @@
+WHILE Pump is ON
+	SET supplyTemperatureSetpoint = HWSTMax
+	IF nTemperatureResetRequests <
+	nIgnoredRequests
+		IF supplyTemperatureSetpoint >
+		SP_min
+			supplyTemperatureSetpoint -=
+			SP_trim
+		ENDIF
+	ELSE
+		supplyTemperatureSetpoint +=
+		SP_respond
+	ENDIF
+ENDWHILE		

@@ -1,0 +1,13 @@
+compareVars :=
+  {
+    "bypassValvePosition.uPumSta[1]",
+    "bypassValvePosition.uPumSta[2]",
+    "bypassValvePosition.priCirFloRat",
+    "bypassValvePosition.boiMinFloSet",
+    "bypassValvePosition.yBypValPos",
+    "bypassValvePosition1.uPumSta[1]",
+    "bypassValvePosition1.uPumSta[2]",
+    "bypassValvePosition1.priCirFloRat",
+    "bypassValvePosition1.boiMinFloSet",
+    "bypassValvePosition1.yBypValPos"
+  };

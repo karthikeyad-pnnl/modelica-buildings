@@ -1,0 +1,20 @@
+WHILE boilerPlant is ON
+    IF boilerPlantOnTime > 15 minutes
+         IF outdoorAirTemperature > boilerLockoutTemperature 
+			OR..hotWaterSupplyResetRequests < numberOfIgnores 
+			OR..boilerPlantEnableSchedule is OFF
+				set boilerPlant OFF
+         ENDIF
+    ENDIF
+ENDWHILE
+
+WHILE boilerPlant is OFF
+    IF boilerPlantOffTime > 15 minutes
+         IF outdoorAirTemperature < boilerLockoutTemperature 
+			AND..hotWaterSupplyResetRequests > numberOfIgnores 
+			AND..boilerPlantEnableSchedule is ON
+				set boilerPlant ON
+         ENDIF
+    ENDIF
+ENDWHILE 	
+	
