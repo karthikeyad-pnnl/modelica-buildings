@@ -62,9 +62,9 @@ block Up "Generates a stage up signal"
     annotation (Placement(transformation(extent={{-140,-130},{-100,-90}}),
     iconTransformation(extent={{-140,10},{-100,50}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y "Stage up signal"
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yStaUp "Stage up signal"
     annotation (Placement(transformation(extent={{100,-20},{140,20}}),
-      iconTransformation(extent={{100,-20},{140,20}})));
+        iconTransformation(extent={{100,-20},{140,20}})));
 
   EfficiencyConditionUp effCon
     annotation (Placement(transformation(extent={{-60,30},{-40,50}})));
@@ -88,18 +88,10 @@ block Up "Generates a stage up signal"
     annotation (Placement(transformation(extent={{-140,-40},{-100,0}})));
   CDL.Interfaces.IntegerInput uAvaUp "Index of next available higher stage"
     annotation (Placement(transformation(extent={{-140,-70},{-100,-30}})));
-protected
-  Buildings.Controls.OBC.CDL.Logical.Or3 orStaUp "Or for staging up"
-    annotation (Placement(transformation(extent={{44,-10},{64,10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Not not1 "Logical not"
-    annotation (Placement(transformation(extent={{-40,-150},{-20,-130}})));
-
+  CDL.Logical.Or or2
+    annotation (Placement(transformation(extent={{40,-10},{60,10}})));
 equation
-  connect(uAvaCur, not1.u)
-    annotation (Line(points={{-120,-140},{-42,-140}},color={255,0,255}));
-  connect(not1.y, orStaUp.u3) annotation (Line(points={{-18,-140},{20,-140},{20,
-          -8},{42,-8}},  color={255,0,255}));
   connect(effCon.uQReq, uQReq) annotation (Line(points={{-62,49},{-64,49},{-64,
           130},{-120,130}}, color={0,0,127}));
   connect(effCon.uQDes, uQDes) annotation (Line(points={{-62,46},{-72,46},{-72,
@@ -114,16 +106,18 @@ equation
           -20},{-120,-20}}, color={255,127,0}));
   connect(effCon.uAvaUp, uAvaUp) annotation (Line(points={{-62,31},{-64,31},{
           -64,-50},{-120,-50}}, color={255,127,0}));
-  connect(faiSafCon.THotWatSupSet, THotWatSupSet) annotation (Line(points={{-62,
-          -85},{-86,-85},{-86,-80},{-120,-80}}, color={0,0,127}));
-  connect(faiSafCon.THotWatSup, THotWatSup) annotation (Line(points={{-62,-95},
-          {-84,-95},{-84,-110},{-120,-110}}, color={0,0,127}));
-  connect(faiSafCon.y, orStaUp.u2) annotation (Line(points={{-38,-90},{0,-90},{
-          0,0},{42,0}}, color={255,0,255}));
-  connect(effCon.yEffCon, orStaUp.u1) annotation (Line(points={{-38,40},{0,40},
-          {0,8},{42,8}}, color={255,0,255}));
-  connect(orStaUp.y, y)
-    annotation (Line(points={{66,0},{120,0}}, color={255,0,255}));
+  connect(faiSafCon.THotWatSupSet, THotWatSupSet) annotation (Line(points={{-62,-85},
+          {-80,-85},{-80,-80},{-120,-80}},      color={0,0,127}));
+  connect(faiSafCon.THotWatSup, THotWatSup) annotation (Line(points={{-62,-90},
+          {-80,-90},{-80,-110},{-120,-110}}, color={0,0,127}));
+  connect(or2.y, yStaUp)
+    annotation (Line(points={{62,0},{120,0}}, color={255,0,255}));
+  connect(effCon.yEffCon, or2.u1) annotation (Line(points={{-38,40},{0,40},{0,0},
+          {38,0}}, color={255,0,255}));
+  connect(uAvaCur, faiSafCon.uAvaCur) annotation (Line(points={{-120,-140},{-70,
+          -140},{-70,-95},{-62,-95}}, color={255,0,255}));
+  connect(faiSafCon.y, or2.u2) annotation (Line(points={{-38,-90},{0,-90},{0,-8},
+          {38,-8}}, color={255,0,255}));
   annotation (defaultComponentName = "staUp",
         Icon(coordinateSystem(extent={{-100,-160},{100,160}}),
              graphics={

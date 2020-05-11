@@ -1,0 +1,16 @@
+IF plantType == primaryOnly:
+	IF (QRequired < (1.1 * BStageMin_current FOR 5 minutes) OR (minFlowBypassValve is OPEN FOR 5 minutes)) AND...
+	failsafeCondition_lowerStage == FALSE AND...
+	(QRequired < 0.8 * QbX_lowerStage FOR 5 minutes):
+		set stage = stage_lower
+
+ELSE:
+	IF currentStage_nonCondensingBoilers == absent:
+		IF (QRequired < (1.1 * BStageMin_current FOR 5 minutes) OR ((priPumpFlowRate == minPriPumpSpeed_current) AND (priHWRT > secHWRT + 3 deg.F FOR 5 minutes))) AND...
+		failsafeCondition_lowerStage == FALSE AND...
+		(QRequired < 0.8 * QbX_lowerStage FOR 5 minutes):
+			set stage = stage_lower
+			
+	ELSE IF currentStage_nonCondensingBoilers == present:
+		IF (QRequired < 0.8 * QDes_lower FOR 10 minutes) AND (failsafeCondition_lowerStage == FALSE):
+			set stage = stage_lower

@@ -96,16 +96,17 @@ equation
           {-140,60}}, color={0,0,127}));
   connect(div1.u1, add2.y) annotation (Line(points={{-62,86},{-70,86},{-70,90},{
           -78,90}}, color={0,0,127}));
-  connect(div1.u2, uQDes) annotation (Line(points={{-62,74},{-114,74},{-114,100},
-          {-140,100}}, color={0,0,127}));
+  connect(div1.u2, uQDes) annotation (Line(points={{-62,74},{-70,74},{-70,70},{
+          -114,70},{-114,100},{-140,100}},
+                       color={0,0,127}));
   connect(add1.u1, uHotWatFloRat) annotation (Line(points={{-102,-34},{-110,-34},
           {-110,-20},{-140,-20}}, color={0,0,127}));
   connect(add1.u2, uUpMinFloSetPoi) annotation (Line(points={{-102,-46},{-110,-46},
           {-110,-60},{-140,-60}}, color={0,0,127}));
   connect(add1.y, div2.u1) annotation (Line(points={{-78,-40},{-70,-40},{-70,-44},
           {-62,-44}}, color={0,0,127}));
-  connect(div2.u2, uUpMinFloSetPoi) annotation (Line(points={{-62,-56},{-110,-56},
-          {-110,-60},{-140,-60}}, color={0,0,127}));
+  connect(div2.u2, uUpMinFloSetPoi) annotation (Line(points={{-62,-56},{-70,-56},
+          {-70,-60},{-140,-60}},  color={0,0,127}));
   connect(div2.y, hys.u)
     annotation (Line(points={{-38,-50},{-22,-50}}, color={0,0,127}));
   connect(div1.y, hys1.u)

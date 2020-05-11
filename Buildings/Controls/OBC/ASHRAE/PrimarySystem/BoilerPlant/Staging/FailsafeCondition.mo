@@ -14,8 +14,8 @@ block FailsafeCondition "Failsafe condition used in staging up and down"
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatSup(
     final unit="K",
     final quantity="ThermodynamicTemperature") "Hot water supply temperature"
-    annotation (Placement(transformation(extent={{-140,-70},{-100,-30}}),
-        iconTransformation(extent={{-140,-70},{-100,-30}})));
+    annotation (Placement(transformation(extent={{-140,-20},{-100,20}}),
+        iconTransformation(extent={{-140,-20},{-100,20}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y "Failsafe condition for chiller staging"
     annotation (Placement(transformation(extent={{100,-20},{140,20}}),
@@ -27,18 +27,30 @@ block FailsafeCondition "Failsafe condition used in staging up and down"
     annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
   CDL.Logical.TrueDelay truDel(delayTime=samPer, delayOnInit=true)
     annotation (Placement(transformation(extent={{0,-10},{20,10}})));
+  CDL.Interfaces.BooleanInput uAvaCur "Availability of current stage"
+    annotation (Placement(transformation(extent={{-140,-70},{-100,-30}})));
+  CDL.Logical.Or or2
+    annotation (Placement(transformation(extent={{40,-10},{60,10}})));
+  CDL.Logical.Not not1
+    annotation (Placement(transformation(extent={{-40,-60},{-20,-40}})));
 equation
 
   connect(add2.u2, THotWatSup) annotation (Line(points={{-82,-6},{-90,-6},{-90,
-          -50},{-120,-50}}, color={0,0,127}));
+          0},{-120,0}},     color={0,0,127}));
   connect(add2.u1, THotWatSupSet) annotation (Line(points={{-82,6},{-90,6},{-90,
           50},{-120,50}}, color={0,0,127}));
   connect(add2.y, hys.u)
     annotation (Line(points={{-58,0},{-42,0}}, color={0,0,127}));
   connect(hys.y, truDel.u)
     annotation (Line(points={{-18,0},{-2,0}}, color={255,0,255}));
-  connect(truDel.y, y)
-    annotation (Line(points={{22,0},{120,0}}, color={255,0,255}));
+  connect(or2.y, y)
+    annotation (Line(points={{62,0},{120,0}}, color={255,0,255}));
+  connect(truDel.y, or2.u1)
+    annotation (Line(points={{22,0},{38,0}}, color={255,0,255}));
+  connect(not1.u, uAvaCur)
+    annotation (Line(points={{-42,-50},{-120,-50}}, color={255,0,255}));
+  connect(not1.y, or2.u2) annotation (Line(points={{-18,-50},{28,-50},{28,-8},{
+          38,-8}}, color={255,0,255}));
 annotation (defaultComponentName = "faiSafCon",
         Icon(coordinateSystem(extent={{-100,-80},{100,100}}),
              graphics={
