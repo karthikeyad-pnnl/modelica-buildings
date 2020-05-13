@@ -1,5 +1,6 @@
-within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant;
-package Staging "Boiler staging sequences"
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging;
+package Subsequences "Boiler staging subsequences"
+
   annotation (Icon(graphics={
         Rectangle(
           lineColor={200,200,200},
@@ -35,8 +36,8 @@ package Staging "Boiler staging sequences"
           fillPattern=FillPattern.Solid,
           extent={{-80.0,0.0},{-20.0,60.0}})}),
         Documentation(info="<html>
-        <p>
-        This package contains the boiler staging seqeunces.
-        </p>
-        </html>"));
-end Staging;
+          <p>
+          This package contains boiler staging control sequences.
+          </p>
+          </html>"));
+end Subsequences;
