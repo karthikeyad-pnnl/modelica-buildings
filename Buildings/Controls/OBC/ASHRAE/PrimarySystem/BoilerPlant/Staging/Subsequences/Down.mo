@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging;
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences;
 block Down "Generates a stage down signal"
 
   parameter Boolean primaryOnly = false
@@ -47,7 +47,7 @@ block Down "Generates a stage down signal"
   CDL.Interfaces.BooleanInput uAvaLow
     "Signal indicating availability of next lower stage"
     annotation (Placement(transformation(extent={{-220,70},{-180,110}})));
-  FailsafeCondition faiSafCon
+  Subsequences.FailsafeCondition faiSafCon
     annotation (Placement(transformation(extent={{-160,112},{-140,130}})));
   CDL.Logical.Not not1
     annotation (Placement(transformation(extent={{-120,110},{-100,130}})));

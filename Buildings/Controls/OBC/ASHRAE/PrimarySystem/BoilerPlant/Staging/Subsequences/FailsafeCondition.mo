@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging;
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences;
 block FailsafeCondition "Failsafe condition used in staging up and down"
 
   parameter Real samPer = 900

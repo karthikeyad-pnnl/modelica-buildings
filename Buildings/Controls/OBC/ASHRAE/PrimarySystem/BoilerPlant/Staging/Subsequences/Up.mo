@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging;
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences;
 block Up "Generates a stage up signal"
   parameter Boolean have_WSE = true
     "true = plant has a WSE, false = plant does not have WSE";
@@ -66,10 +66,10 @@ block Up "Generates a stage up signal"
     annotation (Placement(transformation(extent={{100,-20},{140,20}}),
         iconTransformation(extent={{100,-20},{140,20}})));
 
-  EfficiencyConditionUp effCon
+  Subsequences.EfficiencyConditionUp effCon
     annotation (Placement(transformation(extent={{-60,30},{-40,50}})));
 
-  FailsafeCondition faiSafCon
+  Subsequences.FailsafeCondition faiSafCon
     annotation (Placement(transformation(extent={{-60,-98},{-40,-80}})));
   CDL.Interfaces.RealInput uQUpMin
     "Minimum heating capacity of next available stage"
