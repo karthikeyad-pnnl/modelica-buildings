@@ -106,10 +106,10 @@ equation
           -20},{-120,-20}}, color={255,127,0}));
   connect(effCon.uAvaUp, uAvaUp) annotation (Line(points={{-62,31},{-64,31},{
           -64,-50},{-120,-50}}, color={255,127,0}));
-  connect(faiSafCon.THotWatSupSet, THotWatSupSet) annotation (Line(points={{-62,-85},
-          {-80,-85},{-80,-80},{-120,-80}},      color={0,0,127}));
-  connect(faiSafCon.THotWatSup, THotWatSup) annotation (Line(points={{-62,-90},
-          {-80,-90},{-80,-110},{-120,-110}}, color={0,0,127}));
+  connect(faiSafCon.TSupSet, THotWatSupSet) annotation (Line(points={{-62,-85},
+          {-80,-85},{-80,-80},{-120,-80}}, color={0,0,127}));
+  connect(faiSafCon.TSup, THotWatSup) annotation (Line(points={{-62,-90},{-80,-90},
+          {-80,-110},{-120,-110}}, color={0,0,127}));
   connect(or2.y, yStaUp)
     annotation (Line(points={{62,0},{120,0}}, color={255,0,255}));
   connect(effCon.yEffCon, or2.u1) annotation (Line(points={{-38,40},{0,40},{0,0},

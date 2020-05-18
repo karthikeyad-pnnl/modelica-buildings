@@ -142,9 +142,9 @@ block Down "Generates a stage down signal"
   CDL.Logical.Not not3
     annotation (Placement(transformation(extent={{-80,-50},{-60,-30}})));
 equation
-  connect(faiSafCon.THotWatSupSet, THotWatSupSet) annotation (Line(points={{
-          -162,125},{-176,125},{-176,150},{-200,150}}, color={0,0,127}));
-  connect(faiSafCon.THotWatSup, THotWatSup)
+  connect(faiSafCon.TSupSet, THotWatSupSet) annotation (Line(points={{-162,125},
+          {-176,125},{-176,150},{-200,150}}, color={0,0,127}));
+  connect(faiSafCon.TSup, THotWatSup)
     annotation (Line(points={{-162,120},{-200,120}}, color={0,0,127}));
   connect(faiSafCon.uAvaCur, uAvaLow) annotation (Line(points={{-162,115},{-174,
           115},{-174,90},{-200,90}}, color={255,0,255}));

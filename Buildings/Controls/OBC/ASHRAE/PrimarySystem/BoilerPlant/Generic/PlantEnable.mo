@@ -65,6 +65,9 @@ model PlantEnable
   "Time since plant has been disabled"
   annotation (Placement(transformation(extent={{10,60},{30,80}})));
 
+  CDL.Logical.TrueFalseHold truFalHol(trueHoldDuration=plaOnThrTim,
+      falseHoldDuration=plaOffThrTim)
+    annotation (Placement(transformation(extent={{120,-100},{140,-80}})));
 protected
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(final threshold=0.5)
     "Check if schedule lets the controller enable the plant or not"
@@ -195,6 +198,8 @@ equation
           10}}, color={255,0,255}));
   connect(enaSch.y[1], greThr.u)
     annotation (Line(points={{-128,-110},{-122,-110}}, color={0,0,127}));
+  connect(truFalHol.u, yPla) annotation (Line(points={{118,-90},{110,-90},{110,
+          -56},{150,-56},{150,0},{180,0}}, color={255,0,255}));
   annotation (defaultComponentName = "plaEna",
   Icon(graphics={
         Rectangle(
