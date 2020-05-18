@@ -66,7 +66,7 @@ block Up "Generates a stage up signal"
     annotation (Placement(transformation(extent={{100,-20},{140,20}}),
         iconTransformation(extent={{100,-20},{140,20}})));
 
-  Subsequences.EfficiencyConditionUp effCon
+  EfficiencyCondition effCon
     annotation (Placement(transformation(extent={{-60,30},{-40,50}})));
 
   Subsequences.FailsafeCondition faiSafCon

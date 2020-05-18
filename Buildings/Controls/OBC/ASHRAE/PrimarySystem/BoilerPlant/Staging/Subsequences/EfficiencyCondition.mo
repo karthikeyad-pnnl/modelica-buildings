@@ -1,10 +1,15 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences;
-block EfficiencyConditionUp "Efficiency condition used in staging up and down"
-  parameter Integer nSta = 5 "Number of stages in the boiler plant";
-  parameter Real perNonConBoi = 0.9 "Percentage value of B-Stage minimum at
-  which the efficiency condition is satisfied for non-condensing boilers"
-  annotation(Evaluate=true, Dialog(enable=nonConBoiOnl));
-  parameter Real perConBoi = 0.9 "Percentage value of B-Stage minimum at
+block EfficiencyCondition
+  "Efficiency condition used in staging up and down"
+
+  parameter Integer nSta = 5
+    "Number of stages in the boiler plant";
+
+  parameter Real perNonConBoi = 0.9
+    "Percentage value of B-Stage minimum at which the efficiency condition is
+    satisfied for non-condensing boilers";
+
+  parameter Real perConBoi = 1.5 "Percentage value of B-Stage minimum at
   which the efficiency condition is satisfied for condensing boilers"
   annotation(Evaluate=true, Dialog(enable=not
                                              (nonConBoiOnl)));
@@ -32,14 +37,12 @@ block EfficiencyConditionUp "Efficiency condition used in staging up and down"
     annotation (Placement(transformation(extent={{-160,-80},{-120,-40}}),
         iconTransformation(extent={{-140,-50},{-100,-10}})));
   CDL.Continuous.Division div
-    annotation (Placement(transformation(extent={{-60,10},{-40,30}})));
+    annotation (Placement(transformation(extent={{-80,10},{-60,30}})));
   CDL.Interfaces.RealInput uQDes "Design heating capacity of current stage"
     annotation (Placement(transformation(extent={{-160,80},{-120,120}}),
     iconTransformation(extent={{-140,40},{-100,80}})));
-  CDL.Continuous.Add add2(k1=-1)
-    annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
   CDL.Continuous.Division div1
-    annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
+    annotation (Placement(transformation(extent={{-80,70},{-60,90}})));
   CDL.Continuous.Division div2
     annotation (Placement(transformation(extent={{-60,-60},{-40,-40}})));
   CDL.Continuous.Hysteresis hys(uLow=-0.1, uHigh=0)
@@ -47,9 +50,9 @@ block EfficiencyConditionUp "Efficiency condition used in staging up and down"
   CDL.Logical.Sources.Constant con1(k=true)
     annotation (Placement(transformation(extent={{-20,-20},{0,0}})));
   CDL.Continuous.Hysteresis hys1(uLow=perNonConBoi - 0.1, uHigh=perNonConBoi)
-    annotation (Placement(transformation(extent={{-30,70},{-10,90}})));
+    annotation (Placement(transformation(extent={{-40,70},{-20,90}})));
   CDL.Continuous.Hysteresis hys2(uLow=perConBoi - 0.1, uHigh=perConBoi)
-    annotation (Placement(transformation(extent={{-30,10},{-10,30}})));
+    annotation (Placement(transformation(extent={{-40,10},{-20,30}})));
   CDL.Logical.TrueDelay truDel(delayTime=samPer, delayOnInit=true)
     annotation (Placement(transformation(extent={{0,10},{20,30}})));
   CDL.Logical.TrueDelay truDel1(delayTime=samPer, delayOnInit=true)
@@ -75,29 +78,14 @@ block EfficiencyConditionUp "Efficiency condition used in staging up and down"
   CDL.Logical.LogicalSwitch logSwi1
     annotation (Placement(transformation(extent={{40,-40},{60,-20}})));
 protected
-  Buildings.Controls.OBC.CDL.Continuous.Add add(
-    final k2=-1) "Subtracts part load ratios"
-    annotation (Placement(transformation(extent={{-100,30},{-80,50}})));
   CDL.Continuous.Add                        add1(final k2=-1)
                  "Subtracts part load ratios"
     annotation (Placement(transformation(extent={{-100,-50},{-80,-30}})));
 equation
-  connect(add.u2, uQUpMin) annotation (Line(points={{-102,34},{-110,34},{-110,20},
+  connect(div.u2, uQUpMin) annotation (Line(points={{-82,14},{-110,14},{-110,20},
           {-140,20}}, color={0,0,127}));
-  connect(add.u1, uQReq) annotation (Line(points={{-102,46},{-110,46},{-110,60},
-          {-140,60}}, color={0,0,127}));
-  connect(div.u1, add.y) annotation (Line(points={{-62,26},{-70,26},{-70,40},{-78,
-          40}}, color={0,0,127}));
-  connect(div.u2, uQUpMin) annotation (Line(points={{-62,14},{-110,14},{-110,20},
-          {-140,20}}, color={0,0,127}));
-  connect(add2.u1, uQDes) annotation (Line(points={{-102,96},{-110,96},{-110,100},
-          {-140,100}}, color={0,0,127}));
-  connect(add2.u2, uQReq) annotation (Line(points={{-102,84},{-110,84},{-110,60},
-          {-140,60}}, color={0,0,127}));
-  connect(div1.u1, add2.y) annotation (Line(points={{-62,86},{-70,86},{-70,90},{
-          -78,90}}, color={0,0,127}));
-  connect(div1.u2, uQDes) annotation (Line(points={{-62,74},{-70,74},{-70,70},{
-          -114,70},{-114,100},{-140,100}},
+  connect(div1.u2, uQDes) annotation (Line(points={{-82,74},{-90,74},{-90,70},{-114,
+          70},{-114,100},{-140,100}},
                        color={0,0,127}));
   connect(add1.u1, uHotWatFloRat) annotation (Line(points={{-102,-34},{-110,-34},
           {-110,-20},{-140,-20}}, color={0,0,127}));
@@ -110,13 +98,13 @@ equation
   connect(div2.y, hys.u)
     annotation (Line(points={{-38,-50},{-22,-50}}, color={0,0,127}));
   connect(div1.y, hys1.u)
-    annotation (Line(points={{-38,80},{-32,80}}, color={0,0,127}));
+    annotation (Line(points={{-58,80},{-42,80}}, color={0,0,127}));
   connect(div.y, hys2.u)
-    annotation (Line(points={{-38,20},{-32,20}}, color={0,0,127}));
+    annotation (Line(points={{-58,20},{-42,20}}, color={0,0,127}));
   connect(truDel1.u, hys1.y)
-    annotation (Line(points={{-2,80},{-8,80}}, color={255,0,255}));
-  connect(truDel.u, hys2.y) annotation (Line(points={{-2,20},{-6,20},{-6,20},{-8,
-          20}}, color={255,0,255}));
+    annotation (Line(points={{-2,80},{-18,80}},color={255,0,255}));
+  connect(truDel.u, hys2.y) annotation (Line(points={{-2,20},{-18,20}},
+                color={255,0,255}));
   connect(intToRea.u, uTyp)
     annotation (Line(points={{-102,-100},{-140,-100}}, color={255,127,0}));
   connect(extIndSig.u, intToRea.y)
@@ -143,6 +131,10 @@ equation
           {38,-38}}, color={255,0,255}));
   connect(logSwi1.u2, greThr.y) annotation (Line(points={{38,-30},{30,-30},{30,
           -100},{2,-100}}, color={255,0,255}));
+  connect(div.u1, uQReq) annotation (Line(points={{-82,26},{-100,26},{-100,60},{
+          -140,60}}, color={0,0,127}));
+  connect(div1.u1, uQReq) annotation (Line(points={{-82,86},{-100,86},{-100,60},
+          {-140,60}}, color={0,0,127}));
 annotation (defaultComponentName = "effCon",
         Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
              graphics={
@@ -168,4 +160,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end EfficiencyConditionUp;
+end EfficiencyCondition;
