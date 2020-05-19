@@ -14,3 +14,5 @@ if boilerType == nonCondensingBoiler:
 if boilerType == hybrid:
 	if (THotWatSup < THotWatSupSetPoi - 10 deg. F FOR 15 minutes):
 		set failsafeCondition = TRUE
+		
+# this block seems uncompleted, there is no way efficiencyCondition = FALSE
