@@ -5,3 +5,4 @@ if boilerType == nonCondensingBoiler:
 ELSE:
 	if qRequired > (1.5 * bStageMin_nextStage FOR 10 minutes) AND (hotWaterFlowRate > minFlowSetpoint_nextStage):
 		set efficiencyCondition = TRUE
+		

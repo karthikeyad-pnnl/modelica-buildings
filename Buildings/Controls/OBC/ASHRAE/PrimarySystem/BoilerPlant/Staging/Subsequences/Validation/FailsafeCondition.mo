@@ -1,5 +1,6 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation;
-block FailsafeCondition "Validation model for FailsafeCondition"
+block FailsafeCondition
+  "Validation model for FailsafeCondition"
 
   parameter Real TSupSetNom(
     final unit="K",
@@ -132,6 +133,6 @@ equation
       </p>
       </html>"),
     __Dymola_Commands(file=
-          "./Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Validation/FailsafeCondition.mos"
-        "Simulate and plot"));
+       "./Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Validation/FailsafeCondition.mos"
+       "Simulate and plot"));
 end FailsafeCondition;
