@@ -133,14 +133,22 @@ equation
   connect(conInt1.y, effCon1.uAvaUp)
     annotation (Line(points={{32,-120},{100,-120},{100,-9},{108,-9}},
       color={255,127,0}));
+<<<<<<< HEAD
   connect(con4.y, effCon.uUpMinFloSetPoi)
     annotation (Line(points={{-108,-40},{-60,-40},{-60,-3},{-32,-3}},
       color={0,0,127}));
   connect(con5.y, effCon1.uUpMinFloSetPoi)
+=======
+  connect(con4.y, effCon.uUpMinFloSet)
+    annotation (Line(points={{-108,-40},{-60,-40},{-60,-3},{-32,-3}},
+      color={0,0,127}));
+  connect(con5.y, effCon1.uUpMinFloSet)
+>>>>>>> 2a7fedd2c9c4b0499d5eba96aa9bb2a5b4cbc677
     annotation (Line(points={{32,-40},{80,-40},{80,-3},{108,-3}},
       color={0,0,127}));
 
   annotation(Icon(coordinateSystem(preserveAspectRatio=false,
+<<<<<<< HEAD
                                     extent={{-100,-100},{100,100}}),
                graphics={Ellipse(lineColor = {75,138,73},
                                  fillColor={255,255,255},
@@ -151,12 +159,30 @@ equation
                                  pattern = LinePattern.None,
                                  fillPattern = FillPattern.Solid,
                                  points={{-36,60},{64,0},{-36,-60},{-36,60}})}),
+=======
+                                   extent={{-100,-100},{100,100}}),
+             graphics={Ellipse(lineColor = {75,138,73},
+                               fillColor={255,255,255},
+                               fillPattern = FillPattern.Solid,
+                               extent={{-100,-100},{100,100}}),
+                       Polygon(lineColor = {0,0,255},
+                               fillColor = {75,138,73},
+                               pattern = LinePattern.None,
+                               fillPattern = FillPattern.Solid,
+                               points={{-36,60},{64,0},{-36,-60},{-36,60}})}),
+>>>>>>> 2a7fedd2c9c4b0499d5eba96aa9bb2a5b4cbc677
     Diagram(coordinateSystem(preserveAspectRatio=false,
                              extent={{-140,-140},{140,140}})),
     experiment(
       StopTime=7200,
+<<<<<<< HEAD
       Interval=1),
       __Dymola_Commands(file="./Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Validation/EfficiencyCondition.mos"
+=======
+      Interval=1,
+      Tolerance=1e-6),
+    __Dymola_Commands(file="./Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Validation/EfficiencyCondition.mos"
+>>>>>>> 2a7fedd2c9c4b0499d5eba96aa9bb2a5b4cbc677
       "Simulate and plot"),
     Documentation(info="<html>
       <p>This example validates
