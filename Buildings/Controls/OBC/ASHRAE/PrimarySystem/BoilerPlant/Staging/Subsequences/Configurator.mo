@@ -1,108 +1,124 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences;
-block Configurator "Configures chiller staging"
+block Configurator "Configures boiler staging"
 
   parameter Integer nSta = 3
-    "Number of chiller stages";
+    "Number of boiler stages";
 
-  parameter Integer nChi = 2
-    "Number of chillers";
+  parameter Integer nBoi = 2
+    "Number of boilers";
 
-  parameter Modelica.SIunits.Power chiDesCap[nChi]
-    "Design chiller capacities vector";
+  parameter Integer boiTyp[nBoi]={
+    Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler,
+    Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.nonCondensingBoiler}
+    "Boiler type. Recommended staging order: ToBeFixed";
 
-  parameter Modelica.SIunits.Power chiMinCap[nChi]
-    "Chiller minimum cycling loads vector";
+  parameter Integer staMat[nSta, nBoi] = {{1,0},{0,1},{1,1}}
+    "Staging matrix with stage as row index and boiler as column index";
 
-  parameter Integer chiTyp[nChi]={
-    Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Types.ChillerAndStageTypes.positiveDisplacement,
-    Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Types.ChillerAndStageTypes.constantSpeedCentrifugal}
-    "Chiller type. Recommended staging order: positive displacement, variable speed centrifugal, constant speed centrifugal";
+  parameter Real boiDesCap[nBoi](
+    final unit="W",
+    final displayUnit="W",
+    final quantity="Power")
+    "Design boiler capacities vector";
 
-  parameter Integer staMat[nSta, nChi] = {{1,0},{0,1},{1,1}}
-    "Staging matrix with stage as row index and chiller as column index";
+  parameter Real boiFirMin[nBoi](
+    final unit="1",
+    final displayUnit="1",
+    final quantity="Power")
+    "Boiler minimum firing ratios vector";
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uBoiAva[nBoi]
     "Boiler availability status vector"
     annotation (Placement(transformation(extent={{-260,-60},{-220,-20}}),
-        iconTransformation(extent={{-140,-20},{-100,20}})));
+      iconTransformation(extent={{-140,-20},{-100,20}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yAva[nSta]
     "Stage availability status vector"
     annotation (Placement(transformation(extent={{220,-100},{260,-60}}),
-        iconTransformation(extent={{100,-100},{140,-60}})));
+      iconTransformation(extent={{100,-100},{140,-60}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yTyp[nSta](
-    final max=fill(nSta, nSta)) "Chiller stage types vector"
+    final max=fill(nSta, nSta))
+    "Boiler stage types vector"
     annotation (Placement(transformation(extent={{220,-140},{260,-100}}),
-        iconTransformation(extent={{100,-60},{140,-20}})));
+      iconTransformation(extent={{100,-60},{140,-20}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yDesCap[nSta](
     final unit=fill("W", nSta),
-    final quantity=fill("Power", nSta)) "Stage design capacities vector"
+    final quantity=fill("Power", nSta))
+    "Stage design capacities vector"
     annotation (Placement(transformation(extent={{220,0},{260,40}}),
-        iconTransformation(extent={{100,60},{140,100}})));
+      iconTransformation(extent={{100,60},{140,100}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yMinCap[nSta](
     final unit=fill("W", nSta),
-    final quantity=fill("Power", nSta)) "Unload stage capacities vector"
+    final quantity=fill("Power", nSta))
+    "Minimum stage capacities vector"
     annotation (Placement(transformation(extent={{220,-40},{260,0}}),
-        iconTransformation(extent={{100,20},{140,60}})));
-
-//protected
-  final parameter Integer chiTypMat[nSta, nChi] = {chiTyp[i] for i in 1:nChi, j in 1:nSta}
-    "Chiller type array expanded to allow for element-wise multiplication with the staging matrix";
+      iconTransformation(extent={{100,20},{140,60}})));
 
   Buildings.Controls.OBC.CDL.Utilities.Assert assMes1(
-  final message="The chillers must be tagged in order of design capacity if unequally sized")
-    "Asserts whether chillers are tagged in ascending order with regards to capacity"
-    annotation (Placement(transformation(extent={{60,160},{80,180}})));
+    final message="The boilers must be tagged in order of design capacity if unequally sized")
+    "Asserts whether boilers are tagged in ascending order with regards to capacity"
+    annotation (Placement(transformation(extent={{60,150},{80,170}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sort sort1(
-    final nin=nChi) "Ascending sort"
-    annotation (Placement(transformation(extent={{-140,160},{-120,180}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Add add1[nBoi](final k1=fill(1, nBoi),
-      final k2=fill(-1, nBoi))
+  Buildings.Controls.OBC.CDL.Continuous.Add add1[nBoi](
+    final k1=fill(1, nBoi),
+    final k2=fill(-1, nBoi))
     "Subtracts signals"
-    annotation (Placement(transformation(extent={{-100,160},{-80,180}})));
+    annotation (Placement(transformation(extent={{-100,150},{-80,170}})));
 
   Buildings.Controls.OBC.CDL.Continuous.MultiMax multiMax(
-    final nin=nChi) "Maximum value in a vector input"
-    annotation (Placement(transformation(extent={{-60,160},{-40,180}})));
+    nin=nBoi)
+    "Maximum value in a vector input"
+    annotation (Placement(transformation(extent={{-60,150},{-40,170}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Abs abs "Absolute values"
-    annotation (Placement(transformation(extent={{-20,160},{0,180}})));
+  Buildings.Controls.OBC.CDL.Continuous.Abs abs
+    "Absolute values"
+    annotation (Placement(transformation(extent={{-20,150},{0,170}})));
 
   Buildings.Controls.OBC.CDL.Continuous.LessThreshold lesThr1(
-    final threshold=0.5) "Less threshold"
-    annotation (Placement(transformation(extent={{20,160},{40,180}})));
+    final threshold=0.5)
+    "Less threshold"
+    annotation (Placement(transformation(extent={{20,150},{40,170}})));
+
+//protected
+  final parameter Integer boiTypMat[nSta, nBoi] = {boiTyp[i] for i in 1:nBoi, j in 1:nSta}
+    "Boiler type array expanded to allow for element-wise multiplication with the
+    staging matrix";
+
+  final parameter Real boiFirMinVal[nSta, nBoi] = {boiFirMin[i] for i in 1:nBoi, j in 1:nSta}
+    "Boiler minimum firing ratio array expanded for element-wise multiplication
+    with the staging matrix";
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant boiDesCaps[nBoi](
-      final k=boiDesCap) "Design boiler capacities vector"
+    final k=boiDesCap)
+    "Design boiler capacities vector"
     annotation (Placement(transformation(extent={{-200,100},{-180,120}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant boiMinCaps[nBoi](
-      final k=boiMinCap) "Boiler unload capacities vector"
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant boiFirMinMat[nSta,nBoi](
+    final k=boiFirMinVal)
+    "Boiler minimum firing ratios matrix"
     annotation (Placement(transformation(extent={{-200,60},{-180,80}})));
 
   Buildings.Controls.OBC.CDL.Continuous.MatrixGain staDesCaps(
-    final K=staMat) "Matrix gain for design capacities"
+    final K=staMat)
+    "Matrix gain for design capacities"
     annotation (Placement(transformation(extent={{-140,100},{-120,120}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.MatrixGain staMinCaps(
-    final K=staMat) "Matrix gain from minimal capacities"
-    annotation (Placement(transformation(extent={{-140,60},{-120,80}})));
-
   Buildings.Controls.OBC.CDL.Continuous.MatrixGain sumNumBoi(
-    final K=staMat) "Outputs the total boiler count per stage vector"
+    final K=staMat)
+    "Outputs the total boiler count per stage vector"
     annotation (Placement(transformation(extent={{-140,10},{-120,30}})));
 
   Buildings.Controls.OBC.CDL.Continuous.MatrixGain sumNumAvaBoi(
-    final K=staMat) "Outputs the available boiler count per stage vector"
+    final K=staMat)
+    "Outputs the available boiler count per stage vector"
     annotation (Placement(transformation(extent={{-140,-50},{-120,-30}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant oneVec[nBoi](final k=
-        fill(1, nBoi)) "Mocks a case with all boilers available"
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant oneVec[nBoi](
+    final k=fill(1, nBoi))
+    "Mocks a case with all boilers available"
     annotation (Placement(transformation(extent={{-200,10},{-180,30}})));
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea[nBoi]
@@ -120,20 +136,23 @@ block Configurator "Configures chiller staging"
     annotation (Placement(transformation(extent={{-40,-20},{-20,0}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant boiStaMat[nSta,nBoi](
-    final k=staMat) "Staging matrix"
-    annotation (Placement(transformation(extent={{-200,-170},{-180,-150}})));
+    final k=staMat)
+    "Staging matrix"
+    annotation (Placement(transformation(extent={{-200,-100},{-180,-80}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant staType[nSta,nBoi](
-      final k=BoiTypMat) "Boiler stage type matrix"
-    annotation (Placement(transformation(extent={{-200,-110},{-180,-90}})));
+    final k=boiTypMat)
+    "Boiler stage type matrix"
+    annotation (Placement(transformation(extent={{-200,-160},{-180,-140}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Product pro[nSta,nBoi]
     "Element-wise product"
     annotation (Placement(transformation(extent={{-140,-130},{-120,-110}})));
 
   Buildings.Controls.OBC.CDL.Continuous.MatrixMax matMax(
-    final nRow=nSta, final nCol=nBoi)
-                     "Row-wise matrix maximum"
+    final nRow=nSta,
+    final nCol=nBoi)
+    "Row-wise matrix maximum"
     annotation (Placement(transformation(extent={{-100,-130},{-80,-110}})));
 
   Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt[nSta]
@@ -141,7 +160,8 @@ block Configurator "Configures chiller staging"
     annotation (Placement(transformation(extent={{-60,-130},{-40,-110}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sort sort(
-    final nin=nSta) "Vector sort"
+    final nin=nSta)
+    "Vector sort"
     annotation (Placement(transformation(extent={{20,-180},{40,-160}})));
 
   Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea1[nSta]
@@ -152,7 +172,8 @@ block Configurator "Configures chiller staging"
     "Type converter"
     annotation (Placement(transformation(extent={{60,-180},{80,-160}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Equal intEqu[nSta] "Integer equality"
+  Buildings.Controls.OBC.CDL.Integers.Equal intEqu[nSta]
+    "Integer equality"
     annotation (Placement(transformation(extent={{100,-160},{120,-140}})));
 
   Buildings.Controls.OBC.CDL.Utilities.Assert assMes(
@@ -164,138 +185,186 @@ block Configurator "Configures chiller staging"
     annotation (Placement(transformation(extent={{180,-160},{200,-140}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd(
-    final nu=nSta) "Logical and with a vector input"
+    final nu=nSta)
+    "Logical and with a vector input"
     annotation (Placement(transformation(extent={{140,-160},{160,-140}})));
 
+  Buildings.Controls.OBC.CDL.Continuous.Product pro1[nSta,nBoi]
+    "Element-wise product"
+    annotation (Placement(transformation(extent={{-160,60},{-140,80}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.MatrixMax matMax1(
+    final rowMax=true,
+    final nRow=nSta,
+    final nCol=nBoi)
+    "Find highest BFirMin in each stage"
+    annotation (Placement(transformation(extent={{-120,60},{-100,80}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.Product pro2[nSta]
+    annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.Sort sort1(
+    final nin=nBoi)
+    annotation (Placement(transformation(extent={{-140,160},{-120,180}})));
 equation
-  connect(boiDesCaps.y, staDesCaps.u) annotation (Line(points={{-178,110},{-142,
-          110}}, color={0,0,127}));
-  connect(boiMinCaps.y, staMinCaps.u) annotation (Line(points={{-178,70},{-142,70}},
-                 color={0,0,127}));
+  connect(boiDesCaps.y, staDesCaps.u)
+    annotation (Line(points={{-178,110},{-142,110}},
+      color={0,0,127}));
   connect(uBoiAva, booToRea.u)
-    annotation (Line(points={{-240,-40},{-202,-40}}, color={255,0,255}));
+    annotation (Line(points={{-240,-40},{-202,-40}},
+      color={255,0,255}));
   connect(booToRea.y,sumNumAvaBoi. u)
-    annotation (Line(points={{-178,-40},{-142,-40}}, color={0,0,127}));
-  connect(sumNumBoi.y, add2.u1) annotation (Line(points={{-118,20},{-100,20},{-100,
-          -4},{-82,-4}}, color={0,0,127}));
-  connect(sumNumAvaBoi.y, add2.u2) annotation (Line(points={{-118,-40},{-100.5,-40},
-          {-100.5,-16},{-82,-16}}, color={0,0,127}));
+    annotation (Line(points={{-178,-40},{-142,-40}},
+      color={0,0,127}));
+  connect(sumNumBoi.y, add2.u1)
+    annotation (Line(points={{-118,20},{-100,20},{-100,-4},{-82,-4}},
+      color={0,0,127}));
+  connect(sumNumAvaBoi.y, add2.u2)
+    annotation (Line(points={{-118,-40},{-100.5,-40},{-100.5,-16},{-82,-16}},
+      color={0,0,127}));
   connect(add2.y,lesThr. u)
-    annotation (Line(points={{-58,-10},{-42,-10}},  color={0,0,127}));
-  connect(lesThr.y, yAva) annotation (Line(points={{-18,-10},{60,-10},{60,-80},{
-          240,-80}}, color={255,0,255}));
-  connect(boiStaMat.y,pro. u2) annotation (Line(points={{-178,-160},{-160,-160},
-          {-160,-126},{-142,-126}}, color={0,0,127}));
+    annotation (Line(points={{-58,-10},{-42,-10}},
+      color={0,0,127}));
+  connect(lesThr.y, yAva)
+    annotation (Line(points={{-18,-10},{60,-10},{60,-80},{240,-80}},
+      color={255,0,255}));
   connect(pro.y,matMax. u)
-    annotation (Line(points={{-118,-120},{-102,-120}}, color={0,0,127}));
+    annotation (Line(points={{-118,-120},{-102,-120}},
+      color={0,0,127}));
   connect(matMax.y,reaToInt. u)
-    annotation (Line(points={{-78,-120},{-62,-120}}, color={0,0,127}));
-  connect(reaToInt.y, yTyp) annotation (Line(points={{-38,-120},{240,-120}},
-                      color={255,127,0}));
-  connect(reaToInt.y, intToRea1.u) annotation (Line(points={{-38,-120},{-28,-120},
-          {-28,-170},{-22,-170}},color={255,127,0}));
+    annotation (Line(points={{-78,-120},{-62,-120}},
+      color={0,0,127}));
+  connect(reaToInt.y, yTyp)
+    annotation (Line(points={{-38,-120},{240,-120}},
+      color={255,127,0}));
+  connect(reaToInt.y, intToRea1.u)
+    annotation (Line(points={{-38,-120},{-30,-120},{-30,-170},{-22,-170}},
+      color={255,127,0}));
   connect(intToRea1.y, sort.u)
-    annotation (Line(points={{2,-170},{18,-170}},  color={0,0,127}));
+    annotation (Line(points={{2,-170},{18,-170}},
+      color={0,0,127}));
   connect(sort.y, reaToInt1.u)
-    annotation (Line(points={{42,-170},{58,-170}},   color={0,0,127}));
-  connect(reaToInt.y,intEqu. u1) annotation (Line(points={{-38,-120},{90,-120},{
-          90,-150},{98,-150}},   color={255,127,0}));
-  connect(reaToInt1.y,intEqu. u2) annotation (Line(points={{82,-170},{90,-170},{
-          90,-158},{98,-158}},    color={255,127,0}));
+    annotation (Line(points={{42,-170},{58,-170}},
+      color={0,0,127}));
+  connect(reaToInt.y,intEqu. u1)
+    annotation (Line(points={{-38,-120},{90,-120},{90,-150},{98,-150}},
+      color={255,127,0}));
+  connect(reaToInt1.y,intEqu. u2)
+    annotation (Line(points={{82,-170},{90,-170},{90,-158},{98,-158}},
+      color={255,127,0}));
   connect(mulAnd.y, assMes.u)
-    annotation (Line(points={{162,-150},{178,-150}},  color={255,0,255}));
-  connect(intEqu.y, mulAnd.u) annotation (Line(points={{122,-150},{138,-150}},
-    color={255,0,255}));
-  connect(staType.y, pro.u1) annotation (Line(points={{-178,-100},{-160,-100},{-160,
-          -114},{-142,-114}}, color={0,0,127}));
-  connect(staDesCaps.y, yDesCap) annotation (Line(points={{-118,110},{100,110},{
-          100,20},{240,20}}, color={0,0,127}));
-  connect(staMinCaps.y, yMinCap) annotation (Line(points={{-118,70},{80,70},{80,
-          -20},{240,-20}}, color={0,0,127}));
+    annotation (Line(points={{162,-150},{178,-150}},
+      color={255,0,255}));
+  connect(intEqu.y, mulAnd.u)
+    annotation (Line(points={{122,-150},{138,-150}},
+      color={255,0,255}));
+  connect(staDesCaps.y, yDesCap)
+    annotation (Line(points={{-118,110},{100,110},{100,20},{240,20}},
+      color={0,0,127}));
   connect(oneVec.y,sumNumBoi. u)
-    annotation (Line(points={{-178,20},{-142,20}}, color={0,0,127}));
-  connect(sort1.u,boiDesCaps. y) annotation (Line(points={{-142,170},{-160,
-          170},{-160,110},{-178,110}}, color={0,0,127}));
-  connect(sort1.y, add1.u1) annotation (Line(points={{-118,170},{-110,170},{-110,
-          176},{-102,176}}, color={0,0,127}));
+    annotation (Line(points={{-178,20},{-142,20}},
+      color={0,0,127}));
+  connect(boiStaMat.y, pro.u1)
+    annotation (Line(points={{-178,-90},{-160,-90},{-160,-114},{-142,-114}},
+      color={0,0,127}));
+  connect(staType.y, pro.u2)
+    annotation (Line(points={{-178,-150},{-160,-150},{-160,-126},{-142,-126}},
+      color={0,0,127}));
+  connect(boiFirMinMat.y, pro1.u1)
+    annotation (Line(points={{-178,70},{-170,70},{-170,76},{-162,76}},
+      color={0,0,127}));
+  connect(pro1.u2, boiStaMat.y)
+    annotation (Line(points={{-162,64},{-170,64},{-170,-90},{-178,-90}},
+      color={0,0,127}));
+  connect(pro1.y, matMax1.u)
+    annotation (Line(points={{-138,70},{-122,70}},
+      color={0,0,127}));
+  connect(matMax1.y, pro2.u2)
+    annotation (Line(points={{-98,70},{-90,70},{-90,64},{-82,64}},
+      color={0,0,127}));
+  connect(staDesCaps.y, pro2.u1)
+    annotation (Line(points={{-118,110},{-90,110},{-90,76},{-82,76}},
+      color={0,0,127}));
+  connect(pro2.y, yMinCap)
+    annotation (Line(points={{-58,70},{80,70},{80,-20},{240,-20}},
+      color={0,0,127}));
+
   connect(boiDesCaps.y, add1.u2) annotation (Line(points={{-178,110},{-160,110},
-          {-160,150},{-110,150},{-110,164},{-102,164}}, color={0,0,127}));
-  connect(add1.y, multiMax.u)
-    annotation (Line(points={{-78,170},{-62,170}}, color={0,0,127}));
+          {-160,154},{-102,154}}, color={0,0,127}));
+  connect(sort1.y, add1.u1) annotation (Line(points={{-118,170},{-110,170},
+          {-110,166},{-102,166}}, color={0,0,127}));
+  connect(add1.y, multiMax.u) annotation (Line(points={{-78,160},{-70,160},
+          {-70,160},{-62,160}}, color={0,0,127}));
   connect(multiMax.y, abs.u)
-    annotation (Line(points={{-38,170},{-22,170}}, color={0,0,127}));
+    annotation (Line(points={{-38,160},{-22,160}}, color={0,0,127}));
   connect(abs.y, lesThr1.u)
-    annotation (Line(points={{2,170},{18,170}}, color={0,0,127}));
+    annotation (Line(points={{2,160},{18,160}}, color={0,0,127}));
   connect(lesThr1.y, assMes1.u)
-    annotation (Line(points={{42,170},{58,170}}, color={255,0,255}));
+    annotation (Line(points={{42,160},{58,160}}, color={255,0,255}));
+  connect(sort1.u, boiDesCaps.y) annotation (Line(points={{-142,170},{-160,
+          170},{-160,110},{-178,110}}, color={0,0,127}));
   annotation (defaultComponentName = "conf",
-        Icon(graphics={
-        Rectangle(
-        extent={{-100,-100},{100,100}},
-        lineColor={0,0,127},
-        fillColor={255,255,255},
-        fillPattern=FillPattern.Solid),
-        Text(
-          extent={{-120,146},{100,108}},
-          lineColor={0,0,255},
-          textString="%name")}),
-        Diagram(coordinateSystem(preserveAspectRatio=false,
-          extent={{-220,-200},{220,200}})),
-Documentation(info="<html>
-<p>
-This subsequence is not directly specified in 1711 as it provides
-a side calculation pertaining to generalization of the staging 
-sequences for any number of chillers and stages provided by the 
-user.
-</p>
-<p>
-Given the staging matrix input parameter <code>staMat</code> the staging configurator calculates:
-</p>
-<ul>
-<li>
-Stage availability vector <code>yAva</code> from the chiller availability <code>uChiAva</code> 
-input vector according to RP-1711 March 2020 Draft section 5.2.4.13<br/>
-</li>
-<li>
-Design stage capacity vector <code>yDesCap</code> from the design chiller capacity vector 
-input parameter <code>chiDesCap</code>.
-The chillers need to be tagged in order of ascending chiller capacity if unequally sized. This is 
-according to 3.1.1.4.1 1711 March 2020 Draft, otherwise a warning is thrown.<br/>
-</li>
-<li>
-Minimum stage capacity vector <code>yMinCap</code> from the chiller minimum cycling load input 
-parameter <code>chiMinCap</code> according to section 3.1.1.5.1, 1711 March 2020 Draft.<br/>
-</li>
-<li>
-Stage type vector <code>yTyp</code> from the chiller type vector input parameter 
-<code>uChiTyp</code>, as listed in section 5.2.4.14, 1711 March 2020 Draft. Chiller types are defined in 
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Types.ChillerAndStageTypes\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Types.ChillerAndStageTypes</a>.<br/>
-Stage type is, based on the chiller types in that stage and in the recommended staging order:<br/>
-<ul>
-<li>
-Positive displacement, for any stage with only positive displacement chiller(s)
-</li>
-<li>
-Variable speed centirfugal, for any stage with any variable speed chiller(s) and no constant speed chiller(s)
-</li>
-<li>
-Constant speed centirfugal, for any stage with any constant speed centrifugal chiller(s)<br/>
-</li>
-</ul>
-This stage type is used in the 
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Staging.Subsequences.PartLoadRatios\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Staging.Subsequences.PartLoadRatios</a>
-subsequence to determine the stage up and down part load ratios.
-</li>
-</ul>
-</html>",
-revisions="<html>
-<ul>
-<li>
-June 7, 2019, by Milica Grahovac:<br/>
-First implementation.
-</li>
-</ul>
-</html>"));
+    Icon(graphics={
+           Rectangle(extent={{-100,-100},{100,100}},
+                     lineColor={0,0,127},
+                     fillColor={255,255,255},
+                     fillPattern=FillPattern.Solid),
+                Text(extent={{-120,146},{100,108}},
+                     lineColor={0,0,255},
+                     textString="%name")}),
+    Diagram(coordinateSystem(preserveAspectRatio=false,
+      extent={{-220,-200},{220,200}})),
+    Documentation(info="<html>
+      <p>
+      This subsequence is not directly specified in 1711 as it provides
+      a side calculation pertaining to generalization of the staging 
+      sequences for any number of boilers and stages provided by the 
+      user.
+      </p>
+      <p>
+      Given the staging matrix input parameter <code>staMat</code> the staging
+      configurator calculates:
+      </p>
+      <ul>
+      <li>
+      Stage availability vector <code>yAva</code> from the boiler availability
+      <code>uBoiAva</code> input vector according to RP-1711 March 2020 Draft
+      section 5.3.3.9.
+      </li>
+      <li>
+      Design stage capacity vector <code>yDesCap</code> from the design boiler
+      capacity vector input parameter <code>boiDesCap</code>.
+      </li>
+      <li>
+      Minimum stage capacity vector <code>yMinCap</code> from the boiler minimum
+      firing rate input parameter <code>boiMinCap</code> according to section
+      5.3.3.8, 1711 March 2020 Draft.
+      </li>
+      <li>
+      Stage type vector <code>yTyp</code> from the boiler type vector input
+      parameter <code>boiTyp</code>. Boiler types are defined in
+      <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes\">
+      Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes</a>.<br/>
+      Stage type is based on the boiler types in that stage, and is classified
+      as:
+      <ol>
+      <li>
+      non-condensing, if any of the boilers in that stage are non-condensing boilers.
+      </li>
+      <li>
+      condensing, if all the boilers in that stage are condensing boilers.
+      </li>
+      </ol>
+      This stage type is used to determine the stage up and down conditions to apply.
+      </li>
+      </ul>
+      </html>",
+      revisions="<html>
+      <ul>
+      <li>
+      May 20, 2020, by Karthik Devaprasad:<br/>
+      First implementation.
+      </li>
+      </ul>
+      </html>"));
 end Configurator;

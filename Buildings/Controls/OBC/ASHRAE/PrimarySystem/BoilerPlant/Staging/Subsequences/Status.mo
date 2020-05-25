@@ -1,42 +1,46 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences;
 block Status
-  "Outputs current stage chiller index vector, current, next available lower and higher stage index and whether curent stage is the lowest and/or the highest available stage"
+  "Outputs current stage boiler index vector, current, next available lower and
+  higher stage index and whether current stage is the lowest and/or the highest
+  available stage"
 
   parameter Integer nSta = 3
     "Number of stages";
 
-  parameter Integer nChi = 2
-    "Number of chillers";
+  parameter Integer nBoi = 2
+    "Number of boilers";
 
-  parameter Integer staMat[nSta, nChi] = {{1,0},{0,1},{1,1}}
-    "Staging matrix with stages in rows and chillers in columns";
+  parameter Integer staMat[nSta, nBoi] = {{1,0},{0,1},{1,1}}
+    "Staging matrix with stages in rows and boilers in columns";
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uAva[nSta](
-    final start = fill(true, nSta)) "Stage availability status"
+    final start = fill(true, nSta))
+    "Stage availability status"
     annotation (Placement(transformation(extent={{-460,-100},{-420,-60}}),
-        iconTransformation(extent={{-140,-80},{-100,-40}})));
+      iconTransformation(extent={{-140,-80},{-100,-40}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput u(
     final min=0,
     final max=nSta,
-    final start = 0) "Current chiller stage"
+    final start = 0)
+    "Current boiler stage"
     annotation (Placement(transformation(extent={{-460,60},{-420,100}}),
-        iconTransformation(extent={{-140,40},{-100,80}})));
+      iconTransformation(extent={{-140,40},{-100,80}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yHig
     "If true current stage is the highest available stage"
     annotation (Placement(transformation(extent={{440,20},{480,60}}),
-        iconTransformation(extent={{100,-30},{140,10}})));
+      iconTransformation(extent={{100,-30},{140,10}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yLow
     "If true current stage is the lowest available stage"
     annotation (Placement(transformation(extent={{440,-100},{480,-60}}),
-        iconTransformation(extent={{100,-60},{140,-20}})));
+      iconTransformation(extent={{100,-60},{140,-20}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yAvaCur
     "Current stage availability status"
     annotation (Placement(transformation(extent={{440,-260},{480,-220}}),
-        iconTransformation(extent={{100,-90},{140,-50}})));
+      iconTransformation(extent={{100,-90},{140,-50}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yAvaUp(
     final min=0,
@@ -50,30 +54,34 @@ block Status
     final max=nSta)
     "Next available lower stage"
     annotation (Placement(
-        transformation(extent={{440,-60},{480,-20}}), iconTransformation(extent=
-           {{100,20},{140,60}})));
+      transformation(extent={{440,-60},{480,-20}}),
+      iconTransformation(extent={{100,20},{140,60}})));
 
 protected
   final parameter Integer staInd[nSta] = {i for i in 1:nSta}
     "Stage index vector";
 
-  final parameter Integer staIndMat[nSta, nChi] = {j for i in 1:nChi, j in 1:nSta}
+  final parameter Integer staIndMat[nSta, nBoi] = {j for i in 1:nBoi, j in 1:nSta}
     "Matrix of staging matrix dimensions with stage indices in each column";
 
   final parameter Integer lowDia[nSta, nSta] = {if i<=j then 1 else 0 for i in 1:nSta, j in 1:nSta}
     "Lower diagonal unit matrix";
 
-  Buildings.Controls.OBC.CDL.Logical.Not not1 "Not unavailable"
+  Buildings.Controls.OBC.CDL.Logical.Not not1
+    "Not unavailable"
     annotation (Placement(transformation(extent={{20,-250},{40,-230}})));
 
-  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi2 "Switch"
+  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi2
+    "Switch"
     annotation (Placement(transformation(extent={{100,-220},{120,-200}})));
 
-  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi3 "Switch"
+  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi3
+    "Switch"
     annotation (Placement(transformation(extent={{360,70},{380,90}})));
 
   Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep(
-    final nout=nSta) "Replicates signal to a length equal the stage count"
+    final nout=nSta)
+    "Replicates signal to a length equal the stage count"
     annotation (Placement(transformation(extent={{-300,190},{-280,210}})));
 
   Buildings.Controls.OBC.CDL.Integers.Product proInt1[nSta]
@@ -81,7 +89,8 @@ protected
     annotation (Placement(transformation(extent={{-60,100},{-40,120}})));
 
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant staIndx[nSta](
-    final k=staInd) "Stage index vector"
+    final k=staInd)
+    "Stage index vector"
     annotation (Placement(transformation(extent={{-240,120},{-220,140}})));
 
   Buildings.Controls.OBC.CDL.Integers.Greater intGre[nSta]
@@ -120,7 +129,8 @@ protected
     annotation (Placement(transformation(extent={{-140,-100},{-120,-80}})));
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt2[nSta](
-      integerTrue=fill(1, nSta), integerFalse=fill(0, nSta))
+    final integerTrue=fill(1, nSta),
+    final integerFalse=fill(0, nSta))
     "Type converter that outputs zero for any false input"
     annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
 
@@ -142,7 +152,8 @@ protected
     annotation (Placement(transformation(extent={{60,-80},{80,-60}})));
 
   Buildings.Controls.OBC.CDL.Integers.GreaterThreshold intGreThr(
-    final threshold=nSta) "True if there are no higher available stages"
+    final threshold=nSta)
+    "True if there are no higher available stages"
     annotation (Placement(transformation(extent={{100,100},{120,120}})));
 
   Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi
@@ -154,13 +165,15 @@ protected
     "If the current stage is the lowest available the input value equals 0"
     annotation (Placement(transformation(extent={{100,-80},{120,-60}})));
 
-  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi1 "Logical switch"
+  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi1
+    "Logical switch"
     annotation (Placement(transformation(extent={{180,-80},{200,-60}})));
 
   Buildings.Controls.OBC.CDL.Routing.RealExtractor extStaAva(
     final allowOutOfRange=true,
     final outOfRangeValue=nSta + 1,
-    final nin=nSta) "Extracts stage availability for the current stage"
+    final nin=nSta)
+    "Extracts stage availability for the current stage"
     annotation (Placement(transformation(extent={{-200,-160},{-180,-140}})));
 
   Buildings.Controls.OBC.CDL.Continuous.LessThreshold lesThr(
@@ -169,21 +182,24 @@ protected
     annotation (Placement(transformation(extent={{-160,-160},{-140,-140}})));
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea[nSta](
-    final realTrue=fill(1, nSta), realFalse=fill(0, nSta))
+    final realTrue=fill(1, nSta),
+    final realFalse=fill(0, nSta))
     "Type converter"
     annotation (Placement(transformation(extent={{-240,-160},{-220,-140}})));
 
   Buildings.Controls.OBC.CDL.Utilities.Assert cheStaAva1(
-    final message="There are no available chiller stages. The staging cannot be performed.")
+    final message="There are no available boiler stages. The staging cannot be performed.")
     "Checks if any stage is available"
     annotation (Placement(transformation(extent={{-340,-140},{-320,-120}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
-    final nu=nSta) "Logical or"
+    final nu=nSta)
+    "Logical or"
     annotation (Placement(transformation(extent={{-380,-140},{-360,-120}})));
 
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(
-    final k=0) "Zero"
+    final k=0)
+    "Zero"
     annotation (Placement(transformation(extent={{100,-40},{120,-20}})));
 
   Buildings.Controls.OBC.CDL.Logical.And and4
@@ -306,31 +322,64 @@ equation
           textString="%name")}),
         Diagram(coordinateSystem(preserveAspectRatio=false,
           extent={{-420,-280},{440,280}})),
-Documentation(info="<html>
-<p>This subsequence is not directly specified in 1711 as it provides a side calculation pertaining to generalization of the staging sequences for any number of chillers and stages provided by the user. </p>
-<p>Based on the current stage <span style=\"font-family: monospace;\">u</span> and stage availability vector <span style=\"font-family: monospace;\">uAva</span> the sequence outputs: </p>
-<ul>
-<li>Integer indices of: the current stage <span style=\"font-family: monospace;\">y</span>, first available higher stage <span style=\"font-family: monospace;\">yUp</span> and the first available lower stage <span style=\"font-family: monospace;\">yDown</span>. </li>
-<li>Boolean status outputs to show if the current operating stage <span style=\"font-family: monospace;\">u</span> is: </li>
-<li><ul>
-<li>Available, <span style=\"font-family: monospace;\">u</span> </li>
-<li>The highest available stage, <span style=\"font-family: monospace;\">yHig</span> </li>
-<li>The lowest available stage, <span style=\"font-family: monospace;\">yLow</span> </li>
-</ul></li>
-</ul>
-<p>The purpose of this sequence is to: </p>
-<ul>
-<li>Provide inputs for the stage up and down conditionals such that staging into unavailable stages is avoided. </li>
-<li>Change the stage to the first available higher stage in an event that the current stage becomes unavailable. </li>
-</ul>
-<p>The sequences are implemented according to 1711 March 2020 Draft, section 5.2.4.15.</p>
-</html>",
-revisions="<html>
-<ul>
-<li>
-June 10, 2019, by Milica Grahovac:<br/>
-First implementation.
-</li>
-</ul>
-</html>"));
+  Documentation(info="<html>
+    <p>
+    This subsequence is not directly specified in 1711 as it provides a side
+    calculation pertaining to generalization of the staging sequences for any number
+    of boilers and stages provided by the user.
+    </p>
+    <p>
+    Based on the current stage <span style=\"font-family: monospace;\">u</span>
+    and stage availability vector <span style=\"font-family: monospace;\">uAva</span>
+    the sequence outputs:
+    </p>
+    <ul>
+    <li>
+    Integer indices of: the current stage <span style=\"font-family: monospace;\">y</span>,
+    first available higher stage <span style=\"font-family: monospace;\">yUp</span>
+    and the first available lower stage <span style=\"font-family: monospace;\">yDown</span>.
+    </li>
+    <li>
+    Boolean status outputs to show if the current operating stage 
+    <span style=\"font-family: monospace;\">u</span> is:
+    </li>
+    <li>
+    <ul>
+    <li>
+    Available, <span style=\"font-family: monospace;\">u</span>
+    </li>
+    <li>
+    The highest available stage, <span style=\"font-family: monospace;\">yHig</span> 
+    </li>
+    <li>
+    The lowest available stage, <span style=\"font-family: monospace;\">yLow</span>
+    </li>
+    </ul>
+    </li>
+    </ul>
+    <p>
+    The purpose of this sequence is to: 
+    </p>
+    <ul>
+    <li>
+    Provide inputs for the stage up and down conditionals such that staging into
+    unavailable stages is avoided.
+    </li>
+    <li>
+    Change the stage to the first available higher stage in an event that the
+    current stage becomes unavailable. 
+    </li>
+    </ul>
+    <p>
+    The sequences are implemented according to 1711 March 2020 Draft, section 5.3.3.9.
+    </p>
+    </html>",
+    revisions="<html>
+    <ul>
+    <li>
+    May 22, 2020, by Karthik Devaprasad:<br/>
+    First implementation.
+    </li>
+    </ul>
+    </html>"));
 end Status;

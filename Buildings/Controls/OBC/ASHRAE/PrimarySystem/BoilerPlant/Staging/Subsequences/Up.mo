@@ -66,22 +66,29 @@ block Up "Generates a stage up signal"
     annotation (Placement(transformation(extent={{100,-20},{140,20}}),
         iconTransformation(extent={{100,-20},{140,20}})));
 
-  EfficiencyCondition effCon
+  EfficiencyCondition effCon "Efficiency condition for staging up"
     annotation (Placement(transformation(extent={{-60,30},{-40,50}})));
 
   Subsequences.FailsafeCondition faiSafCon
-    annotation (Placement(transformation(extent={{-60,-98},{-40,-80}})));
-  CDL.Interfaces.RealInput uQUpMin
+    "Failsafe condition for staging up and down"
+    annotation (Placement(transformation(extent={{-60,-102},{-40,-84}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uQUpMin
     "Minimum heating capacity of next available stage"
     annotation (Placement(transformation(extent={{-140,50},{-100,90}})));
-  CDL.Interfaces.RealInput uHotWatFloRat "Measured hot water flow rate"
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uHotWatFloRat
+    "Measured hot water flow rate"
     annotation (Placement(transformation(extent={{-140,20},{-100,60}})));
-  CDL.Interfaces.RealInput uUpMinFloSetPoi
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uUpMinFloSetPoi
     "Minimum flow setpoint for next available higher stage"
     annotation (Placement(transformation(extent={{-140,-10},{-100,30}})));
-  CDL.Interfaces.RealInput uQDes
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uQDes
+    "Design heating capacity of the current stage"
     annotation (Placement(transformation(extent={{-140,80},{-100,120}})));
-  CDL.Interfaces.RealInput uQReq
+  CDL.Interfaces.RealInput uQReq "Calculated heating capacity requirement"
     annotation (Placement(transformation(extent={{-140,110},{-100,150}})));
   CDL.Interfaces.IntegerInput uTyp[nSta]
     "Boiler-type vector specifying boiler-type in each stage"
@@ -89,7 +96,9 @@ block Up "Generates a stage up signal"
   CDL.Interfaces.IntegerInput uAvaUp "Index of next available higher stage"
     annotation (Placement(transformation(extent={{-140,-70},{-100,-30}})));
 
-  CDL.Logical.Or or2
+  CDL.Logical.Not not1 "Logical not"
+    annotation (Placement(transformation(extent={{-60,-150},{-40,-130}})));
+  CDL.Logical.MultiOr mulOr(nu=3) "Logical Or"
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
 equation
   connect(effCon.uQReq, uQReq) annotation (Line(points={{-62,49},{-64,49},{-64,
@@ -106,18 +115,21 @@ equation
           -20},{-120,-20}}, color={255,127,0}));
   connect(effCon.uAvaUp, uAvaUp) annotation (Line(points={{-62,31},{-64,31},{
           -64,-50},{-120,-50}}, color={255,127,0}));
-  connect(faiSafCon.TSupSet, THotWatSupSet) annotation (Line(points={{-62,-85},
-          {-80,-85},{-80,-80},{-120,-80}}, color={0,0,127}));
-  connect(faiSafCon.TSup, THotWatSup) annotation (Line(points={{-62,-90},{-80,-90},
+  connect(faiSafCon.TSupSet, THotWatSupSet) annotation (Line(points={{-62,-89},{
+          -80,-89},{-80,-80},{-120,-80}},  color={0,0,127}));
+  connect(faiSafCon.TSup, THotWatSup) annotation (Line(points={{-62,-99},{-80,-99},
           {-80,-110},{-120,-110}}, color={0,0,127}));
-  connect(or2.y, yStaUp)
+  connect(mulOr.y, yStaUp)
     annotation (Line(points={{62,0},{120,0}}, color={255,0,255}));
-  connect(effCon.yEffCon, or2.u1) annotation (Line(points={{-38,40},{0,40},{0,0},
-          {38,0}}, color={255,0,255}));
-  connect(uAvaCur, faiSafCon.uAvaCur) annotation (Line(points={{-120,-140},{-70,
-          -140},{-70,-95},{-62,-95}}, color={255,0,255}));
-  connect(faiSafCon.y, or2.u2) annotation (Line(points={{-38,-90},{0,-90},{0,-8},
-          {38,-8}}, color={255,0,255}));
+  connect(effCon.yEffCon, mulOr.u[1]) annotation (Line(points={{-38,40},{10,40},
+          {10,4.66667},{38,4.66667}},
+                                    color={255,0,255}));
+  connect(faiSafCon.y, mulOr.u[2]) annotation (Line(points={{-38,-94},{0,-94},{0,
+          0},{38,0}}, color={255,0,255}));
+  connect(not1.u, uAvaCur)
+    annotation (Line(points={{-62,-140},{-120,-140}}, color={255,0,255}));
+  connect(not1.y, mulOr.u[3]) annotation (Line(points={{-38,-140},{10,-140},{10,
+          -4.66667},{38,-4.66667}}, color={255,0,255}));
   annotation (defaultComponentName = "staUp",
         Icon(coordinateSystem(extent={{-100,-160},{100,160}}),
              graphics={
