@@ -122,6 +122,7 @@ block Up
     annotation (Placement(transformation(extent={{100,-20},{140,20}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
+protected
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.EfficiencyCondition effCon(
     final nSta=nSta,
     final perNonConBoi=perNonConBoi,
