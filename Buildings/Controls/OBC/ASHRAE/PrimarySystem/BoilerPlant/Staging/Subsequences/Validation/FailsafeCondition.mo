@@ -92,27 +92,6 @@ protected
 equation
   connect(con.y, faiSafCon.TSupSet)
     annotation (Line(points={{-58,70},{-50,70},{-50,55},{-42,55}},
-<<<<<<< HEAD
-                                                            color={0,0,127}));
-  connect(pul.y, faiSafCon.TSup) annotation (Line(points={{-58,30},{-50,30},{-50,
-          45},{-42,45}}, color={0,0,127}));
-  connect(con1.y, faiSafCon1.TSupSet) annotation (Line(points={{42,70},{50,70},{
-          50,55},{58,55}}, color={0,0,127}));
-  connect(pul1.y, faiSafCon1.TSup) annotation (Line(points={{42,30},{50,30},{50,
-          45},{58,45}}, color={0,0,127}));
-  connect(con2.y,faiSafCon2. TSupSet) annotation (Line(points={{-58,-30},{-50,-30},
-          {-50,-45},{-42,-45}},
-                           color={0,0,127}));
-  connect(pul2.y,faiSafCon2. TSup) annotation (Line(points={{-58,-70},{-50,-70},
-          {-50,-55},{-42,-55}},
-                        color={0,0,127}));
-  connect(con3.y,faiSafCon3. TSupSet) annotation (Line(points={{42,-30},{50,-30},
-          {50,-45},{58,-45}},
-                           color={0,0,127}));
-  connect(pul3.y,faiSafCon3. TSup) annotation (Line(points={{42,-70},{50,-70},{50,
-          -55},{58,-55}},
-                        color={0,0,127}));
-=======
       color={0,0,127}));
   connect(pul.y, faiSafCon.TSup)
     annotation (Line(points={{-58,30},{-50,30},{-50,45},{-42,45}},
@@ -135,8 +114,6 @@ equation
   connect(pul3.y,faiSafCon3.TSup)
     annotation (Line(points={{42,-70},{50,-70},{50,-55},{58,-55}},
       color={0,0,127}));
-
->>>>>>> 2a7fedd2c9c4b0499d5eba96aa9bb2a5b4cbc677
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Ellipse(lineColor = {75,138,73},
@@ -151,12 +128,8 @@ equation
     Diagram(coordinateSystem(preserveAspectRatio=false)),
     experiment(
       StopTime=7200,
-<<<<<<< HEAD
-      Interval=1),
-=======
       Interval=1,
       Tolerance=1e-6),
->>>>>>> 2a7fedd2c9c4b0499d5eba96aa9bb2a5b4cbc677
     Documentation(info="<html>
       <p>This example validates
       <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.FailsafeCondition\">
