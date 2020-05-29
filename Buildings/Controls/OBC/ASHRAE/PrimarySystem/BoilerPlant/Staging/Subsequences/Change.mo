@@ -1,91 +1,96 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences;
-block Change "Calculates the chiller stage signal"
+block Change
+  "Calculates the boiler stage signal"
 
   parameter Integer nSta = 3
-    "Number of chiller stages";
+    "Number of boiler stages";
 
-  parameter Modelica.SIunits.Time delayStaCha = 900
+  parameter Real delayStaCha(
+    final unit="s",
+    final displayUnit="s",
+    final quantity="Time") = 600
     "Hold period for each stage change";
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uPla
+    "Plant enable signal"
+    annotation (Placement(transformation(extent={{-480,140},{-440,180}}),
+      iconTransformation(extent={{-140,60},{-100,100}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uUp
     "Stage up status"
-    annotation (Placement(transformation(extent={{-478,-60},{-438,-20}}),
-      iconTransformation(extent={{-140,-40},{-100,0}})));
+    annotation (Placement(transformation(extent={{-480,-60},{-440,-20}}),
+      iconTransformation(extent={{-140,-60},{-100,-20}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uDow
     "Stage down signal"
     annotation (Placement(transformation(extent={{-480,-160},{-440,-120}}),
-    iconTransformation(extent={{-140,-80},{-100,-40}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uIni(
-    final min=0,
-    final max=nSta)
-    "Initial chiller stage (at plant enable)"
-     annotation (Placement(transformation(extent={{-478,200},{-438,240}}),
-     iconTransformation(extent={{-140,80},{-100,120}})));
+      iconTransformation(extent={{-140,-100},{-100,-60}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uAvaUp(
     final min=0,
     final max=nSta)
     "Next available stage up"
-    annotation (Placement(transformation(extent={{-478,80},{-438,120}}),
-      iconTransformation(extent={{-140,40},{-100,80}})));
+    annotation (Placement(transformation(extent={{-480,80},{-440,120}}),
+      iconTransformation(extent={{-140,20},{-100,60}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uAvaDow(
     final min=0,
     final max=nSta)
     "Next available stage down"
-    annotation (Placement(transformation(extent={{-478,0}, {-438,40}}),
-    iconTransformation(extent={{-140,0},{-100,40}})));
+    annotation (Placement(transformation(extent={{-480,0},{-440,40}}),
+      iconTransformation(extent={{-140,-20},{-100,20}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y
+    "Boiler stage change edge signal"
+    annotation (Placement(transformation(extent={{440,-20},{480,20}}),
+      iconTransformation(extent={{100,-60},{140,-20}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput ySta(
     final min=0,
     final max = nSta)
-    "Chiller stage integer setpoint"
+    "Boiler stage integer setpoint"
     annotation (Placement(
-        transformation(extent={{440,140},{480,180}}),  iconTransformation(
-          extent={{100,20},{140,60}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y
-    "Chiller stage change edge signal"
-    annotation (Placement(transformation(extent={{440,-20},{480,20}}),
-        iconTransformation(extent={{100,-60},{140,-20}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uPla
-    "Plant enable signal"
-    annotation (Placement(transformation(extent={{-478,140},{-438,180}}),
-    iconTransformation(extent={{-140,-120},{-100,-80}})));
+      transformation(extent={{440,140},{480,180}}),
+      iconTransformation(extent={{100,20},{140,60}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Logical.Or or2 "Logical or"
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(
+    final k=1)
+    "Initial boiler stage"
+    annotation (Placement(transformation(extent={{262,210},{282,230}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Or or2
+    "Logical or"
     annotation (Placement(transformation(extent={{-380,-100},{-360,-80}})));
 
   Buildings.Controls.OBC.CDL.Logical.Edge edg1
-     "Boolean signal change"
+    "Boolean signal change"
     annotation (Placement(transformation(extent={{0,-90},{20,-70}})));
 
-  Buildings.Controls.OBC.CDL.Discrete.TriggeredSampler triSam "Triggered sampler"
+  Buildings.Controls.OBC.CDL.Discrete.TriggeredSampler triSam
+    "Triggered sampler"
     annotation (Placement(transformation(extent={{140,50},{160,70}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch switch1 "Switch"
+  Buildings.Controls.OBC.CDL.Logical.Switch switch1
+    "Switch"
     annotation (Placement(transformation(extent={{-200,50},{-180,70}})));
 
-  Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea "Type converter"
+  Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea
+    "Type converter"
     annotation (Placement(transformation(extent={{-320,10},{-300,30}})));
 
-  Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt "Type converter"
+  Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt
+    "Type converter"
     annotation (Placement(transformation(extent={{400,150},{420,170}})));
 
-  Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea1 "Type converter"
+  Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea1
+    "Type converter"
     annotation (Placement(transformation(extent={{-320,90},{-300,110}})));
 
   Buildings.Controls.OBC.CDL.Logical.Latch lat(
-    final pre_y_start=true) "Latch"
+    final pre_y_start=true)
+    "Latch"
     annotation (Placement(transformation(extent={{-320,50},{-300,70}})));
-
-  Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea2
-    "Integer to real conversion"
-    annotation (Placement(transformation(extent={{-40,210},{-20,230}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold holIniSta(
     final trueHoldDuration=delayStaCha,
@@ -93,10 +98,12 @@ protected
     "Holds stage switched to initial upon plant start"
     annotation (Placement(transformation(extent={{-320,150},{-300,170}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch switch2 "Switch"
+  Buildings.Controls.OBC.CDL.Logical.Switch switch2
+    "Switch"
     annotation (Placement(transformation(extent={{340,190},{360,210}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Or or1 "Logical or"
+  Buildings.Controls.OBC.CDL.Logical.Or or1
+    "Logical or"
     annotation (Placement(transformation(extent={{120,-60},{140,-40}})));
 
   Buildings.Controls.OBC.CDL.Logical.Edge edg2
@@ -104,21 +111,29 @@ protected
     annotation (Placement(transformation(extent={{20,-180},{40,-160}})));
 
   Buildings.Controls.OBC.CDL.Logical.And and2
-    "Ensures the stage is changed at high load increases/decreases where a stage up or a stage down signal is uninterrupted after a single stage change as an another one is needed right away"
+    "Ensures the stage is changed at high load increases/decreases where a stage
+    up or a stage down signal is uninterrupted after a single stage change as 
+    another one is needed right away"
     annotation (Placement(transformation(extent={{80,-180},{100,-160}})));
 
   Buildings.Controls.OBC.CDL.Logical.Timer tim(
-    final accumulate=false) "Timer"
+    final accumulate=false)
+    "Timer"
     annotation (Placement(transformation(extent={{-20,-240},{0,-220}})));
 
-  Buildings.Controls.OBC.CDL.Logical.And and1 "Logical andEnsures the stage is changed at high load increases/decreases where a stage up or a stage down signal is uninterrupted after a single stage change as an another one is needed right away"
+  Buildings.Controls.OBC.CDL.Logical.And and1
+    "Ensures the stage is changed at high load increases/decreases where a stage
+    up or a stage down signal is uninterrupted after a single stage change as 
+    another one is needed right away"
     annotation (Placement(transformation(extent={{-80,-200},{-60,-180}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre "Previous value"
+  Buildings.Controls.OBC.CDL.Logical.Pre pre
+    "Previous value"
     annotation (Placement(transformation(extent={{60,-240},{80,-220}})));
 
   Buildings.Controls.OBC.CDL.Continuous.LessEqualThreshold lesEquThr(
-    final threshold=delayStaCha) "Less equal threshold"
+    final threshold=delayStaCha)
+    "Less equal threshold"
     annotation (Placement(transformation(extent={{20,-240},{40,-220}})));
 
   Buildings.Controls.OBC.CDL.Discrete.TriggeredSampler triSam1
@@ -126,46 +141,56 @@ protected
     annotation (Placement(transformation(extent={{240,0},{260,20}})));
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea
+    "Boolean to Real conversion"
     annotation (Placement(transformation(extent={{200,0},{220,20}})));
 
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr1(
     final threshold=0.5)
+    "Check if plant is still enabled"
     annotation (Placement(transformation(extent={{280,0},{300,20}})));
 
   Buildings.Controls.OBC.CDL.Logical.Latch lat1
-    "Ensures initial stage is held until the first stage change signal after the initial stage phase is over"
+    "Ensures initial stage is held until the first stage change signal after the
+    initial stage phase is over"
     annotation (Placement(transformation(extent={{102,150},{122,170}})));
 
-  Buildings.Controls.OBC.CDL.Logical.And and3 "And"
+  Buildings.Controls.OBC.CDL.Logical.And and3
+    "And"
     annotation (Placement(transformation(extent={{280,90},{300,110}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Not not2 "Not"
+  Buildings.Controls.OBC.CDL.Logical.Not not2
+    "Not"
     annotation (Placement(transformation(extent={{340,10},{360,30}})));
 
-  Buildings.Controls.OBC.CDL.Logical.And and5 "And"
+  Buildings.Controls.OBC.CDL.Logical.And and5
+    "And"
     annotation (Placement(transformation(extent={{400,-10},{420,10}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold staChaHol1(
     final trueHoldDuration=delayStaCha,
     final falseHoldDuration=0)
-    "Ensures stage change delay is kept at long stage up or down signals that cause multiple consecutive stage changes "
+    "Ensures stage change delay is kept at long stage up or down signals that
+    cause multiple consecutive stage changes "
     annotation (Placement(transformation(extent={{-20,-180},{0,-160}})));
 
   Buildings.Controls.OBC.CDL.Logical.Edge edg
     "Detects plant start"
     annotation (Placement(transformation(extent={{-380,150},{-360,170}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Not not3 "Logical not"
+  Buildings.Controls.OBC.CDL.Logical.Not not3
+    "Logical not"
     annotation (Placement(transformation(extent={{-220,-70},{-200,-50}})));
 
-  Buildings.Controls.OBC.CDL.Logical.And3 and6 "Logical not"
+  Buildings.Controls.OBC.CDL.Logical.And3 and6
+    "Logical not"
     annotation (Placement(transformation(extent={{-160,-90},{-140,-70}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Or or3 "Logical or"
+  Buildings.Controls.OBC.CDL.Logical.Or or3
+    "Logical or"
     annotation (Placement(transformation(extent={{220,-60},{240,-40}})));
 
   Buildings.Controls.OBC.CDL.Logical.FallingEdge falEdg
-    "Detects plant start"
+    "Detects plant disable"
     annotation (Placement(transformation(extent={{40,-40},{60,-20}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold staChaHol2(
@@ -180,10 +205,12 @@ protected
     "Stage change hold"
     annotation (Placement(transformation(extent={{340,-118},{360,-98}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Not not1 "Logical not"
+  Buildings.Controls.OBC.CDL.Logical.Not not1
+    "Logical not"
     annotation (Placement(transformation(extent={{378,-118},{398,-98}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre1 "Previous value"
+  Buildings.Controls.OBC.CDL.Logical.Pre pre1
+    "Previous value"
     annotation (Placement(transformation(extent={{406,-118},{426,-98}})));
 
 equation
@@ -200,11 +227,6 @@ equation
                                                   color={255,0,255}));
   connect(triSam.y,switch2. u3) annotation (Line(points={{162,60},{170,60},{170,
           192},{338,192}},     color={0,0,127}));
-  connect(uIni,intToRea2. u) annotation (Line(points={{-458,220},{-42,220}},
-                         color={255,127,0}));
-  connect(intToRea2.y,switch2. u1) annotation (Line(points={{-18,220},{140,220},
-          {140,208},{338,208}},
-                           color={0,0,127}));
   connect(edg2.y,and2. u1) annotation (Line(points={{42,-170},{78,-170}},
                              color={255,0,255}));
   connect(and2.y,or1. u2) annotation (Line(points={{102,-170},{110,-170},{110,-58},
@@ -240,18 +262,18 @@ equation
                                color={255,0,255}));
   connect(staChaHol1.y,edg2. u)
     annotation (Line(points={{2,-170},{18,-170}},    color={255,0,255}));
-  connect(uUp, lat.u) annotation (Line(points={{-458,-40},{-380,-40},{-380,60},{
+  connect(uUp, lat.u) annotation (Line(points={{-460,-40},{-380,-40},{-380,60},{
           -322,60}}, color={255,0,255}));
   connect(uDow, lat.clr) annotation (Line(points={{-460,-140},{-340,-140},{-340,
           54},{-322,54}}, color={255,0,255}));
-  connect(uUp, or2.u1) annotation (Line(points={{-458,-40},{-400,-40},{-400,-90},
+  connect(uUp, or2.u1) annotation (Line(points={{-460,-40},{-400,-40},{-400,-90},
           {-382,-90}}, color={255,0,255}));
   connect(uDow, or2.u2) annotation (Line(points={{-460,-140},{-400,-140},{-400,-98},
           {-382,-98}}, color={255,0,255}));
   connect(uAvaUp, intToRea1.u)
-    annotation (Line(points={{-458,100},{-322,100}}, color={255,127,0}));
+    annotation (Line(points={{-460,100},{-322,100}}, color={255,127,0}));
   connect(uAvaDow, intToRea.u)
-    annotation (Line(points={{-458,20},{-322,20}}, color={255,127,0}));
+    annotation (Line(points={{-460,20},{-322,20}}, color={255,127,0}));
   connect(holIniSta.y, not3.u) annotation (Line(points={{-298,160},{-230,160},{-230,
           -60},{-222,-60}},      color={255,0,255}));
   connect(not3.y, and6.u1) annotation (Line(points={{-198,-60},{-180,-60},{-180,
@@ -264,16 +286,16 @@ equation
           {60,-140},{60,-178},{78,-178}},    color={255,0,255}));
   connect(and6.y, edg1.u)
     annotation (Line(points={{-138,-80},{-2,-80}}, color={255,0,255}));
-  connect(uPla, booToRea.u) annotation (Line(points={{-458,160},{-400,160},{
-          -400,120},{40,120},{40,10},{198,10}}, color={255,0,255}));
+  connect(uPla, booToRea.u) annotation (Line(points={{-460,160},{-400,160},{-400,
+          120},{40,120},{40,10},{198,10}},      color={255,0,255}));
   connect(or3.y, triSam1.trigger) annotation (Line(points={{242,-50},{250,-50},
           {250,-1.8}}, color={255,0,255}));
-  connect(uPla, falEdg.u) annotation (Line(points={{-458,160},{-420,160},{-420,
-          -20},{0,-20},{0,-30},{38,-30}}, color={255,0,255}));
+  connect(uPla, falEdg.u) annotation (Line(points={{-460,160},{-420,160},{-420,-20},
+          {0,-20},{0,-30},{38,-30}},      color={255,0,255}));
   connect(falEdg.y, or3.u1) annotation (Line(points={{62,-30},{210,-30},{210,
           -50},{218,-50}}, color={255,0,255}));
   connect(uPla, edg.u)
-    annotation (Line(points={{-458,160},{-382,160}}, color={255,0,255}));
+    annotation (Line(points={{-460,160},{-382,160}}, color={255,0,255}));
   connect(lat.y, switch1.u2)
     annotation (Line(points={{-298,60},{-202,60}}, color={255,0,255}));
   connect(and3.u1, and6.y) annotation (Line(points={{278,100},{-100,100},{-100,-80},
@@ -302,40 +324,74 @@ equation
     annotation (Line(points={{400,-108},{404,-108}}, color={255,0,255}));
   connect(pre1.y, and6.u3) annotation (Line(points={{428,-108},{428,-286},{-170,
           -286},{-170,-88},{-162,-88}}, color={255,0,255}));
+  connect(con.y, switch2.u1) annotation (Line(points={{284,220},{310,220},{310,208},
+          {338,208}}, color={0,0,127}));
   annotation (defaultComponentName = "cha",
-        Icon(graphics={
-        Rectangle(
+    Icon(graphics={
+      Rectangle(
         extent={{-100,-100},{100,100}},
         lineColor={0,0,127},
         fillColor={255,255,255},
         fillPattern=FillPattern.Solid),
-        Text(
-          extent={{-112,150},{108,112}},
-          lineColor={0,0,255},
-          textString="%name")}), Diagram(
-        coordinateSystem(preserveAspectRatio=false,
-        extent={{-440,-300},{440,300}})),
-Documentation(info="<html>
-<p>This subsequence is not directly specified in 1711 as it provides a side calculation pertaining to generalization of the staging sequences for any number of chillers and stages provided by the user. </p>
-<p>This subsequence is used to generate the chiller stage setpoint <span style=\"font-family: monospace;\">ySta</span> and a boolean vector of chiller status setpoint indices <span style=\"font-family: monospace;\">y</span> for the <span style=\"font-family: monospace;\">ySta</span> stage. </p>
-<p>The inputs to the subsequece are: </p>
-<ul>
-<li>Plant enable status <span style=\"font-family: monospace;\">uPla</span> that is generated by <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Generic.PlantEnable\">Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Generic.PlantEnable</a> subsequence </li>
-<li>Integer index of initial chiller stage <span style=\"font-family: monospace;\">uIni</span> that is generated by <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Staging.Subsequences.Initial\">Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Staging.Subsequences.Initial</a> subsequence </li>
-<li>Stage up <span style=\"font-family: monospace;\">uUp</span> and down <span style=\"font-family: monospace;\">uDow</span> boolean signals that are generated by <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Staging.Subsequences.Up\">Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Staging.Subsequences.Up</a> and <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Staging.Subsequences.Down\">Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Staging.Subsequences.Down</a> subsequences, respectively </li>
-<li>Integer index of next available higher <span style=\"font-family: monospace;\">uAvaUp</span> and lower <span style=\"font-family: monospace;\">uAvaDow</span> chiller stage, as calculated by <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Staging.Subsequences.Status\">Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Staging.Subsequences.Status</a> subsequence </li>
-</ul>
-<p>If stage down and stage up happen at the same time for any faulty reason the staging down is performed.</p>
-<p>If stage down or stage up signal is held for a time longer than <code>delayStaCha</code> multiple consecutive stage change signals are issued.</p>
-<p>At plant enable the intial stage <code>uIni</code> is held for at least <code>delayStaCha</code> and until any stage up or down signal is generated.</p>
-<p>Per 1711 March 2020 Draft 5.2.4.15.1. Each stage shall have a minimum runtime of <span style=\"font-family: monospace;\">delayStaCha</span>. </p>
-</html>",
-revisions="<html>
-<ul>
-<li>
-April 14, 2020, by Milica Grahovac:<br/>
-First implementation.
-</li>
-</ul>
-</html>"));
+      Text(
+        extent={{-112,150},{108,112}},
+        lineColor={0,0,255},
+        textString="%name")}),
+    Diagram(
+      coordinateSystem(preserveAspectRatio=false,
+      extent={{-440,-300},{440,300}})),
+    Documentation(info="<html>
+    <p>
+    This subsequence is not directly specified in 1711 as it provides a side
+    calculation pertaining to generalization of the staging sequences for any
+    number of boilers and stages provided by the user.
+    </p>
+    <p>This subsequence is used to generate the boiler stage setpoint 
+    <span style=\"font-family: monospace;\">ySta</span> and a boolean vector of
+    boiler status setpoint indices <span style=\"font-family: monospace;\">y</span>
+    for the <span style=\"font-family: monospace;\">ySta</span> stage. </p>
+    <p>The inputs to the subsequece are: </p>
+    <ul>
+    <li>
+    Plant enable status <span style=\"font-family: monospace;\">uPla</span> that
+    is generated by <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.PlantEnable\">Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.PlantEnable</a> subsequence. 
+    </li>
+    <li>
+    Stage up <span style=\"font-family: monospace;\">uUp</span> and down 
+    <span style=\"font-family: monospace;\">uDow</span> boolean signals that are
+    generated by <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Up\">Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Up</a>
+    and <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Down\">Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Down</a> subsequences, respectively.
+    </li>
+    <li>
+    Integer index of next available higher <span style=\"font-family: monospace;\">uAvaUp</span>
+    and lower <span style=\"font-family: monospace;\">uAvaDow</span> boiler stage,
+    as calculated by <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Status\">Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Status</a>
+    subsequence.
+    </li>
+    </ul>
+    <p>
+    If stage down and stage up happen at the same time for any faulty reason the
+    staging down is performed.
+    </p>
+    <p>
+    If stage down or stage up signal is held for a time longer than <code>delayStaCha</code>
+    multiple consecutive stage change signals are issued.
+    </p>
+    <p>
+    At plant enable the intial stage is held for at least <code>delayStaCha</code>
+    and until any stage up or down signal is generated.
+    </p>
+    <p>
+    Per 1711 March 2020 Draft 5.2.4.15.1. Each stage shall have a minimum
+    runtime of <span style=\"font-family: monospace;\">delayStaCha</span>. 
+    </p>
+    </html>",
+    revisions="<html>
+    <ul>
+    <li>
+    May 29, 2020, by Karthik Devaprasad:<br/>
+    First implementation.
+    </li>
+    </ul>
+    </html>"));
 end Change;

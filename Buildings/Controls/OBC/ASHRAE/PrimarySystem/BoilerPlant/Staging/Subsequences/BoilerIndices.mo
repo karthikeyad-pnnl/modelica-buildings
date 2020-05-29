@@ -1,5 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences;
-block ChillerIndices "Returns chiller indices for the current stage"
+block BoilerIndices "Returns boiler indices for the current stage"
 
   parameter Integer nSta = 3
     "Number of stages";
@@ -36,43 +36,49 @@ protected
     final nout=nSta) "Replicates signal to a length equal the stage count"
     annotation (Placement(transformation(extent={{-180,10},{-160,30}})));
 
-  Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep1[nSta](
-    final nout=fill(nChi, nSta)) "Replicates signal to dimensions of the staging matrix"
+  Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep1[nSta](final nout
+      =fill(nBoi, nSta))         "Replicates signal to dimensions of the staging matrix"
     annotation (Placement(transformation(extent={{-140,10},{-120,30}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant staIndMatr[nSta,nChi](
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant staIndMatr[nSta,nBoi](
     final k=staIndMat) "Matrix with stage index in each column"
     annotation (Placement(transformation(extent={{-140,-40},{-120,-20}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Equal intEqu1[nSta,nChi]
+  Buildings.Controls.OBC.CDL.Integers.Equal intEqu1[nSta,nBoi]
     "Outputs a zero matrix populated with ones in the current stage index row"
     annotation (Placement(transformation(extent={{-80,10},{-60,30}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant chiStaMatr[nSta,nChi](
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant boiStaMatr[nSta,nBoi](
     final k=staMat) "Staging matrix"
     annotation (Placement(transformation(extent={{-60,-40},{-40,-20}})));
 
   Buildings.Controls.OBC.CDL.Continuous.MatrixMax matMax(
     final nRow=nSta,
-    final nCol=nChi,
+    final nCol=nBoi,
     final rowMax=false) "Column-wise matrix maximum"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold chiInSta[nChi](threshold=fill(0.5, nChi))
-    "Identifies chillers designated to operate in a given stage"
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold boiInSta[nBoi](
+      threshold=fill(0.5, nBoi))
+    "Identifies boilers designated to operate in a given stage"
     annotation (Placement(transformation(extent={{140,-10},{160,10}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Product proInt[nSta,nChi]
-    "Outputs a zero matrix populated with ones for any available chiller in the current stage"
+  Buildings.Controls.OBC.CDL.Integers.Product proInt[nSta,nBoi]
+    "Outputs a zero matrix populated with ones for any available boiler in the current stage"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
 
-  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt[nSta,nChi](
-    final integerTrue=fill(1, nSta, nChi),
-    final integerFalse=fill(0, nSta, nChi))
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt[nSta,nBoi](
+      final integerTrue=fill(
+        1,
+        nSta,
+        nBoi), final integerFalse=fill(
+        0,
+        nSta,
+        nBoi))
     "Type converter"
     annotation (Placement(transformation(extent={{-40,10},{-20,30}})));
 
-  Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea[nSta,nChi]
+  Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea[nSta,nBoi]
     "Type converter"
     annotation (Placement(transformation(extent={{60,-10},{80,10}})));
 
@@ -81,11 +87,11 @@ equation
     annotation (Line(points={{-158,20},{-142,20}}, color={255,127,0}));
   connect(intRep1.y, intEqu1.u1)
     annotation (Line(points={{-118,20},{-82,20}}, color={255,127,0}));
-  connect(matMax.y, chiInSta.u)
+  connect(matMax.y,boiInSta. u)
     annotation (Line(points={{122,0},{138,0}},    color={0,0,127}));
   connect(staIndMatr.y, intEqu1.u2) annotation (Line(points={{-118,-30},{-100,-30},
           {-100,12},{-82,12}},         color={255,127,0}));
-  connect(chiInSta.y, yChi)
+  connect(boiInSta.y, yChi)
     annotation (Line(points={{162,0},{220,0}},
           color={255,0,255}));
   connect(proInt.y, intToRea.u)
@@ -96,7 +102,7 @@ equation
           {18,6}},            color={255,127,0}));
   connect(intEqu1.y, booToInt.u)
     annotation (Line(points={{-58,20},{-42,20}},   color={255,0,255}));
-  connect(chiStaMatr.y, proInt.u2) annotation (Line(points={{-38,-30},{0,-30},{0,
+  connect(boiStaMatr.y, proInt.u2) annotation (Line(points={{-38,-30},{0,-30},{0,
           -6},{18,-6}},         color={255,127,0}));
   connect(u, intRep.u) annotation (Line(points={{-220,20},{-182,20}},
                        color={255,127,0}));
@@ -133,4 +139,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end ChillerIndices;
+end BoilerIndices;

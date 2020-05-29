@@ -28,7 +28,7 @@ block FailsafeCondition
     "Hot water supply temperature setpoint"
     annotation (Placement(
       transformation(extent={{-140,30},{-100,70}}),
-	  iconTransformation(extent={{-140,30},{-100,70}})));
+   iconTransformation(extent={{-140,30},{-100,70}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TSup(
     final unit="K",
