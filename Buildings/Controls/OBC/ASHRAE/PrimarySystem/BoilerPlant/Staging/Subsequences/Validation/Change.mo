@@ -4,18 +4,25 @@ model Change
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Change
     cha(
-    final nSta=10)
+    final nSta=10,
+    iniSta=0,
+    delayStaCha=600)
     "Controls for stage up signal variations"
     annotation (Placement(transformation(extent={{-40,180},{-20,200}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Change
     cha1(
-    final nSta=10)
+    final nSta=10,
+    iniSta=7,
+    delayStaCha=600)
     "Controls for stage down signal variations"
     annotation (Placement(transformation(extent={{-40,0},{-20,20}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Change
-    cha2
+    cha2(
+    nSta=10,
+    iniSta=3,
+    delayStaCha=600)
     "Controls for stage up/stage down signal interaction"
     annotation (Placement(transformation(extent={{-40,-180},{-20,-160}})));
 
@@ -156,25 +163,13 @@ protected
   Buildings.Controls.OBC.CDL.Integers.Max maxInt2 "Maximum"
     annotation (Placement(transformation(extent={{180,-220},{200,-200}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant uIni(final k=0)
-    "Chiller stage"
-    annotation (Placement(transformation(extent={{-120,260},{-100,280}})));
-
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant step(final k=1)
     "Assuming that the next available stage is always the next stage"
     annotation (Placement(transformation(extent={{100,220},{120,240}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant uIni1(final k=7)
-    "Chiller stage"
-    annotation (Placement(transformation(extent={{-120,80},{-100,100}})));
-
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant step1(final k=1)
     "Assuming that the next available stage is always the next stage"
     annotation (Placement(transformation(extent={{100,40},{120,60}})));
-
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant uIni2(final k=3)
-    "Chiller stage"
-    annotation (Placement(transformation(extent={{-120,-100},{-100,-80}})));
 
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant step2(final k=1)
     "Assuming that the next available stage is always the next stage"
@@ -194,15 +189,14 @@ protected
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable timeTable3(
     final table=[0,0; 10,0; 10,1; 11000,1; 11000,0; 12000,0; 12000,1; 14000,1;
-        14000,0]) "Plant enable"
+        14000,0])
+    "Plant enable"
     annotation (Placement(transformation(extent={{-200,20},{-180,40}})));
 
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr1(
     final threshold=0.5) "Greater than threshold"
     annotation (Placement(transformation(extent={{-160,20},{-140,40}})));
 equation
-  connect(cha.uIni, uIni.y) annotation (Line(points={{-42,200},{-60,200},{-60,
-          270},{-98,270}}, color={255,127,0}));
   connect(timeTable.y[1], greThr.u)
     annotation (Line(points={{-138,230},{-122,230}}, color={0,0,127}));
   connect(cha.ySta, intToRea.u) annotation (Line(points={{-18,194},{0,194},{0,
@@ -224,8 +218,6 @@ equation
           164},{138,164}}, color={255,127,0}));
   connect(addInt.y, cha.uAvaUp) annotation (Line(points={{162,210},{170,210},{170,
           250},{-50,250},{-50,194},{-42,194}}, color={255,127,0}));
-  connect(cha1.uIni, uIni1.y) annotation (Line(points={{-42,20},{-60,20},{-60,
-          90},{-98,90}}, color={255,127,0}));
   connect(cha1.ySta, intToRea1.u) annotation (Line(points={{-18,14},{0,14},{0,
           10},{18,10}},
                      color={255,127,0}));
@@ -247,8 +239,6 @@ equation
           70},{-50,70},{-50,14},{-42,14}}, color={255,127,0}));
   connect(timeTable2.y[1], greThr2.u)
     annotation (Line(points={{-138,-130},{-122,-130}}, color={0,0,127}));
-  connect(cha2.uIni, uIni2.y) annotation (Line(points={{-42,-160},{-60,-160},{-60,
-          -90},{-98,-90}}, color={255,127,0}));
   connect(cha2.ySta, intToRea2.u) annotation (Line(points={{-18,-166},{0,-166},
           {0,-170},{18,-170}},color={255,127,0}));
   connect(intToRea2.y, zerOrdHol2.u)
@@ -318,18 +308,18 @@ equation
           -88,-162},{-42,-162}}, color={255,0,255}));
 annotation (
  experiment(StopTime=14000.0, Tolerance=1e-06),
-  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/ChillerPlant/Staging/Subsequences/Validation/Change.mos"
+  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Validation/Change.mos"
     "Simulate and plot"),
   Documentation(info="<html>
 <p>
 This example validates
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Staging.Subsequences.Change\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Staging.Subsequences.Change</a>.
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Change\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Change</a>.
 </p>
 </html>", revisions="<html>
 <ul>
 <li>
-April 15, 2020, by Milica Grahovac:<br/>
+May 31, 2020, by Karthik Devaprasad:<br/>
 First implementation.
 </li>
 </ul>

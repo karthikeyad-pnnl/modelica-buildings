@@ -5,6 +5,9 @@ block Change
   parameter Integer nSta = 3
     "Number of boiler stages";
 
+  parameter Real iniSta = 1
+    "Initial boiler plant stage";
+
   parameter Real delayStaCha(
     final unit="s",
     final displayUnit="s",
@@ -55,7 +58,7 @@ block Change
 
 protected
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(
-    final k=1)
+    final k=iniSta)
     "Initial boiler stage"
     annotation (Placement(transformation(extent={{262,210},{282,230}})));
 
@@ -384,6 +387,13 @@ equation
     <p>
     Per 1711 March 2020 Draft 5.2.4.15.1. Each stage shall have a minimum
     runtime of <span style=\"font-family: monospace;\">delayStaCha</span>. 
+    </p>
+    <p align=\"center\">
+    <img alt=\"Validation plot for Change\"
+    src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Change.png\"/>
+    <br/>
+    Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.Change\">
+    Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.Change</a>.
     </p>
     </html>",
     revisions="<html>
