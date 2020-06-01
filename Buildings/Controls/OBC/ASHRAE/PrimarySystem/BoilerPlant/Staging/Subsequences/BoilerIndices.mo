@@ -1,47 +1,51 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences;
-block BoilerIndices "Returns boiler indices for the current stage"
+block BoilerIndices
+  "Returns boiler indices for the current stage"
 
   parameter Integer nSta = 3
     "Number of stages";
 
-  parameter Integer nChi = 2
-    "Number of chillers";
+  parameter Integer nBoi = 2
+    "Number of boilers";
 
-  parameter Integer staMat[nSta, nChi] = {{1,0},{0,1},{1,1}}
-    "Staging matrix with stages in rows and chillers in columns";
+  parameter Integer staMat[nSta, nBoi] = {{1,0},{0,1},{1,1}}
+    "Staging matrix with stages in rows and boilers in columns";
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput u(
     final min=0,
     final max=nSta,
-    final start=0) "Current chiller stage"
+    final start=0) "Current boiler stage"
     annotation (Placement(transformation(extent={{-240,0},{-200,40}}),
-        iconTransformation(extent={{-140,-20},{-100,20}})));
+      iconTransformation(extent={{-140,-20},{-100,20}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yChi[nChi]
-    "Chiller status setpoint vector for the current stage"
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yBoi[nBoi]
+    "Boiler status setpoint vector for the current stage"
     annotation (Placement(transformation(extent={{200,-20},{240,20}}),
-        iconTransformation(extent={{100,-20},{140,20}})));
+      iconTransformation(extent={{100,-20},{140,20}})));
 
 protected
   final parameter Integer staInd[nSta] = {i for i in 1:nSta}
     "Stage index vector";
 
-  final parameter Integer staIndMat[nSta, nChi] = {j for i in 1:nChi, j in 1:nSta}
+  final parameter Integer staIndMat[nSta, nBoi] = {j for i in 1:nBoi, j in 1:nSta}
     "Matrix of staging matrix dimensions with stage indices in each column";
 
   final parameter Integer lowDia[nSta, nSta] = {if i<=j then 1 else 0 for i in 1:nSta, j in 1:nSta}
     "Lower diagonal unit matrix";
 
   Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep(
-    final nout=nSta) "Replicates signal to a length equal the stage count"
+    final nout=nSta)
+    "Replicates signal to a length equal the stage count"
     annotation (Placement(transformation(extent={{-180,10},{-160,30}})));
 
-  Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep1[nSta](final nout
-      =fill(nBoi, nSta))         "Replicates signal to dimensions of the staging matrix"
+  Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep1[nSta](
+    final nout=fill(nBoi, nSta))
+    "Replicates signal to dimensions of the staging matrix"
     annotation (Placement(transformation(extent={{-140,10},{-120,30}})));
 
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant staIndMatr[nSta,nBoi](
-    final k=staIndMat) "Matrix with stage index in each column"
+    final k=staIndMat)
+    "Matrix with stage index in each column"
     annotation (Placement(transformation(extent={{-140,-40},{-120,-20}})));
 
   Buildings.Controls.OBC.CDL.Integers.Equal intEqu1[nSta,nBoi]
@@ -49,17 +53,19 @@ protected
     annotation (Placement(transformation(extent={{-80,10},{-60,30}})));
 
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant boiStaMatr[nSta,nBoi](
-    final k=staMat) "Staging matrix"
+    final k=staMat)
+    "Staging matrix"
     annotation (Placement(transformation(extent={{-60,-40},{-40,-20}})));
 
   Buildings.Controls.OBC.CDL.Continuous.MatrixMax matMax(
     final nRow=nSta,
     final nCol=nBoi,
-    final rowMax=false) "Column-wise matrix maximum"
+    final rowMax=false)
+    "Column-wise matrix maximum"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
 
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold boiInSta[nBoi](
-      threshold=fill(0.5, nBoi))
+    final threshold=fill(0.5, nBoi))
     "Identifies boilers designated to operate in a given stage"
     annotation (Placement(transformation(extent={{140,-10},{160,10}})));
 
@@ -68,13 +74,8 @@ protected
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt[nSta,nBoi](
-      final integerTrue=fill(
-        1,
-        nSta,
-        nBoi), final integerFalse=fill(
-        0,
-        nSta,
-        nBoi))
+    final integerTrue=fill(1,nSta,nBoi),
+    final integerFalse=fill(0,nSta,nBoi))
     "Type converter"
     annotation (Placement(transformation(extent={{-40,10},{-20,30}})));
 
@@ -91,7 +92,7 @@ equation
     annotation (Line(points={{122,0},{138,0}},    color={0,0,127}));
   connect(staIndMatr.y, intEqu1.u2) annotation (Line(points={{-118,-30},{-100,-30},
           {-100,12},{-82,12}},         color={255,127,0}));
-  connect(boiInSta.y, yChi)
+  connect(boiInSta.y, yBoi)
     annotation (Line(points={{162,0},{220,0}},
           color={255,0,255}));
   connect(proInt.y, intToRea.u)
@@ -106,7 +107,7 @@ equation
           -6},{18,-6}},         color={255,127,0}));
   connect(u, intRep.u) annotation (Line(points={{-220,20},{-182,20}},
                        color={255,127,0}));
-  annotation (defaultComponentName = "chiInd",
+  annotation (defaultComponentName = "boiInd",
         Icon(graphics={
         Rectangle(
         extent={{-100,-100},{100,100}},
@@ -123,18 +124,25 @@ Documentation(info="<html>
 <p>
 This subsequence is not directly specified in 1711 as it provides
 a side calculation pertaining to generalization of the staging 
-sequences for any number of chillers and stages provided by the 
+sequences for any number of boilers and stages provided by the 
 user.
 </p>
 <p>
-The subsequence outputs a vector of chiller indices <code>yChi</code>
+The subsequence outputs a vector of boiler indices <code>yBoi</code>
 for a stage index input <code>u</code> given a staging matrix <code>staMat</code>.
+</p>
+<p align=\"center\">
+<img alt=\"Validation plot for BoilerIndices\"
+src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/BoilerIndices.png\"/>
+<br/>
+Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.BoilerIndices\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.BoilerIndices</a>.
 </p>
 </html>",
 revisions="<html>
 <ul>
 <li>
-April 15, 2020, by Milica Grahovac:<br/>
+May 31, 2020, by Karthik Devaprasad:<br/>
 First implementation.
 </li>
 </ul>

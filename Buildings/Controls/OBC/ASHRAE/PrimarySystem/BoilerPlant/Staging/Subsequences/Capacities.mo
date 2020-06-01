@@ -8,72 +8,82 @@ block Capacities
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uLow
     "Current stage is the lowest available stage"
     annotation (Placement(transformation(extent={{-240,-80},{-200,-40}}),
-        iconTransformation(extent={{-140,-110},{-100,-70}})));
+      iconTransformation(extent={{-140,-110},{-100,-70}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uHig
     "Current stage is the highest available stage"
     annotation (Placement(transformation(extent={{-240,-140},{-200,-100}}),
-        iconTransformation(extent={{-140,-80},{-100,-40}})));
+      iconTransformation(extent={{-140,-80},{-100,-40}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput u(
     final min=0,
-    final max=nSta) "Chiller stage"
+    final max=nSta)
+    "Boiler plant stage"
     annotation (Placement(transformation(extent={{-240,100},{-200,140}}),
-        iconTransformation(extent={{-140,10},{-100,50}})));
+      iconTransformation(extent={{-140,10},{-100,50}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uUp(
     final min=0,
-    final max=nSta) "Next available higher stage"
+    final max=nSta)
+    "Next available higher stage"
     annotation (Placement(transformation(extent={{-240,40},{-200,80}}),
-        iconTransformation(extent={{-140,-20},{-100,20}})));
+      iconTransformation(extent={{-140,-20},{-100,20}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uDown(
     final min=0,
-    final max=nSta) "Next available lower stage"
+    final max=nSta)
+    "Next available lower stage"
     annotation (Placement(transformation(extent={{-240,-20},{-200,20}}),
-        iconTransformation(extent={{-140,-50},{-100,-10}})));
+      iconTransformation(extent={{-140,-50},{-100,-10}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uDesCap[nSta](
     final quantity=fill("Power", nSta),
-    final unit=fill("W", nSta)) "Design stage capacities"
+    final unit=fill("W", nSta))
+    "Design stage capacities"
     annotation (Placement(transformation(extent={{-240,160},{-200,200}}),
-        iconTransformation(extent={{-140,70},{-100,110}})));
+      iconTransformation(extent={{-140,70},{-100,110}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uMinCap[nSta](
     final quantity=fill("Power", nSta),
-    final unit=fill("W", nSta)) "Unload stage capacities"
+    final unit=fill("W", nSta))
+    "Unload stage capacities"
     annotation (Placement(transformation(extent={{-240,-200},{-200,-160}}),
-        iconTransformation(extent={{-140,40},{-100,80}})));
+      iconTransformation(extent={{-140,40},{-100,80}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yDes(
     final unit="W",
-    final quantity="Power") "Design capacity of the current stage"
+    final quantity="Power")
+    "Design capacity of the current stage"
     annotation (Placement(transformation(extent={{200,130},{240,170}}),
-        iconTransformation(extent={{100,60},{140,100}})));
+      iconTransformation(extent={{100,60},{140,100}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yDowDes(
     final unit="W",
-    final quantity="Power") "Design capacity of the next available lower stage"
+    final quantity="Power")
+    "Design capacity of the next available lower stage"
     annotation (Placement(transformation(extent={{200,0},{240,40}}),
-        iconTransformation(extent={{100,-20},{140,20}})));
+      iconTransformation(extent={{100,-20},{140,20}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yUpDes(
     final unit="W",
-    final quantity="Power") "Design capacity of the next available higher stage"
+    final quantity="Power")
+    "Design capacity of the next available higher stage"
     annotation (Placement(transformation(extent={{200,40},{240,80}}),
-        iconTransformation(extent={{100,20},{140,60}})));
+      iconTransformation(extent={{100,20},{140,60}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yMin(
     final unit="W",
-    final quantity="Power") "Minimum capacity of the current stage"
+    final quantity="Power")
+    "Minimum capacity of the current stage"
     annotation (Placement(transformation(extent={{200,-40},{240,0}}),
-        iconTransformation(extent={{100,-60},{140,-20}})));
+      iconTransformation(extent={{100,-60},{140,-20}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yUpMin(
     final unit="W",
-    final quantity="Power") "Minimum capacity of the next available higher stage"
+    final quantity="Power")
+    "Minimum capacity of the next available higher stage"
     annotation (Placement(transformation(extent={{200,-110},{240,-70}}),
-        iconTransformation(extent={{100,-100},{140,-60}})));
+      iconTransformation(extent={{100,-100},{140,-60}})));
 
 protected
   final parameter Real small = 0.001
@@ -117,18 +127,23 @@ protected
     "Extracts the minimum capacity of the current stage"
     annotation (Placement(transformation(extent={{0,-80},{20,-60}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch swi2 "Switch"
+  Buildings.Controls.OBC.CDL.Logical.Switch swi2
+    "Switch"
     annotation (Placement(transformation(extent={{160,50},{180,70}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch swi4 "Switch"
+  Buildings.Controls.OBC.CDL.Logical.Switch swi4
+    "Switch"
     annotation (Placement(transformation(extent={{160,-100},{180,-80}})));
 
   Buildings.Controls.OBC.CDL.Logical.Switch swi1
-    "Outputs minimum current stage capacity as design stage down capacity if operating in the lowest available stage"
+    "Outputs minimum current stage capacity as design stage down capacity if
+    operating in the lowest available stage"
     annotation (Placement(transformation(extent={{100,10},{120,30}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Gain gai(final k=larGai)
-    "Ouputs a very large and unachievable staging up capacity when current is the highest available stage"
+  Buildings.Controls.OBC.CDL.Continuous.Gain gai(
+    final k=larGai)
+    "Ouputs a very large and unachievable staging up capacity when current is
+    the highest available stage"
     annotation (Placement(transformation(extent={{-60,110},{-40,130}})));
 
 equation
@@ -201,7 +216,7 @@ Documentation(info="<html>
 <p>
 This subsequence is not directly specified in 1711 as it provides
 a side calculation pertaining to generalization of the staging 
-sequences for any number of chillers and stages provided by the 
+sequences for any number of boilers and stages provided by the 
 user.
 </p>
 <p>
@@ -209,18 +224,18 @@ Based on:
 </p>
 <ul>
 <li>
-the current chiller stage <code>u</code> index
+the current boiler stage <code>u</code> index
 </li>
 <li>
-the next available higher chiller stage <code>uUp</code> index
+the next available higher boiler stage <code>uUp</code> index
 </li>
 <li>
-the next available lower chiller stage <code>uDown</code> index
+the next available lower boiler stage <code>uDown</code> index
 </li>
 <li>
 boolean inputs that determine if the current stage is 
 any of the following: the highest <code>uHigh</code> or the 
-lowest <code>uLow</code> available chiller stage
+lowest <code>uLow</code> available boiler stage
 </li>
 </ul>
 <p>
@@ -239,17 +254,17 @@ stage <code>yUpMin</code>
 </li>
 </ul>
 <p>
-for the purpose of calculating the operative part load ratios 
-(OPLR) up and down, respectively. The OPLR is defined in 1711 March 2020 draft section 5.2.4.6.
+for the purpose of calculations involved in staging the plant up and down.
 </p>
 <p>
 For numerical reasons and to ensure expected behavior in corner cases such as 
 when the plant operates at the highest or the lowest available stage, the
 sequence implements the following:
 </p>
+<p>
 <ul>
 <li>
-if operating at the lowest available chiller stage, the minimal capacity
+if operating at the lowest available boiler stage, the minimal capacity
 of that stage is returned as the stage down design capacity.
 </li>
 <li>
@@ -258,16 +273,24 @@ of that stage, as well as the stage down design capacity
 equals a small value, to avoid downstream division 0.
 </li>
 <li>
-if operating at the highest stage, the design and minimal stage up conditionals are set to
-a value significantly larger than the design capacity of the highest stage.
-This ensures numerical stability and satisfies the staging down conditionals.
+if operating at the highest stage, the design and minimal stage up conditionals
+are set to a value significantly larger than the design capacity of the highest
+stage. This ensures numerical stability and satisfies the staging down conditionals.
 </li>
 </ul>
+</p>
+<p align=\"center\">
+<img alt=\"Validation plot for Capacities\"
+src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Capacities.png\"/>
+<br/>
+Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.Capacities\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.Capacities</a>.
+</p>
 </html>",
 revisions="<html>
 <ul>
 <li>
-January 13, 2020, by Milica Grahovac:<br/>
+June 1, 2020, by Karthik Devaprasad:<br/>
 First implementation.
 </li>
 </ul>
