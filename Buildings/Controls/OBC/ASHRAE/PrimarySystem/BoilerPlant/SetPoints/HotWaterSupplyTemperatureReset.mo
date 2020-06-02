@@ -1,8 +1,11 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints;
 model HotWaterSupplyTemperatureReset
-  parameter Real hotWatSetMax(final unit = "K", displayUnit = "K")
-  "The maximum allowed hot-water setpoint temperature";
-  parameter Real hotWatSetMin(final unit = "K", displayUnit = "K")
+  parameter Real hotWatSetMax(
+    final unit = "K", displayUnit = "K")
+    "The maximum allowed hot-water setpoint temperature";
+
+  parameter Real hotWatSetMin(
+    final unit = "K", displayUnit = "K")
   "The minimum allowed hot-water setpoint temperature";
   parameter Real delTimVal(final unit = "s", displayUnit = "min")
   "Delay time";
@@ -33,7 +36,7 @@ public
     resAmo=resAmoVal,
     maxRes=maxResVal)
     "Trim and respond controller for hot water supply temperature setpoint"
-    annotation (Placement(transformation(extent={{-26,22},{-6,42}})));
+    annotation (Placement(transformation(extent={{-30,20},{-10,40}})));
   CDL.Interfaces.IntegerInput nHotWatSupResReq
     "Number of hot-water supply temeprature reset requests"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
@@ -46,40 +49,42 @@ public
   CDL.Interfaces.BooleanInput uHotWatPumSta[nPum] "Status of hot-water pumps"
     annotation (Placement(transformation(extent={{-140,20},{-100,60}})));
   CDL.Logical.Edge edg "Detect start of stage change process"
-    annotation (Placement(transformation(extent={{-50,-24},{-30,-4}})));
+    annotation (Placement(transformation(extent={{-50,-30},{-30,-10}})));
   CDL.Logical.TrueHoldWithReset truHol(duration=holTimVal)
     "Hold setpoint value for duration of stage change"
-    annotation (Placement(transformation(extent={{-50,-50},{-30,-30}})));
+    annotation (Placement(transformation(extent={{-50,-70},{-30,-50}})));
   CDL.Discrete.TriggeredSampler triSam
     "Retain last value before stage change initiates"
-    annotation (Placement(transformation(extent={{10,22},{30,42}})));
+    annotation (Placement(transformation(extent={{10,20},{30,40}})));
   CDL.Logical.Switch swi
-    annotation (Placement(transformation(extent={{36,-10},{56,10}})));
+    annotation (Placement(transformation(extent={{60,-10},{80,10}})));
   CDL.Logical.MultiOr mulOr(nu=nPum) "Check if any pumps are turned on"
-    annotation (Placement(transformation(extent={{-54,30},{-34,50}})));
+    annotation (Placement(transformation(extent={{-70,30},{-50,50}})));
 equation
-  connect(uHotWatPumSta, mulOr.u[1:2]) annotation (Line(points={{-120,40},{-56,40}},
+  connect(uHotWatPumSta, mulOr.u[1:2]) annotation (Line(points={{-120,40},{-72,40}},
                                   color={255,0,255}));
   connect(mulOr.y, triRes.uDevSta)
-    annotation (Line(points={{-32,40},{-28,40}},           color={255,0,255}));
+    annotation (Line(points={{-48,40},{-40,40},{-40,38},{-32,38}},
+                                                           color={255,0,255}));
   connect(triRes.y, triSam.u)
-    annotation (Line(points={{-4,32},{8,32}},color={0,0,127}));
+    annotation (Line(points={{-8,30},{8,30}},color={0,0,127}));
   connect(truHol.u, uStaCha)
-    annotation (Line(points={{-52,-40},{-120,-40}},color={255,0,255}));
-  connect(edg.u, uStaCha) annotation (Line(points={{-52,-14},{-56,-14},{-56,-40},
+    annotation (Line(points={{-52,-60},{-60,-60},{-60,-40},{-120,-40}},
+                                                   color={255,0,255}));
+  connect(edg.u, uStaCha) annotation (Line(points={{-52,-20},{-60,-20},{-60,-40},
           {-120,-40}},color={255,0,255}));
-  connect(edg.y, triSam.trigger) annotation (Line(points={{-28,-14},{20,-14},{20,
-          20.2}}, color={255,0,255}));
+  connect(edg.y, triSam.trigger) annotation (Line(points={{-28,-20},{20,-20},{20,
+          18.2}}, color={255,0,255}));
   connect(triSam.y, swi.u1)
-    annotation (Line(points={{32,32},{32,8},{34,8}},         color={0,0,127}));
-  connect(swi.u3, triSam.u)
-    annotation (Line(points={{34,-8},{0,-8},{0,32},{8,32}}, color={0,0,127}));
-  connect(truHol.y, swi.u2) annotation (Line(points={{-28,-40},{30,-40},{30,0},{
-          34,0}}, color={255,0,255}));
-  connect(triRes.numOfReq, nHotWatSupResReq) annotation (Line(points={{-28,24},{
-          -46,24},{-46,0},{-120,0}},color={255,127,0}));
+    annotation (Line(points={{32,30},{40,30},{40,8},{58,8}}, color={0,0,127}));
+  connect(truHol.y, swi.u2) annotation (Line(points={{-28,-60},{40,-60},{40,0},{
+          58,0}}, color={255,0,255}));
+  connect(triRes.numOfReq, nHotWatSupResReq) annotation (Line(points={{-32,22},{
+          -60,22},{-60,0},{-120,0}},color={255,127,0}));
   connect(swi.y, THotWatSupSet)
-    annotation (Line(points={{58,0},{120,0}},color={0,0,127}));
+    annotation (Line(points={{82,0},{120,0}},color={0,0,127}));
+  connect(swi.u3, triRes.y)
+    annotation (Line(points={{58,-8},{0,-8},{0,30},{-8,30}}, color={0,0,127}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}})),
   Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
