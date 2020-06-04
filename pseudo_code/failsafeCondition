@@ -1,18 +1,5 @@
-if boilerType == condensingBoiler:
-	if plantConfiguration == primaryHeadered:
-		if (THotWatSup < THotWatSupSetPoi - 10 deg. F FOR 15 minutes):
-			set failsafeCondition = TRUE
-			
-	if	plantConfiguration == variablePrimaryVariableSecondary:
-		if (THotWatSup < THotWatSupSetPoi - 10 deg. F FOR 15 minutes):
-			set failsafeCondition = TRUE
-
-if boilerType == nonCondensingBoiler:
-	if (THotWatSup < THotWatSupSetPoi - 10 deg. F FOR 15 minutes):
-		set failsafeCondition = TRUE
-		
-if boilerType == hybrid:
-	if (THotWatSup < THotWatSupSetPoi - 10 deg. F FOR 15 minutes):
-		set failsafeCondition = TRUE
-		
-# this block seems uncompleted, there is no way efficiencyCondition = FALSE
+IF (THotWatSup < THotWatSupSetPoi - 10 deg. F FOR 15 minutes):
+	SET failsafeCondition = TRUE
+ELSE:
+	SET failsafeCondition = FALSE
+ENDIF

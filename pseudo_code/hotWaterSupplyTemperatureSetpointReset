@@ -1,14 +1,23 @@
 WHILE Pump is ON
-	SET supplyTemperatureSetpoint = HWSTMax
-	IF nTemperatureResetRequests <
-	nIgnoredRequests
-		IF supplyTemperatureSetpoint >
-		SP_min
-			supplyTemperatureSetpoint -=
-			SP_trim
+	SET plantSupplyTemperatureSetpoint = HWSTMax
+	IF nTemperatureResetRequests < nIgnoredRequests
+		IF supplyTemperatureSetpoint > HWSTMin
+			plantSupplyTemperatureSetpoint -= SP_trim
+		ELSE
+			doNothing
 		ENDIF
 	ELSE
-		supplyTemperatureSetpoint +=
-		SP_respond
+		IF supplyTemperatureSetpoint < HWSTMax
+			plantSupplyTemperatureSetpoint += SP_respond
+		ELSE
+			doNothing
+		ENDIF
 	ENDIF
-ENDWHILE		
+	
+	IF currentStage == condensingBoiler:
+		SET	boilerSupplyTemperatureSetpoint = plantSupplyTemperatureSetpoint
+	ELSE:
+		SET nonCondensingBoilerSupplyTemperatureSetpoint = plantSupplyTemperatureSetpoint
+		SET condensingBoilerSupplyTemperatureSetpoint = min(condensingBoilerSupplyTemperatureSetpointMax,(plantSupplyTemperatureSetpoint - 10))
+	ENDIF
+ENDWHILE

@@ -1,10 +1,13 @@
-if boilerType == nonCondensingBoiler:
-	if (qRequired > 0.9 * QbX_currentStage FOR 10 minutes):
-		set efficiencyCondition = TRUE
-		
+IF boilerType == nonCondensingBoiler:
+	IF (qRequired > 0.9 * QbX_currentStage FOR 10 minutes):
+		SET efficiencyCondition = TRUE
+	ELSE:
+		SET efficiencyCondition = FALSE
+	ENDIF	
 ELSE:
-	if (qRequired > 1.5 * bStageMin_nextStage FOR 10 minutes) 
-		AND (hotWaterFlowRate > minFlowSetpoint_nextStage):
-			set efficiencyCondition = TRUE
-		
-		# this block seems uncompleted, there is no way efficiencyCondition = FALSE
+	IF (qRequired > 1.5 * bStageMin_nextStage FOR 10 minutes) AND (hotWaterFlowRate > minFlowSetpoint_nextStage):
+		SET efficiencyCondition = TRUE
+	ELSE:
+		SET efficiencyCondition = FALSE
+	ENDIF
+ENDIF
