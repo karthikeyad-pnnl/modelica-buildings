@@ -1,5 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints;
-model PumpSpeed
+block PumpSpeed
   parameter Real priCirDesFloRatVal=135*10e-4
     "Hot water design flow rate value for primary circuit";
   parameter Real hotWatDifPreMaxVal=1

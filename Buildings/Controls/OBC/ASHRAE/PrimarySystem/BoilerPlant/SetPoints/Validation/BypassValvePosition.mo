@@ -1,5 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.Validation;
-model BypassValvePosition
+block BypassValvePosition
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.BypassValvePosition
     bypassValvePosition(
     controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,

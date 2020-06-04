@@ -1,5 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.Validation;
-model PumpSpeed
+block PumpSpeed
   .Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.PumpSpeed pumpSpeed
     annotation (Placement(transformation(extent={{-46,14},{-26,38}})));
   CDL.Logical.Sources.Pulse booPul(period=5, startTime=1)
