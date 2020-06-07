@@ -378,5 +378,19 @@ equation
       Tolerance=1e-06),
     __Dymola_Commands(file=
           "Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/SetPoints/Validation/HotWaterPlantReset.mos"
-        "Simulate and plot"));
+        "Simulate and plot"),
+    Documentation(info="<html>
+      <p>
+      This example validates
+      <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.HotWaterSupplyTemperatureReset\">
+      Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.HotWaterSupplyTemperatureReset</a>.
+      </p>
+      </html>", revisions="<html>
+      <ul>
+      <li>
+      May 19, 2020, by Karthik Devaprasad:<br/>
+      First implementation.
+      </li>
+      </ul>
+      </html>"));
 end HotWaterSupplyTemperatureReset;
