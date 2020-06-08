@@ -23,8 +23,7 @@ block Configurator "Configures boiler staging"
 
   parameter Real boiFirMin[nBoi](
     final unit="1",
-    final displayUnit="1",
-    final quantity="Power")
+    final displayUnit="1")
     "Boiler minimum firing ratios vector";
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uBoiAva[nBoi]
@@ -82,7 +81,7 @@ block Configurator "Configures boiler staging"
     "Less threshold"
     annotation (Placement(transformation(extent={{20,150},{40,170}})));
 
-//protected
+protected
   final parameter Integer boiTypMat[nSta, nBoi] = {boiTyp[i] for i in 1:nBoi, j in 1:nSta}
     "Boiler type array expanded to allow for element-wise multiplication with the
     staging matrix";

@@ -123,7 +123,7 @@ block Up
       iconTransformation(extent={{100,-20},{140,20}})));
 
 protected
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.EfficiencyCondition effCon(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.EfficiencyCondition effCon(
     final nSta=nSta,
     final perNonConBoi=perNonConBoi,
     final perConBoi=perConBoi,
@@ -132,7 +132,7 @@ protected
     "Efficiency condition for staging up"
     annotation (Placement(transformation(extent={{-60,30},{-40,50}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.FailsafeCondition faiSafCon(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.FailsafeCondition faiSafCon(
     final samPer=samPerFaiCon,
     final TDif=TDif,
     final TDifHys=TDifHys)

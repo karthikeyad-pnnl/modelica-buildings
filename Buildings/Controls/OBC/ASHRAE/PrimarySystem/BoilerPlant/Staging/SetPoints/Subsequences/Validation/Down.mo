@@ -2,7 +2,7 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints
 model Down
   "Validate model for stage down conditions sequence"
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Down
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Down
     staDow(
     final primaryOnly=false,
     final nSta=1,
@@ -23,7 +23,7 @@ model Down
     "Scenario testing sequence for condensing-type stage"
     annotation (Placement(transformation(extent={{-120,-10},{-100,10}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Down
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Down
     staDow1(
     final primaryOnly=false,
     final nSta=1,
@@ -44,7 +44,7 @@ model Down
     "Scenario testing sequence for non-condensing-type stage"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Down
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Down
     staDow2(
     final primaryOnly=true,
     final nSta=1,

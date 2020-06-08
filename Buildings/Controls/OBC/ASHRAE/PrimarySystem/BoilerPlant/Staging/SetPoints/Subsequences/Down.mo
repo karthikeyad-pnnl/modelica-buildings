@@ -220,7 +220,7 @@ block Down
     annotation (Placement(transformation(extent={{180,-10},{200,10}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.FailsafeCondition faiSafCon(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.FailsafeCondition faiSafCon(
     final samPer=delayFaiCon,
     final TDif=TDifFaiCon,
     TDifHys=dTemp)

@@ -2,56 +2,56 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints
 model Status
   "Validates boiler stage status subsequence"
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Status sta(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Status sta(
     final nSta=4,
     final nBoi=3,
     final staMat={{1,0,0},{1,1,0},{0,1,1},{1,1,1}})
     "Tests boiler stage status"
     annotation (Placement(transformation(extent={{-40,120},{-20,140}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Status sta1(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Status sta1(
     final nSta=4,
     final nBoi=3,
     final staMat={{1,0,0},{1,1,0},{0,1,1},{1,1,1}})
     "Tests boiler stage status at the first stage"
     annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Status sta2(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Status sta2(
     final nSta=4,
     final nBoi=3,
     final staMat={{0,1,0},{1,1,0},{0,1,1},{1,1,1}})
     "Tests boiler stage status with no higher stages available"
     annotation (Placement(transformation(extent={{120,120},{140,140}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Status sta3(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Status sta3(
     final nSta=4,
     final nBoi=3,
     final staMat={{0,1,0},{1,1,0},{0,1,1},{1,1,1}})
     "Tests boiler stage status with no lower stages available"
     annotation (Placement(transformation(extent={{120,40},{140,60}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Status sta4(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Status sta4(
     final nSta=4,
     final nBoi=3,
     final staMat={{1,0,0},{1,1,0},{0,1,1},{1,1,1}})
     "Tests boiler stage status at the highest stage"
     annotation (Placement(transformation(extent={{-40,-60},{-20,-40}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Status sta6(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Status sta6(
     final nSta=4,
     final nBoi=3,
     final staMat={{1,0,0},{1,1,0},{0,1,1},{1,1,1}})
     "Tests for unavailable current stage input"
     annotation (Placement(transformation(extent={{120,-60},{140,-40}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Status sta7(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Status sta7(
     final nSta=4,
     final nBoi=3,
     final staMat={{1,0,0},{1,1,0},{0,1,1},{1,1,1}})
     "Tests for unavailable current stage input, with no higher stages available"
     annotation (Placement(transformation(extent={{120,-130},{140,-110}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Status sta5(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Status sta5(
     final nSta=4,
     final nBoi=3,
     final staMat={{1,0,0},{1,1,0},{0,1,1},{1,1,1}})

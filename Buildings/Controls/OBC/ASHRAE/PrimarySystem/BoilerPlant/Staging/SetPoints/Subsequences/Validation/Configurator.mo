@@ -1,7 +1,7 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation;
 model Configurator "Validate boiler staging configurator subsequence"
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Configurator
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Configurator
     conf(
     final nSta=5,
     final nBoi=3,
@@ -14,7 +14,7 @@ model Configurator "Validate boiler staging configurator subsequence"
     "Validation scenario-1"
     annotation (Placement(transformation(extent={{20,90},{40,110}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Configurator
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Configurator
     conf1(
     final nSta=5,
     final nBoi=3,
@@ -27,7 +27,7 @@ model Configurator "Validate boiler staging configurator subsequence"
     "Validation scenario-2"
     annotation (Placement(transformation(extent={{20,50},{40,70}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Configurator
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Configurator
     conf2(
     final nSta=5,
     final nBoi=3,
@@ -40,7 +40,7 @@ model Configurator "Validate boiler staging configurator subsequence"
     "Validation scenario-3"
     annotation (Placement(transformation(extent={{20,10},{40,30}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Configurator
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Configurator
     conf3(
     final nSta=5,
     final nBoi=3,
@@ -53,7 +53,7 @@ model Configurator "Validate boiler staging configurator subsequence"
     "Validation scenario-4"
     annotation (Placement(transformation(extent={{20,-30},{40,-10}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Configurator
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Configurator
     conf4(
     final nSta=5,
     final nBoi=3,
@@ -66,7 +66,7 @@ model Configurator "Validate boiler staging configurator subsequence"
     "Validation scenario-5"
     annotation (Placement(transformation(extent={{20,-70},{40,-50}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Configurator
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Configurator
     conf5(
     final nSta=5,
     final nBoi=3,

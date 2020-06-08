@@ -2,7 +2,7 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints
 model Up
   "Validate model for stage up conditions sequence"
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Up
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Up
     staUp(
     final nSta=2,
     final perNonConBoi=0.9,
@@ -15,7 +15,7 @@ model Up
     "Scenario testing activation by efficiency condition"
     annotation (Placement(transformation(extent={{-100,-10},{-80,10}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Up
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Up
     staUp1(
     final nSta=2,
     final perNonConBoi=0.9,
@@ -28,7 +28,7 @@ model Up
     "Scenario testing activation by failsafe condition"
     annotation (Placement(transformation(extent={{30,-10},{50,10}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Up
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Up
     staUp2(
     final nSta=2,
     final perNonConBoi=0.9,
