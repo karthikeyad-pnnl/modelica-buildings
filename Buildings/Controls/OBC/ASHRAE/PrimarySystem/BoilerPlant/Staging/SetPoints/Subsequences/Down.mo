@@ -128,15 +128,12 @@ block Down
         extent={{-140,70},{-100,110}},
         rotation=90)));
 
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uAvaDow
-    "Next available lower stage"
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uCur "Current stage index"
     annotation (Placement(transformation(
         extent={{-220,90},{-180,130}},
         rotation=90,
-        origin={0,-20}),
-      iconTransformation(
-        extent={{-140,50},{-100,90}},
-        rotation=90)));
+        origin={0,-20}), iconTransformation(extent={{-140,50},{-100,90}},
+          rotation=90)));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatSupSet(
     final unit="K",
@@ -421,7 +418,7 @@ equation
           -220}}, color={255,127,0}));
   connect(intToRea.y, extIndSig.u)
     annotation (Line(points={{-118,-170},{-102,-170}}, color={0,0,127}));
-  connect(uAvaDow, extIndSig.index) annotation (Line(points={{-110,-220},{-110,-190},
+  connect(uCur, extIndSig.index) annotation (Line(points={{-110,-220},{-110,-190},
           {-90,-190},{-90,-182}}, color={255,127,0}));
   connect(greThr1.u, extIndSig.y)
     annotation (Line(points={{-62,-170},{-78,-170}}, color={0,0,127}));
