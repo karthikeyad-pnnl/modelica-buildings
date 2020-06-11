@@ -5,20 +5,20 @@ block EfficiencyCondition
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.EfficiencyCondition
     effCon(
     final nSta=1,
-    final perNonConBoi=0.9,
-    final perConBoi=1.5,
+    final fraNonConBoi=0.9,
+    final fraConBoi=1.5,
     final sigDif=0.1,
-    final delayQReq=600)
+    final delCapReq=600)
     "Testing efficiency condition for condensing boiler stage type"
     annotation (Placement(transformation(extent={{-30,-10},{-10,10}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.EfficiencyCondition
     effCon1(
     final nSta=1,
-    final perNonConBoi=0.9,
-    final perConBoi=1.5,
+    final fraNonConBoi=0.9,
+    final fraConBoi=1.5,
     final sigDif=0.1,
-    final delayQReq=600)
+    final delCapReq=600)
     "Testing efficiency condition for non-condensing boiler stage type"
     annotation (Placement(transformation(extent={{110,-10},{130,10}})));
 
@@ -105,31 +105,31 @@ equation
   connect(conIntp.y, effCon.uTyp)
     annotation (Line(points={{-108,-80},{-50,-80},{-50,-6},{-32,-6}},
       color={255,127,0}));
-  connect(pul3.y, effCon.uHotWatFloRat)
+  connect(pul3.y, effCon.VHotWat_flow)
     annotation (Line(points={{-108,0},{-32,0}},
       color={0,0,127}));
-  connect(pul.y, effCon.uQReq)
+  connect(pul.y, effCon.uCapReq)
     annotation (Line(points={{-108,120},{-40,120},{-40,9},{-32,9}},
       color={0,0,127}));
-  connect(con.y, effCon.uQDes)
+  connect(con.y, effCon.uCapDes)
     annotation (Line(points={{-108,80},{-50,80},{-50,6},{-32,6}},
       color={0,0,127}));
-  connect(con1.y, effCon.uQUpMin)
+  connect(con1.y, effCon.uCapUpMin)
     annotation (Line(points={{-108,40},{-60,40},{-60,3},{-32,3}},
       color={0,0,127}));
   connect(conIntp1.y, effCon1.uTyp)
     annotation (Line(points={{32,-80},{90,-80},{90,-6},{108,-6}},
       color={255,127,0}));
-  connect(pul2.y, effCon1.uHotWatFloRat)
+  connect(pul2.y, effCon1.VHotWat_flow)
     annotation (Line(points={{32,0},{108,0}},
       color={0,0,127}));
-  connect(pul1.y, effCon1.uQReq)
+  connect(pul1.y, effCon1.uCapReq)
     annotation (Line(points={{32,120},{100,120},{100,9},{108,9}},
       color={0,0,127}));
-  connect(con2.y, effCon1.uQDes)
+  connect(con2.y, effCon1.uCapDes)
     annotation (Line(points={{32,80},{90,80},{90,6},{108,6}},
       color={0,0,127}));
-  connect(con3.y, effCon1.uQUpMin)
+  connect(con3.y, effCon1.uCapUpMin)
     annotation (Line(points={{32,40},{80,40},{80,3},{108,3}},
       color={0,0,127}));
   connect(conInt.y, effCon.uAvaUp)
@@ -138,10 +138,10 @@ equation
   connect(conInt1.y, effCon1.uAvaUp)
     annotation (Line(points={{32,-120},{100,-120},{100,-9},{108,-9}},
       color={255,127,0}));
-  connect(con4.y, effCon.uUpMinFloSet)
+  connect(con4.y, effCon.VUpMinSet_flow)
     annotation (Line(points={{-108,-40},{-60,-40},{-60,-3},{-32,-3}},
       color={0,0,127}));
-  connect(con5.y, effCon1.uUpMinFloSet)
+  connect(con5.y, effCon1.VUpMinSet_flow)
     annotation (Line(points={{32,-40},{80,-40},{80,-3},{108,-3}},
       color={0,0,127}));
 
@@ -165,7 +165,8 @@ equation
     __Dymola_Commands(file="./Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/Validation/EfficiencyCondition.mos"
       "Simulate and plot"),
     Documentation(info="<html>
-      <p>This example validates
+      <p>
+      This example validates
       <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.EfficiencyCondition\">
       Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.EfficiencyCondition</a>
       </p>

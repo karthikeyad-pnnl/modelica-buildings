@@ -4,7 +4,7 @@ block FailsafeCondition
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.FailsafeCondition
     faiSafCon(
-    final delayEna=900,
+    final delEna=900,
     final TDif=10,
     final TDifHys=1)
     "Testing scenario with FailsafeCondition unmet"
@@ -12,7 +12,7 @@ block FailsafeCondition
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.FailsafeCondition
     faiSafCon1(
-    final delayEna=900,
+    final delEna=900,
     final TDif=10,
     final TDifHys=1)
     "Testing scenario with FailsafeCondition met"
@@ -20,18 +20,20 @@ block FailsafeCondition
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.FailsafeCondition
     faiSafCon2(
-    final delayEna=900,
+    final delEna=900,
     final TDif=10,
     final TDifHys=1)
-    "Testing scenario exhibiting lower limit of hysteresis loop in sequence being unmet"
+    "Testing scenario exhibiting lower limit of hysteresis loop in sequence being
+    unmet"
     annotation (Placement(transformation(extent={{-40,-58},{-20,-40}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.FailsafeCondition
     faiSafCon3(
-    final delayEna=900,
+    final delEna=900,
     final TDif=10,
     final TDifHys=1)
-    "Testing scenario exhibitng lower limit of hysteresis loop in sequence being met"
+    "Testing scenario exhibitng lower limit of hysteresis loop in sequence being
+    met"
     annotation (Placement(transformation(extent={{60,-58},{80,-40}})));
 
 protected
@@ -110,7 +112,8 @@ equation
       color={0,0,127}));
 
   annotation (
-    Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+    Icon(coordinateSystem(preserveAspectRatio=false),
+      graphics={
         Ellipse(lineColor = {75,138,73},
                 fillColor={255,255,255},
                 fillPattern = FillPattern.Solid,
@@ -126,7 +129,8 @@ equation
       Interval=1,
       Tolerance=1e-6),
     Documentation(info="<html>
-      <p>This example validates
+      <p>
+      This example validates
       <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.FailsafeCondition\">
       Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.FailsafeCondition</a>
       </p>
