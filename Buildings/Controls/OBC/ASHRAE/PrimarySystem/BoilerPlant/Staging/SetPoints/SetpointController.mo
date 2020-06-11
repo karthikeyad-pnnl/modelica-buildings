@@ -1,6 +1,6 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints;
 block SetpointController
-  "Calculates the chiller stage status setpoint signal"
+  "Calculates the boiler stage status setpoint signal"
 
   parameter Boolean have_WSE = false
     "true = plant has a WSE, false = plant does not have WSE"
@@ -212,17 +212,26 @@ block SetpointController
     annotation (Placement(transformation(extent={{-20,-180},{0,-160}})));
   BoilerPlant.Staging.SetPoints.Subsequences.BoilerIndices boiInd
     annotation (Placement(transformation(extent={{40,-210},{60,-190}})));
-  Subsequences.CapacityRequirement capReq1
+  Subsequences.CapacityRequirement capReq1(avePer=avePer)
     annotation (Placement(transformation(extent={{-360,240},{-340,260}})));
-  Subsequences.Configurator conf
+  Subsequences.Configurator conf(
+    nSta=nSta,
+    nBoi=nBoi,
+    boiTyp=boiTyp,
+    staMat=staMat,
+    boiDesCap=boiDesCap,
+    boiFirMin=boiFirMin)
     annotation (Placement(transformation(extent={{-360,-180},{-340,-160}})));
-  Subsequences.Status sta
+  Subsequences.Status sta(
+    nSta=nSta,
+    nBoi=nBoi,
+    staMat=staMat)
     annotation (Placement(transformation(extent={{-310,-220},{-290,-200}})));
   CDL.Interfaces.RealInput THotWatSup(final unit="K", final quantity="ThermodynamicTemperature")
     "Measured hot water supply temperature" annotation (Placement(
         transformation(extent={{-440,150},{-400,190}}), iconTransformation(
           extent={{-140,130},{-100,170}})));
-  Subsequences.Capacities cap
+  Subsequences.Capacities cap(nSta=nSta)
     annotation (Placement(transformation(extent={{-270,-180},{-250,-160}})));
   Subsequences.Up staUp
     annotation (Placement(transformation(extent={{-140,-120},{-120,-100}})));

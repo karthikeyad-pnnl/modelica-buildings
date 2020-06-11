@@ -1,5 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints;
-package Validation "Package with validation model for staging setpoint controller"
+package Validation "Collection of validation models"
 
 annotation (Icon(graphics={
         Rectangle(
@@ -22,8 +22,8 @@ annotation (Icon(graphics={
           Documentation(info="<html>
           <p>
           This package contains validation models for the classes in
-          <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences\">
-          Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences</a>.
+          <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints\">
+          Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints</a>.
           </p>
           <p>
           Note that most validation models contain simple input data
