@@ -195,13 +195,13 @@ equation
 annotation (
   experiment(StopTime=10.0,
     Tolerance=1e-06),
-  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Validation/Status.mos"
+  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/Validation/Status.mos"
     "Simulate and plot"),
   Documentation(info="<html>
   <p>
   This example validates
-  <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Generic.Status\">
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Generic.Status</a>.
+  <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Status\">
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Status</a>.
   </p>
   </html>",
   revisions="<html>
