@@ -42,14 +42,14 @@ block Configurator "Configures boiler staging"
     annotation (Placement(transformation(extent={{220,-140},{260,-100}}),
       iconTransformation(extent={{100,-60},{140,-20}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yDesCap[nSta](
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yCapDes[nSta](
     final unit=fill("W", nSta),
     final quantity=fill("Power", nSta))
     "Stage design capacities vector"
     annotation (Placement(transformation(extent={{220,0},{260,40}}),
       iconTransformation(extent={{100,60},{140,100}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yMinCap[nSta](
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yCapMin[nSta](
     final unit=fill("W", nSta),
     final quantity=fill("Power", nSta))
     "Minimum stage capacities vector"
@@ -199,11 +199,11 @@ protected
     "Find highest BFirMin in each stage"
     annotation (Placement(transformation(extent={{-120,60},{-100,80}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Product pro2[nSta]
+  Buildings.Controls.OBC.CDL.Continuous.Product pro2[nSta] "Product"
     annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sort sort1(
-    final nin=nBoi)
+    final nin=nBoi) "Sort values"
     annotation (Placement(transformation(extent={{-140,160},{-120,180}})));
 equation
   connect(boiDesCaps.y, staDesCaps.u)
@@ -257,7 +257,7 @@ equation
   connect(intEqu.y, mulAnd.u)
     annotation (Line(points={{122,-150},{138,-150}},
       color={255,0,255}));
-  connect(staDesCaps.y, yDesCap)
+  connect(staDesCaps.y,yCapDes)
     annotation (Line(points={{-118,110},{100,110},{100,20},{240,20}},
       color={0,0,127}));
   connect(oneVec.y,sumNumBoi. u)
@@ -284,7 +284,7 @@ equation
   connect(staDesCaps.y, pro2.u1)
     annotation (Line(points={{-118,110},{-90,110},{-90,76},{-82,76}},
       color={0,0,127}));
-  connect(pro2.y, yMinCap)
+  connect(pro2.y,yCapMin)
     annotation (Line(points={{-58,70},{80,70},{80,-20},{240,-20}},
       color={0,0,127}));
 

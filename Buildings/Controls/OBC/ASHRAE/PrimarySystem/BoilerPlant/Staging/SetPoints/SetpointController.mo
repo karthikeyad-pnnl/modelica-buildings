@@ -174,11 +174,11 @@ block SetpointController
     annotation (Placement(transformation(extent={{-440,190},{-400,230}}),
         iconTransformation(extent={{-140,-110},{-100,-70}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uMinFloSet[nSta](final unit="Pa",
-      final quantity="PressureDifference") if
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput VMinSet_flow[nSta](final unit
+      ="Pa", final quantity="PressureDifference") if
                                             not serChi
-    "Primary circuit minimum flow setpoint for next higher stage" annotation (
-      Placement(transformation(extent={{-440,110},{-400,150}}),
+    "Vector with primary circuit minimum flow setpoint for all stages"
+    annotation (Placement(transformation(extent={{-440,110},{-400,150}}),
         iconTransformation(extent={{-140,-10},{-100,30}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatRet(
@@ -273,9 +273,9 @@ equation
           {-332,-178},{-338,-178}}, color={255,0,255}));
   connect(sta.u, u) annotation (Line(points={{-312,-204},{-328,-204},{-328,-110},
           {-420,-110}},color={255,127,0}));
-  connect(conf.yDesCap, cap.uDesCap) annotation (Line(points={{-338,-162},{-310,
+  connect(conf.yCapDes, cap.uDesCap) annotation (Line(points={{-338,-162},{-310,
           -162},{-310,-161},{-272,-161}}, color={0,0,127}));
-  connect(conf.yMinCap, cap.uMinCap) annotation (Line(points={{-338,-166},{-310,
+  connect(conf.yCapMin, cap.uMinCap) annotation (Line(points={{-338,-166},{-310,
           -166},{-310,-164},{-272,-164}}, color={0,0,127}));
   connect(cap.u, u) annotation (Line(points={{-272,-167},{-308,-167},{-308,-168},
           {-328,-168},{-328,-110},{-420,-110}},
@@ -290,9 +290,9 @@ equation
           -274,-179},{-272,-179}}, color={255,0,255}));
   connect(conf.yTyp, staDow.uTyp) annotation (Line(points={{-338,-174},{-336,-174},
           {-336,-248},{-139,-248},{-139,-242}}, color={255,127,0}));
-  connect(cap.yDes, staUp.uQDes) annotation (Line(points={{-248,-162},{-210,-162},
+  connect(cap.yDes, staUp.uCapDes) annotation (Line(points={{-248,-162},{-210,-162},
           {-210,-103},{-142,-103}}, color={0,0,127}));
-  connect(cap.yUpMin, staUp.uQUpMin) annotation (Line(points={{-248,-178},{-208,
+  connect(cap.yUpMin, staUp.uCapUpMin) annotation (Line(points={{-248,-178},{-208,
           -178},{-208,-105},{-142,-105}}, color={0,0,127}));
   connect(conf.yTyp, staUp.uTyp) annotation (Line(points={{-338,-174},{-336,-174},
           {-336,-248},{-206,-248},{-206,-111},{-142,-111}}, color={255,127,0}));
@@ -304,7 +304,7 @@ equation
   connect(THotWatSupSet, staUp.THotWatSupSet) annotation (Line(points={{-420,
           290},{-184,290},{-184,-115},{-142,-115}},
                                                color={0,0,127}));
-  connect(VHotWat_flow, staUp.uHotWatFloRat) annotation (Line(points={{-420,210},
+  connect(VHotWat_flow, staUp.VHotWat_flow) annotation (Line(points={{-420,210},
           {-194,210},{-194,-107},{-142,-107}}, color={0,0,127}));
   connect(staDow.THotWatSupSet, THotWatSupSet) annotation (Line(points={{-142,
           -221},{-184,-221},{-184,290},{-420,290}},
@@ -312,25 +312,22 @@ equation
   connect(staDow.THotWatSup, THotWatSup) annotation (Line(points={{-142,-223},{
           -188,-223},{-188,170},{-420,170}},
                                         color={0,0,127}));
-  connect(staDow.uQReq, capReq1.y) annotation (Line(points={{-142,-225},{-180,
-          -225},{-180,250},{-338,250}},
-                                  color={0,0,127}));
-  connect(extIndSig.y, staUp.uUpMinFloSet) annotation (Line(points={{-218,-110},
+  connect(staDow.uCapReq, capReq1.y) annotation (Line(points={{-142,-225},{-180,
+          -225},{-180,250},{-338,250}}, color={0,0,127}));
+  connect(extIndSig.y, staUp.VUpMinSet_flow) annotation (Line(points={{-218,-110},
           {-216,-110},{-216,-109},{-142,-109}}, color={0,0,127}));
-  connect(extIndSig.u, uMinFloSet) annotation (Line(points={{-242,-110},{-250,
-          -110},{-250,130},{-420,130}},
-                                  color={0,0,127}));
+  connect(extIndSig.u, VMinSet_flow) annotation (Line(points={{-242,-110},{-250,
+          -110},{-250,130},{-420,130}}, color={0,0,127}));
   connect(extIndSig.index, sta.yAvaUp) annotation (Line(points={{-230,-122},{-230,
           -154},{-280,-154},{-280,-203},{-288,-203}}, color={255,127,0}));
-  connect(extIndSig1.y, staDow.uMinPriPumFlo) annotation (Line(points={{-208,-270},
+  connect(extIndSig1.y, staDow.VMinSet_flow) annotation (Line(points={{-208,-270},
           {-190,-270},{-190,-235},{-142,-235}}, color={0,0,127}));
-  connect(extIndSig1.u, uMinFloSet) annotation (Line(points={{-232,-270},{-240,
-          -270},{-240,-130},{-250,-130},{-250,130},{-420,130}},
-                                                          color={0,0,127}));
-  connect(cap.yMin, staDow.uQMin) annotation (Line(points={{-248,-174},{-190,-174},
-          {-190,-227},{-142,-227}}, color={0,0,127}));
-  connect(cap.yDowDes, staDow.uQDowDes) annotation (Line(points={{-248,-170},{-192,
-          -170},{-192,-231},{-142,-231}}, color={0,0,127}));
+  connect(extIndSig1.u, VMinSet_flow) annotation (Line(points={{-232,-270},{-240,
+          -270},{-240,-130},{-250,-130},{-250,130},{-420,130}}, color={0,0,127}));
+  connect(cap.yMin, staDow.uCapMin) annotation (Line(points={{-248,-174},{-190,
+          -174},{-190,-227},{-142,-227}}, color={0,0,127}));
+  connect(cap.yDowDes, staDow.uCapDowDes) annotation (Line(points={{-248,-170},
+          {-192,-170},{-192,-231},{-142,-231}}, color={0,0,127}));
   connect(staDow.uBypValPos, uBypValPos) annotation (Line(points={{-142,-229},{
           -172,-229},{-172,90},{-420,90}},
                                         color={0,0,127}));
@@ -338,14 +335,13 @@ equation
           {-170,50},{-170,-237},{-142,-237}},  color={0,0,127}));
   connect(THotWatRetSec, staDow.TSecHotWatRet) annotation (Line(points={{-420,10},
           {-168,10},{-168,-239},{-142,-239}},  color={0,0,127}));
-  connect(VHotWat_flow, staDow.uPriCirFloRat) annotation (Line(points={{-420,
-          210},{-194,210},{-194,-233},{-142,-233}},
-                                               color={0,0,127}));
+  connect(VHotWat_flow, staDow.VHotWat_flow) annotation (Line(points={{-420,210},
+          {-194,210},{-194,-233},{-142,-233}}, color={0,0,127}));
   connect(extIndSig1.index, u) annotation (Line(points={{-220,-282},{-220,-290},
           {-328,-290},{-328,-110},{-420,-110}},
                                               color={255,127,0}));
-  connect(capReq1.y, staUp.uQReq) annotation (Line(points={{-338,250},{-180,250},
-          {-180,-101},{-142,-101}}, color={0,0,127}));
+  connect(capReq1.y, staUp.uCapReq) annotation (Line(points={{-338,250},{-180,
+          250},{-180,-101},{-142,-101}}, color={0,0,127}));
   connect(sta.yAvaUp, staUp.uAvaUp) annotation (Line(points={{-288,-203},{-280,
           -203},{-280,-154},{-202,-154},{-202,-113},{-142,-113}},
                                                             color={255,127,0}));
@@ -358,8 +354,8 @@ equation
           -170},{-56,-206},{-288,-206}}, color={255,127,0}));
   connect(staUp.yStaUp, cha.uUp) annotation (Line(points={{-118,-110},{-64,-110},
           {-64,-174},{-22,-174}}, color={255,0,255}));
-  connect(staDow.y, cha.uDow) annotation (Line(points={{-118,-230},{-64,-230},{
-          -64,-178},{-22,-178}}, color={255,0,255}));
+  connect(staDow.yStaDow, cha.uDow) annotation (Line(points={{-118,-230},{-64,-230},
+          {-64,-178},{-22,-178}}, color={255,0,255}));
   annotation (defaultComponentName = "staSetCon",
         Icon(coordinateSystem(extent={{-400,-300},{120,320}}),
              graphics={

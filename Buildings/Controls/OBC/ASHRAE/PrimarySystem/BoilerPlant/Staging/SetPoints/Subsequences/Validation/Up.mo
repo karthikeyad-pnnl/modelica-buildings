@@ -5,11 +5,11 @@ model Up
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Up
     staUp(
     final nSta=2,
-    final perNonConBoi=0.9,
-    final perConBoi=1.5,
+    final fraNonConBoi=0.9,
+    final fraConBoi=1.5,
+    final delEffCon=600,
+    final delFaiCon=900,
     final sigDif=0.1,
-    final samPerEffCon=10*60,
-    final samPerFaiCon=900,
     final TDif=10,
     final TDifHys=1)
     "Scenario testing activation by efficiency condition"
@@ -18,11 +18,11 @@ model Up
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Up
     staUp1(
     final nSta=2,
-    final perNonConBoi=0.9,
-    final perConBoi=1.5,
+    final fraNonConBoi=0.9,
+    final fraConBoi=1.5,
+    final delEffCon=600,
+    final delFaiCon=900,
     final sigDif=0.1,
-    final samPerEffCon=600,
-    final samPerFaiCon=900,
     final TDif=10,
     final TDifHys=1)
     "Scenario testing activation by failsafe condition"
@@ -31,11 +31,11 @@ model Up
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Up
     staUp2(
     final nSta=2,
-    final perNonConBoi=0.9,
-    final perConBoi=1.5,
+    final fraNonConBoi=0.9,
+    final fraConBoi=1.5,
+    final delEffCon=600,
+    final delFaiCon=900,
     final sigDif=0.1,
-    final samPerEffCon=600,
-    final samPerFaiCon=900,
     final TDif=10,
     final TDifHys=1)
     "Scenario testing activation due to current stage unavailability"
@@ -194,64 +194,64 @@ protected
     annotation (Placement(transformation(extent={{80,50},{100,70}})));
 
 equation
-  connect(staUp.uQDes, con.y) annotation (Line(points={{-102,7},{-114,7},{-114,140},
-          {-158,140}}, color={0,0,127}));
-  connect(con1.y, staUp.uQUpMin) annotation (Line(points={{-158,100},{-120,100},
+  connect(staUp.uCapDes, con.y) annotation (Line(points={{-102,7},{-114,7},{-114,
+          140},{-158,140}}, color={0,0,127}));
+  connect(con1.y, staUp.uCapUpMin) annotation (Line(points={{-158,100},{-120,100},
           {-120,5},{-102,5}}, color={0,0,127}));
-  connect(pul3.y, staUp.uHotWatFloRat) annotation (Line(points={{-158,60},{-126,
-          60},{-126,3},{-102,3}}, color={0,0,127}));
-  connect(con4.y, staUp.uUpMinFloSet) annotation (Line(points={{-158,20},{-132,20},
-          {-132,1},{-102,1}}, color={0,0,127}));
+  connect(pul3.y, staUp.VHotWat_flow) annotation (Line(points={{-158,60},{-126,60},
+          {-126,3},{-102,3}}, color={0,0,127}));
+  connect(con4.y, staUp.VUpMinSet_flow) annotation (Line(points={{-158,20},{-132,
+          20},{-132,1},{-102,1}}, color={0,0,127}));
   connect(conIntp.y, staUp.uTyp) annotation (Line(points={{-158,-20},{-132,-20},
           {-132,-1},{-102,-1}}, color={255,127,0}));
   connect(conInt.y, staUp.uAvaUp) annotation (Line(points={{-158,-60},{-126,-60},
           {-126,-3},{-102,-3}}, color={255,127,0}));
   connect(con2.y, staUp.THotWatSupSet) annotation (Line(points={{-158,-100},{-120,
           -100},{-120,-5},{-102,-5}}, color={0,0,127}));
-  connect(con3.y, staUp.uQReq) annotation (Line(points={{-158,180},{-110,180},{-110,
-          9},{-102,9}}, color={0,0,127}));
+  connect(con3.y, staUp.uCapReq) annotation (Line(points={{-158,180},{-110,180},
+          {-110,9},{-102,9}}, color={0,0,127}));
   connect(con5.y, staUp.THotWatSup) annotation (Line(points={{-158,-140},{-114,-140},
           {-114,-7},{-102,-7}}, color={0,0,127}));
   connect(con6.y, staUp.uAvaCur) annotation (Line(points={{-158,-180},{-110,-180},
           {-110,-9},{-102,-9}}, color={255,0,255}));
-  connect(staUp1.uQDes, con8.y) annotation (Line(points={{28,7},{16,7},{16,140},
+  connect(staUp1.uCapDes, con8.y) annotation (Line(points={{28,7},{16,7},{16,140},
           {-28,140}}, color={0,0,127}));
-  connect(con9.y, staUp1.uQUpMin) annotation (Line(points={{-28,100},{10,100},{10,
-          5},{28,5}}, color={0,0,127}));
-  connect(con10.y, staUp1.uUpMinFloSet) annotation (Line(points={{-28,20},{-2,20},
-          {-2,1},{28,1}}, color={0,0,127}));
+  connect(con9.y, staUp1.uCapUpMin) annotation (Line(points={{-28,100},{10,100},
+          {10,5},{28,5}}, color={0,0,127}));
+  connect(con10.y, staUp1.VUpMinSet_flow) annotation (Line(points={{-28,20},{-2,
+          20},{-2,1},{28,1}}, color={0,0,127}));
   connect(conIntp1.y, staUp1.uTyp) annotation (Line(points={{-28,-20},{-2,-20},{
           -2,-1},{28,-1}}, color={255,127,0}));
   connect(conInt1.y, staUp1.uAvaUp) annotation (Line(points={{-28,-60},{4,-60},{
           4,-3},{28,-3}}, color={255,127,0}));
-  connect(con12.y, staUp1.uQReq) annotation (Line(points={{-28,180},{20,180},{20,
-          9},{28,9}}, color={0,0,127}));
+  connect(con12.y, staUp1.uCapReq) annotation (Line(points={{-28,180},{20,180},{
+          20,9},{28,9}}, color={0,0,127}));
   connect(con7.y, staUp1.uAvaCur) annotation (Line(points={{-28,-180},{20,-180},
           {20,-9},{28,-9}}, color={255,0,255}));
-  connect(staUp2.uQDes, con15.y) annotation (Line(points={{158,7},{146,7},{146,140},
-          {102,140}}, color={0,0,127}));
-  connect(con16.y, staUp2.uQUpMin) annotation (Line(points={{102,100},{140,100},
+  connect(staUp2.uCapDes, con15.y) annotation (Line(points={{158,7},{146,7},{146,
+          140},{102,140}}, color={0,0,127}));
+  connect(con16.y, staUp2.uCapUpMin) annotation (Line(points={{102,100},{140,100},
           {140,5},{158,5}}, color={0,0,127}));
-  connect(con17.y, staUp2.uUpMinFloSet) annotation (Line(points={{102,20},{128,20},
-          {128,1},{158,1}}, color={0,0,127}));
+  connect(con17.y, staUp2.VUpMinSet_flow) annotation (Line(points={{102,20},{128,
+          20},{128,1},{158,1}}, color={0,0,127}));
   connect(conIntp2.y, staUp2.uTyp) annotation (Line(points={{102,-20},{128,-20},
           {128,-1},{158,-1}}, color={255,127,0}));
   connect(conInt2.y, staUp2.uAvaUp) annotation (Line(points={{102,-60},{134,-60},
           {134,-3},{158,-3}}, color={255,127,0}));
   connect(con18.y, staUp2.THotWatSupSet) annotation (Line(points={{102,-100},{140,
           -100},{140,-5},{158,-5}}, color={0,0,127}));
-  connect(con19.y, staUp2.uQReq) annotation (Line(points={{102,180},{150,180},{150,
-          9},{158,9}}, color={0,0,127}));
+  connect(con19.y, staUp2.uCapReq) annotation (Line(points={{102,180},{150,180},
+          {150,9},{158,9}}, color={0,0,127}));
   connect(con20.y, staUp2.THotWatSup) annotation (Line(points={{102,-140},{146,-140},
           {146,-7},{158,-7}}, color={0,0,127}));
-  connect(con21.y, staUp1.uHotWatFloRat)
+  connect(con21.y, staUp1.VHotWat_flow)
     annotation (Line(points={{-28,60},{4,60},{4,3},{28,3}}, color={0,0,127}));
   connect(con13.y, staUp1.THotWatSupSet) annotation (Line(points={{-28,-100},{10,
           -100},{10,-5},{28,-5}}, color={0,0,127}));
   connect(pul.y, staUp1.THotWatSup) annotation (Line(points={{-28,-140},{16,-140},
           {16,-7},{28,-7}}, color={0,0,127}));
-  connect(con11.y, staUp2.uHotWatFloRat) annotation (Line(points={{102,60},{134,
-          60},{134,3},{158,3}}, color={0,0,127}));
+  connect(con11.y, staUp2.VHotWat_flow) annotation (Line(points={{102,60},{134,60},
+          {134,3},{158,3}}, color={0,0,127}));
   connect(booPul.y, staUp2.uAvaCur) annotation (Line(points={{102,-180},{150,-180},
           {150,-9},{158,-9}}, color={255,0,255}));
 annotation (
@@ -259,13 +259,13 @@ annotation (
       StopTime=7200,
       Interval=1,
       Tolerance=1e-06),
-  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Validation/Up.mos"
+  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/Validation/Up.mos"
     "Simulate and plot"),
   Documentation(info="<html>
     <p>
     This example validates
-    <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Up\">
-    Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Up</a>.
+    <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Up\">
+    Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Up</a>.
     </p>
     </html>", revisions="<html>
     <ul>

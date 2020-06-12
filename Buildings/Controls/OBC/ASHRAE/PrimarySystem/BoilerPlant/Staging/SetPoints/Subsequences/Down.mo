@@ -9,22 +9,24 @@ block Down
   parameter Integer nSta = 1
     "Number of stages";
 
-  parameter Real minFirPer = 1.10
-    "Percentage ratio of QRequired to BFiringMin for minimum firing ratio condition"
+  parameter Real fraMinFir = 1.10
+    "Fraction of boiler minimum firing ratio that required capacity needs to be
+    for minimum firing ratio condition"
     annotation(Dialog(group="Minimum firing rate condition parameters"));
 
-  parameter Real delayMinFir(
+  parameter Real delMinFir(
     final unit="s",
     final displayUnit="s",
     final quantity="Time")= 300
     "Delay for staging based on minimum firing rate of current stage"
     annotation(Dialog(group="Minimum firing rate condition parameters"));
 
-  parameter Real desCapPer =  0.80
-    "Percentage ratio of QRequired to design capacity of next lower stage for lower design capacity ratio condition"
+  parameter Real fraDesCap =  0.80
+    "Fraction of design capacity of next lower stage that heating capacity needs
+    to be for lower design capacity ratio condition"
     annotation(Dialog(group="Stage design capacity condition parameters"));
 
-  parameter Real delayDesCapNonConBoi(
+  parameter Real delDesCapNonConBoi(
     final unit="s",
     final displayUnit="s",
     final quantity="Time") = 600
@@ -32,11 +34,11 @@ block Down
     annotation(Evaluate=true,Dialog(enable=not
                                               (primaryOnly), group="Stage design capacity condition parameters"));
 
-  parameter Real delayDesCapConBoi(
+  parameter Real delDesCapConBoi(
     final unit="s",
     final displayUnit="s",
     final quantity="Time") = 300
-    "Enable delay for lower stage design capacity ratio condition for non-condensing boilers"
+    "Enable delay for lower stage design capacity ratio condition for condensing boilers"
     annotation(Dialog(group="Stage design capacity condition parameters"));
 
   parameter Real sigDif = 0.01
@@ -57,7 +59,7 @@ block Down
     "Higher hysteresis deadband limit for flow-rate condition"
     annotation(Dialog(tab="Advanced"));
 
-  parameter Real delayBypVal(
+  parameter Real delBypVal(
     final unit="s",
     final displayUnit="s",
     final quantity="Time") = 300
@@ -85,7 +87,7 @@ block Down
                   (primaryOnly),
         group="Return temperature condition parameters"));
 
-  parameter Real delayTRetDif(
+  parameter Real delTRetDif(
     final unit="s",
     final displayUnit="s",
     final quantity="Time") = 300
@@ -111,7 +113,7 @@ block Down
     "Temperature difference for failsafe condition"
     annotation(Dialog(group="Failsafe condition parameters"));
 
-  parameter Real delayFaiCon(
+  parameter Real delFaiCon(
     final unit="s",
     final displayUnit="s",
     final quantity="Time") = 900
@@ -128,7 +130,8 @@ block Down
         extent={{-140,70},{-100,110}},
         rotation=90)));
 
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uCur "Current stage index"
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uCur
+    "Current stage index"
     annotation (Placement(transformation(
         extent={{-220,90},{-180,130}},
         rotation=90,
@@ -151,7 +154,7 @@ block Down
     annotation (Placement(transformation(extent={{-220,100},{-180,140}}),
       iconTransformation(extent={{-140,50},{-100,90}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uQReq(
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uCapReq(
     final unit="W",
     final displayUnit="W",
     final quantity="Power")
@@ -159,7 +162,7 @@ block Down
     annotation (Placement(transformation(extent={{-220,40},{-180,80}}),
       iconTransformation(extent={{-140,30},{-100,70}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uQMin(
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uCapMin(
     final unit="W",
     final displayUnit="W",
     final quantity="Power")
@@ -167,7 +170,7 @@ block Down
     annotation (Placement(transformation(extent={{-220,10},{-180,50}}),
       iconTransformation(extent={{-140,10},{-100,50}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uQDowDes(
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uCapDowDes(
     final unit="W",
     final displayUnit="W",
     final quantity="Power")
@@ -175,7 +178,7 @@ block Down
     annotation (Placement(transformation(extent={{-220,-50},{-180,-10}}),
       iconTransformation(extent={{-140,-30},{-100,10}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uPriCirFloRat(
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput VHotWat_flow(
     final unit="m3/s",
     final displayUnit="m3/s",
     final quantity="VolumeFlowRate") if not primaryOnly
@@ -183,7 +186,7 @@ block Down
     annotation (Placement(transformation(extent={{-220,-80},{-180,-40}}),
       iconTransformation(extent={{-140,-50},{-100,-10}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uMinPriPumFlo(
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput VMinSet_flow(
     final unit="m3/s",
     final displayUnit="m3/s",
     final quantity="VolumeFlowRate") if not primaryOnly
@@ -212,15 +215,16 @@ block Down
     annotation (Placement(transformation(extent={{-220,-170},{-180,-130}}),
       iconTransformation(extent={{-140,-110},{-100,-70}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yStaDow
     "Stage down signal"
     annotation (Placement(transformation(extent={{180,-10},{200,10}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
+protected
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.FailsafeCondition faiSafCon(
-    final samPer=delayFaiCon,
+    final delEna=delFaiCon,
     final TDif=TDifFaiCon,
-    TDifHys=dTemp)
+    final TDifHys=dTemp)
     "Failsafe condition"
     annotation (Placement(transformation(extent={{-160,126},{-140,144}})));
 
@@ -233,13 +237,13 @@ block Down
     annotation (Placement(transformation(extent={{-140,34},{-120,54}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(
-    final uLow=minFirPer,
-    final uHigh=minFirPer + sigDif)
+    final uLow=fraMinFir,
+    final uHigh=fraMinFir + sigDif)
     "Hysteresis loop"
     annotation (Placement(transformation(extent={{-110,34},{-90,54}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(
-    final delayTime=delayMinFir,
+    final delayTime=delMinFir,
     final delayOnInit=true)
     "Enable delay for minimum firing rate condition"
     annotation (Placement(transformation(extent={{-50,34},{-30,54}})));
@@ -249,7 +253,7 @@ block Down
     annotation (Placement(transformation(extent={{0,10},{20,30}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel1(
-    final delayTime=delayBypVal,
+    final delayTime=delBypVal,
     final delayOnInit=true) if primaryOnly
     "Enable delay for bypass valve position condition"
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
@@ -259,13 +263,13 @@ block Down
     annotation (Placement(transformation(extent={{-160,-50},{-140,-30}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys1(
-    final uLow=desCapPer,
-    final uHigh=desCapPer + sigDif)
+    final uLow=fraDesCap,
+    final uHigh=fraDesCap + sigDif)
     "Hysteresis loop"
     annotation (Placement(transformation(extent={{-120,-50},{-100,-30}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel2(
-    final delayTime=delayDesCapNonConBoi,
+    final delayTime=delDesCapNonConBoi,
     final delayOnInit=true)
     "Enable delay for stage design capacity condition"
     annotation (Placement(transformation(extent={{40,-30},{60,-10}})));
@@ -291,7 +295,7 @@ block Down
     annotation (Placement(transformation(extent={{-120,-140},{-100,-120}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel3(
-    final delayTime=delayTRetDif,
+    final delayTime=delTRetDif,
     final delayOnInit=true) if not primaryOnly
     "Enable delay for return water temperature condition"
     annotation (Placement(transformation(extent={{-80,-140},{-60,-120}})));
@@ -305,7 +309,7 @@ block Down
     annotation (Placement(transformation(extent={{0,-100},{20,-80}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel4(
-    final delayTime=delayDesCapConBoi,
+    final delayTime=delDesCapConBoi,
     final delayOnInit=true)
     "Enable delay for stage design capacity condition"
     annotation (Placement(transformation(extent={{40,-70},{60,-50}})));
@@ -327,11 +331,6 @@ block Down
   Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea[nSta]
     "Integer to Real conversion"
     annotation (Placement(transformation(extent={{-140,-180},{-120,-160}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr1(
-    final threshold=1)
-    "Check for non-condensing boiler stage type"
-    annotation (Placement(transformation(extent={{-60,-180},{-40,-160}})));
 
   Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi1 if not primaryOnly
     "Logical switch"
@@ -361,15 +360,22 @@ block Down
     "Logical Not"
     annotation (Placement(transformation(extent={{-80,-90},{-60,-70}})));
 
+  Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt
+    "Real to Integer conversion"
+    annotation (Placement(transformation(extent={{-60,-180},{-40,-160}})));
+
+  Buildings.Controls.OBC.CDL.Integers.GreaterThreshold intGreThr(
+    final threshold=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler)
+    "Check for non-condensing boilers in stage"
+    annotation (Placement(transformation(extent={{-20,-180},{0,-160}})));
+
 equation
   connect(faiSafCon.TSupSet, THotWatSupSet) annotation (Line(points={{-162,139},
           {-170,139},{-170,150},{-200,150}}, color={0,0,127}));
   connect(faiSafCon.TSup, THotWatSup)
     annotation (Line(points={{-162,129},{-170,129},{-170,120},{-200,120}},
                                                      color={0,0,127}));
-  connect(not1.u, faiSafCon.y)
-    annotation (Line(points={{-122,134},{-138,134}}, color={255,0,255}));
-  connect(div.u2, uQMin) annotation (Line(points={{-142,38},{-150,38},{-150,30},
+  connect(div.u2, uCapMin) annotation (Line(points={{-142,38},{-150,38},{-150,30},
           {-200,30}}, color={0,0,127}));
   connect(hys.u, div.y)
     annotation (Line(points={{-112,44},{-118,44}},
@@ -378,20 +384,20 @@ equation
           -28,44}},  color={255,0,255}));
   connect(truDel1.y, or2.u2) annotation (Line(points={{-58,0},{-20,0},{-20,12},{
           -2,12}},  color={255,0,255}));
-  connect(div1.u2, uQDowDes) annotation (Line(points={{-162,-46},{-172,-46},{-172,
-          -30},{-200,-30}},                            color={0,0,127}));
+  connect(div1.u2, uCapDowDes) annotation (Line(points={{-162,-46},{-172,-46},{-172,
+          -30},{-200,-30}}, color={0,0,127}));
   connect(hys1.u, div1.y)
     annotation (Line(points={{-122,-40},{-138,-40}},
                                                    color={0,0,127}));
-  connect(and3.y, y)
+  connect(and3.y, yStaDow)
     annotation (Line(points={{162,0},{190,0}}, color={255,0,255}));
   connect(and3.u1, not1.y) annotation (Line(points={{138,8},{120,8},{120,134},{-98,
           134}},     color={255,0,255}));
   connect(and3.u2, or2.y) annotation (Line(points={{138,0},{114,0},{114,20},{22,
           20}}, color={255,0,255}));
-  connect(add3.u1, uPriCirFloRat) annotation (Line(points={{-162,-74},{-168,-74},
+  connect(add3.u1, VHotWat_flow) annotation (Line(points={{-162,-74},{-168,-74},
           {-168,-60},{-200,-60}}, color={0,0,127}));
-  connect(add3.u2,uMinPriPumFlo)  annotation (Line(points={{-162,-86},{-168,-86},
+  connect(add3.u2, VMinSet_flow) annotation (Line(points={{-162,-86},{-168,-86},
           {-168,-90},{-200,-90}}, color={0,0,127}));
   connect(add4.u1, TPriHotWatRet) annotation (Line(points={{-162,-124},{-168,
           -124},{-168,-120},{-200,-120}}, color={0,0,127}));
@@ -420,22 +426,16 @@ equation
     annotation (Line(points={{-118,-170},{-102,-170}}, color={0,0,127}));
   connect(uCur, extIndSig.index) annotation (Line(points={{-110,-220},{-110,-190},
           {-90,-190},{-90,-182}}, color={255,127,0}));
-  connect(greThr1.u, extIndSig.y)
-    annotation (Line(points={{-62,-170},{-78,-170}}, color={0,0,127}));
-  connect(greThr1.y, logSwi.u2) annotation (Line(points={{-38,-170},{74,-170},{74,
-          -40},{78,-40}}, color={255,0,255}));
   connect(con1.y, logSwi1.u1) annotation (Line(points={{102,-70},{112,-70},{112,
           -82},{118,-82}}, color={255,0,255}));
   connect(or1.y, logSwi1.u3) annotation (Line(points={{22,-90},{70,-90},{70,-98},
           {118,-98}}, color={255,0,255}));
-  connect(logSwi1.u2, logSwi.u2) annotation (Line(points={{118,-90},{74,-90},{74,
-          -40},{78,-40}}, color={255,0,255}));
   connect(and3.u2, logSwi1.y) annotation (Line(points={{138,0},{114,0},{114,-20},
           {150,-20},{150,-90},{142,-90}}, color={255,0,255}));
-  connect(div.u1, uQReq) annotation (Line(points={{-142,50},{-150,50},{-150,60},
+  connect(div.u1, uCapReq) annotation (Line(points={{-142,50},{-150,50},{-150,60},
           {-200,60}}, color={0,0,127}));
-  connect(div1.u1, uQReq) annotation (Line(points={{-162,-34},{-166,-34},{-166,60},
-          {-200,60}}, color={0,0,127}));
+  connect(div1.u1, uCapReq) annotation (Line(points={{-162,-34},{-166,-34},{-166,
+          60},{-200,60}}, color={0,0,127}));
   connect(truDel.u, not2.y)
     annotation (Line(points={{-52,44},{-58,44}}, color={255,0,255}));
   connect(not2.u, hys.y)
@@ -457,6 +457,16 @@ equation
     annotation (Line(points={{-98,-80},{-82,-80}}, color={255,0,255}));
   connect(not4.y, and2.u1) annotation (Line(points={{-58,-80},{-50,-80},{-50,-98},
           {-42,-98}}, color={255,0,255}));
+  connect(extIndSig.y, reaToInt.u)
+    annotation (Line(points={{-78,-170},{-62,-170}}, color={0,0,127}));
+  connect(intGreThr.u, reaToInt.y)
+    annotation (Line(points={{-22,-170},{-38,-170}}, color={255,127,0}));
+  connect(intGreThr.y, logSwi.u2) annotation (Line(points={{2,-170},{74,-170},{74,
+          -40},{78,-40}}, color={255,0,255}));
+  connect(intGreThr.y, logSwi1.u2) annotation (Line(points={{2,-170},{74,-170},{
+          74,-90},{118,-90}}, color={255,0,255}));
+  connect(faiSafCon.yFaiCon, not1.u)
+    annotation (Line(points={{-138,134},{-122,134}}, color={255,0,255}));
   annotation(defaultComponentName = "staDow",
     Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
       graphics={
@@ -512,24 +522,24 @@ equation
         <p>
         <ol>
         <li>
-        If the next available lower stage <code>uAvaDow</code> has only
-        condensing boilers, the block outputs a boolean stage down signal
-        <code>y</code> when all the following are true:
+        If the current stage <code>uCur</code> has only condensing boilers, the
+        block outputs a boolean stage down signal <code>yStaDow</code> when all
+        the following are true:
         <ul>
         <li>
         <ul>
         <li>
-        Required heating capacity <code>uQReq</code> is lower than <code>minFirPer</code>
-        times the minimum firing rate <code>uQMin</code> of the current stage
-        for a time period <code>delayMinFir</code>, or
+        Required heating capacity <code>uCapReq</code> is lower than <code>fraMinFir</code>
+        times the minimum firing rate <code>uCapMin</code> of the current stage
+        for a time period <code>delMinFir</code>, or
         </li>
         <li>
-        Primary circuit flow rate <code>uPriCirFloRat</code> is at the minimum
-        allowed flow rate <code>uMinPriPumFlo</code> and primary circuit hot
+        Primary circuit flow rate <code>VHotWat_flow</code> is at the minimum
+        allowed flow rate <code>VMinSet_flow</code> and primary circuit hot
         water return temperature <code>TPriHotWatRet</code>
         <br>
         exceeds the secondary circuit hot water return temperature <code>TSecHotWatRet</code> by 
-        <code>TCirDif</code> for a time period <code>delayTRetDiff</code>.
+        <code>TCirDif</code> for a time period <code>delTRetDiff</code>.
         </li>
         </ul>
         </li>
@@ -537,25 +547,25 @@ equation
         Failsafe condition is not <code>true</code>.
         </li>
         <li>
-        Required heating capacity <code>uQReq</code> is less than <code>desCapPer</code>
-        times the design capacity <code>uQDowDes</code> of the next available
-        lower stage for a time period <code>delayDesCapConBoi</code>.
+        Required heating capacity <code>uCapReq</code> is less than <code>fraDesCap</code>
+        times the design capacity <code>uCapDowDes</code> of the next available
+        lower stage for a time period <code>delDesCapConBoi</code>.
         </li>
         </ul>
         </li>
         <br>
         <li>
-        If the next available lower stage <code>uAvaDow</code> has a non-condensing 
-        boiler, the block outputs a boolean stage down signal <code>y</code>
-        when all the following are true:
+        If the current stage <code>uCur</code> has a non-condensing boiler, the
+        block outputs a boolean stage down signal <code>yStaDow</code> when all
+        the following are true:
         <ul>
         <li>
         Failsafe condition is not <code>true</code>.
         </li>
         <li>
-        Required heating capacity <code>uQReq</code> is less than <code>desCapPer</code>
-        times the design capacity <code>uQDowDes</code> of the next available
-        lower stage for a time period <code>delayDesCapNonConBoi</code>.
+        Required heating capacity <code>uCapReq</code> is less than <code>fraDesCap</code>
+        times the design capacity <code>uCapDowDes</code> of the next available
+        lower stage for a time period <code>delDesCapNonConBoi</code>.
         </li>
         </ul>
         </li>
@@ -563,19 +573,19 @@ equation
         <li>
         If the plant is a primary-only, condensing type boiler plant,
         <code>primaryOnly</code> is set to <code>true</code> and the block
-        outputs a boolean stage down signal <code>y</code>
+        outputs a boolean stage down signal <code>yStaDow</code>
         when all the following are true:
         <ul>
         <li>
         <ul>
         <li>
-        Required heating capacity <code>uQReq</code> is lower than <code>minFirPer</code>
-        times the minimum firing rate <code>uQMin</code> of the current stage
-        for a time period <code>delayMinFir</code>, or
+        Required heating capacity <code>uCapReq</code> is lower than <code>fraMinFir</code>
+        times the minimum firing rate <code>uCapMin</code> of the current stage
+        for a time period <code>delMinFir</code>, or
         </li>
         <li>
         The minimum flow bypass valve position <code>uBypValPos</code> is greater
-        than <code>bypValClo</code>% open for a time period <code>delayBypVal</code>.
+        than <code>bypValClo</code>% open for a time period <code>delBypVal</code>.
         </li>
         </ul>
         </li>
@@ -583,9 +593,9 @@ equation
         Failsafe condition is not <code>true</code>.
         </li>
         <li>
-        Required heating capacity <code>uQReq</code> is less than <code>desCapPer</code>
-        times the design capacity <code>uQDowDes</code> of the next available
-        lower stage for a time period <code>delayDesCapConBoi</code>.
+        Required heating capacity <code>uCapReq</code> is less than <code>fraDesCap</code>
+        times the design capacity <code>uCapDowDes</code> of the next available
+        lower stage for a time period <code>delDesCapConBoi</code>.
         </li>
         </ul>
         </li>
@@ -596,24 +606,24 @@ equation
         </p>
         <p align=\"center\">
         <img alt=\"Validation plot for EfficiencyCondition1\"
-        src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Down1.png\"/>
+        src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/Down1.png\"/>
         <br/>
-        Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.Down\">
-        Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.Down</a> for a stage with all condensing boilers.
+        Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Down\">
+        Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Down</a> for a stage with all condensing boilers.
         </p>
         <p align=\"center\">
         <img alt=\"Validation plot for EfficiencyCondition1\"
-        src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Down2.png\"/>
+        src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/Down2.png\"/>
         <br/>
-        Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.Down\">
-        Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.Down</a> for a stage with a non-condensing boiler.
+        Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Down\">
+        Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Down</a> for a stage with a non-condensing boiler.
         </p>
         <p align=\"center\">
         <img alt=\"Validation plot for EfficiencyCondition1\"
-        src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Down3.png\"/>
+        src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/Down3.png\"/>
         <br/>
-        Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.Down\">
-        Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.Down</a> for a primary-only, condensing-type boiler plant.
+        Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Down\">
+        Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Down</a> for a primary-only, condensing-type boiler plant.
         </p>
         </html>",
         revisions="<html>

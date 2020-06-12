@@ -1,17 +1,17 @@
-within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences;
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences;
 block Up
   "Generates a stage up signal"
 
   parameter Integer nSta = 5
     "Number of stages in the boiler plant";
 
-  parameter Real fraNonConBoi = 0.9
-    "Fraction of stage design capacity at which the efficiency condition
+  parameter Real perNonConBoi = 0.9
+    "Percentage value of stage design capacity at which the efficiency condition
     is satisfied for non-condensing boilers"
     annotation(Dialog(group="Efficiency condition"));
 
-  parameter Real fraConBoi = 1.5
-    "Fraction of stage minimum capacity at which the efficiency condition is
+  parameter Real perConBoi = 1.5
+    "Percentage value of B-Stage minimum at which the efficiency condition is
     satisfied for condensing boilers"
     annotation(Dialog(group="Efficiency condition"));
 
@@ -20,13 +20,13 @@ block Up
     annotation (Dialog(tab="Advanced",
       group="Efficiency condition"));
 
-  parameter Real delEffCon(
+  parameter Real delayEffCon(
     final unit="s",
     final displayUnit="s") = 600
     "Enable delay for heating capacity and heating requirement"
     annotation(Dialog(group="Efficiency condition"));
 
-  parameter Real delFaiCon(
+  parameter Real delayFaiCon(
     final unit="s",
     final displayUnit="s") = 900
     "Enable delay for temperature"
@@ -77,7 +77,7 @@ block Up
     annotation (Placement(transformation(extent={{-140,-130},{-100,-90}}),
       iconTransformation(extent={{-140,-90},{-100,-50}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uCapUpMin(
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uQUpMin(
     final unit="W",
     final displayUnit="W",
     final quantity="Power")
@@ -85,7 +85,7 @@ block Up
     annotation (Placement(transformation(extent={{-140,50},{-100,90}}),
       iconTransformation(extent={{-140,30},{-100,70}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uCapDes(
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uQDes(
     final unit="W",
     final displayUnit="W",
     final quantity="Power")
@@ -93,7 +93,7 @@ block Up
     annotation (Placement(transformation(extent={{-140,80},{-100,120}}),
       iconTransformation(extent={{-140,50},{-100,90}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uCapReq(
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uQReq(
     final unit="W",
     final displayUnit="W",
     final quantity="Power")
@@ -101,7 +101,7 @@ block Up
     annotation (Placement(transformation(extent={{-140,110},{-100,150}}),
       iconTransformation(extent={{-140,70},{-100,110}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput VHotWat_flow(
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uHotWatFloRat(
     final unit="m3/s",
     final displayUnit="m3/s",
     final quantity="VolumeFlowRate")
@@ -109,13 +109,13 @@ block Up
     annotation (Placement(transformation(extent={{-140,20},{-100,60}}),
       iconTransformation(extent={{-140,10},{-100,50}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput VUpMinSet_flow(
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uUpMinFloSet(
     final unit="m3/s",
     final displayUnit="m3/s",
     final quantity="VolumeFlowRate")
     "Minimum flow setpoint for next available higher stage"
     annotation (Placement(transformation(extent={{-140,-10},{-100,30}}),
-      iconTransformation(extent={{-140,-10},{-100,30}})));
+        iconTransformation(extent={{-140,-10},{-100,30}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yStaUp
     "Stage up signal"
@@ -123,17 +123,17 @@ block Up
       iconTransformation(extent={{100,-20},{140,20}})));
 
 protected
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.EfficiencyCondition effCon(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.EfficiencyCondition effCon(
     final nSta=nSta,
-    final fraNonConBoi=fraNonConBoi,
-    final fraConBoi=fraConBoi,
-    final delCapReq=delEffCon,
-    final sigDif=sigDif)
+    final perNonConBoi=perNonConBoi,
+    final perConBoi=perConBoi,
+    final sigDif=sigDif,
+    final delayQReq=delayEffCon)
     "Efficiency condition for staging up"
     annotation (Placement(transformation(extent={{-60,30},{-40,50}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.FailsafeCondition faiSafCon(
-    final delEna=delFaiCon,
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.FailsafeCondition faiSafCon(
+    final delayEna=delayFaiCon,
     final TDif=TDif,
     final TDifHys=TDifHys)
     "Failsafe condition for staging up and down"
@@ -149,6 +149,18 @@ protected
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
 
 equation
+  connect(effCon.uQReq, uQReq)
+    annotation (Line(points={{-62,49},{-64,49},{-64,130},{-120,130}},
+      color={0,0,127}));
+  connect(effCon.uQDes, uQDes)
+    annotation (Line(points={{-62,46},{-72,46},{-72,100},{-120,100}},
+      color={0,0,127}));
+  connect(effCon.uQUpMin, uQUpMin)
+    annotation (Line(points={{-62,43},{-80,43},{-80,70},{-120,70}},
+      color={0,0,127}));
+  connect(effCon.uHotWatFloRat, uHotWatFloRat)
+    annotation (Line(points={{-62,40},{-120,40}},
+      color={0,0,127}));
   connect(effCon.uTyp, uTyp)
     annotation (Line(points={{-62,34},{-72,34},{-72,-20},{-120,-20}},
       color={255,127,0}));
@@ -167,24 +179,18 @@ equation
   connect(effCon.yEffCon, mulOr.u[1])
     annotation (Line(points={{-38,40},{10,40},{10,4.66667},{38,4.66667}},
       color={255,0,255}));
+  connect(faiSafCon.y, mulOr.u[2])
+    annotation (Line(points={{-38,-94},{0,-94},{0,0},{38,0}},
+      color={255,0,255}));
   connect(not1.u, uAvaCur)
     annotation (Line(points={{-62,-140},{-120,-140}},
       color={255,0,255}));
+  connect(not1.y, mulOr.u[3])
+    annotation (Line(points={{-38,-140},{10,-140},{10,-4.66667},{38,-4.66667}},
+      color={255,0,255}));
+  connect(effCon.uUpMinFloSet, uUpMinFloSet) annotation (Line(points={{-62,37},{
+          -80,37},{-80,10},{-120,10}}, color={0,0,127}));
 
-  connect(faiSafCon.yFaiCon, mulOr.u[2]) annotation (Line(points={{-38,-94},{0,-94},
-          {0,0},{38,0}}, color={255,0,255}));
-  connect(not1.y, mulOr.u[3]) annotation (Line(points={{-38,-140},{10,-140},{10,
-          -4.66667},{38,-4.66667}}, color={255,0,255}));
-  connect(effCon.uCapReq, uCapReq) annotation (Line(points={{-62,49},{-64,49},{-64,
-          130},{-120,130}}, color={0,0,127}));
-  connect(effCon.uCapDes, uCapDes) annotation (Line(points={{-62,46},{-72,46},{-72,
-          100},{-120,100}}, color={0,0,127}));
-  connect(effCon.uCapUpMin, uCapUpMin) annotation (Line(points={{-62,43},{-80,43},
-          {-80,70},{-120,70}}, color={0,0,127}));
-  connect(effCon.VHotWat_flow, VHotWat_flow)
-    annotation (Line(points={{-62,40},{-120,40}}, color={0,0,127}));
-  connect(effCon.VUpMinSet_flow, VUpMinSet_flow) annotation (Line(points={{-62,37},
-          {-80,37},{-80,10},{-120,10}}, color={0,0,127}));
   annotation (defaultComponentName = "staUp",
     Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
          graphics={
@@ -220,7 +226,7 @@ equation
       and applies to all boiler plants defined in RP-1711.
       </p>
       <p>
-      The stage up signal <code>yStaUp</code> becomes <code>true</code> when:
+      The stage up signal becomes <code>true</code> when:
       </p>
       <ul>
       <li>
@@ -235,24 +241,24 @@ equation
       </ul>
       <p align=\"center\">
       <img alt=\"Validation plot for EfficiencyCondition1\"
-      src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/Up1.png\"/>
+      src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Up1.png\"/>
       <br/>
-      Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Up\">
-      Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Up</a> with the block being activated by the efficiency condition.
+      Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.Up\">
+      Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.Up</a> with the block being activated by the efficiency condition.
       </p>
       <p align=\"center\">
       <img alt=\"Validation plot for EfficiencyCondition1\"
-      src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/Up2.png\"/>
+      src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Up2.png\"/>
       <br/>
-      Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Up\">
-      Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Up</a> with the block being activated by the failsafe condition.
+      Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.Up\">
+      Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.Up</a> with the block being activated by the failsafe condition.
       </p>
       <p align=\"center\">
       <img alt=\"Validation plot for EfficiencyCondition1\"
-      src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/Up3.png\"/>
+      src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Up3.png\"/>
       <br/>
-      Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Up\">
-      Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Up</a> with the block being activated by the unavailabaility
+      Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.Up\">
+      Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.Up</a> with the block being activated by the unavailabaility
       of current stage.
       </p>
       </html>",
