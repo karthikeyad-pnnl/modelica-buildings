@@ -19,8 +19,7 @@ block Change
     annotation (Placement(transformation(extent={{-480,140},{-440,180}}),
       iconTransformation(extent={{-140,60},{-100,100}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uUp
-    "Stage up status"
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uUp "Stage up signal"
     annotation (Placement(transformation(extent={{-480,-60},{-440,-20}}),
       iconTransformation(extent={{-140,-60},{-100,-20}})));
 
