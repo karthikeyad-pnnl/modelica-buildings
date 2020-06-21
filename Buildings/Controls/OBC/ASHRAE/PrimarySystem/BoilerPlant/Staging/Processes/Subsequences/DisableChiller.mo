@@ -104,8 +104,8 @@ protected
     annotation (Placement(transformation(extent={{80,40},{100,60}})));
   Buildings.Controls.OBC.CDL.Logical.Not not1 "Logical not"
     annotation (Placement(transformation(extent={{-20,40},{0,60}})));
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt[nChi](
-    final k=chiInd) "Chiller index array"
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt[nBoi](final k=
+        boiInd) "Boiler index array"
     annotation (Placement(transformation(extent={{-160,160},{-140,180}})));
   Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep1(final nout=nChi)
     "Replicate integer input"
@@ -418,7 +418,8 @@ annotation (
           fillPattern=FillPattern.Solid,
           lineColor={0,0,127},
           horizontalAlignment=TextAlignment.Right,
-          textString="Disable chiller when the down-process requires small chiller being enabled")}),
+          textString=
+              "Disable boiler when the down-process requires small boiler being enabled")}),
 Documentation(info="<html>
 <p>
 Block that controlles chiller when there is staging down command <code>uStaDow=true</code>.

@@ -229,7 +229,7 @@ protected
     final chaChiWatIsoTim=chaChiWatIsoTim,
     final proOnTim=proOnTim) "Start stage-down process"
     annotation (Placement(transformation(extent={{60,220},{80,240}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.CHWIsoVal
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HWIsoVal
     disChiIsoVal(
     final nChi=nChi,
     final chaChiWatIsoTim=chaChiWatIsoTim,

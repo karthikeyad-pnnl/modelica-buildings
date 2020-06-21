@@ -2,159 +2,212 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints
 block SetpointController
   "Calculates the boiler stage status setpoint signal"
 
-  parameter Boolean have_WSE = false
-    "true = plant has a WSE, false = plant does not have WSE"
-    annotation (Dialog(tab="General", group="Plant configuration parameters"));
+  parameter Boolean primaryOnly = false
+    "Is the boiler plant a primary-only, condensing boiler plant?"
+    annotation(Dialog(tab="General", group="Boiler plant configuration parameters"));
 
-  parameter Boolean serChi = false
-    "true = series chillers plant; false = parallel chillers plant"
-    annotation (Dialog(tab="General", group="Plant configuration parameters"));
+  parameter Integer nBoi = 2
+    "Number of boilers"
+    annotation (Dialog(tab="General", group="Boiler plant configuration parameters"));
 
-  parameter Boolean anyVsdCen = false
-    "Plant contains at least one variable speed centrifugal chiller"
-    annotation (Dialog(tab="General", group="Plant configuration parameters"));
-
-  parameter Integer nChi = 2
-    "Number of chillers"
-    annotation (Dialog(tab="General", group="Chiller configuration parameters"));
-
-  parameter Modelica.SIunits.Power chiDesCap[nChi]
-    "Design chiller capacities vector"
-    annotation (Dialog(tab="General", group="Chiller configuration parameters"));
-
-  parameter Modelica.SIunits.Power chiMinCap[nChi]
-    "Chiller minimum cycling loads vector"
-    annotation (Dialog(tab="General", group="Chiller configuration parameters"));
-
-  parameter Integer chiTyp[nChi]={
-    Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Types.ChillerAndStageTypes.positiveDisplacement,
-    Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Types.ChillerAndStageTypes.variableSpeedCentrifugal}
-    "Chiller type. Recommended staging order: positive displacement, variable speed centrifugal, constant speed centrifugal"
-    annotation (Dialog(tab="General", group="Chiller configuration parameters"));
+  parameter Integer boiTyp[nBoi]={
+    Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler,
+    Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.nonCondensingBoiler}
+    "Boiler type"
+    annotation (Dialog(tab="General", group="Boiler plant configuration parameters"));
 
   parameter Integer nSta = 3
-    "Number of chiller stages"
-    annotation (Dialog(tab="General", group="Chiller configuration parameters"));
+    "Number of boiler plant stages"
+    annotation (Dialog(tab="General", group="Boiler plant configuration parameters"));
 
-  parameter Integer staMat[nSta, nChi] = {{1,0},{0,1},{1,1}}
-    "Staging matrix with stage as row index and chiller as column index"
-    annotation (Dialog(tab="General", group="Chiller configuration parameters"));
+  parameter Integer staMat[nSta, nBoi] = {{1,0},{0,1},{1,1}}
+    "Staging matrix with stage as row index and boiler as column index"
+    annotation (Dialog(tab="General", group="Boiler plant configuration parameters"));
 
-  parameter Modelica.SIunits.Time avePer = 300
-    "Time period for the capacity requirement rolling average"
-    annotation (Dialog(tab="Time parameters", group="Hold and delay parameters"));
+  parameter Integer iniSta = 1
+    "Initial boiler plant stage"
+    annotation (Dialog(tab="General", group="Boiler plant configuration parameters"));
 
-  parameter Modelica.SIunits.Time delayStaCha = 900
+  parameter Real boiDesCap[nBoi](
+    final unit="W",
+    final displayUnit="W",
+    final quantity="Power")
+    "Design boiler capacities vector"
+    annotation (Dialog(tab="General", group="Boiler plant configuration parameters"));
+
+  parameter Real boiFirMin[nBoi](
+    final unit="1",
+    final displayUnit="1")
+    "Boiler minimum firing ratio"
+    annotation (Dialog(tab="General", group="Boiler plant configuration parameters"));
+
+  parameter Real delStaCha(
+    final unit="s",
+    final displayUnit="s",
+    final quantity="Time") = 900
     "Hold period for each stage change"
-    annotation (Dialog(tab="Time parameters", group="Hold and delay parameters"));
+    annotation (Dialog(tab="Staging parameters", group="General parameters"));
 
-  parameter Modelica.SIunits.Time parLoaRatDelay = 900
-    "Enable delay for operating and staging part load ratio condition"
-    annotation (Dialog(tab="Time parameters", group="Hold and delay parameters"));
+  parameter Real avePer(
+    final unit="s",
+    final displayUnit="s",
+    final quantity="Time") = 300
+    "Time period for the capacity requirement rolling average"
+    annotation (Dialog(tab="Staging parameters", group="Capacity requirement calculation parameters"));
 
-  parameter Modelica.SIunits.Time faiSafTruDelay = 900
-    "Enable delay for failsafe condition"
-    annotation (Dialog(tab="Time parameters", group="Hold and delay parameters"));
+  parameter Real fraNonConBoi(
+    final unit="1",
+    final displayUnit="1") = 0.9
+    "Fraction of current stage design capacity at which efficiency condition is 
+    satisfied for non-condensing boilers"
+    annotation(Dialog(tab="Staging parameters", group="Efficiency condition parameters"));
 
-  parameter Modelica.SIunits.Time effConTruDelay = 900
-    "Enable delay for efficiency condition"
-    annotation (Dialog(tab="Time parameters", group="Hold and delay parameters"));
+  parameter Real fraConBoi(
+    final unit="1",
+    final displayUnit="1") = 1.5
+    "Fraction of higher stage design capacity at which efficiency condition is 
+    satisfied for condensing boilers"
+    annotation(Dialog(tab="Staging parameters", group="Efficiency condition parameters"));
 
-  parameter Modelica.SIunits.Time shortTDelay = 600
-    "Short enable delay for staging from zero to first available stage up"
-    annotation(Evaluate=true, Dialog(enable=have_WSE, tab="Time parameters", group="Hold and delay parameters"));
+  parameter Real delEffCon(
+    final unit="s",
+    final displayUnit="s",
+    final quantity="Time") = 600
+    "Enable delay for heating capacity requirement condition"
+    annotation (Dialog(tab="Staging parameters", group="Efficiency condition parameters"));
 
-  parameter Modelica.SIunits.Time longTDelay = 1200
-    "Long enable delay for staging from zero to first available stage up"
-    annotation(Evaluate=true, Dialog(enable=have_WSE, tab="Time parameters", group="Hold and delay parameters"));
+  parameter Real TDif(
+    final unit="K",
+    final displayUnit="K",
+    final quantity="TemperatureDifference") = 10
+    "Required temperature difference between setpoint and measured temperature"
+    annotation(Dialog(tab="Staging parameters", group="Failsafe condition parameters"));
 
-  parameter Real posDisMult(
-    final unit = "1",
-    final min = 0,
-    final max = 1)=0.8
-    "Positive displacement chiller type staging multiplier"
-    annotation (Dialog(tab="Conditionals", group="Staging part load ratio parameters"));
+  parameter Real delFaiCon(
+    final unit="s",
+    final displayUnit="s",
+    final quantity="Time") = 900
+    "Enable delay for temperature condition"
+    annotation(Dialog(tab="Staging parameters", group="Failsafe condition parameters"));
 
-  parameter Real conSpeCenMult(
-    final unit = "1",
-    final min = 0,
-    final max = 1)=0.9
-    "Constant speed centrifugal chiller type staging multiplier"
-    annotation (Dialog(tab="Conditionals", group="Staging part load ratio parameters"));
-
-  parameter Real anyOutOfScoMult(
-    final unit = "1",
-    final min = 0,
-    final max = 1)=0.9
-    "Outside of G36 recommended staging order chiller type SPLR multiplier"
-    annotation(Evaluate=true, __cdl(ValueInReference=False), Dialog(tab="Conditionals", group="Staging part load ratio parameters"));
-
-  parameter Real varSpeStaMin(
-    final unit = "1",
-    final min = 0.1,
-    final max = 1)=0.45
-    "Minimum stage up or down part load ratio for variable speed centrifugal stage types"
-    annotation(Evaluate=true, Dialog(enable=anyVsdCen, tab="Conditionals", group="Staging part load ratio parameters"));
-
-  parameter Real varSpeStaMax(
-    final unit = "1",
-    final min = varSpeStaMin,
-    final max = 1)=0.9
-    "Maximum stage up or down part load ratio for variable speed centrifugal stage types"
-    annotation(Evaluate=true, Dialog(enable=anyVsdCen, tab="Conditionals", group="Staging part load ratio parameters"));
-
-  parameter Modelica.SIunits.TemperatureDifference smallTDif = 1
-    "Offset between the chilled water supply temperature and its setpoint for the long condition"
-    annotation(Evaluate=true, Dialog(enable=have_WSE, tab="Conditionals", group="Value comparison parameters"));
-
-  parameter Modelica.SIunits.TemperatureDifference largeTDif = 2
-    "Offset between the chilled water supply temperature and its setpoint for the short condition"
-    annotation(Evaluate=true, Dialog(enable=have_WSE, tab="Conditionals", group="Value comparison parameters"));
-
-  parameter Modelica.SIunits.TemperatureDifference faiSafTDif = 1
-    "Offset between the chilled water supply temperature and its setpoint for the failsafe condition"
-    annotation (Dialog(tab="Conditionals", group="Value comparison parameters"));
-
-  parameter Modelica.SIunits.PressureDifference dpDif = 2 * 6895
-    "Offset between the chilled water pump diferential static pressure and its setpoint"
-    annotation (Dialog(tab="Conditionals", group="Value comparison parameters"));
-
-  parameter Modelica.SIunits.TemperatureDifference TDif = 1
-    "Offset between the chilled water supply temperature and its setpoint for staging down to WSE only"
-    annotation (Dialog(tab="Conditionals", group="Value comparison parameters"));
-
-  parameter Modelica.SIunits.TemperatureDifference TDifHys = 1
-    "Hysteresis deadband for temperature"
-    annotation (Dialog(tab="Conditionals", group="Value comparison parameters"));
-
-  parameter Modelica.SIunits.PressureDifference faiSafDpDif = 2 * 6895
-    "Offset between the chilled water differential pressure and its setpoint"
-    annotation (Dialog(tab="Conditionals", group="Value comparison parameters"));
-
-  parameter Modelica.SIunits.PressureDifference dpDifHys = 0.5 * 6895
-    "Pressure difference hysteresis deadband"
-    annotation (Dialog(tab="Conditionals", group="Value comparison parameters"));
-
-  parameter Real effConSigDif = 0.05
+  parameter Real sigDif(
+    final unit="1",
+    final displayUnit="1") = 0.1
     "Signal hysteresis deadband"
-    annotation (Dialog(tab="Conditionals", group="Value comparison parameters"));
+    annotation(Dialog(tab="Advanced", group="Efficiency condition parameters"));
+
+  parameter Real TDifHys(
+    final unit="K",
+    final displayUnit="K",
+    final quantity="TemperatureDifference") = 1
+    "Temperature deadband for hysteresis loop"
+    annotation(Dialog(tab="Advanced", group="Failsafe condition parameters"));
+
+  parameter Real fraMinFir(
+    final unit="1",
+    final displayUnit="1") = 1.1
+    "Fraction of boiler minimum firing rate that required capacity needs to be
+    to initiate stage-down process"
+    annotation(Dialog(tab="Staging parameters", group="Staging down parameters"));
+
+  parameter Real delMinFir(
+    final unit="s",
+    final displayUnit="s",
+    final quantity="Time") = 300
+    "Delay for staging based on minimum firing rate of current stage"
+    annotation(Dialog(tab="Staging parameters", group="Staging down parameters"));
+
+  parameter Real fraDesCap(
+    final unit="1",
+    final displayUnit="1") = 0.8
+    "Fraction of design capacity of next lower stage that heating capacity needs
+    to be for staging down"
+    annotation(Dialog(tab="Staging parameters", group="Staging down parameters"));
+
+  parameter Real delDesCapNonConBoi(
+    final unit="s",
+    final displayUnit="s",
+    final quantity="Time") = 600
+    "Enable delay for capacity requirement condition for non-condensing boilers"
+    annotation(Dialog(tab="Staging parameters", group="Staging down parameters"));
+
+  parameter Real delDesCapConBoi(
+    final unit="s",
+    final displayUnit="s",
+    final quantity="Time") = 300
+    "Enable delay for capacity requirement condition for condensing boilers"
+    annotation(Dialog(tab="Staging parameters", group="Staging down parameters"));
+
+  parameter Real delBypVal(
+    final unit="s",
+    final displayUnit="s",
+    final quantity="Time") = 300
+    "Enable delay for bypass valve condition for primary-only plants"
+    annotation(Dialog(tab="Staging parameters", group="Staging down parameters"));
+
+  parameter Real TCirDif(
+    final unit="K",
+    final displayUnit="K",
+    final quantity="TemperatureDifference") = 3
+    "Required return water temperature difference between primary and secondary
+    circuits for staging down"
+    annotation(Dialog(tab="Staging parameters", group="Staging down parameters"));
+
+  parameter Real delTRetDif(
+    final unit="s",
+    final displayUnit="s",
+    final quantity="Time") = 300
+    "Enable delay for measured ht water return temperature difference condition"
+    annotation(Dialog(tab="Staging parameters", group="Staging down parameters"));
+
+  parameter Real dFloRatLow(
+    final unit="m3/s",
+    final displayUnit="m3/s",
+    final quantity="VolumeFlowRate") = -0.1
+    "Lower hysteresis deadband limit for flow-rate condition"
+    annotation(Dialog(tab="Advanced", group="Staging down parameters"));
+
+  parameter Real dFloRatHig(
+    final unit="m3/s",
+    final displayUnit="m3/s",
+    final quantity="VolumeFlowRate") = 0.1
+    "Higher hysteresis deadband limit for flow-rate condition"
+    annotation(Dialog(tab="Advanced", group="Staging down parameters"));
+
+  parameter Real bypValClo(
+    final unit="1",
+    final displayUnit="1") = 0
+    "Adjustment for signal received when bypass valve is closed"
+    annotation(Dialog(tab="Advanced", group="Staging down parameters"));
+
+  parameter Real dTemp(
+    final unit="K",
+    final displayUnit="K",
+    final quantity="TemperatureDifference") = 0.1
+    "Hysteresis deadband for measured temperatures"
+    annotation(Dialog(tab="Advanced", group="Staging down parameters"));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uBoiAva[nBoi]
     "Boiler availability status vector"
     annotation (Placement(transformation(extent={{-440,-200},{-400,-160}}),
-        iconTransformation(extent={{-140,-210},{-100,-170}})));
+      iconTransformation(extent={{-140,-210},{-100,-170}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uPla
+    "Plant enable signal"
+    annotation (Placement(transformation(extent={{-440,-100},{-400,-60}}),
+      iconTransformation(extent={{-140,-230},{-100,-190}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput u(
     final min=0,
     final max=nSta) "Chiller stage"
     annotation (Placement(transformation(extent={{-440,-130},{-400,-90}}),
-        iconTransformation(extent={{-140,-130},{-100,-90}})));
+      iconTransformation(extent={{-140,-130},{-100,-90}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatRetPri(final unit="1") if
-                       have_WSE
-    "Measured temperature of return hot water in primary circuit" annotation (
-      Placement(transformation(extent={{-440,30},{-400,70}}),
-        iconTransformation(extent={{-140,-90},{-100,-50}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatRetPri(
+    final unit="1") if have_WSE
+    "Measured temperature of return hot water in primary circuit"
+    annotation (Placement(transformation(extent={{-440,30},{-400,70}}),
+      iconTransformation(extent={{-140,-90},{-100,-50}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatRetSec if have_WSE
     "Measured temperature of return hot water in secondary circuit"
@@ -168,18 +221,12 @@ block SetpointController
     annotation (Placement(transformation(extent={{-440,270},{-400,310}}),
         iconTransformation(extent={{-140,130},{-100,170}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput VHotWat_flow(
-    final quantity="VolumeFlowRate",
-    final unit="m3/s") "Measured hot water flow rate"
-    annotation (Placement(transformation(extent={{-440,190},{-400,230}}),
-        iconTransformation(extent={{-140,-110},{-100,-70}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput VMinSet_flow[nSta](final unit
-      ="Pa", final quantity="PressureDifference") if
-                                            not serChi
-    "Vector with primary circuit minimum flow setpoint for all stages"
-    annotation (Placement(transformation(extent={{-440,110},{-400,150}}),
-        iconTransformation(extent={{-140,-10},{-100,30}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatSup(
+    final unit="K",
+    final quantity="ThermodynamicTemperature")
+    "Measured hot water supply temperature"
+    annotation (Placement(transformation(extent={{-440,150},{-400,190}}),
+      iconTransformation(extent={{-140,130},{-100,170}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatRet(
     final unit="K",
@@ -187,64 +234,95 @@ block SetpointController
     annotation (Placement(transformation(extent={{-440,230},{-400,270}}),
     iconTransformation(extent={{-140,110},{-100,150}})));
 
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput VHotWat_flow(
+    final quantity="VolumeFlowRate",
+    final unit="m3/s") "Measured hot water flow rate"
+    annotation (Placement(transformation(extent={{-440,190},{-400,230}}),
+        iconTransformation(extent={{-140,-110},{-100,-70}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput VMinSet_flow[nSta](final unit=
+       "Pa", final quantity="PressureDifference") if
+                                            not serChi
+    "Vector with primary circuit minimum flow setpoint for all stages"
+    annotation (Placement(transformation(extent={{-440,110},{-400,150}}),
+        iconTransformation(extent={{-140,-10},{-100,30}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uBypValPos(
+    final unit="Pa",
+    final quantity="PressureDifference") if not serChi
+    "Bypass valve position"
+    annotation (Placement(transformation(extent={{-440,70},{-400,110}}),
+        iconTransformation(extent={{-140,-10},{-100,30}})));
+
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yBoi[nBoi]
     "Boiler status setpoint vector for the current boiler stage setpoint"
     annotation (Placement(transformation(extent={{120,-280},{160,-240}}),
         iconTransformation(extent={{100,-160},{140,-120}})));
 
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y
+    "Boiler stage change edge signal"
+    annotation (Placement(transformation(extent={{120,-194},{160,-154}}),
+      iconTransformation(extent={{100,-90},{140,-50}})));
+
   Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput ySta(
     final min=0,
-    final max=nSta) "Boiler stage integer setpoint"
-    annotation (Placement(
-        transformation(extent={{120,-140},{160,-100}}),iconTransformation(
-          extent={{100,-20},{140,20}})));
+    final max=nSta)
+    "Boiler stage integer setpoint"
+    annotation (Placement(transformation(extent={{120,-140},{160,-100}}),
+      iconTransformation(extent={{100,-20},{140,20}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uPla "Plant enable signal"
-                          annotation (Placement(
-        transformation(extent={{-440,-100},{-400,-60}}),  iconTransformation(
-          extent={{-140,-230},{-100,-190}})));
-
-  CDL.Interfaces.BooleanOutput y "Boiler stage change edge signal"  annotation (
-     Placement(transformation(extent={{120,-194},{160,-154}}),
-        iconTransformation(extent={{100,-90},{140,-50}})));
-  BoilerPlant.Staging.SetPoints.Subsequences.Change cha(final nSta=nSta, final
-      delayStaCha=delayStaCha) "Stage change assignment"
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Change cha(
+    final nSta=nSta,
+    final delayStaCha=delStaCha)
+    "Stage change assignment"
     annotation (Placement(transformation(extent={{-20,-180},{0,-160}})));
-  BoilerPlant.Staging.SetPoints.Subsequences.BoilerIndices boiInd
+
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.BoilerIndices boiInd
     annotation (Placement(transformation(extent={{40,-210},{60,-190}})));
-  Subsequences.CapacityRequirement capReq1(avePer=avePer)
+
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.CapacityRequirement capReq1(
+    final avePer=avePer)
     annotation (Placement(transformation(extent={{-360,240},{-340,260}})));
-  Subsequences.Configurator conf(
-    nSta=nSta,
-    nBoi=nBoi,
-    boiTyp=boiTyp,
-    staMat=staMat,
-    boiDesCap=boiDesCap,
-    boiFirMin=boiFirMin)
+
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Configurator conf(
+    final nSta=nSta,
+    final nBoi=nBoi,
+    final boiTyp=boiTyp,
+    final staMat=staMat,
+    final boiDesCap=boiDesCap,
+    final boiFirMin=boiFirMin)
+    "Configurator to decide stage availability based on boiler availability"
     annotation (Placement(transformation(extent={{-360,-180},{-340,-160}})));
-  Subsequences.Status sta(
+
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Status sta(
     nSta=nSta,
     nBoi=nBoi,
     staMat=staMat)
+    "Status calculator to find next higher and lower available stages"
     annotation (Placement(transformation(extent={{-310,-220},{-290,-200}})));
-  CDL.Interfaces.RealInput THotWatSup(final unit="K", final quantity="ThermodynamicTemperature")
-    "Measured hot water supply temperature" annotation (Placement(
-        transformation(extent={{-440,150},{-400,190}}), iconTransformation(
-          extent={{-140,130},{-100,170}})));
-  Subsequences.Capacities cap(nSta=nSta)
+
+
+
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Capacities cap(nSta=nSta)
+    "Stage capacity calculator to to find design and minimum capacities for staging calculations"
     annotation (Placement(transformation(extent={{-270,-180},{-250,-160}})));
-  Subsequences.Up staUp
+
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Up staUp
     annotation (Placement(transformation(extent={{-140,-120},{-120,-100}})));
-  Subsequences.Down staDow
+
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Down staDow
     annotation (Placement(transformation(extent={{-140,-240},{-120,-220}})));
-  CDL.Routing.RealExtractor extIndSig(nin=nSta)
+
+  Buildings.Controls.OBC.CDL.Routing.RealExtractor extIndSig(
+    final nin=nSta)
     annotation (Placement(transformation(extent={{-240,-120},{-220,-100}})));
-  CDL.Routing.RealExtractor extIndSig1(nin=nSta)
+
+  Buildings.Controls.OBC.CDL.Routing.RealExtractor extIndSig1(
+    final nin=nSta)
     annotation (Placement(transformation(extent={{-230,-280},{-210,-260}})));
-  CDL.Interfaces.RealInput uBypValPos(final unit="Pa", final quantity="PressureDifference") if
-                                            not serChi "Bypass valve position"
-    annotation (Placement(transformation(extent={{-440,70},{-400,110}}),
-        iconTransformation(extent={{-140,-10},{-100,30}})));
+
+
+
 equation
   connect(uPla, cha.uPla) annotation (Line(points={{-420,-80},{-280,-80},{-280,
           -140},{-60,-140},{-60,-162},{-22,-162}},
@@ -356,6 +434,8 @@ equation
           {-64,-174},{-22,-174}}, color={255,0,255}));
   connect(staDow.yStaDow, cha.uDow) annotation (Line(points={{-118,-230},{-64,-230},
           {-64,-178},{-22,-178}}, color={255,0,255}));
+  connect(THotWatRetSec, capReq1.TRet) annotation (Line(points={{-420,10},{-370,
+          10},{-370,250},{-362,250}}, color={0,0,127}));
   annotation (defaultComponentName = "staSetCon",
         Icon(coordinateSystem(extent={{-400,-300},{120,320}}),
              graphics={

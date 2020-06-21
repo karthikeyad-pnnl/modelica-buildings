@@ -2,8 +2,7 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints
 model SetpointController
   "Validates chiller stage status setpoint signal generation for plants with WSE"
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Staging.SetpointController staSetCon(
-    final have_WSE=true,
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.SetpointController staSetCon(
     final chiDesCap={500000,700000},
     final chiMinCap={100000,200000},
     final chiTyp={Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Types.ChillerAndStageTypes.positiveDisplacement,
@@ -263,7 +262,7 @@ equation
           150},{-130,145},{58,145}},
                                   color={0,0,127}));
   connect(staSetCon.ySta,intToRea. u)
-    annotation (Line(points={{82,150},{98,150}},
+    annotation (Line(points={{80,149.677},{90,149.677},{90,150},{98,150}},
                                                color={255,127,0}));
   connect(intToRea.y,zerOrdHol. u)
     annotation (Line(points={{122,150},{138,150}},
@@ -271,11 +270,12 @@ equation
   connect(zerOrdHol.y,reaToInt. u)
     annotation (Line(points={{162,150},{178,150}},
                                                  color={0,0,127}));
-  connect(reaToInt.y,staSetCon. u) annotation (Line(points={{202,150},{210,150},{210,100},
-          {50,100},{50,139},{58,139}},
+  connect(reaToInt.y,staSetCon. u) annotation (Line(points={{202,150},{210,150},
+          {210,100},{50,100},{50,146.129},{70.7692,146.129}},
                                      color={255,127,0}));
-  connect(staSetCon.y,truFalHol. u) annotation (Line(points={{82,143},{90,143},{90,70},
-          {98,70}},  color={255,0,255}));
+  connect(staSetCon.y,truFalHol. u) annotation (Line(points={{80,147.419},{90,
+          147.419},{90,70},{98,70}},
+                     color={255,0,255}));
   connect(truFalHol.y,pre. u)
     annotation (Line(points={{122,70},{138,70}},   color={255,0,255}));
   connect(pre.y,staSetCon. chaPro) annotation (Line(points={{162,70},{170,70},{170,50},
@@ -283,8 +283,9 @@ equation
   connect(staSetCon.uIni,conInt. y) annotation (Line(points={{58,137.2},{28,137.2},{28,
           110},{2,110}},
                     color={255,127,0}));
-  connect(truDel.y,staSetCon. uPla) annotation (Line(points={{2,70},{34,70},{34,129},{
-          58,129}}, color={255,0,255}));
+  connect(truDel.y,staSetCon. uPla) annotation (Line(points={{2,70},{34,70},{34,
+          142.903},{70.7692,142.903}},
+                    color={255,0,255}));
   connect(maxTowFanSpe.y, staSetCon.uTowFanSpeMax) annotation (Line(points={{-138,190},
           {34,190},{34,148},{58,148}}, color={0,0,127}));
   connect(TCWSupSet.y, wseTPre.u) annotation (Line(points={{-98,170},{-80,170},
