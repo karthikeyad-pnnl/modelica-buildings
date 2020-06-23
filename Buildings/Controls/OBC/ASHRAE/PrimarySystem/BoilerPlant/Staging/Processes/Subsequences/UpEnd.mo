@@ -131,14 +131,6 @@ protected
     final iniValPos=1,
     final endValPos=0) "Disable isolation valve of the chiller being disabled"
     annotation (Placement(transformation(extent={{60,-20},{80,0}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HeadControl
-    disHeaCon(
-    final nChi=nChi,
-    final thrTimEnb=0,
-    final waiTim=0,
-    final heaStaCha=false)
-    "Disable head pressure control of the chiller being disabled"
-    annotation (Placement(transformation(extent={{40,-80},{60,-60}})));
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.MinimumFlowBypass.Subsequences.FlowSetpoint
     minChiWatSet(
     final nChi=nChi,

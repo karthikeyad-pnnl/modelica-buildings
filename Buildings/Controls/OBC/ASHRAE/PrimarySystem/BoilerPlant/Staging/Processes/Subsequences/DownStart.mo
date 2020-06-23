@@ -136,24 +136,10 @@ block DownStart "Sequence for starting stage-down process"
       iconTransformation(extent={{100,-110},{140,-70}})));
 
 protected
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.ReduceDemand
-    chiDemRed(
-    final nChi=nChi,
-    final chiDemRedFac=chiDemRedFac,
-    final holChiDemTim=holChiDemTim) "Reduce chiller demand"
-    annotation (Placement(transformation(extent={{-20,160},{0,180}})));
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.ResetMinBypass
     minBypRes(final aftByPasSetTim=aftByPasSetTim, final relFloDif=relFloDif)
     "Slowly change the minimum flow bypass setpoint"
     annotation (Placement(transformation(extent={{60,100},{80,120}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HeadControl
-    enaHeaCon(
-    final nChi=nChi,
-    final thrTimEnb=0,
-    final waiTim=waiTim,
-    final heaStaCha=true)
-    "Enable head pressure control of the chiller being enabled"
-    annotation (Placement(transformation(extent={{0,-10},{20,10}})));
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.CHWIsoVal
     enaChiIsoVal(
     final nChi=nChi,

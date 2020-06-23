@@ -207,12 +207,6 @@ protected
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextChiller
     nexChi(final nChi=nChi) "Identify next enabling chiller"
     annotation (Placement(transformation(extent={{-80,210},{-60,230}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.ReduceDemand
-    chiDemRed(
-    final nChi=nChi,
-    final chiDemRedFac=chiDemRedFac,
-    final holChiDemTim=holChiDemTim) "Limit chiller demand"
-    annotation (Placement(transformation(extent={{-80,160},{-60,180}})));
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.MinimumFlowBypass.Subsequences.FlowSetpoint
     minChiWatFlo(
     final nChi=nChi,
@@ -226,10 +220,6 @@ protected
     minBypSet(final aftByPasSetTim=aftByPasSetTim, final relFloDif=relFloDif)
     "Check if minium bypass has been reset"
     annotation (Placement(transformation(extent={{60,120},{80,140}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.EnableCWPump
-    enaNexCWP
-    "Identify correct stage number for enabling next condenser water pump"
-    annotation (Placement(transformation(extent={{0,30},{20,50}})));
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Pumps.CondenserWater.Controller
     conWatPumCon(
     final isHeadered=isHeadered,
@@ -242,14 +232,6 @@ protected
     final relSpeDif=relSpeDif)
     "Enabling next condenser water pump or change pump speed"
     annotation (Placement(transformation(extent={{60,-20},{80,0}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HeadControl
-    enaHeaCon(
-    final nChi=nChi,
-    final thrTimEnb=thrTimEnb,
-    final waiTim=waiTim,
-    final heaStaCha=true)
-    "Enabling head pressure control for next enabling chiller"
-    annotation (Placement(transformation(extent={{60,-100},{80,-80}})));
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.CHWIsoVal
     enaChiIsoVal(
     final nChi=nChi,

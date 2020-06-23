@@ -236,18 +236,6 @@ protected
     final iniValPos=1,
     final endValPos=0) "Disable isolation valve of the chiller being disabled"
     annotation (Placement(transformation(extent={{200,50},{220,70}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HeadControl
-    disHeaCon(
-    final nChi=nChi,
-    final thrTimEnb=0,
-    final waiTim=0,
-    final heaStaCha=false)
-    "Disable head pressure control of the chiller being disabled"
-    annotation (Placement(transformation(extent={{200,-110},{220,-90}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.EnableCWPump
-    disNexCWP
-    "Identify correct stage number for disabling next condenser water pump"
-    annotation (Placement(transformation(extent={{100,-170},{120,-150}})));
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Pumps.CondenserWater.Controller
     conWatPumCon(
     final isHeadered=isHeadered,
