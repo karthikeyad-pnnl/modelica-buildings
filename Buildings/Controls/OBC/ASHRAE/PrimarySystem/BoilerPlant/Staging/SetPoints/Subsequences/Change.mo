@@ -8,7 +8,7 @@ block Change
   parameter Real iniSta = 1
     "Initial boiler plant stage";
 
-  parameter Real delayStaCha(
+  parameter Real delStaCha(
     final unit="s",
     final displayUnit="s",
     final quantity="Time") = 600
