@@ -2,27 +2,27 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints
 model Change
   "Validates boiler stage status setpoint signal generation for boiler plants"
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Change
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Change
     cha(
     final nSta=10,
-    iniSta=0,
-    delayStaCha=600)
+    final iniSta=0,
+    final delStaCha=600)
     "Controls for stage up signal variations"
     annotation (Placement(transformation(extent={{-40,180},{-20,200}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Change
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Change
     cha1(
     final nSta=10,
-    iniSta=7,
-    delayStaCha=600)
+    final iniSta=7,
+    final delStaCha=600)
     "Controls for stage down signal variations"
     annotation (Placement(transformation(extent={{-40,0},{-20,20}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Change
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Change
     cha2(
-    nSta=10,
-    iniSta=3,
-    delayStaCha=600)
+    final nSta=10,
+    final iniSta=3,
+    final delStaCha=600)
     "Controls for stage up/stage down signal interaction"
     annotation (Placement(transformation(extent={{-40,-180},{-20,-160}})));
 
@@ -45,27 +45,17 @@ model Change
     annotation (Placement(transformation(extent={{0,-240},{20,-220}})));
 
 protected
-  parameter Modelica.SIunits.Temperature TChiWatSupSet = 285.15
-  "Chilled water supply set temperature";
-
-  parameter Modelica.SIunits.Temperature aveTChiWatRet = 288.15
-  "Average measured chilled water return temperature";
-
-  parameter Modelica.SIunits.Time minStaRuntime = 900
-    "Minimum stage runtime";
-
-  parameter Modelica.SIunits.VolumeFlowRate aveVChiWat_flow = 0.05
-    "Average measured chilled water flow rate";
-
-  Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable timeTable(final table=
-       [0,0; 600,0; 600,1; 1200,1; 1200,0; 2500,0; 2500,1; 3700,1; 3700,0; 4300,
+  Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable timeTable(
+    final table=[0,0; 600,0; 600,1; 1200,1; 1200,0; 2500,0; 2500,1; 3700,1; 3700,0; 4300,
         0; 4300,1; 4500,1; 4500,0; 6000,0; 6000,1; 9200,1; 9200,0; 12000,0;
         12000,1; 14000,1; 14000,0])
-    "Stage up signal for the first exampe and stage down signal for the second example from the top"
+    "Stage up signal for the first example and stage down signal for the second
+    example from the top"
     annotation (Placement(transformation(extent={{-160,220},{-140,240}})));
 
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
-    final threshold=0.5) "Greater than threshold"
+    final threshold=0.5)
+    "Greater than threshold"
     annotation (Placement(transformation(extent={{-120,220},{-100,240}})));
 
   Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea
@@ -73,7 +63,8 @@ protected
     annotation (Placement(transformation(extent={{20,180},{40,200}})));
 
   Buildings.Controls.OBC.CDL.Discrete.ZeroOrderHold zerOrdHol(
-    final samplePeriod=1) "Zero order hold"
+    final samplePeriod=1)
+    "Zero order hold"
     annotation (Placement(transformation(extent={{60,180},{80,200}})));
 
   Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt
@@ -81,11 +72,13 @@ protected
     annotation (Placement(transformation(extent={{100,180},{120,200}})));
 
   Buildings.Controls.OBC.CDL.Integers.Add addInt(
-    final k1=+1) "Adder"
+    final k1=+1)
+    "Adder"
     annotation (Placement(transformation(extent={{140,200},{160,220}})));
 
   Buildings.Controls.OBC.CDL.Integers.Add addInt1(
-    final k2=-1) "Adder"
+    final k2=-1)
+    "Adder"
     annotation (Placement(transformation(extent={{140,160},{160,180}})));
 
   Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea1
@@ -93,7 +86,8 @@ protected
     annotation (Placement(transformation(extent={{20,0},{40,20}})));
 
   Buildings.Controls.OBC.CDL.Discrete.ZeroOrderHold zerOrdHol1(
-    final samplePeriod=1) "Zero order hold"
+    final samplePeriod=1)
+    "Zero order hold"
     annotation (Placement(transformation(extent={{60,0},{80,20}})));
 
   Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt1
@@ -101,22 +95,25 @@ protected
     annotation (Placement(transformation(extent={{100,0},{120,20}})));
 
   Buildings.Controls.OBC.CDL.Integers.Add addInt2(
-    final k1=+1) "Adder"
+    final k1=+1)
+    "Adder"
     annotation (Placement(transformation(extent={{140,20},{160,40}})));
 
   Buildings.Controls.OBC.CDL.Integers.Add addInt3(
-    final k2=-1) "Addder"
+    final k2=-1)
+    "Adder"
     annotation (Placement(transformation(extent={{140,-20},{160,0}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable timeTable2(final
-      table=[0,0; 800,0; 800,1; 2700,1; 2700,0; 4500,0; 4500,1; 5200,1; 5200,0;
+  Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable timeTable2(
+    final table=[0,0; 800,0; 800,1; 2700,1; 2700,0; 4500,0; 4500,1; 5200,1; 5200,0;
         6000,0; 6000,1; 6900,1; 6900,0; 7800,0; 7800,1; 8700,1; 8700,0; 12000,0;
         12000,1; 14000,1; 14000,0])
     "Stage up signal, if simultaneous stage up and down signals are generated the plant will stage down"
     annotation (Placement(transformation(extent={{-160,-140},{-140,-120}})));
 
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr2(
-    final threshold=0.5) "Greater threshold"
+    final threshold=0.5)
+    "Greater threshold"
     annotation (Placement(transformation(extent={{-120,-140},{-100,-120}})));
 
   Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea2
@@ -124,7 +121,8 @@ protected
     annotation (Placement(transformation(extent={{20,-180},{40,-160}})));
 
   Buildings.Controls.OBC.CDL.Discrete.ZeroOrderHold zerOrdHol2(
-    final samplePeriod=1) "Zero order hold"
+    final samplePeriod=1)
+    "Zero order hold"
     annotation (Placement(transformation(extent={{60,-180},{80,-160}})));
 
   Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt2
@@ -132,15 +130,18 @@ protected
     annotation (Placement(transformation(extent={{100,-180},{120,-160}})));
 
   Buildings.Controls.OBC.CDL.Integers.Add addInt4(
-    final k1=+1) "Adder"
+    final k1=+1)
+    "Adder"
     annotation (Placement(transformation(extent={{140,-160},{160,-140}})));
 
   Buildings.Controls.OBC.CDL.Integers.Add addInt5(
-    final k2=-1) "Adder"
+    final k2=-1)
+    "Adder"
     annotation (Placement(transformation(extent={{140,-200},{160,-180}})));
 
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr3(
-    final threshold=0.5) "Greater than threshold"
+    final threshold=0.5)
+    "Greater than threshold"
     annotation (Placement(transformation(extent={{-120,-180},{-100,-160}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Constant noStaChaSig(
@@ -148,43 +149,52 @@ protected
     "No stage change signal"
     annotation (Placement(transformation(extent={{-200,100},{-180,120}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable timeTable1(final
-      table=[0,0; 1600,0; 1600,1; 2400,1; 2400,0; 3700,0; 3700,1; 5900,1; 5900,
+  Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable timeTable1(
+    final table=[0,0; 1600,0; 1600,1; 2400,1; 2400,0; 3700,0; 3700,1; 5900,1; 5900,
         0; 6900,0; 6900,1; 7800,1; 7800,0; 12000,0; 12000,1; 14000,1; 14000,0])
     "Stage down signal"
     annotation (Placement(transformation(extent={{-160,-180},{-140,-160}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Max maxInt "Maximum"
+  Buildings.Controls.OBC.CDL.Integers.Max maxInt
+    "Maximum"
     annotation (Placement(transformation(extent={{180,140},{200,160}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Max maxInt1 "Maximum"
+  Buildings.Controls.OBC.CDL.Integers.Max maxInt1
+    "Maximum"
     annotation (Placement(transformation(extent={{180,-40},{200,-20}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Max maxInt2 "Maximum"
+  Buildings.Controls.OBC.CDL.Integers.Max maxInt2
+    "Maximum"
     annotation (Placement(transformation(extent={{180,-220},{200,-200}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant step(final k=1)
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant step(
+    final k=1)
     "Assuming that the next available stage is always the next stage"
     annotation (Placement(transformation(extent={{100,220},{120,240}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant step1(final k=1)
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant step1(
+    final k=1)
     "Assuming that the next available stage is always the next stage"
     annotation (Placement(transformation(extent={{100,40},{120,60}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant step2(final k=1)
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant step2(
+    final k=1)
     "Assuming that the next available stage is always the next stage"
     annotation (Placement(transformation(extent={{100,-140},{120,-120}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant u3(final k=0)
-    "Chiller stage"
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant u3(
+    final k=0)
+    "Boiler stage"
     annotation (Placement(transformation(extent={{140,120},{160,140}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant u4(final k=0)
-    "Chiller stage"
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant u4(
+    final k=0)
+    "Boiler stage"
     annotation (Placement(transformation(extent={{140,-60},{160,-40}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant u5(final k=0)
-    "Chiller stage"
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant u5(
+    final k=0)
+    "Boiler stage"
     annotation (Placement(transformation(extent={{140,-240},{160,-220}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable timeTable3(
@@ -194,8 +204,10 @@ protected
     annotation (Placement(transformation(extent={{-200,20},{-180,40}})));
 
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr1(
-    final threshold=0.5) "Greater than threshold"
+    final threshold=0.5)
+    "Greater than threshold"
     annotation (Placement(transformation(extent={{-160,20},{-140,40}})));
+
 equation
   connect(timeTable.y[1], greThr.u)
     annotation (Line(points={{-138,230},{-122,230}}, color={0,0,127}));
@@ -306,15 +318,16 @@ equation
           18},{-42,18}},    color={255,0,255}));
   connect(greThr1.y, cha2.uPla) annotation (Line(points={{-138,30},{-88,30},{
           -88,-162},{-42,-162}}, color={255,0,255}));
+
 annotation (
  experiment(StopTime=14000.0, Tolerance=1e-06),
-  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Validation/Change.mos"
+  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/Validation/Change.mos"
     "Simulate and plot"),
   Documentation(info="<html>
 <p>
 This example validates
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Change\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Change</a>.
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Change\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Change</a>.
 </p>
 </html>", revisions="<html>
 <ul>
@@ -333,6 +346,6 @@ Icon(graphics={
                 fillColor = {75,138,73},
                 pattern = LinePattern.None,
                 fillPattern = FillPattern.Solid,
-                points = {{-36,60},{64,0},{-36,-60},{-36,60}})}),Diagram(
-        coordinateSystem(preserveAspectRatio=false, extent={{-220,-280},{220,300}})));
+                points = {{-36,60},{64,0},{-36,-60},{-36,60}})}),
+Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-220,-280},{220,300}})));
 end Change;

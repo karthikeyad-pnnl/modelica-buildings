@@ -2,25 +2,25 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints
 model Capacities
   "Validate stage capacities subsequence for boiler stage inputs"
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Capacities
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Capacities
     staCap0(
     final nSta=3)
     "Outputs design capacitites at the current and stage one lower"
     annotation (Placement(transformation(extent={{-100,0},{-80,20}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Capacities
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Capacities
     staCap1(
     final nSta=3)
     "Outputs design capacitites at the current and stage one lower"
     annotation (Placement(transformation(extent={{-20,0},{0,20}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Capacities
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Capacities
     staCap2(
     final nSta=3)
     "Outputs design capacitites at the current and stage one lower"
     annotation (Placement(transformation(extent={{60,0},{80,20}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Capacities
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Capacities
     staCap3(
     final nSta=3)
     "Outputs design capacitites at the current and stage one lower"
@@ -150,13 +150,13 @@ equation
           1},{138,1}},     color={255,0,255}));
 annotation (
  experiment(StopTime=10.0, Tolerance=1e-06),
-  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Validation/Capacities.mos"
+  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/Validation/Capacities.mos"
     "Simulate and plot"),
   Documentation(info="<html>
 <p>
 This example validates
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Generic.Capacities\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Generic.Capacities</a>.
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Capacities\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Capacities</a>.
 </p>
 </html>", revisions="<html>
 <ul>

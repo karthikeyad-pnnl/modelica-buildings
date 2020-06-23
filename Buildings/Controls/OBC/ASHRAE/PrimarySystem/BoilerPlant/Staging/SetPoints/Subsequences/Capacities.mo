@@ -87,10 +87,10 @@ block Capacities
 
 protected
   final parameter Real small = 0.001
-  "Small number to avoid division with zero";
+    "Small number to avoid division with zero";
 
   final parameter Real larGai = 10
-  "Large gain";
+    "Large gain";
 
   Buildings.Controls.OBC.CDL.Routing.RealExtractor cap(
     final nin=nSta,
@@ -281,10 +281,10 @@ stage. This ensures numerical stability and satisfies the staging down condition
 </p>
 <p align=\"center\">
 <img alt=\"Validation plot for Capacities\"
-src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Capacities.png\"/>
+src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/Capacities.png\"/>
 <br/>
-Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.Capacities\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.Capacities</a>.
+Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Capacities\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Capacities</a>.
 </p>
 </html>",
 revisions="<html>

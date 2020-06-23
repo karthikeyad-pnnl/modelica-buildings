@@ -133,10 +133,10 @@ for a stage index input <code>u</code> given a staging matrix <code>staMat</code
 </p>
 <p align=\"center\">
 <img alt=\"Validation plot for BoilerIndices\"
-src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/BoilerIndices.png\"/>
+src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/BoilerIndices.png\"/>
 <br/>
-Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.BoilerIndices\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Validation.BoilerIndices</a>.
+Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.BoilerIndices\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.BoilerIndices</a>.
 </p>
 </html>",
 revisions="<html>

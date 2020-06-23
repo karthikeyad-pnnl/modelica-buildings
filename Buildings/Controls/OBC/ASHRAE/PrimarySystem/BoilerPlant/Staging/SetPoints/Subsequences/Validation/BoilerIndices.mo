@@ -2,7 +2,7 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints
 model BoilerIndices
   "Validates extraction of boiler indices in a given stage"
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.BoilerIndices
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.BoilerIndices
     boiInd(
     final nSta=3,
     final nBoi=2,
@@ -10,7 +10,7 @@ model BoilerIndices
     "Boiler index generator"
     annotation (Placement(transformation(extent={{0,80},{20,100}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.BoilerIndices
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.BoilerIndices
     boiInd1(
     final nSta=3,
     final nBoi=2,
@@ -18,7 +18,7 @@ model BoilerIndices
     "Boiler index generator"
     annotation (Placement(transformation(extent={{0,40},{20,60}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.BoilerIndices
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.BoilerIndices
     boiInd2(
     final nSta=3,
     final nBoi=2,
@@ -26,7 +26,7 @@ model BoilerIndices
     "Boiler index generator"
     annotation (Placement(transformation(extent={{0,0},{20,20}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.BoilerIndices
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.BoilerIndices
     boiInd3(
     final nSta=3,
     final nBoi=2,
@@ -34,7 +34,7 @@ model BoilerIndices
     "Boiler index generator"
     annotation (Placement(transformation(extent={{0,-40},{20,-20}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.BoilerIndices
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.BoilerIndices
     boiInd4(
     final nSta=5,
     final nBoi=3,
@@ -42,7 +42,7 @@ model BoilerIndices
     "Boiler index generator"
     annotation (Placement(transformation(extent={{40,60},{60,80}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.BoilerIndices
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.BoilerIndices
     boiInd5(
     final nSta=5,
     final nBoi=3,
@@ -50,7 +50,7 @@ model BoilerIndices
     "Boiler index generator"
     annotation (Placement(transformation(extent={{40,20},{60,40}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.BoilerIndices
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.BoilerIndices
     boiInd6(
     final nSta=5,
     final nBoi=3,
@@ -58,7 +58,7 @@ model BoilerIndices
     "Boiler index generator"
     annotation (Placement(transformation(extent={{40,-60},{60,-40}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.BoilerIndices
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.BoilerIndices
     boiInd7(
     final nSta=5,
     final nBoi=3,
@@ -111,13 +111,13 @@ equation
           {-38,-70}}, color={255,127,0}));
 annotation (
  experiment(StopTime=10.0, Tolerance=1e-06),
-  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Validation/BoilerIndices.mos"
+  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/Validation/BoilerIndices.mos"
     "Simulate and plot"),
   Documentation(info="<html>
     <p>
     This example validates
-    <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.BoilerIndices\">
-    Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.BoilerIndices</a>.
+    <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.BoilerIndices\">
+    Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.BoilerIndices</a>.
     </p>
     </html>",
     revisions="<html>
