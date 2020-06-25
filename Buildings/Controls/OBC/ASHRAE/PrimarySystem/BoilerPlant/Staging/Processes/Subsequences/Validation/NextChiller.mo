@@ -2,18 +2,18 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes
 model NextChiller
   "Validate sequence of identifying next enable or disable chillers"
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextChiller
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextBoiler
     nexChi
     "Identify next enabling and disabling chiller during the staging up process"
     annotation (Placement(transformation(extent={{-60,170},{-40,190}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextChiller
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextBoiler
     nexChi1 "Identify next enabling during the staging up process"
     annotation (Placement(transformation(extent={{240,170},{260,190}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextChiller
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextBoiler
     nexChi2
     "Identify next enabling and disabling chiller during the staging down process"
     annotation (Placement(transformation(extent={{-60,-150},{-40,-130}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextChiller
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextBoiler
     nexChi3 "Identify next disabling chiller during the staging down process"
     annotation (Placement(transformation(extent={{240,-150},{260,-130}})));
 

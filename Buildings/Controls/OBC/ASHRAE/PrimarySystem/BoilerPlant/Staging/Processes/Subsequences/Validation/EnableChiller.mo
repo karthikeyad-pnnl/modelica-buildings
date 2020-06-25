@@ -2,10 +2,10 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes
 model EnableChiller
   "Validate sequence of enabling and disabling chiller"
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.EnableChiller
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.EnableBoiler
     enaDisChi(final nChi=3) "Enable larger chiller and disable smaller chiller"
     annotation (Placement(transformation(extent={{-80,70},{-60,90}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.EnableChiller
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.EnableBoiler
     enaOneChi(final nChi=3) "Enable additional chiller"
     annotation (Placement(transformation(extent={{100,70},{120,90}})));
 

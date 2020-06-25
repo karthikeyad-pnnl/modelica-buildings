@@ -1,5 +1,5 @@
 ﻿within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences;
-block DisableChiller "Sequence for disabling chiller in stage-down process"
+block DisableBoiler "Sequence for disabling boiler in stage-down process"
 
   parameter Integer nChi "Total number of chillers";
   parameter Real proOnTim(
@@ -456,4 +456,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end DisableChiller;
+end DisableBoiler;

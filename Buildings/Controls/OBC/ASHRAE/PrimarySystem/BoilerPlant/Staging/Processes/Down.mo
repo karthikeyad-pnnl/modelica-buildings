@@ -211,7 +211,7 @@ protected
   Buildings.Controls.OBC.CDL.Integers.Change cha
     "Check if stage setpoint dicreases"
     annotation (Placement(transformation(extent={{-240,340},{-220,360}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextChiller
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextBoiler
     nexChi(final nChi=nChi) "Identify next enabling chiller"
     annotation (Placement(transformation(extent={{-40,310},{-20,330}})));
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.DownStart

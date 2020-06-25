@@ -1,8 +1,8 @@
 HWIsoVal
-DisableChiller
+DisableBoiler
 DownStart
-EnableChiller
-NextChiller
+EnableBoiler
+NextBoiler
 ResetMinBypass
 UpEnd
 Validation

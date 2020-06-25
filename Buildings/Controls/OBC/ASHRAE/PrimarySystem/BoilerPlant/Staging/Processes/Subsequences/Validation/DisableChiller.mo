@@ -2,11 +2,11 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes
 model DisableChiller
   "Validate sequence of disabling chiller during stage-down process"
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.DisableChiller
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.DisableBoiler
     chiOnOff(final nChi=3, final proOnTim=300)
     "Disable a chiller and enable another chiller"
     annotation (Placement(transformation(extent={{-80,70},{-60,90}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.DisableChiller
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.DisableBoiler
     chiOff(final nChi=3, final proOnTim=300) "Disable chiller"
     annotation (Placement(transformation(extent={{102,70},{122,90}})));
 

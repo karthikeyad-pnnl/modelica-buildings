@@ -1,5 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences;
-block NextChiller "Identify next enable and disable chillers"
+block NextBoiler "Identify next enable and disable boilers"
 
   parameter Integer nChi=2 "Total number of chillers";
 
@@ -300,4 +300,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end NextChiller;
+end NextBoiler;

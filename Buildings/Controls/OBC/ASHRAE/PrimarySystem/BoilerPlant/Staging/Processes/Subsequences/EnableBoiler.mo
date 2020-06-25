@@ -1,5 +1,5 @@
 ﻿within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences;
-block EnableChiller "Sequence for enabling chiller"
+block EnableBoiler "Sequence for enabling boiler"
 
   parameter Integer nChi "Total number of chillers";
   parameter Real proOnTim(
@@ -409,4 +409,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end EnableChiller;
+end EnableBoiler;

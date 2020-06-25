@@ -1,6 +1,5 @@
 ﻿within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences;
-block ResetMinBypass
-  "Sequence for minimum chilled water flow setpoint reset"
+block ResetMinBypass "Sequence for minimum hot water flow setpoint reset"
 
   parameter Real aftByPasSetTim(
     final unit="s",

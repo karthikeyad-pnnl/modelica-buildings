@@ -121,7 +121,7 @@ block UpEnd "Sequence for ending stage-up process"
 protected
   parameter Integer chiInd[nChi]={i for i in 1:nChi}
     "Chiller index, {1,2,...,n}";
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.EnableChiller
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.EnableBoiler
     enaChi(final nChi=nChi, final proOnTim=proOnTim) "Enable next chiller"
     annotation (Placement(transformation(extent={{-100,180},{-80,200}})));
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.CHWIsoVal

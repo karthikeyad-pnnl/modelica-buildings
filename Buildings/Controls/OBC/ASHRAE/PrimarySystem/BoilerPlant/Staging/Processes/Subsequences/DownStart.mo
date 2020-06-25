@@ -147,7 +147,7 @@ protected
     final iniValPos=0,
     final endValPos=1) "Enable chiller chilled water isolation valve "
     annotation (Placement(transformation(extent={{0,-110},{20,-90}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.DisableChiller
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.DisableBoiler
     disChi(final nChi=nChi, final proOnTim=proOnTim) "Disable last chiller"
     annotation (Placement(transformation(extent={{0,-160},{20,-140}})));
   Buildings.Controls.OBC.CDL.Logical.And and2 "Logical and"

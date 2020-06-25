@@ -204,7 +204,7 @@ protected
   Buildings.Controls.OBC.CDL.Integers.Change cha
     "Check if stage setpoint increases"
     annotation (Placement(transformation(extent={{-200,190},{-180,210}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextChiller
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextBoiler
     nexChi(final nChi=nChi) "Identify next enabling chiller"
     annotation (Placement(transformation(extent={{-80,210},{-60,230}})));
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.MinimumFlowBypass.Subsequences.FlowSetpoint
@@ -232,7 +232,7 @@ protected
     final relSpeDif=relSpeDif)
     "Enabling next condenser water pump or change pump speed"
     annotation (Placement(transformation(extent={{60,-20},{80,0}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.CHWIsoVal
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HWIsoVal
     enaChiIsoVal(
     final nChi=nChi,
     final chaChiWatIsoTim=chaChiWatIsoTim,
