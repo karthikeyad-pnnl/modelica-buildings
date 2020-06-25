@@ -3,12 +3,34 @@ model SetpointController
   "Validates chiller stage status setpoint signal generation for plants with WSE"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.SetpointController staSetCon(
-    primaryOnly=false,
-    final chiDesCap={500000,700000},
-    final chiMinCap={100000,200000},
-    final chiTyp={Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Types.ChillerAndStageTypes.positiveDisplacement,
-        Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Types.ChillerAndStageTypes.positiveDisplacement})
-    "Chiller stage setpoint controller"
+    final primaryOnly=false,
+    final nBoi=2,
+    final boiTyp={Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler,
+        Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.nonCondensingBoiler},
+    final nSta=3,
+    final staMat=[1,0; 0,1; 1,1],
+    final iniSta=1,
+    final boiDesCap={500000,700000},
+    final boiFirMin={0.2,0.4},
+    final delStaCha=900,
+    final avePer=300,
+    final fraNonConBoi=0.9,
+    final fraConBoi=1.5,
+    final delEffCon=600,
+    final TDif=10,
+    final delFaiCon=900,
+    final sigDif=0.1,
+    final TDifHys=1,
+    final fraMinFir=1.1,
+    final delMinFir=300,
+    final fraDesCap=0.8,
+    final delDesCapNonConBoi=600,
+    final delDesCapConBoi=300,
+    final TCirDif=3,
+    final delTRetDif=300,
+    final dTemp=0.1,
+    final boiMinCap={100000,200000})
+    "Boiler stage setpoint controller"
     annotation (Placement(transformation(extent={{60,140},{80,160}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.SetpointController staSetCon1(
@@ -52,7 +74,7 @@ protected
   Buildings.Controls.OBC.CDL.Logical.Sources.Constant chiAva[2](
     final k={true,true})
     "Chiller availability vector"
-    annotation (Placement(transformation(extent={{-120,200},{-100,220}})));
+    annotation (Placement(transformation(extent={{-52,16},{-32,36}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Max max "Maximum"
     annotation (Placement(transformation(extent={{-160,100},{-140,120}})));
@@ -205,9 +227,6 @@ protected
     annotation (Placement(transformation(extent={{-160,-60},{-140,-40}})));
 
 equation
-  connect(chiAva.y,staSetCon. uChiAva) annotation (Line(points={{-98,210},{-28,210},{-28,
-          131},{58,131}},
-                        color={255,0,255}));
   connect(zero.y,max. u2) annotation (Line(points={{-178,70},{-170,70},{-170,
           104},{-162,104}},
                        color={0,0,127}));
@@ -229,17 +248,15 @@ equation
     annotation (Line(points={{162,150},{178,150}},
                                                  color={0,0,127}));
   connect(reaToInt.y,staSetCon. u) annotation (Line(points={{202,150},{210,150},
-          {210,100},{50,100},{50,138},{58,138}},
+          {210,100},{50,100},{50,137},{58,137}},
                                      color={255,127,0}));
   connect(staSetCon.y,truFalHol. u) annotation (Line(points={{82,150},{90,150},{
           90,70},{98,70}},
                      color={255,0,255}));
   connect(truFalHol.y,pre. u)
     annotation (Line(points={{122,70},{138,70}},   color={255,0,255}));
-  connect(pre.y,staSetCon. chaPro) annotation (Line(points={{162,70},{170,70},{170,50},
-          {40,50},{40,133},{58,133}},color={255,0,255}));
   connect(truDel.y,staSetCon. uPla) annotation (Line(points={{2,70},{34,70},{34,
-          141},{58,141}},
+          140},{58,140}},
                     color={255,0,255}));
   connect(TCWSupSet.y, staSetCon.TChiWatSupSet) annotation (Line(points={{-98,170},{
           -20,170},{-20,165},{58,165}}, color={0,0,127}));
@@ -266,9 +283,8 @@ equation
     annotation (Line(points={{122,-90},{138,-90}}, color={0,0,127}));
   connect(zerOrdHol1.y, reaToInt1.u)
     annotation (Line(points={{162,-90},{178,-90}}, color={0,0,127}));
-  connect(reaToInt1.y, staSetCon1.u) annotation (Line(points={{202,-90},{210,
-          -90},{210,-140},{50,-140},{50,-102},{58,-102}},
-                                                    color={255,127,0}));
+  connect(reaToInt1.y, staSetCon1.u) annotation (Line(points={{202,-90},{210,-90},
+          {210,-140},{50,-140},{50,-103},{58,-103}},color={255,127,0}));
   connect(staSetCon1.y, truFalHol1.u) annotation (Line(points={{82,-90},{90,-90},
           {90,-170},{98,-170}},
                             color={255,0,255}));
@@ -280,8 +296,8 @@ equation
           {28,-130},{2,-130}}, color={255,127,0}));
   connect(plaSta1.y, truDel1.u)
     annotation (Line(points={{-38,-170},{-22,-170}}, color={255,0,255}));
-  connect(truDel1.y, staSetCon1.uPla) annotation (Line(points={{2,-170},{34,
-          -170},{34,-99},{58,-99}},
+  connect(truDel1.y, staSetCon1.uPla) annotation (Line(points={{2,-170},{34,-170},
+          {34,-100},{58,-100}},
                             color={255,0,255}));
   connect(maxTowFanSpe1.y, staSetCon1.uTowFanSpeMax) annotation (Line(points={{-138,
           -50},{34,-50},{34,-92},{58,-92}}, color={0,0,127}));

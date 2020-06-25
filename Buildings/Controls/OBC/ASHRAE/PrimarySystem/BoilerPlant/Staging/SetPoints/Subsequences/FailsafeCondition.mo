@@ -22,6 +22,11 @@ block FailsafeCondition
     final quantity="Time") = 900
     "Enable delay";
 
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uStaChaProEnd
+    "Signal indicating end of stage change process"
+    annotation (Placement(transformation(extent={{-160,-70},{-120,-30}}),
+      iconTransformation(extent={{-140,-70},{-100,-30}})));
+
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TSupSet(
     final unit="K",
     final displayUnit="K",
@@ -37,11 +42,6 @@ block FailsafeCondition
     "Measured hot water supply temperature"
     annotation (Placement(transformation(extent={{-160,-20},{-120,20}}),
       iconTransformation(extent={{-140,-20},{-100,20}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uStaChaProEnd
-    "Signal indicating end of stage change process"
-    annotation (Placement(transformation(extent={{-160,-70},{-120,-30}}),
-      iconTransformation(extent={{-140,-70},{-100,-30}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yFaiCon
     "Failsafe condition for boiler staging"
