@@ -170,7 +170,8 @@ protected
     annotation (Placement(transformation(extent={{320,-120},{340,-100}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd(
-    final nu=4) "Ensure all conditions for stage change are satisfied"
+    final nu=4)
+    "Ensure all conditions for stage change are satisfied"
     annotation (Placement(transformation(extent={{-160,-90},{-140,-70}})));
 
   Buildings.Controls.OBC.CDL.Logical.Latch lat2(
