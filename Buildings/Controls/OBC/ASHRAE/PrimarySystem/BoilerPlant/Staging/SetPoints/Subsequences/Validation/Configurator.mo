@@ -111,7 +111,6 @@ protected
     annotation (Placement(transformation(extent={{-40,10},{-20,30}})));
 
 equation
-
   connect(boiAva.y, conf.uBoiAva)
     annotation (Line(points={{-18,100},{18,100}}, color={255,0,255}));
   connect(boiAva1.y, conf1.uBoiAva)
@@ -127,13 +126,13 @@ equation
 annotation (
   experiment(StopTime=10.0, Tolerance=1e-06),
   __Dymola_Commands(file=
-          "modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Subsequences/Validation/Configurator.mos"
+          "modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/Validation/Configurator.mos"
         "Simulate and plot"),
   Documentation(info="<html>
     <p>
     This example validates
-    <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Configurator\">
-    Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Subsequences.Configurator</a>.
+    <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Configurator\">
+    Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Configurator</a>.
     </p>
     </html>", revisions="<html>
     <ul>

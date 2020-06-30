@@ -66,7 +66,7 @@ block Change
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput ySta(
     final min=0,
-    final max = nSta)
+    final max=nSta)
     "Boiler stage integer setpoint"
     annotation (Placement(transformation(extent={{440,130},{480,170}}),
       iconTransformation(extent={{100,40},{140,80}})));
@@ -346,6 +346,11 @@ equation
     as calculated by
     <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Status\">Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Status</a>
     subsequence.
+    </li>
+    <li>
+    Signal indicating end of stage change process <span style=\"font-family: monospace;\">uStaChaProEnd</span>
+    from <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes\">Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes</a>
+    subsequences.
     </li>
     </ul>
     <p>

@@ -5,17 +5,27 @@ block Up
   parameter Integer nSta = 5
     "Number of stages in the boiler plant";
 
-  parameter Real fraNonConBoi = 0.9
+  parameter Real fraNonConBoi(
+    final unit="1",
+    final displayUnit="1",
+    final min=0,
+    final max=1) = 0.9
     "Fraction of stage design capacity at which the efficiency condition
     is satisfied for non-condensing boilers"
     annotation(Dialog(group="Efficiency condition"));
 
-  parameter Real fraConBoi = 1.5
+  parameter Real fraConBoi(
+    final unit="1",
+    final displayUnit="1",
+    final min=0) = 1.5
     "Fraction of stage minimum capacity at which the efficiency condition is
     satisfied for condensing boilers"
     annotation(Dialog(group="Efficiency condition"));
 
-  parameter Real sigDif = 0.1
+  parameter Real sigDif(
+    final unit="1",
+    final displayUnit="1",
+    final min=0) = 0.1
     "Signal hysteresis deadband"
     annotation (Dialog(tab="Advanced",
       group="Efficiency condition"));
@@ -127,7 +137,6 @@ block Up
     annotation (Placement(transformation(extent={{100,-20},{140,20}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
-
 protected
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.EfficiencyCondition effCon(
     final nSta=nSta,
@@ -224,7 +233,7 @@ equation
       extent={{-100,-180},{100,140}})),
     Documentation(info="<html>
       <p>
-      Outputs a boolean stage up signal <code>y</code> based on the 
+      Outputs a boolean stage up signal <code>yStaUp</code> based on the 
       various plant operation conditions that get provided as input signals. 
       Implemented according to 1711 March 2020 Draft, section 5.3.3.10.
       and applies to all boiler plants defined in RP-1711. Timer reset has been

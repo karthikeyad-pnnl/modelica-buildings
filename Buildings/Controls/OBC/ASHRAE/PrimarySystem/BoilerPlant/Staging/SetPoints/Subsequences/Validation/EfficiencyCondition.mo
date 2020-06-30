@@ -29,7 +29,7 @@ block EfficiencyCondition
     final fraConBoi=1.5,
     final sigDif=0.1,
     final delCapReq=600)
-    "Testing efficiency condition for non-condensing boiler stage type"
+    "Testing efficiency condition for non-condensing boiler stage type with timer reset"
     annotation (Placement(transformation(extent={{250,-10},{270,10}})));
 
 protected
@@ -150,9 +150,11 @@ protected
     final width=0.05,
     final period=1000,
     final startTime=960)
+    "Boolean pulse signal"
     annotation (Placement(transformation(extent={{150,-170},{170,-150}})));
 
   Buildings.Controls.OBC.CDL.Logical.Edge edg
+    "Edge detector"
     annotation (Placement(transformation(extent={{180,-170},{200,-150}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con11(
