@@ -4,7 +4,11 @@ WHILE boilerPlant is ON
 			OR..hotWaterSupplyResetRequests < numberOfIgnores 
 			OR..boilerPlantEnableSchedule is OFF
 				set boilerPlant OFF
+		 ELSE
+			Do nothing
          ENDIF
+	ELSE
+		Do nothing	
     ENDIF
 ENDWHILE
 
@@ -14,7 +18,11 @@ WHILE boilerPlant is OFF
 			AND..hotWaterSupplyResetRequests > numberOfIgnores 
 			AND..boilerPlantEnableSchedule is ON
 				set boilerPlant ON
+		 ELSE
+			Do nothing
          ENDIF
-    ENDIF
+	ELSE
+		Do nothing
+	ENDIF
 ENDWHILE 	
 	

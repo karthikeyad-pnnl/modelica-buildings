@@ -2,3 +2,4 @@ IF efficiencyCondition == TRUE OR failsafeCondition == TRUE OR uAvaCur != TRUE:
 	SET yStaUp = TRUE
 ELSE:
 	SET yStaUp = FALSE
+ENDIF
