@@ -55,8 +55,7 @@ protected
     "Ensure negative heating requirement calculation is not passed downstream"
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(
-    final k=0)
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(final k=10^(-10))
     "Lowest allowed heating requirement"
     annotation (Placement(transformation(extent={{60,24},{80,44}})));
 
