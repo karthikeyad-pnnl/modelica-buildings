@@ -5,10 +5,11 @@ IF plantType == primaryOnly:
 			SET yStaLow = TRUE
 	ELSE:
 			SET yStaLow = FALSE 
+	ENDIF
 
 ELSE:
 	IF currentStage_nonCondensingBoilers == absent:  # This clause should be for condensing boiler
-		IF (QRequired < 1.1 * BStageMin_current FOR 5 minutes) 
+		IF ((QRequired < 1.1 * BStageMin_current FOR 5 minutes) 
 				OR ((priPumpFlowRate == minPriPumpSpeed_current) 
 					AND (priHWRT > secHWRT + 3 deg.F FOR 5 minutes))) 
 			AND...failsafeCondition_lowerStage == FALSE 
@@ -16,6 +17,9 @@ ELSE:
 				SET yStaLow = TRUE
 		ELSE:
 				SET yStaLow = FALSE
+		ENDIF
+	
+# there are two ifs, and need another ELSE?
 	
 	ELSE IF currentStage_nonCondensingBoilers == present:  # this clause should be for non-condensing boiler
 		IF (QRequired < 0.8 * QDes_lower FOR 10 minutes) 
