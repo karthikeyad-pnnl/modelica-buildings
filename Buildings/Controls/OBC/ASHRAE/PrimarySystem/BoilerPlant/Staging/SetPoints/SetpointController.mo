@@ -41,6 +41,18 @@ block SetpointController
     "Boiler minimum firing ratio"
     annotation(Dialog(tab="General", group="Boiler plant configuration parameters"));
 
+  parameter Real bMinPriPumSpeSta[nSta](
+    final unit="1",
+    final displayUnit="1",
+    final max=1,
+    final min=0) = {0,0,0}
+    "Minimum primary pump speed for the boiler plant stage"
+    annotation(Evaluate=true,
+      Dialog(enable=not
+                       (primaryOnly),
+        tab="General",
+        group="Boiler plant configuration parameters"));
+
   parameter Real delStaCha(
     final unit="s",
     final displayUnit="s",
@@ -195,10 +207,17 @@ block SetpointController
     "Hysteresis deadband for measured temperatures"
     annotation (Dialog(tab="Advanced", group="Failsafe condition parameters"));
 
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uStaChaProEnd
+    "Signal indicating end of stage change process"
+    annotation (Placement(transformation(extent={{-440,-280},{-400,-240}}),
+      iconTransformation(extent={{-140,150},{-100,190}},
+        rotation=90,
+        origin={80,-80})));
+
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uBoiAva[nBoi]
     "Boiler availability status vector"
-    annotation (Placement(transformation(extent={{-440,-200},{-400,-160}}),
-      iconTransformation(extent={{-140,-182},{-100,-142}})));
+    annotation (Placement(transformation(extent={{-440,-190},{-400,-150}}),
+      iconTransformation(extent={{-140,-180},{-100,-140}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uPla
     "Plant enable signal"
@@ -282,22 +301,32 @@ block SetpointController
     annotation (Placement(transformation(extent={{-440,-50},{-400,-10}}),
         iconTransformation(extent={{-140,-90},{-100,-50}})));
 
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yChaUpEdg
+    "Boiler stage change higher edge signal"
+    annotation (Placement(transformation(extent={{120,-90},{160,-50}}),
+      iconTransformation(extent={{100,20},{140,60}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yChaDowEdg
+    "Boiler stage change lower edge signal"
+    annotation (Placement(transformation(extent={{120,-210},{160,-170}}),
+      iconTransformation(extent={{100,-60},{140,-20}})));
+
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yBoi[nBoi]
     "Boiler status setpoint vector for the current boiler stage setpoint"
     annotation (Placement(transformation(extent={{120,-280},{160,-240}}),
-      iconTransformation(extent={{100,-110},{140,-70}})));
+      iconTransformation(extent={{100,-100},{140,-60}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yChaEdg
     "Boiler stage change edge signal"
-    annotation (Placement(transformation(extent={{120,-194},{160,-154}}),
+    annotation (Placement(transformation(extent={{120,-150},{160,-110}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput ySta(
     final min=0,
     final max=nSta)
     "Boiler stage integer setpoint"
-    annotation (Placement(transformation(extent={{120,-140},{160,-100}}),
-      iconTransformation(extent={{100,70},{140,110}})));
+    annotation (Placement(transformation(extent={{120,-20},{160,20}}),
+      iconTransformation(extent={{100,60},{140,100}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Change cha(
     final nSta=nSta,
@@ -310,10 +339,12 @@ block SetpointController
     final nSta=nSta,
     final nBoi=nBoi,
     final staMat=staMat)
+    "Boiler index generator"
     annotation (Placement(transformation(extent={{40,-210},{60,-190}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.CapacityRequirement capReq1(
     final avePer=avePer)
+    "Capacity requirement calculator"
     annotation (Placement(transformation(extent={{-360,240},{-340,260}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Configurator conf(
@@ -347,10 +378,11 @@ block SetpointController
     final TDif=TDif,
     final TDifHys=TDifHys,
     final delFaiCon=delFaiCon)
-    annotation (Placement(transformation(extent={{-140,-120},{-120,-100}})));
+    "Staging up calculator"
+    annotation (Placement(transformation(extent={{-140,-120},{-120,-88}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Down staDow(
-    final primaryOnly=false,
+    final primaryOnly=primaryOnly,
     final nSta=nSta,
     final fraMinFir=fraMinFir,
     final delMinFir=delMinFir,
@@ -364,27 +396,27 @@ block SetpointController
     final delTRetDif=delTRetDif,
     final dTemp=dTemp,
     final TDif=TDif,
-    final delFaiCon=delFaiCon)
-    annotation (Placement(transformation(extent={{-140,-240},{-120,-220}})));
+    final delFaiCon=delFaiCon,
+    bMinPriPumSpeSta=bMinPriPumSpeSta)
+    "Staging down calculator"
+    annotation (Placement(transformation(extent={{-140,-256},{-120,-221}})));
 
   Buildings.Controls.OBC.CDL.Routing.RealExtractor extIndSig(
     final nin=nSta)
+    "Identify minimum flow rate for the next higher available stage"
     annotation (Placement(transformation(extent={{-240,-120},{-220,-100}})));
 
 equation
   connect(uPla, cha.uPla) annotation (Line(points={{-420,-80},{-280,-80},{-280,
           -140},{-60,-140},{-60,-162},{-22,-162}},
                                              color={255,0,255}));
-  connect(cha.ySta, ySta) annotation (Line(points={{2,-166},{20,-166},{20,-120},
-          {140,-120}},
-                     color={255,127,0}));
-  connect(cha.y, y) annotation (Line(points={{2,-174},{140,-174}},
-                                      color={255,0,255}));
-  connect(boiInd.yChi,yBoi)
+  connect(cha.ySta, ySta) annotation (Line(points={{2,-164},{20,-164},{20,0},{
+          140,0}},   color={255,127,0}));
+  connect(boiInd.yBoi,yBoi)
     annotation (Line(points={{62,-200},{80,-200},{80,-260},{140,-260}},
                                                      color={255,0,255}));
-  connect(cha.ySta,boiInd. u) annotation (Line(points={{2,-166},{20,-166},{20,-200},
-          {38,-200}},        color={255,127,0}));
+  connect(cha.ySta,boiInd. u) annotation (Line(points={{2,-164},{20,-164},{20,
+          -200},{38,-200}},  color={255,127,0}));
   connect(capReq1.TSupSet, THotWatSupSet) annotation (Line(points={{-362,257},{
           -380,257},{-380,290},{-420,290}},
                                        color={0,0,127}));
@@ -393,8 +425,8 @@ equation
   connect(capReq1.VHotWat_flow, VHotWat_flow) annotation (Line(points={{-362,
           243},{-380,243},{-380,210},{-420,210}},
                                              color={0,0,127}));
-  connect(conf.uBoiAva,uBoiAva)  annotation (Line(points={{-362,-170},{-380,-170},
-          {-380,-180},{-420,-180}}, color={255,0,255}));
+  connect(conf.uBoiAva,uBoiAva)  annotation (Line(points={{-362,-170},{-420,-170}},
+                                    color={255,0,255}));
   connect(sta.uAva, conf.yAva) annotation (Line(points={{-312,-216},{-332,-216},
           {-332,-178},{-338,-178}}, color={255,0,255}));
   connect(sta.u, u) annotation (Line(points={{-312,-204},{-328,-204},{-328,-110},
@@ -414,69 +446,73 @@ equation
           -276,-176},{-272,-176}}, color={255,0,255}));
   connect(sta.yLow, cap.uLow) annotation (Line(points={{-288,-214},{-274,-214},{
           -274,-179},{-272,-179}}, color={255,0,255}));
-  connect(conf.yTyp, staDow.uTyp) annotation (Line(points={{-338,-174},{-336,-174},
-          {-336,-248},{-139,-248},{-139,-242}}, color={255,127,0}));
   connect(cap.yDes, staUp.uCapDes) annotation (Line(points={{-248,-162},{-210,-162},
-          {-210,-103},{-142,-103}}, color={0,0,127}));
+          {-210,-92},{-142,-92}},   color={0,0,127}));
   connect(cap.yUpMin, staUp.uCapUpMin) annotation (Line(points={{-248,-178},{-208,
-          -178},{-208,-105},{-142,-105}}, color={0,0,127}));
+          -178},{-208,-95},{-142,-95}},   color={0,0,127}));
   connect(conf.yTyp, staUp.uTyp) annotation (Line(points={{-338,-174},{-336,-174},
-          {-336,-248},{-206,-248},{-206,-111},{-142,-111}}, color={255,127,0}));
-  connect(sta.yAvaCur, staUp.uAvaCur) annotation (Line(points={{-288,-217},{-174,
-          -217},{-174,-119},{-142,-119}}, color={255,0,255}));
-  connect(THotWatSup, staUp.THotWatSup) annotation (Line(points={{-420,170},{
-          -188,170},{-188,-117},{-142,-117}},
-                                         color={0,0,127}));
-  connect(THotWatSupSet, staUp.THotWatSupSet) annotation (Line(points={{-420,
-          290},{-184,290},{-184,-115},{-142,-115}},
-                                               color={0,0,127}));
+          {-336,-226},{-206,-226},{-206,-104},{-142,-104}}, color={255,127,0}));
+  connect(sta.yAvaCur, staUp.uAvaCur) annotation (Line(points={{-288,-217},{-154,
+          -217},{-154,-116},{-142,-116}}, color={255,0,255}));
+  connect(THotWatSup, staUp.THotWatSup) annotation (Line(points={{-420,170},{-188,
+          170},{-188,-113},{-142,-113}}, color={0,0,127}));
+  connect(THotWatSupSet, staUp.THotWatSupSet) annotation (Line(points={{-420,290},
+          {-184,290},{-184,-110},{-142,-110}}, color={0,0,127}));
   connect(VHotWat_flow, staUp.VHotWat_flow) annotation (Line(points={{-420,210},
-          {-194,210},{-194,-107},{-142,-107}}, color={0,0,127}));
-  connect(staDow.THotWatSupSet, THotWatSupSet) annotation (Line(points={{-142,
-          -221},{-184,-221},{-184,290},{-420,290}},
-                                              color={0,0,127}));
-  connect(staDow.THotWatSup, THotWatSup) annotation (Line(points={{-142,-223},{
-          -188,-223},{-188,170},{-420,170}},
-                                        color={0,0,127}));
-  connect(staDow.uCapReq, capReq1.y) annotation (Line(points={{-142,-225},{-180,
-          -225},{-180,250},{-338,250}}, color={0,0,127}));
+          {-194,210},{-194,-98},{-142,-98}},   color={0,0,127}));
+  connect(staDow.THotWatSupSet, THotWatSupSet) annotation (Line(points={{-142,-231},
+          {-184,-231},{-184,290},{-420,290}}, color={0,0,127}));
+  connect(staDow.THotWatSup, THotWatSup) annotation (Line(points={{-142,-234},{-188,
+          -234},{-188,170},{-420,170}}, color={0,0,127}));
+  connect(staDow.uCapReq, capReq1.y) annotation (Line(points={{-142,-237},{-180,
+          -237},{-180,250},{-338,250}}, color={0,0,127}));
   connect(extIndSig.y, staUp.VUpMinSet_flow) annotation (Line(points={{-218,-110},
-          {-216,-110},{-216,-109},{-142,-109}}, color={0,0,127}));
+          {-216,-110},{-216,-101},{-142,-101}}, color={0,0,127}));
   connect(extIndSig.u, VMinSet_flow) annotation (Line(points={{-242,-110},{-250,
           -110},{-250,130},{-420,130}}, color={0,0,127}));
   connect(extIndSig.index, sta.yAvaUp) annotation (Line(points={{-230,-122},{-230,
           -154},{-280,-154},{-280,-203},{-288,-203}}, color={255,127,0}));
-  connect(cap.yMin, staDow.uCapMin) annotation (Line(points={{-248,-174},{-190,
-          -174},{-190,-227},{-142,-227}}, color={0,0,127}));
-  connect(cap.yDowDes, staDow.uCapDowDes) annotation (Line(points={{-248,-170},
-          {-192,-170},{-192,-231},{-142,-231}}, color={0,0,127}));
-  connect(staDow.uBypValPos, uBypValPos) annotation (Line(points={{-142,-229},{
-          -172,-229},{-172,90},{-420,90}},
-                                        color={0,0,127}));
+  connect(cap.yMin, staDow.uCapMin) annotation (Line(points={{-248,-174},{-190,-174},
+          {-190,-240},{-142,-240}},       color={0,0,127}));
+  connect(cap.yDowDes, staDow.uCapDowDes) annotation (Line(points={{-248,-170},{
+          -192,-170},{-192,-243},{-142,-243}},  color={0,0,127}));
+  connect(staDow.uBypValPos, uBypValPos) annotation (Line(points={{-142,-246},{-172,
+          -246},{-172,90},{-420,90}},   color={0,0,127}));
   connect(THotWatRetPri, staDow.TPriHotWatRet) annotation (Line(points={{-420,50},
-          {-170,50},{-170,-237},{-142,-237}},  color={0,0,127}));
+          {-170,50},{-170,-252},{-142,-252}},  color={0,0,127}));
   connect(THotWatRetSec, staDow.TSecHotWatRet) annotation (Line(points={{-420,10},
-          {-168,10},{-168,-239},{-142,-239}},  color={0,0,127}));
-  connect(capReq1.y, staUp.uCapReq) annotation (Line(points={{-338,250},{-180,
-          250},{-180,-101},{-142,-101}}, color={0,0,127}));
-  connect(sta.yAvaUp, staUp.uAvaUp) annotation (Line(points={{-288,-203},{-280,
-          -203},{-280,-154},{-202,-154},{-202,-113},{-142,-113}},
-                                                            color={255,127,0}));
-  connect(u, staDow.uCur) annotation (Line(points={{-420,-110},{-328,-110},{
-          -328,-252},{-137,-252},{-137,-242}},
-                                    color={255,127,0}));
+          {-168,10},{-168,-255},{-142,-255}},  color={0,0,127}));
+  connect(capReq1.y, staUp.uCapReq) annotation (Line(points={{-338,250},{-180,250},
+          {-180,-89},{-142,-89}},        color={0,0,127}));
+  connect(sta.yAvaUp, staUp.uAvaUp) annotation (Line(points={{-288,-203},{-280,-203},
+          {-280,-154},{-202,-154},{-202,-107},{-142,-107}}, color={255,127,0}));
+  connect(u, staDow.uCur) annotation (Line(points={{-420,-110},{-328,-110},{-328,
+          -228},{-142,-228}},       color={255,127,0}));
   connect(cha.uAvaUp, sta.yAvaUp) annotation (Line(points={{-22,-166},{-60,-166},
           {-60,-203},{-288,-203}}, color={255,127,0}));
   connect(cha.uAvaDow, sta.yAvaDow) annotation (Line(points={{-22,-170},{-56,
           -170},{-56,-206},{-288,-206}}, color={255,127,0}));
-  connect(staUp.yStaUp, cha.uUp) annotation (Line(points={{-118,-110},{-64,-110},
+  connect(staUp.yStaUp, cha.uUp) annotation (Line(points={{-118,-104},{-64,-104},
           {-64,-174},{-22,-174}}, color={255,0,255}));
-  connect(staDow.yStaDow, cha.uDow) annotation (Line(points={{-118,-230},{-64,-230},
+  connect(staDow.yStaDow, cha.uDow) annotation (Line(points={{-118,-240},{-64,-240},
           {-64,-178},{-22,-178}}, color={255,0,255}));
-  connect(THotWatRetSec, capReq1.TRet) annotation (Line(points={{-420,10},{-370,
-          10},{-370,250},{-362,250}}, color={0,0,127}));
-  connect(uPumSpe, staDow.uPumSpe) annotation (Line(points={{-420,-30},{-188,-30},
-          {-188,-233},{-142,-233}}, color={0,0,127}));
+  connect(uPumSpe, staDow.uPumSpe) annotation (Line(points={{-420,-30},{-198,
+          -30},{-198,-249},{-142,-249}},
+                                    color={0,0,127}));
+  connect(conf.yTyp, staDow.uTyp) annotation (Line(points={{-338,-174},{-336,-174},
+          {-336,-226},{-142,-226},{-142,-225}},           color={255,127,0}));
+  connect(uStaChaProEnd, staDow.uStaChaProEnd) annotation (Line(points={{-420,-260},
+          {-150,-260},{-150,-222},{-142,-222}},               color={255,0,255}));
+  connect(uStaChaProEnd, cha.uStaChaProEnd) annotation (Line(points={{-420,-260},
+          {-19,-260},{-19,-182}}, color={255,0,255}));
+  connect(cha.yChaEdg, yChaEdg) annotation (Line(points={{2,-172},{110,-172},{
+          110,-130},{140,-130}}, color={255,0,255}));
+  connect(cha.yChaUpEdg, yChaUpEdg) annotation (Line(points={{2,-168},{100,-168},
+          {100,-70},{140,-70}}, color={255,0,255}));
+  connect(cha.yChaDowEdg, yChaDowEdg) annotation (Line(points={{2,-176},{100,
+          -176},{100,-190},{140,-190}}, color={255,0,255}));
+  connect(uStaChaProEnd, staUp.uStaChaProEnd) annotation (Line(points={{-420,-260},
+          {-150,-260},{-150,-119},{-142,-119}},         color={255,0,255}));
   annotation (defaultComponentName = "staSetCon",
         Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
              graphics={
@@ -507,43 +543,43 @@ The controller contains the following subsequences:
 <li>
 <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.CapacityRequirement\">
 Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.CapacityRequirement</a> to calculate
-the capacity requirement
+the capacity requirement.
 </li>
 <li>
 <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Configurator\">
 Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Configurator</a> to allow the user 
 to provide the boiler plant configuration parameters such as boiler design and minimal capacities and types. It 
-calculates the design and minimal stage capacities, stage type and stage availability
+calculates the design and minimal stage capacities, stage type and stage availability.
 </li>
 <li>
 <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Status\">
 Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Status</a> to calculate
-the next higher and lower available stages
+the next higher and lower available stages.
 </li>
 <li>
 <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Capacities\">
 Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Capacities</a> to calculate
-design and minimal stage capacities for current and next available higher and lower stage
+design and minimal stage capacities for current and next available higher and lower stage.
 </li>
 <li>
 <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Up\">
 Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Up</a> to generate
-a stage up signal
+a stage up signal.
 </li>
 <li>
 <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Down\">
 Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Down</a> to generate
-a stage down signal
+a stage down signal.
 </li>
 <li>
 <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Change\">
 Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Change</a> to set the stage
-based on the initial stage signal and stage up and down signals
+based on the initial stage signal and stage up and down signals.
 </li>
 <li>
 <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.BoilerIndices\">
 Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.BoilerIndices</a> to generate
-the boiler index vector for a given stage
+the boiler index vector for a given stage.
 </li>
 </ul>
 </html>",
