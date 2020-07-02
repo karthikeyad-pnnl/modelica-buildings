@@ -85,19 +85,6 @@ block Capacities
     annotation (Placement(transformation(extent={{200,-110},{240,-70}}),
       iconTransformation(extent={{100,-100},{140,-60}})));
 
-  CDL.Continuous.Sources.Constant con(k=small)
-    annotation (Placement(transformation(extent={{78,170},{98,190}})));
-  CDL.Continuous.Max max "Provide non-zero value at system start"
-    annotation (Placement(transformation(extent={{150,140},{170,160}})));
-  CDL.Continuous.Max max1 "Provide non-zero value at system start"
-    annotation (Placement(transformation(extent={{150,-30},{170,-10}})));
-  CDL.Continuous.Max max2 "Provide non-zero value at system start"
-    annotation (Placement(transformation(extent={{150,50},{170,70}})));
-  CDL.Continuous.Max max3 "Provide non-zero value at system start"
-    annotation (Placement(transformation(extent={{150,10},{170,30}})));
-  CDL.Continuous.Max max4 "Provide non-zero value at system start"
-  annotation (Placement(transformation(extent={{150,-100},{170,-80}})));
-
 protected
   final parameter Real small = 0.001
     "Small number to avoid division with zero";
@@ -205,37 +192,16 @@ equation
   connect(yUpMin, yUpMin)
     annotation (Line(points={{220,-90},{220,-90}}, color={0,0,127}));
 
-  connect(con.y, max.u1) annotation (Line(points={{100,180},{130,180},{130,156},
-          {148,156}}, color={0,0,127}));
-  connect(max.y, yDes)
-    annotation (Line(points={{172,150},{220,150}}, color={0,0,127}));
-  connect(cap.y, max.u2) annotation (Line(points={{-78,150},{120,150},{120,144},
-          {148,144}}, color={0,0,127}));
-  connect(max1.y, yMin)
-    annotation (Line(points={{172,-20},{220,-20}}, color={0,0,127}));
-  connect(capMin.y, max1.u2) annotation (Line(points={{22,-70},{140,-70},{140,-26},
-          {148,-26}}, color={0,0,127}));
-  connect(con.y, max1.u1) annotation (Line(points={{100,180},{130,180},{130,-14},
-          {148,-14}}, color={0,0,127}));
-  connect(swi2.y, max2.u2) annotation (Line(points={{122,60},{140,60},{140,54},{
-          148,54}}, color={0,0,127}));
-  connect(swi1.y, max3.u2) annotation (Line(points={{122,20},{140,20},{140,14},{
-          148,14}}, color={0,0,127}));
-  connect(max4.y, yUpMin)
-    annotation (Line(points={{172,-90},{220,-90}}, color={0,0,127}));
-  connect(swi4.y, max4.u2) annotation (Line(points={{124,-90},{140,-90},{140,-96},
-          {148,-96}}, color={0,0,127}));
-  connect(con.y, max2.u1) annotation (Line(points={{100,180},{130,180},{130,66},
-          {148,66}}, color={0,0,127}));
-  connect(con.y, max3.u1) annotation (Line(points={{100,180},{130,180},{130,26},
-          {148,26}}, color={0,0,127}));
-  connect(con.y, max4.u1) annotation (Line(points={{100,180},{130,180},{130,-84},
-          {148,-84}}, color={0,0,127}));
-  connect(max2.y, yUpDes) annotation (Line(points={{172,60},{194,60},{194,60},{220,
-          60}}, color={0,0,127}));
-  connect(max3.y, yDowDes)
-    annotation (Line(points={{172,20},{220,20}}, color={0,0,127}));
-
+  connect(cap.y, yDes) annotation (Line(points={{-78,150},{66,150},{66,150},{
+          220,150}}, color={0,0,127}));
+  connect(swi2.y, yUpDes) annotation (Line(points={{122,60},{168,60},{168,60},{
+          220,60}}, color={0,0,127}));
+  connect(swi1.y, yDowDes)
+    annotation (Line(points={{122,20},{220,20}}, color={0,0,127}));
+  connect(swi4.y, yUpMin) annotation (Line(points={{124,-90},{168,-90},{168,-90},
+          {220,-90}}, color={0,0,127}));
+  connect(capMin.y, yMin) annotation (Line(points={{22,-70},{100,-70},{100,-20},
+          {220,-20}}, color={0,0,127}));
 annotation (defaultComponentName = "cap",
         Icon(graphics={
         Rectangle(

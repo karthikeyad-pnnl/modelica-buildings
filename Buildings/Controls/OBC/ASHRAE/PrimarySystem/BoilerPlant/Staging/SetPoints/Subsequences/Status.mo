@@ -160,8 +160,8 @@ protected
     "If no higher stage is available, output current stage"
     annotation (Placement(transformation(extent={{180,100},{200,120}})));
 
-  Buildings.Controls.OBC.CDL.Integers.LessEqualThreshold intLesEquThr(
-    final threshold=0)
+  Buildings.Controls.OBC.CDL.Integers.LessEqualThreshold intLesEquThr(final
+      threshold=0)
     "If the current stage is the lowest available the input value equals 0"
     annotation (Placement(transformation(extent={{100,-80},{120,-60}})));
 
@@ -197,8 +197,7 @@ protected
     "Logical or"
     annotation (Placement(transformation(extent={{-380,-140},{-360,-120}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(
-    final k=0)
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(final k=1)
     "Zero"
     annotation (Placement(transformation(extent={{100,-40},{120,-20}})));
 
