@@ -56,7 +56,7 @@ block SetpointController
   parameter Real delStaCha(
     final unit="s",
     final displayUnit="s",
-    final quantity="Time") = 900
+    final quantity="Time") = 600
     "Hold period for each stage change"
     annotation(Dialog(tab="Staging parameters", group="General parameters"));
 
@@ -280,9 +280,9 @@ block SetpointController
       iconTransformation(extent={{-140,90},{-100,130}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput VMinSet_flow[nSta](
-    final unit="Pa",
-    final displayUnit="Pa",
-    final quantity="PressureDifference")
+    final unit="m3/s",
+    final displayUnit="m3/s",
+    final quantity="VolumeFlowRate")
     "Vector with primary circuit minimum flow setpoint for all stages"
     annotation (Placement(transformation(extent={{-440,110},{-400,150}}),
       iconTransformation(extent={{-140,30},{-100,70}})));
