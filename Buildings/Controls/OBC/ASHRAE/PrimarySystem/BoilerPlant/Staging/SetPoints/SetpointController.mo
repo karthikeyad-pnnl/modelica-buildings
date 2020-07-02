@@ -514,7 +514,7 @@ equation
   connect(uStaChaProEnd, staUp.uStaChaProEnd) annotation (Line(points={{-420,-260},
           {-150,-260},{-150,-119},{-142,-119}},         color={255,0,255}));
   annotation (defaultComponentName = "staSetCon",
-        Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
+        Icon(coordinateSystem(extent={{-100,-180},{100,180}}),
              graphics={
         Rectangle(
         extent={{-100,-180},{100,180}},
