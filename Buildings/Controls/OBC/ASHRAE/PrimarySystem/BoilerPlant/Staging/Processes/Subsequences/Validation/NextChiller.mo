@@ -211,7 +211,7 @@ equation
           32},{-142,32},{-142,32}}, color={255,0,255}));
   connect(staSet.y, nexChi.uStaSet) annotation (Line(points={{-118,220},{-80,220},
           {-80,187},{-62,187}}, color={255,127,0}));
-  connect(chiSet.y, nexChi.uChiSet) annotation (Line(points={{-118,100},{-100,100},
+  connect(chiSet.y,nexChi.uBoiSet)  annotation (Line(points={{-118,100},{-100,100},
           {-100,180},{-62,180}}, color={255,0,255}));
   connect(inPro.y, nexChi.chaPro) annotation (Line(points={{-118,40},{-80,40},{-80,
           173},{-62,173}}, color={255,0,255}));
@@ -237,7 +237,7 @@ equation
           {158,32}}, color={255,0,255}));
   connect(staSet1.y, nexChi1.uStaSet) annotation (Line(points={{182,220},{220,220},
           {220,187},{238,187}}, color={255,127,0}));
-  connect(chiSet1.y, nexChi1.uChiSet) annotation (Line(points={{182,100},{200,100},
+  connect(chiSet1.y,nexChi1.uBoiSet)  annotation (Line(points={{182,100},{200,100},
           {200,180},{238,180}}, color={255,0,255}));
   connect(inPro1.y, nexChi1.chaPro) annotation (Line(points={{182,40},{220,40},{
           220,173},{238,173}}, color={255,0,255}));
@@ -263,7 +263,7 @@ equation
           {-160,-288},{-142,-288}}, color={255,0,255}));
   connect(staSet2.y, nexChi2.uStaSet) annotation (Line(points={{-118,-100},{-80,
           -100},{-80,-133},{-62,-133}}, color={255,127,0}));
-  connect(chiSet2.y, nexChi2.uChiSet) annotation (Line(points={{-118,-220},{-100,
+  connect(chiSet2.y,nexChi2.uBoiSet)  annotation (Line(points={{-118,-220},{-100,
           -220},{-100,-140},{-62,-140}}, color={255,0,255}));
   connect(inPro2.y, nexChi2.chaPro) annotation (Line(points={{-118,-280},{-80,-280},
           {-80,-147},{-62,-147}}, color={255,0,255}));
@@ -301,7 +301,7 @@ equation
           -288},{158,-288}}, color={255,0,255}));
   connect(staSet3.y, nexChi3.uStaSet) annotation (Line(points={{182,-100},{220,-100},
           {220,-133},{238,-133}}, color={255,127,0}));
-  connect(chiSet3.y, nexChi3.uChiSet) annotation (Line(points={{182,-220},{200,-220},
+  connect(chiSet3.y,nexChi3.uBoiSet)  annotation (Line(points={{182,-220},{200,-220},
           {200,-140},{238,-140}}, color={255,0,255}));
   connect(inPro3.y, nexChi3.chaPro) annotation (Line(points={{182,-280},{220,-280},
           {220,-147},{238,-147}}, color={255,0,255}));

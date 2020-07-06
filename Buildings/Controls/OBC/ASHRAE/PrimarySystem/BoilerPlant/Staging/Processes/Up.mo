@@ -329,13 +329,13 @@ equation
   connect(lat.y, enaHeaCon.chaPro)
     annotation (Line(points={{-118,200},{-100,200},{-100,-86},{58,-86}},
       color={255,0,255}));
-  connect(nexChi.yNexEnaChi, enaHeaCon.nexChaChi)
+  connect(nexChi.yNexEnaBoi, enaHeaCon.nexChaChi)
     annotation (Line(points={{-58,229},{-36,229},{-36,-94},{58,-94}},
       color={255,127,0}));
   connect(enaHeaCon.uChiHeaCon, uChiHeaCon)
     annotation (Line(points={{58,-98},{-48,-98},{-48,-130},{-260,-130}},
       color={255,0,255}));
-  connect(nexChi.yNexEnaChi, enaChiIsoVal.nexChaChi)
+  connect(nexChi.yNexEnaBoi, enaChiIsoVal.nexChaChi)
     annotation (Line(points={{-58,229},{-36,229},{-36,-142},{58,-142}},
       color={255,127,0}));
   connect(enaChiIsoVal.uChiWatIsoVal, uChiWatIsoVal)
@@ -344,7 +344,7 @@ equation
   connect(lat.y, enaChiIsoVal.chaPro)
     annotation (Line(points={{-118,200},{-100,200},{-100,-158},{58,-158}},
       color={255,0,255}));
-  connect(nexChi.yNexEnaChi, endUp.nexEnaChi)
+  connect(nexChi.yNexEnaBoi, endUp.nexEnaChi)
     annotation (Line(points={{-58,229},{-36,229},{-36,-208},{18,-208}},
       color={255,127,0}));
   connect(lat.y, endUp.uStaUp)
@@ -406,7 +406,7 @@ equation
   connect(enaChiIsoVal.yChiWatIsoVal, swi.u3)
     annotation (Line(points={{82,-156},{100,-156},{100,-148},{198,-148}},
       color={0,0,127}));
-  connect(nexChi.yDisSmaChi, endUp.nexDisChi)
+  connect(nexChi.yDisSmaBoi, endUp.nexDisChi)
     annotation (Line(points={{-58,224},{-40,224},{-40,-218},{18,-218}},
       color={255,127,0}));
   connect(nexChi.yOnOff, minChiWatFlo.uOnOff)
@@ -432,10 +432,10 @@ equation
   connect(uChi, minChiWatFlo.uChi)
     annotation (Line(points={{-260,130},{-220,130},{-220,94},{18,94}},
       color={255,0,255}));
-  connect(nexChi.yNexEnaChi, minChiWatFlo.nexEnaChi)
+  connect(nexChi.yNexEnaBoi, minChiWatFlo.nexEnaChi)
     annotation (Line(points={{-58,229},{-36,229},{-36,91},{18,91}},
       color={255,127,0}));
-  connect(nexChi.yDisSmaChi, minChiWatFlo.nexDisChi)
+  connect(nexChi.yDisSmaBoi, minChiWatFlo.nexDisChi)
     annotation (Line(points={{-58,224},{-40,224},{-40,89},{18,89}},
       color={255,127,0}));
   connect(con.y, minChiWatFlo.uSubCha)
@@ -522,7 +522,7 @@ equation
           {-104,227},{-82,227}}, color={255,127,0}));
   connect(lat.y, nexChi.chaPro) annotation (Line(points={{-118,200},{-100,200},{
           -100,213},{-82,213}}, color={255,0,255}));
-  connect(nexChi.uChiSet, uChiSet)
+  connect(nexChi.uBoiSet, uChiSet)
     annotation (Line(points={{-82,220},{-260,220}}, color={255,0,255}));
   connect(uStaSet, cha.u) annotation (Line(points={{-260,250},{-220,250},{-220,200},
           {-202,200}}, color={255,127,0}));
