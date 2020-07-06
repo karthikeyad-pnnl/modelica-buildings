@@ -16,7 +16,7 @@ class StripModelicaTypesTests(unittest.TestCase):
 	@classmethod
 	def setUp(self):
 
-		self.file_path = "C:/Users/deva713/OneDrive - PNNL/Documents/Git_repos/modelica-buildings/formatting_script/tests/test.mo"
+		self.file_path = "C:/Users/deva713/OneDrive - PNNL/Documents/Git_repos/modelica-buildings/Buildings/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Validation/SetpointController.mo"
 		# make a copy of the modelica library
 		self.package_path = "C:/Users/deva713/OneDrive - PNNL/Documents/Git_repos/modelica-buildings_issue1916/Buildings/Controls/OBC/ASHRAE/PrimarySystem"
 
@@ -25,12 +25,4 @@ class StripModelicaTypesTests(unittest.TestCase):
 		"""
 		"""
 		result = StripModelicaTypes(
-			self.file_path, overwrite=False)
-
-		bp()
-
-	def test_tree(self):
-		"""
-		"""
-		result = StripModelicaTypes(
-			self.package_path, overwrite=True)
+			self.file_path, overwrite=True)

@@ -22,7 +22,9 @@ class StripModelicaTypes(object):
 	def __init__(self, path, overwrite=False):
 
 		self.to_replace = {
-			"Modelica.SIunits.Time" : "(\n    final unit=\"s\",\n    final quantity=\"Time\",\n    final displayUnit=\"h\")"
+			# "Modelica.SIunits.Time" : "(\n    final unit=\"s\",\n    final quantity=\"Time\",\n    final displayUnit=\"h\")",
+			'  CDL.' : '  Buildings.Controls.OBC.CDL.',
+			' \"' : '\n    \"'
 		}
 
 		paths = []
@@ -38,41 +40,89 @@ class StripModelicaTypes(object):
 						paths.append(str(item))
 				except:
 					print("Not able to check if this is a model file: {}".format(item))
-
-		for file in paths:
-			self.replace(file, overwrite=False)
-
-
-	def replace(self, path, overwrite=False):
-		"""Looks for the modelica standard library
-		type specification line by line and
-		replaces it with the OBC compliant
-		specification.
-		"""
+		
+		for file_name in paths:
+			self.global_paths(file_name, overwrite=True)
+			# self.line_breaks(file_name, overwrite=True)		
+	
+	def global_paths(self, path, overwrite=False):
 		lines = tuple(open(path, 'r'))
 
-		for unit_type in self.to_replace.keys():
-			repl_unit = self.to_replace[unit_type]
+		file_with_units_replaced = ""
 
-			file_with_units_replaced = ""
+		# for key in list(self.to_replace.keys()):
+		# 	for line in lines:
+		# 		try:
+		# 			if key in line:
+		# 				line = line.replace(key, self.to_replace[key])
+		# 				text = line
 
-			for line in lines:
-				try:
-					if unit_type in line:
-						line = line.replace(unit_type, "Real")
-						line_split_on_equal_sign = re.split(r'=',line)
-						text = '  ' + line_split_on_equal_sign[0].strip() + \
-							repl_unit + '=' + line_split_on_equal_sign[1].strip() + '\n  '
+		# 			else:
+		# 				# append to the new file unchanged
+		# 				text = line
 
-					else:
-						# append to the new file unchanged
-						text = line
+		# 			file_with_units_replaced = \
+		# 					file_with_units_replaced + \
+		# 					text
+		# 		except:
+		# 			print("In {} not able to replace for {} line".format(path, line))
 
-					file_with_units_replaced = \
-							file_with_units_replaced + \
-							text
-				except:
-					print("In {} not able to replace for {} line".format(path, line))
+
+		for line in lines:
+			try:
+				if "  CDL." in line:
+					line = line.replace('  CDL.', '  Buildings.Controls.OBC.CDL.')
+					text = line
+
+				# if (("\;" in line)): #and ('\n' not in lines(index+1)[0])):
+				# 	line = line.replace('\;', '''\;
+												
+				# 								''')
+				# 	text = line
+
+				else:
+					# append to the new file unchanged
+					text = line
+
+				file_with_units_replaced = \
+						file_with_units_replaced + \
+						text
+			except:
+				print("In {} not able to replace for {} line".format(path, line))
+
+		if overwrite:
+			outpath=path
+		else:
+			outpath=re.split(r'\.mo',path)[0] + \
+				'_converted' + '.mo'
+
+		file_out = open(outpath, "w")
+		file_out.write(file_with_units_replaced)
+		file_out.close()
+
+		return file_with_units_replaced
+
+	def line_breaks(self, path, overwrite=False):
+		lines = tuple(open(path, 'r'))
+
+		file_with_units_replaced = ""
+
+		for line in lines:
+			index = lines.index(line)
+			try:
+				if (("\;" in line)): #and ('\n' not in lines(index+1)[0])):
+					line = line.replace('\;', '\; \n')
+					text = line
+
+				else:
+					# append to the new file unchanged
+					text = line
+
+				file_with_units_replaced = \
+						file_with_units_replaced + \
+						text
+			except:
+				print("In {} not able to replace for {} line".format(path, line))
 
 		if overwrite:
 			outpath=path
