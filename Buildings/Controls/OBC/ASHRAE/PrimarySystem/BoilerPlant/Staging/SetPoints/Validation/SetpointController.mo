@@ -64,7 +64,7 @@ model SetpointController
     "Testing staging setpoint controller for non-condensing boiler plant"
     annotation (Placement(transformation(extent={{60,-100},{80,-64}})));
 
-   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.SetpointController staSetCon2(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.SetpointController staSetCon2(
     final primaryOnly=true,
     final nBoi=2,
     final boiTyp={Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler,
@@ -110,13 +110,15 @@ model SetpointController
     annotation (Placement(transformation(extent={{-160,10},{-140,30}})));
 
   Buildings.Controls.OBC.CDL.Discrete.ZeroOrderHold zerOrdHol(
-    final samplePeriod=10)
+    final samplePeriod=10) "Hold stage setpoint for signal feedback"
     annotation (Placement(transformation(extent={{140,148},{160,168}})));
 
   Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea
+    "Integer to Real converter"
     annotation (Placement(transformation(extent={{100,148},{120,168}})));
 
   Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt
+    "Real to Integer converter"
     annotation (Placement(transformation(extent={{180,148},{200,168}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold staCha(
@@ -125,7 +127,8 @@ model SetpointController
     "Detect stage change signal"
     annotation (Placement(transformation(extent={{100,60},{120,80}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre
+  Buildings.Controls.OBC.CDL.Logical.Pre pre3
+    "Logical pre block"
     annotation (Placement(transformation(extent={{130,60},{150,80}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Constant plaSta(
@@ -136,69 +139,98 @@ model SetpointController
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(
     final delayTime=10,
     final delayOnInit=true)
+    "Delay plant enable signal"
     annotation (Placement(transformation(extent={{-120,40},{-100,60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant THotWatSupSet(final k=
-        273.15 + 30) "Hot water supply temperature setpoint"
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant THotWatSupSet(
+    final k=273.15 + 30)
+    "Hot water supply temperature setpoint"
     annotation (Placement(transformation(extent={{-80,210},{-60,230}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant zero(final k=10^(-10))
-               "Constant"
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant zero(
+    final k=10^(-10))
+    "Constant"
     annotation (Placement(transformation(extent={{-160,110},{-140,130}})));
 
-  CDL.Continuous.Sources.Constant THotWatSup(final k=273.15 + 30)
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant THotWatSup(
+    final k=273.15 + 30)
     "Hot water supply temperature"
     annotation (Placement(transformation(extent={{-80,130},{-60,150}})));
-  CDL.Continuous.Sources.Constant VHotWat_flow(final k=0.037)
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant VHotWat_flow(
+    final k=0.037)
     "Hot water flow rate"
     annotation (Placement(transformation(extent={{-160,170},{-140,190}})));
-  CDL.Continuous.Sources.Constant THotWatRetSec(final k=273.15 + 26)
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant THotWatRetSec(
+    final k=273.15 + 26)
     "Hot water secondary loop return temperature"
     annotation (Placement(transformation(extent={{-80,90},{-60,110}})));
-  CDL.Continuous.Sources.Sine uPumSpe(
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine uPumSpe(
     final amplitude=1,
     final offset=0,
-    final freqHz=1/21600) "Pump speed signal"
+    final freqHz=1/21600)
+    "Pump speed signal"
     annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
-  CDL.Logical.TrueFalseHold staUp(final trueHoldDuration=10, final
-      falseHoldDuration=0) "Detect stage up signal"
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold staUp(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
+    "Detect stage up signal"
     annotation (Placement(transformation(extent={{100,180},{120,200}})));
-  CDL.Logical.TrueFalseHold staDow(final trueHoldDuration=10, final
-      falseHoldDuration=0) "Detect stage down signal"
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold staDow(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
+    "Detect stage down signal"
     annotation (Placement(transformation(extent={{100,120},{120,140}})));
 
-
-  CDL.Logical.FallingEdge falEdg1
+  Buildings.Controls.OBC.CDL.Logical.FallingEdge falEdg1
+    "Falling edge detector"
     annotation (Placement(transformation(extent={{160,-180},{180,-160}})));
-  CDL.Routing.RealReplicator reaRep1(nout=3)
+
+  Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep1(
+    final nout=3)
+    "Convert input into array"
     annotation (Placement(transformation(extent={{-120,-130},{-100,-110}})));
-  CDL.Continuous.Sources.Sine                        THotWatRet1(
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine THotWatRet1(
     final amplitude=7,
-    phase=0,
+    final phase=0,
     final offset=273.15 + 22,
-    final freqHz=1/21600) "Hot water return temeprature"
+    final freqHz=1/21600)
+    "Hot water return temeprature"
     annotation (Placement(transformation(extent={{-80,-62},{-60,-42}})));
-  CDL.Logical.Sources.Constant                        boiAva1
-                                                            [2](final k={true,true})
-                         "Boiler availability vector"
+
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant boiAva1[2](
+    final k={true,true})
+    "Boiler availability vector"
     annotation (Placement(transformation(extent={{-160,-230},{-140,-210}})));
-  CDL.Discrete.ZeroOrderHold                        zerOrdHol1(final
-      samplePeriod=10)
+
+  Buildings.Controls.OBC.CDL.Discrete.ZeroOrderHold zerOrdHol1(
+    final samplePeriod=10)
+    "Hold stage setpoint for signal feedback"
     annotation (Placement(transformation(extent={{140,-92},{160,-72}})));
-  CDL.Conversions.IntegerToReal                        intToRea1
+
+  Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea1
+    "Integer to Real converter"
     annotation (Placement(transformation(extent={{100,-92},{120,-72}})));
-  CDL.Conversions.RealToInteger                        reaToInt1
+
+  Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt1
+    "Real to Integer converter"
     annotation (Placement(transformation(extent={{180,-92},{200,-72}})));
+
   CDL.Logical.TrueFalseHold staCha1(final trueHoldDuration=900, final
       falseHoldDuration=0) "Detect stage change signal"
     annotation (Placement(transformation(extent={{100,-180},{120,-160}})));
-  CDL.Logical.Pre                        pre1
+  CDL.Logical.Pre                        pre1 "Logical pre block"
     annotation (Placement(transformation(extent={{130,-180},{150,-160}})));
   CDL.Logical.Sources.Constant                        plaSta1(final k=true)
     "Plant status"
     annotation (Placement(transformation(extent={{-160,-200},{-140,-180}})));
   CDL.Logical.TrueDelay                        truDel1(final delayTime=10,
-      final delayOnInit=true)
+      final delayOnInit=true) "Delay plant enable signal"
     annotation (Placement(transformation(extent={{-120,-200},{-100,-180}})));
   CDL.Continuous.Sources.Constant                        THotWatSupSet1(final k=
         273.15 + 30) "Hot water supply temperature setpoint"
@@ -228,9 +260,9 @@ model SetpointController
     annotation (Placement(transformation(extent={{100,-120},{120,-100}})));
 
 
-  CDL.Logical.FallingEdge falEdg2
+  CDL.Logical.FallingEdge falEdg2 "Falling edge detector"
     annotation (Placement(transformation(extent={{560,60},{580,80}})));
-  CDL.Routing.RealReplicator reaRep2(nout=3)
+  CDL.Routing.RealReplicator reaRep2(nout=3) "Convert input into array"
     annotation (Placement(transformation(extent={{280,110},{300,130}})));
   CDL.Continuous.Sources.Sine                        THotWatRet2(
     final amplitude=7,
@@ -243,22 +275,24 @@ model SetpointController
                          "Boiler availability vector"
     annotation (Placement(transformation(extent={{240,10},{260,30}})));
   CDL.Discrete.ZeroOrderHold                        zerOrdHol2(final
-      samplePeriod=10)
+      samplePeriod=10) "Hold stage setpoint for signal feedback"
     annotation (Placement(transformation(extent={{540,148},{560,168}})));
   CDL.Conversions.IntegerToReal                        intToRea2
+    "Integer to Real converter"
     annotation (Placement(transformation(extent={{500,148},{520,168}})));
   CDL.Conversions.RealToInteger                        reaToInt2
+    "Real to Integer converter"
     annotation (Placement(transformation(extent={{580,148},{600,168}})));
   CDL.Logical.TrueFalseHold staCha2(final trueHoldDuration=900, final
       falseHoldDuration=0) "Detect stage change signal"
     annotation (Placement(transformation(extent={{500,60},{520,80}})));
-  CDL.Logical.Pre                        pre2
+  CDL.Logical.Pre                        pre2 "Logical pre block"
     annotation (Placement(transformation(extent={{530,60},{550,80}})));
   CDL.Logical.Sources.Constant                        plaSta2(final k=true)
     "Plant status"
     annotation (Placement(transformation(extent={{240,40},{260,60}})));
   CDL.Logical.TrueDelay                        truDel2(final delayTime=10,
-      final delayOnInit=true)
+      final delayOnInit=true) "Delay plant enable signal"
     annotation (Placement(transformation(extent={{280,40},{300,60}})));
   CDL.Continuous.Sources.Constant                        THotWatSupSet2(final k=
         273.15 + 30) "Hot water supply temperature setpoint"
@@ -284,14 +318,14 @@ model SetpointController
       falseHoldDuration=0) "Detect stage down signal"
     annotation (Placement(transformation(extent={{500,120},{520,140}})));
 
-  CDL.Logical.FallingEdge falEdg
+  CDL.Logical.FallingEdge falEdg "Falling edge detector"
     annotation (Placement(transformation(extent={{160,60},{180,80}})));
-  CDL.Routing.RealReplicator reaRep(nout=3)
+  CDL.Routing.RealReplicator reaRep(nout=3) "Convert input into array"
     annotation (Placement(transformation(extent={{-120,110},{-100,130}})));
 
 equation
   connect(staSetCon.ySta,intToRea. u)
-    annotation (Line(points={{82,166},{90,166},{90,158},{98,158}},
+    annotation (Line(points={{82,166},{94,166},{94,158},{98,158}},
                                                color={255,127,0}));
   connect(intToRea.y,zerOrdHol. u)
     annotation (Line(points={{122,158},{138,158}},
@@ -304,14 +338,14 @@ equation
                                      color={255,127,0}));
   connect(staSetCon.yChaEdg, staCha.u) annotation (Line(points={{82,158},{90,158},
           {90,70},{98,70}}, color={255,0,255}));
-  connect(staCha.y, pre.u)
+  connect(staCha.y, pre3.u)
     annotation (Line(points={{122,70},{128,70}}, color={255,0,255}));
   connect(truDel.y,staSetCon. uPla) annotation (Line(points={{-98,50},{32,50},{32,
           148},{58,148}},
                     color={255,0,255}));
   connect(plaSta.y, truDel.u) annotation (Line(points={{-138,50},{-122,50}},
                      color={255,0,255}));
-  connect(pre.y, falEdg.u)
+  connect(pre3.y, falEdg.u)
     annotation (Line(points={{152,70},{158,70}}, color={255,0,255}));
   connect(falEdg.y, staSetCon.uStaChaProEnd) annotation (Line(points={{182,70},{
           190,70},{190,50},{61,50},{61,138}},  color={255,0,255}));
@@ -340,7 +374,7 @@ equation
   connect(staDow.u, staSetCon.yChaDowEdg) annotation (Line(points={{98,130},{94,
           130},{94,154},{82,154}}, color={255,0,255}));
   connect(staSetCon1.ySta, intToRea1.u)
-    annotation (Line(points={{82,-74},{90,-74},{90,-82},{98,-82}},
+    annotation (Line(points={{82,-74},{94,-74},{94,-82},{98,-82}},
                                                  color={255,127,0}));
   connect(intToRea1.y, zerOrdHol1.u)
     annotation (Line(points={{122,-82},{138,-82}}, color={0,0,127}));
@@ -385,7 +419,7 @@ equation
   connect(staDow1.u, staSetCon1.yChaDowEdg) annotation (Line(points={{98,-110},{
           94,-110},{94,-86},{82,-86}}, color={255,0,255}));
   connect(staSetCon2.ySta, intToRea2.u)
-    annotation (Line(points={{482,166},{490,166},{490,158},{498,158}},
+    annotation (Line(points={{482,166},{494,166},{494,158},{498,158}},
                                                    color={255,127,0}));
   connect(intToRea2.y, zerOrdHol2.u)
     annotation (Line(points={{522,158},{538,158}}, color={0,0,127}));
