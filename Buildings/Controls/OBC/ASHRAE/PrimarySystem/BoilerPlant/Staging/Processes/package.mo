@@ -1,5 +1,7 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging;
-package Processes "Package of sequences for controlling devices when there is a chiller stage change command"
+
+package Processes
+    "Package of sequences for controlling devices when there is a boiler stage change command"
   annotation (preferredView="info", Documentation(info="<html>
 <p>
 This package contains sequences for controlling devices when there is stage-up
@@ -40,4 +42,5 @@ Icon(graphics={
           lineColor={128,128,128},
           extent={{-100.0,-100.0},{100.0,100.0}},
           radius=25.0)}));
+
 end Processes;

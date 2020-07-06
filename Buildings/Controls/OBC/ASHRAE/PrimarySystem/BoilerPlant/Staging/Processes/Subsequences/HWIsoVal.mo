@@ -1,6 +1,8 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences;
+
 block HWIsoVal
-  "Sequence of enable or disable hot water isolation valve"
+ 
+    "Sequence of enable or disable hot water isolation valve"
 
   parameter Integer nBoi
     "Total number of boiler, which is also the total number of hot water isolation valve";
@@ -200,127 +202,174 @@ protected
 equation
   connect(uHotWatIsoVal, triSam.u)
     annotation (Line(points={{-180,-100},{-82,-100}}, color={0,0,127}));
+
   connect(con9.y, lin1.x1)
     annotation (Line(points={{22,100},{30,100},{30,88},{38,88}},
       color={0,0,127}));
+
   connect(con6.y, lin1.f1)
     annotation (Line(points={{-18,100},{-10,100},{-10,84},{38,84}},
       color={0,0,127}));
+
   connect(con7.y, lin1.x2)
     annotation (Line(points={{-18,50},{-10,50},{-10,76},{38,76}},
       color={0,0,127}));
+
   connect(con8.y, lin1.f2)
     annotation (Line(points={{22,50},{30,50},{30,72},{38,72}}, color={0,0,127}));
+
   connect(tim.y, lin1.u)
     annotation (Line(points={{-78,80},{38,80}}, color={0,0,127}));
+
   connect(uUpsDevSta, edg.u)
     annotation (Line(points={{-180,-140},{-102,-140}}, color={255,0,255}));
+
   connect(chaPro, and2.u2)
     annotation (Line(points={{-180,-178},{-42,-178}}, color={255,0,255}));
+
   connect(edg.y, and2.u1)
     annotation (Line(points={{-78,-140},{-60,-140},{-60,-170},{-42,-170}},
       color={255,0,255}));
+
   connect(and2.y, lat.u)
     annotation (Line(points={{-18,-170},{18,-170}}, color={255,0,255}));
+
   connect(chaPro, not1.u)
     annotation (Line(points={{-180,-178},{-80,-178},{-80,-200},{-42,-200}},
       color={255,0,255}));
+
   connect(not1.y, lat.clr)
     annotation (Line(points={{-18,-200},{0,-200},{0,-176},{18,-176}},
       color={255,0,255}));
+
   connect(lat.y, booRep1.u)
     annotation (Line(points={{42,-170},{58,-170}}, color={255,0,255}));
+
   connect(booRep1.y, swi.u2)
     annotation (Line(points={{82,-170},{100,-170},{100,-40},{118,-40}},
       color={255,0,255}));
+
   connect(swi.y,yHotWatIsoVal)
     annotation (Line(points={{142,-40},{200,-40}}, color={0,0,127}));
+
   connect(booRep.y, triSam.trigger)
     annotation (Line(points={{42,-140},{60,-140},{60,-120},{-70,-120},
       {-70,-111.8}},  color={255,0,255}));
+
   connect(and2.y, booRep.u)
     annotation (Line(points={{-18,-170},{0,-170},{0,-140},{18,-140}},
       color={255,0,255}));
+
   connect(booRep1.y, not2.u)
     annotation (Line(points={{82,-170},{100,-170},{100,-110},{-40,-110},
       {-40,-80},{-22,-80}},  color={255,0,255}));
+
   connect(not2.y, swi1.u2)
     annotation (Line(points={{2,-80},{20,-80},{20,-60},{58,-60}},
       color={255,0,255}));
+
   connect(triSam.y, swi1.u3)
     annotation (Line(points={{-58,-100},{40,-100},{40,-68},{58,-68}},
       color={0,0,127}));
+
   connect(swi1.y, swi.u3)
     annotation (Line(points={{82,-60},{90,-60},{90,-48},{118,-48}},
       color={0,0,127}));
+
   connect(uHotWatIsoVal, swi1.u1)
     annotation (Line(points={{-180,-100},{-140,-100},{-140,-52},{58,-52}},
       color={0,0,127}));
+
   connect(swi2.y, swi.u1)
     annotation (Line(points={{82,10},{100,10},{100,-32},{118,-32}},
       color={0,0,127}));
+
   connect(nexChaBoi, intRep.u)
     annotation (Line(points={{-180,10},{-82,10}}, color={255,127,0}));
+
   connect(intRep.y, intEqu.u1)
     annotation (Line(points={{-58,10},{-22,10}}, color={255,127,0}));
+
   connect(intEqu.y, swi2.u2)
     annotation (Line(points={{2,10},{58,10}}, color={255,0,255}));
+
   connect(lin1.y, reaRep.u)
     annotation (Line(points={{62,80},{78,80}}, color={0,0,127}));
+
   connect(lat.y, tim.u)
     annotation (Line(points={{42,-170},{50,-170},{50,-220},{-120,-220},
       {-120,80},{-102,80}},  color={255,0,255}));
+
   connect(reaRep.y, swi2.u1)
     annotation (Line(points={{102,80},{120,80},{120,50},{40,50},{40,18},{58,18}},
       color={0,0,127}));
+
   connect(triSam.y, swi2.u3)
     annotation (Line(points={{-58,-100},{40,-100},{40,2},{58,2}},
       color={0,0,127}));
+
   connect(uHotWatIsoVal, hys4.u)
     annotation (Line(points={{-180,-100},{-140,-100},{-140,160},{-122,160}},
       color={0,0,127}));
+
   connect(uHotWatIsoVal, hys3.u)
     annotation (Line(points={{-180,-100},{-140,-100},{-140,220},{-122,220}},
       color={0,0,127}));
+
   connect(hys3.y, and3.u1)
     annotation (Line(points={{-98,220},{-2,220}}, color={255,0,255}));
+
   connect(hys4.y, and3.u2)
     annotation (Line(points={{-98,160},{-80,160},{-80,212},{-2,212}},
       color={255,0,255}));
+
   connect(hys4.y, not4.u)
     annotation (Line(points={{-98,160},{-42,160}}, color={255,0,255}));
+
   connect(hys3.y, not3.u)
     annotation (Line(points={{-98,220},{-60,220},{-60,190},{-42,190}},
       color={255,0,255}));
+
   connect(not4.y, and4.u2)
     annotation (Line(points={{-18,160},{-12,160},{-12,182},{-2,182}},
       color={255,0,255}));
+
   connect(not3.y, and4.u1)
     annotation (Line(points={{-18,190},{-2,190}}, color={255,0,255}));
+
   connect(and3.y, or2.u1)
     annotation (Line(points={{22,220},{38,220}}, color={255,0,255}));
+
   connect(and4.y, or2.u2)
     annotation (Line(points={{22,190},{30,190},{30,212},{38,212}},
       color={255,0,255}));
+
   connect(tim.y, hys5.u)
     annotation (Line(points={{-78,80},{-60,80},{-60,120},{78,120}},
       color={0,0,127}));
+
   connect(mulAnd1.y, and5.u1)
     annotation (Line(points={{102,220},{120,220},{120,148},{138,148}},
       color={255,0,255}));
+
   connect(and5.y,yEnaHotWatIsoVal)
     annotation (Line(points={{162,140},{200,140}}, color={255,0,255}));
+
   connect(or2.y, mulAnd1.u)
     annotation (Line(points={{62,220},{78,220}}, color={255,0,255}));
+
   connect(conInt.y, intEqu.u2)
     annotation (Line(points={{-58,-20},{-40,-20},{-40,2},{-22,2}},
       color={255,127,0}));
+
   connect(hys5.y, and5.u3)
     annotation (Line(points={{102,120},{120,120},{120,132},{138,132}},
       color={255,0,255}));
+
   connect(uUpsDevSta, and5.u2)
     annotation (Line(points={{-180,-140},{-130,-140},{-130,140},{138,140}},
       color={255,0,255}));
+
 
 annotation (
   defaultComponentName="enaHotWatIsoVal",
@@ -433,4 +482,5 @@ annotation (
   </li>
   </ul>
   </html>"));
+
 end HWIsoVal;

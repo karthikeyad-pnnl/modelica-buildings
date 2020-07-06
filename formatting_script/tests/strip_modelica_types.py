@@ -76,19 +76,39 @@ class StripModelicaTypes(object):
 					line = line.replace('  CDL.', '  Buildings.Controls.OBC.CDL.')
 					text = line
 
-				if ((";" in line) and not(lines[index+1]=="\n") and not('end' in line)):
-					# print(index)
-					line = line.replace(';', ';\n')
-					# print("Found it")
-					text = line
+				if ((";" in line) and not('end' in line)):
+					if  not(lines[index+1]=="\n"):
+						# print(index)
+						line = line.replace(';', ';\n')
+						# print("Found it")
+						text = line
 
 				if ("(final" in line):
 					# print(line[line.index("final")-1])
 					line=line.replace('(final', '(\n    final')
 					text = line
 
+				if (('"' in line) and not (('    "') in line)):
+					line = line.replace(' "', '\n    "')
+
 				if 'nChi' in line:
 					line=line.replace('nChi','nBoi')
+					text=line
+
+				if 'chiller' in line:
+					line=line.replace('chiller', 'boiler')
+					text=line
+
+				if 'Chiller' in line:
+					line=line.replace('Chiller', 'Boiler')
+					text=line
+
+				if 'Chilled water' in line:
+					line=line.replace('Chilled water', 'Hot water')
+					text=line
+
+				if 'chilled water' in line:
+					line=line.replace('chilled water', 'hot water')
 					text=line
 
 				# if (("final" in line) and (',' in line) and ((line[line.index(",")+2] =="f"))):# and ((line[line.index("final")-1] ==" "))):

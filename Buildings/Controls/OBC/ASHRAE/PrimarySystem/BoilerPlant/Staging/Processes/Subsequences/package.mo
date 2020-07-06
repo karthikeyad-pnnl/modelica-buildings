@@ -1,5 +1,7 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes;
-package Subsequences "Package of subsequences for staging up and down devices"
+
+package Subsequences
+    "Package of subsequences for staging up and down devices"
 
 annotation (preferredView="info", Documentation(info="<html>
 <p>
@@ -41,4 +43,5 @@ or stage-down command.
           lineColor={128,128,128},
           extent={{-100.0,-100.0},{100.0,100.0}},
           radius=25.0)}));
+
 end Subsequences;

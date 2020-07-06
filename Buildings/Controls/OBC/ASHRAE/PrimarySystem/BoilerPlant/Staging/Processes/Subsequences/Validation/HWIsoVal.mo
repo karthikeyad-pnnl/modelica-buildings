@@ -1,6 +1,8 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.Validation;
+
 model HWIsoVal
-  "Validate isolation valve enable and disable sequence"
+ 
+    "Validate isolation valve enable and disable sequence"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HWIsoVal
     enaHotIsoVal(
@@ -62,7 +64,8 @@ protected
     annotation (Placement(transformation(extent={{20,10},{40,30}})));
 
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant disBoi(
-    final k=2) "Disabling boiler index"
+    final k=2)
+    "Disabling boiler index"
     annotation (Placement(transformation(extent={{60,70},{80,90}})));
 
   Buildings.Controls.OBC.CDL.Discrete.ZeroOrderHold zerOrdHol1(
@@ -77,40 +80,56 @@ protected
 equation
   connect(booPul.y, staCha.u)
     annotation (Line(points={{-178,-70},{-162,-70}}, color={255,0,255}));
+
   connect(booPul1.y, upsDevSta.u)
     annotation (Line(points={{-178,-30},{-162,-30}}, color={255,0,255}));
+
   connect(valOne1.y, swi.u3)
     annotation (Line(points={{42,20},{60,20},{60,32},{158,32}}, color={0,0,127}));
+
   connect(zerOrdHol1.y, swi.u1)
     annotation (Line(points={{182,-10},{200,-10},{200,20},{150,20},{150,48},
       {158,48}}, color={0,0,127}));
 
   connect(zerOrdHol.y, enaHotIsoVal.uHotWatIsoVal[1]) annotation (Line(points={{
           -38,0},{-28,0},{-28,40},{-140,40},{-140,14},{-102,14}}, color={0,0,127}));
+
   connect(valOne.y, enaHotIsoVal.uHotWatIsoVal[2]) annotation (Line(points={{-178,
           20},{-150,20},{-150,16},{-102,16}}, color={0,0,127}));
+
   connect(enaBoi.y, enaHotIsoVal.nexChaBoi) annotation (Line(points={{-138,80},
           {-120,80},{-120,18},{-102,18}}, color={255,127,0}));
+
   connect(upsDevSta.y, enaHotIsoVal.uUpsDevSta) annotation (Line(points={{-138,
           -30},{-120,-30},{-120,5},{-102,5}}, color={255,0,255}));
+
   connect(upsDevSta.y, swi.u2) annotation (Line(points={{-138,-30},{100,-30},{
           100,40},{158,40}}, color={255,0,255}));
+
   connect(upsDevSta.y, disHotIsoVal.uUpsDevSta) annotation (Line(points={{-138,
           -30},{100,-30},{100,-5},{118,-5}}, color={255,0,255}));
+
   connect(staCha.y, enaHotIsoVal.chaPro) annotation (Line(points={{-138,-70},{
           -110,-70},{-110,2},{-102,2}}, color={255,0,255}));
+
   connect(staCha.y, disHotIsoVal.chaPro) annotation (Line(points={{-138,-70},{
           110,-70},{110,-8},{118,-8}}, color={255,0,255}));
+
   connect(disBoi.y, disHotIsoVal.nexChaBoi) annotation (Line(points={{82,80},{
           90,80},{90,8},{118,8}}, color={255,127,0}));
+
   connect(valOne1.y, disHotIsoVal.uHotWatIsoVal[1]) annotation (Line(points={{
           42,20},{60,20},{60,4},{118,4}}, color={0,0,127}));
+
   connect(swi.y, disHotIsoVal.uHotWatIsoVal[2]) annotation (Line(points={{182,
           40},{190,40},{190,60},{80,60},{80,6},{118,6}}, color={0,0,127}));
+
   connect(disHotIsoVal.yHotWatIsoVal[2], zerOrdHol1.u) annotation (Line(points=
           {{142,-5},{146,-5},{146,-10},{158,-10}}, color={0,0,127}));
+
   connect(enaHotIsoVal.yHotWatIsoVal[2], zerOrdHol.u) annotation (Line(points={
           {-78,5},{-70,5},{-70,0},{-62,0}}, color={0,0,127}));
+
 annotation (
   experiment(StopTime=3600, Tolerance=1e-06),
   __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Processes/Subsequences/Validation/HWIsoVal.mos"
@@ -142,4 +161,5 @@ annotation (
               points = {{-36,60},{64,0},{-36,-60},{-36,60}})}),
     Diagram(coordinateSystem(preserveAspectRatio=false,
       extent={{-220,-120},{220,120}})));
+
 end HWIsoVal;
