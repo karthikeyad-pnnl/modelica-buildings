@@ -69,15 +69,31 @@ class StripModelicaTypes(object):
 
 
 		for line in lines:
+			index = lines.index(line)
+			# print(index)
 			try:
 				if "  CDL." in line:
 					line = line.replace('  CDL.', '  Buildings.Controls.OBC.CDL.')
 					text = line
 
-				# if (("\;" in line)): #and ('\n' not in lines(index+1)[0])):
-				# 	line = line.replace('\;', '''\;
-												
-				# 								''')
+				if ((";" in line) and not(lines[index+1]=="\n") and not('end' in line)):
+					# print(index)
+					line = line.replace(';', ';\n')
+					# print("Found it")
+					text = line
+
+				if ("(final" in line):
+					# print(line[line.index("final")-1])
+					line=line.replace('(final', '(\n    final')
+					text = line
+
+				if 'nChi' in line:
+					line=line.replace('nChi','nBoi')
+					text=line
+
+				# if (("final" in line) and (',' in line) and ((line[line.index(",")+2] =="f"))):# and ((line[line.index("final")-1] ==" "))):
+				# 	print(index)
+				# 	line=line.replace(', final',',\n    final')
 				# 	text = line
 
 				else:
@@ -102,36 +118,36 @@ class StripModelicaTypes(object):
 
 		return file_with_units_replaced
 
-	def line_breaks(self, path, overwrite=False):
-		lines = tuple(open(path, 'r'))
+	# def line_breaks(self, path, overwrite=False):
+	# 	lines = tuple(open(path, 'r'))
 
-		file_with_units_replaced = ""
+	# 	file_with_units_replaced = ""
 
-		for line in lines:
-			index = lines.index(line)
-			try:
-				if (("\;" in line)): #and ('\n' not in lines(index+1)[0])):
-					line = line.replace('\;', '\; \n')
-					text = line
+	# 	for line in lines:
+	# 		index = lines.index(line)
+	# 		try:
+	# 			if (("\;" in line)): #and ('\n' not in lines(index+1)[0])):
+	# 				line = line.replace('\;', '\; \n')
+	# 				text = line
 
-				else:
-					# append to the new file unchanged
-					text = line
+	# 			else:
+	# 				# append to the new file unchanged
+	# 				text = line
 
-				file_with_units_replaced = \
-						file_with_units_replaced + \
-						text
-			except:
-				print("In {} not able to replace for {} line".format(path, line))
+	# 			file_with_units_replaced = \
+	# 					file_with_units_replaced + \
+	# 					text
+	# 		except:
+	# 			print("In {} not able to replace for {} line".format(path, line))
 
-		if overwrite:
-			outpath=path
-		else:
-			outpath=re.split(r'\.mo',path)[0] + \
-				'_converted' + '.mo'
+	# 	if overwrite:
+	# 		outpath=path
+	# 	else:
+	# 		outpath=re.split(r'\.mo',path)[0] + \
+	# 			'_converted' + '.mo'
 
-		file_out = open(outpath, "w")
-		file_out.write(file_with_units_replaced)
-		file_out.close()
+	# 	file_out = open(outpath, "w")
+	# 	file_out.write(file_with_units_replaced)
+	# 	file_out.close()
 
-		return file_with_units_replaced
+	# 	return file_with_units_replaced
