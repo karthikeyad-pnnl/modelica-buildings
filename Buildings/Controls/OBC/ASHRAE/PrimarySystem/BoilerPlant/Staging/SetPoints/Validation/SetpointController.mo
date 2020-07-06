@@ -95,7 +95,61 @@ model SetpointController
     "Testing staging setpoint controller for primary-only, condensing boiler plant"
     annotation (Placement(transformation(extent={{460,140},{480,176}})));
 
-//protected
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold staCha(
+    final trueHoldDuration=900,
+    final falseHoldDuration=0)
+    "Detect stage change signal"
+    annotation (Placement(transformation(extent={{100,60},{120,80}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold staCha1(
+    final trueHoldDuration=900,
+    final falseHoldDuration=0)
+    "Detect stage change signal"
+    annotation (Placement(transformation(extent={{100,-180},{120,-160}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold staCha2(
+    final trueHoldDuration=900,
+    final falseHoldDuration=0)
+    "Detect stage change signal"
+    annotation (Placement(transformation(extent={{500,60},{520,80}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold staUp(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
+    "Detect stage up signal"
+    annotation (Placement(transformation(extent={{100,180},{120,200}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold staUp1(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
+    "Detect stage up signal"
+    annotation (Placement(transformation(extent={{100,-60},{120,-40}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold staUp2(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
+    "Detect stage up signal"
+    annotation (Placement(transformation(extent={{500,180},{520,200}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold staDow(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
+    "Detect stage down signal"
+    annotation (Placement(transformation(extent={{100,120},{120,140}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold staDow1(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
+    "Detect stage down signal"
+    annotation (Placement(transformation(extent={{100,-120},{120,-100}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold staDow2(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
+    "Detect stage down signal"
+    annotation (Placement(transformation(extent={{500,120},{520,140}})));
+
+protected
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine THotWatRet(
     final amplitude=7,
     final phase=0,
@@ -120,12 +174,6 @@ model SetpointController
   Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt
     "Real to Integer converter"
     annotation (Placement(transformation(extent={{180,148},{200,168}})));
-
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold staCha(
-    final trueHoldDuration=900,
-    final falseHoldDuration=0)
-    "Detect stage change signal"
-    annotation (Placement(transformation(extent={{100,60},{120,80}})));
 
   Buildings.Controls.OBC.CDL.Logical.Pre pre3
     "Logical pre block"
@@ -174,18 +222,6 @@ model SetpointController
     "Pump speed signal"
     annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold staUp(
-    final trueHoldDuration=10,
-    final falseHoldDuration=0)
-    "Detect stage up signal"
-    annotation (Placement(transformation(extent={{100,180},{120,200}})));
-
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold staDow(
-    final trueHoldDuration=10,
-    final falseHoldDuration=0)
-    "Detect stage down signal"
-    annotation (Placement(transformation(extent={{100,120},{120,140}})));
-
   Buildings.Controls.OBC.CDL.Logical.FallingEdge falEdg1
     "Falling edge detector"
     annotation (Placement(transformation(extent={{160,-180},{180,-160}})));
@@ -221,106 +257,135 @@ model SetpointController
     "Real to Integer converter"
     annotation (Placement(transformation(extent={{180,-92},{200,-72}})));
 
-  CDL.Logical.TrueFalseHold staCha1(final trueHoldDuration=900, final
-      falseHoldDuration=0) "Detect stage change signal"
-    annotation (Placement(transformation(extent={{100,-180},{120,-160}})));
-  CDL.Logical.Pre                        pre1 "Logical pre block"
+  Buildings.Controls.OBC.CDL.Logical.Pre pre1
+    "Logical pre block"
     annotation (Placement(transformation(extent={{130,-180},{150,-160}})));
-  CDL.Logical.Sources.Constant                        plaSta1(final k=true)
+
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant plaSta1(
+    final k=true)
     "Plant status"
     annotation (Placement(transformation(extent={{-160,-200},{-140,-180}})));
-  CDL.Logical.TrueDelay                        truDel1(final delayTime=10,
-      final delayOnInit=true) "Delay plant enable signal"
+
+  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel1(
+    final delayTime=10,
+    final delayOnInit=true)
+    "Delay plant enable signal"
     annotation (Placement(transformation(extent={{-120,-200},{-100,-180}})));
-  CDL.Continuous.Sources.Constant                        THotWatSupSet1(final k=
-        273.15 + 30) "Hot water supply temperature setpoint"
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant THotWatSupSet1(
+    final k=273.15 + 30)
+    "Hot water supply temperature setpoint"
     annotation (Placement(transformation(extent={{-80,-30},{-60,-10}})));
-  CDL.Continuous.Sources.Constant                        zero1(final k=10^(-10))
-               "Constant"
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant zero1(
+    final k=10^(-10))
+    "Constant"
     annotation (Placement(transformation(extent={{-160,-130},{-140,-110}})));
-  CDL.Continuous.Sources.Constant THotWatSup1(final k=273.15 + 30)
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant THotWatSup1(
+    final k=273.15 + 30)
     "Hot water supply temperature"
     annotation (Placement(transformation(extent={{-80,-110},{-60,-90}})));
-  CDL.Continuous.Sources.Constant VHotWat_flow1(final k=0.037)
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant VHotWat_flow1(
+    final k=0.037)
     "Hot water flow rate"
     annotation (Placement(transformation(extent={{-160,-70},{-140,-50}})));
-  CDL.Continuous.Sources.Constant THotWatRetSec1(final k=273.15 + 26)
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant THotWatRetSec1(
+    final k=273.15 + 26)
     "Hot water secondary loop return temperature"
     annotation (Placement(transformation(extent={{-80,-150},{-60,-130}})));
-  CDL.Continuous.Sources.Sine uPumSpe1(
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine uPumSpe1(
     final amplitude=1,
     final offset=0,
     final freqHz=1/21600) "Pump speed signal"
     annotation (Placement(transformation(extent={{-80,-180},{-60,-160}})));
-  CDL.Logical.TrueFalseHold staUp1(final trueHoldDuration=10, final
-      falseHoldDuration=0) "Detect stage up signal"
-    annotation (Placement(transformation(extent={{100,-60},{120,-40}})));
-  CDL.Logical.TrueFalseHold staDow1(final trueHoldDuration=10, final
-      falseHoldDuration=0) "Detect stage down signal"
-    annotation (Placement(transformation(extent={{100,-120},{120,-100}})));
 
-
-  CDL.Logical.FallingEdge falEdg2 "Falling edge detector"
+  Buildings.Controls.OBC.CDL.Logical.FallingEdge falEdg2
+    "Falling edge detector"
     annotation (Placement(transformation(extent={{560,60},{580,80}})));
-  CDL.Routing.RealReplicator reaRep2(nout=3) "Convert input into array"
+
+  Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep2(
+    final nout=3)
+    "Convert input into array"
     annotation (Placement(transformation(extent={{280,110},{300,130}})));
-  CDL.Continuous.Sources.Sine                        THotWatRet2(
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine THotWatRet2(
     final amplitude=7,
-    phase=0,
+    final phase=0,
     final offset=273.15 + 22,
-    final freqHz=1/21600) "Hot water return temeprature"
+    final freqHz=1/21600)
+    "Hot water return temeprature"
     annotation (Placement(transformation(extent={{320,170},{340,190}})));
-  CDL.Logical.Sources.Constant                        boiAva2
-                                                            [2](final k={true,true})
-                         "Boiler availability vector"
+
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant boiAva2[2](
+    final k={true,true})
+    "Boiler availability vector"
     annotation (Placement(transformation(extent={{240,10},{260,30}})));
-  CDL.Discrete.ZeroOrderHold                        zerOrdHol2(final
-      samplePeriod=10) "Hold stage setpoint for signal feedback"
+
+  Buildings.Controls.OBC.CDL.Discrete.ZeroOrderHold zerOrdHol2(
+    final samplePeriod=10)
+    "Hold stage setpoint for signal feedback"
     annotation (Placement(transformation(extent={{540,148},{560,168}})));
-  CDL.Conversions.IntegerToReal                        intToRea2
+
+  Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea2
     "Integer to Real converter"
     annotation (Placement(transformation(extent={{500,148},{520,168}})));
-  CDL.Conversions.RealToInteger                        reaToInt2
+
+  Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt2
     "Real to Integer converter"
     annotation (Placement(transformation(extent={{580,148},{600,168}})));
-  CDL.Logical.TrueFalseHold staCha2(final trueHoldDuration=900, final
-      falseHoldDuration=0) "Detect stage change signal"
-    annotation (Placement(transformation(extent={{500,60},{520,80}})));
-  CDL.Logical.Pre                        pre2 "Logical pre block"
+
+  Buildings.Controls.OBC.CDL.Logical.Pre pre2
+    "Logical pre block"
     annotation (Placement(transformation(extent={{530,60},{550,80}})));
-  CDL.Logical.Sources.Constant                        plaSta2(final k=true)
+
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant plaSta2(
+    final k=true)
     "Plant status"
     annotation (Placement(transformation(extent={{240,40},{260,60}})));
-  CDL.Logical.TrueDelay                        truDel2(final delayTime=10,
-      final delayOnInit=true) "Delay plant enable signal"
+
+  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel2(
+    final delayTime=10,
+    final delayOnInit=true)
+    "Delay plant enable signal"
     annotation (Placement(transformation(extent={{280,40},{300,60}})));
-  CDL.Continuous.Sources.Constant                        THotWatSupSet2(final k=
-        273.15 + 30) "Hot water supply temperature setpoint"
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant THotWatSupSet2(
+    final k=273.15 + 30)
+    "Hot water supply temperature setpoint"
     annotation (Placement(transformation(extent={{320,202},{340,222}})));
-  CDL.Continuous.Sources.Constant                        zero2(final k=10^(-10))
-               "Constant"
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant zero2(
+    final k=10^(-10))
+    "Constant"
     annotation (Placement(transformation(extent={{240,110},{260,130}})));
-  CDL.Continuous.Sources.Constant THotWatSup2(final k=273.15 + 30)
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant THotWatSup2(
+    final k=273.15 + 30)
     "Hot water supply temperature"
     annotation (Placement(transformation(extent={{320,130},{340,150}})));
-  CDL.Continuous.Sources.Constant VHotWat_flow2(final k=0.037)
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant VHotWat_flow2(
+    final k=0.037)
     "Hot water flow rate"
     annotation (Placement(transformation(extent={{240,170},{260,190}})));
-  CDL.Continuous.Sources.Sine uPumSpe2(
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine uPumSpe2(
     final amplitude=1,
     final offset=0,
     final freqHz=1/21600) "Pump speed signal"
     annotation (Placement(transformation(extent={{320,80},{340,100}})));
-  CDL.Logical.TrueFalseHold staUp2(final trueHoldDuration=10, final
-      falseHoldDuration=0) "Detect stage up signal"
-    annotation (Placement(transformation(extent={{500,180},{520,200}})));
-  CDL.Logical.TrueFalseHold staDow2(final trueHoldDuration=10, final
-      falseHoldDuration=0) "Detect stage down signal"
-    annotation (Placement(transformation(extent={{500,120},{520,140}})));
 
-  CDL.Logical.FallingEdge falEdg "Falling edge detector"
+  Buildings.Controls.OBC.CDL.Logical.FallingEdge falEdg
+    "Falling edge detector"
     annotation (Placement(transformation(extent={{160,60},{180,80}})));
-  CDL.Routing.RealReplicator reaRep(nout=3) "Convert input into array"
+
+  Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep(
+    final nout=3)
+    "Convert input into array"
     annotation (Placement(transformation(extent={{-120,110},{-100,130}})));
 
 equation
