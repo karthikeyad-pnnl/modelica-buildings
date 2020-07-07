@@ -1,31 +1,33 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.Validation;
-
 model NextBoiler
- 
     "Validate sequence of identifying next enable or disable boilers"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextBoiler
-    nexChi
+    nexBoi(
+    final nBoi=2)
     "Identify next enabling and disabling boiler during the staging up process"
     annotation (Placement(transformation(extent={{-60,170},{-40,190}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextBoiler
-    nexChi1
+    nexBoi1(
+    final nBoi=2)
     "Identify next enabling during the staging up process"
     annotation (Placement(transformation(extent={{240,170},{260,190}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextBoiler
-    nexChi2
+    nexBoi2(
+    final nBoi=2)
     "Identify next enabling and disabling boiler during the staging down process"
     annotation (Placement(transformation(extent={{-60,-150},{-40,-130}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextBoiler
-    nexChi3
+    nexBoi3(
+    final nBoi=2)
     "Identify next disabling boiler during the staging down process"
     annotation (Placement(transformation(extent={{240,-150},{260,-130}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch chiSet[2]
+  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch boiSet[2]
     "Boiler status setpoint"
     annotation (Placement(transformation(extent={{-140,90},{-120,110}})));
 
@@ -33,7 +35,7 @@ protected
     "Check if it is in the staging process"
     annotation (Placement(transformation(extent={{-140,30},{-120,50}})));
 
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch chiSet1[2]
+  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch boiSet1[2]
     "Boiler status setpoint"
     annotation (Placement(transformation(extent={{160,90},{180,110}})));
 
@@ -41,7 +43,7 @@ protected
     "Check if it is in the staging process"
     annotation (Placement(transformation(extent={{160,30},{180,50}})));
 
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch chiSet2[2]
+  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch boiSet2[2]
     "Boiler status setpoint"
     annotation (Placement(transformation(extent={{-140,-230},{-120,-210}})));
 
@@ -49,7 +51,7 @@ protected
     "Check if it is in the staging process"
     annotation (Placement(transformation(extent={{-140,-290},{-120,-270}})));
 
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch chiSet3[2]
+  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch boiSet3[2]
     "Boiler status setpoint"
     annotation (Placement(transformation(extent={{160,-230},{180,-210}})));
 
@@ -67,7 +69,7 @@ protected
     "Stage up command"
     annotation (Placement(transformation(extent={{-220,150},{-200,170}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant staOneChi[2](
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant staOneBoi[2](
     final k={true,false})
     "Vector of boilers status setpoint at stage one"
     annotation (Placement(transformation(extent={{-260,70},{-240,90}})));
@@ -90,7 +92,7 @@ protected
     "Stage setpoint index"
     annotation (Placement(transformation(extent={{-140,210},{-120,230}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant staTwoChi[2](
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant staTwoBoi[2](
     final k={false,true})
     "Vector of boilers status setpoint at stage two"
     annotation (Placement(transformation(extent={{-260,110},{-240,130}})));
@@ -117,11 +119,11 @@ protected
     "Boolean pulse"
     annotation (Placement(transformation(extent={{40,150},{60,170}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Not staUp1 
+  Buildings.Controls.OBC.CDL.Logical.Not staUp1
     "Stage up command"
     annotation (Placement(transformation(extent={{80,150},{100,170}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant staOneChi1[2](
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant staOneBoi1[2](
     final k={true,false})
     "Vector of boilers status setpoint at stage one"
     annotation (Placement(transformation(extent={{40,70},{60,90}})));
@@ -144,7 +146,7 @@ protected
     "Stage setpoint index"
     annotation (Placement(transformation(extent={{160,210},{180,230}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant staTwoChi1[2](
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant staTwoBoi1[2](
     final k={true,true})
     "Vector of boilers status setpoint at stage two"
     annotation (Placement(transformation(extent={{40,110},{60,130}})));
@@ -175,7 +177,7 @@ protected
     "Stage down command"
     annotation (Placement(transformation(extent={{-220,-170},{-200,-150}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant staOneChi2[2](
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant staOneBoi2[2](
     final k={true,false})
     "Vector of boilers status setpoint at stage one"
     annotation (Placement(transformation(extent={{-260,-210},{-240,-190}})));
@@ -198,7 +200,7 @@ protected
     "Stage setpoint index"
     annotation (Placement(transformation(extent={{-140,-110},{-120,-90}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant staTwoChi2[2](
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant staTwoBoi2[2](
     final k={false,true})
     "Vector of boilers status setpoint at stage two"
     annotation (Placement(transformation(extent={{-260,-250},{-240,-230}})));
@@ -229,7 +231,7 @@ protected
     "Stage down command"
     annotation (Placement(transformation(extent={{80,-170},{100,-150}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant staOneChi3[2](
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant staOneBoi3[2](
     final k={true,false})
     "Vector of boilers status setpoint at stage one"
     annotation (Placement(transformation(extent={{40,-210},{60,-190}})));
@@ -252,7 +254,7 @@ protected
     "Stage setpoint index"
     annotation (Placement(transformation(extent={{160,-110},{180,-90}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant staTwoChi3[2](
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant staTwoBoi3[2](
     final k={true,true})
     "Vector of boilers status setpoint at stage two"
     annotation (Placement(transformation(extent={{40,-250},{60,-230}})));
@@ -295,7 +297,7 @@ equation
   connect(staUp.y, booRep.u) annotation (Line(points={{-198,160},{-190,160},{-190,
           100},{-182,100}}, color={255,0,255}));
 
-  connect(booRep.y, chiSet.u2)
+  connect(booRep.y,boiSet. u2)
     annotation (Line(points={{-158,100},{-142,100}}, color={255,0,255}));
 
   connect(staUp.y, inPro.u2) annotation (Line(points={{-198,160},{-190,160},{-190,
@@ -306,15 +308,6 @@ equation
 
   connect(notIn.y, inPro.u3) annotation (Line(points={{-198,20},{-160,20},{-160,
           32},{-142,32},{-142,32}}, color={255,0,255}));
-
-  connect(staSet.y, nexChi.uStaSet) annotation (Line(points={{-118,220},{-80,220},
-          {-80,187},{-62,187}}, color={255,127,0}));
-
-  connect(chiSet.y,nexChi.uBoiSet)  annotation (Line(points={{-118,100},{-100,100},
-          {-100,180},{-62,180}}, color={255,0,255}));
-
-  connect(inPro.y, nexChi.chaPro) annotation (Line(points={{-118,40},{-80,40},{-80,
-          173},{-62,173}}, color={255,0,255}));
 
   connect(booPul1.y, staUp1.u)
     annotation (Line(points={{62,160},{78,160}}, color={255,0,255}));
@@ -334,7 +327,7 @@ equation
   connect(staUp1.y, booRep1.u) annotation (Line(points={{102,160},{110,160},{110,
           100},{118,100}}, color={255,0,255}));
 
-  connect(booRep1.y, chiSet1.u2)
+  connect(booRep1.y,boiSet1. u2)
     annotation (Line(points={{142,100},{158,100}}, color={255,0,255}));
 
   connect(staUp1.y, inPro1.u2) annotation (Line(points={{102,160},{110,160},{110,
@@ -345,15 +338,6 @@ equation
 
   connect(notIn1.y, inPro1.u3) annotation (Line(points={{102,20},{140,20},{140,32},
           {158,32}}, color={255,0,255}));
-
-  connect(staSet1.y, nexChi1.uStaSet) annotation (Line(points={{182,220},{220,220},
-          {220,187},{238,187}}, color={255,127,0}));
-
-  connect(chiSet1.y,nexChi1.uBoiSet)  annotation (Line(points={{182,100},{200,100},
-          {200,180},{238,180}}, color={255,0,255}));
-
-  connect(inPro1.y, nexChi1.chaPro) annotation (Line(points={{182,40},{220,40},{
-          220,173},{238,173}}, color={255,0,255}));
 
   connect(booPul2.y, staDow.u)
     annotation (Line(points={{-238,-160},{-222,-160}}, color={255,0,255}));
@@ -367,13 +351,13 @@ equation
   connect(staDow.y, booRep2.u) annotation (Line(points={{-198,-160},{-190,-160},
           {-190,-220},{-182,-220}}, color={255,0,255}));
 
-  connect(staOneChi2.y, chiSet2.u1) annotation (Line(points={{-238,-200},{-150,-200},
+  connect(staOneBoi2.y,boiSet2. u1) annotation (Line(points={{-238,-200},{-150,-200},
           {-150,-212},{-142,-212}}, color={255,0,255}));
 
-  connect(booRep2.y, chiSet2.u2)
+  connect(booRep2.y,boiSet2. u2)
     annotation (Line(points={{-158,-220},{-142,-220}}, color={255,0,255}));
 
-  connect(staTwoChi2.y, chiSet2.u3) annotation (Line(points={{-238,-240},{-148,-240},
+  connect(staTwoBoi2.y,boiSet2. u3) annotation (Line(points={{-238,-240},{-148,-240},
           {-148,-228},{-142,-228}}, color={255,0,255}));
 
   connect(staDow.y, inPro2.u2) annotation (Line(points={{-198,-160},{-190,-160},
@@ -385,31 +369,22 @@ equation
   connect(notIn2.y, inPro2.u3) annotation (Line(points={{-198,-300},{-160,-300},
           {-160,-288},{-142,-288}}, color={255,0,255}));
 
-  connect(staSet2.y, nexChi2.uStaSet) annotation (Line(points={{-118,-100},{-80,
-          -100},{-80,-133},{-62,-133}}, color={255,127,0}));
-
-  connect(chiSet2.y,nexChi2.uBoiSet)  annotation (Line(points={{-118,-220},{-100,
-          -220},{-100,-140},{-62,-140}}, color={255,0,255}));
-
-  connect(inPro2.y, nexChi2.chaPro) annotation (Line(points={{-118,-280},{-80,-280},
-          {-80,-147},{-62,-147}}, color={255,0,255}));
-
   connect(dowSta2.y, swi2.u1) annotation (Line(points={{-238,-80},{-200,-80},{-200,
           -92},{-182,-92}}, color={0,0,127}));
 
   connect(upSta2.y, swi2.u3) annotation (Line(points={{-238,-120},{-200,-120},{-200,
           -108},{-182,-108}}, color={0,0,127}));
 
-  connect(staTwoChi.y, chiSet.u1) annotation (Line(points={{-238,120},{-150,120},
+  connect(staTwoBoi.y,boiSet. u1) annotation (Line(points={{-238,120},{-150,120},
           {-150,108},{-142,108}}, color={255,0,255}));
 
-  connect(staOneChi.y, chiSet.u3) annotation (Line(points={{-238,80},{-150,80},{
+  connect(staOneBoi.y,boiSet. u3) annotation (Line(points={{-238,80},{-150,80},{
           -150,92},{-142,92}}, color={255,0,255}));
 
-  connect(staTwoChi1.y, chiSet1.u1) annotation (Line(points={{62,120},{150,120},
+  connect(staTwoBoi1.y,boiSet1. u1) annotation (Line(points={{62,120},{150,120},
           {150,108},{158,108}}, color={255,0,255}));
 
-  connect(staOneChi1.y, chiSet1.u3) annotation (Line(points={{62,80},{150,80},{150,
+  connect(staOneBoi1.y,boiSet1. u3) annotation (Line(points={{62,80},{150,80},{150,
           92},{158,92}}, color={255,0,255}));
 
   connect(booPul3.y, staDow1.u)
@@ -424,13 +399,13 @@ equation
   connect(staDow1.y, booRep3.u) annotation (Line(points={{102,-160},{110,-160},{
           110,-220},{118,-220}}, color={255,0,255}));
 
-  connect(staOneChi3.y, chiSet3.u1) annotation (Line(points={{62,-200},{150,-200},
+  connect(staOneBoi3.y,boiSet3. u1) annotation (Line(points={{62,-200},{150,-200},
           {150,-212},{158,-212}}, color={255,0,255}));
 
-  connect(booRep3.y, chiSet3.u2)
+  connect(booRep3.y,boiSet3. u2)
     annotation (Line(points={{142,-220},{158,-220}}, color={255,0,255}));
 
-  connect(staTwoChi3.y, chiSet3.u3) annotation (Line(points={{62,-240},{152,-240},
+  connect(staTwoBoi3.y,boiSet3. u3) annotation (Line(points={{62,-240},{152,-240},
           {152,-228},{158,-228}}, color={255,0,255}));
 
   connect(staDow1.y, inPro3.u2) annotation (Line(points={{102,-160},{110,-160},{
@@ -442,21 +417,36 @@ equation
   connect(notIn3.y, inPro3.u3) annotation (Line(points={{102,-300},{140,-300},{140,
           -288},{158,-288}}, color={255,0,255}));
 
-  connect(staSet3.y, nexChi3.uStaSet) annotation (Line(points={{182,-100},{220,-100},
-          {220,-133},{238,-133}}, color={255,127,0}));
-
-  connect(chiSet3.y,nexChi3.uBoiSet)  annotation (Line(points={{182,-220},{200,-220},
-          {200,-140},{238,-140}}, color={255,0,255}));
-
-  connect(inPro3.y, nexChi3.chaPro) annotation (Line(points={{182,-280},{220,-280},
-          {220,-147},{238,-147}}, color={255,0,255}));
-
   connect(dowSta3.y, swi3.u1) annotation (Line(points={{62,-80},{100,-80},{100,-92},
           {118,-92}}, color={0,0,127}));
 
   connect(upSta3.y, swi3.u3) annotation (Line(points={{62,-120},{100,-120},{100,
           -108},{118,-108}}, color={0,0,127}));
 
+  connect(staSet.y, nexBoi.uStaSet) annotation (Line(points={{-118,220},{-80,220},
+          {-80,187},{-62,187}}, color={255,127,0}));
+  connect(boiSet.y, nexBoi.uBoiSet) annotation (Line(points={{-118,100},{-100,100},
+          {-100,180},{-62,180}}, color={255,0,255}));
+  connect(inPro.y, nexBoi.chaPro) annotation (Line(points={{-118,40},{-80,40},{-80,
+          173},{-62,173}}, color={255,0,255}));
+  connect(staSet1.y, nexBoi1.uStaSet) annotation (Line(points={{182,220},{220,220},
+          {220,187},{238,187}}, color={255,127,0}));
+  connect(boiSet1.y, nexBoi1.uBoiSet) annotation (Line(points={{182,100},{200,100},
+          {200,180},{238,180}}, color={255,0,255}));
+  connect(inPro1.y, nexBoi1.chaPro) annotation (Line(points={{182,40},{220,40},{
+          220,173},{238,173}}, color={255,0,255}));
+  connect(staSet2.y, nexBoi2.uStaSet) annotation (Line(points={{-118,-100},{-80,
+          -100},{-80,-133},{-62,-133}}, color={255,127,0}));
+  connect(boiSet2.y, nexBoi2.uBoiSet) annotation (Line(points={{-118,-220},{-100,
+          -220},{-100,-140},{-62,-140}}, color={255,0,255}));
+  connect(inPro2.y, nexBoi2.chaPro) annotation (Line(points={{-118,-280},{-80,-280},
+          {-80,-147},{-62,-147}}, color={255,0,255}));
+  connect(staSet3.y, nexBoi3.uStaSet) annotation (Line(points={{182,-100},{220,-100},
+          {220,-133},{238,-133}}, color={255,127,0}));
+  connect(inPro3.y, nexBoi3.chaPro) annotation (Line(points={{182,-280},{220,-280},
+          {220,-147},{238,-147}}, color={255,0,255}));
+  connect(boiSet3.y, nexBoi3.uBoiSet) annotation (Line(points={{182,-220},{200,-220},
+          {200,-140},{238,-140}}, color={255,0,255}));
 annotation (
  experiment(StopTime=120, Tolerance=1e-06),
   __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Processes/Subsequences/Validation/NextBoiler.mos"
@@ -520,5 +510,4 @@ Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
           extent={{62,-28},{182,-38}},
           lineColor={0,0,127},
           textString="In stage down process (stage 2 to 1),")}));
-
 end NextBoiler;

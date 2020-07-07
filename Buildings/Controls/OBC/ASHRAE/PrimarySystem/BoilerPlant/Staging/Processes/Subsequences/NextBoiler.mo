@@ -1,9 +1,8 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences;
-
 block NextBoiler
     "Identify next enable and disable boilers"
 
-  parameter Integer nBoi=2
+  parameter Integer nBoi=3
     "Total number of boilers";
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uBoiSet[nBoi]
@@ -45,6 +44,10 @@ block NextBoiler
     "Smaller boiler to be enabled in stage-down process"
     annotation (Placement(transformation(extent={{220,-180},{260,-140}}),
       iconTransformation(extent={{100,-110},{140,-70}})));
+
+protected
+  parameter Integer boiInd[nBoi]={i for i in 1:nBoi}
+    "Boiler index, {1,2,...,n}";
 
   Buildings.Controls.OBC.CDL.Integers.Change cha
     "Check if it is stage up or stage down"
@@ -133,10 +136,6 @@ block NextBoiler
   Buildings.Controls.OBC.CDL.Integers.Product proInt7
     "Enabling boiler during stage down process"
     annotation (Placement(transformation(extent={{180,-170},{200,-150}})));
-
-protected
-  parameter Integer chiInd[nBoi]={i for i in 1:nBoi}
-    "Boiler index, {1,2,...,n}";
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt[nBoi]
     "Boolean to integer"
@@ -305,7 +304,7 @@ equation
     annotation (Line(points={{202,-160},{240,-160}}, color={255,127,0}));
 
 annotation (
-  defaultComponentName="nexChi",
+  defaultComponentName="nexBoi",
   Diagram(coordinateSystem(preserveAspectRatio=false,
           extent={{-220,-180},{220,180}})),
     Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
@@ -327,12 +326,12 @@ annotation (
           extent={{-100,8},{-58,-4}},
           lineColor={255,0,255},
           pattern=LinePattern.Dash,
-          textString="uChiSet"),
+          textString="uBoiSet"),
         Text(
           extent={{50,100},{98,80}},
           lineColor={255,127,0},
           pattern=LinePattern.Dash,
-          textString="yNexEnaChi"),
+          textString="yNexEnaBoi"),
         Text(
           extent={{-98,-62},{-64,-74}},
           lineColor={255,0,255},
@@ -342,17 +341,17 @@ annotation (
           extent={{50,52},{98,32}},
           lineColor={255,127,0},
           pattern=LinePattern.Dash,
-          textString="yDisSmaChi"),
+          textString="yDisSmaBoi"),
         Text(
           extent={{50,-28},{98,-48}},
           lineColor={255,127,0},
           pattern=LinePattern.Dash,
-          textString="yDisLasChi"),
+          textString="yDisLasBoi"),
         Text(
           extent={{44,-78},{98,-100}},
           lineColor={255,127,0},
           pattern=LinePattern.Dash,
-          textString="yEnaSmaChi"),
+          textString="yEnaSmaBoi"),
         Text(
           extent={{54,8},{96,-4}},
           lineColor={255,0,255},
@@ -364,28 +363,25 @@ annotation (
           textString="?")}),
 Documentation(info="<html>
 <p>
-This block identifies index of next enable (<code>yNexEnaChi</code> and 
-<code>yEnaSmaChi</code>) or disable boiler (<code>yDisSmaChi</code> and 
-<code>yLasDisChi</code>) based on current boiler stage setpoint
-<code>uStaSet</code> and the boiler status setpoint <code>uChiSet</code>.
+This block identifies index of next enabled boiler (<code>yNexEnaBoi</code> and 
+<code>yEnaSmaBoi</code>) or disabled boiler (<code>yDisSmaBoi</code> and 
+<code>yLasDisBoi</code>) based on current boiler stage setpoint
+<code>uStaSet</code> and the boiler status setpoint <code>uBoiSet</code>.
 </p>
 <p>
 This implementation assumes that the stage-up process (increased <code>uStaSet</code>)
 will enable only one more boiler (<code>yOnOff=false</code>), or enable a larger
-boiler and disable a smaller boiler (<code>yOnOff=true</code>);
-
- the stage-down
-process (dicreased <code>uStaSet</code>) will disable only one existing boiler
+boiler and disable a smaller boiler (<code>yOnOff=true</code>); the stage-down
+process (decreased <code>uStaSet</code>) will disable only one existing boiler
 (<code>yOnOff=false</code>), or disable a larger boiler and enable a smaller
 boiler (<code>yOnOff=true</code>).
 </p>
 </html>", revisions="<html>
 <ul>
 <li>
-May 06, 2020, by Jianjun Hu:<br/>
+July 07, 2020, by Karthik Devaprasad:<br/>
 First implementation.
 </li>
 </ul>
 </html>"));
-
 end NextBoiler;
