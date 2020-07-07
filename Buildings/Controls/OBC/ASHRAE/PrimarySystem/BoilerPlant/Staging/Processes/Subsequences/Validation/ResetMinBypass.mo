@@ -1,7 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.Validation;
-
 model ResetMinBypass
- 
     "Validate sequence of reseting minimum flow bypass"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.ResetMinBypass
@@ -59,7 +57,7 @@ equation
   connect(staUp.y, minBypRes.chaPro)
     annotation (Line(points={{-18,10},{4,10},{4,52},{38,52}}, color={255,0,255}));
 
-  connect(meaFlo.y, minBypRes.VChiWat_flow)
+  connect(meaFlo.y,minBypRes.VHotWat_flow)
     annotation (Line(points={{-18,-30},{8,-30},{8,44},{38,44}}, color={0,0,127}));
 
   connect(minFloSet.y, minBypRes.VMinBoiWat_setpoint)
@@ -83,7 +81,7 @@ First implementation.
 </li>
 </ul>
 </html>"),
-Icon(coordinateSystem(extent={{-100,-120},{100,100}}),
+Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
      graphics={
         Ellipse(lineColor = {75,138,73},
                 fillColor={255,255,255},
@@ -95,5 +93,4 @@ Icon(coordinateSystem(extent={{-100,-120},{100,100}}),
                 fillPattern = FillPattern.Solid,
                 points = {{-36,60},{64,0},{-36,-60},{-36,60}})}),Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
-
 end ResetMinBypass;

@@ -1,12 +1,11 @@
-﻿within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences;
-
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences;
 block ResetMinBypass
     "Sequence for minimum hot water flow setpoint reset"
 
   parameter Real aftByPasSetTim(
     final unit="s",
     final quantity="Time",
-    final displayUnit="h") = 60
+    final displayUnit="s") = 60
     "Time after setpoint achieved";
 
   parameter Real relFloDif=0.05
@@ -14,18 +13,19 @@ block ResetMinBypass
     annotation (Dialog(tab="Advanced"));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uUpsDevSta
-    "Status of resetting status of device before reset minimum flow setpoint"
+    "Reset status of upstream device before resetting minimum flow setpoint"
     annotation (Placement(transformation(extent={{-200,60},{-160,100}}),
       iconTransformation(extent={{-140,60},{-100,100}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput chaPro
-    "Indicate if there is stage change"
+    "Continuous signal indicating if stage change is in process"
     annotation (Placement(transformation(extent={{-200,20},{-160,60}}),
       iconTransformation(extent={{-140,20},{-100,60}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput VChiWat_flow(
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput VHotWat_flow(
     final min=0,
     final unit="m3/s",
+    final displayUnit="m3/s",
     final quantity="VolumeFlowRate")
     "Measured hot water flow rate"
     annotation (Placement(transformation(extent={{-200,-40},{-160,0}}),
@@ -34,13 +34,14 @@ block ResetMinBypass
   Buildings.Controls.OBC.CDL.Interfaces.RealInput VMinBoiWat_setpoint(
     final min=0,
     final unit="m3/s",
+    final displayUnit="m3/s",
     final quantity="VolumeFlowRate")
     "Minimum boiler water flow setpoint"
     annotation (Placement(transformation(extent={{-200,-100},{-160,-60}}),
       iconTransformation(extent={{-140,-100},{-100,-60}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yMinBypRes
-    "True: minimum hot water flow bypass setpoint has been resetted successfully"
+    "True: minimum hot water flow bypass setpoint has been reset successfully"
     annotation (Placement(transformation(extent={{160,60},{200,100}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
@@ -72,8 +73,7 @@ protected
     "Logical not"
     annotation (Placement(transformation(extent={{-120,10},{-100,30}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Latch lat
-    "Logical latch, maintain ON signal until condition changes"
+  Buildings.Controls.OBC.CDL.Logical.Latch lat "Logical latch"
     annotation (Placement(transformation(extent={{80,30},{100,50}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Division div
@@ -85,29 +85,28 @@ protected
     "Add a small positive to avoid zero output"
     annotation (Placement(transformation(extent={{-140,-90},{-120,-70}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Edge edg1
-    "Rising edge, output true at the moment when input turns from false to true"
+  Buildings.Controls.OBC.CDL.Logical.Edge edg1 "Rising edge"
     annotation (Placement(transformation(extent={{-80,10},{-60,30}})));
 
   Buildings.Controls.OBC.CDL.Logical.And and3
     "Logical and"
     annotation (Placement(transformation(extent={{0,-30},{20,-10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Edge edg2
-    "Rising edge, output true at the moment when input turns from false to true"
+  Buildings.Controls.OBC.CDL.Logical.Edge edg2 "Rising edge"
     annotation (Placement(transformation(extent={{40,30},{60,50}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Abs abs
     "Absolute value"
     annotation (Placement(transformation(extent={{-120,-30},{-100,-10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Feedback floDif
-    "Checkout the flow rate difference"
-    annotation (Placement(transformation(extent={{-150,-30},{-130,-10}})));
-
   Buildings.Controls.OBC.CDL.Logical.Not not2
     "Logical not"
     annotation (Placement(transformation(extent={{-20,-70},{0,-50}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.Add add2(
+    final k2=-1)
+    "Adder"
+    annotation (Placement(transformation(extent={{-148,-30},{-128,-10}})));
 
 equation
   connect(uUpsDevSta, and2.u1)
@@ -166,16 +165,6 @@ equation
   connect(edg2.y, lat.u)
     annotation (Line(points={{62,40},{78,40}}, color={255,0,255}));
 
-  connect(VChiWat_flow, floDif.u1)
-    annotation (Line(points={{-180,-20},{-152,-20}}, color={0,0,127}));
-
-  connect(VMinBoiWat_setpoint, floDif.u2)
-    annotation (Line(points={{-180,-80},{-150,-80},{-150,-40},{-140,-40},
-      {-140,-32}}, color={0,0,127}));
-
-  connect(floDif.y, abs.u)
-    annotation (Line(points={{-128,-20},{-122,-20}}, color={0,0,127}));
-
   connect(abs.y, div.u1)
     annotation (Line(points={{-98,-20},{-90,-20},{-90,-40},{-110,-40},{-110,-54},
       {-102,-54}}, color={0,0,127}));
@@ -191,6 +180,12 @@ equation
     annotation (Line(points={{2,-60},{10,-60},{10,-40},{-10,-40},{-10,-28},
       {-2,-28}}, color={255,0,255}));
 
+  connect(abs.u, add2.y)
+    annotation (Line(points={{-122,-20},{-126,-20}}, color={0,0,127}));
+  connect(add2.u1, VHotWat_flow) annotation (Line(points={{-150,-14},{-154,-14},
+          {-154,-20},{-180,-20}}, color={0,0,127}));
+  connect(add2.u2, VMinBoiWat_setpoint) annotation (Line(points={{-150,-26},{-154,
+          -26},{-154,-80},{-180,-80}}, color={0,0,127}));
 annotation (
   defaultComponentName="minBypRes",
   Icon(graphics={
@@ -212,12 +207,12 @@ annotation (
           extent={{-98,-32},{-50,-46}},
           lineColor={0,0,127},
           pattern=LinePattern.Dash,
-          textString="VChiWat_flow"),
+          textString="VHotWat_flow"),
         Text(
           extent={{-98,-72},{-30,-88}},
           lineColor={0,0,127},
           pattern=LinePattern.Dash,
-          textString="VMinBoiWat_setpoint"),
+          textString="VMinHotWat_setpoint"),
         Text(
           extent={{-98,46},{-66,36}},
           lineColor={255,0,255},
@@ -238,16 +233,13 @@ annotation (
 <p>
 Block that generates minimum bypass flow reset status when there is 
 stage-change command.
-This development is based on ASHRAE RP-1711 Advanced Sequences of Operation for 
-HVAC Systems Phase II – Central Plants and Hydronic Systems (Draft version,
-March 2020), section 5.2.4.16, item 2.
+This development is based on RP-1711, March 2020 draft, section 5.2.4.16, item 2.
 </p>
 <p>
-When there is stage-change command (<code>chaPro</code> = true) and the upstream
-device has finished its adjustment process (<code>uUpsDevSta</code> = true), 
-like in the stage-up process the operating boilers have reduced the demand, 
-check if the minimum hot water flow rate <code>VChiWat_flow</code> has achieved 
-its new set point <code>VMinBoiWat_setpoint</code>. 
+When a stage-change command is received (<code>chaPro</code> = true) and the upstream
+device has finished its adjustment process (<code>uUpsDevSta</code> = true),
+check if the minimum hot water flow rate <code>VHotWat_flow</code> has achieved 
+its new set point <code>VMinHotWat_setpoint</code>. 
 After new setpoint is achieved, wait for 1 minute (<code>byPasSetTim</code>) to 
 allow loop to stabilize. It will then set <code>yMinBypRes</code> to true.
 </p>
@@ -255,10 +247,9 @@ allow loop to stabilize. It will then set <code>yMinBypRes</code> to true.
 revisions="<html>
 <ul>
 <li>
-September 17, 2019, by Jianjun Hu:<br/>
+July 07, 2020, by Karthik Devaprasad:<br/>
 First implementation.
 </li>
 </ul>
 </html>"));
-
 end ResetMinBypass;
