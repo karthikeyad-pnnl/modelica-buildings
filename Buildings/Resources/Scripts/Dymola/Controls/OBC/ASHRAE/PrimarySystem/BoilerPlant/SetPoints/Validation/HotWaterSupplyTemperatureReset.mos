@@ -33,4 +33,4 @@ createPlot(id=5, position={0, 0, 1495, 162}, y={"hotWatSupTemRes4.uStaCha"}, ran
 createPlot(id=5, position={0, 0, 1495, 163}, y={"hotWatSupTemRes4.uCur"}, range={0.0, 7200.0, 0.0, 4.0}, grid=true, subPlot=4, colors={{28,108,200}});
 createPlot(id=5, position={0, 0, 1495, 162}, y={"hotWatSupTemRes4.TPlaHotWatSupSet"}, range={0.0, 7200.0, 348.0, 354.0}, grid=true, subPlot=5, colors={{28,108,200}});
 createPlot(id=5, position={0, 0, 1495, 162}, y={"hotWatSupTemRes4.TBoiHotWatSupSet[1]", "hotWatSupTemRes4.TBoiHotWatSupSet[2]"}, range={0.0, 7200.0, 330.0, 360.0}, grid=true, subPlot=6, colors={{28,108,200}, {238,46,47}});
-ExportPlotAsImage("./Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/SetPoints/HotWaterSupplyTemperatureReset.png", 5, true, false);
+//ExportPlotAsImage("./Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/SetPoints/HotWaterSupplyTemperatureReset.png", 5, true, false);
