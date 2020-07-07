@@ -214,15 +214,13 @@ protected
     "Identify non-condensing boilers in plant"
     annotation (Placement(transformation(extent={{-80,-260},{-60,-240}})));
 
-  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea[nBoi](
-    final realTrue=0,
-    final realFalse=1)
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea[nBoi](final
+      realTrue=fill(0, nBoi), final realFalse=fill(1, nBoi))
     "Generate binary vector to identify condensing boilers"
     annotation (Placement(transformation(extent={{-40,-240},{-20,-220}})));
 
-  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea1[nBoi](
-    final realTrue=1,
-    final realFalse=0)
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea1[nBoi](final
+      realTrue=fill(1, nBoi), final realFalse=fill(0, nBoi))
     "Generate binary vector to identify non-condensing boilers"
     annotation (Placement(transformation(extent={{-40,-280},{-20,-260}})));
 

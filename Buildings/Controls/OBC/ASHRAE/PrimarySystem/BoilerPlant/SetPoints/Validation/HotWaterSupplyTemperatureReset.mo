@@ -20,6 +20,7 @@ block HotWaterSupplyTemperatureReset
     final resAmoVal=3,
     final maxResVal=7,
     final holTimVal=900)
+    "Scenario testing lack of hot-water requests"
     annotation (Placement(transformation(extent={{-120,90},{-100,110}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.HotWaterSupplyTemperatureReset
@@ -41,6 +42,7 @@ block HotWaterSupplyTemperatureReset
     final resAmoVal=3,
     final maxResVal=7,
     final holTimVal=900)
+    "Scenario testing increasing number of requests"
     annotation (Placement(transformation(extent={{100,90},{120,110}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.HotWaterSupplyTemperatureReset
@@ -62,6 +64,7 @@ block HotWaterSupplyTemperatureReset
     final resAmoVal=3,
     final maxResVal=7,
     final holTimVal=900)
+    "Scenario testing lack of pumps proven on"
     annotation (Placement(transformation(extent={{-20,90},{0,110}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.HotWaterSupplyTemperatureReset
@@ -83,6 +86,7 @@ block HotWaterSupplyTemperatureReset
     final resAmoVal=3,
     final maxResVal=7,
     final holTimVal=900)
+    "Scenario testing effect of stage change process"
     annotation (Placement(transformation(extent={{-120,-90},{-100,-70}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.HotWaterSupplyTemperatureReset
@@ -104,6 +108,7 @@ block HotWaterSupplyTemperatureReset
     final resAmoVal=3,
     final maxResVal=7,
     final holTimVal=900)
+    "Scenario testing switch between condensing and non-condensing stages"
     annotation (Placement(transformation(extent={{-20,-90},{0,-70}})));
 
 protected
