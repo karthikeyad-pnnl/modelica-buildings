@@ -1,33 +1,27 @@
-﻿within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences;
-
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences;
 block EnableBoiler
     "Sequence for enabling boiler"
 
-  parameter Integer nBoi
+  parameter Integer nBoi = 3
     "Total number of boilers";
 
   parameter Real proOnTim(
     final unit="s",
     final quantity="Time",
-    final displayUnit="h") = 300
+    final displayUnit="s") = 300
     "Enabled boiler operation time to indicate if it is proven on";
 
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput nexEnaChi
-    "Index of next enabling boiler"
-    annotation (Placement(transformation(extent={{-240,100},{-200,140}}),
-      iconTransformation(extent={{-140,70},{-100,110}})));
-
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uStaUp
-    "Stage-up command"
+    "Continuous stage-up command until change process is completed"
     annotation (Placement(transformation(extent={{-240,40},{-200,80}}),
       iconTransformation(extent={{-140,40},{-100,80}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uEnaChiWatIsoVal
-    "Status of hot water isolation valve control: true=enabled valve is fully open"
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uUpsDevSta
+    "Status of upstream device: true=upstream device is proved functional"
     annotation (Placement(transformation(extent={{-240,10},{-200,50}}),
-      iconTransformation(extent={{-140,0},{-100,40}})));
+        iconTransformation(extent={{-140,0},{-100,40}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uChi[nBoi]
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uBoi[nBoi]
     "Boiler status: true=ON"
      annotation (Placement(transformation(extent={{-240,-20},{-200,20}}),
        iconTransformation(extent={{-140,-40},{-100,0}})));
@@ -37,23 +31,28 @@ block EnableBoiler
     annotation (Placement(transformation(extent={{-240,-70},{-200,-30}}),
       iconTransformation(extent={{-140,-80},{-100,-40}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput nexDisChi
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput nexDisBoi
     "Next disabling boiler when there is any stage up that need one boiler on and another off"
     annotation (Placement(transformation(extent={{-240,-170},{-200,-130}}),
       iconTransformation(extent={{-140,-110},{-100,-70}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yChi[nBoi]
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput nexEnaBoi
+    "Index of next enabling boiler"
+    annotation (Placement(transformation(extent={{-240,100},{-200,140}}),
+      iconTransformation(extent={{-140,70},{-100,110}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yBoi[nBoi]
     "Boiler enabling status"
     annotation (Placement(transformation(extent={{200,-70},{240,-30}}),
       iconTransformation(extent={{100,60},{140,100}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yNewChiEna
-    "Newly enabled boiler has been proven on by more than 5 minutes"
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yBoiEnaPro
+    "True pulse when the boiler enabling process has been completed"
     annotation (Placement(transformation(extent={{200,-190},{240,-150}}),
       iconTransformation(extent={{100,-100},{140,-60}})));
 
 protected
-  final parameter Integer chiInd[nBoi]={i for i in 1:nBoi}
+  final parameter Integer boiInd[nBoi]={i for i in 1:nBoi}
     "Boiler index, {1,2,...,n}";
 
   Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi[nBoi]
@@ -61,6 +60,7 @@ protected
     annotation (Placement(transformation(extent={{100,110},{120,130}})));
 
   Buildings.Controls.OBC.CDL.Logical.And and2
+    "Logical And"
     annotation (Placement(transformation(extent={{-160,50},{-140,70}})));
 
   Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
@@ -88,7 +88,7 @@ protected
 
   Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr[nBoi](
     final threshold=fill(0.5, nBoi))
-    "Convert real input to boolean output"
+    "Check boilers that are on"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
 
   Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi1[nBoi]
@@ -118,7 +118,7 @@ protected
     annotation (Placement(transformation(extent={{-160,110},{-140,130}})));
 
   Buildings.Controls.OBC.CDL.Integers.Equal intEqu[nBoi]
-    "Check next enabling isolation valve"
+    "Check next enabling boiler"
     annotation (Placement(transformation(extent={{-100,110},{-80,130}})));
 
   Buildings.Controls.OBC.CDL.Logical.Timer tim
@@ -135,7 +135,7 @@ protected
     annotation (Placement(transformation(extent={{-60,-30},{-40,-10}})));
 
   Buildings.Controls.OBC.CDL.Logical.Edge edg
-    "Rising edge, output true at the moment when input turns from false to true"
+    "Rising edge"
     annotation (Placement(transformation(extent={{-100,-30},{-80,-10}})));
 
   Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep2(
@@ -157,7 +157,7 @@ protected
     annotation (Placement(transformation(extent={{-20,-80},{0,-60}})));
 
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt[nBoi](
-    final k=chiInd)
+    final k=boiInd)
     "Boiler index array"
     annotation (Placement(transformation(extent={{-160,80},{-140,100}})));
 
@@ -167,7 +167,7 @@ protected
     annotation (Placement(transformation(extent={{-160,-160},{-140,-140}})));
 
   Buildings.Controls.OBC.CDL.Integers.Equal intEqu1[nBoi]
-    "Check next enabling isolation valve"
+    "Check next enabling boiler"
     annotation (Placement(transformation(extent={{-100,-160},{-80,-140}})));
 
   Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi3[nBoi]
@@ -181,18 +181,21 @@ protected
 
   Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi4
     "Logical switch"
+    annotation (Placement(transformation(extent={{120,-180},{140,-160}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Edge edg1
+    "Sends pulse when boiler turns on"
     annotation (Placement(transformation(extent={{160,-180},{180,-160}})));
 
 equation
-  connect(nexEnaChi, intRep.u)
+  connect(nexEnaBoi, intRep.u)
     annotation (Line(points={{-220,120},{-162,120}}, color={255,127,0}));
 
   connect(intRep.y,intEqu. u1)
     annotation (Line(points={{-138,120},{-102,120}}, color={255,127,0}));
 
-  connect(uEnaChiWatIsoVal,and2. u2)
-    annotation (Line(points={{-220,30},{-180,30},{-180,52},{-162,52}},
-      color={255,0,255}));
+  connect(uUpsDevSta, and2.u2) annotation (Line(points={{-220,30},{-180,30},{-180,
+          52},{-162,52}}, color={255,0,255}));
 
   connect(uStaUp, and2.u1)
     annotation (Line(points={{-220,60},{-162,60}}, color={255,0,255}));
@@ -216,7 +219,7 @@ equation
   connect(tim.y,greEquThr3. u)
     annotation (Line(points={{-78,-110},{-62,-110}}, color={0,0,127}));
 
-  connect(uChi,booToRea. u)
+  connect(uBoi,booToRea. u)
     annotation (Line(points={{-220,0},{-162,0}}, color={255,0,255}));
 
   connect(booToRea.y,triSam. u)
@@ -248,7 +251,7 @@ equation
     annotation (Line(points={{62,-80},{80,-80},{80,-102},{98,-102}},
       color={255,0,255}));
 
-  connect(uChi,logSwi1. u3)
+  connect(uBoi,logSwi1. u3)
     annotation (Line(points={{-220,0},{-180,0},{-180,-130},{80,-130},{80,-118},
       {98,-118}}, color={255,0,255}));
 
@@ -266,7 +269,7 @@ equation
     annotation (Line(points={{122,120},{140,120},{140,-42},{158,-42}},
       color={255,0,255}));
 
-  connect(logSwi2.y,yChi)
+  connect(logSwi2.y,yBoi)
     annotation (Line(points={{182,-50},{220,-50}}, color={255,0,255}));
 
   connect(not2.y,or2. u1)
@@ -287,7 +290,7 @@ equation
     annotation (Line(points={{-138,90},{-110,90},{-110,112},{-102,112}},
       color={255,127,0}));
 
-  connect(nexDisChi, intRep1.u)
+  connect(nexDisBoi, intRep1.u)
     annotation (Line(points={{-220,-150},{-162,-150}}, color={255,127,0}));
 
   connect(intRep1.y, intEqu1.u1)
@@ -312,7 +315,7 @@ equation
   connect(booRep4.y, logSwi3.u2)
     annotation (Line(points={{-18,40},{58,40}}, color={255,0,255}));
 
-  connect(uChi, logSwi3.u3)
+  connect(uBoi, logSwi3.u3)
     annotation (Line(points={{-220,0},{-180,0},{-180,20},{40,20},{40,32},
       {58,32}}, color={255,0,255}));
 
@@ -324,28 +327,31 @@ equation
       color={255,0,255}));
 
   connect(not2.y, logSwi4.u2)
-    annotation (Line(points={{-138,-50},{-130,-50},{-130,-170},{158,-170}},
+    annotation (Line(points={{-138,-50},{-130,-50},{-130,-170},{118,-170}},
       color={255,0,255}));
 
   connect(and2.y, logSwi4.u1)
-    annotation (Line(points={{-138,60},{-120,60},{-120,-162},{158,-162}},
+    annotation (Line(points={{-138,60},{-120,60},{-120,-162},{118,-162}},
       color={255,0,255}));
 
   connect(greEquThr3.y, logSwi4.u3)
-    annotation (Line(points={{-38,-110},{-30,-110},{-30,-178},{158,-178}},
+    annotation (Line(points={{-38,-110},{-30,-110},{-30,-178},{118,-178}},
       color={255,0,255}));
 
-  connect(logSwi4.y, yNewChiEna)
+  connect(edg1.u, logSwi4.y)
+    annotation (Line(points={{158,-170},{142,-170}}, color={255,0,255}));
+
+  connect(edg1.y,yBoiEnaPro)
     annotation (Line(points={{182,-170},{220,-170}}, color={255,0,255}));
 
 annotation (
-  defaultComponentName="enaChi",
+  defaultComponentName="enaBoi",
   Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Rectangle(
-        extent={{-100,-100},{100,100}},
-        lineColor={0,0,127},
-        fillColor={255,255,255},
-        fillPattern=FillPattern.Solid),
+          extent={{-100,-100},{100,100}},
+          lineColor={0,0,127},
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid),
         Text(extent={{-120,146},{100,108}},
           lineColor={0,0,255},
           textString="%name"),
@@ -373,12 +379,12 @@ annotation (
           extent={{-98,96},{-50,84}},
           lineColor={255,127,0},
           pattern=LinePattern.Dash,
-          textString="nexEnaChi"),
+          textString="nexEnaBoi"),
         Text(
           extent={{-98,-84},{-50,-96}},
           lineColor={255,127,0},
           pattern=LinePattern.Dash,
-          textString="nexDisChi"),
+          textString="nexDisBoi"),
         Text(
           extent={{-100,66},{-68,56}},
           lineColor={255,0,255},
@@ -388,12 +394,12 @@ annotation (
           extent={{-98,26},{-34,14}},
           lineColor={255,0,255},
           pattern=LinePattern.Dash,
-          textString="uEnaChiWatIsoVal"),
+          textString="uUpsDevSta"),
         Text(
           extent={{-100,-14},{-78,-24}},
           lineColor={255,0,255},
           pattern=LinePattern.Dash,
-          textString="uChi"),
+          textString="uBoi"),
         Text(
           extent={{-98,-54},{-72,-66}},
           lineColor={255,0,255},
@@ -403,13 +409,14 @@ annotation (
           extent={{74,86},{100,76}},
           lineColor={255,0,255},
           pattern=LinePattern.Dash,
-          textString="yChi"),
+          textString="yBoi"),
         Text(
           extent={{60,-72},{98,-84}},
           lineColor={255,0,255},
           pattern=LinePattern.Dash,
-          textString="yNewChiEna")}),                            Diagram(
-        coordinateSystem(preserveAspectRatio=false, extent={{-200,-180},{200,180}}),
+          textString="yNewBoiEna")}),
+        Diagram(
+          coordinateSystem(preserveAspectRatio=false, extent={{-200,-180},{200,180}}),
         graphics={
           Rectangle(
           extent={{-198,-62},{198,-178}},
@@ -422,93 +429,54 @@ annotation (
           fillPattern=FillPattern.Solid,
           pattern=LinePattern.None),
           Text(
-          extent={{68,104},{148,96}},
-          pattern=LinePattern.None,
-          fillColor={210,210,210},
-          fillPattern=FillPattern.Solid,
-          lineColor={0,0,127},
-          horizontalAlignment=TextAlignment.Right,
-          textString="Output new boiler status array:"),
-          Text(
-          extent={{46,-76},{124,-84}},
-          pattern=LinePattern.None,
-          fillColor={210,210,210},
-          fillPattern=FillPattern.Solid,
-          lineColor={0,0,127},
-          horizontalAlignment=TextAlignment.Right,
-          textString="Disable 
-small boiler"),
-          Text(
-          extent={{70,94},{204,78}},
+          extent={{20,158},{100,150}},
           pattern=LinePattern.None,
           fillColor={210,210,210},
           fillPattern=FillPattern.Solid,
           lineColor={0,0,127},
           horizontalAlignment=TextAlignment.Left,
-          textString="1. When the stage change does not require one boiler off and another 
-boiler on."),
+          textString="Output new boiler status array:\n1. When the stage change does not require one boiler off and another boiler on.\n2. When the stage change does require one boiler off and another boiler on,\n    but the enabled boiler has not yet finished starting."),
           Text(
-          extent={{70,84},{282,62}},
+          extent={{34,-140},{114,-148}},
           pattern=LinePattern.None,
           fillColor={210,210,210},
           fillPattern=FillPattern.Solid,
           lineColor={0,0,127},
           horizontalAlignment=TextAlignment.Left,
-          textString="2. When the stage change does require one boiler off and another boiler on, 
-but the enabled boiler has not yet finished starting."),
-          Text(
-          extent={{36,-132},{116,-140}},
-          pattern=LinePattern.None,
-          fillColor={210,210,210},
-          fillPattern=FillPattern.Solid,
-          lineColor={0,0,127},
-          horizontalAlignment=TextAlignment.Right,
-          textString="Output new boiler status array:"),
-          Text(
-          extent={{36,-138},{248,-160}},
-          pattern=LinePattern.None,
-          fillColor={210,210,210},
-          fillPattern=FillPattern.Solid,
-          lineColor={0,0,127},
-          horizontalAlignment=TextAlignment.Left,
-          textString="When the stage change does require one boiler off and another boiler on, 
-          and the enabled boiler has finished starting.")}),
+          textString="Output new boiler status array:\nWhen the stage change does require one boiler off and another boiler on,\nand the enabled boiler has finished starting.")}),
 Documentation(info="<html>
 <p>
-Block that controlles boiler when there is staging up command <code>uStaUp=true</code>.
-
-This implementation is based on ASHRAE RP-1711 Advanced Sequences of Operation for HVAC Systems Phase II – 
-Central Plants and Hydronic Systems (Draft version, March 2020), section 5.2.4.16,
-item 6 and item 7.a. These sections specify when the next boiler should be enabled
+Block that controls boiler when there is staging up command <code>uStaUp=true</code>.
+This implementation is based on RP-1711, March 2020 draft, section 5.3.3.11,
+5.3.3.13, 5.3.3.14, 5.3.3.15. These sections specify when the next boiler should be enabled
 and when the running smaller boiler should be diabled.
 </p>
 <p>
 When the stage-up process does not requires a smaller boiler being staged off and
 a larger boiler being staged on (<code>uOnOff=false</code>):
-</p>
 <ul>
 <li>
-Start the next stage boiler after the hot water isolation valve is fully open
-<code>uEnaChiWatIsoVal=true</code>.
+Start the next stage boiler after the upstream device is proved functional
+<code>uUpsDevSta=true</code>.
 </li>
 </ul>
+</p>
 <p>
 For any stage change during which a smaller boiler is diabled and a larger boiler
 is enabled (<code>uOnOff=true</code>):
-</p>
 <ul>
 <li>
-Wait 5 minutes (<code>proOnTim</code>) for the newly enabled boiler to prove that is 
-operating correctly <code>yNewChiEna=true</code>, then shut off the smaller boiler.
+Wait 5 minutes (<code>proOnTim</code>) for the newly enabled boiler to prove that it is 
+operating correctly <code>yNewBoiEna=true</code>, then shut off the smaller boiler.
 </li>
 </ul>
+</p>
 </html>", revisions="<html>
 <ul>
 <li>
-September 15, 2019, by Jianjun Hu:<br/>
+July 08, 2020, by Karthik Devaprasad:<br/>
 First implementation.
 </li>
 </ul>
 </html>"));
-
 end EnableBoiler;
