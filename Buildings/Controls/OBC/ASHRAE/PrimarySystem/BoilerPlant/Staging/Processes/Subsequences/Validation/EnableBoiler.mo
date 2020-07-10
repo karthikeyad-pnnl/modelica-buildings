@@ -127,8 +127,7 @@ equation
   connect(boiStaRet[1].y, boiTwo.u1) annotation (Line(points={{-18,80},{0,80},{0,
           0},{-60,0},{-60,-32},{-42,-32}}, color={255,0,255}));
   connect(enaDisBoi.yBoi[3], boiStaRet[2].u) annotation (Line(points={{-58,
-          89.3333},{-52,89.3333},{-52,88},{-42,88},{-42,80}},
-                                                     color={255,0,255}));
+          89.3333},{-52,89.3333},{-52,80},{-42,80}}, color={255,0,255}));
   connect(boiStaRet[2].y, enaDisBoi.uBoi[3]) annotation (Line(points={{-18,80},
           {0,80},{0,66},{-104,66},{-104,79.3333},{-82,79.3333}},color={255,0,255}));
   connect(disBoi.y, enaDisBoi.nexDisBoi) annotation (Line(points={{-138,-100},{-90,
