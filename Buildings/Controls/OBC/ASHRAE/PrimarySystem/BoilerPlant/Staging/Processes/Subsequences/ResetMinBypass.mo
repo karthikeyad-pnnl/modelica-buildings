@@ -233,7 +233,8 @@ annotation (
 <p>
 Block that generates minimum bypass flow reset status when there is 
 stage-change command.
-This development is based on RP-1711, March 2020 draft, section 5.2.4.16, item 2.
+This development is based on RP-1711, March 2020 draft, sections 5.3.3.11 and
+5.3.3.12, subsection 1.a.
 </p>
 <p>
 When a stage-change command is received (<code>chaPro</code> = true) and the upstream

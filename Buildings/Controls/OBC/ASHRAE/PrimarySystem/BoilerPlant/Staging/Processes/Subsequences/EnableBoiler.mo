@@ -447,8 +447,8 @@ annotation (
 Documentation(info="<html>
 <p>
 Block that controls boiler when there is staging up command <code>uStaUp=true</code>.
-This implementation is based on RP-1711, March 2020 draft, section 5.3.3.11,
-5.3.3.13, 5.3.3.14, 5.3.3.15. These sections specify when the next boiler should be enabled
+This implementation is based on RP-1711, March 2020 draft, sections 5.3.3.11,
+5.3.3.13, 5.3.3.14 and 5.3.3.15. These sections specify when the next boiler should be enabled
 and when the running smaller boiler should be diabled.
 </p>
 <p>
