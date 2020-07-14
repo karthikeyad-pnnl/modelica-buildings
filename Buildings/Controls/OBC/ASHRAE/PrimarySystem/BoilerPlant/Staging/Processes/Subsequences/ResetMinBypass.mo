@@ -31,14 +31,13 @@ block ResetMinBypass
     annotation (Placement(transformation(extent={{-200,-40},{-160,0}}),
       iconTransformation(extent={{-140,-60},{-100,-20}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput VMinBoiWat_setpoint(
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput VMinHotWatSet_flow(
     final min=0,
     final unit="m3/s",
     final displayUnit="m3/s",
-    final quantity="VolumeFlowRate")
-    "Minimum boiler water flow setpoint"
+    final quantity="VolumeFlowRate") "Minimum hot water flow setpoint"
     annotation (Placement(transformation(extent={{-200,-100},{-160,-60}}),
-      iconTransformation(extent={{-140,-100},{-100,-60}})));
+        iconTransformation(extent={{-140,-100},{-100,-60}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yMinBypRes
     "True: minimum hot water flow bypass setpoint has been reset successfully"
@@ -138,7 +137,7 @@ equation
     annotation (Line(points={{102,-20},{114,-20},{114,72},{118,72}},
       color={255,0,255}));
 
-  connect(VMinBoiWat_setpoint, addPar.u)
+  connect(VMinHotWatSet_flow, addPar.u)
     annotation (Line(points={{-180,-80},{-142,-80}}, color={0,0,127}));
 
   connect(div.y, hys.u)
@@ -184,7 +183,7 @@ equation
     annotation (Line(points={{-122,-20},{-126,-20}}, color={0,0,127}));
   connect(add2.u1, VHotWat_flow) annotation (Line(points={{-150,-14},{-154,-14},
           {-154,-20},{-180,-20}}, color={0,0,127}));
-  connect(add2.u2, VMinBoiWat_setpoint) annotation (Line(points={{-150,-26},{-154,
+  connect(add2.u2, VMinHotWatSet_flow) annotation (Line(points={{-150,-26},{-154,
           -26},{-154,-80},{-180,-80}}, color={0,0,127}));
 annotation (
   defaultComponentName="minBypRes",

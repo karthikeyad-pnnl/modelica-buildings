@@ -1,5 +1,4 @@
 ﻿within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences;
-
 block UpEnd
     "Sequence for ending stage-up process"
 
@@ -357,7 +356,7 @@ equation
     annotation (Line(points={{-58,-40},{10,-40},{10,-176},{38,-176}},
       color={255,0,255}));
 
-  connect(minBypSet.VChiWat_flow, VChiWat_flow)
+  connect(minBypSet.VHotWat_flow, VChiWat_flow)
     annotation (Line(points={{38,-184},{-20,-184},{-20,-170},{-220,-170}},
       color={0,0,127}));
 
@@ -425,7 +424,7 @@ equation
     annotation (Line(points={{82,-230},{100,-230},{100,-190},{220,-190}},
       color={255,0,255}));
 
-  connect(nexEnaChi, enaChi.nexEnaChi)
+  connect(nexEnaChi,enaChi.nexEnaBoi)
     annotation (Line(points={{-220,240},{-120,240},{-120,199},{-102,199}},
       color={255,127,0}));
 
@@ -433,11 +432,10 @@ equation
     annotation (Line(points={{-220,210},{-140,210},{-140,196},{-102,196}},
       color={255,0,255}));
 
-  connect(uEnaChiWatIsoVal, enaChi.uEnaChiWatIsoVal)
-    annotation (Line(points={{-220,180},{-160,180},{-160,192},{-102,192}},
-      color={255,0,255}));
+  connect(uEnaChiWatIsoVal, enaChi.uUpsDevSta) annotation (Line(points={{-220,
+          180},{-160,180},{-160,192},{-102,192}}, color={255,0,255}));
 
-  connect(uChi, enaChi.uChi)
+  connect(uChi,enaChi.uBoi)
     annotation (Line(points={{-220,150},{-140,150},{-140,188},{-102,188}},
       color={255,0,255}));
 
@@ -445,11 +443,11 @@ equation
     annotation (Line(points={{-220,100},{-190,100},{-190,184},{-102,184}},
       color={255,0,255}));
 
-  connect(nexDisChi, enaChi.nexDisChi)
+  connect(nexDisChi,enaChi.nexDisBoi)
     annotation (Line(points={{-220,70},{-110,70},{-110,181},{-102,181}},
       color={255,127,0}));
 
-  connect(enaChi.yChi, yChi)
+  connect(enaChi.yBoi, yChi)
     annotation (Line(points={{-78,198},{92,198},{92,140},{220,140}},
       color={255,0,255}));
 
@@ -493,7 +491,7 @@ equation
     annotation (Line(points={{-220,240},{-120,240},{-120,160},{-90,160},
       {-90,-129},{38,-129}}, color={255,127,0}));
 
-  connect(enaChi.yNewChiEna, lat1.u)
+  connect(enaChi.yBoiEnaPro, lat1.u)
     annotation (Line(points={{-78,182},{-70,182},{-70,140},{-62,140}},
       color={255,0,255}));
 
@@ -818,5 +816,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-
 end UpEnd;

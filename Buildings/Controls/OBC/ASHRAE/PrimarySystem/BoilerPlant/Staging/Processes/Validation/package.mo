@@ -1,7 +1,6 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes;
+package Validation "Collection of validation models"
 
-package Validation
-    "Collection of validation models"
 annotation (preferredView="info", Documentation(info="<html>
 <p>
 This package contains validation models for the classes in
@@ -35,5 +34,4 @@ used for continuous validation whenever models in the library change.
           lineColor={128,128,128},
           extent={{-100.0,-100.0},{100.0,100.0}},
           radius=25.0)}));
-
 end Validation;

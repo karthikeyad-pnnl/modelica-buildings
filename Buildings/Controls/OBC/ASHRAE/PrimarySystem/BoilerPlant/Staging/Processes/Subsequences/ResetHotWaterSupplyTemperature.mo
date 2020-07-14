@@ -1,5 +1,4 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences;
-
 block ResetHotWaterSupplyTemperature
     "Sequence for hot water supply temperature reset"
 
@@ -56,6 +55,9 @@ block ResetHotWaterSupplyTemperature
     annotation (Placement(transformation(extent={{160,10},{200,50}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
+  CDL.Logical.And and1
+    "Ensure stage-completion signal is passed only when the stage-up signal is active"
+    annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
 protected
   parameter Integer boiStaInd[nSta]={i for i in 1:nSta}
     "Index vector of boiler plant stages";
@@ -174,9 +176,6 @@ equation
   connect(or2.u1, truDel.y) annotation (Line(points={{-102,50},{-110,50},{-110,
           70},{-118,70}}, color={255,0,255}));
 
-  connect(or2.y, logSwi.u1) annotation (Line(points={{-78,50},{100,50},{100,38},
-          {118,38}}, color={255,0,255}));
-
   connect(and2.y, logSwi.u2) annotation (Line(points={{142,-30},{150,-30},{150,
           10},{110,10},{110,30},{118,30}}, color={255,0,255}));
 
@@ -207,6 +206,12 @@ equation
   connect(lesThr.y, and2.u2) annotation (Line(points={{102,-60},{110,-60},{110,-38},
           {118,-38}}, color={255,0,255}));
 
+  connect(or2.y, and1.u1)
+    annotation (Line(points={{-78,50},{-42,50}}, color={255,0,255}));
+  connect(uStaUp, and1.u2) annotation (Line(points={{-180,70},{-150,70},{-150,
+          10},{-50,10},{-50,42},{-42,42}}, color={255,0,255}));
+  connect(and1.y, logSwi.u1) annotation (Line(points={{-18,50},{100,50},{100,38},
+          {118,38}}, color={255,0,255}));
 annotation (
   defaultComponentName="hotWatSupTemRes",
   Icon(graphics={
@@ -248,5 +253,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-
 end ResetHotWaterSupplyTemperature;

@@ -1,7 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.Validation;
-
 model UpEndWithoutOff
- 
     "Validate sequence of end staging up process which does not require boiler OFF"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.UpEnd
@@ -84,7 +82,7 @@ protected
     annotation (Placement(transformation(extent={{140,70},{160,90}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant chiWatIsoVal[2](
-    final k=fill(1, 2)) 
+    final k=fill(1, 2))
     "Constant one"
     annotation (Placement(transformation(extent={{-140,-90},{-120,-70}})));
 
@@ -218,10 +216,8 @@ Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
           extent={{-138,226},{22,216}},
           lineColor={0,0,127},
           textString="from stage 1 which has only boiler 1 being enabled,
-    "),
-        Text(
+    "), Text(
           extent={{-138,214},{16,200}},
           lineColor={0,0,127},
           textString="to stage 2 which has boiler 1 and 2 being enabled.")}));
-
 end UpEndWithoutOff;

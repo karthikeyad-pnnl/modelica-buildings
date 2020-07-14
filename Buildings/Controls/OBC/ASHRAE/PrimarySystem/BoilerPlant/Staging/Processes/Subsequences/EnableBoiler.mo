@@ -47,7 +47,7 @@ block EnableBoiler
       iconTransformation(extent={{100,60},{140,100}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yBoiEnaPro
-    "True pulse when the boiler enabling process has been completed"
+    "True signal when the boiler enabling process has been completed"
     annotation (Placement(transformation(extent={{200,-190},{240,-150}}),
       iconTransformation(extent={{100,-100},{140,-60}})));
 
@@ -182,10 +182,6 @@ protected
   Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi4
     "Logical switch"
     annotation (Placement(transformation(extent={{120,-180},{140,-160}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Edge edg1
-    "Sends pulse when boiler turns on"
-    annotation (Placement(transformation(extent={{160,-180},{180,-160}})));
 
 equation
   connect(nexEnaBoi, intRep.u)
@@ -338,12 +334,8 @@ equation
     annotation (Line(points={{-38,-110},{-30,-110},{-30,-178},{118,-178}},
       color={255,0,255}));
 
-  connect(edg1.u, logSwi4.y)
-    annotation (Line(points={{158,-170},{142,-170}}, color={255,0,255}));
-
-  connect(edg1.y,yBoiEnaPro)
-    annotation (Line(points={{182,-170},{220,-170}}, color={255,0,255}));
-
+  connect(logSwi4.y, yBoiEnaPro)
+    annotation (Line(points={{142,-170},{220,-170}}, color={255,0,255}));
 annotation (
   defaultComponentName="enaBoi",
   Icon(coordinateSystem(preserveAspectRatio=false), graphics={

@@ -60,8 +60,8 @@ equation
   connect(meaFlo.y,minBypRes.VHotWat_flow)
     annotation (Line(points={{-18,-30},{8,-30},{8,44},{38,44}}, color={0,0,127}));
 
-  connect(minFloSet.y, minBypRes.VMinBoiWat_setpoint)
-    annotation (Line(points={{-18,-70},{12,-70},{12,40},{38,40}}, color={0,0,127}));
+  connect(minFloSet.y, minBypRes.VMinHotWatSet_flow) annotation (Line(points={{
+          -18,-70},{12,-70},{12,40},{38,40}}, color={0,0,127}));
 
 annotation (
  experiment(StopTime=600, Tolerance=1e-06),

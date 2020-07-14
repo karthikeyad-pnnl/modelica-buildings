@@ -1,7 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.Validation;
-
 model DownStartWithoutOn
- 
     "Validate sequence of starting the staging down process which does not require enabling a boiler"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.DownStart
@@ -247,10 +245,8 @@ Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
           extent={{-114,276},{46,266}},
           lineColor={0,0,127},
           textString="from stage 2 which has boiler one and two enabled,
-    "),
-        Text(
+    "), Text(
           extent={{-116,264},{-14,250}},
           lineColor={0,0,127},
           textString="to stage 1 which only has boiler 1.")}));
-
 end DownStartWithoutOn;

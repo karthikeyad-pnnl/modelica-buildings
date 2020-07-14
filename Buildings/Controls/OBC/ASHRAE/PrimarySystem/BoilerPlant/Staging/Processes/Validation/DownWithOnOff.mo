@@ -1,7 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Validation;
-
 model DownWithOnOff
- 
     "Validate sequence of staging down process which requires enabling one boiler and disabling another boiler"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Down
@@ -485,10 +483,8 @@ Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
           extent={{-194,288},{-6,278}},
           lineColor={0,0,127},
           textString="from stage 2 which only has large boiler enabled (boiler 2),
-    "),
-        Text(
+    "), Text(
           extent={{-204,300},{-156,292}},
           lineColor={0,0,127},
           textString="Stage down:")}));
-
 end DownWithOnOff;

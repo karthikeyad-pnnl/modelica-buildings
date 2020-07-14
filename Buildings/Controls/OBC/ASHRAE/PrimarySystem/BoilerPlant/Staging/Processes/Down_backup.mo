@@ -1,6 +1,6 @@
 ﻿within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes;
-block Down
-    "Sequence for controlling devices when there is a stage-down command"
+block Down_backup
+  "Sequence for controlling devices when there is a stage-down command"
 
   parameter Integer nBoi = 2
     "Total number of boilers in the plant";
@@ -833,7 +833,6 @@ equation
     annotation (Line(points={{-300,160},{-150,160},{-150,-165},{98,-165}},
       color={255,127,0}));
 
-
 annotation (
   defaultComponentName="dowProCon",
   Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-280,-400},{280,400}})),
@@ -1091,4 +1090,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end Down;
+end Down_backup;

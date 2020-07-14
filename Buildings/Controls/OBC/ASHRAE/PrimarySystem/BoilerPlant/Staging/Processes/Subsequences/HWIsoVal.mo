@@ -1,16 +1,14 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences;
-
 block HWIsoVal
- 
     "Sequence of enable or disable hot water isolation valve"
 
-  parameter Integer nBoi
+  parameter Integer nBoi = 3
     "Total number of boiler, which is also the total number of hot water isolation valve";
 
   parameter Real chaHotWatIsoTim(
     final unit="s",
     final quantity="Time",
-    final displayUnit="h")
+    final displayUnit="s") = 60
     "Time to slowly change isolation valve, should be determined in the field";
 
   parameter Real iniValPos
@@ -86,10 +84,6 @@ protected
   Buildings.Controls.OBC.CDL.Logical.Timer tim
     "Count the time after changing up-stream device status"
     annotation (Placement(transformation(extent={{-100,70},{-80,90}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Edge edg
-    "Rising edge, output true at the moment when input turns from false to true"
-    annotation (Placement(transformation(extent={{-100,-150},{-80,-130}})));
 
   Buildings.Controls.OBC.CDL.Logical.Latch lat
     "Logical latch, maintain ON signal until condition changes"
@@ -221,21 +215,14 @@ equation
   connect(tim.y, lin1.u)
     annotation (Line(points={{-78,80},{38,80}}, color={0,0,127}));
 
-  connect(uUpsDevSta, edg.u)
-    annotation (Line(points={{-180,-140},{-102,-140}}, color={255,0,255}));
-
   connect(chaPro, and2.u2)
     annotation (Line(points={{-180,-178},{-42,-178}}, color={255,0,255}));
-
-  connect(edg.y, and2.u1)
-    annotation (Line(points={{-78,-140},{-60,-140},{-60,-170},{-42,-170}},
-      color={255,0,255}));
 
   connect(and2.y, lat.u)
     annotation (Line(points={{-18,-170},{18,-170}}, color={255,0,255}));
 
   connect(chaPro, not1.u)
-    annotation (Line(points={{-180,-178},{-80,-178},{-80,-200},{-42,-200}},
+    annotation (Line(points={{-180,-178},{-60,-178},{-60,-200},{-42,-200}},
       color={255,0,255}));
 
   connect(not1.y, lat.clr)
@@ -371,6 +358,8 @@ equation
       color={255,0,255}));
 
 
+  connect(uUpsDevSta, and2.u1) annotation (Line(points={{-180,-140},{-60,-140},
+          {-60,-170},{-42,-170}}, color={255,0,255}));
 annotation (
   defaultComponentName="enaHotWatIsoVal",
   Diagram(
@@ -482,5 +471,4 @@ annotation (
   </li>
   </ul>
   </html>"));
-
 end HWIsoVal;

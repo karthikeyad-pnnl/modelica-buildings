@@ -1,5 +1,4 @@
 ﻿within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences;
-
 block DownStart
     "Sequence for starting stage-down process"
 
@@ -275,7 +274,7 @@ equation
     annotation (Line(points={{-180,210},{-140,210},{-140,114},{58,114}},
       color={255,0,255}));
 
-  connect(VChiWat_flow, minBypRes.VChiWat_flow)
+  connect(VChiWat_flow,minBypRes.VHotWat_flow)
     annotation (Line(points={{-180,90},{-150,90},{-150,106},{58,106}},
       color={0,0,127}));
 
@@ -677,5 +676,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-
 end DownStart;

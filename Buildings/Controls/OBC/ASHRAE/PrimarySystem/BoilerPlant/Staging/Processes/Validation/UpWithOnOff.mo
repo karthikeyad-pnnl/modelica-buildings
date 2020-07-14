@@ -1,7 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Validation;
-
 model UpWithOnOff
- 
     "Validate sequence of staging up process which does require boiler OFF"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Up upProCon(
@@ -464,10 +462,8 @@ Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
           extent={{-196,280},{-50,272}},
           lineColor={0,0,127},
           textString="from stage 1 which has small boiler one been enabled,
-    "),
-        Text(
+    "), Text(
           extent={{-196,268},{-70,254}},
           lineColor={0,0,127},
           textString="to stage 2 which has large boiler 2 been enabled.")}));
-
 end UpWithOnOff;

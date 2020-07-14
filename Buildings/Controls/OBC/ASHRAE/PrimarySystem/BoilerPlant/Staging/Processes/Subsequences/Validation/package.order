@@ -1,9 +1,10 @@
 HWIsoVal
-DisableChiller
 DownStartWithOn
 DownStartWithoutOn
-EnableChiller
-NextChiller
 ResetMinBypass
 UpEndWithOff
 UpEndWithoutOff
+NextBoiler
+EnableBoiler
+DisableBoiler
+ResetHotWaterSupplyTemperature

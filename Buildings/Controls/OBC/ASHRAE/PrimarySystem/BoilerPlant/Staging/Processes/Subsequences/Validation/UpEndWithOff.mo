@@ -1,7 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.Validation;
-
 model UpEndWithOff
- 
     "Validate sequence of end staging up process which requires boiler OFF"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.UpEnd
@@ -304,10 +302,8 @@ Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
           extent={{-176,236},{-16,226}},
           lineColor={0,0,127},
           textString="from stage 1 which has small boiler 1 being enabled,
-    "),
-        Text(
+    "), Text(
           extent={{-180,224},{82,210}},
           lineColor={0,0,127},
           textString="to stage 2 which has small boiler 1 being disabled and large boiler 2 being enabled.")}));
-
 end UpEndWithOff;
