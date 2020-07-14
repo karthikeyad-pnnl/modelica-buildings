@@ -174,8 +174,8 @@ protected
     "Integer to Real conversion"
     annotation (Placement(transformation(extent={{-120,-80},{-100,-60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr[nSta](
-    final threshold=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler)
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(final threshold=
+       Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler)
     "Check for non-condensing boilers that are already enabled"
     annotation (Placement(transformation(extent={{60,-80},{80,-60}})));
 
@@ -294,6 +294,11 @@ protected
     final k=staIndVal)
     "Index of boiler plant stages"
     annotation (Placement(transformation(extent={{-120,-110},{-100,-90}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.MultiMax mulMax(
+    final nin=nSta)
+    "Detect highest value from filtered stage type vector"
+    annotation (Placement(transformation(extent={{30,-80},{50,-60}})));
 
 equation
   connect(uHotWatPumSta, mulOr.u[1:2]) annotation (Line(points={{-160,90},{-122,
@@ -425,15 +430,16 @@ equation
   connect(extIndSig.y, swi3.u1) annotation (Line(points={{-58,-70},{-20,-70},{-20,
           -62},{-2,-62}}, color={0,0,127}));
 
-  connect(swi3.y, greThr.u)
-    annotation (Line(points={{22,-70},{58,-70}}, color={0,0,127}));
-
   connect(intLesEqu.y, swi3.u2) annotation (Line(points={{-18,-110},{-10,-110},{
           -10,-70},{-2,-70}}, color={255,0,255}));
 
   connect(con1.y, swi3.u3) annotation (Line(points={{-98,-30},{-54,-30},{-54,-78},
           {-2,-78}}, color={0,0,127}));
 
+  connect(swi3.y, mulMax.u[1:nSta]) annotation (Line(points={{22,-70},{26,-70},{26,
+          -70},{28,-70}},           color={0,0,127}));
+  connect(mulMax.y, greThr.u) annotation (Line(points={{52,-70},{58,-70},{58,-70},
+          {58,-70}}, color={0,0,127}));
   annotation(defaultComponentName="hotWatSupTemRes",
     Diagram(coordinateSystem(preserveAspectRatio=false,
       extent={{-140,-320},{140,120}})),
