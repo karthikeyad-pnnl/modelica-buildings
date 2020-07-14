@@ -1,0 +1,122 @@
+# Input Boolean flags
+primaryOnly
+dedicatedPumps
+headeredPumps
+###############
+# Calculated Boolean flags
+uOnOff # As a part of stage change, is one boiler being turned off and another being turned on?
+firstNonCondensingStage # Is this the first non-condensing boiler stage to be turned on?
+
+boilersSet = [currentStageBoilers]
+
+DO PARALLEL:
+	IF primaryOnly:
+		IF uOnOff:
+			SET resetMinimumFlowBypass = FALSE
+			SET timer = 0
+			START timer
+			boilersSet = [currentStageBoilers] + [nextStageBoilers]
+			SET minimumFlowSetpoint = minimumFlowSetpointCalculation(boilersSet)
+			WHILE resetMinimumFlowBypass == FALSE:												
+				IF ((measuredFlow > ((1 - dFloRat) * minimumFlowSetpoint) AND measuredFlow < ((1 + dFloRat) * minimumFlowSetpoint)) OR timer > processTimeout:
+					SET resetMinimumFlowBypass = TRUE
+				ELSE:
+					DO NOTHING
+			END WHILE
+		ELSE:
+			boilersSet = [nextStageBoilers]
+			SET minimumFlowSetpoint = minimumFlowSetpointCalculation(boilersSet)
+		END IF
+	ELSE:
+		DO NOTHING
+	END IF;
+	
+	if firstNonCondensingStage:
+		SET hotWaterSupplyTemperatureSetpoint = hotWaterSupplyTemperatureSetpointController(nonCondensingStage)
+		
+		SET resetHotWaterSupplyTemperature = FALSE
+		SET timer = 0
+		START timer
+		WHILE resetHotWaterSupplyTemperature == FALSE:		
+			IF (hotWaterSupplyTemperature > minimumNonCondensingBoilerSupplyTemperature) OR timer > processTimeout:
+				SET resetHotWaterSupplyTemperature = TRUE
+			ELSE:
+				DO NOTHING
+			END IF
+		END WHILE
+	ELSE:
+		DO NOTHING
+	END IF;
+END PARALLEL
+
+IF dedicatedPumps:
+	IF uOnOff:
+		boilersSet = [currentStageBoilers] + [nextStageBoilers]
+		SET pumpsStatus = pumpController(boilersSet)
+	ELSE:
+		boilersSet = [nextStageBoilers]
+		SET pumpsStatus = pumpController(boilersSet)
+	END IF
+ELSE:
+	DO NOTHING
+END IF
+
+IF headeredPumps:
+	IF uOnOff:
+		boilersSet = [currentStageBoilers] + [nextStageBoilers]
+		SET isolationValveStatus = isolationValveController(boilersSet)
+	ELSE:
+		boilersSet = [nextStageBoilers]
+		SET isolationValveStatus = isolationValveController(boilersSet)
+	END IF 
+	
+	IF uOnOff:
+		boilersSet = [currentStageBoilers] + [nextStageBoilers]
+		SET pumpsStatus = pumpController(boilersSet)
+	ELSE:
+		boilersSet = [nextStageBoilers]
+		SET pumpsStatus = pumpController(boilersSet)
+	END IF
+ELSE:
+	DO NOTHING
+END IF
+
+SET timer = 0
+START timer
+WHILE timer < boilerEnableDelay:
+	DO NOTHING
+	GOTO 65
+END WHILE
+
+IF uOnOff:	
+	boilersSet = [currentStageBoilers] + [nextStageBoilers]
+	boilersStatus = boilerController(boilersSet)
+	
+	SET timer = 0
+	START timer
+	WHILE timer < boilerProvingTime:
+		DO NOTHING
+		GOTO 76
+	END WHILE
+	
+	boilersSet = [nextStageBoilers]
+	boilersStatus = boilerController(boilersSet)
+
+	SET timer = 0
+	START timer
+	WHILE timer < boilerOffTime:
+		DO NOTHING
+		GOTO 86
+	END WHILE
+	
+	pumpsStatus = pumpController(boilersSet)
+	
+	IF headeredPumps:
+		isolationValveStatus = isolationValveController(boilersSet)
+	ELSE:
+		DO NOTHING
+	END IF
+ELSE:
+	boilersSet = [nextStageBoilers]
+	boilersStatus = boilerController(boilersSet)
+END IF	
