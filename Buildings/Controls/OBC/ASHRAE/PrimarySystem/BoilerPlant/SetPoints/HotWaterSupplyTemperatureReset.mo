@@ -174,8 +174,8 @@ protected
     "Integer to Real conversion"
     annotation (Placement(transformation(extent={{-120,-80},{-100,-60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(final threshold=
-       Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler)
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
+    final threshold=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler)
     "Check for non-condensing boilers that are already enabled"
     annotation (Placement(transformation(extent={{60,-80},{80,-60}})));
 
@@ -214,7 +214,7 @@ protected
     "Check if any pumps are turned on"
     annotation (Placement(transformation(extent={{-120,80},{-100,100}})));
 
-  Buildings.Controls.OBC.ASHRAE.G36_PR1.Generic.SetPoints.TrimAndRespond                               triRes1(
+  Buildings.Controls.OBC.ASHRAE.G36_PR1.Generic.SetPoints.TrimAndRespond triRes1(
     final iniSet=TPlaHotWatSetMax,
     final minSet=THotWatSetMinConBoi,
     final maxSet=TPlaHotWatSetMax,
