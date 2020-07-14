@@ -1,6 +1,6 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints;
 block HotWaterSupplyTemperatureReset
-  "Block to calculate hot-water setpoint for hot water supply temperature"
+    "Block to calculate hot-water setpoint for hot water supply temperature"
 
   parameter Integer nPum = 2
     "Number of pumps in the boiler plant loop"
@@ -122,8 +122,8 @@ block HotWaterSupplyTemperatureReset
     annotation (Placement(transformation(extent={{-180,-90},{-140,-50}}),
       iconTransformation(extent={{-140,-60},{-100,-20}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uCur
-    "Current stage index"
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uCurStaSet
+    "Current stage setpoint index"
     annotation (Placement(transformation(extent={{-180,-140},{-140,-100}}),
       iconTransformation(extent={{-140,-100},{-100,-60}})));
 
@@ -144,11 +144,29 @@ block HotWaterSupplyTemperatureReset
       iconTransformation(extent={{100,-60},{140,-20}})));
 
 protected
+  Buildings.Controls.OBC.CDL.Integers.LessEqual intLesEqu[nSta]
+    "Identify stage indices up to current stage setpoint"
+    annotation (Placement(transformation(extent={{-40,-120},{-20,-100}})));
+
+  Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep(
+    final nout=nSta)
+    annotation (Placement(transformation(extent={{-80,-128},{-60,-108}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Switch swi3[nSta]
+    "Pass through stage typoe values for all stages up to current setpoint and 0 for higher stages"
+    annotation (Placement(transformation(extent={{0,-80},{20,-60}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con1[nSta](
+    final k=0)
+    "Constant zero source"
+    annotation (Placement(transformation(extent={{-120,-40},{-100,-20}})));
+
   Buildings.Controls.OBC.CDL.Logical.Switch swi1
     "Select plant setpoint based on stage type"
     annotation (Placement(transformation(extent={{10,60},{30,80}})));
 
-  Buildings.Controls.OBC.CDL.Routing.RealExtractor extIndSig(nin=nSta)
+  Buildings.Controls.OBC.CDL.Routing.RealExtractor extIndSig[nSta](
+    final nin=nSta)
     "Extract stage type for current stage"
     annotation (Placement(transformation(extent={{-80,-80},{-60,-60}})));
 
@@ -156,10 +174,10 @@ protected
     "Integer to Real conversion"
     annotation (Placement(transformation(extent={{-120,-80},{-100,-60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr[nSta](
     final threshold=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler)
-    "Check for non-condensing stage type"
-    annotation (Placement(transformation(extent={{-40,-80},{-20,-60}})));
+    "Check for non-condensing boilers that are already enabled"
+    annotation (Placement(transformation(extent={{60,-80},{80,-60}})));
 
   Buildings.Controls.OBC.ASHRAE.G36_PR1.Generic.SetPoints.TrimAndRespond triRes(
     final iniSet=TPlaHotWatSetMax,
@@ -174,10 +192,12 @@ protected
     "Trim and respond controller for non-condensing stage type"
     annotation (Placement(transformation(extent={{-40,80},{-20,100}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Edge edg "Detect start of stage change process"
+  Buildings.Controls.OBC.CDL.Logical.Edge edg
+    "Detect start of stage change process"
     annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueHoldWithReset truHol(duration=holTimVal)
+  Buildings.Controls.OBC.CDL.Logical.TrueHoldWithReset truHol(
+    final duration=holTimVal)
     "Hold setpoint value for duration of stage change"
     annotation (Placement(transformation(extent={{-40,-40},{-20,-20}})));
 
@@ -185,10 +205,13 @@ protected
     "Retain last value before stage change initiates"
     annotation (Placement(transformation(extent={{50,40},{70,60}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch swi "Logical switch"
+  Buildings.Controls.OBC.CDL.Logical.Switch swi
+    "Logical switch"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(nu=nPum) "Check if any pumps are turned on"
+  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
+    final nu=nPum)
+    "Check if any pumps are turned on"
     annotation (Placement(transformation(extent={{-120,80},{-100,100}})));
 
   Buildings.Controls.OBC.ASHRAE.G36_PR1.Generic.SetPoints.TrimAndRespond                               triRes1(
@@ -215,14 +238,14 @@ protected
     annotation (Placement(transformation(extent={{-80,-260},{-60,-240}})));
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea[nBoi](
-    final realTrue=0,
-    final realFalse=1)
+    final realTrue=fill(0, nBoi),
+    final realFalse=fill(1, nBoi))
     "Generate binary vector to identify condensing boilers"
     annotation (Placement(transformation(extent={{-40,-240},{-20,-220}})));
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea1[nBoi](
-    final realTrue=1,
-    final realFalse=0)
+    final realTrue=fill(1, nBoi),
+    final realFalse=fill(0, nBoi))
     "Generate binary vector to identify non-condensing boilers"
     annotation (Placement(transformation(extent={{-40,-280},{-20,-260}})));
 
@@ -267,88 +290,149 @@ protected
     "Element-wise product"
     annotation (Placement(transformation(extent={{60,-280},{80,-260}})));
 
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant staInd[nSta](
+    final k=staIndVal)
+    "Index of boiler plant stages"
+    annotation (Placement(transformation(extent={{-120,-110},{-100,-90}})));
+
 equation
   connect(uHotWatPumSta, mulOr.u[1:2]) annotation (Line(points={{-160,90},{-122,
           90}},                   color={255,0,255}));
+
   connect(mulOr.y, triRes.uDevSta)
     annotation (Line(points={{-98,90},{-60,90},{-60,98},{-42,98}},
                                                            color={255,0,255}));
+
   connect(truHol.u, uStaCha)
     annotation (Line(points={{-42,-30},{-50,-30},{-50,0},{-160,0}},
                                                    color={255,0,255}));
+
   connect(edg.u, uStaCha) annotation (Line(points={{-42,0},{-160,0}},
                       color={255,0,255}));
+
   connect(edg.y, triSam.trigger) annotation (Line(points={{-18,0},{60,0},{60,38.2}},
                   color={255,0,255}));
+
   connect(triSam.y, swi.u1)
     annotation (Line(points={{72,50},{80,50},{80,8},{98,8}}, color={0,0,127}));
+
   connect(truHol.y, swi.u2) annotation (Line(points={{-18,-30},{80,-30},{80,0},{
           98,0}}, color={255,0,255}));
+
   connect(triRes.numOfReq, nHotWatSupResReq) annotation (Line(points={{-42,82},{
           -50,82},{-50,50},{-160,50}},
                                     color={255,127,0}));
+
   connect(swi.y, TPlaHotWatSupSet)
     annotation (Line(points={{122,0},{160,0}}, color={0,0,127}));
+
   connect(swi1.y, triSam.u) annotation (Line(points={{32,70},{40,70},{40,50},{48,
           50}}, color={0,0,127}));
+
   connect(triRes.y, swi1.u1) annotation (Line(points={{-18,90},{0,90},{0,78},{8,
           78}},   color={0,0,127}));
+
   connect(triRes1.y, swi1.u3)
     annotation (Line(points={{-18,50},{0,50},{0,62},{8,62}}, color={0,0,127}));
+
   connect(triRes1.numOfReq, nHotWatSupResReq) annotation (Line(points={{-42,42},
           {-50,42},{-50,50},{-160,50}}, color={255,127,0}));
+
   connect(triRes1.uDevSta, mulOr.y) annotation (Line(points={{-42,58},{-60,58},{
           -60,90},{-98,90}},   color={255,0,255}));
+
   connect(swi1.y, swi.u3) annotation (Line(points={{32,70},{40,70},{40,-8},{98,-8}},
         color={0,0,127}));
-  connect(uCur, extIndSig.index) annotation (Line(points={{-160,-120},{-70,-120},
-          {-70,-82}}, color={255,127,0}));
+
   connect(extIndSig.u, intToRea.y)
     annotation (Line(points={{-82,-70},{-98,-70}}, color={0,0,127}));
+
   connect(intToRea.u, uTyp)
     annotation (Line(points={{-122,-70},{-160,-70}}, color={255,127,0}));
-  connect(extIndSig.y, greThr.u)
-    annotation (Line(points={{-58,-70},{-42,-70}}, color={0,0,127}));
-  connect(greThr.y, swi1.u2) annotation (Line(points={{-18,-70},{-10,-70},{-10,70},
-          {8,70}}, color={255,0,255}));
+
+  connect(greThr.y, swi1.u2) annotation (Line(points={{82,-70},{90,-70},{90,-50},
+          {-10,-50},{-10,70},{8,70}},
+                   color={255,0,255}));
+
   connect(boiTypVec.y, greThr1.u)
     annotation (Line(points={{-98,-250},{-82,-250}},  color={0,0,127}));
+
   connect(booToRea1.u, greThr1.y) annotation (Line(points={{-42,-270},{-50,-270},
           {-50,-250},{-58,-250}}, color={255,0,255}));
+
   connect(booToRea.u, greThr1.y) annotation (Line(points={{-42,-230},{-50,-230},
           {-50,-250},{-58,-250}}, color={255,0,255}));
+
   connect(add2.y, TBoiHotWatSupSet)
     annotation (Line(points={{122,-230},{160,-230}}, color={0,0,127}));
+
   connect(swi2.u2, greThr.y) annotation (Line(points={{-42,-190},{-50,-190},{-50,
-          -100},{-10,-100},{-10,-70},{-18,-70}},
+          -160},{90,-160},{90,-70},{82,-70}},
                            color={255,0,255}));
+
   connect(swi2.u3, swi.y) annotation (Line(points={{-42,-198},{-46,-198},{-46,-210},
           {-130,-210},{-130,-130},{130,-130},{130,0},{122,0}},
                                       color={0,0,127}));
+
   connect(addPar.u, swi.y) annotation (Line(points={{-122,-190},{-130,-190},{-130,
           -130},{130,-130},{130,0},{122,0}}, color={0,0,127}));
+
   connect(min.u1, con.y) annotation (Line(points={{-82,-164},{-90,-164},{-90,-150},
           {-98,-150}}, color={0,0,127}));
+
   connect(min.u2, addPar.y) annotation (Line(points={{-82,-176},{-90,-176},{-90,
           -190},{-98,-190}}, color={0,0,127}));
+
   connect(min.y, swi2.u1) annotation (Line(points={{-58,-170},{-46,-170},{-46,-182},
           {-42,-182}}, color={0,0,127}));
+
   connect(swi2.y, reaRep.u)
     annotation (Line(points={{-18,-190},{8,-190}},color={0,0,127}));
+
   connect(pro.u1, reaRep.y) annotation (Line(points={{58,-184},{50,-184},{50,-190},
           {32,-190}}, color={0,0,127}));
+
   connect(reaRep1.u, swi.y) annotation (Line(points={{8,-300},{-130,-300},{-130,
           -130},{130,-130},{130,0},{122,0}}, color={0,0,127}));
+
   connect(booToRea.y, pro.u2) annotation (Line(points={{-18,-230},{50,-230},{50,
           -196},{58,-196}}, color={0,0,127}));
+
   connect(pro.y, add2.u1) annotation (Line(points={{82,-190},{90,-190},{90,-224},
           {98,-224}}, color={0,0,127}));
+
   connect(reaRep1.y, pro1.u2) annotation (Line(points={{32,-300},{50,-300},{50,-276},
           {58,-276}}, color={0,0,127}));
+
   connect(booToRea1.y, pro1.u1) annotation (Line(points={{-18,-270},{50,-270},{50,
           -264},{58,-264}}, color={0,0,127}));
+
   connect(pro1.y, add2.u2) annotation (Line(points={{82,-270},{90,-270},{90,-236},
           {98,-236}}, color={0,0,127}));
+
+  connect(staInd.y, extIndSig.index) annotation (Line(points={{-98,-100},{-70,-100},
+          {-70,-82}}, color={255,127,0}));
+
+  connect(staInd.y, intLesEqu.u1) annotation (Line(points={{-98,-100},{-50,-100},
+          {-50,-110},{-42,-110}}, color={255,127,0}));
+
+  connect(uCurStaSet, intRep.u) annotation (Line(points={{-160,-120},{-120,-120},
+          {-120,-118},{-82,-118}}, color={255,127,0}));
+
+  connect(intRep.y, intLesEqu.u2)
+    annotation (Line(points={{-58,-118},{-42,-118}}, color={255,127,0}));
+
+  connect(extIndSig.y, swi3.u1) annotation (Line(points={{-58,-70},{-20,-70},{-20,
+          -62},{-2,-62}}, color={0,0,127}));
+
+  connect(swi3.y, greThr.u)
+    annotation (Line(points={{22,-70},{58,-70}}, color={0,0,127}));
+
+  connect(intLesEqu.y, swi3.u2) annotation (Line(points={{-18,-110},{-10,-110},{
+          -10,-70},{-2,-70}}, color={255,0,255}));
+
+  connect(con1.y, swi3.u3) annotation (Line(points={{-98,-30},{-54,-30},{-54,-78},
+          {-2,-78}}, color={0,0,127}));
 
   annotation(defaultComponentName="hotWatSupTemRes",
     Diagram(coordinateSystem(preserveAspectRatio=false,
@@ -392,7 +476,8 @@ equation
       <tr><th> Variable </th> <th> Value </th> <th> Definition </th> </tr>
       <tr><td>Device</td><td>Any hot water pump</td> <td>Associated device</td></tr>
       <tr><td>iniSet</td><td><code>TPlaHotWatSetMax</code></td><td>Initial setpoint</td></tr>
-      <tr><td>minSet</td><td><code>THotWatSetMinConBoi</code> for condensing boilers;<br><code>THotWatSetMinNonConBoi</code> for non-condensing boilers</td><td>Minimum setpoint</td></tr>
+      <tr><td>minSet</td><td><code>THotWatSetMinConBoi</code> for condensing boilers;
+<br><code>THotWatSetMinNonConBoi</code> for non-condensing boilers</td><td>Minimum setpoint</td></tr>
       <tr><td>maxSet</td><td><code>TPlaHotWatSetMax</code></td><td>Maximum setpoint</td></tr>
       <tr><td>delTim</td><td><code>delTimVal</code></td><td>Delay timer</td></tr>
       <tr><td>samplePeriod</td><td><code>samPerVal</code></td><td>Time step</td></tr>
