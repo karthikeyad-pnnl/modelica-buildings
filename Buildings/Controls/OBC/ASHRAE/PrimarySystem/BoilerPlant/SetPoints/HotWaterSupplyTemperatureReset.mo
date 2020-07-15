@@ -370,7 +370,7 @@ equation
                   textString="%name")}),
     Documentation(info="<html>
       <p>
-      Control sequence for hot-water supply temperature setpoint <code>THotWatSupSet</code>
+      Control sequence for hot-water supply temperature setpoint <code>TPlaHotWatSupSet</code>
       for boiler plant loop.
       </p>
       <h4>
@@ -384,7 +384,7 @@ equation
       <br>
       <li>
       When enabled, a Trim-and-Respond logic controller adjusts the supply
-      temperature setpoint <code>THotWatSupSet</code> according to the following parameters:
+      temperature setpoint <code>TPlaHotWatSupSet</code> according to the following parameters:
       </li>
       <table summary=\"summary\" border=\"1\">
       <tr><th> Variable </th> <th> Value </th> <th> Definition </th> </tr>
