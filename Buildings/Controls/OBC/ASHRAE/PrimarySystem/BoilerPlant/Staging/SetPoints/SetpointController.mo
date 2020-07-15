@@ -328,6 +328,7 @@ block SetpointController
     annotation (Placement(transformation(extent={{120,-20},{160,20}}),
       iconTransformation(extent={{100,60},{140,100}})));
 
+protected
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Change cha(
     final nSta=nSta,
     final iniSta=iniSta,
