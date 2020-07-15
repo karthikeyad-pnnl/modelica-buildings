@@ -122,8 +122,8 @@ block HotWaterSupplyTemperatureReset
     annotation (Placement(transformation(extent={{-180,-90},{-140,-50}}),
       iconTransformation(extent={{-140,-60},{-100,-20}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uCur
-    "Current stage index"
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uCurStaSet
+    "Current stage setpoint index"
     annotation (Placement(transformation(extent={{-180,-140},{-140,-100}}),
       iconTransformation(extent={{-140,-100},{-100,-60}})));
 
@@ -299,8 +299,8 @@ equation
           -60,90},{-98,90}},   color={255,0,255}));
   connect(swi1.y, swi.u3) annotation (Line(points={{32,70},{40,70},{40,-8},{98,-8}},
         color={0,0,127}));
-  connect(uCur, extIndSig.index) annotation (Line(points={{-160,-120},{-70,-120},
-          {-70,-82}}, color={255,127,0}));
+  connect(uCurStaSet, extIndSig.index) annotation (Line(points={{-160,-120},{-70,
+          -120},{-70,-82}}, color={255,127,0}));
   connect(extIndSig.u, intToRea.y)
     annotation (Line(points={{-82,-70},{-98,-70}}, color={0,0,127}));
   connect(intToRea.u, uTyp)

@@ -316,10 +316,10 @@ equation
           70},{-28,100},{-22,100}}, color={255,0,255}));
   connect(conInt3.y, hotWatSupTemRes2.uTyp) annotation (Line(points={{-38,40},{-26,
           40},{-26,96},{-22,96}}, color={255,127,0}));
-  connect(conInt4.y, hotWatSupTemRes.uCur) annotation (Line(points={{-128,10},{-124,
-          10},{-124,92},{-122,92}}, color={255,127,0}));
-  connect(conInt5.y, hotWatSupTemRes2.uCur) annotation (Line(points={{-38,10},{-24,
-          10},{-24,92},{-22,92}}, color={255,127,0}));
+  connect(conInt4.y, hotWatSupTemRes.uCurStaSet) annotation (Line(points={{-128,
+          10},{-124,10},{-124,92},{-122,92}}, color={255,127,0}));
+  connect(conInt5.y, hotWatSupTemRes2.uCurStaSet) annotation (Line(points={{-38,
+          10},{-24,10},{-24,92},{-22,92}}, color={255,127,0}));
   connect(con3.y, hotWatSupTemRes1.uHotWatPumSta[1]) annotation (Line(points={{82,
           160},{92,160},{92,107},{98,107}}, color={255,0,255}));
   connect(con4.y, hotWatSupTemRes1.uHotWatPumSta[2]) annotation (Line(points={{82,
@@ -330,8 +330,8 @@ equation
           70},{90,100},{98,100}}, color={255,0,255}));
   connect(conInt6.y, hotWatSupTemRes1.uTyp) annotation (Line(points={{82,40},{92,
           40},{92,96},{98,96}}, color={255,127,0}));
-  connect(conInt7.y, hotWatSupTemRes1.uCur) annotation (Line(points={{82,10},{96,
-          10},{96,92},{98,92}}, color={255,127,0}));
+  connect(conInt7.y, hotWatSupTemRes1.uCurStaSet) annotation (Line(points={{82,
+          10},{96,10},{96,92},{98,92}}, color={255,127,0}));
   connect(con9.y, hotWatSupTemRes3.uHotWatPumSta[1]) annotation (Line(points={{-128,
           -20},{-124,-20},{-124,-73},{-122,-73}}, color={255,0,255}));
   connect(con10.y, hotWatSupTemRes3.uHotWatPumSta[2]) annotation (Line(points={{
@@ -342,8 +342,8 @@ equation
           {-126,-110},{-126,-80},{-122,-80}}, color={255,0,255}));
   connect(conInt8.y, hotWatSupTemRes3.uTyp) annotation (Line(points={{-128,-140},
           {-124,-140},{-124,-84},{-122,-84}}, color={255,127,0}));
-  connect(conInt9.y, hotWatSupTemRes3.uCur) annotation (Line(points={{-128,-170},
-          {-122,-170},{-122,-88}}, color={255,127,0}));
+  connect(conInt9.y, hotWatSupTemRes3.uCurStaSet) annotation (Line(points={{-128,
+          -170},{-122,-170},{-122,-88}}, color={255,127,0}));
   connect(con11.y, hotWatSupTemRes4.uHotWatPumSta[1]) annotation (Line(points={{
           -38,-20},{-30,-20},{-30,-73},{-22,-73}}, color={255,0,255}));
   connect(con12.y, hotWatSupTemRes4.uHotWatPumSta[2]) annotation (Line(points={{
@@ -359,8 +359,8 @@ equation
           {-26,-140},{-26,-84},{-22,-84}}, color={255,127,0}));
   connect(sin.y, reaToInt3.u)
     annotation (Line(points={{-68,-170},{-62,-170}}, color={0,0,127}));
-  connect(reaToInt3.y, hotWatSupTemRes4.uCur) annotation (Line(points={{-38,-170},
-          {-22,-170},{-22,-88}}, color={255,127,0}));
+  connect(reaToInt3.y, hotWatSupTemRes4.uCurStaSet) annotation (Line(points={{-38,
+          -170},{-22,-170},{-22,-88}}, color={255,127,0}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false,
       extent={{-100,-100},{100,100}}),
