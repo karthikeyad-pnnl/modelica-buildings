@@ -172,35 +172,35 @@ equation
     annotation (Line(points={{-118,-250},{-100,-250},{-100,-258},{-22,-258}},
       color={0,0,127}));
 
-  connect(upProCon.yChi, chiStaRet.u) annotation (Line(points={{62,49},{94,49},
+  connect(upProCon.yBoi, chiStaRet.u) annotation (Line(points={{62,49},{94,49},
           {94,70},{98,70}}, color={255,0,255}));
 
   connect(chiStaRet.y, swi1.u2) annotation (Line(points={{122,70},{140,70},{140,
           40},{-80,40},{-80,20},{-62,20}}, color={255,0,255}));
 
-  connect(swi1.y, upProCon.uChiLoa) annotation (Line(points={{-38,20},{-30,20},{
-          -30,80},{38,80}},   color={0,0,127}));
+  connect(swi1.y, upProCon.VMinHotWatSet_flow) annotation (Line(points={{-38,20},
+          {-30,20},{-30,80},{38,80}}, color={0,0,127}));
 
-  connect(chiStaRet.y, upProCon.uChi) annotation (Line(points={{122,70},{140,70},
+  connect(chiStaRet.y,upProCon.uBoi)  annotation (Line(points={{122,70},{140,70},
           {140,40},{-28,40},{-28,78},{38,78}}, color={255,0,255}));
 
-  connect(chiWatFlo.y, upProCon.VChiWat_flow) annotation (Line(points={{-118,-40},
+  connect(chiWatFlo.y,upProCon.VHotWat_flow)  annotation (Line(points={{-118,-40},
           {-26,-40},{-26,75.6},{38,75.6}}, color={0,0,127}));
 
-  connect(chiStaRet.y, upProCon.uChiConIsoVal) annotation (Line(points={{122,70},
-          {140,70},{140,40},{-24,40},{-24,73},{38,73}}, color={255,0,255}));
+  connect(chiStaRet.y, upProCon.uStaChaPro) annotation (Line(points={{122,70},{
+          140,70},{140,40},{-24,40},{-24,73},{38,73}}, color={255,0,255}));
 
   connect(chiStaRet.y, upProCon.uConWatReq) annotation (Line(points={{122,70},{
           140,70},{140,40},{12,40},{12,66},{38,66}}, color={255,0,255}));
 
-  connect(wseSta.y, upProCon.uWSE) annotation (Line(points={{-118,-170},{14,-170},
-          {14,63},{38,63}},   color={255,0,255}));
+  connect(wseSta.y, upProCon.uPumChaPro) annotation (Line(points={{-118,-170},{
+          14,-170},{14,63},{38,63}}, color={255,0,255}));
 
   connect(upProCon.yDesConWatPumSpe, zerOrdHol1.u) annotation (Line(points={{62,67},
           {80,67},{80,-60},{98,-60}},       color={0,0,127}));
 
-  connect(zerOrdHol1.y, upProCon.uConWatPumSpeSet) annotation (Line(points={{122,-60},
-          {140,-60},{140,-140},{16,-140},{16,60},{38,60}},        color={0,0,127}));
+  connect(zerOrdHol1.y, upProCon.THotWatSup) annotation (Line(points={{122,-60},
+          {140,-60},{140,-140},{16,-140},{16,60},{38,60}}, color={0,0,127}));
 
   connect(zerOrdHol1.y, zerOrdHol2.u) annotation (Line(points={{122,-60},{140,-60},
           {140,-90},{80,-90},{80,-110},{98,-110}}, color={0,0,127}));
@@ -217,13 +217,13 @@ equation
   connect(booRep.y, IsoVal.u2) annotation (Line(points={{-38,-220},{-30,-220},{-30,
           -250},{-22,-250}}, color={255,0,255}));
 
-  connect(upProCon.yChiWatIsoVal, zerOrdHol.u) annotation (Line(points={{62,54},
+  connect(upProCon.yHotWatIsoVal, zerOrdHol.u) annotation (Line(points={{62,54},
           {88,54},{88,-20},{98,-20}},color={0,0,127}));
 
   connect(zerOrdHol.y, IsoVal.u1) annotation (Line(points={{122,-20},{150,-20},{
           150,-190},{-80,-190},{-80,-242},{-22,-242}}, color={0,0,127}));
 
-  connect(IsoVal.y, upProCon.uChiWatIsoVal) annotation (Line(points={{2,-250},{22,
+  connect(IsoVal.y,upProCon.uHotWatIsoVal)  annotation (Line(points={{2,-250},{22,
           -250},{22,51},{38,51}},   color={0,0,127}));
 
   connect(chiStaRet.y, upProCon.uChiWatReq) annotation (Line(points={{122,70},{
@@ -268,11 +268,11 @@ equation
   connect(chiSta.y, sta.u)
     annotation (Line(points={{-38,-110},{-22,-110}}, color={0,0,127}));
 
-  connect(sta.y, upProCon.uChiSta) annotation (Line(points={{2,-110},{8,-110},{8,
-          70},{38,70}}, color={255,127,0}));
+  connect(sta.y, upProCon.uBoiStaSet) annotation (Line(points={{2,-110},{8,-110},
+          {8,70},{38,70}}, color={255,127,0}));
 
-  connect(upProCon.yStaPro, falEdg.u) annotation (Line(points={{62,87},{70,87},{
-          70,140},{78,140}}, color={255,0,255}));
+  connect(upProCon.yStaChaPro, falEdg.u) annotation (Line(points={{62,87},{70,
+          87},{70,140},{78,140}}, color={255,0,255}));
 
   connect(falEdg.y, lat.u)
     annotation (Line(points={{102,140},{118,140}}, color={255,0,255}));

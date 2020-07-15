@@ -762,9 +762,9 @@ equation
   connect(chiWatMinSet.y, yChiWatMinFloSet)
     annotation (Line(points={{222,-330},{300,-330}}, color={0,0,127}));
 
-  connect(chiWatMinSet.y, minBypSet.VMinBoiWat_setpoint)
-    annotation (Line(points={{222,-330},{240,-330},{240,-350},{60,-350},
-      {60,-378},{98,-378}}, color={0,0,127}));
+  connect(chiWatMinSet.y, minBypSet.VMinHotWatSet_flow) annotation (Line(points
+        ={{222,-330},{240,-330},{240,-350},{60,-350},{60,-378},{98,-378}},
+        color={0,0,127}));
 
   connect(nexChi.yOnOff, dowSta.uOnOff)
     annotation (Line(points={{-18,320},{0,320},{0,228},{58,228}},

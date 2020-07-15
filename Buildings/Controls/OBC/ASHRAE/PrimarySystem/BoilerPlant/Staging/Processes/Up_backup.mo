@@ -112,8 +112,7 @@ block Up_backup "Sequence for control devices when there is stage-up command"
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uChiLoa[nBoi](
     final quantity=fill("HeatFlowRate", nBoi),
-    final unit=fill("W", nBoi))
-    "Current boiler load"
+    final unit=fill("W", nBoi)) "Current boiler load"
     annotation (Placement(transformation(extent={{-280,150},{-240,190}}),
       iconTransformation(extent={{-140,100},{-100,140}})));
 
@@ -153,8 +152,7 @@ block Up_backup "Sequence for control devices when there is stage-up command"
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uConWatPumSpeSet(
     final min=0,
     final max=1,
-    final unit="1")
-    "Condenser water pump speed setpoint"
+    final unit="1") "Condenser water pump speed setpoint"
     annotation (Placement(transformation(extent={{-280,-90},{-240,-50}}),
       iconTransformation(extent={{-140,-100},{-100,-60}})));
 
@@ -577,9 +575,8 @@ equation
     annotation (Line(points={{-58,220},{-44,220},{-44,190},{-92,190},{-92,165},
       {-82,165}}, color={255,0,255}));
 
-  connect(minBoiWatFlo.yChiWatMinFloSet, minBypSet.VMinBoiWat_setpoint)
-    annotation (Line(points={{42,90},{50,90},{50,122},{58,122}},
-      color={0,0,127}));
+  connect(minBoiWatFlo.yChiWatMinFloSet, minBypSet.VMinHotWatSet_flow)
+    annotation (Line(points={{42,90},{50,90},{50,122},{58,122}}, color={0,0,127}));
 
   connect(minBoiWatFlo.yChiWatMinFloSet, swi1.u3)
     annotation (Line(points={{42,90},{50,90},{50,82},{198,82}},

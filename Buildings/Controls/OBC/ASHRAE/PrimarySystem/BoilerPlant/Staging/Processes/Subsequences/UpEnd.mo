@@ -463,9 +463,9 @@ equation
     annotation (Line(points={{-220,100},{-190,100},{-190,-137},{38,-137}},
       color={255,0,255}));
 
-  connect(minBoiWatSet.yChiWatMinFloSet, minBypSet.VMinBoiWat_setpoint)
+  connect(minBoiWatSet.yChiWatMinFloSet, minBypSet.VMinHotWatSet_flow)
     annotation (Line(points={{62,-130},{70,-130},{70,-146},{30,-146},{30,-188},
-      {38,-188}},  color={0,0,127}));
+          {38,-188}}, color={0,0,127}));
 
   connect(con3.y, minBoiWatSet.uUpsDevSta)
     annotation (Line(points={{-138,-150},{-20,-150},{-20,-123},{38,-123}},

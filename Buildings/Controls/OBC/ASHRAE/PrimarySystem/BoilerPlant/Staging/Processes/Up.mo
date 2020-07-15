@@ -185,7 +185,7 @@ block Up
     endValPos=1)
     annotation (Placement(transformation(extent={{-70,-10},{-50,10}})));
   CDL.Logical.And and1
-    annotation (Placement(transformation(extent={{10,-10},{30,10}})));
+    annotation (Placement(transformation(extent={{0,-8},{20,12}})));
   Subsequences.EnableBoiler enaBoi
     annotation (Placement(transformation(extent={{60,-10},{80,10}})));
   Subsequences.HWIsoVal disHotWatIsoVal1(
@@ -219,13 +219,13 @@ block Up
   CDL.Logical.Latch lat4
     annotation (Placement(transformation(extent={{160,-200},{180,-180}})));
   CDL.Logical.And and4
-    annotation (Placement(transformation(extent={{130,-200},{150,-180}})));
+    annotation (Placement(transformation(extent={{132,-200},{152,-180}})));
   CDL.Logical.Edge edg
     annotation (Placement(transformation(extent={{210,40},{230,60}})));
   CDL.Logical.Edge edg1
-    annotation (Placement(transformation(extent={{-30,-200},{-10,-180}})));
+    annotation (Placement(transformation(extent={{-100,-260},{-80,-240}})));
   CDL.Logical.Edge edg2
-    annotation (Placement(transformation(extent={{190,-200},{210,-180}})));
+    annotation (Placement(transformation(extent={{140,-246},{160,-226}})));
   CDL.Logical.Or or2
     annotation (Placement(transformation(extent={{210,-250},{230,-230}})));
   CDL.Interfaces.BooleanOutput yPumChaPro
@@ -246,7 +246,7 @@ equation
   connect(and2.u2, hotWatSupTemRes.yHotWatSupTemRes) annotation (Line(points={{-132,
           -8},{-140,-8},{-140,-20},{-148,-20}}, color={255,0,255}));
   connect(and1.y, enaBoi.uUpsDevSta)
-    annotation (Line(points={{32,0},{36,0},{36,2},{58,2}}, color={255,0,255}));
+    annotation (Line(points={{22,2},{58,2}},               color={255,0,255}));
   connect(disHotWatIsoVal1.yEnaHotWatIsoVal, and3.u1) annotation (Line(points={{172,6},
           {180,6},{180,0},{188,0}},        color={255,0,255}));
   connect(nexBoi.yNexEnaBoi, enaHotWatIsoVal.nexChaBoi) annotation (Line(points={{-148,
@@ -312,8 +312,8 @@ equation
           -48,6},{-44,6},{-44,-110},{-32,-110}}, color={255,0,255}));
   connect(pre.y, lat2.clr) annotation (Line(points={{222,-50},{230,-50},{230,
           -80},{-38,-80},{-38,-116},{-32,-116}}, color={255,0,255}));
-  connect(lat2.y, and1.u1) annotation (Line(points={{-8,-110},{0,-110},{0,0},{8,
-          0}}, color={255,0,255}));
+  connect(lat2.y, and1.u1) annotation (Line(points={{-8,-110},{-6,-110},{-6,2},
+          {-2,2}}, color={255,0,255}));
   connect(uHotWatIsoVal, disHotWatIsoVal1.uHotWatIsoVal) annotation (Line(
         points={{-260,120},{144,120},{144,5},{148,5}}, color={0,0,127}));
   connect(nexBoi.uBoiSet, uBoiSet) annotation (Line(points={{-172,-60},{-190,
@@ -329,33 +329,29 @@ equation
   connect(uStaChaPro, lat.u)
     annotation (Line(points={{-260,0},{-224,0}}, color={255,0,255}));
   connect(lat3.y, and1.u2) annotation (Line(points={{-118,-190},{-48,-190},{-48,
-          -14},{4,-14},{4,-8},{8,-8}}, color={255,0,255}));
+          -30},{-10,-30},{-10,-6},{-2,-6}}, color={255,0,255}));
   connect(uPumChaPro, lat3.u)
     annotation (Line(points={{-260,-190},{-142,-190}}, color={255,0,255}));
   connect(and4.y, lat4.u)
-    annotation (Line(points={{152,-190},{158,-190}}, color={255,0,255}));
+    annotation (Line(points={{154,-190},{158,-190}}, color={255,0,255}));
   connect(truDel.y, and4.u1) annotation (Line(points={{122,0},{126,0},{126,-190},
-          {128,-190}}, color={255,0,255}));
+          {130,-190}}, color={255,0,255}));
   connect(uPumChaPro, and4.u2) annotation (Line(points={{-260,-190},{-160,-190},
-          {-160,-210},{120,-210},{120,-198},{128,-198}}, color={255,0,255}));
+          {-160,-210},{120,-210},{120,-198},{130,-198}}, color={255,0,255}));
   connect(lat4.y, and3.u2) annotation (Line(points={{182,-190},{184,-190},{184,
           -8},{188,-8}}, color={255,0,255}));
   connect(pre.y, lat3.clr) annotation (Line(points={{222,-50},{230,-50},{230,
-          -220},{-150,-220},{-150,-196},{-142,-196}}, color={255,0,255}));
+          -216},{-150,-216},{-150,-196},{-142,-196}}, color={255,0,255}));
   connect(pre.y, lat4.clr) annotation (Line(points={{222,-50},{230,-50},{230,
-          -220},{154,-220},{154,-196},{158,-196}}, color={255,0,255}));
+          -216},{154,-216},{154,-196},{158,-196}}, color={255,0,255}));
   connect(and3.y, edg.u) annotation (Line(points={{212,0},{220,0},{220,30},{200,
           30},{200,50},{208,50}}, color={255,0,255}));
   connect(edg.y, yStaChaPro)
     annotation (Line(points={{232,50},{260,50}}, color={255,0,255}));
-  connect(lat3.y, edg1.u)
-    annotation (Line(points={{-118,-190},{-32,-190}}, color={255,0,255}));
-  connect(edg2.u, lat4.y)
-    annotation (Line(points={{188,-190},{182,-190}}, color={255,0,255}));
-  connect(edg2.y, or2.u1) annotation (Line(points={{212,-190},{220,-190},{220,
-          -210},{200,-210},{200,-240},{208,-240}}, color={255,0,255}));
-  connect(edg1.y, or2.u2) annotation (Line(points={{-8,-190},{0,-190},{0,-248},
-          {208,-248}}, color={255,0,255}));
+  connect(edg2.y, or2.u1) annotation (Line(points={{162,-236},{200,-236},{200,
+          -240},{208,-240}}, color={255,0,255}));
+  connect(edg1.y, or2.u2) annotation (Line(points={{-78,-250},{66,-250},{66,
+          -248},{208,-248}}, color={255,0,255}));
   connect(enaHotWatIsoVal.yHotWatIsoVal, yHotWatIsoVal) annotation (Line(points
         ={{-48,-6},{-30,-6},{-30,-70},{260,-70}}, color={0,0,127}));
   connect(disHotWatIsoVal1.yHotWatIsoVal, yHotWatIsoVal) annotation (Line(
@@ -369,6 +365,10 @@ equation
           {144,-110},{260,-110}}, color={255,0,255}));
   connect(nexBoi.yNexEnaBoi, yNexEnaBoi) annotation (Line(points={{-148,-51},{
           160,-51},{160,-150},{260,-150}}, color={255,127,0}));
+  connect(and2.y, edg1.u) annotation (Line(points={{-108,0},{-106,0},{-106,-250},
+          {-102,-250}}, color={255,0,255}));
+  connect(truDel.y, edg2.u) annotation (Line(points={{122,0},{126,0},{126,-236},
+          {138,-236}}, color={255,0,255}));
 annotation (
   defaultComponentName="upProCon",
   Diagram(coordinateSystem(preserveAspectRatio=false,

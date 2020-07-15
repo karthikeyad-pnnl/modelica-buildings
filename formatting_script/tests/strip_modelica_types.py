@@ -137,37 +137,3 @@ class StripModelicaTypes(object):
 		file_out.close()
 
 		return file_with_units_replaced
-
-	# def line_breaks(self, path, overwrite=False):
-	# 	lines = tuple(open(path, 'r'))
-
-	# 	file_with_units_replaced = ""
-
-	# 	for line in lines:
-	# 		index = lines.index(line)
-	# 		try:
-	# 			if (("\;" in line)): #and ('\n' not in lines(index+1)[0])):
-	# 				line = line.replace('\;', '\; \n')
-	# 				text = line
-
-	# 			else:
-	# 				# append to the new file unchanged
-	# 				text = line
-
-	# 			file_with_units_replaced = \
-	# 					file_with_units_replaced + \
-	# 					text
-	# 		except:
-	# 			print("In {} not able to replace for {} line".format(path, line))
-
-	# 	if overwrite:
-	# 		outpath=path
-	# 	else:
-	# 		outpath=re.split(r'\.mo',path)[0] + \
-	# 			'_converted' + '.mo'
-
-	# 	file_out = open(outpath, "w")
-	# 	file_out.write(file_with_units_replaced)
-	# 	file_out.close()
-
-	# 	return file_with_units_replaced
