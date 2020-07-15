@@ -1,6 +1,6 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Validation;
 model SetpointController
-  "Validates chiller stage status setpoint signal generation for plants with WSE"
+  "Validates boiler stage status setpoint signal generation for boiler plants"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.SetpointController staSetCon(
     final primaryOnly=false,

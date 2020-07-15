@@ -1,6 +1,6 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints;
 block HotWaterSupplyTemperatureReset
-  "Block to calculate hot-water setpoint for hot water supply temperature"
+  "Block to calculate temperature setpoint for hot water supply temperature"
 
   parameter Integer nPum = 2
     "Number of pumps in the boiler plant loop"
@@ -370,7 +370,7 @@ equation
                   textString="%name")}),
     Documentation(info="<html>
       <p>
-      Control sequence for hot-water supply temperature setpoint <code>hotWatSupTemSet</code>
+      Control sequence for hot-water supply temperature setpoint <code>THotWatSupSet</code>
       for boiler plant loop.
       </p>
       <h4>
@@ -409,13 +409,13 @@ equation
       </li>
       <br>
       <li>
-      When the current stage type <code>uTyp[uCur]</code> is condensing type, the
+      When the current stage type <code>uTyp[uCurStaSet]</code> is condensing type, the
       condensing boiler setpoint <code>TBoiHotWatSupSet</code> shall be the plant
       hot water supply setpoint <code>TPlaHotWatSupSet</code>.
       </li>
       <br>
       <li>
-      When <code>uTyp[uCur]</code> is non-condensing type,
+      When <code>uTyp[uCurStaSet]</code> is non-condensing type,
       <ul>
       <li>
       the non-condensing boiler setpoints in <code>TBoiHotWatSupSet</code> shall

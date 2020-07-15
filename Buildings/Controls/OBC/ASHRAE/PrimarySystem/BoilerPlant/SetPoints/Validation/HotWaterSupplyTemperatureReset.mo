@@ -1,5 +1,6 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.Validation;
 block HotWaterSupplyTemperatureReset
+  "Validates hot water supply temperature setpoint reset for boiler plants"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.HotWaterSupplyTemperatureReset
     hotWatSupTemRes(
@@ -359,8 +360,8 @@ equation
           {-26,-140},{-26,-84},{-22,-84}}, color={255,127,0}));
   connect(sin.y, reaToInt3.u)
     annotation (Line(points={{-68,-170},{-62,-170}}, color={0,0,127}));
-  connect(reaToInt3.y, hotWatSupTemRes4.uCurStaSet) annotation (Line(points={{-38,
-          -170},{-22,-170},{-22,-88}}, color={255,127,0}));
+  connect(reaToInt3.y, hotWatSupTemRes4.uCurStaSet) annotation (Line(points={{
+          -38,-170},{-22,-170},{-22,-88}}, color={255,127,0}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false,
       extent={{-100,-100},{100,100}}),
