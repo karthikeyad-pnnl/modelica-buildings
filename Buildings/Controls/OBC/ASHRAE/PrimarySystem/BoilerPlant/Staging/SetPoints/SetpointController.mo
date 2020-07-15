@@ -530,8 +530,9 @@ equation
 Documentation(info="<html>
 <p>
 The sequence is a boiler stage status setpoint controller that outputs the 
-boiler stage integer index <code>ySta</code>, boiler stage change trigger signal
-<code>y</code> and a boiler status vector for the current stage <code>yBoi</code>.
+boiler stage integer index <code>ySta</code>, boiler stage change trigger signals
+<code>yChaEdg</code>, <code>yChaUpEdg</code>, <code>yChaDowEdg</code>, and a boiler
+status vector for the current stage <code>yBoi</code>.
 </p>
 <p>
 Implemented according to ASHRAE RP-1711 March 2020 Draft, section 5.3.3.10.
