@@ -328,6 +328,16 @@ block SetpointController
     annotation (Placement(transformation(extent={{120,-20},{160,20}}),
       iconTransformation(extent={{100,60},{140,100}})));
 
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.CapacityRequirement capReq1(
+    final avePer=avePer)
+    "Capacity requirement calculator"
+    annotation (Placement(transformation(extent={{-360,240},{-340,260}})));
+
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Capacities cap(
+    final nSta=nSta)
+    "Stage capacity calculator to to find design and minimum capacities for staging calculations"
+    annotation (Placement(transformation(extent={{-270,-180},{-250,-160}})));
+
 protected
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Change cha(
     final nSta=nSta,
@@ -342,11 +352,6 @@ protected
     final staMat=staMat)
     "Boiler index generator"
     annotation (Placement(transformation(extent={{40,-210},{60,-190}})));
-
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.CapacityRequirement capReq1(
-    final avePer=avePer)
-    "Capacity requirement calculator"
-    annotation (Placement(transformation(extent={{-360,240},{-340,260}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Configurator conf(
     final nSta=nSta,
@@ -364,11 +369,6 @@ protected
     final staMat=staMat)
     "Status calculator to find next higher and lower available stages"
     annotation (Placement(transformation(extent={{-310,-220},{-290,-200}})));
-
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Capacities cap(
-    final nSta=nSta)
-    "Stage capacity calculator to to find design and minimum capacities for staging calculations"
-    annotation (Placement(transformation(extent={{-270,-180},{-250,-160}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Up staUp(
     final nSta=nSta,
