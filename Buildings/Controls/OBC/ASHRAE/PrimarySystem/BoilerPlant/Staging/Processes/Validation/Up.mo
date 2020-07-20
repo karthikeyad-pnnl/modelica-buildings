@@ -161,56 +161,56 @@ model Up
     annotation (Placement(transformation(extent={{-120,190},{-100,210}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold yStaChaPro1(
-    final
-      trueHoldDuration=10, final falseHoldDuration=0)
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "Hold true pulse signal for visualization"
     annotation (Placement(transformation(extent={{250,190},{270,210}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold yStaChaPro2(
-    final
-      trueHoldDuration=10, final falseHoldDuration=0)
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "Hold true pulse signal for visualization"
     annotation (Placement(transformation(extent={{-130,-140},{-110,-120}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold yStaChaPro3(
-    final
-      trueHoldDuration=10, final falseHoldDuration=0)
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "Hold true pulse signal for visualization"
     annotation (Placement(transformation(extent={{250,-140},{270,-120}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold yStaChaPro4(
-    final
-      trueHoldDuration=10, final falseHoldDuration=0)
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "Hold true pulse signal for visualization"
     annotation (Placement(transformation(extent={{640,190},{660,210}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold yPumChaPro(
-    final
-      trueHoldDuration=10, final falseHoldDuration=0)
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "Hold true pulse signal for visualization"
     annotation (Placement(transformation(extent={{-120,150},{-100,170}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold yPumChaPro1(
-    final
-      trueHoldDuration=10, final falseHoldDuration=0)
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "Hold true pulse signal for visualization"
     annotation (Placement(transformation(extent={{250,150},{270,170}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold yPumChaPro2(
-    final
-      trueHoldDuration=10, final falseHoldDuration=0)
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "Hold true pulse signal for visualization"
     annotation (Placement(transformation(extent={{-130,-180},{-110,-160}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold yPumChaPro3(
-    final
-      trueHoldDuration=10, final falseHoldDuration=0)
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "Hold true pulse signal for visualization"
     annotation (Placement(transformation(extent={{250,-180},{270,-160}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold yPumChaPro4(
-    final
-      trueHoldDuration=10, final falseHoldDuration=0)
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "Hold true pulse signal for visualization"
     annotation (Placement(transformation(extent={{640,150},{660,170}})));
 
