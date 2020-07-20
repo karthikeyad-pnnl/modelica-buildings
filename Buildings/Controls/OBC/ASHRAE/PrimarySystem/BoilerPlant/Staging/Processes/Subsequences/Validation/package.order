@@ -1,9 +1,5 @@
 HWIsoVal
-DownStartWithOn
-DownStartWithoutOn
 ResetMinBypass
-UpEndWithOff
-UpEndWithoutOff
 NextBoiler
 EnableBoiler
 DisableBoiler

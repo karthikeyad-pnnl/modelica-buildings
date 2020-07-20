@@ -16,12 +16,14 @@ model DisableBoiler
     "Disable boiler"
     annotation (Placement(transformation(extent={{102,70},{122,90}})));
 
-  CDL.Logical.TrueFalseHold truFalHol(trueHoldDuration=10)
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol(trueHoldDuration=10)
     "Hold boolean pulse signal for easy visualization"
     annotation (Placement(transformation(extent={{-10,90},{10,110}})));
-  CDL.Logical.TrueFalseHold truFalHol1(trueHoldDuration=10)
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol1(trueHoldDuration=10)
     "Hold boolean pulse signal for easy visualization"
     annotation (Placement(transformation(extent={{170,90},{190,110}})));
+
 protected
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul(
     final width=0.15,
@@ -67,7 +69,8 @@ protected
     "Disabling boiler index"
     annotation (Placement(transformation(extent={{-160,-70},{-140,-50}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant enaBoi1(final k=1)
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant enaBoi1(
+    final k=1)
     "Enabling boiler index"
     annotation (Placement(transformation(extent={{20,90},{40,110}})));
 
@@ -174,20 +177,27 @@ equation
 
   connect(boiOnOff.yBoi[2], boiStaRet[1].u)
     annotation (Line(points={{-58,80},{-42,80}}, color={255,0,255}));
+
   connect(boiOnOff.yBoi[3], boiStaRet[2].u) annotation (Line(points={{-58,
           81.3333},{-52,81.3333},{-52,80},{-42,80}},
                                             color={255,0,255}));
+
   connect(boiOff.yBoi[2], boiStaRet1[1].u)
     annotation (Line(points={{124,80},{138,80}}, color={255,0,255}));
+
   connect(boiOff.yBoi[3], boiStaRet1[2].u) annotation (Line(points={{124,
           81.3333},{130,81.3333},{130,80},{138,80}},
                                             color={255,0,255}));
+
   connect(boiOnOff.yBoiDisPro, truFalHol.u) annotation (Line(points={{-58,72},{-48,
           72},{-48,100},{-12,100}}, color={255,0,255}));
+
   connect(boiOff.yBoiDisPro, truFalHol1.u) annotation (Line(points={{124,72},{134,
           72},{134,100},{168,100}}, color={255,0,255}));
+
   connect(upsDevSta.y, boiOff.uUpsDevSta) annotation (Line(points={{-138,20},{
           60,20},{60,82},{100,82}}, color={255,0,255}));
+
 annotation (
  experiment(StopTime=3600, Tolerance=1e-06),
   __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Processes/Subsequences/Validation/DisableBoiler.mos"

@@ -55,9 +55,10 @@ block ResetHotWaterSupplyTemperature
     annotation (Placement(transformation(extent={{160,10},{200,50}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
-  CDL.Logical.And and1
+  Buildings.Controls.OBC.CDL.Logical.And and1
     "Ensure stage-completion signal is passed only when the stage-up signal is active"
     annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
+
 protected
   parameter Integer boiStaInd[nSta]={i for i in 1:nSta}
     "Index vector of boiler plant stages";
@@ -208,10 +209,13 @@ equation
 
   connect(or2.y, and1.u1)
     annotation (Line(points={{-78,50},{-42,50}}, color={255,0,255}));
+
   connect(uStaUp, and1.u2) annotation (Line(points={{-180,70},{-150,70},{-150,
           10},{-50,10},{-50,42},{-42,42}}, color={255,0,255}));
+
   connect(and1.y, logSwi.u1) annotation (Line(points={{-18,50},{100,50},{100,38},
           {118,38}}, color={255,0,255}));
+
 annotation (
   defaultComponentName="hotWatSupTemRes",
   Icon(graphics={

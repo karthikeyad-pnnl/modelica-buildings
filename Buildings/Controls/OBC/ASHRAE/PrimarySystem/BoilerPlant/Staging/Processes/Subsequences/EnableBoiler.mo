@@ -336,6 +336,7 @@ equation
 
   connect(logSwi4.y, yBoiEnaPro)
     annotation (Line(points={{142,-170},{220,-170}}, color={255,0,255}));
+
 annotation (
   defaultComponentName="enaBoi",
   Icon(coordinateSystem(preserveAspectRatio=false), graphics={

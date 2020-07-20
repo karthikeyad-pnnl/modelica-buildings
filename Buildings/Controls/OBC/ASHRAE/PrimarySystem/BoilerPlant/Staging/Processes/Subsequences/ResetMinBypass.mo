@@ -2,11 +2,11 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes
 block ResetMinBypass
     "Sequence for minimum hot water flow setpoint reset"
 
-  parameter Real aftByPasSetTim(
+  parameter Real delEna(
     final unit="s",
     final quantity="Time",
     final displayUnit="s") = 60
-    "Time after setpoint achieved";
+    "Enable delay after setpoint achieved";
 
   parameter Real relFloDif=0.05
     "Relative error to the setpoint for checking if it has achieved flow rate setpoint"
@@ -35,7 +35,8 @@ block ResetMinBypass
     final min=0,
     final unit="m3/s",
     final displayUnit="m3/s",
-    final quantity="VolumeFlowRate") "Minimum hot water flow setpoint"
+    final quantity="VolumeFlowRate")
+    "Minimum hot water flow setpoint"
     annotation (Placement(transformation(extent={{-200,-100},{-160,-60}}),
         iconTransformation(extent={{-140,-100},{-100,-60}})));
 
@@ -64,7 +65,8 @@ protected
     annotation (Placement(transformation(extent={{-80,70},{-60,90}})));
 
   Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr(
-    final threshold=aftByPasSetTim)
+    final
+      threshold=delEna)
     "Check if it has been threshold time after new setpoint achieved"
     annotation (Placement(transformation(extent={{80,-30},{100,-10}})));
 
@@ -72,7 +74,8 @@ protected
     "Logical not"
     annotation (Placement(transformation(extent={{-120,10},{-100,30}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Latch lat "Logical latch"
+  Buildings.Controls.OBC.CDL.Logical.Latch lat
+    "Logical latch"
     annotation (Placement(transformation(extent={{80,30},{100,50}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Division div
@@ -84,14 +87,16 @@ protected
     "Add a small positive to avoid zero output"
     annotation (Placement(transformation(extent={{-140,-90},{-120,-70}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Edge edg1 "Rising edge"
+  Buildings.Controls.OBC.CDL.Logical.Edge edg1
+    "Rising edge"
     annotation (Placement(transformation(extent={{-80,10},{-60,30}})));
 
   Buildings.Controls.OBC.CDL.Logical.And and3
     "Logical and"
     annotation (Placement(transformation(extent={{0,-30},{20,-10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Edge edg2 "Rising edge"
+  Buildings.Controls.OBC.CDL.Logical.Edge edg2
+    "Rising edge"
     annotation (Placement(transformation(extent={{40,30},{60,50}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Abs abs
@@ -181,10 +186,13 @@ equation
 
   connect(abs.u, add2.y)
     annotation (Line(points={{-122,-20},{-126,-20}}, color={0,0,127}));
+
   connect(add2.u1, VHotWat_flow) annotation (Line(points={{-150,-14},{-154,-14},
           {-154,-20},{-180,-20}}, color={0,0,127}));
+
   connect(add2.u2, VMinHotWatSet_flow) annotation (Line(points={{-150,-26},{-154,
           -26},{-154,-80},{-180,-80}}, color={0,0,127}));
+
 annotation (
   defaultComponentName="minBypRes",
   Icon(graphics={

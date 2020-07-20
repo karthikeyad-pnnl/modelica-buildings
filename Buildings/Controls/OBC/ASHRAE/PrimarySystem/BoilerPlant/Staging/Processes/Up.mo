@@ -1,68 +1,88 @@
-﻿within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes;
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes;
 block Up
     "Sequence for control devices when there is stage-up command"
 
   parameter Boolean primaryOnly = false
-    "True: The boiler plant is primary-only";
+    "True: The boiler plant is primary-only"
+    annotation (Dialog(group="Boiler plant parameters"));
 
   parameter Boolean isHeadered = true
-    "True: Headered hot water pumps; False: Dedicated hot water pumps";
+    "True: Headered hot water pumps;
+ False: Dedicated hot water pumps"
+    annotation (Dialog(group="Boiler plant parameters"));
 
   parameter Integer nBoi=3
-    "Total number of boilers in the plant";
+    "Total number of boilers in the plant"
+    annotation (Dialog(group="Boiler plant parameters"));
 
   parameter Integer nSta=5
-    "Total number of stages";
+    "Total number of stages"
+    annotation (Dialog(group="Boiler plant parameters"));
+
+  parameter Real TMinSupNonConBoi(
+    final unit="K",
+    final displayUnit="K",
+    final quantity="ThermodynamicTemperature") = 333.2
+    "Minimum supply temperature required for non-condensing boilers"
+    annotation (Dialog(group="Boiler plant parameters"));
+
+  parameter Real delProSupTemSet(
+    final unit="s",
+    final displayUnit="s",
+    final quantity="time")=300
+    "Process time-out for hot water supply temperature setpoint reset"
+    annotation (Dialog(group="Time and delay parameters"));
+
+  parameter Real delEnaMinFloSet(
+    final unit="s",
+    final displayUnit="s",
+    final quantity="time")=60
+    "Enable delay after minimum flow setpoint is achieved in bypass valve"
+    annotation (Dialog(group="Time and delay parameters"));
+
+  parameter Real chaIsoValTim(
+    final unit="s",
+    final displayUnit="s",
+    final quantity="time") = 60
+    "Time to slowly change isolation valve, should be determined in the field"
+    annotation (Dialog(group="Time and delay parameters"));
 
   parameter Real delPreBoiEna(
     final unit="s",
     final displayUnit="s",
     final quantity="time") = 30
     "Time delay after valve and pump change process has been completed before
-    starting boiler change process";
-
-  parameter Real delBoiEna(
-    final unit="s",
-    final displayUnit="s",
-    final quantity="time") = 180
-    "Time delay after boiler change process has been completed before turning off excess valves and pumps";
-
-  parameter Real delEnaMinFloSet(
-    final unit="s",
-    final displayUnit="s",
-    final quantity="time")=60
-    "Enable delay after minimum flow setpoint is achieved in bypass valve";
-
-  parameter Real delProSupTemSet(
-    final unit="s",
-    final displayUnit="s",
-    final quantity="time")=300
-    "Process time-out for hot water supply temperature setpoint reset";
-
-  parameter Real TMinSupNonConBoi(
-    final unit="K",
-    final displayUnit="K",
-    final quantity="ThermodynamicTemperature") = 333.2
-    "Minimum supply temperature required for non-condensing boilers";
-
-  parameter Real sigDif(
-    final unit="K",
-    final displayUnit="K",
-    final quantity="TemperatureDifference")=0.1
-    "Significant difference based on minimum resolution of temperature sensor";
-
-  parameter Real chaIsoValTim(
-    final unit="s",
-    final displayUnit="s",
-    final quantity="time") = 60
-    "Time to slowly change isolation valve, should be determined in the field";
+    starting boiler change process"
+    annotation (Dialog(group="Time and delay parameters"));
 
   parameter Real boiChaProOnTim(
     final unit="s",
     final displayUnit="s",
     final quantity="time") = 300
     "Enabled boiler operation time to indicate if it is proven on during a staging
-    process where one boiler is turned on and the other is turned off";
+    process where one boiler is turned on and the other is turned off"
+    annotation (Dialog(group="Time and delay parameters"));
+
+  parameter Real delBoiEna(
+    final unit="s",
+    final displayUnit="s",
+    final quantity="time") = 180
+    "Time delay after boiler change process has been completed before turning off
+    excess valves and pumps"
+    annotation (Dialog(group="Time and delay parameters"));
+
+  parameter Real sigDif(
+    final unit="K",
+    final displayUnit="K",
+    final quantity="TemperatureDifference")=0.1
+    "Significant difference based on minimum resolution of temperature sensor"
+    annotation (Dialog(tab="Advanced"));
+
+  parameter Real relFloDif(
+    final unit="1",
+    final displayUnit="1")=0.05
+    "Relative error to the flow setpoint for checking if it has been achieved"
+    annotation (Dialog(tab="Advanced"));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uStaUpPro
     "Pulse indicating start of stage up process"
@@ -162,106 +182,136 @@ block Up
     annotation (Placement(transformation(extent={{280,-90},{320,-50}}),
       iconTransformation(extent={{100,20},{140,60}})));
 
-  Subsequences.ResetMinBypass minBypRes(final delEna=delEnaMinFloSet, relFloDif=
-       relFloDif) if                                                     primaryOnly
+protected
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.ResetMinBypass minBypRes(
+    final delEna=delEnaMinFloSet,
+    final relFloDif=relFloDif) if primaryOnly
     "Reset process for minimum flow bypass valve setpoint"
     annotation (Placement(transformation(extent={{-170,10},{-150,30}})));
 
-  Subsequences.ResetHotWaterSupplyTemperature hotWatSupTemRes(final nSta=nSta,
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.ResetHotWaterSupplyTemperature hotWatSupTemRes(
+    final nSta=nSta,
     final delPro=delProSupTemSet,
     final TMinSupNonConBoi=TMinSupNonConBoi,
     final sigDif=sigDif) if not primaryOnly
     "Reset process for hot water supply temperature setpoint"
     annotation (Placement(transformation(extent={{-170,-30},{-150,-10}})));
 
-  Subsequences.NextBoiler nexBoi(final nBoi=nBoi)
-    "Identify boiler indices to  be turned on and off during the stage change process"
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextBoiler nexBoi(
+    final nBoi=nBoi)
+    "Identify boiler indices to be turned on and off during the stage change process"
     annotation (Placement(transformation(extent={{-170,-70},{-150,-50}})));
 
-  Subsequences.HWIsoVal enaHotWatIsoVal(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HWIsoVal enaHotWatIsoVal(
     final nBoi=nBoi,
     final chaHotWatIsoTim=chaIsoValTim,
     final iniValPos=0,
     final endValPos=1) if isHeadered
+    "Open hot water isolation valve for boiler being enabled"
     annotation (Placement(transformation(extent={{-70,-10},{-50,10}})));
 
   Buildings.Controls.OBC.CDL.Logical.And and1
-    annotation (Placement(transformation(extent={{0,-8},{20,12}})));
+    "Check for completion of valve opening process and pump change process"
+    annotation (Placement(transformation(extent={{0,-10},{20,10}})));
 
-  Subsequences.EnableBoiler enaBoi(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.EnableBoiler enaBoi(
     final nBoi=nBoi,
     final proOnTim=boiChaProOnTim)
+    "Change boiler status as per stage change required"
     annotation (Placement(transformation(extent={{60,-10},{80,10}})));
 
-  Subsequences.HWIsoVal disHotWatIsoVal1(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HWIsoVal disHotWatIsoVal1(
     final nBoi=nBoi,
     final chaHotWatIsoTim=chaIsoValTim,
     final iniValPos=1,
     final endValPos=0) if isHeadered
+    "Close hot water valve for boiler being disabled"
     annotation (Placement(transformation(extent={{150,-10},{170,10}})));
 
   Buildings.Controls.OBC.CDL.Logical.And and3
+    "Check for completion of valve closing process and pump change process"
     annotation (Placement(transformation(extent={{190,-10},{210,10}})));
 
   Buildings.Controls.OBC.CDL.Logical.Latch lat
     "Latch to retain stage-up edge signal till the stage change process is completed"
     annotation (Placement(transformation(extent={{-222,-10},{-202,10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(final delayTime=delBoiEna)
+  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(
+    final delayTime=delBoiEna)
+    "Time delay after boiler status has been changed"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre
+  Buildings.Controls.OBC.CDL.Logical.Pre pre1
+    "Logical pre block"
     annotation (Placement(transformation(extent={{200,-60},{220,-40}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Latch lat1 if isHeadered
-    annotation (Placement(transformation(extent={{-100,-120},{-80,-100}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Pre pre1 if isHeadered
-    annotation (Placement(transformation(extent={{-140,-126},{-120,-106}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Latch lat2 if isHeadered
-    annotation (Placement(transformation(extent={{-30,-120},{-10,-100}})));
-
   Buildings.Controls.OBC.CDL.Logical.Latch lat3
+    "Hold process completion signal after pump enable process"
     annotation (Placement(transformation(extent={{-140,-200},{-120,-180}})));
 
   Buildings.Controls.OBC.CDL.Logical.Latch lat4
+    "Hold process completion signal after pump disable process"
     annotation (Placement(transformation(extent={{160,-200},{180,-180}})));
 
   Buildings.Controls.OBC.CDL.Logical.And and4
+    "Check for pump disable completion after start of pump disable process"
     annotation (Placement(transformation(extent={{132,-200},{152,-180}})));
 
   Buildings.Controls.OBC.CDL.Logical.Edge edg
-    annotation (Placement(transformation(extent={{210,40},{230,60}})));
+    "Detect change in process completion status and send out pulse signal"
+    annotation (Placement(transformation(extent={{230,40},{250,60}})));
 
   Buildings.Controls.OBC.CDL.Logical.Edge edg1
+    "Generate pulse to signal start of pump change process"
     annotation (Placement(transformation(extent={{-100,-260},{-80,-240}})));
 
   Buildings.Controls.OBC.CDL.Logical.Edge edg2
+    "Generate pulse to signal start of pump change process"
     annotation (Placement(transformation(extent={{140,-246},{160,-226}})));
 
   Buildings.Controls.OBC.CDL.Logical.Or or2
+    "Check for pump change proces start signal"
     annotation (Placement(transformation(extent={{210,-250},{230,-230}})));
 
-  parameter Real relFloDif=0.05
-    "Relative error to the flow setpoint for checking if it has been achieved";
-  CDL.Logical.Latch                        lat5 if not isHeadered
+  Buildings.Controls.OBC.CDL.Logical.Latch lat5 if not isHeadered
+    "Latch to short valve opening process in dedicated pump configuration plants"
     annotation (Placement(transformation(extent={{-70,30},{-50,50}})));
-  CDL.Logical.Latch                        lat6 if not isHeadered
+
+  Buildings.Controls.OBC.CDL.Logical.Latch lat6 if not isHeadered
+    "Latch to short valve closing process in dedicated pump configuration plants"
     annotation (Placement(transformation(extent={{150,30},{170,50}})));
-  CDL.Logical.Switch swi[nBoi]
+
+  Buildings.Controls.OBC.CDL.Logical.Switch swi[nBoi] if isHeadered
+    "Pass valve position signal from valve opening controller once the opening process starts"
     annotation (Placement(transformation(extent={{40,-140},{60,-120}})));
-  CDL.Routing.BooleanReplicator booRep(nout=nBoi)
+
+  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
+    final nout=nBoi) if isHeadered
+    "Boolean replicator"
     annotation (Placement(transformation(extent={{0,-140},{20,-120}})));
-  CDL.Logical.Switch swi1[nBoi]
+
+  Buildings.Controls.OBC.CDL.Logical.Switch swi1[nBoi] if isHeadered
+    "Pass valve position signal from valve closing controller once the closing process starts"
     annotation (Placement(transformation(extent={{100,-120},{120,-100}})));
-  CDL.Routing.BooleanReplicator booRep1(nout=nBoi)
+
+  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep1(
+    final nout=nBoi) if isHeadered
+    "Boolean replicator"
     annotation (Placement(transformation(extent={{70,-160},{90,-140}})));
-  CDL.Logical.TrueDelay                        truDel1(final delayTime=
-        delPreBoiEna)
+
+  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel1(
+    final delayTime=delPreBoiEna)
+    "Time delay after valve has been opened and pump status has been changed"
     annotation (Placement(transformation(extent={{0,90},{20,110}})));
-  CDL.Logical.LogicalSwitch logSwi
+
+  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi
+    "Pass process completion signal based on whether stage change involves turning off smaller boiler or not"
     annotation (Placement(transformation(extent={{230,-20},{250,0}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Latch lat1 if isHeadered
+    "Hold process completion signal after valve has been opened"
+    annotation (Placement(transformation(extent={{-32,-120},{-12,-100}})));
+
 equation
 
   connect(nexBoi.yNexEnaBoi, enaHotWatIsoVal.nexChaBoi) annotation (Line(points={{-148,
@@ -295,7 +345,7 @@ equation
   connect(nexBoi.yOnOff,disHotWatIsoVal1. chaPro) annotation (Line(points={{-148,
           -60},{144,-60},{144,-8},{148,-8}}, color={255,0,255}));
 
-  connect(pre.y, lat.clr) annotation (Line(points={{222,-50},{230,-50},{230,-80},
+  connect(pre1.y, lat.clr) annotation (Line(points={{222,-50},{230,-50},{230,-80},
           {-230,-80},{-230,-6},{-224,-6}}, color={255,0,255}));
 
   connect(lat.y, enaHotWatIsoVal.chaPro) annotation (Line(points={{-200,0},{-196,
@@ -329,28 +379,6 @@ equation
   connect(uHotWatIsoVal, enaHotWatIsoVal.uHotWatIsoVal) annotation (Line(points={{-260,
           120},{-80,120},{-80,5},{-72,5}},       color={0,0,127}));
 
-  connect(lat1.y, enaHotWatIsoVal.uUpsDevSta) annotation (Line(points={{-78,
-          -110},{-74,-110},{-74,-5},{-72,-5}}, color={255,0,255}));
-
-  connect(pre1.y, lat1.clr)
-    annotation (Line(points={{-118,-116},{-102,-116}}, color={255,0,255}));
-
-  connect(pre1.u, enaHotWatIsoVal.yEnaHotWatIsoVal) annotation (Line(points={{
-          -142,-116},{-146,-116},{-146,-130},{-44,-130},{-44,6},{-48,6}}, color=
-         {255,0,255}));
-
-  connect(enaHotWatIsoVal.yEnaHotWatIsoVal, lat2.u) annotation (Line(points={{
-          -48,6},{-44,6},{-44,-110},{-32,-110}}, color={255,0,255}));
-
-  connect(pre.y, lat2.clr) annotation (Line(points={{222,-50},{230,-50},{230,
-          -80},{-40,-80},{-40,-116},{-32,-116}}, color={255,0,255}));
-
-  connect(lat2.y, and1.u1) annotation (Line(points={{-8,-110},{-6,-110},{-6,2},
-          {-2,2}}, color={255,0,255}));
-
-  connect(uHotWatIsoVal, disHotWatIsoVal1.uHotWatIsoVal) annotation (Line(
-        points={{-260,120},{130,120},{130,5},{148,5}}, color={0,0,127}));
-
   connect(nexBoi.uBoiSet, uBoiSet) annotation (Line(points={{-172,-63},{-190,
           -63},{-190,40},{-260,40}}, color={255,0,255}));
 
@@ -370,7 +398,7 @@ equation
     annotation (Line(points={{-260,0},{-224,0}}, color={255,0,255}));
 
   connect(lat3.y, and1.u2) annotation (Line(points={{-118,-190},{-48,-190},{-48,
-          -30},{-10,-30},{-10,-6},{-2,-6}}, color={255,0,255}));
+          -30},{-10,-30},{-10,-8},{-2,-8}}, color={255,0,255}));
 
   connect(uPumChaPro, lat3.u)
     annotation (Line(points={{-260,-190},{-142,-190}}, color={255,0,255}));
@@ -387,14 +415,14 @@ equation
   connect(lat4.y, and3.u2) annotation (Line(points={{182,-190},{184,-190},{184,
           -8},{188,-8}}, color={255,0,255}));
 
-  connect(pre.y, lat3.clr) annotation (Line(points={{222,-50},{230,-50},{230,
-          -216},{-150,-216},{-150,-196},{-142,-196}}, color={255,0,255}));
+  connect(pre1.y, lat3.clr) annotation (Line(points={{222,-50},{230,-50},{230,-216},
+          {-150,-216},{-150,-196},{-142,-196}}, color={255,0,255}));
 
-  connect(pre.y, lat4.clr) annotation (Line(points={{222,-50},{230,-50},{230,
-          -216},{154,-216},{154,-196},{158,-196}}, color={255,0,255}));
+  connect(pre1.y, lat4.clr) annotation (Line(points={{222,-50},{230,-50},{230,-216},
+          {154,-216},{154,-196},{158,-196}}, color={255,0,255}));
 
   connect(edg.y, yStaChaPro)
-    annotation (Line(points={{232,50},{300,50}}, color={255,0,255}));
+    annotation (Line(points={{252,50},{300,50}}, color={255,0,255}));
 
   connect(edg2.y, or2.u1) annotation (Line(points={{162,-236},{200,-236},{200,
           -240},{208,-240}}, color={255,0,255}));
@@ -417,66 +445,109 @@ equation
   connect(truDel.y, edg2.u) annotation (Line(points={{122,0},{126,0},{126,-236},
           {138,-236}}, color={255,0,255}));
 
-  connect(minBypRes.yMinBypRes, lat1.u) annotation (Line(points={{-148,20},{-110,
-          20},{-110,-110},{-102,-110}}, color={255,0,255}));
-  connect(hotWatSupTemRes.yHotWatSupTemRes, lat1.u) annotation (Line(points={{-148,
-          -20},{-110,-20},{-110,-110},{-102,-110}}, color={255,0,255}));
   connect(minBypRes.yMinBypRes, edg1.u) annotation (Line(points={{-148,20},{-110,
           20},{-110,-250},{-102,-250}}, color={255,0,255}));
+
   connect(hotWatSupTemRes.yHotWatSupTemRes, edg1.u) annotation (Line(points={{-148,
           -20},{-110,-20},{-110,-250},{-102,-250}}, color={255,0,255}));
+
   connect(minBypRes.yMinBypRes, lat5.u) annotation (Line(points={{-148,20},{
           -110,20},{-110,40},{-72,40}},
                                    color={255,0,255}));
+
   connect(hotWatSupTemRes.yHotWatSupTemRes, lat5.u) annotation (Line(points={{-148,
           -20},{-110,-20},{-110,40},{-72,40}}, color={255,0,255}));
-  connect(pre.y, lat5.clr) annotation (Line(points={{222,-50},{230,-50},{230,
-          -80},{-100,-80},{-100,34},{-72,34}},
-                                          color={255,0,255}));
-  connect(lat5.y, and1.u1) annotation (Line(points={{-48,40},{-6,40},{-6,2},{-2,
-          2}}, color={255,0,255}));
+
+  connect(pre1.y, lat5.clr) annotation (Line(points={{222,-50},{230,-50},{230,-80},
+          {-100,-80},{-100,34},{-72,34}}, color={255,0,255}));
+
+  connect(lat5.y, and1.u1) annotation (Line(points={{-48,40},{-6,40},{-6,0},{-2,
+          0}}, color={255,0,255}));
+
   connect(truDel.y, lat6.u) annotation (Line(points={{122,0},{126,0},{126,40},{148,
           40}}, color={255,0,255}));
+
   connect(lat6.y, and3.u1) annotation (Line(points={{172,40},{180,40},{180,0},{188,
           0}}, color={255,0,255}));
-  connect(pre.y, lat6.clr) annotation (Line(points={{222,-50},{230,-50},{230,
-          -80},{136,-80},{136,34},{148,34}},
-                                        color={255,0,255}));
+
+  connect(pre1.y, lat6.clr) annotation (Line(points={{222,-50},{230,-50},{230,-80},
+          {136,-80},{136,34},{148,34}}, color={255,0,255}));
+
   connect(enaHotWatIsoVal.yHotWatIsoVal, swi.u1) annotation (Line(points={{-48,
           -6},{-30,-6},{-30,-90},{26,-90},{26,-122},{38,-122}}, color={0,0,127}));
+
   connect(uHotWatIsoVal, swi.u3) annotation (Line(points={{-260,120},{30,120},{
           30,-138},{38,-138}}, color={0,0,127}));
+
   connect(booRep.y, swi.u2)
     annotation (Line(points={{22,-130},{38,-130}}, color={255,0,255}));
-  connect(lat1.y, booRep.u) annotation (Line(points={{-78,-110},{-74,-110},{-74,
-          -124},{-20,-124},{-20,-130},{-2,-130}}, color={255,0,255}));
+
   connect(swi.y, swi1.u3) annotation (Line(points={{62,-130},{92,-130},{92,-118},
           {98,-118}}, color={0,0,127}));
+
   connect(disHotWatIsoVal1.yHotWatIsoVal, swi1.u1) annotation (Line(points={{
           172,-6},{180,-6},{180,-70},{92,-70},{92,-102},{98,-102}}, color={0,0,
           127}));
+
   connect(truDel.y, booRep1.u) annotation (Line(points={{122,0},{126,0},{126,
           -170},{60,-170},{60,-150},{68,-150}}, color={255,0,255}));
+
   connect(booRep1.y, swi1.u2) annotation (Line(points={{92,-150},{96,-150},{96,
           -110},{98,-110}}, color={255,0,255}));
+
   connect(swi1.y, yHotWatIsoVal) annotation (Line(points={{122,-110},{134,-110},
           {134,-90},{210,-90},{210,-70},{300,-70}}, color={0,0,127}));
-  connect(and1.y, truDel1.u) annotation (Line(points={{22,2},{28,2},{28,60},{-10,
-          60},{-10,100},{-2,100}}, color={255,0,255}));
+
+  connect(and1.y, truDel1.u) annotation (Line(points={{22,0},{28,0},{28,60},{
+          -10,60},{-10,100},{-2,100}},
+                                   color={255,0,255}));
+
   connect(truDel1.y, enaBoi.uUpsDevSta) annotation (Line(points={{22,100},{42,100},
           {42,2},{58,2}}, color={255,0,255}));
+
   connect(disHotWatIsoVal1.yEnaHotWatIsoVal, and3.u1) annotation (Line(points={{
           172,6},{180,6},{180,0},{188,0}}, color={255,0,255}));
+
   connect(and3.y, logSwi.u1) annotation (Line(points={{212,0},{220,0},{220,-2},{
           228,-2}}, color={255,0,255}));
+
   connect(enaBoi.yBoiEnaPro, logSwi.u3) annotation (Line(points={{82,-8},{90,-8},
           {90,-18},{228,-18}}, color={255,0,255}));
+
   connect(nexBoi.yOnOff, logSwi.u2) annotation (Line(points={{-148,-60},{170,-60},
           {170,-24},{220,-24},{220,-10},{228,-10}}, color={255,0,255}));
-  connect(logSwi.y, edg.u) annotation (Line(points={{252,-10},{260,-10},{260,30},
-          {200,30},{200,50},{208,50}}, color={255,0,255}));
-  connect(logSwi.y, pre.u) annotation (Line(points={{252,-10},{260,-10},{260,-30},
-          {192,-30},{192,-50},{198,-50}}, color={255,0,255}));
+
+  connect(logSwi.y, edg.u) annotation (Line(points={{252,-10},{260,-10},{260,20},
+          {220,20},{220,50},{228,50}}, color={255,0,255}));
+
+  connect(minBypRes.yMinBypRes, booRep.u) annotation (Line(points={{-148,20},{
+          -110,20},{-110,-130},{-2,-130}}, color={255,0,255}));
+
+  connect(hotWatSupTemRes.yHotWatSupTemRes, booRep.u) annotation (Line(points={
+          {-148,-20},{-110,-20},{-110,-130},{-2,-130}}, color={255,0,255}));
+
+  connect(minBypRes.yMinBypRes, enaHotWatIsoVal.uUpsDevSta) annotation (Line(
+        points={{-148,20},{-110,20},{-110,-5},{-72,-5}}, color={255,0,255}));
+
+  connect(hotWatSupTemRes.yHotWatSupTemRes, enaHotWatIsoVal.uUpsDevSta)
+    annotation (Line(points={{-148,-20},{-110,-20},{-110,-5},{-72,-5}}, color={
+          255,0,255}));
+
+  connect(uHotWatIsoVal, disHotWatIsoVal1.uHotWatIsoVal) annotation (Line(
+        points={{-260,120},{144,120},{144,5},{148,5}}, color={0,0,127}));
+
+  connect(edg.y, pre1.u) annotation (Line(points={{252,50},{266,50},{266,-32},{
+          190,-32},{190,-50},{198,-50}}, color={255,0,255}));
+
+  connect(enaHotWatIsoVal.yEnaHotWatIsoVal, lat1.u) annotation (Line(points={{
+          -48,6},{-40,6},{-40,-110},{-34,-110}}, color={255,0,255}));
+
+  connect(pre1.y, lat1.clr) annotation (Line(points={{222,-50},{230,-50},{230,
+          -216},{-40,-216},{-40,-116},{-34,-116}}, color={255,0,255}));
+
+  connect(lat1.y, and1.u1) annotation (Line(points={{-10,-110},{-6,-110},{-6,0},
+          {-2,0}}, color={255,0,255}));
+
 annotation (
   defaultComponentName="upProCon",
   Diagram(coordinateSystem(preserveAspectRatio=false,
@@ -504,110 +575,76 @@ annotation (
           fillPattern=FillPattern.Solid)}),
 Documentation(info="<html>
 <p>
-Block that controls devices when there is a stage-up command. This sequence is for
-water-cooled primary-only parallel boiler plants with headered hot water pumps
-and headered condenser water pumps, or air-cooled primary-only parallel boiler
-plants with headered hot water pumps.
-This development is based on ASHRAE RP-1711 Advanced Sequences of Operation for 
-HVAC Systems Phase II – Central Plants and Hydronic Systems (Draft version, March 2020),
-section 5.2.4.16, which specifies the step-by-step control of
-devices during boiler staging up process.
+Block that controls boiler status and isolation valve position, initiates status
+change in devices like pumps and minimum flow bypass valve, and resets plant
+parameters like hot water supply temperature setpoint and minimum flow setpoint
+when there is a stage-up command.
+This development is based on ASHRAE RP-1711, March 2020 draft,sections 5.3.3.11 - 5.3.3.18,
+which specify the step-by-step control of devices during boiler staging up process.
 </p>
 <ol>
 <li>
-Identify the boiler(s) that should be enabled (and disabled, if <code>have_PonyBoiler=true</code>). 
-This is implemented in block <code>nexChi</code>. See
+Identify the boiler(s) that should be enabled (and disabled). This is implemented in block <code>nexBoi</code>. See
 <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextBoiler\">
 Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextBoiler</a>
 for more decriptions.
 </li>
 <li>
-Command operating boilers to reduce demand to 75% (<code>chiDemRedFac</code>) of 
-their current load (<code>uChiLoa</code>). Wait until actual demand &lt;
-
- 80% of 
-current load up to a maximum of 5 minutes (<code>holChiDemTim</code>) before proceeding.
-This is implemented in block <code>chiDemRed</code>. See
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.ReduceDemand\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.ReduceDemand</a>
-for more decriptions.
-</li>
-<li>
-Reset the minimum hot water flow setpoint,
+Initiate the process to reset the minimum hot water flow setpoint for the minimum
+flow bypass valve,
 <ul>
 <li>
 For any stage change during which a smaller boiler is disabled and a larger boiler
-is enabled, slowly change (<code>byPasSetTim</code>) the minimum hot water flow 
-setpoint to the one that includes both boilers are enabled. After new setpoint is 
-achieved, wait 1 minute (<code>aftByPasSetTim</code>) to allow loop to stabilize.
+is enabled, slowly change the minimum hot water flow 
+setpoint to the one that includes both boilers being enabled. After new setpoint is 
+achieved, wait <code>delEnaMinFloSet</code> to allow loop to stabilize.
 </li>
 <li>
-For any other stage change, reset ((<code>byPasSetTim</code>)) the minimum chilled 
-water flow setpoint to the one that includes the new boiler. After new setpoint is 
-achieved, wait 1 minute (<code>aftByPasSetTim</code>) to allow loop to stabilize.
+For any other stage change, reset the minimum hot water flow setpoint to the one
+that includes the new boiler. After new setpoint is 
+achieved, wait <code>delEnaMinFloSet</code> to allow loop to stabilize.
 </li>
 </ul>
-The minimum flow setpoint is reset in block <code>minBoiWatFlo</code>
-(<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.MinimumFlowBypass.Subsequences.FlowSetpoint\">
+The minimum flow setpoint is reset in sequence
+(<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.MinimumFlowBypass.FlowSetpoint\">
 Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.MinimumFlowBypass.Subsequences.FlowSetpoint</a>).
-Block <code>minBypSet</code> checks if the new setpoint is achieved
+Block <code>minBypRes</code> checks if the new setpoint is achieved
 (<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.ResetMinBypass\">
 Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.ResetMinBypass</a>).
 </li>
 <li>
-Start the next condenser water pump and/or change condenser water pump speed 
-to that required of the new stage. Wait 10 seconds (<code>thrTimEnb</code>).
-Block <code>enaNexCWP</code> identifies boiler stage for the condenser water pump
-control
-(<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.EnableCWPump\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.EnableCWPump</a>)
-and block <code>conWatPumCon</code> checks if the condenser water pumps have been reset
-(<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.CondenserWater.Controller\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.CondenserWater.Controller</a>).
+Start the next hot water pump and/or open the hot water isolation valves using the
+block <code>enaHotWatIsoVal</code> using sequence implemented in <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HWIsoVal\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HWIsoVal</a>
+for the valves and initiating the pump change process with the pulse signal <code>yPumChaPro</code>. 
+Once the pumps have been reset, the controller receives a pulse signal on the
+input <code>uPumChaPro</code>.
 </li>
 <li>
-Enabled head pressure control for the boiler being enabled. Wait 30 seconds (<code>waiTim</code>).
-This is implemented in block <code>enaHeaCon</code>. See
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HeadControl\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HeadControl</a>
-for more decriptions.
+After waiting for time <code>delPreBoiEna</code>, the boiler status <code>yBoi</code> 
+is changed using the boiler status controller <code>enaBoi</code> implemented in the sequence
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.EnableBoiler\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.EnableBoiler</a>.
 </li>
 <li>
-Slowly (<code>chaChiWatIsoTim</code>) open hot water isolation valve of the boiler 
-being enabled. The valve timing should be determined in the fields.
-This is implemented in block <code>enaChiIsoVal</code>. See
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.CHWIsoVal\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.CHWIsoVal</a>
-for more decriptions.
-</li>
-<li>
-End the staging up process:
+If the stage up process does not involve turning off a smaller boiler, end the
+staging up process by sending a pulse signal through <code>yStaChaPro</code>. Otherwise,
 <ul>
 <li>
-If the stage change does not require one boiler enabled and another boiler disabled, 
-start the next stage boiler after the isolation valve is fully open.
+Wait for time <code>delBoiEna</code> before closing the isolation valve for the
+disabled boiler and initiating the pump change process.
 </li>
 <li>
-If the stage change does require one boiler enabled and another boiler disabled, 
-starting the next stage boiler after the isolation valve is fully open, then shut off
-the smaller boiler, close the boiler's hot water isolation valve, disable
-the head pressure control loop, and change the minimum hot water flow setpoint 
-to the one for the new stage.
-</li>
-<li>
-Release the demand limit, which marks the end of the staging process.
+End the staging process after the valve has been closed and the pump change process
+completion signal has been received. Send pulse signal through <code>yStaChaPro</code>
+to indicate the same.
 </li>
 </ul>
-These are implemented in block <code>endUp</code>. See
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.UpEnd\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.UpEnd</a>
-for more decriptions.
-</li>
 </ol>
 </html>", revisions="<html>
 <ul>
 <li>
-September 23, 2019, by Jianjun Hu:<br/>
+July 20, 2020, by Karthik Devaprasad:<br/>
 First implementation.
 </li>
 </ul>

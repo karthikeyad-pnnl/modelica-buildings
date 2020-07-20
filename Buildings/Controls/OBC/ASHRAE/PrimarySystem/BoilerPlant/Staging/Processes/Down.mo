@@ -1,842 +1,512 @@
-﻿within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes;
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes;
 block Down
-    "Sequence for controlling devices when there is a stage-down command"
+    "Sequence for control devices when there is stage-down command"
 
-  parameter Integer nBoi = 2
-    "Total number of boilers in the plant";
+  parameter Boolean primaryOnly = false
+    "True: The boiler plant is primary-only"
+    annotation (Dialog(group="Boiler plant parameters"));
 
-  parameter Integer totSta = 3
-    "Total number of stages, including the stages with a WSE, if applicable";
+  parameter Boolean isHeadered = true
+    "True: Headered hot water pumps;
+ False: Dedicated hot water pumps"
+    annotation (Dialog(group="Boiler plant parameters"));
 
-  parameter Boolean have_WSE=true
-    "True: have waterside economizer";
+  parameter Integer nBoi=3
+    "Total number of boilers in the plant"
+    annotation (Dialog(group="Boiler plant parameters"));
 
-  parameter Boolean have_PonyBoiler=false
-    "True: have pony boiler";
+  parameter Integer nSta=5
+    "Total number of stages"
+    annotation (Dialog(group="Boiler plant parameters"));
 
-  parameter Boolean isParallelBoiler=true
-    "True: the plant has parallel boilers";
-
-  parameter Boolean isHeadered=true
-    "True: headered condenser water pumps";
-
-  parameter Real chiDemRedFac=0.75
-    "Demand reducing factor of current operating boilers"
-    annotation (Dialog(group="Disable last boiler", enable=have_PonyBoiler));
-
-  parameter Real holChiDemTim(
+  parameter Real delEnaMinFloSet(
     final unit="s",
-    final quantity="Time",
-    final displayUnit="h")=300
-    "Maximum time to wait for the actual demand less than percentage of current load"
-    annotation (Dialog(group="Disable last boiler", enable=have_PonyBoiler));
+    final displayUnit="s",
+    final quantity="time")=60
+    "Enable delay after minimum flow setpoint is achieved in bypass valve"
+    annotation (Evaluate=true,
+      Dialog(group="Time and delay parameters",
+        enable=primaryOnly));
 
-  parameter Real waiTim(
+  parameter Real chaIsoValTim(
     final unit="s",
-    final quantity="Time",
-    final displayUnit="h")=30
-    "Waiting time after enabling next head pressure control"
-    annotation (Dialog(group="Disable last boiler", enable=have_PonyBoiler));
-
-  parameter Real proOnTim(
-    final unit="s",
-    final quantity="Time",
-    final displayUnit="h")=300
-    "Enabled boiler operation time to indicate if it is proven on"
-    annotation (Dialog(group="Disable last boiler", enable=have_PonyBoiler));
-
-  parameter Real chaChiWatIsoTim(
-    final unit="s",
-    final quantity="Time",
-    final displayUnit="h")
+    final displayUnit="s",
+    final quantity="time") = 60
     "Time to slowly change isolation valve, should be determined in the field"
-    annotation (Dialog(group="Disable CHW isolation valve"));
+    annotation (Evaluate=true,
+      Dialog(group="Time and delay parameters",
+        enable=isHeadered));
 
-  parameter Real staVec[totSta]
-    "Boiler stage vector, element value like x.5 means boiler stage x plus WSE"
-    annotation (Dialog(group="Disable condenser water pump"));
-
-  parameter Real desConWatPumSpe[totSta]
-    "Design condenser water pump speed setpoints, the size should be double of total stage numbers"
-    annotation (Dialog(group="Disable condenser water pump"));
-
-  parameter Real desConWatPumNum[totSta]
-    "Design number of condenser water pumps that should be ON, the size should be double of total stage numbers"
-    annotation (Dialog(group="Disable condenser water pump"));
-
-  parameter Real byPasSetTim(
+  parameter Real delPreBoiEna(
     final unit="s",
-    final quantity="Time",
-    final displayUnit="h")
-    "Time to reset minimum by-pass flow"
-    annotation (Dialog(group="Reset CHW minimum flow setpoint"));
+    final displayUnit="s",
+    final quantity="time") = 30
+    "Time delay after valve and pump change process has been completed before
+    starting boiler change process"
+    annotation (Dialog(group="Time and delay parameters"));
 
-  parameter Modelica.SIunits.VolumeFlowRate minFloSet[nBoi]
-    "Minimum hot water flow through each boiler"
-    annotation (Dialog(group="Reset CHW minimum flow setpoint"));
-
-  parameter Modelica.SIunits.VolumeFlowRate maxFloSet[nBoi]
-    "Maximum hot water flow through each boiler"
-    annotation (Dialog(group="Reset CHW minimum flow setpoint"));
-
-  parameter Real aftByPasSetTim(
+  parameter Real boiChaProOnTim(
     final unit="s",
-    final quantity="Time",
-    final displayUnit="h")=60
-    "Time to allow loop to stabilize after resetting minimum hot water flow setpoint"
-    annotation (Dialog(group="Reset bypass"));
+    final displayUnit="s",
+    final quantity="time") = 300
+    "Enabled boiler operation time to indicate if it is proven on during a staging
+    process where one boiler is turned on and the other is turned off"
+    annotation (Dialog(group="Time and delay parameters"));
 
-  parameter Real relSpeDif = 0.05
-    "Relative error to the setpoint for checking if it has achieved speed setpoint"
-    annotation (Dialog(tab="Advanced", group="Disable condenser water pump"));
+  parameter Real delBoiEna(
+    final unit="s",
+    final displayUnit="s",
+    final quantity="time") = 180
+    "Time delay after boiler change process has been completed before turning off
+    excess valves and pumps"
+    annotation (Dialog(group="Time and delay parameters"));
 
-  parameter Real relFloDif=0.05
-    "Relative error to the setpoint for checking if it has achieved flow rate setpoint"
-    annotation (Dialog(tab="Advanced", group="Reset bypass"));
+  parameter Real relFloDif(
+    final unit="1",
+    final displayUnit="1")=0.05
+    "Relative error to the flow setpoint for checking if it has been achieved"
+    annotation (Evaluate=true,
+      Dialog(tab="Advanced",
+        enable=primaryOnly));
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uStaDowPro
+    "Pulse indicating start of stage up process" annotation (Placement(
+        transformation(extent={{-280,-20},{-240,20}}), iconTransformation(
+          extent={{-140,-80},{-100,-40}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uBoi[nBoi]
+    "Boiler status: true=ON"
+    annotation (Placement(transformation(extent={{-280,60},{-240,100}}),
+      iconTransformation(extent={{-140,0},{-100,40}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uPumChaPro
+    "Pulse indicating all pump change processes have been completed and pumps have been proved on"
+    annotation (Placement(transformation(extent={{-280,-210},{-240,-170}}),
+      iconTransformation(extent={{-140,-200},{-100,-160}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uBoiSet[nBoi]
+    "Boiler status setpoint: true=ON"
+    annotation (Placement(transformation(extent={{-280,20},{-240,60}}),
+      iconTransformation(extent={{-140,-40},{-100,0}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uStaSet
     "Boiler stage setpoint index"
-    annotation (Placement(transformation(extent={{-320,360},{-280,400}}),
-      iconTransformation(extent={{-140,162},{-100,202}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uChiSet[nBoi]
-    "Vector of boilers status setpoint"
-    annotation (Placement(transformation(extent={{-320,300},{-280,340}}),
-      iconTransformation(extent={{-140,142},{-100,182}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput yOpeParLoaRatMin(
-    final min=0,
-    final max=1,
-    final unit="1")
-    "Current stage minimum cycling operative partial load ratio"
-    annotation (Placement(transformation(extent={{-320,260},{-280,300}}),
-      iconTransformation(extent={{-140,110},{-100,150}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uChiLoa[nBoi](
-    final quantity=fill("HeatFlowRate", nBoi),
-    final unit=fill("W", nBoi))
-    "Current boiler load"
-    annotation (Placement(transformation(extent={{-320,230},{-280,270}}),
-      iconTransformation(extent={{-140,90},{-100,130}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uChi[nBoi]
-    "Boiler status: true=ON"
-    annotation (Placement(transformation(extent={{-320,200},{-280,240}}),
-      iconTransformation(extent={{-140,60},{-100,100}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput VChiWat_flow(
-    final min=0,
-    final unit="m3/s",
-    final quantity="VolumeFlowRate")
-    "Measured hot water flow rate"
-    annotation (Placement(transformation(extent={{-320,170},{-280,210}}),
-      iconTransformation(extent={{-140,40},{-100,80}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uChiSta
-    "Current boiler stage, it would the same as boiler stage setpoint when it is not in staging process"
-    annotation (Placement(transformation(extent={{-320,140},{-280,180}}),
-      iconTransformation(extent={{-140,10},{-100,50}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uChiHeaCon[nBoi]
-    "Boilers head pressure control status"
-    annotation (Placement(transformation(extent={{-320,110},{-280,150}}),
-      iconTransformation(extent={{-140,-20},{-100,20}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uChiWatIsoVal[nBoi](
-    final min=fill(0, nBoi),
-    final max=fill(1, nBoi),
-    final unit=fill("1", nBoi))
-    "Hot water isolation valve position"
-    annotation (Placement(transformation(extent={{-320,80},{-280,120}}),
-      iconTransformation(extent={{-140,-50},{-100,-10}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uChiWatReq[nBoi]
-    "Hot water requst status for each boiler"
-    annotation (Placement(transformation(extent={{-320,-30},{-280,10}}),
-      iconTransformation(extent={{-140,-80},{-100,-40}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uConWatReq[nBoi]
-    "Condenser water requst status for each boiler"
-    annotation (Placement(transformation(extent={{-320,-140},{-280,-100}}),
-      iconTransformation(extent={{-140,-100},{-100,-60}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uChiConIsoVal[nBoi]
-    "Boiler condenser water isolation valve status"
-    annotation (Placement(transformation(extent={{-320,-200},{-280,-160}}),
-      iconTransformation(extent={{-140,-130},{-100,-90}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uWSE if have_WSE
-    "Water side economizer status: true = ON, false = OFF"
-    annotation (Placement(transformation(extent={{-320,-260},{-280,-220}}),
+    annotation (Placement(transformation(extent={{-280,-100},{-240,-60}}),
       iconTransformation(extent={{-140,-160},{-100,-120}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uConWatPumSpeSet(
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput VMinHotWatSet_flow(
+    final quantity="VolumeFlowRate",
+    final unit="m3/s",
+    final displayUnit="m3/s",
+    final min=0) if primaryOnly
+    "Minimum hot water flow rate setpoint"
+    annotation (Placement(transformation(extent={{-280,180},{-240,220}}),
+      iconTransformation(extent={{-140,120},{-100,160}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput VHotWat_flow(
     final min=0,
-    final max=1,
-    final unit="1")
-    "Condenser water pump speed setpoint"
-    annotation (Placement(transformation(extent={{-320,-300},{-280,-260}}),
-      iconTransformation(extent={{-140,-190},{-100,-150}})));
+    final quantity="VolumeFlowRate",
+    final unit="m3/s",
+    final displayUnit="m3/s") if primaryOnly
+    "Measured hot water flow rate through the minimum flow bypass valve"
+    annotation (Placement(transformation(extent={{-280,220},{-240,260}}),
+      iconTransformation(extent={{-140,160},{-100,200}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uConWatPumSpe(
-    final min=0,
-    final max=1,
-    final unit="1")
-    "Current condenser water pump speed"
-    annotation (Placement(transformation(extent={{-320,-360},{-280,-320}}),
-      iconTransformation(extent={{-140,-210},{-100,-170}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yStaPro
-    "Indicate stage-down status: true=in stage-down process"
-    annotation (Placement(transformation(extent={{280,330},{320,370}}),
-      iconTransformation(extent={{100,170},{140,210}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yChiDem[nBoi](
-    final quantity=fill("HeatFlowRate", nBoi),
-    final unit=fill("W", nBoi))
-    "Boiler demand setpoint"
-    annotation (Placement(transformation(extent={{280,240},{320,280}}),
-      iconTransformation(extent={{100,130},{140,170}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yChi[nBoi]
-    "Boiler enabling status"
-    annotation (Placement(transformation(extent={{280,200},{320,240}}),
-      iconTransformation(extent={{100,100},{140,140}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yReaDemLim
-    "Release demand limit"
-    annotation (Placement(transformation(extent={{280,160},{320,200}}),
-      iconTransformation(extent={{100,60},{140,100}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yChiWatIsoVal[nBoi](
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uHotWatIsoVal[nBoi](
     final min=fill(0, nBoi),
     final max=fill(1, nBoi),
-    final unit=fill("1", nBoi))
-    "Boiler hot water isolation valve position"
-    annotation (Placement(transformation(extent={{280,20},{320,60}}),
-      iconTransformation(extent={{100,20},{140,60}})));
+    final unit=fill("1", nBoi)) if isHeadered
+    "Hot water isolation valve position"
+    annotation (Placement(transformation(extent={{-280,100},{-240,140}}),
+      iconTransformation(extent={{-140,40},{-100,80}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yTowStaDow
-    "Tower stage down status: true=stage down cooling tower"
-    annotation (Placement(transformation(extent={{280,-80},{320,-40}}),
-      iconTransformation(extent={{100,-20},{140,20}})));
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yBoi[nBoi]
+    "Boiler enabling status"
+    annotation (Placement(transformation(extent={{280,90},{320,130}}),
+      iconTransformation(extent={{100,160},{140,200}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yChiHeaCon[nBoi]
-    "Boiler head pressure control enabling status"
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yStaChaPro
+    "Pulse indicating end of stage change process"
+    annotation (Placement(transformation(extent={{280,30},{320,70}}),
+      iconTransformation(extent={{100,90},{140,130}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yPumChaPro
+    "Pulse indicating start of pump change process"
+    annotation (Placement(transformation(extent={{280,-260},{320,-220}}),
+      iconTransformation(extent={{100,-190},{140,-150}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yOnOff
+    "Signal indicating whether stage change involves simultaneous turning on
+    and turning off of boilers"
     annotation (Placement(transformation(extent={{280,-130},{320,-90}}),
       iconTransformation(extent={{100,-50},{140,-10}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yLeaPum
-    "Lead pump status"
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yNexEnaBoi
+    "Boiler index of next boiler being enabled"
     annotation (Placement(transformation(extent={{280,-170},{320,-130}}),
-      iconTransformation(extent={{100,-90},{140,-50}})));
+      iconTransformation(extent={{100,-120},{140,-80}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yDesConWatPumSpe(
-    final min=0,
-    final max=1,
-    final unit="1")
-    "Condenser water pump design speed at current stage"
-    annotation (Placement(transformation(extent={{280,-200},{320,-160}}),
-      iconTransformation(extent={{100,-130},{140,-90}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yConWatPumNum
-    "Number of operating condenser water pumps"
-    annotation (Placement(transformation(extent={{280,-240},{320,-200}}),
-      iconTransformation(extent={{100,-170},{140,-130}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yChiWatMinFloSet(
-    final min=0,
-    final unit="m3/s",
-    final quantity="VolumeFlowRate")
-    "Hot water minimum flow setpoint"
-    annotation (Placement(transformation(extent={{280,-350},{320,-310}}),
-      iconTransformation(extent={{100,-210},{140,-170}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yHotWatIsoVal[nBoi](
+    final min=fill(0, nBoi),
+    final max=fill(1, nBoi),
+    final unit=fill("1", nBoi)) if isHeadered
+    "Boiler hot water isolation valve position"
+    annotation (Placement(transformation(extent={{280,-90},{320,-50}}),
+      iconTransformation(extent={{100,20},{140,60}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Integers.Change cha
-    "Check if stage setpoint dicreases"
-    annotation (Placement(transformation(extent={{-240,340},{-220,360}})));
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.ResetMinBypass minBypRes(
+    final delEna=delEnaMinFloSet,
+    final relFloDif=relFloDif) if primaryOnly
+    "Reset process for minimum flow bypass valve setpoint"
+    annotation (Placement(transformation(extent={{-170,10},{-150,30}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextBoiler
-    nexChi(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextBoiler nexBoi(
     final nBoi=nBoi)
-    "Identify next enabling boiler"
-    annotation (Placement(transformation(extent={{-40,310},{-20,330}})));
+    "Identify boiler indices to be turned on and off during the stage change process"
+    annotation (Placement(transformation(extent={{-170,-76},{-150,-56}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.DownStart
-    dowSta(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HWIsoVal enaHotWatIsoVal(
     final nBoi=nBoi,
-    final isParallelBoiler=isParallelBoiler,
-    final chiDemRedFac=chiDemRedFac,
-    final holChiDemTim=holChiDemTim,
-    final minFloSet=minFloSet,
-    final maxFloSet=maxFloSet,
-    final aftByPasSetTim=aftByPasSetTim,
-    final relFloDif=relFloDif,
-    final byPasSetTim=byPasSetTim,
-    final waiTim=waiTim,
-    final chaChiWatIsoTim=chaChiWatIsoTim,
-    final proOnTim=proOnTim)
-    "Start stage-down process"
-    annotation (Placement(transformation(extent={{60,220},{80,240}})));
-
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HWIsoVal
-    disChiIsoVal(
-    final nBoi=nBoi,
-    final chaChiWatIsoTim=chaChiWatIsoTim,
-    final iniValPos=1,
-    final endValPos=0)
-    "Disable isolation valve of the boiler being disabled"
-    annotation (Placement(transformation(extent={{200,50},{220,70}})));
-
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.CondenserWater.Controller
-    conWatPumCon(
-    final isHeadered=isHeadered,
-    final have_WSE=have_WSE,
-    final nBoi=nBoi,
-    final totSta=totSta,
-    final staVec=staVec,
-    final desConWatPumSpe=desConWatPumSpe,
-    final desConWatPumNum=desConWatPumNum,
-    final relSpeDif=relSpeDif)
-    "Enabling next condenser water pump or change pump speed"
-    annotation (Placement(transformation(extent={{140,-192},{160,-172}})));
-
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.MinimumFlowBypass.Subsequences.FlowSetpoint
-    minBoiWatFlo(
-    final nBoi=nBoi,
-    final isParallelBoiler=isParallelBoiler,
-    final maxFloSet=maxFloSet,
-    final byPasSetTim=byPasSetTim,
-    final minFloSet=minFloSet)
-    "Minimum hot water flow setpoint"
-    annotation (Placement(transformation(extent={{100,-330},{120,-310}})));
-
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.ResetMinBypass
-    minBypSet(
-    final aftByPasSetTim=aftByPasSetTim, final relFloDif=relFloDif)
-    "Check if minium bypass has been reset"
-    annotation (Placement(transformation(extent={{100,-380},{120,-360}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con(
-    final k=false)
-    "False constant"
-    annotation (Placement(transformation(extent={{-160,190},{-140,210}})));
-
-  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea1[nBoi]
-    "Convert boolean input to real output"
-    annotation (Placement(transformation(extent={{-240,-20},{-220,0}})));
-
-  Buildings.Controls.OBC.CDL.Routing.RealExtractor curDisChi(
-    final nin=nBoi)
-    "Current disabling boiler"
-    annotation (Placement(transformation(extent={{-80,-20},{-60,0}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.LessEqualThreshold lesEquThr(
-    final threshold=0.5)
-    "Check if the disabled boiler has hot water request"
-    annotation (Placement(transformation(extent={{-40,-20},{-20,0}})));
-
-  Buildings.Controls.OBC.CDL.Logical.And and4
-    "Logical and"
-    annotation (Placement(transformation(extent={{-40,20},{-20,40}})));
-
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi2
-    "Logical switch"
-    annotation (Placement(transformation(extent={{60,10},{80,30}})));
+    final chaHotWatIsoTim=chaIsoValTim,
+    final iniValPos=0,
+    final endValPos=1) if isHeadered
+    "Open hot water isolation valve for boiler being enabled"
+    annotation (Placement(transformation(extent={{-70,-10},{-50,10}})));
 
   Buildings.Controls.OBC.CDL.Logical.And and1
-    "Logical and"
-    annotation (Placement(transformation(extent={{140,10},{160,30}})));
+    "Check for completion of valve opening process and pump change process"
+    annotation (Placement(transformation(extent={{0,-10},{20,10}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep4(
-    final nout=nBoi)
-    "Replicate boolean input"
-    annotation (Placement(transformation(extent={{40,70},{60,90}})));
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.DisableBoiler disBoi(
+    final nBoi=nBoi,
+    final proOnTim=boiChaProOnTim)
+    "Change boiler status as per stage change required"
+    annotation (Placement(transformation(extent={{60,-10},{80,10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch swi[nBoi]
-    "Hot water isolvation valve position"
-    annotation (Placement(transformation(extent={{140,70},{160,90}})));
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HWIsoVal disHotWatIsoVal1(
+    final nBoi=nBoi,
+    final chaHotWatIsoTim=chaIsoValTim,
+    final iniValPos=1,
+    final endValPos=0) if isHeadered
+    "Close hot water valve for boiler being disabled"
+    annotation (Placement(transformation(extent={{150,-10},{170,10}})));
 
-  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea2[nBoi]
-    "Convert boolean input to real output"
-    annotation (Placement(transformation(extent={{-240,-130},{-220,-110}})));
-
-  Buildings.Controls.OBC.CDL.Routing.RealExtractor curDisChi1(
-    final nin=nBoi)
-    "Current disabling boiler"
-    annotation (Placement(transformation(extent={{-80,-130},{-60,-110}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.LessEqualThreshold lesEquThr1(
-    final threshold=0.5)
-    "Check if the disabled boiler is not requiring condenser water"
-    annotation (Placement(transformation(extent={{-40,-130},{-20,-110}})));
-
-  Buildings.Controls.OBC.CDL.Logical.And3 and5
-    "Logical and"
-    annotation (Placement(transformation(extent={{60,-130},{80,-110}})));
-
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep1(
-    final nout=nBoi)
-    "Replicate boolean input"
-    annotation (Placement(transformation(extent={{60,-80},{80,-60}})));
-
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi [nBoi]
-    "Boilers head pressure control status"
-    annotation (Placement(transformation(extent={{140,-80},{160,-60}})));
-
-  Buildings.Controls.OBC.CDL.Logical.MultiOr  mulOr(
-    final nu=nBoi)
-    "Multiple or"
-    annotation (Placement(transformation(extent={{-80,-200},{-60,-180}})));
-
-  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr1(
-    final nu=nBoi)
-    "Multiple or"
-    annotation (Placement(transformation(extent={{-80,-230},{-60,-210}})));
+  Buildings.Controls.OBC.CDL.Logical.And and3
+    "Check for completion of valve closing process and pump change process"
+    annotation (Placement(transformation(extent={{190,-10},{210,10}})));
 
   Buildings.Controls.OBC.CDL.Logical.Latch lat
-    "Logical latch, maintain ON signal until condition changes"
-    annotation (Placement(transformation(extent={{-180,340},{-160,360}})));
+    "Latch to retain stage-up edge signal till the stage change process is completed"
+    annotation (Placement(transformation(extent={{-222,-10},{-202,10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.And and2
-    "Logical and"
-    annotation (Placement(transformation(extent={{200,-250},{220,-230}})));
+  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(
+    final delayTime=delBoiEna)
+    "Time delay after boiler status has been changed"
+    annotation (Placement(transformation(extent={{100,-10},{120,10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Edge edg1
-    "Rising edge, output true at the moment when input turns from false to true"
-    annotation (Placement(transformation(extent={{200,-380},{220,-360}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Pre pre
-    "Break algebraic loop"
-    annotation (Placement(transformation(extent={{160,-380},{180,-360}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Latch lat1
-    "Maintain ON signal when condenser water pump has been disabled"
-    annotation (Placement(transformation(extent={{240,-270},{260,-250}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Latch lat2
-    "Maintain ON signal when boiler demand has been limited"
-    annotation (Placement(transformation(extent={{120,150},{140,170}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Switch chiWatMinSet
-    "Hot water minimum flow set"
-    annotation (Placement(transformation(extent={{200,-340},{220,-320}})));
+  Buildings.Controls.OBC.CDL.Logical.Pre pre1
+    "Logical pre block"
+    annotation (Placement(transformation(extent={{200,-60},{220,-40}})));
 
   Buildings.Controls.OBC.CDL.Logical.Latch lat3
-    "Maintain ON signal when hot water isolation valve has been disabled"
-    annotation (Placement(transformation(extent={{200,-40},{220,-20}})));
+    "Hold process completion signal after pump enable process"
+    annotation (Placement(transformation(extent={{-140,-200},{-120,-180}})));
 
   Buildings.Controls.OBC.CDL.Logical.Latch lat4
-    "Maintain ON signal when boiler head pressure control has been disabled"
-    annotation (Placement(transformation(extent={{200,-140},{220,-120}})));
+    "Hold process completion signal after pump disable process"
+    annotation (Placement(transformation(extent={{160,-200},{180,-180}})));
+
+  Buildings.Controls.OBC.CDL.Logical.And and4
+    "Check for pump disable completion after start of pump disable process"
+    annotation (Placement(transformation(extent={{132,-200},{152,-180}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Edge edg
+    "Detect change in process completion status and send out pulse signal"
+    annotation (Placement(transformation(extent={{230,40},{250,60}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Edge edg1
+    "Generate pulse to signal start of pump change process"
+    annotation (Placement(transformation(extent={{-100,-260},{-80,-240}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Edge edg2
+    "Generate pulse to signal start of pump change process"
+    annotation (Placement(transformation(extent={{140,-246},{160,-226}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Or or2
+    "Check for pump change proces start signal"
+    annotation (Placement(transformation(extent={{210,-250},{230,-230}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Latch lat5 if not isHeadered
+    "Latch to short valve opening process in dedicated pump configuration plants"
+    annotation (Placement(transformation(extent={{-70,30},{-50,50}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Latch lat6 if not isHeadered
+    "Latch to short valve closing process in dedicated pump configuration plants"
+    annotation (Placement(transformation(extent={{150,30},{170,50}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Switch swi[nBoi] if isHeadered
+    "Pass valve position signal from valve opening controller once the opening process starts"
+    annotation (Placement(transformation(extent={{40,-140},{60,-120}})));
+
+  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
+    final nout=nBoi) if isHeadered
+    "Boolean replicator"
+    annotation (Placement(transformation(extent={{0,-140},{20,-120}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Switch swi1[nBoi] if isHeadered
+    "Pass valve position signal from valve closing controller once the closing process starts"
+    annotation (Placement(transformation(extent={{100,-120},{120,-100}})));
+
+  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep1(
+    final nout=nBoi) if isHeadered
+    "Boolean replicator"
+    annotation (Placement(transformation(extent={{70,-160},{90,-140}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel1(
+    final delayTime=delPreBoiEna)
+    "Time delay after valve has been opened and pump status has been changed"
+    annotation (Placement(transformation(extent={{0,90},{20,110}})));
+
+  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi
+    "Pass process completion signal based on whether stage change involves turning off larger boiler or not"
+    annotation (Placement(transformation(extent={{40,-50},{60,-30}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Latch lat1 if isHeadered
+    "Hold process completion signal after valve has been opened"
+    annotation (Placement(transformation(extent={{-32,-120},{-12,-100}})));
+
+  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
+    final nu=1) if not primaryOnly
+    "Pass enable signal for plants that are not primary-only"
+    annotation (Placement(transformation(extent={{-170,50},{-150,70}})));
 
 equation
-  connect(nexChi.yEnaSmaBoi,dowSta. nexEnaChi)
-    annotation (Line(points={{-18,311},{30,311},{30,226},{58,226}},
-      color={255,127,0}));
 
-  connect(dowSta.uChiHeaCon, uChiHeaCon)
-    annotation (Line(points={{58,224},{-100,224},{-100,130},{-300,130}},
-      color={255,0,255}));
+  connect(lat.y, minBypRes.uUpsDevSta) annotation (Line(points={{-200,0},{-196,
+          0},{-196,28},{-172,28}},
+                                color={255,0,255}));
 
-  connect(dowSta.uChiWatIsoVal, uChiWatIsoVal)
-    annotation (Line(points={{58,222},{-60,222},{-60,100},{-300,100}},
-      color={0,0,127}));
+  connect(lat.y, nexBoi.chaPro) annotation (Line(points={{-200,0},{-196,0},{-196,
+          -73},{-172,-73}}, color={255,0,255}));
 
-  connect(nexChi.yLasDisBoi,dowSta. nexDisChi)
-    annotation (Line(points={{-18,316},{20,316},{20,220},{58,220}},
-      color={255,127,0}));
+  connect(truDel.y,disHotWatIsoVal1. uUpsDevSta) annotation (Line(points={{122,0},
+          {126,0},{126,-5},{148,-5}}, color={255,0,255}));
 
-  connect(uChiWatReq, booToRea1.u)
-    annotation (Line(points={{-300,-10},{-242,-10}}, color={255,0,255}));
+  connect(pre1.y, lat.clr) annotation (Line(points={{222,-50},{230,-50},{230,-80},
+          {-230,-80},{-230,-6},{-224,-6}}, color={255,0,255}));
 
-  connect(booToRea1.y, curDisChi.u)
-    annotation (Line(points={{-218,-10},{-82,-10}}, color={0,0,127}));
+  connect(VHotWat_flow, minBypRes.VHotWat_flow) annotation (Line(points={{-260,
+          240},{-176,240},{-176,16},{-172,16}},
+                                           color={0,0,127}));
 
-  connect(curDisChi.y, lesEquThr.u)
-    annotation (Line(points={{-58,-10},{-42,-10}}, color={0,0,127}));
+  connect(VMinHotWatSet_flow, minBypRes.VMinHotWatSet_flow) annotation (Line(
+        points={{-260,200},{-180,200},{-180,12},{-172,12}}, color={0,0,127}));
 
-  connect(nexChi.yOnOff, logSwi2.u2)
-    annotation (Line(points={{-18,320},{0,320},{0,20},{58,20}},
-      color={255,0,255}));
+  connect(uHotWatIsoVal, enaHotWatIsoVal.uHotWatIsoVal) annotation (Line(points={{-260,
+          120},{-80,120},{-80,5},{-72,5}},       color={0,0,127}));
 
-  connect(and4.y, logSwi2.u1)
-    annotation (Line(points={{-18,30},{40,30},{40,28},{58,28}},
-      color={255,0,255}));
+  connect(nexBoi.uBoiSet, uBoiSet) annotation (Line(points={{-172,-69},{-190,-69},
+          {-190,40},{-260,40}},      color={255,0,255}));
 
-  connect(nexChi.yLasDisBoi, curDisChi.index)
-    annotation (Line(points={{-18,316},{20,316},{20,120},{-140,120},{-140,-30},
-      {-70,-30},{-70,-22}}, color={255,127,0}));
+  connect(uStaSet, nexBoi.uStaSet) annotation (Line(points={{-260,-80},{-234,-80},
+          {-234,-59},{-172,-59}},      color={255,127,0}));
 
-  connect(lesEquThr.y, and1.u2)
-    annotation (Line(points={{-18,-10},{120,-10},{120,12},{138,12}},
-      color={255,0,255}));
+  connect(uStaDowPro, lat.u)
+    annotation (Line(points={{-260,0},{-224,0}}, color={255,0,255}));
 
-  connect(logSwi2.y, and1.u1)
-    annotation (Line(points={{82,20},{138,20}}, color={255,0,255}));
+  connect(lat3.y, and1.u2) annotation (Line(points={{-118,-190},{-48,-190},{-48,
+          -26},{-10,-26},{-10,-8},{-2,-8}}, color={255,0,255}));
 
-  connect(nexChi.yLasDisBoi, disChiIsoVal.nexChaChi)
-    annotation (Line(points={{-18,316},{20,316},{20,68},{198,68}},
-      color={255,127,0}));
+  connect(uPumChaPro, lat3.u)
+    annotation (Line(points={{-260,-190},{-142,-190}}, color={255,0,255}));
 
-  connect(and1.y,disChiIsoVal.uUpsDevSta)
-    annotation (Line(points={{162,20},{180,20},{180,55},{198,55}},
-      color={255,0,255}));
+  connect(and4.y, lat4.u)
+    annotation (Line(points={{154,-190},{158,-190}}, color={255,0,255}));
 
-  connect(nexChi.yOnOff, booRep4.u)
-    annotation (Line(points={{-18,320},{0,320},{0,80},{38,80}}, color={255,0,255}));
+  connect(truDel.y, and4.u1) annotation (Line(points={{122,0},{126,0},{126,-190},
+          {130,-190}}, color={255,0,255}));
 
-  connect(booRep4.y, swi.u2)
-    annotation (Line(points={{62,80},{138,80}}, color={255,0,255}));
+  connect(uPumChaPro, and4.u2) annotation (Line(points={{-260,-190},{-160,-190},
+          {-160,-210},{120,-210},{120,-198},{130,-198}}, color={255,0,255}));
 
-  connect(uChiWatIsoVal, swi.u3)
-    annotation (Line(points={{-300,100},{80,100},{80,72},{138,72}},
-      color={0,0,127}));
+  connect(lat4.y, and3.u2) annotation (Line(points={{182,-190},{184,-190},{184,
+          -8},{188,-8}}, color={255,0,255}));
 
-  connect(dowSta.yChiWatIsoVal, swi.u1)
-    annotation (Line(points={{82,228},{96,228},{96,88},{138,88}},
-      color={0,0,127}));
+  connect(pre1.y, lat3.clr) annotation (Line(points={{222,-50},{230,-50},{230,-216},
+          {-150,-216},{-150,-196},{-142,-196}}, color={255,0,255}));
 
-  connect(swi.y, disChiIsoVal.uChiWatIsoVal)
-    annotation (Line(points={{162,80},{180,80},{180,65},{198,65}},
-      color={0,0,127}));
+  connect(pre1.y, lat4.clr) annotation (Line(points={{222,-50},{230,-50},{230,-216},
+          {154,-216},{154,-196},{158,-196}}, color={255,0,255}));
 
-  connect(uConWatReq, booToRea2.u)
-    annotation (Line(points={{-300,-120},{-242,-120}}, color={255,0,255}));
+  connect(edg.y, yStaChaPro)
+    annotation (Line(points={{252,50},{300,50}}, color={255,0,255}));
 
-  connect(booToRea2.y, curDisChi1.u)
-    annotation (Line(points={{-218,-120},{-82,-120}},color={0,0,127}));
+  connect(edg2.y, or2.u1) annotation (Line(points={{162,-236},{200,-236},{200,
+          -240},{208,-240}}, color={255,0,255}));
 
-  connect(curDisChi1.y, lesEquThr1.u)
-    annotation (Line(points={{-58,-120},{-42,-120}}, color={0,0,127}));
+  connect(edg1.y, or2.u2) annotation (Line(points={{-78,-250},{66,-250},{66,
+          -248},{208,-248}}, color={255,0,255}));
 
-  connect(logSwi2.y, and5.u1)
-    annotation (Line(points={{82,20},{90,20},{90,-20},{10,-20},{10,-112},{58,-112}},
-      color={255,0,255}));
+  connect(or2.y, yPumChaPro)
+    annotation (Line(points={{232,-240},{300,-240}}, color={255,0,255}));
 
-  connect(lesEquThr1.y, and5.u3)
-    annotation (Line(points={{-18,-120},{10,-120},{10,-128},{58,-128}},
-      color={255,0,255}));
+  connect(nexBoi.yOnOff, yOnOff) annotation (Line(points={{-148,-66},{144,-66},{
+          144,-110},{300,-110}},  color={255,0,255}));
 
-  connect(uChi,dowSta. uChi)
-    annotation (Line(points={{-300,220},{-200,220},{-200,234},{58,234}},
-      color={255,0,255}));
+  connect(truDel.y, edg2.u) annotation (Line(points={{122,0},{126,0},{126,-236},
+          {138,-236}}, color={255,0,255}));
 
-  connect(nexChi.yLasDisBoi, curDisChi1.index)
-    annotation (Line(points={{-18,316},{20,316},{20,120},{-140,120},{-140,-140},
-      {-70,-140},{-70,-132}}, color={255,127,0}));
+  connect(minBypRes.yMinBypRes, edg1.u) annotation (Line(points={{-148,20},{-110,
+          20},{-110,-250},{-102,-250}}, color={255,0,255}));
 
-  connect(nexChi.yOnOff, booRep1.u)
-    annotation (Line(points={{-18,320},{0,320},{0,-70},{58,-70}},
-      color={255,0,255}));
+  connect(minBypRes.yMinBypRes, lat5.u) annotation (Line(points={{-148,20},{
+          -110,20},{-110,40},{-72,40}},
+                                   color={255,0,255}));
 
-  connect(booRep1.y, logSwi.u2)
-    annotation (Line(points={{82,-70},{138,-70}}, color={255,0,255}));
-
-  connect(uChiHeaCon, logSwi.u3)
-    annotation (Line(points={{-300,130},{-100,130},{-100,-90},{120,-90},{120,-78},
-          {138,-78}},       color={255,0,255}));
-
-  connect(dowSta.yChiHeaCon, logSwi.u1)
-    annotation (Line(points={{82,232},{100,232},{100,-62},{138,-62}},
-      color={255,0,255}));
-
-  connect(and5.y, disHeaCon.uUpsDevSta)
-    annotation (Line(points={{82,-120},{160,-120},{160,-92},{198,-92}},
-      color={255,0,255}));
-
-  connect(nexChi.yLasDisBoi, disHeaCon.nexChaChi)
-    annotation (Line(points={{-18,316},{20,316},{20,-104},{198,-104}},
-      color={255,127,0}));
+  connect(pre1.y, lat5.clr) annotation (Line(points={{222,-50},{230,-50},{230,-80},
+          {-100,-80},{-100,34},{-72,34}}, color={255,0,255}));
 
-  connect(logSwi.y, disHeaCon.uChiHeaCon)
-    annotation (Line(points={{162,-70},{180,-70},{180,-108},{198,-108}},
-      color={255,0,255}));
+  connect(lat5.y, and1.u1) annotation (Line(points={{-48,40},{-6,40},{-6,0},{-2,
+          0}}, color={255,0,255}));
 
-  connect(con.y,disNexCWP. uStaUp)
-    annotation (Line(points={{-138,200},{-120,200},{-120,-158},{98,-158}},
-      color={255,0,255}));
+  connect(truDel.y, lat6.u) annotation (Line(points={{122,0},{126,0},{126,40},{148,
+          40}}, color={255,0,255}));
 
-  connect(disNexCWP.yChiSta, conWatPumCon.uChiSta)
-    annotation (Line(points={{122,-160},{130,-160},{130,-183},{138,-183}},
-      color={255,127,0}));
+  connect(lat6.y, and3.u1) annotation (Line(points={{172,40},{180,40},{180,0},{188,
+          0}}, color={255,0,255}));
 
-  connect(mulOr1.y, conWatPumCon.uLeaConWatReq)
-    annotation (Line(points={{-58,-220},{46,-220},{46,-180},{138,-180}},
-      color={255,0,255}));
+  connect(pre1.y, lat6.clr) annotation (Line(points={{222,-50},{230,-50},{230,-80},
+          {136,-80},{136,34},{148,34}}, color={255,0,255}));
 
-  connect(uChi, mulOr.u)
-    annotation (Line(points={{-300,220},{-200,220},{-200,-190},{-82,-190}},
-      color={255,0,255}));
+  connect(enaHotWatIsoVal.yHotWatIsoVal, swi.u1) annotation (Line(points={{-48,
+          -6},{-30,-6},{-30,-90},{26,-90},{26,-122},{38,-122}}, color={0,0,127}));
 
-  connect(uConWatReq, mulOr1.u)
-    annotation (Line(points={{-300,-120},{-250,-120},{-250,-220},{-82,-220}},
-      color={255,0,255}));
+  connect(uHotWatIsoVal, swi.u3) annotation (Line(points={{-260,120},{30,120},{
+          30,-138},{38,-138}}, color={0,0,127}));
 
-  connect(conWatPumCon.uWSE, uWSE)
-    annotation (Line(points={{138,-186},{52,-186},{52,-240},{-300,-240}},
-      color={255,0,255}));
+  connect(booRep.y, swi.u2)
+    annotation (Line(points={{22,-130},{38,-130}}, color={255,0,255}));
 
-  connect(conWatPumCon.uConWatPumSpe, uConWatPumSpe)
-    annotation (Line(points={{138,-191},{64,-191},{64,-340},{-300,-340}},
-      color={0,0,127}));
+  connect(swi.y, swi1.u3) annotation (Line(points={{62,-130},{92,-130},{92,-118},
+          {98,-118}}, color={0,0,127}));
 
-  connect(con.y, minBoiWatFlo.uStaUp)
-    annotation (Line(points={{-138,200},{-120,200},{-120,-311},{98,-311}},
-      color={255,0,255}));
+  connect(disHotWatIsoVal1.yHotWatIsoVal, swi1.u1) annotation (Line(points={{
+          172,-6},{180,-6},{180,-70},{92,-70},{92,-102},{98,-102}}, color={0,0,
+          127}));
 
-  connect(nexChi.yOnOff, minBoiWatFlo.uOnOff)
-    annotation (Line(points={{-18,320},{0,320},{0,-327},{98,-327}},
-      color={255,0,255}));
+  connect(truDel.y, booRep1.u) annotation (Line(points={{122,0},{126,0},{126,
+          -170},{60,-170},{60,-150},{68,-150}}, color={255,0,255}));
 
-  connect(dowSta.yChiDem, yChiDem)
-    annotation (Line(points={{82,239},{179.5,239},{179.5,260},{300,260}},
-      color={0,0,127}));
+  connect(booRep1.y, swi1.u2) annotation (Line(points={{92,-150},{96,-150},{96,
+          -110},{98,-110}}, color={255,0,255}));
 
-  connect(dowSta.yChi, yChi)
-    annotation (Line(points={{82,224},{180,224},{180,220},{300,220}},
-      color={255,0,255}));
+  connect(swi1.y, yHotWatIsoVal) annotation (Line(points={{122,-110},{134,-110},
+          {134,-90},{210,-90},{210,-70},{300,-70}}, color={0,0,127}));
 
-  connect(disChiIsoVal.yChiWatIsoVal, yChiWatIsoVal)
-    annotation (Line(points={{222,54},{260,54},{260,40},{300,40}},
-      color={0,0,127}));
+  connect(and1.y, truDel1.u) annotation (Line(points={{22,0},{28,0},{28,60},{
+          -10,60},{-10,100},{-2,100}},
+                                   color={255,0,255}));
 
-  connect(lat.y, minBypSet.chaPro)
-    annotation (Line(points={{-158,350},{-140,350},{-140,328},{-260,328},
-      {-260,-366}, {98,-366}}, color={255,0,255}));
+  connect(disHotWatIsoVal1.yEnaHotWatIsoVal, and3.u1) annotation (Line(points={{
+          172,6},{180,6},{180,0},{188,0}}, color={255,0,255}));
 
-  connect(VChiWat_flow,minBypSet.VHotWat_flow)
-    annotation (Line(points={{-300,190},{-170,190},{-170,-374},{98,-374}},
-      color={0,0,127}));
+  connect(minBypRes.yMinBypRes, booRep.u) annotation (Line(points={{-148,20},{
+          -110,20},{-110,-130},{-2,-130}}, color={255,0,255}));
 
-  connect(VChiWat_flow, dowSta.VChiWat_flow)
-    annotation (Line(points={{-300,190},{-170,190},{-170,232},{58,232}},
-      color={0,0,127}));
+  connect(minBypRes.yMinBypRes, enaHotWatIsoVal.uUpsDevSta) annotation (Line(
+        points={{-148,20},{-110,20},{-110,-5},{-72,-5}}, color={255,0,255}));
 
-  connect(uChiLoa,dowSta. uChiLoa)
-    annotation (Line(points={{-300,250},{-170,250},{-170,236},{58,236}},
-      color={0,0,127}));
+  connect(uHotWatIsoVal, disHotWatIsoVal1.uHotWatIsoVal) annotation (Line(
+        points={{-260,120},{144,120},{144,5},{148,5}}, color={0,0,127}));
 
-  connect(lat.y,dowSta. uStaDow)
-    annotation (Line(points={{-158,350},{-140,350},{-140,328},{-260,328},{-260,240},
-          {58,240}},        color={255,0,255}));
+  connect(edg.y, pre1.u) annotation (Line(points={{252,50},{266,50},{266,-32},{
+          190,-32},{190,-50},{198,-50}}, color={255,0,255}));
 
-  connect(lat.y, disChiIsoVal.chaPro)
-    annotation (Line(points={{-158,350},{-140,350},{-140,328},{-260,328},{-260,52},
-          {198,52}},       color={255,0,255}));
+  connect(enaHotWatIsoVal.yEnaHotWatIsoVal, lat1.u) annotation (Line(points={{
+          -48,6},{-40,6},{-40,-110},{-34,-110}}, color={255,0,255}));
 
-  connect(lat.y, and4.u2)
-    annotation (Line(points={{-158,350},{-140,350},{-140,328},{-260,328},{-260,22},
-          {-42,22}},       color={255,0,255}));
+  connect(pre1.y, lat1.clr) annotation (Line(points={{222,-50},{230,-50},{230,
+          -216},{-40,-216},{-40,-116},{-34,-116}}, color={255,0,255}));
 
-  connect(lat.y, logSwi2.u3)
-    annotation (Line(points={{-158,350},{-140,350},{-140,328},{-260,328},{-260,12},
-          {58,12}},       color={255,0,255}));
+  connect(lat1.y, and1.u1) annotation (Line(points={{-10,-110},{-6,-110},{-6,0},
+          {-2,0}}, color={255,0,255}));
 
-  connect(lat.y, disHeaCon.chaPro)
-    annotation (Line(points={{-158,350},{-140,350},{-140,328},{-260,328},{-260,-96},
-          {198,-96}},       color={255,0,255}));
+  connect(nexBoi.yOnOff, logSwi.u2) annotation (Line(points={{-148,-66},{34,-66},
+          {34,-40},{38,-40}}, color={255,0,255}));
 
-  connect(lat.y, minBoiWatFlo.uStaDow)
-    annotation (Line(points={{-158,350},{-140,350},{-140,328},{-260,328},{-260,-329},
-          {98,-329}},         color={255,0,255}));
+  connect(truDel1.y, logSwi.u1) annotation (Line(points={{22,100},{36,100},{36,-32},
+          {38,-32}}, color={255,0,255}));
 
-  connect(lat.y,disNexCWP. uStaDow)
-    annotation (Line(points={{-158,350},{-140,350},{-140,328},{-260,328},{-260,-162},
-          {98,-162}},         color={255,0,255}));
+  connect(lat.y, logSwi.u3) annotation (Line(points={{-200,0},{-196,0},{-196,-48},
+          {38,-48}}, color={255,0,255}));
 
-  connect(lat.y, yStaPro)
-    annotation (Line(points={{-158,350},{300,350}},color={255,0,255}));
+  connect(nexBoi.yEnaSmaBoi, enaHotWatIsoVal.nexChaBoi) annotation (Line(points=
+         {{-148,-75},{-76,-75},{-76,8},{-72,8}}, color={255,127,0}));
 
-  connect(dowSta.yOpeParLoaRatMin, yOpeParLoaRatMin)
-    annotation (Line(points={{58,238},{40,238},{40,280},{-300,280}},
-      color={0,0,127}));
+  connect(logSwi.y, disBoi.uUpsDevSta) annotation (Line(points={{62,-40},{70,-40},
+          {70,-20},{50,-20},{50,2},{58,2}}, color={255,0,255}));
 
-  connect(conWatPumCon.uChiConIsoVal, uChiConIsoVal)
-    annotation (Line(points={{138,-172},{-140,-172},{-140,-180},{-300,-180}},
-      color={255,0,255}));
+  connect(lat.y, disBoi.uStaDow) annotation (Line(points={{-200,0},{-196,0},{-196,
+          -20},{44,-20},{44,6},{58,6}}, color={255,0,255}));
 
-  connect(mulOr.y, conWatPumCon.uLeaChiEna)
-    annotation (Line(points={{-58,-190},{40,-190},{40,-175},{138,-175}},
-      color={255,0,255}));
+  connect(nexBoi.yEnaSmaBoi, disBoi.nexEnaBoi) annotation (Line(points={{-148,-75},
+          {-76,-75},{-76,20},{50,20},{50,9},{58,9}}, color={255,127,0}));
 
-  connect(mulOr.y, conWatPumCon.uLeaChiSta)
-    annotation (Line(points={{-58,-190},{40,-190},{40,-177},{138,-177}},
-      color={255,0,255}));
+  connect(uBoi, disBoi.uBoi) annotation (Line(points={{-260,80},{54,80},{54,-2},
+          {58,-2}}, color={255,0,255}));
 
-  connect(conWatPumCon.yDesConWatPumSpe, yDesConWatPumSpe)
-    annotation (Line(points={{162,-179},{240,-179},{240,-180},{300,-180}},
-      color={0,0,127}));
+  connect(nexBoi.yLasDisBoi, disBoi.nexDisBoi) annotation (Line(points={{-148,-70},
+          {26,-70},{26,-5},{58,-5}}, color={255,127,0}));
 
-  connect(conWatPumCon.uConWatPumSpeSet, uConWatPumSpeSet)
-    annotation (Line(points={{138,-189},{58,-189},{58,-280},{-300,-280}},
-      color={0,0,127}));
+  connect(nexBoi.yOnOff, disBoi.uOnOff) annotation (Line(points={{-148,-66},{34,
+          -66},{34,-9},{58,-9}}, color={255,0,255}));
 
-  connect(uChi, minBoiWatFlo.uChi)
-    annotation (Line(points={{-300,220},{-200,220},{-200,-316},{98,-316}},
-      color={255,0,255}));
+  connect(disBoi.yBoiDisPro, truDel.u) annotation (Line(points={{82,-8},{90,-8},
+          {90,0},{98,0}}, color={255,0,255}));
 
-  connect(nexChi.yLasDisBoi, minBoiWatFlo.nexDisChi)
-    annotation (Line(points={{-18,316},{20,316},{20,-321},{98,-321}},
-      color={255,127,0}));
+  connect(disBoi.yBoi, yBoi) annotation (Line(points={{82,0},{86,0},{86,110},{300,
+          110}}, color={255,0,255}));
 
-  connect(nexChi.yEnaSmaBoi, minBoiWatFlo.nexEnaChi)
-    annotation (Line(points={{-18,311},{30,311},{30,-319},{98,-319}},
-      color={255,127,0}));
+  connect(nexBoi.yLasDisBoi, disHotWatIsoVal1.nexChaBoi) annotation (Line(
+        points={{-148,-70},{60,-70},{60,-60},{140,-60},{140,8},{148,8}}, color={
+          255,127,0}));
 
-  connect(con.y, minBoiWatFlo.uSubCha)
-    annotation (Line(points={{-138,200},{-120,200},{-120,-324},{98,-324}},
-      color={255,0,255}));
+  connect(and3.y, edg.u) annotation (Line(points={{212,0},{220,0},{220,50},{228,
+          50}}, color={255,0,255}));
 
-  connect(edg1.y, lat.clr)
-    annotation (Line(points={{222,-370},{260,-370},{260,-390},{-190,-390},
-      {-190,344},{-182,344}},   color={255,0,255}));
+  connect(nexBoi.yOnOff, enaHotWatIsoVal.chaPro) annotation (Line(points={{-148,
+          -66},{-80,-66},{-80,-8},{-72,-8}}, color={255,0,255}));
 
-  connect(conWatPumCon.yConWatPumNum, yConWatPumNum)
-    annotation (Line(points={{162,-185},{220,-185},{220,-220},{300,-220}},
-      color={255,127,0}));
+  connect(nexBoi.yOnOff, minBypRes.chaPro) annotation (Line(points={{-148,-66},{
+          -140,-66},{-140,0},{-184,0},{-184,24},{-172,24}}, color={255,0,255}));
 
-  connect(conWatPumCon.yLeaPum, yLeaPum)
-    annotation (Line(points={{162,-173},{220,-173},{220,-150},{300,-150}},
-      color={255,0,255}));
+  connect(lat.y, disHotWatIsoVal1.chaPro) annotation (Line(points={{-200,0},{-196,
+          0},{-196,-20},{44,-20},{44,-16},{146,-16},{146,-8},{148,-8}}, color={255,
+          0,255}));
 
-  connect(disHeaCon.yChiHeaCon, yChiHeaCon)
-    annotation (Line(points={{222,-106},{260,-106},{260,-110},{300,-110}},
-      color={255,0,255}));
+  connect(lat.y, mulOr.u[1]) annotation (Line(points={{-200,0},{-196,0},{-196,60},
+          {-172,60}}, color={255,0,255}));
 
-  connect(minBypSet.yMinBypRes, pre.u)
-    annotation (Line(points={{122,-370},{158,-370}}, color={255,0,255}));
+  connect(mulOr.y, lat5.u) annotation (Line(points={{-148,60},{-110,60},{-110,40},
+          {-72,40}}, color={255,0,255}));
 
-  connect(pre.y, edg1.u)
-    annotation (Line(points={{182,-370},{198,-370}}, color={255,0,255}));
+  connect(mulOr.y, enaHotWatIsoVal.uUpsDevSta) annotation (Line(points={{-148,60},
+          {-110,60},{-110,-5},{-72,-5}}, color={255,0,255}));
 
-  connect(dowSta.yReaDemLim, yReaDemLim)
-    annotation (Line(points={{82,221},{92,221},{92,180},{300,180}},
-      color={255,0,255}));
+  connect(mulOr.y, booRep.u) annotation (Line(points={{-148,60},{-110,60},{-110,
+          -130},{-2,-130}}, color={255,0,255}));
 
-  connect(dowSta.yReaDemLim, lat2.u)
-    annotation (Line(points={{82,221},{92,221},{92,160},{118,160}},
-      color={255,0,255}));
+  connect(mulOr.y, edg1.u) annotation (Line(points={{-148,60},{-110,60},{-110,-250},
+          {-102,-250}}, color={255,0,255}));
 
-  connect(edg1.y, lat2.clr)
-    annotation (Line(points={{222,-370},{260,-370},{260,-390},{-190,-390},
-      {-190,154},{118,154}}, color={255,0,255}));
-
-  connect(lat2.y, and4.u1)
-    annotation (Line(points={{142,160},{160,160},{160,140},{-80,140},{-80,30},
-      {-42,30}}, color={255,0,255}));
-
-  connect(conWatPumCon.yPumSpeChe, and2.u1)
-    annotation (Line(points={{162,-191},{180,-191},{180,-240},{198,-240}},
-      color={255,0,255}));
-
-  connect(and2.y, lat1.u)
-    annotation (Line(points={{222,-240},{230,-240},{230,-260},{238,-260}},
-      color={255,0,255}));
-
-  connect(edg1.y, lat1.clr)
-    annotation (Line(points={{222,-370},{260,-370},{260,-390},{-190,-390},
-      {-190,-266},{238,-266}}, color={255,0,255}));
-
-  connect(lat1.y, minBoiWatFlo.uUpsDevSta)
-    annotation (Line(points={{262,-260},{270,-260},{270,-290},{-40,-290},
-      {-40,-313},{98,-313}}, color={255,0,255}));
-
-  connect(lat1.y, minBypSet.uUpsDevSta)
-    annotation (Line(points={{262,-260},{270,-260},{270,-290},{-40,-290},
-      {-40,-362},{98,-362}}, color={255,0,255}));
-
-  connect(dowSta.yChiWatMinFloSet, chiWatMinSet.u3)
-    annotation (Line(points={{82,236},{170,236},{170,-338},{198,-338}},
-      color={0,0,127}));
-
-  connect(minBoiWatFlo.yChiWatMinFloSet, chiWatMinSet.u1)
-    annotation (Line(points={{122,-320},{140,-320},{140,-322},{198,-322}},
-      color={0,0,127}));
-
-  connect(lat1.y, chiWatMinSet.u2)
-    annotation (Line(points={{262,-260},{270,-260},{270,-290},{160,-290},
-      {160,-330},{198,-330}}, color={255,0,255}));
-
-  connect(chiWatMinSet.y, yChiWatMinFloSet)
-    annotation (Line(points={{222,-330},{300,-330}}, color={0,0,127}));
-
-  connect(chiWatMinSet.y, minBypSet.VMinHotWatSet_flow) annotation (Line(points
-        ={{222,-330},{240,-330},{240,-350},{60,-350},{60,-378},{98,-378}},
-        color={0,0,127}));
-
-  connect(nexChi.yOnOff, dowSta.uOnOff)
-    annotation (Line(points={{-18,320},{0,320},{0,228},{58,228}},
-      color={255,0,255}));
-
-  connect(edg1.y, dowSta.clr)
-    annotation (Line(points={{222,-370},{260,-370},{260,-390},{-190,-390},
-      {-190,230},{58,230}}, color={255,0,255}));
-
-  connect(disChiIsoVal.yEnaChiWatIsoVal, lat3.u)
-    annotation (Line(points={{222,66},{240,66},{240,0},{180,0},{180,-30},
-      {198,-30}}, color={255,0,255}));
-
-  connect(lat3.y, and5.u2)
-    annotation (Line(points={{222,-30},{240,-30},{240,-50},{40,-50},{40,-120},
-      {58,-120}}, color={255,0,255}));
-
-  connect(edg1.y, lat3.clr)
-    annotation (Line(points={{222,-370},{260,-370},{260,-390},{-190,-390},
-      {-190,-36},{198,-36}}, color={255,0,255}));
-
-  connect(disHeaCon.yEnaHeaCon, lat4.u)
-    annotation (Line(points={{222,-94},{240,-94},{240,-114},{180,-114},
-      {180,-130},{198,-130}}, color={255,0,255}));
-
-  connect(lat4.y, yTowStaDow)
-    annotation (Line(points={{222,-130},{250,-130},{250,-60},{300,-60}},
-      color={255,0,255}));
-
-  connect(lat4.y, disNexCWP.uUpsDevSta)
-    annotation (Line(points={{222,-130},{250,-130},{250,-142},{80,-142},{80,-152},
-      {98,-152}}, color={255,0,255}));
-
-  connect(lat4.y, and2.u2)
-    annotation (Line(points={{222,-130},{250,-130},{250,-142},{80,-142},{80,-248},
-      {198,-248}}, color={255,0,255}));
-
-  connect(edg1.y, lat4.clr)
-    annotation (Line(points={{222,-370},{260,-370},{260,-390},{-190,-390},
-      {-190,-136},{198,-136}}, color={255,0,255}));
-
-  connect(lat.y, nexChi.chaPro)
-    annotation (Line(points={{-158,350},{-140,350},{-140,328},{-260,328},
-      {-260,313},{-42,313}}, color={255,0,255}));
-
-  connect(uStaSet, nexChi.uStaSet)
-    annotation (Line(points={{-300,380},{-60,380},{-60,327},{-42,327}},
-      color={255,127,0}));
-
-  connect(nexChi.uBoiSet, uChiSet)
-    annotation (Line(points={{-42,320},{-300,320}}, color={255,0,255}));
-
-  connect(uStaSet, cha.u)
-    annotation (Line(points={{-300,380},{-260,380},{-260,350},{-242,350}},
-      color={255,127,0}));
-
-  connect(cha.down, lat.u)
-    annotation (Line(points={{-218,344},{-200,344},{-200,350},{-182,350}},
-      color={255,0,255}));
-
-  connect(uStaSet, disNexCWP.uStaSet)
-    annotation (Line(points={{-300,380},{-130,380},{-130,-169},{98,-169}},
-      color={255,127,0}));
-
-  connect(uChiSta, disNexCWP.uChiSta)
-    annotation (Line(points={{-300,160},{-150,160},{-150,-165},{98,-165}},
-      color={255,127,0}));
-
+  connect(nexBoi.yEnaSmaBoi, yNexEnaBoi) annotation (Line(points={{-148,-75},{-76,
+          -75},{-76,-86},{260,-86},{260,-150},{300,-150}}, color={255,127,0}));
 
 annotation (
   defaultComponentName="dowProCon",
-  Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-280,-400},{280,400}})),
+  Diagram(coordinateSystem(preserveAspectRatio=false,
+          extent={{-240,-260},{280,260}})),
     Icon(coordinateSystem(extent={{-100,-200},{100,200}}), graphics={
         Rectangle(
         extent={{-100,-200},{100,200}},
@@ -849,244 +519,76 @@ annotation (
           lineColor={0,0,255},
           textString="%name"),
         Rectangle(
-          extent={{-10,140},{10,-120}},
+          extent={{-10,120},{10,-140}},
           lineColor={200,200,200},
           fillColor={207,207,207},
           fillPattern=FillPattern.Solid),
         Polygon(
-          points={{0,-120},{-42,-120},{0,-160},{40,-120},{0,-120}},
+          points={{0,160},{-40,120},{0,120},{40,120},{0,160}},
           lineColor={200,200,200},
           fillColor={207,207,207},
-          fillPattern=FillPattern.Solid),
-        Text(
-          extent={{-100,190},{-58,178}},
-          lineColor={255,127,0},
-          textString="uStaSet"),
-        Text(
-          extent={{-96,140},{-26,126}},
-          lineColor={0,0,127},
-          pattern=LinePattern.Dash,
-          textString="yOpeParLoaRatMin"),
-        Text(
-          extent={{-96,118},{-60,106}},
-          lineColor={0,0,127},
-          pattern=LinePattern.Dash,
-          textString="uChiLoa"),
-        Text(
-          extent={{-100,88},{-70,76}},
-          lineColor={255,0,255},
-          textString="uChi"),
-        Text(
-          extent={{-98,68},{-44,54}},
-          lineColor={0,0,127},
-          pattern=LinePattern.Dash,
-          textString="VChiWat_flow"),
-        Text(
-          extent={{-96,6},{-44,-6}},
-          lineColor={255,0,255},
-          textString="uChiHeaCon"),
-        Text(
-          extent={{-98,-22},{-38,-34}},
-          lineColor={0,0,127},
-          pattern=LinePattern.Dash,
-          textString="uChiWatIsoVal"),
-        Text(
-          extent={{-98,-54},{-48,-66}},
-          lineColor={255,0,255},
-          textString="uChiWatReq"),
-        Text(
-          extent={{-98,-72},{-40,-86}},
-          lineColor={255,0,255},
-          textString="uConWatReq"),
-        Text(
-          extent={{-98,-102},{-34,-116}},
-          lineColor={255,0,255},
-          textString="uChiConIsoVal"),
-        Text(
-          extent={{-102,-134},{-66,-146}},
-          lineColor={255,0,255},
-          textString="uWSE"),
-        Text(
-          extent={{-98,-182},{-24,-196}},
-          lineColor={0,0,127},
-          pattern=LinePattern.Dash,
-          textString="uConWatPumSpe"),
-        Text(
-          extent={{-98,-160},{-14,-178}},
-          lineColor={0,0,127},
-          pattern=LinePattern.Dash,
-          textString="uConWatPumSpeSet"),
-        Text(
-          extent={{60,198},{100,186}},
-          lineColor={255,0,255},
-          textString="yStaPro"),
-        Text(
-          extent={{60,158},{96,146}},
-          lineColor={0,0,127},
-          pattern=LinePattern.Dash,
-          textString="yChiDem"),
-        Text(
-          extent={{72,126},{96,114}},
-          lineColor={255,0,255},
-          textString="yChi"),
-        Text(
-          extent={{36,50},{96,34}},
-          lineColor={0,0,127},
-          pattern=LinePattern.Dash,
-          textString="yChiWatIsoVal"),
-        Text(
-          extent={{42,8},{96,-4}},
-          lineColor={255,0,255},
-          textString="yTowStaDow"),
-        Text(
-          extent={{48,-22},{96,-36}},
-          lineColor={255,0,255},
-          textString="yChiHeaCon"),
-        Text(
-          extent={{58,-62},{96,-74}},
-          lineColor={255,0,255},
-          textString="yLeaPum"),
-        Text(
-          extent={{18,-104},{98,-114}},
-          lineColor={0,0,127},
-          pattern=LinePattern.Dash,
-          textString="yDesConWatPumSpe"),
-        Text(
-          extent={{34,-142},{96,-156}},
-          lineColor={255,127,0},
-          textString="yConWatPumNum"),
-        Text(
-          extent={{28,-180},{98,-194}},
-          lineColor={0,0,127},
-          pattern=LinePattern.Dash,
-          textString="yChiWatMinFloSet"),
-        Text(
-          extent={{40,88},{96,74}},
-          lineColor={255,0,255},
-          textString="yReaDemLim"),
-        Text(
-          extent={{-100,170},{-60,158}},
-          lineColor={255,0,255},
-          textString="uChiSet"),
-        Text(
-          extent={{-100,38},{-58,26}},
-          lineColor={255,127,0},
-          textString="uChiSta")}),
+          fillPattern=FillPattern.Solid)}),
 Documentation(info="<html>
 <p>
-Block that controls devices when there is a stage-down command. This sequence is for
-water-cooled primary-only parallel boiler plants with headered hot water pumps
-and headered condenser water pumps, or air-cooled primary-only parallel boiler
-plants with headered hot water pumps.
-This development is based on ASHRAE RP-1711 Advanced Sequences of Operation for 
-HVAC Systems Phase II – Central Plants and Hydronic Systems (Draft version, March 2020),
-section 5.2.4.17, which specifies the step-by-step control of
-devices during boiler staging down process.
+Block that controls boiler status and isolation valve position, initiates status
+change in devices like pumps and minimum flow bypass valve, and resets plant
+parameters like minimum flow setpoint when there is a stage-down command.
+This development is based on ASHRAE RP-1711, March 2020 draft,sections 5.3.3.11 - 5.3.3.18,
+which specify the step-by-step control of devices during boiler staging down process.
 </p>
 <ol>
 <li>
-Identify the boiler(s) that should be enabled (and disabled, if <code>have_PonyBoiler=true</code>). 
-This is implemented in block <code>nexChi</code>. See
+Identify the boiler(s) that should be disabled (and enabled). This is implemented in block <code>nexBoi</code>. See
 <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextBoiler\">
 Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.NextBoiler</a>
 for more decriptions.
 </li>
 <li>
-Start the staging down process,
+If the stage change process involves disabling a larger boiler and enabling a smaller boiler,
 <ul>
 <li>
-For any stage change during which a smaller boiler is enabled and a larger chller
-is disabled:
-<ol type=\"i\">
-<li>
-Command operating boilers to reduce demand to 75% (<code>chiDemRedFac</code>) of 
-their current load (<code>uChiLoa</code>) or a percentage equal to current stage 
-minimum cycling operative partial load ratio <code>yOpeParLoaRatMin</code>, whichever is greater. 
-Wait until actual demand &lt;
-
- 80% of current load up to a maximum of 5 minutes 
-(<code>holChiDemTim</code>) before proceeding.
-</li>
-<li>
-Slowly change the minimum flow bypass setpoint to the one that includes both 
-boilers are enabled. After new setpoint is achieved, wait 1 minute 
-(<code>aftByPasSetTim</code>) to allow loop stabilize.
-</li>
-<li>
-Enable head pressure control for the boiler being enabled. Wait 30 seconds (<code>waiTim</code>).
-</li>
-<li>
-Slowly (<code>chaChiWatIsoTim</code>) open hot water isolation valve of the smaller 
-boiler being enabled. The valve timing should be determind in the field.
-</li>
-<li>
-Start the smaller boiler after its hot water isolation valve is fully open.
-</li>
-<li>
-Wait 5 minutes (<code>proOnTim</code>) for the newly enabled boiler to prove that 
-it is operating correctly, then shut off the larger boiler and release the 
-demand limit.
-</li>
-</ol>
-</li>
-<li>
-If staging down from any other stage, shut off the last stage boiler.
-</li>
-</ul>
-These are implemented in block <code>dowSta</code>. See
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.DownStart\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.DownStart</a>
-for more decriptions.
-</li>
-<li>
-When the controller of the boiler being shut off indicates no request for chilled
-water flow (<code>uChiWatReq=false</code>), slowly (<code>chaChiWatIsoTim</code>) 
-close the boiler's hot water isolation valve to avoid a sudden change in flow 
-through other operating boilers.
-This is implemented in block <code>disChiIsoVal</code>. See
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.CHWIsoVal\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.CHWIsoVal</a>
-for more decriptions.
-</li>
-
-<li>
-When the controller of the boiler being shut off indicates no request for condenser
-water flow (<code>uConWatReq=false</code>), disable the boiler's head pressure control 
-loop.
-This is implemented in block <code>disHeaCon</code>. See
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HeadControl\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HeadControl</a>
-for more decriptions.
-</li>
-
-<li>
-When the condenser water head pressure control valve is fully closed, shut off
-the last lag condenser water pump or change the pump speed to that required of 
-the new stage.
-Block <code>disNexCWP</code> identifies boiler stage for the condenser water pump
-control
-(<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.EnableCWPump\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.EnableCWPump</a>)
-and block <code>conWatPumCon</code> checks if the condenser water pumps have been reset
-(<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.CondenserWater.Controller\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.CondenserWater.Controller</a>).
-</li>
-
-<li>
-Change the hot water minimum flow setpoint to that appropriate for the new
-stage.
-The minimum flow setpoint is reset in block <code>minBoiWatFlo</code>
-(<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.MinimumFlowBypass.Subsequences.FlowSetpoint\">
+Slowly change the minimum hot water flow 
+setpoint to the one that includes both boilers being enabled. After new setpoint is 
+achieved, wait <code>delEnaMinFloSet</code> to allow loop to stabilize.
+The minimum flow setpoint is reset in sequence
+(<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.MinimumFlowBypass.FlowSetpoint\">
 Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.MinimumFlowBypass.Subsequences.FlowSetpoint</a>).
-Block <code>minBypSet</code> checks if the new setpoint is achieved
+Block <code>minBypRes</code> checks if the new setpoint is achieved
 (<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.ResetMinBypass\">
 Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.ResetMinBypass</a>).
+</li>
+<li>
+Start the next hot water pump and/or open the hot water isolation valves using the
+block <code>enaHotWatIsoVal</code> using sequence implemented in <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HWIsoVal\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.HWIsoVal</a>
+for the valves and initiating the pump change process with the pulse signal <code>yPumChaPro</code>. 
+Once the pumps have been reset, the controller receives a pulse signal on the
+input <code>uPumChaPro</code>.
+</li>
+<li>
+After waiting for time <code>delPreBoiEna</code>, the boiler status <code>yBoi</code> 
+is changed using the boiler status controller <code>disBoi</code> implemented in the sequence
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.DisableBoiler\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.DisableBoiler</a>.
+</li>
+</ul>
+<li>
+If the stage down process does not involve turning on a smaller boiler, start the
+staging down process immediately by changing <code>yBoi</code> using <code>disBoi</code>.
+<li>
+Wait for time <code>delBoiEna</code> before closing the isolation valve for the
+disabled boiler using <code>disHotWatIsoVal1</code> and initiating the pump change process.
+</li>
+<li>
+End the staging process after the valve has been closed and the pump change process
+completion signal has been received. Send pulse signal through <code>yStaChaPro</code>
+to indicate the same.
 </li>
 </ol>
 </html>", revisions="<html>
 <ul>
 <li>
-September 23, 2019, by Jianjun Hu:<br/>
+July 20, 2020, by Karthik Devaprasad:<br/>
 First implementation.
 </li>
 </ul>

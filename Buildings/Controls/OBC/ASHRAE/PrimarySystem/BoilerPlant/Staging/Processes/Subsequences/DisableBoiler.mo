@@ -11,10 +11,7 @@ block DisableBoiler
     final displayUnit="s") = 300
     "Enabled boiler operation time to indicate if it is proven on";
 
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput nexEnaBoi
-    "Index of next enabling boiler"
-    annotation (Placement(transformation(extent={{-240,180},{-200,220}}),
-      iconTransformation(extent={{-140,70},{-100,110}})));
+
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uStaDow
     "Stage-down command"
@@ -31,15 +28,20 @@ block DisableBoiler
      annotation (Placement(transformation(extent={{-240,40},{-200,80}}),
        iconTransformation(extent={{-140,-40},{-100,0}})));
 
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uOnOff
+    "Indicate if the stage require one boiler to be enabled while another is disabled"
+    annotation (Placement(transformation(extent={{-240,-140},{-200,-100}}),
+      iconTransformation(extent={{-140,-110},{-100,-70}})));
+
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput nexDisBoi
     "Next disabling boiler when there is any stage down that requires one boiler on and another off"
     annotation (Placement(transformation(extent={{-240,-100},{-200,-60}}),
       iconTransformation(extent={{-140,-70},{-100,-30}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uOnOff
-    "Indicate if the stage require one boiler to be enabled while another is disabled"
-    annotation (Placement(transformation(extent={{-240,-140},{-200,-100}}),
-      iconTransformation(extent={{-140,-110},{-100,-70}})));
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput nexEnaBoi
+    "Index of next enabling boiler"
+    annotation (Placement(transformation(extent={{-240,180},{-200,220}}),
+      iconTransformation(extent={{-140,70},{-100,110}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yBoi[nBoi]
     "Boiler enabling status"
@@ -51,8 +53,6 @@ block DisableBoiler
     annotation (Placement(transformation(extent={{200,-70},{240,-30}}),
       iconTransformation(extent={{100,-100},{140,-60}})));
 
-  CDL.Logical.Edge edg2
-    annotation (Placement(transformation(extent={{160,-60},{180,-40}})));
 protected
   final parameter Integer boiInd[nBoi]={i for i in 1:nBoi}
     "Boiler index, {1,2,...,n}";
@@ -427,14 +427,15 @@ equation
       color={255,0,255}));
 
 
-  connect(edg2.y, yBoiDisPro)
-    annotation (Line(points={{182,-50},{220,-50}}, color={255,0,255}));
-  connect(logSwi7.y, edg2.u)
-    annotation (Line(points={{122,-50},{158,-50}}, color={255,0,255}));
   connect(and2.y, booRep4.u) annotation (Line(points={{-138,140},{-120,140},{
           -120,-160},{-82,-160}}, color={255,0,255}));
+
   connect(and2.y, logSwi7.u3) annotation (Line(points={{-138,140},{-120,140},{
           -120,-58},{98,-58}}, color={255,0,255}));
+
+  connect(logSwi7.y, yBoiDisPro)
+    annotation (Line(points={{122,-50},{220,-50}}, color={255,0,255}));
+
 annotation (
   defaultComponentName="disBoi",
   Icon(graphics={

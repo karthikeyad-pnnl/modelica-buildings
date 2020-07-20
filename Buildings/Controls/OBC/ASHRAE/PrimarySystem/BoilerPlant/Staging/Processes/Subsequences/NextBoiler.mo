@@ -7,8 +7,8 @@ block NextBoiler
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uBoiSet[nBoi]
     "Vector of boilers status setpoint"
-    annotation (Placement(transformation(extent={{-260,-40},{-220,0}}),
-      iconTransformation(extent={{-140,-20},{-100,20}})));
+    annotation (Placement(transformation(extent={{-260,-20},{-220,20}}),
+      iconTransformation(extent={{-140,-50},{-100,-10}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput chaPro
     "True: in the stage change process"
@@ -45,7 +45,7 @@ block NextBoiler
     annotation (Placement(transformation(extent={{220,-180},{260,-140}}),
       iconTransformation(extent={{100,-110},{140,-70}})));
 
-protected
+//protected
   parameter Integer boiInd[nBoi]={i for i in 1:nBoi}
     "Boiler index, {1,2,...,n}";
 
@@ -53,21 +53,13 @@ protected
     "Check if it is stage up or stage down"
     annotation (Placement(transformation(extent={{-200,120},{-180,140}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Edge edg[nBoi]
-    "Check if the boiler is being enabled"
-    annotation (Placement(transformation(extent={{-200,30},{-180,50}})));
-
-  Buildings.Controls.OBC.CDL.Logical.FallingEdge falEdg[nBoi]
-    "Check if the boiler is being disabled"
-    annotation (Placement(transformation(extent={{-200,-110},{-180,-90}})));
-
   Buildings.Controls.OBC.CDL.Logical.Latch enaBoi[nBoi]
     "True when the boiler should be enabled"
     annotation (Placement(transformation(extent={{-120,30},{-100,50}})));
 
   Buildings.Controls.OBC.CDL.Logical.FallingEdge endPro
     "True: boiler stage change is end"
-    annotation (Placement(transformation(extent={{-200,-170},{-180,-150}})));
+    annotation (Placement(transformation(extent={{-210,-170},{-190,-150}})));
 
   Buildings.Controls.OBC.CDL.Logical.Latch disBoi[nBoi]
     "True when the boiler should be disabled"
@@ -165,31 +157,25 @@ protected
   Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
     final nout=nBoi)
     "Replicate boolean input"
-    annotation (Placement(transformation(extent={{-160,-170},{-140,-150}})));
+    annotation (Placement(transformation(extent={{-154,-170},{-134,-150}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Edge edg[nBoi]
+    "Detect boilers being turned on"
+    annotation (Placement(transformation(extent={{-200,30},{-180,50}})));
+
+  Buildings.Controls.OBC.CDL.Logical.FallingEdge falEdg[nBoi]
+    "Detect boilers being turned off"
+    annotation (Placement(transformation(extent={{-200,-110},{-180,-90}})));
 
 equation
-  connect(uBoiSet, edg.u) annotation (Line(points={{-240,-20},{-210,-20},{-210,40},
-          {-202,40}},       color={255,0,255}));
-
-  connect(uBoiSet, falEdg.u) annotation (Line(points={{-240,-20},{-210,-20},{-210,
-          -100},{-202,-100}}, color={255,0,255}));
 
   connect(chaPro, endPro.u)
-    annotation (Line(points={{-240,-160},{-202,-160}}, color={255,0,255}));
+    annotation (Line(points={{-240,-160},{-212,-160}}, color={255,0,255}));
 
-  connect(edg.y,enaBoi. u)
-    annotation (Line(points={{-178,40},{-122,40}},   color={255,0,255}));
-
-  connect(falEdg.y,disBoi. u)
-    annotation (Line(points={{-178,-100},{-122,-100}}, color={255,0,255}));
-
-  connect(endPro.y, booRep.u)
-    annotation (Line(points={{-178,-160},{-162,-160}}, color={255,0,255}));
-
-  connect(booRep.y,enaBoi. clr) annotation (Line(points={{-138,-160},{-130,-160},
+  connect(booRep.y,enaBoi. clr) annotation (Line(points={{-132,-160},{-130,-160},
           {-130,34},{-122,34}},   color={255,0,255}));
 
-  connect(booRep.y,disBoi. clr) annotation (Line(points={{-138,-160},{-130,-160},
+  connect(booRep.y,disBoi. clr) annotation (Line(points={{-132,-160},{-130,-160},
           {-130,-106},{-122,-106}}, color={255,0,255}));
 
   connect(enaBoi.y,anyEnaBoi. u) annotation (Line(points={{-98,40},{-90,40},{-90,
@@ -239,12 +225,6 @@ equation
 
   connect(cha.down, dowPro.u) annotation (Line(points={{-178,124},{-140,124},{-140,
           90},{-122,90}}, color={255,0,255}));
-
-  connect(endPro.y, upPro.clr) annotation (Line(points={{-178,-160},{-170,-160},
-          {-170,154},{-122,154}}, color={255,0,255}));
-
-  connect(endPro.y, dowPro.clr) annotation (Line(points={{-178,-160},{-170,-160},
-          {-170,84},{-122,84}}, color={255,0,255}));
 
   connect(enaDis.y, booToInt2.u) annotation (Line(points={{2,-20},{20,-20},{20,-60},
           {38,-60}}, color={255,0,255}));
@@ -302,6 +282,27 @@ equation
 
   connect(proInt7.y,yEnaSmaBoi)
     annotation (Line(points={{202,-160},{240,-160}}, color={255,127,0}));
+
+  connect(falEdg.y, disBoi.u)
+    annotation (Line(points={{-178,-100},{-122,-100}}, color={255,0,255}));
+
+  connect(falEdg.u, uBoiSet) annotation (Line(points={{-202,-100},{-212,-100},{
+          -212,0},{-240,0}}, color={255,0,255}));
+
+  connect(edg.u, uBoiSet) annotation (Line(points={{-202,40},{-212,40},{-212,0},
+          {-240,0}}, color={255,0,255}));
+
+  connect(edg.y, enaBoi.u)
+    annotation (Line(points={{-178,40},{-122,40}}, color={255,0,255}));
+
+  connect(endPro.y, booRep.u)
+    annotation (Line(points={{-188,-160},{-156,-160}}, color={255,0,255}));
+
+  connect(endPro.y, dowPro.clr) annotation (Line(points={{-188,-160},{-160,-160},
+          {-160,84},{-122,84}}, color={255,0,255}));
+
+  connect(endPro.y, upPro.clr) annotation (Line(points={{-188,-160},{-160,-160},
+          {-160,154},{-122,154}}, color={255,0,255}));
 
 annotation (
   defaultComponentName="nexBoi",
@@ -371,7 +372,8 @@ This block identifies index of next enabled boiler (<code>yNexEnaBoi</code> and
 <p>
 This implementation assumes that the stage-up process (increased <code>uStaSet</code>)
 will enable only one more boiler (<code>yOnOff=false</code>), or enable a larger
-boiler and disable a smaller boiler (<code>yOnOff=true</code>); the stage-down
+boiler and disable a smaller boiler (<code>yOnOff=true</code>);
+ the stage-down
 process (decreased <code>uStaSet</code>) will disable only one existing boiler
 (<code>yOnOff=false</code>), or disable a larger boiler and enable a smaller
 boiler (<code>yOnOff=true</code>).
