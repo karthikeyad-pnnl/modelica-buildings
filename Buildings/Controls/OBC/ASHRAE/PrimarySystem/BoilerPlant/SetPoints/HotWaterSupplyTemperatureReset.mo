@@ -1,4 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints;
+
 block HotWaterSupplyTemperatureReset
     "Block to calculate hot-water setpoint for hot water supply temperature"
 
@@ -438,8 +439,10 @@ equation
 
   connect(swi3.y, mulMax.u[1:nSta]) annotation (Line(points={{22,-70},{26,-70},{26,
           -70},{28,-70}},           color={0,0,127}));
+
   connect(mulMax.y, greThr.u) annotation (Line(points={{52,-70},{58,-70},{58,-70},
           {58,-70}}, color={0,0,127}));
+
   annotation(defaultComponentName="hotWatSupTemRes",
     Diagram(coordinateSystem(preserveAspectRatio=false,
       extent={{-140,-320},{140,120}})),
@@ -483,6 +486,7 @@ equation
       <tr><td>Device</td><td>Any hot water pump</td> <td>Associated device</td></tr>
       <tr><td>iniSet</td><td><code>TPlaHotWatSetMax</code></td><td>Initial setpoint</td></tr>
       <tr><td>minSet</td><td><code>THotWatSetMinConBoi</code> for condensing boilers;
+
 <br><code>THotWatSetMinNonConBoi</code> for non-condensing boilers</td><td>Minimum setpoint</td></tr>
       <tr><td>maxSet</td><td><code>TPlaHotWatSetMax</code></td><td>Maximum setpoint</td></tr>
       <tr><td>delTim</td><td><code>delTimVal</code></td><td>Delay timer</td></tr>
@@ -542,4 +546,5 @@ equation
       </li>
       </ul>
       </html>"));
+
 end HotWaterSupplyTemperatureReset;

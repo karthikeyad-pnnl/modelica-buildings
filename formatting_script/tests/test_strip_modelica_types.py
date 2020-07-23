@@ -16,7 +16,7 @@ class StripModelicaTypesTests(unittest.TestCase):
 	@classmethod
 	def setUp(self):
 		# self.file_path = "C:/Users/deva713/OneDrive - PNNL/Documents/Git_repos/modelica-buildings/Buildings/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/SetPoints/HotWaterSupplyTemperatureReset.mo"
-		self.file_path = "C:/Users/deva713/OneDrive - PNNL/Documents/Git_repos/modelica-buildings/Buildings/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/Processes"
+		self.file_path = "C:/Users/deva713/OneDrive - PNNL/Documents/Git_repos/modelica-buildings/Buildings/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/SetPoints/Subsequences"
 		# self.file_path = "C:/Users/deva713/OneDrive - PNNL/Documents/Git_repos/modelica-buildings/formatting_script/tests/SetpointController.mo"
 		# make a copy of the modelica library
 		self.package_path = "C:/Users/deva713/OneDrive - PNNL/Documents/Git_repos/modelica-buildings_issue1916/Buildings/Controls/OBC/ASHRAE/PrimarySystem"

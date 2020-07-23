@@ -1,7 +1,11 @@
-within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging;
-package Subsequences "Boiler staging subsequences"
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints;
 
-  annotation (Icon(graphics={
+package Subsequences
+    "Subsequences for setpoint calculations"
+
+
+
+annotation(Icon(graphics={
         Rectangle(
           lineColor={200,200,200},
           fillColor={248,248,248},
@@ -36,8 +40,9 @@ package Subsequences "Boiler staging subsequences"
           fillPattern=FillPattern.Solid,
           extent={{-80.0,0.0},{-20.0,60.0}})}),
         Documentation(info="<html>
-          <p>
-          This package contains subsequences used in boiler staging control.
-          </p>
-          </html>"));
+             <p>
+             This package contains control subsequences for setpoint calculations.
+             </p>
+             </html>"));
+
 end Subsequences;

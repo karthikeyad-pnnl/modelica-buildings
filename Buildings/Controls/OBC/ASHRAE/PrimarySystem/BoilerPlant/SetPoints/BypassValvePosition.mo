@@ -1,39 +1,54 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints;
+
 block BypassValvePosition
   parameter Buildings.Controls.OBC.CDL.Types.SimpleController controllerType=
-         Buildings.Controls.OBC.CDL.Types.SimpleController.PI "Type of controller";
+         Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "Type of controller";
+
   parameter Real k(
-    min=0) = 1 "Gain of controller";
+    min=0) = 1
+    "Gain of controller";
+
   parameter Real Ti(min=0) = 0.5
     "Time constant of integrator block"
     annotation (Dialog(enable=
           controllerType == CDL.Types.SimpleController.PI or
           controllerType == CDL.Types.SimpleController.PID));
+
   parameter Real Td(min=0) = 0.1
     "Time constant of derivative block"
     annotation (Dialog(enable=
           controllerType == CDL.Types.SimpleController.PD or
           controllerType == CDL.Types.SimpleController.PID));
+
   parameter Integer nPum = 2
     "Number of pumps";
 
-  CDL.Interfaces.RealInput priCirFloRat
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput priCirFloRat
     "Measured hot-water flow-rate thorugh primary circuit"
     annotation (Placement(transformation(extent={{-140,0},{-100,40}})));
-  CDL.Interfaces.BooleanInput uPumSta[nPum]
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uPumSta[nPum]
     "Input signals indicating pump statuses"
     annotation (Placement(transformation(extent={{-140,-70},{-100,-30}})));
-  CDL.Interfaces.RealOutput yBypValPos "Bypass valve opening position"
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yBypValPos
+    "Bypass valve opening position"
     annotation (Placement(transformation(extent={{100,-20},{140,20}})));
-  CDL.Interfaces.RealInput boiMinFloSet
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput boiMinFloSet
     "Calculated setpoint for minimum hot-water flow-rate through boilers"
     annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
-  CDL.Logical.Switch swi "Check if bypass valve should be modulated"
+
+  Buildings.Controls.OBC.CDL.Logical.Switch swi
+    "Check if bypass valve should be modulated"
     annotation (Placement(transformation(extent={{34,-10},{54,10}})));
-  CDL.Continuous.Sources.Constant opeVal(k=1)
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant opeVal(k=1)
     "Bypass valve fully open when pumps are off"
     annotation (Placement(transformation(extent={{-10,-30},{10,-10}})));
-  CDL.Continuous.LimPID conPID(
+
+  Buildings.Controls.OBC.CDL.Continuous.LimPID conPID(
     controllerType=controllerType,
     k=k,
     Ti=Ti,
@@ -45,27 +60,36 @@ block BypassValvePosition
     reset=Buildings.Controls.OBC.CDL.Types.Reset.Parameter)
     "Bypass circuit flow-rate controller to satisfy boiler minimum flow-rate"
     annotation (Placement(transformation(extent={{-10,50},{10,70}})));
-  CDL.Logical.MultiOr mulOr(nu=2)
+
+  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(nu=2)
     "Block to detect if any of the pumps are proved ON"
     annotation (Placement(transformation(extent={{-70,-60},{-50,-40}})));
+
 equation
   connect(opeVal.y, swi.u3) annotation (Line(points={{12,-20},{24,-20},{24,-8},{
           32,-8}}, color={0,0,127}));
+
   connect(swi.y, yBypValPos)
     annotation (Line(points={{56,0},{120,0}}, color={0,0,127}));
+
   connect(conPID.u_s, boiMinFloSet)
     annotation (Line(points={{-12,60},{-120,60}}, color={0,0,127}));
+
   connect(conPID.y, swi.u1)
     annotation (Line(points={{12,60},{24,60},{24,8},{32,8}}, color={0,0,127}));
 
   connect(conPID.u_m, priCirFloRat) annotation (Line(points={{0,48},{0,20},{-120,
           20}},                  color={0,0,127}));
+
   connect(conPID.trigger, swi.u2)
     annotation (Line(points={{-6,48},{-6,0},{32,0}}, color={255,0,255}));
+
   connect(mulOr.u[1:2], uPumSta) annotation (Line(points={{-72,-53.5},{-102,-53.5},
           {-102,-50},{-120,-50}}, color={255,0,255}));
+
   connect(mulOr.y, swi.u2) annotation (Line(points={{-48,-50},{-40,-50},{-40,0},
           {32,0}}, color={255,0,255}));
+
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}}), graphics={Rectangle(
           extent={{-100,100},{100,-100}},
@@ -109,4 +133,5 @@ First implementation.
       Interval=1,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"));
+
 end BypassValvePosition;

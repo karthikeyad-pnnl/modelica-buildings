@@ -1,4 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.Validation;
+
 block HotWaterSupplyTemperatureReset
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.HotWaterSupplyTemperatureReset
@@ -288,74 +289,108 @@ protected
 equation
   connect(ram.y, reaToInt.u)
     annotation (Line(points={{52,100},{58,100}},     color={0,0,127}));
+
   connect(ram1.y, reaToInt1.u)
     annotation (Line(points={{-158,-80},{-152,-80}},
                                                  color={0,0,127}));
+
   connect(con.y, hotWatSupTemRes.uHotWatPumSta[1]) annotation (Line(points={{-128,
           160},{-126,160},{-126,107},{-122,107}}, color={255,0,255}));
+
   connect(con1.y, hotWatSupTemRes.uHotWatPumSta[2]) annotation (Line(points={{-128,
           130},{-124,130},{-124,109},{-122,109}}, color={255,0,255}));
+
   connect(conInt.y, hotWatSupTemRes.nHotWatSupResReq) annotation (Line(points={{-130,
           100},{-130,104},{-122,104}},                 color={255,127,0}));
+
   connect(con2.y, hotWatSupTemRes.uStaCha) annotation (Line(points={{-128,70},{-128,
           100},{-122,100}},           color={255,0,255}));
+
   connect(conInt1.y, hotWatSupTemRes.uTyp) annotation (Line(points={{-128,40},{-126,
           40},{-126,96},{-122,96}}, color={255,127,0}));
+
   connect(con6.y, hotWatSupTemRes2.uHotWatPumSta[1]) annotation (Line(points={{-38,
           160},{-30,160},{-30,107},{-22,107}}, color={255,0,255}));
+
   connect(con7.y, hotWatSupTemRes2.uHotWatPumSta[2]) annotation (Line(points={{-38,
           130},{-30,130},{-30,109},{-22,109}}, color={255,0,255}));
+
   connect(conInt2.y, hotWatSupTemRes2.nHotWatSupResReq) annotation (Line(points=
          {{-38,100},{-30,100},{-30,104},{-22,104}}, color={255,127,0}));
+
   connect(con8.y, hotWatSupTemRes2.uStaCha) annotation (Line(points={{-38,70},{-28,
           70},{-28,100},{-22,100}}, color={255,0,255}));
+
   connect(conInt3.y, hotWatSupTemRes2.uTyp) annotation (Line(points={{-38,40},{-26,
           40},{-26,96},{-22,96}}, color={255,127,0}));
+
   connect(conInt4.y, hotWatSupTemRes.uCurStaSet) annotation (Line(points={{-128,
           10},{-124,10},{-124,92},{-122,92}}, color={255,127,0}));
+
   connect(conInt5.y, hotWatSupTemRes2.uCurStaSet) annotation (Line(points={{-38,
           10},{-24,10},{-24,92},{-22,92}}, color={255,127,0}));
+
   connect(con3.y, hotWatSupTemRes1.uHotWatPumSta[1]) annotation (Line(points={{82,
           160},{92,160},{92,107},{98,107}}, color={255,0,255}));
+
   connect(con4.y, hotWatSupTemRes1.uHotWatPumSta[2]) annotation (Line(points={{82,
           130},{92,130},{92,109},{98,109}}, color={255,0,255}));
+
   connect(reaToInt.y, hotWatSupTemRes1.nHotWatSupResReq) annotation (Line(
         points={{82,100},{88,100},{88,104},{98,104}}, color={255,127,0}));
+
   connect(con5.y, hotWatSupTemRes1.uStaCha) annotation (Line(points={{82,70},{90,
           70},{90,100},{98,100}}, color={255,0,255}));
+
   connect(conInt6.y, hotWatSupTemRes1.uTyp) annotation (Line(points={{82,40},{92,
           40},{92,96},{98,96}}, color={255,127,0}));
+
   connect(conInt7.y, hotWatSupTemRes1.uCurStaSet) annotation (Line(points={{82,
           10},{96,10},{96,92},{98,92}}, color={255,127,0}));
+
   connect(con9.y, hotWatSupTemRes3.uHotWatPumSta[1]) annotation (Line(points={{-128,
           -20},{-124,-20},{-124,-73},{-122,-73}}, color={255,0,255}));
+
   connect(con10.y, hotWatSupTemRes3.uHotWatPumSta[2]) annotation (Line(points={{
           -128,-50},{-126,-50},{-126,-71},{-122,-71}}, color={255,0,255}));
+
   connect(reaToInt1.y, hotWatSupTemRes3.nHotWatSupResReq) annotation (Line(
         points={{-128,-80},{-128,-76},{-122,-76}}, color={255,127,0}));
+
   connect(booPul.y, hotWatSupTemRes3.uStaCha) annotation (Line(points={{-128,-110},
           {-126,-110},{-126,-80},{-122,-80}}, color={255,0,255}));
+
   connect(conInt8.y, hotWatSupTemRes3.uTyp) annotation (Line(points={{-128,-140},
           {-124,-140},{-124,-84},{-122,-84}}, color={255,127,0}));
+
   connect(conInt9.y, hotWatSupTemRes3.uCurStaSet) annotation (Line(points={{-128,
           -170},{-122,-170},{-122,-88}}, color={255,127,0}));
+
   connect(con11.y, hotWatSupTemRes4.uHotWatPumSta[1]) annotation (Line(points={{
           -38,-20},{-30,-20},{-30,-73},{-22,-73}}, color={255,0,255}));
+
   connect(con12.y, hotWatSupTemRes4.uHotWatPumSta[2]) annotation (Line(points={{
           -38,-50},{-30,-50},{-30,-71},{-22,-71}}, color={255,0,255}));
+
   connect(ram2.y,reaToInt2. u)
     annotation (Line(points={{-68,-80},{-62,-80}},
                                                  color={0,0,127}));
+
   connect(reaToInt2.y, hotWatSupTemRes4.nHotWatSupResReq) annotation (Line(
         points={{-38,-80},{-30,-80},{-30,-76},{-22,-76}}, color={255,127,0}));
+
   connect(con13.y, hotWatSupTemRes4.uStaCha) annotation (Line(points={{-38,-110},
           {-28,-110},{-28,-80},{-22,-80}}, color={255,0,255}));
+
   connect(conInt10.y, hotWatSupTemRes4.uTyp) annotation (Line(points={{-38,-140},
           {-26,-140},{-26,-84},{-22,-84}}, color={255,127,0}));
+
   connect(sin.y, reaToInt3.u)
     annotation (Line(points={{-68,-170},{-62,-170}}, color={0,0,127}));
+
   connect(reaToInt3.y, hotWatSupTemRes4.uCurStaSet) annotation (Line(points={{-38,
           -170},{-22,-170},{-22,-88}}, color={255,127,0}));
+
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false,
       extent={{-100,-100},{100,100}}),
@@ -393,4 +428,5 @@ equation
       </li>
       </ul>
       </html>"));
+
 end HotWaterSupplyTemperatureReset;

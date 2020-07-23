@@ -6,20 +6,17 @@ model PlantEnable "Validation model for PlantEnable sequence"
     final nIgnReq=2,
     final plaOffThrTim=15*60,
     final plaOnThrTim=15*60,
-    final schTab=[0,0; 1,1; 18,1; 24,1])
-    "Testing time-variance for all inputs"
+    final schTab=[0,0; 1,1; 18,1; 24,1]) "Testing time-variance for all inputs"
     annotation (Placement(transformation(extent={{-20,50},{0,70}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.PlantEnable
     plaEna1(
-    final nIgnReq=2)
-    "Testing time-varying number of requests"
+    final nIgnReq=2) "Testing time-varying number of requests"
     annotation (Placement(transformation(extent={{-20,-50},{0,-30}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.PlantEnable
     plaEna2(
-    final nIgnReq=2)
-    "Testing time-varying outdoor air temperature"
+    final nIgnReq=2) "Testing time-varying outdoor air temperature"
     annotation (Placement(transformation(extent={{80,50},{100,70}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.PlantEnable
