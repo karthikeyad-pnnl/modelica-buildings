@@ -1,5 +1,4 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints;
-
 block HotWaterSupplyTemperatureReset
     "Block to calculate hot-water setpoint for hot water supply temperature"
 
@@ -546,5 +545,4 @@ equation
       </li>
       </ul>
       </html>"));
-
 end HotWaterSupplyTemperatureReset;

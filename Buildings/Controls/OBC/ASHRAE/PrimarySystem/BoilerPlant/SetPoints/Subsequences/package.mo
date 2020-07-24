@@ -1,7 +1,6 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints;
+package Subsequences "Subsequences for setpoint calculations"
 
-package Subsequences
-    "Subsequences for setpoint calculations"
 
 
 
@@ -44,5 +43,4 @@ annotation(Icon(graphics={
              This package contains control subsequences for setpoint calculations.
              </p>
              </html>"));
-
 end Subsequences;

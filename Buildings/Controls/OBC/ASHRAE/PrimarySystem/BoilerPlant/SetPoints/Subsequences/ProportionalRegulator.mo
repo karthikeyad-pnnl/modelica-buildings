@@ -1,5 +1,4 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.Subsequences;
-
 block ProportionalRegulator
     "Sequence to calculate regulation signal with measured return temperature as input"
 
@@ -120,5 +119,4 @@ equation
     </li>
     </ul>
     </html>"));
-
 end ProportionalRegulator;

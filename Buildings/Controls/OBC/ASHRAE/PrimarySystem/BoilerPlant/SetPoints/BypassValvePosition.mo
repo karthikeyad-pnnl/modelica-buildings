@@ -1,5 +1,4 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints;
-
 block BypassValvePosition
   parameter Buildings.Controls.OBC.CDL.Types.SimpleController controllerType=
          Buildings.Controls.OBC.CDL.Types.SimpleController.PI
@@ -133,5 +132,4 @@ First implementation.
       Interval=1,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"));
-
 end BypassValvePosition;

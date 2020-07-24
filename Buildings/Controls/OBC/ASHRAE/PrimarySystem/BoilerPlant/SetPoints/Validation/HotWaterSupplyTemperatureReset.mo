@@ -1,5 +1,4 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.Validation;
-
 block HotWaterSupplyTemperatureReset
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.HotWaterSupplyTemperatureReset
@@ -428,5 +427,4 @@ equation
       </li>
       </ul>
       </html>"));
-
 end HotWaterSupplyTemperatureReset;

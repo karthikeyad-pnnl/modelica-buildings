@@ -1,5 +1,4 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.Validation;
-
 block PumpSpeed
   .Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.PumpSpeed pumpSpeed
     annotation (Placement(transformation(extent={{-46,14},{-26,38}})));
@@ -116,5 +115,4 @@ First implementation.
 </html>"),
     __Dymola_Commands(file=
           "../Validation_plots/pumpSpeedControllerplot.mos" "plot"));
-
 end PumpSpeed;

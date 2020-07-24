@@ -1,5 +1,4 @@
 ﻿within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints;
-
 block MinimumFlowSetpoint
     "Hot water minimum flow setpoint"
 
@@ -227,7 +226,7 @@ protected
     "Minimum flow rate of operating boiler"
     annotation (Placement(transformation(extent={{-100,-240},{-80,-220}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Or or2 
+  Buildings.Controls.OBC.CDL.Logical.Or or2
     "Logical and"
     annotation (Placement(transformation(extent={{-400,-10},{-380,10}})));
 
@@ -1120,5 +1119,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-
 end MinimumFlowSetpoint;

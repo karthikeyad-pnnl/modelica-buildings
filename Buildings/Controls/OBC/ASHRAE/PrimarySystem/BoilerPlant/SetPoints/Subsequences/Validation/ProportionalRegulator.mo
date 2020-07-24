@@ -1,5 +1,4 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.Subsequences.Validation;
-
 model ProportionalRegulator
     "Validation model for ProportionalRegulator sequence"
 
@@ -54,5 +53,4 @@ equation
       </li>
       </ul>
       </html>"));
-
 end ProportionalRegulator;

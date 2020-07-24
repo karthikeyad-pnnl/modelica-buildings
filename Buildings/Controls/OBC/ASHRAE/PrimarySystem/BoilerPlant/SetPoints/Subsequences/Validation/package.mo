@@ -1,7 +1,6 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.Subsequences;
+package Validation "Collection of validation models"
 
-package Validation
-    "Collection of validation models"
 
 
 
@@ -38,5 +37,4 @@ annotation (Icon(graphics={
           used for continuous validation whenever models in the library change.
           </p>
           </html>"));
-
 end Validation;

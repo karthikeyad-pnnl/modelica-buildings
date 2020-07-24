@@ -1,5 +1,4 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.Validation;
-
 block BypassValvePosition
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.BypassValvePosition
     bypassValvePosition(
@@ -96,5 +95,4 @@ First implementation.
       Interval=1,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"));
-
 end BypassValvePosition;
