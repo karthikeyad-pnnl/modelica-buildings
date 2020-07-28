@@ -9,72 +9,68 @@ package UsersGuide "User's Guide"
     annotation (preferredView="info",
     Documentation(info="<html>
 <p>
-This library follows the conventions of the
-<a href=\"modelica://Modelica.UsersGuide.Conventions\">
-Modelica Standard Library</a>, which are as follows:
+The <code>Buildings</code> library uses the following conventions,
+which largely are based on the conventions of the Modelica Standard Library.
 </p>
 
+<h4>Package structure</h4>
 <p>
-Note, in the html documentation of any Modelica library,
-the headings \"h1, h2, h3\" should not be used,
-because they are utilized from the automatically generated
-documentation and headings.
-Additional headings in the html documentation should start with \"h4\".
+Packages have usually the following subpackages:
 </p>
+<ul>
+<li>
+<code>UsersGuide</code> containing an overall description of the library
+and how to use it.
+</li>
+<li>
+<code>Examples</code> containing models demonstrating the
+usage of the library.
+</li>
+<li>
+<code>Validation</code> containing typically small models that validate a certain
+behavior of a model.
+</li>
+<li>
+<code>Interfaces</code> containing connectors and partial models.
+</li>
+<li>
+<code>Types</code> containing type, enumeration and choice definitions.
+</li>
+</ul>
 
-<p>
-In the Modelica package the following conventions are used:
-</p>
 
+<h4>Naming</h4>
 <ol>
-<li> Class and instance names are written in upper and lower case
-  letters, e.g., \"ElectricCurrent\". An underscore is only used
-  at the end of a name to characterize a lower or upper index,
-  e.g., \"pin_a\".</li>
-
-<li> <b>Class names</b> start always with an upper case letter.</li>
-
-<li> <b>Instance names</b>, i.e., names of component instances and
-  of variables (with the exception of constants),
-  start usually with a lower case letter with only
-  a few exceptions if this is common sense
-  (such as \"T\" for a temperature variable).</li>
-
-<li> <b>Constant names</b>, i.e., names of variables declared with the
-  \"constant\" prefix, follow the usual naming conventions
-  (= upper and lower case letters) and start usually with an
-  upper case letter, e.g. UniformGravity, SteadyState.</li>
-<li> The two connectors of a domain that have identical declarations
-  and different icons are usually distinguished by \"_a\", \"_b\"
-  or \"_p\", \"_n\", e.g., Flange_a/Flange_b, HeatPort_a, HeatPort_b.</li>
-
-<li> The <b>instance name</b> of a component is always displayed in its icon
-  (= text string \"%name\") in <b>blue color</b>. A connector class has the instance
-  name definition in the diagram layer and not in the icon layer.
-  <b>Parameter</b> values, e.g., resistance, mass, gear ratio, are displayed
-  in the icon in <b>black color</b> in a smaller font size as the instance name.
- </li>
-
-<li> A main package has usually the following subpackages:
-  <ul>
-  <li><b>UsersGuide</b> containing an overall description of the library
-   and how to use it.</li>
-  <li><b>Examples</b> containing models demonstrating the
-   usage of the library.</li>
-  <li><b>Interfaces</b> containing connectors and partial
-   models.</li>
-  <li><b>Types</b> containing type, enumeration and choice
-   definitions.</li>
-  </ul>
-  </li>
-</ol>
-
-<p>
-The <code>Buildings</code> library uses the following conventions
-in addition to the ones of the Modelica Standard Library:
-</p>
-
-<ol>
+<li>
+Class names of models, blocks and packages should start with an upper-case letter and be a
+noun or a noun with a combination of adjectives and nouns.
+Use camel-case notation to combine multiple words, such as <code>HeatTransfer</code>.
+Don't repeat higher level package names, for example, rather than <code>Chillers.CarnotChiller</code>,
+use <code>Chillers.Carnot</code>.
+</li>
+<li>
+Instance names should be a combination of the first three
+characters of a word, such as <code>preDro</code> for pressure drop model.
+Where applicable, a single character can be used if this is generally understood, such
+as <code>T</code> for temperature, <code>p</code> for pressure, <code>u</code> for control input
+and <code>y</code> for control output signal. As needed, these can be augmented, for example
+a controller that outputs a control signal for a valve and a damper may output <code>yVal</code>
+and <code>yDam</code>.
+</li>
+<li>
+The following variables are frequently used for physical quantities:
+<ul>
+<li><code>T</code> for temperature,</li>
+<li><code>p</code> for pressure,</li>
+<li><code>dp</code> for pressure difference,</li>
+<li><code>P</code> for power,</li>
+<li><code>E</code> for energy (or <code>Q</code> for thermal energy),</li>
+<li><code>X</code> for mass fraction,</li>
+<li><code>Q_flow</code> for heat flow rate</li>
+<li><code>m_flow</code> for mass flow rate and</li>
+<li><code>H_flow</code> for enthalpy flow rate.</li>
+</ul>
+</li>
 <li>
 The nomenclature used in the package
 <a href=\"modelica://Buildings.Utilities.Psychrometrics\">
@@ -97,39 +93,14 @@ denotes dew point temperature, <code>TWetBul</code> denotes wet bulb temperature
 and <code>TDryBul</code> (or simply <code>T</code>) denotes dry bulb temperature.
 </li>
 </ul>
-<li>
-Class names of models, blocks and packages should start with an upper-case letter and be a
-noun or a noun with a combination of adjectives and nouns.
-Use camel-case notation to combine multiple words, such as <code>HeatTransfer</code>.
-Don't repeat higher level package names, for example, rather than <code>Chillers.CarnotChiller</code>,
-use <code>Chillers.Carnot</code>.
-</li>
-<li>
-Instance names should be a combination of the first three
-characters of a word, such as <code>preDro</code> for pressure drop model.
-Where applicable, a single character can be used if this is generally understood, such
-as <code>T</code> for temperature, <code>p</code> for pressure, <code>u</code> for control input
-and <code>y</code> for control output signal. As needed, these can be augmented, for example
-a controller that outputs a control signal for a valve and a damper may output <code>yVal</code>
-and <code>yDam</code>.<br/>
-The following strings are frequently used:
-<ul>
-<li>
-The following variables are frequently used for physical quantities:
-<code>T</code> for temperature,
-<code>p</code> for pressure,
-<code>dp</code> for pressure difference,
-<code>P</code> for power,
-<code>E</code> for energy (or <code>Q</code> for thermal energy),
-<code>X</code> for mass fraction,
-<code>Q_flow</code> for heat flow rate
-<code>m_flow</code> for mass flow rate and
-<code>H_flow</code> for enthalpy flow rate.
 </li>
 <li>
 Control input signals usually start with <code>u</code> and control output signals usually start with <code>y</code>,
 unless use of the physical quantity is clearer.
 </li>
+<li>
+The following strings are frequently used:
+<ul>
 <li>
 Prefix <code>use_</code> for conditionally enabled input signals, such as <code>use_T_in</code>
 for enabling an input connector for temperature.
@@ -165,15 +136,59 @@ such as in <code>TSupSetMin</code> for minimum supply temperature set point.
 </ul>
 </li>
 <li>
+The two connectors of a domain that have identical declarations
+and different icons are usually distinguished by <code>_a</code>, <code>_b</code>
+or <code>_p</code>, <code>_n</code>.
+Examples are fluid ports <code>port_a</code> and <code>port_b</code>
+or electrical connectors
+<code>terminal_p</code> and <code>terminal_n</code>.
+</li>
+</ol>
+
+<h4>Documentation</h4>
+<ol>
+<li>
+In the html documentation, start additional headings with
+<code>h4</code>.
+(The headings <code>h1, h2, h3</code> must not be used,
+because they are utilized from the automatically generated
+documentation.)
+</li>
+<li>
 Comments must be added to each class (package, model, function etc.).
+</li>
+<li>
 The first character should be upper case.
+</li>
+<li>
 For one-line comments of parameters, variables and classes, no period should be used at the end of the comment.
 </li>
+</ol>
+
+<h4>Graphical display</h4>
+<ol>
+<li>
+The instance name of a component is always displayed in its icon
+(using the text string \"%name\") in blue color.
+</li>
+<li>
+A connector class has the instance
+name definition in the diagram layer and usually not in the icon layer, unless this helps with usability.
+</li>
+<li>
+The value of main parameters, such as nominal capacity, are displayed
+in the icon in black color in a smaller font size as the instance name
+if this helps with usability.
+</li>
+</ol>
+
+<h4>Miscellaneous</h4>
+<ol>
 <li>
 Where applicable, all variable must have units, also if the variable is protected.
 </li>
 <li>
-Each class (i.e., a package, model, block etc.) must be used in an example or validation case.
+Each class (i.e., model, block and function) must be used in an example or validation case.
 </li>
 </ol>
 </html>"));
@@ -182,12 +197,12 @@ Each class (i.e., a package, model, block etc.) must be used in an example or va
   package ReleaseNotes "Release notes"
     extends Modelica.Icons.ReleaseNotes;
 
-    class Version_7_0_1 "Version 7.0.1"
+    class Version_8_0_0 "Version 8.0.0"
       extends Modelica.Icons.ReleaseNotes;
         annotation (Documentation(info="<html>
 <div class=\"release-summary\">
 <p>
-Version 7.0.1 is ... xxx
+Version 8.0.0 is ... xxx
 </p>
 </div>
 <!-- New libraries -->
@@ -223,12 +238,15 @@ have been <b style=\"color:blue\">improved</b> in a
 <b style=\"color:blue\">backward compatible</b> way:
 </p>
 <table class=\"releaseTable\" summary=\"summary\" border=\"1\" cellspacing=0 cellpadding=2 style=\"border-collapse:collapse;\">
-<tr><td colspan=\"2\"><b>xxx</b>
+<tr><td colspan=\"2\"><b>Buildings.Fluid.HeatExchangers.RadiantSlabs</b>
     </td>
 </tr>
-<tr><td valign=\"top\">xxx
+<tr><td valign=\"top\">Buildings.Fluid.HeatExchangers.RadiantSlabs.BaseClasses.Functions.AverageResistance
     </td>
-    <td valign=\"top\">xxx.
+    <td valign=\"top\">Corrected inequality test on <code>alpha</code>,
+                       and changed print statement to an assertion with assertion level set to warning.<br/>
+                       This is for
+                       <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/2009\">issue 2009</a>.
     </td>
 </tr>
 <tr><td colspan=\"2\"><b>xxx</b>
@@ -247,13 +265,24 @@ have been <b style=\"color:blue\">improved</b> in a
 <b style=\"color:blue\">non-backward compatible</b> way:
 </p>
 <table class=\"releaseTable\" summary=\"summary\" border=\"1\" cellspacing=0 cellpadding=2 style=\"border-collapse:collapse;\">
- <tr><td colspan=\"2\"><b>xxx</b>
+ <tr><td colspan=\"2\"><b>Buildings.Controls.Continuous</b>
     </td>
 </tr>
-<tr><td valign=\"top\">xxx
+<tr><td valign=\"top\">Buildings.Controls.Continuous.LimPID<br/>
+                       Buildings.Controls.Continuous.PIDHysteresis<br/>
+                       Buildings.Controls.Continuous.PIDHysteresisTimer<br/>
+                       Buildings.Controls.OBC.CDL.Continuous.LimPID
     </td>
-    <td valign=\"top\">xxx.
-    </td>
+    <td valign=\"top\">Corrected wrong convention of reverse and direct action.
+                       The previous parameter <code>reverseAction</code> with a default of <code>false</code>
+                       has been removed, and
+                       a new parameter <code>reverseActing</code> with a default of <code>true</code>
+                       has been added. This was done because the previous implementation wrongly interpreted reverse action
+                       as the control output changing in reverse to the change in control error, but the
+                       industry convention is that reverse action means that the control output
+                       changes in reverse to the measurement signal.<br/>
+                       This is for <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1365\">IBPSA, #1365</a>.<br/>
+                       For Dymola, a conversion script makes this change.</td>
 </tr>
 </table>
 <!-- Errors that have been fixed -->
@@ -296,7 +325,7 @@ xxx
 </li>
 </ul>
 </html>"));
-    end Version_7_0_1;
+    end Version_8_0_0;
 
     class Version_7_0_0 "Version 7.0.0"
       extends Modelica.Icons.ReleaseNotes;
@@ -8309,6 +8338,8 @@ The following people have directly contributed to the implementation of the Buil
 </li>
 <li>Tea Zakula, University of Zagreb, Croatia
 </li>
+<li>Ettore Zanetti, Politecnico di Milano, Italy
+</li>
 <li>Rebecca Zarin Pass, Lawrence Berkeley National Laboratory, USA
 </li>
 <li>Kun Zhang, Lawrence Berkeley National Laboratory, USA
@@ -8571,13 +8602,13 @@ end UsersGuide;
 
 annotation (
 preferredView="info",
-version="7.0.1",
+version="8.0.0",
 versionDate="2020-05-28",
 dateModified="2020-05-28",
 uses(Modelica(version="3.2.3")),
 conversion(
-  from(version={"6.0.0"},
-      script="modelica://Buildings/Resources/Scripts/Dymola/ConvertBuildings_from_6_to_7.0.0.mos")),
+  from(version={"7.0.0"},
+      script="modelica://Buildings/Resources/Scripts/Dymola/ConvertBuildings_from_7_to_8.0.0.mos")),
 preferredView="info",
 Documentation(info="<html>
 <p>
