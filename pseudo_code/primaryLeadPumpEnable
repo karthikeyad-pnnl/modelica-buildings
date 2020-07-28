@@ -1,0 +1,24 @@
+# Boolean flags
+
+haveHeadered # TRUE: Headered pumps; FALSE: Dedicated pumps
+
+# Input signals
+hotWaterIsolationValveOpen
+plantEnable
+
+# Output signals
+leadPumpEnable
+
+IF haveHeadered == TRUE:
+	IF hotWaterIsolationValveOpen == TRUE:
+		set leadPumpEnable = TRUE
+	ELSE:
+		set leadPumpEnable = FALSE
+	ENDIF
+ELSE:
+	IF plantEnable == TRUE:
+		set leadPumpEnable = TRUE
+	ELSE:
+		set leadPumpEnable = FALSE
+	ENDIF
+ENDIF

@@ -1,0 +1,28 @@
+# Calculations
+hotWaterFlowrateRatio
+
+# Boolean flag
+haveHeadered # TRUE: Headered pumps; FALSE: Dedicated pumps
+
+# Parameters
+nPum # Number of pumps in plant
+
+# Inputs
+VHotWat_flow
+uHotWatPum[nPum]
+
+IF haveHeadered:
+	IF (hotWaterFlowrateRatio > length(uHotWatPum)/nPum - 0.03) FOR (time > 10 minutes):
+		SET nextLagPump = TRUE
+	ELSE IF (hotWaterFlowrateRatio < (length(uHotWatPum)-1)/nPum - 0.03) FOR (time > 10 minutes):
+		SET lastLagPump = FALSE
+	ELSE:
+		DO NOTHING
+	ENDIF
+ELSE:
+	IF length(uHotWatPum) < length (uBoi):
+		SET nextLagPump`= TRUE
+	ELSE:
+		DO NOTHING
+	ENDIF
+ENDIF

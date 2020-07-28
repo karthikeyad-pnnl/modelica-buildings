@@ -1,0 +1,45 @@
+# Input parameters
+controlTypes = {dP, dP_remote, primarySecondaryFlowMeters, decouplerFlowMeter, primarySecondaryTempSensor, boilerSecondaryTempSensor}
+
+# Boolean flags
+primaryOnly # TRUE: Primary-only plant; FALSE: Primary-secondary plant
+
+IF primaryOnly == TRUE:
+	IF controlType == dP:
+		pumpSpeed = PID_loop(dP=HW-DPmax)
+	ELSE IF controlType == dP_remote:
+		local_dPSetpoint = PID_loop(remote_dP=HW-DPmax)
+		pumpSpeed = PID_loop(local_dP=local_dPSetpoint)
+	ELSE:
+		DO NOTHING
+	ENDIF
+ELSE:
+	IF controlType == primarySecondaryFlowMeters:
+		pumpSpeed = PID_loop((primaryFlowrate-secondaryFlowrate)=0)
+	ELSE IF controlType == decouplerFlowMeter:
+		pumpSpeed = PID_loop(decouplerFlowrate=0)
+	ELSE IF controlType == primarySecondaryTempSensor:
+		deltaT = TPrimarySupply - TSecondarySupply
+		IF deltaT > 2:
+			requests = 2 UNTIL deltaT < 1.2
+		ELSE IF deltaT > 1:
+			requests = 1 UNTIL deltaT < 0.2
+		ELSE:
+			requests = 0
+		ENDIF
+		pumpSpeed = trimAndRespond(requests)
+	ELSE IF controlType == boilerSecondaryTempSensor:
+		TPrimarySupply = weighted_average(TBoilerSupply)
+		deltaT = TPrimarySupply - TSecondarySupply
+		IF deltaT > 2:
+			requests = 2 UNTIL deltaT < 1.2
+		ELSE IF deltaT > 1:
+			requests = 1 UNTIL deltaT < 0.2
+		ELSE:
+			requests = 0
+		ENDIF
+		pumpSpeed = trimAndRespond(requests)
+	ELSE:
+		DO NOTHING
+	ENDIF
+ENDIF
