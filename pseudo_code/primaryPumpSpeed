@@ -17,10 +17,10 @@ ELSE:
 	IF controlType == primarySecondaryFlowMeters:
 		pumpSpeed = PID_loop((primaryFlowrate-secondaryFlowrate)=0)
 	ELSE IF controlType == decouplerFlowMeter:
-		pumpSpeed = PID_loop(decouplerFlowrate=0)
+		pumpSpeed = P ID_loop(decouplerFlowrate=0)
 	ELSE IF controlType == primarySecondaryTempSensor:
 		deltaT = TPrimarySupply - TSecondarySupply
-		IF deltaT > 2:
+		IF deltaT > 2: # this request is a hysteresis 
 			requests = 2 UNTIL deltaT < 1.2
 		ELSE IF deltaT > 1:
 			requests = 1 UNTIL deltaT < 0.2
@@ -28,8 +28,8 @@ ELSE:
 			requests = 0
 		ENDIF
 		pumpSpeed = trimAndRespond(requests)
-	ELSE IF controlType == boilerSecondaryTempSensor:
-		TPrimarySupply = weighted_average(TBoilerSupply)
+	ELSE IF controlType == boilerSecondaryTempSensor:  # is this the system type that has no single HWST sensor at the common supply?  The name is not self-explanatory 
+		TPrimarySupply = weighted_average(TBoilerSupply)  # 5.3.6.15 It needs to only weight the boiler that is proven ON.  And it needs to be weighted by design flow rate. 
 		deltaT = TPrimarySupply - TSecondarySupply
 		IF deltaT > 2:
 			requests = 2 UNTIL deltaT < 1.2

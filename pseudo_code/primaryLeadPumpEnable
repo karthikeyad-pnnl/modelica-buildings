@@ -2,6 +2,8 @@
 
 haveHeadered # TRUE: Headered pumps; FALSE: Dedicated pumps
 
+5.3.6 Primary Hot Water Pump (RP1711) 
+
 # Input signals
 hotWaterIsolationValveOpen
 plantEnable
