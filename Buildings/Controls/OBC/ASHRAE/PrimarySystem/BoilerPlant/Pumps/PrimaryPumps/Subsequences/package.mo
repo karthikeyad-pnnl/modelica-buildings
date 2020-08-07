@@ -1,14 +1,11 @@
-within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant;
-package Pumps "Sequences for condenser water and boiler water pumps control"
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps;
+package Subsequences "Hot water pump control sequences"
 
 
 annotation (
 preferredView="info", Documentation(info="<html>
 <p>
-This package contains control sequences for condenser and hot water pumps.
-The implementations are based on section 5.2.9 Condenser water pumps and 
-section 5.2.6 Primary hot water pumps, in ASHRAE RP-1711 (Draft 4 on January 7, 2019).
-</p>
+This package contains subsequences for hot water pumps control.</p>
 </html>"),
 Icon(graphics={
         Rectangle(
@@ -44,4 +41,4 @@ Icon(graphics={
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
           extent={{-80.0,0.0},{-20.0,60.0}})}));
-end Pumps;
+end Subsequences;

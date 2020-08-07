@@ -32,10 +32,10 @@ block CondensationControl
     "Minimum secondary pump speed";
 
   parameter Real minPriPumSpeSta[nSta](
-    final unit="1",
-    final displayUnit="1",
-    final min=0,
-    final max=1) = {0,0,0,0,0}
+    final unit=fill("1",nSta),
+    final displayUnit=fill("1",nSta),
+    final min=fill(0,nSta),
+    final max=fill(1,nSta)) = {0,0,0,0,0}
     "Vector of minimum primary pump speed for each stage";
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uCurSta
