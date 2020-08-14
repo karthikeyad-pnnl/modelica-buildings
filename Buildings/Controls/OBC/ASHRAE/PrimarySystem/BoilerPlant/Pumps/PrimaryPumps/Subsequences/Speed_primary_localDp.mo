@@ -57,11 +57,6 @@ block Speed_primary_localDp
       controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PD or
       controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
 
-  parameter Buildings.Controls.OBC.CDL.Types.SimpleController controllerType=
-    Buildings.Controls.OBC.CDL.Types.SimpleController.PID
-    "Type of controller"
-    annotation(Dialog(group="Speed controller"));
-
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uHotWatPum[nPum]
     "Hot water pump status"
     annotation (Placement(transformation(extent={{-180,-70},{-140,-30}}),
@@ -120,7 +115,8 @@ block Speed_primary_localDp
 
 protected
   Buildings.Controls.OBC.CDL.Continuous.LimPID conPID[nSen](
-    final controllerType=fill(controllerType, nSen),
+    final controllerType=fill(Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
+        nSen),
     final k=fill(k, nSen),
     final Ti=fill(Ti, nSen),
     final Td=fill(Td, nSen),
@@ -221,7 +217,7 @@ equation
     annotation (Line(points={{-18,-100},{10,-100},{10,-32}}, color={0,0,127}));
 
   connect(hotPumSpe.yHotWatPumSpe, yHotWatPumSpe)
-    annotation (Line(points={{81,90},{160,90}}, color={0,0,127}));
+    annotation (Line(points={{82,90},{160,90}}, color={0,0,127}));
   connect(mulOr.y, booRep.u)
     annotation (Line(points={{-28,-50},{-22,-50}}, color={255,0,255}));
   connect(uHotWatPum, mulOr.u[1:nPum]) annotation (Line(points={{-160,-50},{-106,-50},

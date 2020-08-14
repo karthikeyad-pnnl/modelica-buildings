@@ -1,14 +1,8 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types;
 type PrimaryPumpSpeedControlTypes = enumeration(
-    primaryHeadered
-                "Primary only, Headered pumps",
-    primarySecondaryDedicated
-                          "Primary-Secondary, Dedicated Primary Pumps",
-    primarySecondaryHeadered
-                         "Primary-Secondary, Headered Primary Pumps",
-    distributedSecondaryHeadered
-                             "Primary-Distributed Secondary, Headered Primary Pumps",
-    separatePrimaryCommonSecondary
-                               "Hybrid, Separate Non-Condensing and Condensing
-                                Primary Loops, Common Secondary")
+    localDP "Pump speed regulated to maintain local differential pressure setpoint",
+    remoteDP "Pump speed regulated to maintain remote differential pressure setpoint",
+    flowrate "Pump speed regulated to maintain flowrate through decoupler",
+    temperature "Pump speed regulated to maintain temperature difference between
+      primary and secondary loops")
   "Definitions for primary pump speed control types";

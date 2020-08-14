@@ -91,6 +91,8 @@ block EnableLag_headered
     "Count time"
     annotation (Placement(transformation(extent={{0,-90},{20,-70}})));
 
+  CDL.Logical.Not not3
+    annotation (Placement(transformation(extent={{100,-90},{120,-70}})));
 protected
   Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
     final p=staCon,
@@ -127,33 +129,15 @@ protected
     "Add real inputs"
     annotation (Placement(transformation(extent={{-80,-90},{-60,-70}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr(
-    final threshold=timPer)
+  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr(final
+      threshold=timPer)
     "Check if the time is greater than delay time period"
     annotation (Placement(transformation(extent={{40,30},{60,50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr1(
-    final threshold=timPer)
+  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr1(final
+      threshold=timPer)
     "Check if the time is greater than delay time period"
     annotation (Placement(transformation(extent={{40,-90},{60,-70}})));
-
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch enaNexLag
-    "Enabling next lag pump"
-    annotation (Placement(transformation(extent={{100,30},{120,50}})));
-
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch shuLasLag
-    "Shut off last lag pump"
-    annotation (Placement(transformation(extent={{100,-90},{120,-70}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con(
-    final k=true)
-    "Logical true"
-    annotation (Placement(transformation(extent={{40,110},{60,130}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con1(
-    final k=false)
-    "Logical false"
-    annotation (Placement(transformation(extent={{40,-50},{60,-30}})));
 
   Buildings.Controls.OBC.CDL.Logical.Edge edg
     "Rising edge"
@@ -237,25 +221,6 @@ equation
     annotation (Line(points={{-98,80},{-90,80},{-90,60},{-100,60},{-100,-86},
       {-82,-86}}, color={0,0,127}));
 
-  connect(con.y, enaNexLag.u1)
-    annotation (Line(points={{62,120},{86,120},{86,48},{98,48}}, color={255,0,255}));
-
-  connect(shuLasLag.y, yDown)
-    annotation (Line(points={{122,-80},{160,-80}}, color={255,0,255}));
-
-  connect(enaNexLag.y, yUp)
-    annotation (Line(points={{122,40},{160,40}}, color={255,0,255}));
-
-  connect(con1.y, enaNexLag.u3)
-    annotation (Line(points={{62,-40},{90,-40},{90,32},{98,32}},
-      color={255,0,255}));
-
-  connect(greEquThr.y, enaNexLag.u2)
-    annotation (Line(points={{62,40},{98,40}}, color={255,0,255}));
-
-  connect(greEquThr1.y, shuLasLag.u2)
-    annotation (Line(points={{62,-80},{98,-80}}, color={255,0,255}));
-
   connect(edg.y, not1.u)
     annotation (Line(points={{-18,-140},{-2,-140}}, color={255,0,255}));
 
@@ -297,10 +262,12 @@ equation
     annotation (Line(points={{62,80},{70,80},{70,66},{-6,66},{-6,40},{-2,40}},
       color={255,0,255}));
 
-  connect(con1.y, shuLasLag.u1) annotation (Line(points={{62,-40},{90,-40},{90,-72},
-          {98,-72}}, color={255,0,255}));
-  connect(con.y, shuLasLag.u3) annotation (Line(points={{62,120},{86,120},{86,-88},
-          {98,-88}}, color={255,0,255}));
+  connect(greEquThr.y, yUp)
+    annotation (Line(points={{62,40},{160,40}}, color={255,0,255}));
+  connect(greEquThr1.y, not3.u)
+    annotation (Line(points={{62,-80},{98,-80}}, color={255,0,255}));
+  connect(not3.y, yDown)
+    annotation (Line(points={{122,-80},{160,-80}}, color={255,0,255}));
 annotation (
   defaultComponentName="enaLagPriPum",
   Icon(coordinateSystem(preserveAspectRatio=false,
