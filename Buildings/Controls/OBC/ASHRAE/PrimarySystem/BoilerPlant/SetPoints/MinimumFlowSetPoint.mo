@@ -1,828 +1,534 @@
-﻿within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints;
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints;
 block MinimumFlowSetpoint
     "Hot water minimum flow setpoint"
 
-  parameter Integer nBoi = 3
+  parameter Integer nBoi(
+    final min=1) = 3
     "Total number of boilers";
 
-  parameter Boolean isParallelBoiler=true
-    "Flag: true means that the plant has parallel boilers";
+  parameter Integer nSta(
+    final min=1) = 5
+    "Total number of stages";
 
-  parameter Modelica.SIunits.Time byPasSetTim = 300
-    "Time constant for resetting minimum bypass flow";
+  parameter Integer boiStaMat[nSta, nBoi] = {{1,0,0},{0,1,0},{1,1,0},{0,1,1},{1,1,1}}
+    "Boiler staging matrix";
 
-  parameter Modelica.SIunits.VolumeFlowRate minFloSet[nBoi] = {0.005, 0.005, 0.005}
-    "Minimum hot water flow through each boiler";
+  parameter Real minFloSet[nBoi](
+    final unit="m3/s",
+    displayUnit="m3/s",
+    final quantity="VolumeFlowRate",
+    final min=1e-6,
+    final max=maxFloSet) = {0.005, 0.005, 0.005}
+    "Design minimum hot water flow through each boiler";
 
-  parameter Modelica.SIunits.VolumeFlowRate maxFloSet[nBoi] = {0.025, 0.025, 0.025}
-    "Maximum hot water flow through each boiler";
+  parameter Real maxFloSet[nBoi](
+    final unit="m3/s",
+    displayUnit="m3/s",
+    final quantity="VolumeFlowRate",
+    final min=minFloSet) = {0.025, 0.025, 0.025}
+    "Design maximum hot water flow through each boiler";
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uStaUp
-    "Stage up logical signal"
-    annotation (Placement(transformation(extent={{-480,400},{-440,440}}),
-      iconTransformation(extent={{-140,70},{-100,110}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uUpsDevSta
-    "Resetting status of upstream device (in staging up or down process) before reset minimum hot water flow setpoint"
-    annotation (Placement(transformation(extent={{-480,360},{-440,400}}),
-      iconTransformation(extent={{-140,50},{-100,90}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uChi[nBoi]
-    "Boiler status: true=ON"
-    annotation (Placement(transformation(extent={{-480,320},{-440,360}}),
-      iconTransformation(extent={{-140,20},{-100,60}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput nexEnaChi
-    "Index of next boiler to be enabled"
-    annotation (Placement(transformation(extent={{-480,50},{-440,90}}),
-      iconTransformation(extent={{-140,-10},{-100,30}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput nexDisChi
-    "Index of next boiler to be disabled"
-    annotation (Placement(transformation(extent={{-480,-90},{-440,-50}}),
-      iconTransformation(extent={{-140,-30},{-100,10}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uSubCha
-    "Indicate if upstream device has been reset in the sub-process. This input is used when the stage change needs boiler on-off"
-    annotation (Placement(transformation(extent={{-480,-300},{-440,-260}}),
-      iconTransformation(extent={{-140,-60},{-100,-20}})));
+  parameter Real bypSetTim(
+    final unit="s",
+    displayUnit="s",
+    final quantity="time",
+    final min=0) = 60
+    "Time period over which to reset bypass valve setpoint during stage change";
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uOnOff
-    "Indicate if the stage change requires one boiler to be enabled while another is disabled"
-    annotation (Placement(transformation(extent={{-480,-340},{-440,-300}}),
-      iconTransformation(extent={{-140,-90},{-100,-50}})));
+    "Signal indicating stage change with boilers being both enabled and disabled"
+    annotation (Placement(transformation(extent={{-180,-30},{-140,10}}),
+      iconTransformation(extent={{-140,0},{-100,40}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uStaDow
-    "Stage down logical signal"
-    annotation (Placement(transformation(extent={{-480,-410},{-440,-370}}),
-      iconTransformation(extent={{-140,-110},{-100,-70}})));
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uStaChaPro
+    "Signal indicating completion of stage change process"
+    annotation (Placement(transformation(extent={{-180,-70},{-140,-30}}),
+      iconTransformation(extent={{-140,-40},{-100,0}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yChiWatMinFloSet(
-    final quantity="VolumeFlowRate",
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uStaSet
+    "Staging setpoint"
+    annotation (Placement(transformation(extent={{-180,-110},{-140,-70}}),
+      iconTransformation(extent={{-140,-80},{-100,-40}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uLasDisBoi
+    "Index of boiler being disabled"
+    annotation (Placement(transformation(extent={{-180,10},{-140,50}}),
+      iconTransformation(extent={{-140,40},{-100,80}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput VHotWatMinSet_flow(
     final unit="m3/s",
-    final min=0)
+    displayUnit="m3/s",
+    final quantity="VolumeFlowRate")
     "Hot water minimum flow setpoint"
-    annotation (Placement(transformation(extent={{440,120},{480,160}}),
+    annotation (Placement(transformation(extent={{320,-90},{360,-50}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
 protected
-  final parameter Integer chiInd[nBoi]={i for i in 1:nBoi}
+  parameter Integer boiInd[nBoi]={i for i in 1:nBoi}
     "Boiler index, {1,2,...,n}";
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con3(
-    final k=byPasSetTim)
-    "Duration time to change old setpoint to new setpoint"
-    annotation (Placement(transformation(extent={{-60,158},{-40,178}})));
+  parameter Integer staInd[nSta]={i for i in 1:nSta}
+    "Stage index, {1,2,...,n}";
 
-  Buildings.Controls.OBC.CDL.Continuous.Line oneMorSet
-    "Minimum flow setpoint when adding one more boiler"
-    annotation (Placement(transformation(extent={{100,220},{120,240}})));
+  parameter Real minFloSetMat[nSta, nBoi] = {minFloSet[i] for i in 1:nBoi, j in 1:nSta}
+    "Boiler minimum design flowrate expanded for element-wise multiplication
+    with the staging matrix";
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con2(
-    final k=0)
-    "Constant zero"
-    annotation (Placement(transformation(extent={{-60,200},{-40,220}})));
+  parameter Real maxFloSetMat[nSta, nBoi] = {maxFloSet[i] for i in 1:nBoi, j in 1:nSta}
+    "Boiler maximum design flowrate expanded for element-wise multiplication
+    with the staging matrix";
 
-  Buildings.Controls.OBC.CDL.Logical.Timer tim
-    "Time after suppress boiler demand"
-    annotation (Placement(transformation(extent={{-218,410},{-198,430}})));
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con[nSta,nBoi](
+    final k=minFloSetMat)
+    "Design minimum boiler flowrate"
+    annotation (Placement(transformation(extent={{-120,-150},{-100,-130}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Line oneLeSet
-    "Minimum flow setpoint when disabling one boiler"
-    annotation (Placement(transformation(extent={{100,-150},{120,-130}})));
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con1[nSta,nBoi](
+    final k=maxFloSetMat)
+    "Design maximum boiler flowrate"
+    annotation (Placement(transformation(extent={{-120,-190},{-100,-170}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Timer tim1
-    "Time after suppress boiler demand"
-    annotation (Placement(transformation(extent={{-220,-400},{-200,-380}})));
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con2[nSta,nBoi](
+    final k=boiStaMat)
+    "Boiler staging matrix"
+    annotation (Placement(transformation(extent={{-120,-220},{-100,-200}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch dowSet
-    "Minimum flow hot water flow setpoint when there is stage-down command"
-    annotation (Placement(transformation(extent={{240,-130},{260,-110}})));
+  Buildings.Controls.OBC.CDL.Integers.Change cha
+    "Detect change in stage setpoint"
+    annotation (Placement(transformation(extent={{-120,-80},{-100,-60}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Not not2
-    "Logical not"
-    annotation (Placement(transformation(extent={{-220,-430},{-200,-410}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Switch byPasSet1
-    "Minimum flow hot water flow setpoint"
-    annotation (Placement(transformation(extent={{400,130},{420,150}})));
-
-  Buildings.Controls.OBC.CDL.Logical.And and1
-    "Logical and"
-    annotation (Placement(transformation(extent={{-320,410},{-300,430}})));
-
-  Buildings.Controls.OBC.CDL.Logical.And and3
-    "Logical and"
-    annotation (Placement(transformation(extent={{-320,-400},{-300,-380}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant minFlo[nBoi](
-    final k=minFloSet)
-    "Minimum hot water flow through each boiler"
-    annotation (Placement(transformation(extent={{-340,190},{-320,210}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant maxFlo[nBoi](
-    final k=maxFloSet)
-    "Maximum hot water flow through each boiler"
-    annotation (Placement(transformation(extent={{-340,150},{-320,170}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant zer[nBoi](
-    final k=fill(0,nBoi))
-    "Constant zero"
-    annotation (Placement(transformation(extent={{-340,110},{-320,130}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Division floRat[nBoi]
-    "Flow rate ratio through each boiler"
-    annotation (Placement(transformation(extent={{-280,170},{-260,190}})));
-
-  Buildings.Controls.OBC.CDL.Routing.RealExtractor nexChiRat(
-    final nin=nBoi) if
-       isParallelBoiler
-    "Flow rate ratio of next enabling boiler"
-    annotation (Placement(transformation(extent={{-220,80},{-200,100}})));
-
-  Buildings.Controls.OBC.CDL.Routing.RealExtractor nexChiMaxFlo(
-    final nin=nBoi) if
-       isParallelBoiler
-    "Maximum flow rate of next enabling boiler"
-    annotation (Placement(transformation(extent={{-220,40},{-200,60}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Max max if isParallelBoiler
-    "Maximum flow rate ratio of operating boilers after one boiler being enabled"
-    annotation (Placement(transformation(extent={{-120,80},{-100,100}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Add add2 if isParallelBoiler
-    "Sum of maximum hot water flow rate setpoint of operating boilers after one boiler being enabled"
-    annotation (Placement(transformation(extent={{-120,40},{-100,60}})));
-
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt[nBoi](
-    final k=chiInd)
-    "Boiler index vector"
-    annotation (Placement(transformation(extent={{-400,-40},{-380,-20}})));
-
-  Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep(
-    final nout=nBoi)
-    "Replicate integer input"
-    annotation (Placement(transformation(extent={{-400,-80},{-380,-60}})));
-
-  Buildings.Controls.OBC.CDL.Integers.Equal intEqu[nBoi]
-    "Check equality of two integer inputs"
-    annotation (Placement(transformation(extent={{-320,-40},{-300,-20}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Xor xor[nBoi]
-    "Outputs true if exactly one input is true"
-    annotation (Placement(transformation(extent={{-220,-40},{-200,-20}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Switch swi3[nBoi] if isParallelBoiler
-    "Flow rate ratio of operating boiler"
-    annotation (Placement(transformation(extent={{-160,-10},{-140,10}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Switch swi4[nBoi] if isParallelBoiler
-    "Maximum flow rate of operating boiler"
-    annotation (Placement(transformation(extent={{-160,-70},{-140,-50}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Product pro2 if isParallelBoiler
-    "Hot water flow setpoint after disabling next boiler"
-    annotation (Placement(transformation(extent={{-60,-40},{-40,-20}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Max max1 if not isParallelBoiler
-    "Largest minimum flow rate setpoint of operating boilers after one boiler being enabled"
-    annotation (Placement(transformation(extent={{-40,-200},{-20,-180}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.MultiSum mulSum1(
-    final nin=nBoi) if
-       isParallelBoiler
-    "Sum of maximum hot water flow rate setpoint of operating boilers after one boiler being disabled"
-    annotation (Placement(transformation(extent={{-120,-70},{-100,-50}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.MultiMax multiMax1(
-    final nin=nBoi) if
-       not isParallelBoiler
-    "Largest minimum flow rate setpoint of operating boilers"
-    annotation (Placement(transformation(extent={{-120,-170},{-100,-150}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.MultiMax multiMax2(
-    final nin=nBoi) if
-       isParallelBoiler
-    "Maximum flow rate ratio of operating boilers after one boiler being disabled"
-    annotation (Placement(transformation(extent={{-120,-10},{-100,10}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.MultiMax multiMax3(
-    final nin=nBoi) if
-       not isParallelBoiler
-    "Largest minimum flow rate setpoint of operating boilers after one boiler being disabled"
-    annotation (Placement(transformation(extent={{-40,-240},{-20,-220}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Switch swi5[nBoi] if not isParallelBoiler
-    "Minimum flow rate of operating boiler"
-    annotation (Placement(transformation(extent={{-160,-170},{-140,-150}})));
-
-  Buildings.Controls.OBC.CDL.Routing.RealExtractor nexChiMinFlo(
-    final nin=nBoi) if
-       not isParallelBoiler
-    "Minimum flow rate of next enabling boiler"
-    annotation (Placement(transformation(extent={{-100,-200},{-80,-180}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Switch swi6[nBoi] if not isParallelBoiler
-    "Minimum flow rate of operating boiler"
-    annotation (Placement(transformation(extent={{-100,-240},{-80,-220}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Or or2
-    "Logical and"
-    annotation (Placement(transformation(extent={{-400,-10},{-380,10}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Switch swi9[nBoi] if isParallelBoiler
-    "Flow rate ratio of operating boiler"
-    annotation (Placement(transformation(extent={{-220,340},{-200,360}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.MultiMax multiMax4(
-    final nin=nBoi) if isParallelBoiler
-    "Maximum flow rate ratio of operating boilers"
-    annotation (Placement(transformation(extent={{-180,340},{-160,360}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Switch  swi10[nBoi] if isParallelBoiler
-    "Maximum flow rate of operating boiler"
-    annotation (Placement(transformation(extent={{-220,300},{-200,320}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.MultiSum mulSum2(
-    final nin=nBoi) if isParallelBoiler
-    "Sum of maximum hot water flow rate setpoint of operating boilers"
-    annotation (Placement(transformation(extent={{-180,300},{-160,320}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Product pro3 if isParallelBoiler
-    "Hot water flow setpoint for current operating boilers"
-    annotation (Placement(transformation(extent={{-60,320},{-40,340}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Switch swi11[nBoi] if isParallelBoiler
-    "Maximum flow rate of operating boiler"
-    annotation (Placement(transformation(extent={{-220,220},{-200,240}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.MultiSum mulSum3(
-    final nin=nBoi) if isParallelBoiler
-    "Sum of maximum hot water flow rate setpoint of operating boilers"
-    annotation (Placement(transformation(extent={{-180,220},{-160,240}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Switch swi12[nBoi] if isParallelBoiler
-    "Flow rate ratio of operating boiler"
-    annotation (Placement(transformation(extent={{-220,260},{-200,280}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.MultiMax multiMax5(
-    final nin=nBoi) if
-       isParallelBoiler
-    "Maximum flow rate ratio of operating boilers"
-    annotation (Placement(transformation(extent={{-180,260},{-160,280}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Product pro4 if isParallelBoiler
-    "Hot water flow setpoint for current operating boilers"
-    annotation (Placement(transformation(extent={{-60,240},{-40,260}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Product pro1 if isParallelBoiler
-    "Hot water flow setpoint for current operating boilers"
-    annotation (Placement(transformation(extent={{-60,60},{-40,80}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.MultiMax multiMax6(
-    final nin=nBoi) if not isParallelBoiler
-    "Largest minimum flow rate setpoint of operating boilers"
-    annotation (Placement(transformation(extent={{-120,-130},{-100,-110}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Switch swi1[nBoi] if not isParallelBoiler
-    "Minimum flow rate of operating boiler"
-    annotation (Placement(transformation(extent={{-160,-130},{-140,-110}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Switch byPasSet2
-    "Minimum flow hot water flow setpoint"
-    annotation (Placement(transformation(extent={{180,250},{200,270}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Switch upSet
-    "Minimum flow hot water flow setpoint when there is stage-up command"
-    annotation (Placement(transformation(extent={{240,210},{260,230}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Timer tim2
-    "Time after suppress boiler demand"
-    annotation (Placement(transformation(extent={{-220,-360},{-200,-340}})));
+  Buildings.Controls.OBC.CDL.Logical.Latch lat
+    "Set minimum flow setpoint as per 5.3.8.2 if uOnOff=True, else as per 5.3.8.1"
+    annotation (Placement(transformation(extent={{-40,-40},{-20,-20}})));
 
   Buildings.Controls.OBC.CDL.Logical.And and2
-    "Logical and"
-    annotation (Placement(transformation(extent={{-320,-360},{-300,-340}})));
+    "Logical And"
+    annotation (Placement(transformation(extent={{-80,-40},{-60,-20}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Line oneMorSet1
-    "Minimum flow setpoint when adding one more boiler"
-    annotation (Placement(transformation(extent={{100,-360},{120,-340}})));
+  Buildings.Controls.OBC.CDL.Continuous.Product pro[nSta,nBoi]
+    "Element-wise product"
+    annotation (Placement(transformation(extent={{-80,-150},{-60,-130}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch byPasSet4
-    "Minimum flow hot water flow setpoint"
-    annotation (Placement(transformation(extent={{160,-310},{180,-290}})));
+  Buildings.Controls.OBC.CDL.Continuous.Product pro1[nSta,nBoi]
+    "Element-wise product"
+    annotation (Placement(transformation(extent={{-80,-190},{-60,-170}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch chaSet
-    "Minimum flow hot water flow setpoint when there is stage-change command"
-    annotation (Placement(transformation(extent={{300,40},{320,60}})));
+  Buildings.Controls.OBC.CDL.Continuous.Division div[nSta,nBoi]
+    "Element-wise division"
+    annotation (Placement(transformation(extent={{-20,-160},{0,-140}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Not not1
-    "Logical not"
-    annotation (Placement(transformation(extent={{300,130},{320,150}})));
+  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar[nSta,nBoi](
+    final p=fill(1e-6, nSta, nBoi),
+    final k=fill(1, nSta, nBoi))
+    "Prevent divison by zero"
+    annotation (Placement(transformation(extent={{-50,-190},{-30,-170}})));
 
-  Buildings.Controls.OBC.CDL.Logical.And and4
-    "Logical and"
-    annotation (Placement(transformation(extent={{340,130},{360,150}})));
+  Buildings.Controls.OBC.CDL.Continuous.MatrixMax matMax(
+    final rowMax=true,
+    final nRow=nSta,
+    final nCol=nBoi)
+    annotation (Placement(transformation(extent={{20,-160},{40,-140}})));
 
-  Buildings.Controls.OBC.CDL.Discrete.TriggeredSampler triSam[nBoi]
-    "Hold the boiler status when there is any stage change"
-    annotation (Placement(transformation(extent={{-360,240},{-340,260}})));
+  Buildings.Controls.OBC.CDL.Continuous.MatrixGain matGai(
+    final K=boiStaMat)
+    "Sum of maximum flowrates of operating boilers"
+    annotation (Placement(transformation(extent={{-40,-230},{-20,-210}})));
 
-  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea[nBoi]
-    "Boolean to real"
-    annotation (Placement(transformation(extent={{-400,240},{-380,260}})));
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con3[nBoi](
+    final k=maxFloSet)
+    "Design maximum boiler flowrate"
+    annotation (Placement(transformation(extent={{-80,-230},{-60,-210}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
-    final nout=nBoi)
-    "Replicate boolean input"
-    annotation (Placement(transformation(extent={{-380,30},{-360,50}})));
+  Buildings.Controls.OBC.CDL.Continuous.Product pro2
+    "Product of flowrate ratio and maximum flowrate"
+    annotation (Placement(transformation(extent={{140,60},{160,80}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr[nBoi](
-    final threshold=fill(0.5, nBoi))
-    "Convert real to boolean"
-    annotation (Placement(transformation(extent={{-320,240},{-300,260}})));
+  Buildings.Controls.OBC.CDL.Routing.RealExtractor extIndSig(
+    final nin=nSta)
+    "Extract flow ratio of current setpoint during stage-up or stage-down"
+    annotation (Placement(transformation(extent={{60,-60},{80,-40}})));
+
+  Buildings.Controls.OBC.CDL.Routing.RealExtractor extIndSig1(
+    final allowOutOfRange=true,
+    final nin=nSta,
+    final outOfRangeValue=1e-6)
+    "Extract flow ratio of previous setpoint during stage-up"
+    annotation (Placement(transformation(extent={{60,70},{80,90}})));
+
+  Buildings.Controls.OBC.CDL.Integers.Add addInt(
+    final k2=-1) "Previous stage during stage change"
+    annotation (Placement(transformation(extent={{-62,70},{-42,90}})));
+
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(
+    final k=1)
+    "Constant Integer source"
+    annotation (Placement(transformation(extent={{-120,60},{-100,80}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.Max max
+    "Max flowrate as per 5.3.8.2"
+    annotation (Placement(transformation(extent={{100,90},{120,110}})));
+
+  Buildings.Controls.OBC.CDL.Routing.RealExtractor extIndSig2(
+    final nin=nSta)
+    "Extract max flowrate of current setpoint during stage-up or stage-down"
+    annotation (Placement(transformation(extent={{0,-230},{20,-210}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.Add add2
+    "Max flowrate as per 5.3.8.2"
+    annotation (Placement(transformation(extent={{60,30},{80,50}})));
+
+  Buildings.Controls.OBC.CDL.Routing.RealExtractor extIndSig3(
+    final allowOutOfRange=true,
+    final nin=nBoi,
+    final outOfRangeValue=1e-6)
+    "Extract max flowrate of boiler being disabled during stage-up"
+    annotation (Placement(transformation(extent={{-20,40},{0,60}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Switch swi
+    "Pass minimum flow setpoint based on whether stage-up involves a boiler being disabled"
+    annotation (Placement(transformation(extent={{140,0},{160,20}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.Product pro3
+    "Product of flowrate ratio and maximum flowrate"
+    annotation (Placement(transformation(extent={{92,-100},{112,-80}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Switch swi1
+    "Pass minimum flow setpoint based on whether stage-up involves a boiler being disabled"
+    annotation (Placement(transformation(extent={{290,-80},{310,-60}})));
+
+  Buildings.Controls.OBC.CDL.Logical.And and1
+    "Logical And"
+    annotation (Placement(transformation(extent={{-80,-120},{-60,-100}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Latch lat1
+    "Set minimum flow setpoint as per 5.3.8.2 if uOnOff=True, else as per 5.3.8.1"
+    annotation (Placement(transformation(extent={{-40,-120},{-20,-100}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Latch lat2
+    "Set minimum flow setpoint as per 5.3.8.2 if uOnOff=True, else as per 5.3.8.1"
+    annotation (Placement(transformation(extent={{-80,-80},{-60,-60}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Switch swi2
+    "Pass minimum flow setpoint based on whether stage-up involves a boiler being disabled"
+    annotation (Placement(transformation(extent={{140,-160},{160,-140}})));
+
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt1(
+    final k=1)
+    "Constant Integer source"
+    annotation (Placement(transformation(extent={{-130,-330},{-110,-310}})));
+
+  Buildings.Controls.OBC.CDL.Integers.Add addInt1
+    "Previous stage during stage change"
+    annotation (Placement(transformation(extent={{-90,-310},{-70,-290}})));
+
+  Buildings.Controls.OBC.CDL.Routing.RealExtractor extIndSig4(
+    final allowOutOfRange=true,
+    final nin=nSta,
+    final outOfRangeValue=1e-6)
+    "Extract flow ratio of previous setpoint during stage-down"
+    annotation (Placement(transformation(extent={{60,-280},{80,-260}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.Max max1
+    "Max flowrate as per 5.3.8.2"
+    annotation (Placement(transformation(extent={{100,-260},{120,-240}})));
+
+  Buildings.Controls.OBC.CDL.Routing.RealExtractor extIndSig5(
+    final allowOutOfRange=true,
+    final nin=nBoi,
+    final outOfRangeValue=1e-6)
+    "Extract max flowrate of boiler being disabled during stage-down"
+    annotation (Placement(transformation(extent={{-40,-270},{-20,-250}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.Add add1
+    "Max flowrate as per 5.3.8.2"
+    annotation (Placement(transformation(extent={{100,-310},{120,-290}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.Product pro4
+    "Product of flowrate ratio and maximum flowrate"
+    annotation (Placement(transformation(extent={{140,-280},{160,-260}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Latch lat3
+    "Turn on timer for slow change of setpoint"
+    annotation (Placement(transformation(extent={{200,-50},{220,-30}})));
+
+  Buildings.Controls.OBC.CDL.Discrete.TriggeredSampler triSam
+    "Sample last setpoint before stage change start"
+    annotation (Placement(transformation(extent={{140,-50},{160,-30}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.Line lin
+    "Change setpoint over a finite amnount of time during stage change"
+    annotation (Placement(transformation(extent={{260,-10},{280,10}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.Line lin1
+    "Change setpoint over a finite amnount of time during stage change"
+    annotation (Placement(transformation(extent={{260,-150},{280,-130}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con4(final k=0)
+    "Constant Real source"
+    annotation (Placement(transformation(extent={{160,100},{180,120}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Timer tim
+    "Timer for change of setpoint"
+    annotation (Placement(transformation(extent={{230,-50},{250,-30}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr(
+    final threshold=bypSetTim)
+    "Check if timer has achieved time for setpoint reset"
+    annotation (Placement(transformation(extent={{200,-120},{220,-100}})));
+
+  Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel(
+    final samplePeriod=1e-3)
+    "Unit delay for Real signal"
+    annotation (Placement(transformation(extent={{140,-120},{160,-100}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con5(
+    final k=bypSetTim)
+    "Constant Real source"
+    annotation (Placement(transformation(extent={{140,-240},{160,-220}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Pre pre1
+    "Logical pre block"
+    annotation (Placement(transformation(extent={{228,-120},{248,-100}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Or or2
+    "Detect start of change in minimum flow setpoint"
+    annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
 
 equation
-  connect(uStaDow, not2.u)
-    annotation (Line(points={{-460,-390},{-410,-390},{-410,-420},{-222,-420}},
-      color={255,0,255}));
+  connect(uStaSet, cha.u)
+    annotation (Line(points={{-160,-90},{-128,-90},{-128,-70},{-122,-70}},
+                                                     color={255,127,0}));
 
-  connect(byPasSet1.y, yChiWatMinFloSet)
-    annotation (Line(points={{422,140},{460,140}}, color={0,0,127}));
+  connect(lat.u, and2.y)
+    annotation (Line(points={{-42,-30},{-58,-30}},
+                                               color={255,0,255}));
 
-  connect(and1.y, tim.u)
-    annotation (Line(points={{-298,420},{-220,420}}, color={255,0,255}));
+  connect(uOnOff, and2.u1)
+    annotation (Line(points={{-160,-10},{-124,-10},{-124,-30},{-82,-30}},
+                                                color={255,0,255}));
 
-  connect(uStaDow, and3.u1)
-    annotation (Line(points={{-460,-390},{-322,-390}}, color={255,0,255}));
+  connect(cha.up, and2.u2) annotation (Line(points={{-98,-64},{-90,-64},{-90,-38},
+          {-82,-38}},color={255,0,255}));
 
-  connect(and3.y, tim1.u)
-    annotation (Line(points={{-298,-390},{-222,-390}}, color={255,0,255}));
+  connect(uStaChaPro, lat.clr) annotation (Line(points={{-160,-50},{-50,-50},{-50,
+          -36},{-42,-36}},
+                         color={255,0,255}));
 
-  connect(minFlo.y, floRat.u1)
-    annotation (Line(points={{-318,200},{-300,200},{-300,186},{-282,186}},
-      color={0,0,127}));
+  connect(con.y, pro.u1) annotation (Line(points={{-98,-140},{-90,-140},{-90,-134},
+          {-82,-134}},color={0,0,127}));
 
-  connect(maxFlo.y, floRat.u2)
-    annotation (Line(points={{-318,160},{-290,160},{-290,174},{-282,174}},
-      color={0,0,127}));
+  connect(con2.y, pro.u2) annotation (Line(points={{-98,-210},{-90,-210},{-90,-146},
+          {-82,-146}},
+                     color={0,0,127}));
 
-  connect(nexEnaChi, nexChiRat.index)
-    annotation (Line(points={{-460,70},{-210,70},{-210,78}},
-      color={255,127,0}));
+  connect(con1.y, pro1.u1) annotation (Line(points={{-98,-180},{-92,-180},{-92,-174},
+          {-82,-174}},
+                    color={0,0,127}));
 
-  connect(nexEnaChi,nexChiMaxFlo. index)
-    annotation (Line(points={{-460,70},{-340,70},{-340,30},{-210,30},{-210,38}},
-      color={255,127,0}));
+  connect(con2.y, pro1.u2) annotation (Line(points={{-98,-210},{-90,-210},{-90,-186},
+          {-82,-186}},
+                    color={0,0,127}));
 
-  connect(nexChiRat.y, max.u2)
-    annotation (Line(points={{-198,90},{-180,90},{-180,84},{-122,84}},
-      color={0,0,127}));
+  connect(pro.y, div.u1)
+    annotation (Line(points={{-58,-140},{-40,-140},{-40,-144},{-22,-144}},
+                                                   color={0,0,127}));
 
-  connect(nexChiMaxFlo.y, add2.u2)
-    annotation (Line(points={{-198,50},{-180,50},{-180,44},{-122,44}},
-      color={0,0,127}));
+  connect(pro1.y, addPar.u)
+    annotation (Line(points={{-58,-180},{-52,-180}},
+                                                 color={0,0,127}));
 
-  connect(nexDisChi, intRep.u)
-    annotation (Line(points={{-460,-70},{-402,-70}}, color={255,127,0}));
+  connect(addPar.y, div.u2) annotation (Line(points={{-28,-180},{-24,-180},{-24,
+          -156},{-22,-156}},
+                      color={0,0,127}));
 
-  connect(conInt.y, intEqu.u1)
-    annotation (Line(points={{-378,-30},{-322,-30}}, color={255,127,0}));
+  connect(con3.y, matGai.u)
+    annotation (Line(points={{-58,-220},{-42,-220}},
+                                                 color={0,0,127}));
 
-  connect(intRep.y, intEqu.u2)
-    annotation (Line(points={{-378,-70},{-360,-70},{-360,-38},{-322,-38}},
-      color={255,127,0}));
+  connect(div.y, matMax.u)
+    annotation (Line(points={{2,-150},{18,-150}},
+                                                color={0,0,127}));
 
-  connect(intEqu.y, xor.u1)
-    annotation (Line(points={{-298,-30},{-222,-30}}, color={255,0,255}));
+  connect(matMax.y, extIndSig.u)
+    annotation (Line(points={{42,-150},{52,-150},{52,-50},{58,-50}},
+                                                 color={0,0,127}));
 
-  connect(xor.y, swi3.u2)
-    annotation (Line(points={{-198,-30},{-180,-30},{-180,0},{-162,0}},
-      color={255,0,255}));
+  connect(uStaSet, extIndSig.index) annotation (Line(points={{-160,-90},{70,-90},
+          {70,-62}},                     color={255,127,0}));
 
-  connect(xor.y, swi4.u2)
-    annotation (Line(points={{-198,-30},{-180,-30},{-180,-60},{-162,-60}},
-      color={255,0,255}));
+  connect(matMax.y, extIndSig1.u) annotation (Line(points={{42,-150},{52,-150},{
+          52,80},{58,80}},
+                        color={0,0,127}));
 
-  connect(multiMax2.y, pro2.u1)
-    annotation (Line(points={{-98,0},{-80,0},{-80,-24},{-62,-24}},
-      color={0,0,127}));
+  connect(conInt.y, addInt.u2) annotation (Line(points={{-98,70},{-72,70},{-72,74},
+          {-64,74}},
+                   color={255,127,0}));
 
-  connect(mulSum1.y, pro2.u2)
-    annotation (Line(points={{-98,-60},{-80,-60},{-80,-36},{-62,-36}},
-      color={0,0,127}));
+  connect(uStaSet, addInt.u1) annotation (Line(points={{-160,-90},{-128,-90},{-128,
+          100},{-72,100},{-72,86},{-64,86}},   color={255,127,0}));
 
-  connect(swi3.y, multiMax2.u)
-    annotation (Line(points={{-138,0},{-122,0}}, color={0,0,127}));
+  connect(addInt.y, extIndSig1.index) annotation (Line(points={{-40,80},{40,80},
+          {40,60},{70,60},{70,68}},color={255,127,0}));
 
-  connect(swi4.y, mulSum1.u)
-    annotation (Line(points={{-138,-60},{-122,-60}}, color={0,0,127}));
+  connect(matGai.y, extIndSig2.u)
+    annotation (Line(points={{-18,-220},{-2,-220}},
+                                                color={0,0,127}));
 
-  connect(swi5.y, multiMax1.u)
-    annotation (Line(points={{-138,-160},{-122,-160}}, color={0,0,127}));
+  connect(uStaSet, extIndSig2.index) annotation (Line(points={{-160,-90},{-128,-90},
+          {-128,-240},{10,-240},{10,-232}}, color={255,127,0}));
 
-  connect(swi6.y, multiMax3.u)
-    annotation (Line(points={{-78,-230},{-42,-230}},   color={0,0,127}));
+  connect(con3.y, extIndSig3.u) annotation (Line(points={{-58,-220},{-54,-220},{
+          -54,50},{-22,50}}, color={0,0,127}));
 
-  connect(nexEnaChi, nexChiMinFlo.index)
-    annotation (Line(points={{-460,70},{-340,70},{-340,-208},{-90,-208},{-90,-202}},
-      color={255,127,0}));
+  connect(max.y, pro2.u1) annotation (Line(points={{122,100},{130,100},{130,76},
+          {138,76}}, color={0,0,127}));
 
-  connect(multiMax1.y, max1.u1)
-    annotation (Line(points={{-98,-160},{-60,-160},{-60,-184},{-42,-184}},
-      color={0,0,127}));
+  connect(add2.y, pro2.u2) annotation (Line(points={{82,40},{130,40},{130,64},{138,
+          64}}, color={0,0,127}));
 
-  connect(nexChiMinFlo.y, max1.u2)
-    annotation (Line(points={{-78,-190},{-60,-190},{-60,-196},{-42,-196}},
-      color={0,0,127}));
+  connect(pro3.y, swi.u3) annotation (Line(points={{114,-90},{120,-90},{120,2},{
+          138,2}}, color={0,0,127}));
 
-  connect(xor.y, swi6.u2)
-    annotation (Line(points={{-198,-30},{-180,-30},{-180,-230},{-102,-230}},
-      color={255,0,255}));
+  connect(pro2.y, swi.u1) annotation (Line(points={{162,70},{170,70},{170,30},{130,
+          30},{130,18},{138,18}}, color={0,0,127}));
 
-  connect(uStaDow, or2.u2)
-    annotation (Line(points={{-460,-390},{-410,-390},{-410,-8},{-402,-8}},
-      color={255,0,255}));
+  connect(extIndSig.y, pro3.u1) annotation (Line(points={{82,-50},{88,-50},{88,-84},
+          {90,-84}}, color={0,0,127}));
 
-  connect(uStaUp, or2.u1)
-    annotation (Line(points={{-460,420},{-410,420},{-410,0},{-402,0}},
-      color={255,0,255}));
+  connect(extIndSig2.y, pro3.u2) annotation (Line(points={{22,-220},{46,-220},{46,
+          -96},{90,-96}}, color={0,0,127}));
 
-  connect(booToRea.y, triSam.u)
-    annotation (Line(points={{-378,250},{-362,250}}, color={0,0,127}));
+  connect(lat.y, swi.u2) annotation (Line(points={{-18,-30},{126,-30},{126,10},{
+          138,10}}, color={255,0,255}));
 
-  connect(or2.y, booRep.u)
-    annotation (Line(points={{-378,0},{-370,0},{-370,20},{-390,20},{-390,40},
-      {-382,40}}, color={255,0,255}));
+  connect(swi1.y, VHotWatMinSet_flow)
+    annotation (Line(points={{312,-70},{340,-70}}, color={0,0,127}));
 
-  connect(booRep.y, triSam.trigger)
-    annotation (Line(points={{-358,40},{-350,40},{-350,238.2}}, color={255,0,255}));
+  connect(cha.down, and1.u1) annotation (Line(points={{-98,-76},{-90,-76},{-90,-110},
+          {-82,-110}}, color={255,0,255}));
 
-  connect(uChi, booToRea.u)
-    annotation (Line(points={{-460,340},{-420,340},{-420,250},{-402,250}},
-      color={255,0,255}));
+  connect(and1.y, lat1.u)
+    annotation (Line(points={{-58,-110},{-42,-110}}, color={255,0,255}));
 
-  connect(uChi, swi9.u2)
-    annotation (Line(points={{-460,340},{-320,340},{-320,350},{-222,350}},
-      color={255,0,255}));
+  connect(uStaChaPro, lat1.clr) annotation (Line(points={{-160,-50},{-50,-50},{-50,
+          -116},{-42,-116}}, color={255,0,255}));
 
-  connect(uChi, swi10.u2)
-    annotation (Line(points={{-460,340},{-320,340},{-320,310},{-222,310}},
-      color={255,0,255}));
+  connect(cha.up, lat2.u) annotation (Line(points={{-98,-64},{-90,-64},{-90,-70},
+          {-82,-70}}, color={255,0,255}));
 
-  connect(floRat.y, swi9.u1)
-    annotation (Line(points={{-258,180},{-250,180},{-250,358},{-222,358}},
-      color={0,0,127}));
-
-  connect(swi9.y, multiMax4.u)
-    annotation (Line(points={{-198,350},{-188,350},{-188,350},{-182,350}},
-      color={0,0,127}));
-
-  connect(maxFlo.y, swi10.u1)
-    annotation (Line(points={{-318,160},{-290,160},{-290,318},{-222,318}},
-      color={0,0,127}));
-
-  connect(zer.y, swi9.u3)
-    annotation (Line(points={{-318,120},{-240,120},{-240,342},{-222,342}},
-      color={0,0,127}));
-
-  connect(zer.y, swi10.u3)
-    annotation (Line(points={{-318,120},{-240,120},{-240,302},{-222,302}},
-      color={0,0,127}));
-
-  connect(swi10.y, mulSum2.u)
-    annotation (Line(points={{-198,310},{-190,310},{-190,310},{-182,310}},
-      color={0,0,127}));
-
-  connect(multiMax4.y, pro3.u1)
-    annotation (Line(points={{-158,350},{-140,350},{-140,336},{-62,336}},
-      color={0,0,127}));
-
-  connect(mulSum2.y, pro3.u2)
-    annotation (Line(points={{-158,310},{-140,310},{-140,324},{-62,324}},
-      color={0,0,127}));
-
-  connect(floRat.y, swi12.u1)
-    annotation (Line(points={{-258,180},{-250,180},{-250,278},{-222,278}},
-      color={0,0,127}));
-
-  connect(triSam.y, greEquThr.u)
-    annotation (Line(points={{-338,250},{-322,250}}, color={0,0,127}));
-
-  connect(greEquThr.y, swi12.u2)
-    annotation (Line(points={{-298,250},{-230,250},{-230,270},{-222,270}},
-      color={255,0,255}));
-
-  connect(greEquThr.y, swi11.u2)
-    annotation (Line(points={{-298,250},{-230,250},{-230,230},{-222,230}},
-      color={255,0,255}));
-
-  connect(zer.y, swi12.u3)
-    annotation (Line(points={{-318,120},{-240,120},{-240,262},{-222,262}},
-      color={0,0,127}));
-
-  connect(maxFlo.y, swi11.u1)
-    annotation (Line(points={{-318,160},{-290,160},{-290,238},{-222,238}},
-      color={0,0,127}));
-
-  connect(zer.y, swi11.u3)
-    annotation (Line(points={{-318,120},{-240,120},{-240,222},{-222,222}},
-      color={0,0,127}));
-
-  connect(swi12.y, multiMax5.u)
-    annotation (Line(points={{-198,270},{-190,270},{-190,270},{-182,270}},
-      color={0,0,127}));
-
-  connect(swi11.y, mulSum3.u)
-    annotation (Line(points={{-198,230},{-190,230},{-190,230},{-182,230}},
-      color={0,0,127}));
-
-  connect(multiMax5.y, pro4.u1)
-    annotation (Line(points={{-158,270},{-150,270},{-150,256},{-62,256}},
-      color={0,0,127}));
-
-  connect(mulSum3.y, pro4.u2)
-    annotation (Line(points={{-158,230},{-140,230},{-140,244},{-62,244}},
-      color={0,0,127}));
-
-  connect(multiMax5.y, max.u1)
-    annotation (Line(points={{-158,270},{-150,270},{-150,96},{-122,96}},
-      color={0,0,127}));
-
-  connect(mulSum3.y, add2.u1)
-    annotation (Line(points={{-158,230},{-140,230},{-140,56},{-122,56}},
-      color={0,0,127}));
-
-  connect(max.y, pro1.u1)
-    annotation (Line(points={{-98,90},{-80,90},{-80,76},{-62,76}}, color={0,0,127}));
-
-  connect(add2.y, pro1.u2)
-    annotation (Line(points={{-98,50},{-80,50},{-80,64},{-62,64}}, color={0,0,127}));
-
-  connect(maxFlo.y, nexChiMaxFlo.u)
-    annotation (Line(points={{-318,160},{-290,160},{-290,50},{-222,50}},
-      color={0,0,127}));
-
-  connect(greEquThr.y, xor.u2)
-    annotation (Line(points={{-298,250},{-230,250},{-230,-38},{-222,-38}},
-      color={255,0,255}));
-
-  connect(floRat.y, swi3.u1)
-    annotation (Line(points={{-258,180},{-250,180},{-250,8},{-162,8}},
-      color={0,0,127}));
-
-  connect(zer.y, swi3.u3)
-    annotation (Line(points={{-318,120},{-240,120},{-240,-8},{-162,-8}},
-      color={0,0,127}));
-
-  connect(zer.y, swi4.u3)
-    annotation (Line(points={{-318,120},{-240,120},{-240,-68},{-162,-68}},
-      color={0,0,127}));
-
-  connect(maxFlo.y, swi4.u1)
-    annotation (Line(points={{-318,160},{-290,160},{-290,-52},{-162,-52}},
-      color={0,0,127}));
-
-  connect(uChi, swi1.u2)
-    annotation (Line(points={{-460,340},{-420,340},{-420,-120},{-162,-120}},
-      color={255,0,255}));
-
-  connect(greEquThr.y, swi5.u2)
-    annotation (Line(points={{-298,250},{-230,250},{-230,-160},{-162,-160}},
-      color={255,0,255}));
-
-  connect(swi1.y, multiMax6.u)
-    annotation (Line(points={{-138,-120},{-130,-120},{-130,-120},{-122,-120}},
-      color={0,0,127}));
-
-  connect(zer.y, swi1.u3)
-    annotation (Line(points={{-318,120},{-240,120},{-240,-128},{-162,-128}},
-      color={0,0,127}));
-
-  connect(zer.y, swi5.u3)
-    annotation (Line(points={{-318,120},{-240,120},{-240,-168},{-162,-168}},
-      color={0,0,127}));
-
-  connect(maxFlo.y, swi1.u1)
-    annotation (Line(points={{-318,160},{-290,160},{-290,-112},{-162,-112}},
-      color={0,0,127}));
-
-  connect(maxFlo.y, swi5.u1)
-    annotation (Line(points={{-318,160},{-290,160},{-290,-152},{-162,-152}},
-      color={0,0,127}));
-
-  connect(maxFlo.y, nexChiMinFlo.u)
-    annotation (Line(points={{-318,160},{-290,160},{-290,-190},{-102,-190}},
-      color={0,0,127}));
-
-  connect(maxFlo.y, swi6.u1)
-    annotation (Line(points={{-318,160},{-290,160},{-290,-222},{-102,-222}},
-      color={0,0,127}));
-
-  connect(zer.y, swi6.u3)
-    annotation (Line(points={{-318,120},{-240,120},{-240,-238},{-102,-238}},
-      color={0,0,127}));
-
-  connect(uUpsDevSta, and1.u2)
-    annotation (Line(points={{-460,380},{-380,380},{-380,412},{-322,412}},
-      color={255,0,255}));
-
-  connect(uStaUp, and1.u1)
-    annotation (Line(points={{-460,420},{-322,420}}, color={255,0,255}));
-
-  connect(con2.y, oneMorSet.x1)
-    annotation (Line(points={{-38,210},{70,210},{70,238},{98,238}}, color={0,0,127}));
-
-  connect(pro4.y, oneMorSet.f1)
-    annotation (Line(points={{-38,250},{60,250},{60,234},{98,234}}, color={0,0,127}));
-
-  connect(con3.y, oneMorSet.x2)
-    annotation (Line(points={{-38,168},{80,168},{80,226},{98,226}}, color={0,0,127}));
-
-  connect(pro1.y, oneMorSet.f2)
-    annotation (Line(points={{-38,70},{90,70},{90,222},{98,222}},
-      color={0,0,127}));
-
-  connect(tim.y, oneMorSet.u)
-    annotation (Line(points={{-196,420},{50,420},{50,230},{98,230}},
-      color={0,0,127}));
-
-  connect(con2.y, oneLeSet.x1)
-    annotation (Line(points={{-38,210},{70,210},{70,-132},{98,-132}},
-      color={0,0,127}));
-
-  connect(pro4.y, oneLeSet.f1)
-    annotation (Line(points={{-38,250},{60,250},{60,-136},{98,-136}},
-      color={0,0,127}));
-
-  connect(con3.y, oneLeSet.x2)
-    annotation (Line(points={{-38,168},{80,168},{80,-144},{98,-144}},
-      color={0,0,127}));
-
-  connect(pro2.y, oneLeSet.f2)
-    annotation (Line(points={{-38,-30},{50,-30},{50,-148},{98,-148}},
-      color={0,0,127}));
-
-  connect(oneMorSet.y, byPasSet2.u3)
-    annotation (Line(points={{122,230},{170,230},{170,252},{178,252}},
-      color={0,0,127}));
-
-  connect(pro3.y, byPasSet2.u1)
-    annotation (Line(points={{-38,330},{40,330},{40,268},{178,268}},
-      color={0,0,127}));
-
-  connect(uSubCha, byPasSet2.u2)
-    annotation (Line(points={{-460,-280},{150,-280},{150,260},{178,260}},
-      color={255,0,255}));
-
-  connect(uOnOff, upSet.u2)
-    annotation (Line(points={{-460,-320},{220,-320},{220,220},{238,220}},
-      color={255,0,255}));
-
-  connect(byPasSet2.y, upSet.u1)
-    annotation (Line(points={{202,260},{220,260},{220,228},{238,228}},
-      color={0,0,127}));
-
-  connect(oneMorSet.y, upSet.u3)
-    annotation (Line(points={{122,230},{170,230},{170,212},{238,212}},
-      color={0,0,127}));
-
-  connect(uStaDow, and2.u2)
-    annotation (Line(points={{-460,-390},{-410,-390},{-410,-358},{-322,-358}},
-      color={255,0,255}));
-
-  connect(uSubCha, and2.u1)
-    annotation (Line(points={{-460,-280},{-420,-280},{-420,-350},{-322,-350}},
-      color={255,0,255}));
-
-  connect(and2.y, tim2.u)
-    annotation (Line(points={{-298,-350},{-222,-350}}, color={255,0,255}));
-
-  connect(con2.y, oneMorSet1.x1)
-    annotation (Line(points={{-38,210},{70,210},{70,-342},{98,-342}},
-      color={0,0,127}));
-
-  connect(pro4.y, oneMorSet1.f1)
-    annotation (Line(points={{-38,250},{60,250},{60,-346},{98,-346}},
-      color={0,0,127}));
-
-  connect(con3.y, oneMorSet1.x2)
-    annotation (Line(points={{-38,168},{80,168},{80,-354},{98,-354}},
-      color={0,0,127}));
-
-  connect(pro1.y, oneMorSet1.f2)
-    annotation (Line(points={{-38,70},{90,70},{90,-358},{98,-358}},
-      color={0,0,127}));
-
-  connect(tim2.y, oneMorSet1.u)
-    annotation (Line(points={{-198,-350},{98,-350}}, color={0,0,127}));
-
-  connect(oneMorSet1.y, byPasSet4.u3)
-    annotation (Line(points={{122,-350},{140,-350},{140,-308},{158,-308}},
-      color={0,0,127}));
-
-  connect(uUpsDevSta, byPasSet4.u2)
-    annotation (Line(points={{-460,380},{-430,380},{-430,-300},{158,-300}},
-      color={255,0,255}));
-
-  connect(pro3.y, byPasSet4.u1)
-    annotation (Line(points={{-38,330},{40,330},{40,-292},{158,-292}},
-      color={0,0,127}));
-
-  connect(uOnOff, dowSet.u2)
-    annotation (Line(points={{-460,-320},{220,-320},{220,-120},{238,-120}},
-      color={255,0,255}));
-
-  connect(byPasSet4.y, dowSet.u1)
-    annotation (Line(points={{182,-300},{200,-300},{200,-112},{238,-112}},
-      color={0,0,127}));
-
-  connect(uUpsDevSta, and3.u2)
-    annotation (Line(points={{-460,380},{-430,380},{-430,-398},{-322,-398}},
-      color={255,0,255}));
-
-  connect(tim1.y, oneLeSet.u)
-    annotation (Line(points={{-198,-390},{30,-390},{30,-140},{98,-140}},
-      color={0,0,127}));
-
-  connect(oneLeSet.y, dowSet.u3)
-    annotation (Line(points={{122,-140},{180,-140},{180,-128},{238,-128}},
-      color={0,0,127}));
-
-  connect(dowSet.y, chaSet.u3)
-    annotation (Line(points={{262,-120},{270,-120},{270,42},{298,42}},
-      color={0,0,127}));
-
-  connect(upSet.y, chaSet.u1)
-    annotation (Line(points={{262,220},{270,220},{270,58},{298,58}},
-      color={0,0,127}));
-
-  connect(uStaUp, chaSet.u2)
-    annotation (Line(points={{-460,420},{-410,420},{-410,400},{280,400},{280,50},
-      {298,50}}, color={255,0,255}));
-
-  connect(not1.y, and4.u1)
-    annotation (Line(points={{322,140},{338,140}}, color={255,0,255}));
-
-  connect(and4.y, byPasSet1.u2)
-    annotation (Line(points={{362,140},{398,140}}, color={255,0,255}));
-
-  connect(not2.y, and4.u2)
-    annotation (Line(points={{-198,-420},{330,-420},{330,132},{338,132}},
-      color={255,0,255}));
-
-  connect(chaSet.y, byPasSet1.u3)
-    annotation (Line(points={{322,50},{380,50},{380,132},{398,132}},
-      color={0,0,127}));
-
-  connect(pro3.y, byPasSet1.u1)
-    annotation (Line(points={{-38,330},{380,330},{380,148},{398,148}},
-      color={0,0,127}));
-
-  connect(uStaUp, not1.u)
-    annotation (Line(points={{-460,420},{-410,420},{-410,400},{280,400},
-      {280,140},{298,140}}, color={255,0,255}));
-
-  connect(multiMax1.y, oneMorSet.f1)
-    annotation (Line(points={{-98,-160},{60,-160},{60,234},{98,234}},
-      color={0,0,127}));
-
-  connect(multiMax1.y, oneMorSet1.f1)
-    annotation (Line(points={{-98,-160},{60,-160},{60,-346},{98,-346}},
-      color={0,0,127}));
-
-  connect(max1.y, oneMorSet.f2)
-    annotation (Line(points={{-18,-190},{90,-190},{90,222},{98,222}},
-      color={0,0,127}));
-
-  connect(max1.y, oneMorSet1.f2)
-    annotation (Line(points={{-18,-190},{90,-190},{90,-358},{98,-358}},
-      color={0,0,127}));
-
-  connect(multiMax3.y, oneLeSet.f2)
-    annotation (Line(points={{-18,-230},{50,-230},{50,-148},{98,-148}},
-      color={0,0,127}));
-
-  connect(multiMax6.y, byPasSet2.u1)
-    annotation (Line(points={{-98,-120},{40,-120},{40,268},{178,268}},
-      color={0,0,127}));
-
-  connect(multiMax6.y, byPasSet4.u1)
-    annotation (Line(points={{-98,-120},{40,-120},{40,-292},{158,-292}},
-      color={0,0,127}));
-
-  connect(multiMax6.y, byPasSet1.u1)
-    annotation (Line(points={{-98,-120},{40,-120},{40,180},{380,180},{380,148},
-      {398,148}}, color={0,0,127}));
-
-  connect(multiMax1.y, oneLeSet.f1)
-    annotation (Line(points={{-98,-160},{60,-160},{60,-136},{98,-136}},
-      color={0,0,127}));
-
-  connect(floRat.y, nexChiRat.u)
-    annotation (Line(points={{-258,180},{-250,180},{-250,90},{-222,90}},
-      color={0,0,127}));
-
+  connect(cha.down, lat2.clr)
+    annotation (Line(points={{-98,-76},{-82,-76}}, color={255,0,255}));
+
+  connect(lat2.y, swi1.u2)
+    annotation (Line(points={{-58,-70},{288,-70}}, color={255,0,255}));
+
+  connect(lat1.y, swi2.u2) annotation (Line(points={{-18,-110},{126,-110},{126,-150},
+          {138,-150}}, color={255,0,255}));
+
+  connect(uOnOff, and1.u2) annotation (Line(points={{-160,-10},{-124,-10},{-124,
+          -118},{-82,-118}}, color={255,0,255}));
+
+  connect(pro3.y, swi2.u3) annotation (Line(points={{114,-90},{120,-90},{120,-158},
+          {138,-158}}, color={0,0,127}));
+
+  connect(extIndSig3.y, add2.u1) annotation (Line(points={{2,50},{40,50},{40,46},
+          {58,46}}, color={0,0,127}));
+
+  connect(extIndSig2.y, add2.u2) annotation (Line(points={{22,-220},{46,-220},{46,
+          34},{58,34}}, color={0,0,127}));
+
+  connect(uLasDisBoi, extIndSig3.index)
+    annotation (Line(points={{-160,30},{-10,30},{-10,38}}, color={255,127,0}));
+
+  connect(extIndSig.y, max.u2) annotation (Line(points={{82,-50},{88,-50},{88,94},
+          {98,94}}, color={0,0,127}));
+
+  connect(extIndSig1.y, max.u1) annotation (Line(points={{82,80},{84,80},{84,106},
+          {98,106}}, color={0,0,127}));
+
+  connect(conInt1.y, addInt1.u2) annotation (Line(points={{-108,-320},{-100,-320},
+          {-100,-306},{-92,-306}}, color={255,127,0}));
+
+  connect(uStaSet, addInt1.u1) annotation (Line(points={{-160,-90},{-128,-90},{-128,
+          -294},{-92,-294}}, color={255,127,0}));
+
+  connect(matMax.y, extIndSig4.u) annotation (Line(points={{42,-150},{52,-150},{
+          52,-270},{58,-270}}, color={0,0,127}));
+
+  connect(addInt1.y, extIndSig4.index) annotation (Line(points={{-68,-300},{70,-300},
+          {70,-282}}, color={255,127,0}));
+
+  connect(extIndSig4.y, max1.u2) annotation (Line(points={{82,-270},{88,-270},{88,
+          -256},{98,-256}}, color={0,0,127}));
+
+  connect(extIndSig.y, max1.u1) annotation (Line(points={{82,-50},{88,-50},{88,-244},
+          {98,-244}}, color={0,0,127}));
+
+  connect(con3.y, extIndSig5.u) annotation (Line(points={{-58,-220},{-54,-220},{
+          -54,-260},{-42,-260}}, color={0,0,127}));
+
+  connect(extIndSig2.y, add1.u1) annotation (Line(points={{22,-220},{46,-220},{46,
+          -294},{98,-294}}, color={0,0,127}));
+
+  connect(extIndSig5.y, add1.u2) annotation (Line(points={{-18,-260},{0,-260},{0,
+          -306},{98,-306}}, color={0,0,127}));
+
+  connect(max1.y, pro4.u1) annotation (Line(points={{122,-250},{130,-250},{130,-264},
+          {138,-264}}, color={0,0,127}));
+
+  connect(add1.y, pro4.u2) annotation (Line(points={{122,-300},{130,-300},{130,-276},
+          {138,-276}}, color={0,0,127}));
+
+  connect(pro4.y, swi2.u1) annotation (Line(points={{162,-270},{170,-270},{170,-170},
+          {132,-170},{132,-142},{138,-142}}, color={0,0,127}));
+
+  connect(uLasDisBoi, extIndSig5.index) annotation (Line(points={{-160,30},{-134,
+          30},{-134,-280},{-30,-280},{-30,-272}}, color={255,127,0}));
+
+  connect(triSam.y, lin.f1) annotation (Line(points={{162,-40},{170,-40},{170,4},
+          {258,4}}, color={0,0,127}));
+  connect(swi.y, lin.f2) annotation (Line(points={{162,10},{166,10},{166,-8},{258,
+          -8}}, color={0,0,127}));
+  connect(swi2.y, lin1.f2) annotation (Line(points={{162,-150},{254,-150},{254,-148},
+          {258,-148}}, color={0,0,127}));
+  connect(lat3.y, tim.u)
+    annotation (Line(points={{222,-40},{228,-40}}, color={255,0,255}));
+  connect(tim.y, lin.u) annotation (Line(points={{252,-40},{254,-40},{254,0},{258,
+          0}}, color={0,0,127}));
+  connect(tim.y, lin1.u) annotation (Line(points={{252,-40},{254,-40},{254,-140},
+          {258,-140}}, color={0,0,127}));
+  connect(lin1.y, swi1.u3) annotation (Line(points={{282,-140},{286,-140},{286,-78},
+          {288,-78}}, color={0,0,127}));
+  connect(lin.y, swi1.u1) annotation (Line(points={{282,0},{286,0},{286,-62},{288,
+          -62}}, color={0,0,127}));
+  connect(triSam.y, lin1.f1) annotation (Line(points={{162,-40},{170,-40},{170,-136},
+          {258,-136}}, color={0,0,127}));
+  connect(con5.y, lin1.x2) annotation (Line(points={{162,-230},{174,-230},{174,-144},
+          {258,-144}}, color={0,0,127}));
+  connect(con5.y, lin.x2) annotation (Line(points={{162,-230},{174,-230},{174,-4},
+          {258,-4}}, color={0,0,127}));
+  connect(con4.y, lin.x1) annotation (Line(points={{182,110},{186,110},{186,8},{
+          258,8}}, color={0,0,127}));
+  connect(con4.y, lin1.x1) annotation (Line(points={{182,110},{186,110},{186,-132},
+          {258,-132}}, color={0,0,127}));
+  connect(tim.y, greEquThr.u) annotation (Line(points={{252,-40},{254,-40},{254,
+          -128},{192,-128},{192,-110},{198,-110}}, color={0,0,127}));
+  connect(swi1.y, uniDel.u) annotation (Line(points={{312,-70},{314,-70},{314,-84},
+          {130,-84},{130,-110},{138,-110}}, color={0,0,127}));
+  connect(uniDel.y, triSam.u) annotation (Line(points={{162,-110},{164,-110},{164,
+          -80},{130,-80},{130,-40},{138,-40}}, color={0,0,127}));
+  connect(greEquThr.y, pre1.u)
+    annotation (Line(points={{222,-110},{226,-110}}, color={255,0,255}));
+  connect(pre1.y, lat3.clr) annotation (Line(points={{250,-110},{260,-110},{260,
+          -60},{192,-60},{192,-46},{198,-46}}, color={255,0,255}));
+  connect(pre1.y, triSam.trigger) annotation (Line(points={{250,-110},{260,-110},
+          {260,-60},{150,-60},{150,-51.8}}, color={255,0,255}));
+  connect(uStaChaPro, or2.u2) annotation (Line(points={{-160,-50},{-50,-50},{-50,
+          -8},{-42,-8}}, color={255,0,255}));
+  connect(cha.y, or2.u1) annotation (Line(points={{-98,-70},{-94,-70},{-94,0},{-42,
+          0}}, color={255,0,255}));
+  connect(or2.y, lat3.u) annotation (Line(points={{-18,0},{100,0},{100,-20},{192,
+          -20},{192,-40},{198,-40}}, color={255,0,255}));
 
 annotation (
   defaultComponentName="minBoiFloSet",
@@ -897,176 +603,28 @@ annotation (
         Text(
           extent={{6,-4},{34,-10}},
           lineColor={28,108,200},
-          textString="minFloSet[3]"),
-        Text(
-          extent={{-98,20},{-44,4}},
-          lineColor={255,127,0},
-          textString="nexEnaChi"),
-        Text(
-          extent={{-98,0},{-44,-16}},
-          lineColor={255,127,0},
-          textString="nexDisChi"),
-        Text(
-          extent={{-98,-82},{-52,-96}},
-          lineColor={255,0,255},
-          textString="uStaDow"),
-        Text(
-          extent={{-102,-64},{-60,-76}},
-          lineColor={255,0,255},
-          textString="uOnOff"),
-        Text(
-          extent={{-98,-32},{-52,-46}},
-          lineColor={255,0,255},
-          textString="uSubCha"),
-        Text(
-          extent={{-98,98},{-58,84}},
-          lineColor={255,0,255},
-          textString="uStaUp"),
-        Text(
-          extent={{-98,78},{-38,64}},
-          lineColor={255,0,255},
-          textString="uUpsDevSta"),
-        Text(
-          extent={{-98,48},{-70,34}},
-          lineColor={255,0,255},
-          textString="uChi"),
-        Text(
-          extent={{44,6},{98,-6}},
-          lineColor={0,0,127},
-          pattern=LinePattern.Dash,
-          textString="yChiWatMinFloSet")}),
+          textString="minFloSet[3]")}),
   Diagram(coordinateSystem(preserveAspectRatio=false,
-          extent={{-440,-440},{440,440}}), graphics={
-        Rectangle(
-          extent={{-378,378},{-2,-78}},
-          lineColor={0,0,0},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          pattern=LinePattern.None),
-        Rectangle(
-          extent={{-378,-102},{-2,-258}},
-          lineColor={0,0,0},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          pattern=LinePattern.None),
-        Text(
-          extent={{-112,394},{-6,378}},
-          lineColor={0,0,127},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          horizontalAlignment=TextAlignment.Right,
-          textString="Plant with parallel boilers"),
-        Text(
-          extent={{-108,-84},{-10,-100}},
-          lineColor={0,0,127},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          horizontalAlignment=TextAlignment.Right,
-          textString="Plant with series boilers"),
-        Text(
-          extent={{-80,114},{-8,98}},
-          lineColor={0,0,127},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          horizontalAlignment=TextAlignment.Right,
-          textString="Minimum flow setpoint when"),
-        Text(
-          extent={{-72,102},{-8,88}},
-          lineColor={0,0,127},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          horizontalAlignment=TextAlignment.Right,
-          textString="enabling additional boiler"),
-        Text(
-          extent={{-60,2},{-8,-12}},
-          lineColor={0,0,127},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          horizontalAlignment=TextAlignment.Right,
-          textString="disabling one boiler"),
-        Text(
-          extent={{-80,14},{-8,-2}},
-          lineColor={0,0,127},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          horizontalAlignment=TextAlignment.Right,
-          textString="Minimum flow setpoint when"),
-        Text(
-          extent={{-74,-160},{-10,-174}},
-          lineColor={0,0,127},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          horizontalAlignment=TextAlignment.Right,
-          textString="enabling additional boiler"),
-        Text(
-          extent={{-62,-242},{-10,-256}},
-          lineColor={0,0,127},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          horizontalAlignment=TextAlignment.Right,
-          textString="disabling one boiler"),
-        Text(
-          extent={{-112,372},{-10,356}},
-          lineColor={0,0,127},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          horizontalAlignment=TextAlignment.Right,
-          textString="Minimum flow setpoint according to"),
-        Text(
-          extent={{-74,360},{-10,346}},
-          lineColor={0,0,127},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          horizontalAlignment=TextAlignment.Right,
-          textString="current boilers status"),
-        Text(
-          extent={{-110,302},{-8,286}},
-          lineColor={0,0,127},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          horizontalAlignment=TextAlignment.Right,
-          textString="Minimum flow setpoint according to"),
-        Text(
-          extent={{-90,290},{-10,276}},
-          lineColor={0,0,127},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          horizontalAlignment=TextAlignment.Right,
-          textString="boilers status at the moment"),
-        Text(
-          extent={{-88,280},{-10,266}},
-          lineColor={0,0,127},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          horizontalAlignment=TextAlignment.Right,
-          textString="when  requiring stage change"),
-        Text(
-          extent={{-74,-102},{-10,-116}},
-          lineColor={0,0,127},
-          fillColor={215,215,215},
-          fillPattern=FillPattern.Solid,
-          horizontalAlignment=TextAlignment.Right,
-          textString="current boilers status")}),
+          extent={{-140,-340},{320,140}})),
   Documentation(info="<html>
 <p>
-Block that outputs hot water minimum flow setpoint for primary-only
-plants with a minimum flow bypass valve,
-according to ASHRAE RP-1711 Advanced Sequences of Operation for HVAC Systems Phase II –
-Central Plants and Hydronic Systems (Draft 4 on March 26, 2019),
-section 5.2.8 Hot water minimum flow bypass valve.
+Block that outputs hot water minimum flow setpoint for primary-only plants with
+a minimum flow bypass valve, according to ASHRAE RP-1711, March, 2020 draft,
+sections 5.3.8.1 and 5.3.8.2.
 </p>
-<p>
-1. For plants with parallel boilers, bypass valve shall modulate to maintain minimum
-flow as measured by the hot water flow meter at a setpoint that ensures minimum
-flow through all operating boilers, as follows:
-</p>
+<ol>
+<li>
+For plants with parallel boilers, bypass valve shall modulate to maintain minimum
+flow as measured by the hot water flow meter at a setpoint <code>VHotWatMinSet_flow</code>
+that ensures minimum flow through all operating boilers, as follows:
 <ul>
 <li>
 For the operating boilers in current stage, identify the boiler with the
-highest ratio of <code>minFloSet</code> to <code>maxFloSet</code>.
+highest ratio of design minimum flowrate <code>minFloSet</code> to design maximum
+flowrate <code>maxFloSet</code>.
 </li>
 <li>
-Calculate the minimum flow setpoint as the highest ratio multiplied by the sum
+Calculate <code>VHotWatMinSet_flow</code> as the highest ratio multiplied by the sum
 of <code>maxFloSet</code> for the operating boilers.
 </li>
 </ul>
@@ -1093,28 +651,22 @@ of <code>maxFloSet</code> for the operating boilers.
 </tr>
 </table>
 <br/>
-
-<p>
-2. For plants with series boilers, bypass valve shall modulate to maintain minimum
-flow as measured by the hot water flow meter at a setpoint equal to the largest
-<code>minFloSet</code> of the operating boilers in current stage.
-</p>
-<p>
-3. If there is any stage change requiring a boiler on and another boiler off,
-the minimum flow setpoint shall temporarily change to account for the
+</li>
+<li>
+If there is any stage change requiring a boiler on and another boiler off,
+<code>VHotWatMinSet_flow</code> shall temporarily change to account for the
 <code>minFloSet</code> of both the boiler to be enabled and to be disabled
 prior to starting the newly enabled boiler.
-</p>
+</li>
+</ol>
 <p>
-Note that when there is a stage change requiring a change in the
-minimum flow setpoint, the change should be slowly.
-For example, this could be accomplished by resetting the setpoint X GPM/second,
-where <code>X = (NewSetpoint - OldSetpoint) / byPasSetTim</code>.
+Note that when there is a stage change requiring a change in <code>VHotWatMinSet_flow</code>, 
+the change should be slowly made over time <code>bypSetTim</code>.
 </p>
 </html>", revisions="<html>
 <ul>
 <li>
-January 31, 2019, by Jianjun Hu:<br/>
+August 17, 2020, by Jianjun Hu:<br/>
 First implementation.
 </li>
 </ul>

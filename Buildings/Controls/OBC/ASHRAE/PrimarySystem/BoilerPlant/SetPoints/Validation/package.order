@@ -2,3 +2,4 @@ BypassValvePosition
 HotWaterSupplyTemperatureReset
 PumpSpeed
 CondensationControl
+MinimumFlowSetpoint
