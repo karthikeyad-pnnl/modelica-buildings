@@ -104,7 +104,12 @@ model BoilerPlant "Boiler plant model for closed loop testing"
     Q_flow_nominal=Q_flow_nominal,
     fue=Buildings.Fluid.Data.Fuels.HeatingOilLowerHeatingValue()) "Boiler"
     annotation (Placement(transformation(extent={{10,-350},{-10,-330}})));
-  Fluid.Movers.SpeedControlled_y pum
+  Fluid.Movers.SpeedControlled_y pum(
+    redeclare package Medium = Media.Water,
+    allowFlowReversal=false,
+    redeclare Fluid.Movers.Data.Generic per,
+    inputType=Buildings.Fluid.Types.InputType.Continuous,
+    addPowerToMedium=false)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},rotation=90,
         origin={-150,-170})));
   Fluid.FixedResistances.Junction           spl1(
@@ -156,24 +161,30 @@ model BoilerPlant "Boiler plant model for closed loop testing"
     annotation (Placement(transformation(extent={{-60,-350},{-40,-330}})));
   Fluid.Actuators.Valves.TwoWayEqualPercentage val2
     annotation (Placement(transformation(extent={{-60,-290},{-40,-270}})));
-  CDL.Interfaces.BooleanInput uBoiSta[2] "Boiler status signal"
-    annotation (Placement(transformation(extent={{-440,-30},{-400,10}})));
+  CDL.Interfaces.BooleanInput uBoiSta[2] "Boiler status signal" annotation (
+      Placement(transformation(extent={{-440,-30},{-400,10}}),
+        iconTransformation(extent={{-140,30},{-100,70}})));
   CDL.Interfaces.RealInput uHotIsoVal[2] "Hot water isolation valve signal"
-    annotation (Placement(transformation(extent={{-440,-70},{-400,-30}})));
-  CDL.Interfaces.RealInput uPumSpe[2] "Pump speed signal"
-    annotation (Placement(transformation(extent={{-440,-150},{-400,-110}})));
-  CDL.Interfaces.BooleanInput uPumSta[2] "Pump status signal"
-    annotation (Placement(transformation(extent={{-440,-110},{-400,-70}})));
+    annotation (Placement(transformation(extent={{-440,-70},{-400,-30}}),
+        iconTransformation(extent={{-140,0},{-100,40}})));
+  CDL.Interfaces.RealInput uPumSpe[2] "Pump speed signal" annotation (Placement(
+        transformation(extent={{-440,-150},{-400,-110}}), iconTransformation(
+          extent={{-140,-70},{-100,-30}})));
+  CDL.Interfaces.BooleanInput uPumSta[2] "Pump status signal" annotation (
+      Placement(transformation(extent={{-440,-110},{-400,-70}}),
+        iconTransformation(extent={{-140,-40},{-100,0}})));
   CDL.Conversions.BooleanToReal booToRea[2] "Boolean to Real conversion"
     annotation (Placement(transformation(extent={{-380,-100},{-360,-80}})));
   CDL.Continuous.Product pro[2] "Element-wise product"
     annotation (Placement(transformation(extent={{-320,-120},{-300,-100}})));
-  CDL.Interfaces.RealInput uBypValSig "Bypass valve signal"
-    annotation (Placement(transformation(extent={{-440,-190},{-400,-150}})));
+  CDL.Interfaces.RealInput uBypValSig "Bypass valve signal" annotation (
+      Placement(transformation(extent={{-440,-190},{-400,-150}}),
+        iconTransformation(extent={{-140,-100},{-100,-60}})));
   CDL.Conversions.BooleanToReal booToRea1[2] "Boolean to Real conversion"
     annotation (Placement(transformation(extent={{-380,-20},{-360,0}})));
   CDL.Interfaces.RealInput QRooInt_flowrate "Room internal load flowrate"
-    annotation (Placement(transformation(extent={{-440,60},{-400,100}})));
+    annotation (Placement(transformation(extent={{-440,60},{-400,100}}),
+        iconTransformation(extent={{-140,60},{-100,100}})));
 equation
   connect(theCon.port_b, vol.heatPort) annotation (Line(
       points={{40,50},{50,50},{50,30},{60,30}},
