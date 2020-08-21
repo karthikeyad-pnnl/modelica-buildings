@@ -36,7 +36,7 @@ model MinimumFlowSetpoint
     "Hold pulse signal for visualization and to generate end of stage change signal"
     annotation (Placement(transformation(extent={{0,-90},{20,-70}})));
 
-protected
+//protected
   Buildings.Controls.OBC.CDL.Continuous.Sources.Ramp ram(
     final height=3,
     final duration=12,
