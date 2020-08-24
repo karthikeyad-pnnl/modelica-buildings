@@ -1,6 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps;
-package PrimaryPumps "Sequences for primary hot water pump control"
-
+package SecondaryPumps "Sequences for secondary hot water pump control"
 
 annotation (
 preferredView="info", Documentation(info="<html>
@@ -30,4 +29,4 @@ in ASHRAE RP-1711 (Draft 6 on July 25, 2019).
         lineColor={0,0,0},
         fillColor={255,0,0},
         fillPattern=FillPattern.Solid)}));
-end PrimaryPumps;
+end SecondaryPumps;

@@ -33,7 +33,7 @@ model BoilerPlantValidation "Validation for boiler plant model"
   parameter Modelica.SIunits.Volume V=6*10*3 "Room volume";
   parameter Modelica.SIunits.MassFlowRate mA_flow_nominal = V*1.2*6/3600
     "Nominal mass flow rate";
-  parameter Modelica.SIunits.HeatFlowRate QRooInt_flow = 4000
+  parameter Modelica.SIunits.HeatFlowRate QRooInt_flow = 40000
     "Internal heat gains of the room";
 
 //----------------------------------------------------------------------------//
@@ -66,15 +66,29 @@ model BoilerPlantValidation "Validation for boiler plant model"
   CDL.Continuous.Sources.TimeTable                        timTab(
     extrapolation=Buildings.Controls.OBC.CDL.Types.Extrapolation.Periodic,
     smoothness=Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments,
-    table=[-6,0; 8,QRooInt_flow; 18,0],
+    table=[-6,0; 8,-QRooInt_flow; 18,0],
     timeScale=3600)   "Time table for internal heat gain"
     annotation (Placement(transformation(extent={{-360,70},{-340,90}})));
   CDL.Logical.Sources.Constant con[2](k=fill(true, 2))
     annotation (Placement(transformation(extent={{-390,50},{-370,70}})));
+  CDL.Continuous.Sources.Constant con1[2](k=fill(1, 2))
+    annotation (Placement(transformation(extent={{-390,20},{-370,40}})));
+  CDL.Continuous.Sources.Constant con2(k=0)
+    annotation (Placement(transformation(extent={{-350,20},{-330,40}})));
 equation
 
   connect(timTab.y[1], boilerPlant.QRooInt_flowrate) annotation (Line(points={{
           -338,80},{-320,80},{-320,68},{-302,68}}, color={0,0,127}));
+  connect(con.y, boilerPlant.uBoiSta) annotation (Line(points={{-368,60},{-320,60},
+          {-320,65},{-302,65}}, color={255,0,255}));
+  connect(con1.y, boilerPlant.uHotIsoVal) annotation (Line(points={{-368,30},{-360,
+          30},{-360,56},{-314,56},{-314,62},{-302,62}}, color={0,0,127}));
+  connect(con.y, boilerPlant.uPumSta) annotation (Line(points={{-368,60},{-320,60},
+          {-320,58},{-302,58}}, color={255,0,255}));
+  connect(con1.y, boilerPlant.uPumSpe) annotation (Line(points={{-368,30},{-360,
+          30},{-360,55},{-302,55}}, color={0,0,127}));
+  connect(con2.y, boilerPlant.uBypValSig) annotation (Line(points={{-328,30},{-316,
+          30},{-316,52},{-302,52}}, color={0,0,127}));
   annotation (Documentation(info="<html>
 <p>
 This part of the system model adds to the model that is implemented in

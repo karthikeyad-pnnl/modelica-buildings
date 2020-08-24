@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps;
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps;
 block Controller
     "Sequences to control hot water pumps in boiler plants"
 
@@ -7,25 +7,21 @@ block Controller
     annotation (Dialog(group="Plant parameters"));
 
   parameter Boolean primaryOnly = false
-    "True: Plant is primary-only;
- False: Plant is primary-secondary"
+    "True: Plant is primary-only; False: Plant is primary-secondary"
     annotation (Dialog(group="Plant parameters"));
 
   parameter Boolean variablePrimary = false
-    "True: Variable-speed primary pumps;
- False: Fixed-speed primary pumps"
+    "True: Variable-speed primary pumps; False: Fixed-speed primary pumps"
     annotation (Dialog(group="Plant parameters"));
 
   parameter Boolean primarySecondaryFlowSensors=true
-    "True: Flowrate sensors in primary and secondary loops;
- False: Flowrate sensor in decoupler"
+    "True: Flowrate sensors in primary and secondary loops; False: Flowrate sensor in decoupler"
     annotation (Dialog(tab="Pump control parameters",
       group="Flowrate-based speed regulation",
       enable= speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.flowrate));
 
   parameter Boolean primarySecondaryTemperatureSensors=true
-    "True: Temperature sensors in primary and secondary loops;
- False: Temperature sensors in boiler supply and secondary loop"
+    "True: Temperature sensors in primary and secondary loops; False: Temperature sensors in boiler supply and secondary loop"
     annotation (Dialog(tab="Pump control parameters",
       group="Temperature-based speed regulation",
       enable= speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
@@ -273,15 +269,10 @@ block Controller
     annotation (Placement(transformation(extent={{-320,-270},{-280,-230}}),
       iconTransformation(extent={{-140,10},{-100,50}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uNexEnaBoi if not isHeadered
-    "Index of next enabled boiler"
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uNexEnaBoi if
+       not isHeadered "Index of next enabled boiler"
     annotation (Placement(transformation(extent={{-320,-320},{-280,-280}}),
       iconTransformation(extent={{-140,-20},{-100,20}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uLasDisBoi if not isHeadered
-    "Index of last disabled boiler"
-    annotation (Placement(transformation(extent={{-320,-360},{-280,-320}}),
-      iconTransformation(extent={{-140,-50},{-100,-10}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uPumLeaLag[nPum] if isHeadered
     "Hot water pump lead-lag order"
@@ -401,19 +392,7 @@ block Controller
     annotation (Placement(transformation(extent={{280,-506},{320,-466}}),
       iconTransformation(extent={{100,-160},{140,-120}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.EnableLag_headered
-    enaLagHotPum(
-    final nPum=nPum,
-    final nPum_nominal=nPum_nominal,
-    final timPer=timPer,
-    final staCon=staCon,
-    final relFloHys=relFloHys,
-    final VHotWat_flow_nominal=VHotWat_flow_nominal) if primaryOnly and
-    isHeadered
-    "Enable lag pump for primary-only plants using differential pressure pump speed control"
-    annotation (Placement(transformation(extent={{-200,-10},{-180,10}})));
-
-protected
+//protected
   parameter Boolean remoteDPRegulated = (speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP)
     "Boolean flag for pump speed control with remote differential pressure";
 
@@ -433,19 +412,29 @@ protected
     "Pass higher value"
     annotation (Placement(transformation(extent={{134,-496},{154,-476}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.EnableLead_dedicated
-    enaDedLeaPum(
-    final offTimThr=offTimThr) if not isHeadered
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.EnableLead_dedicated
+    enaDedLeaPum(final offTimThr=offTimThr) if not isHeadered
     "Enable lead pump of dedicated pumps"
     annotation (Placement(transformation(extent={{-200,100},{-180,120}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.EnableLead_headered
-    enaHeaLeaPum(
-    final nBoi=nBoi) if isHeadered
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.EnableLead_headered
+    enaHeaLeaPum(final nBoi=nBoi) if isHeadered
     "Enable lead pump of headered pumps"
     annotation (Placement(transformation(extent={{-200,60},{-180,80}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.Speed_primary_localDp
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.EnableLag_headered
+    enaLagHotPum(
+    final nPum=nPum,
+    final nPum_nominal=nPum_nominal,
+    final timPer=timPer,
+    final staCon=staCon,
+    final relFloHys=relFloHys,
+    final VHotWat_flow_nominal=VHotWat_flow_nominal) if primaryOnly and
+    isHeadered
+    "Enable lag pump for primary-only plants using differential pressure pump speed control"
+    annotation (Placement(transformation(extent={{-200,-10},{-180,10}})));
+
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Speed_primary_localDp
     pumSpeLocDp(
     final nSen=nSen,
     final nPum=nPum,
@@ -459,7 +448,7 @@ protected
     "Hot water pump speed control with local DP sensor"
     annotation (Placement(transformation(extent={{-60,-430},{-40,-410}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.Speed_primary_remoteDp
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Speed_primary_remoteDp
     pumSpeRemDp(
     final nSen=nSen,
     final nPum=nPum,
@@ -471,7 +460,8 @@ protected
     "Hot water pump speed control with remote DP sensor"
     annotation (Placement(transformation(extent={{-60,-470},{-40,-450}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.Speed_primarySecondary_flow pumSpeFlo(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Speed_primarySecondary_flow
+    pumSpeFlo(
     final primarySecondarySensors=primarySecondaryFlowSensors,
     final nPum=nPum,
     final minPumSpe=minPumSpe,
@@ -484,7 +474,7 @@ protected
     "Pump speed control using flow sensors"
     annotation (Placement(transformation(extent={{-60,-514},{-40,-494}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.Speed_primarySecondary_temperature
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Speed_primarySecondary_temperature
     pumSpeTem(
     final primarySecondarySensors=primarySecondaryTemperatureSensors,
     final nBoi=nBoi,
@@ -502,8 +492,7 @@ protected
     final twoReqLimHig=twoReqLimHig,
     final oneReqLimLow=oneReqLimLow,
     final oneReqLimHig=oneReqLimHig) if not primaryOnly and variablePrimary
-     and temperatureRegulated
-    "Pump speed control using temperature sensors"
+     and temperatureRegulated "Pump speed control using temperature sensors"
     annotation (Placement(transformation(extent={{-60,-548},{-40,-528}})));
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea[nBoi] if not
@@ -512,13 +501,11 @@ protected
     annotation (Placement(transformation(extent={{-252,-80},{-232,-60}})));
 
   Buildings.Controls.OBC.CDL.Routing.RealExtractor extIndSig(
-    final nin=nBoi) if not isHeadered
-    "Identify status of lead boiler"
+    final nin=nBoi) if not isHeadered "Identify status of lead boiler"
     annotation (Placement(transformation(extent={{-222,-80},{-202,-60}})));
 
   Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr(
-    final threshold=1) if not isHeadered
-    "Check if lead boiler is turned on"
+    final threshold=1) if not isHeadered "Check if lead boiler is turned on"
     annotation (Placement(transformation(extent={{-192,-80},{-172,-60}})));
 
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(
@@ -643,51 +630,41 @@ protected
     annotation (Placement(transformation(extent={{0,-250},{20,-230}})));
 
   Buildings.Controls.OBC.CDL.Logical.Not not1 if isHeadered and (not
-    primaryOnly)
-    "Logical not"
+    primaryOnly)                                            "Logical not"
     annotation (Placement(transformation(extent={{50,-250},{70,-230}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre2 if not primaryOnly
+  CDL.Logical.Pre                        pre2 if not primaryOnly
     "Logical pre block"
     annotation (Placement(transformation(extent={{240,60},{260,80}})));
-
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.ChangePumpStatus chaPumSta(
-    final nPum=nPum) if not isHeadered
+  Subsequences.ChangePumpStatus chaPumSta(nPum=nPum) if not isHeadered
     "Change lead pump status for dedicated primary pumps"
     annotation (Placement(transformation(extent={{58,100},{80,120}})));
-
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.ChangePumpStatus chaPumSta1(
-    final nPum=nPum) if isHeadered
+  Subsequences.ChangePumpStatus chaPumSta1(nPum=nPum) if isHeadered
     "Change lead pump status for headered primary pumps"
     annotation (Placement(transformation(extent={{58,66},{80,86}})));
-
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.ChangePumpStatus chaPumSta2(
-    final nPum=nPum) if primaryOnly and isHeadered
+  Subsequences.ChangePumpStatus chaPumSta2(nPum=nPum) if primaryOnly and
+    isHeadered
     "Change lag pump status for headered primary pumps in a plant that is primary-only"
     annotation (Placement(transformation(extent={{60,-44},{82,-24}})));
-
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.ChangePumpStatus chaPumSta3(
-    final nPum=nPum) if isHeadered and (not primaryOnly)
+  Subsequences.ChangePumpStatus chaPumSta3(nPum=nPum) if isHeadered and (not
+    primaryOnly)
     "Change lag pump status for headered primary pumps in a plant that is not primary-only"
     annotation (Placement(transformation(extent={{60,-182},{82,-162}})));
-
-  Buildings.Controls.OBC.CDL.Logical.And and1 if not isHeadered
+  CDL.Interfaces.IntegerInput uLasDisBoi if
+       not isHeadered "Index of last disabled boiler" annotation (Placement(
+        transformation(extent={{-320,-360},{-280,-320}}), iconTransformation(
+          extent={{-140,-50},{-100,-10}})));
+  CDL.Logical.And                        and1 if not isHeadered
     "Lag pump enable"
     annotation (Placement(transformation(extent={{-148,-294},{-128,-274}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Not not2 if not isHeadered
-    "Logical not"
+  CDL.Logical.Not                        not2 if not isHeadered
+                                                            "Logical not"
     annotation (Placement(transformation(extent={{-148,-330},{-128,-310}})));
-
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.ChangePumpStatus chaPumSta4(
-    final nPum=nPum) if not isHeadered
+  Subsequences.ChangePumpStatus chaPumSta4(nPum=nPum) if not isHeadered
     "Change lag pump status for dedicated primary pumps"
     annotation (Placement(transformation(extent={{62,-314},{84,-294}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Or or2 if not isHeadered
-    "Lag pump disable"
+  CDL.Logical.Or or2 if not isHeadered "Lag pump disable"
     annotation (Placement(transformation(extent={{-110,-312},{-90,-292}})));
-
 equation
   connect(enaDedLeaPum.uPlaEna, uPlaEna) annotation (Line(points={{-202,115},{-240,
           115},{-240,110},{-300,110}}, color={255,0,255}));
@@ -878,163 +855,114 @@ equation
 
   connect(mulOr.y, pre2.u)
     annotation (Line(points={{232,70},{238,70}}, color={255,0,255}));
-
   connect(pre2.y, yPumChaPro)
     annotation (Line(points={{262,70},{300,70}}, color={255,0,255}));
-
   connect(max.y, reaRep.u)
     annotation (Line(points={{156,-486},{194,-486}}, color={0,0,127}));
-
   connect(pumSpeRemDp.yHotWatPumSpe, max.u2) annotation (Line(points={{-38,-460},
           {96,-460},{96,-492},{132,-492}}, color={0,0,127}));
-
   connect(pumSpeLocDp.yHotWatPumSpe, max.u2) annotation (Line(points={{-38,-420},
           {96,-420},{96,-492},{132,-492}}, color={0,0,127}));
-
   connect(pumSpeFlo.yHotWatPumSpe, max.u2) annotation (Line(points={{-38,-504},{
           96,-504},{96,-492},{132,-492}}, color={0,0,127}));
-
   connect(pumSpeTem.yHotWatPumSpe, max.u2) annotation (Line(points={{-38,-538},{
           96,-538},{96,-492},{132,-492}}, color={0,0,127}));
-
   connect(uMinPriPumSpeCon, max.u1)
     annotation (Line(points={{-300,-480},{132,-480}}, color={0,0,127}));
-
   connect(enaDedLeaPum.yLea, chaPumSta.uNexLagPumSta) annotation (Line(points={
           {-178,110},{22,110},{22,118},{56,118}}, color={255,0,255}));
-
   connect(enaDedLeaPum.yLea, chaPumSta.uLasLagPumSta) annotation (Line(points={
           {-178,110},{22,110},{22,115},{56,115}}, color={255,0,255}));
-
   connect(conInt.y, chaPumSta.uNexLagPum) annotation (Line(points={{-252,200},{
           -12,200},{-12,106},{56,106}}, color={255,127,0}));
-
   connect(conInt.y, chaPumSta.uLasLagPum) annotation (Line(points={{-252,200},{
           -12,200},{-12,102},{56,102}}, color={255,127,0}));
-
   connect(reaToInt.y, chaPumSta1.uNexLagPum) annotation (Line(points={{-18,230},
           {46,230},{46,72},{56,72}}, color={255,127,0}));
-
   connect(reaToInt.y, chaPumSta1.uLasLagPum) annotation (Line(points={{-18,230},
           {46,230},{46,68},{56,68}}, color={255,127,0}));
-
   connect(enaHeaLeaPum.yLea, chaPumSta1.uNexLagPumSta) annotation (Line(points=
           {{-178,70},{36,70},{36,84},{56,84}}, color={255,0,255}));
-
   connect(enaHeaLeaPum.yLea, chaPumSta1.uLasLagPumSta) annotation (Line(points=
           {{-178,70},{36,70},{36,81},{56,81}}, color={255,0,255}));
-
   connect(uHotWatPum, chaPumSta.uHotWatPum) annotation (Line(points={{-300,140},
           {26,140},{26,110},{56,110}}, color={255,0,255}));
-
   connect(uHotWatPum, chaPumSta1.uHotWatPum) annotation (Line(points={{-300,140},
           {26,140},{26,76},{56,76}}, color={255,0,255}));
-
   connect(reaToInt1.y, chaPumSta2.uNexLagPum) annotation (Line(points={{-18,-50},
           {30,-50},{30,-38},{58,-38}}, color={255,127,0}));
-
   connect(reaToInt2.y, chaPumSta2.uLasLagPum) annotation (Line(points={{-18,
           -100},{34,-100},{34,-42},{58,-42}}, color={255,127,0}));
-
   connect(enaLagHotPum.yUp, chaPumSta2.uNexLagPumSta) annotation (Line(points={
           {-178,4},{-24,4},{-24,-26},{58,-26}}, color={255,0,255}));
-
   connect(enaLagHotPum.yDown, chaPumSta2.uLasLagPumSta) annotation (Line(points=
          {{-178,-4},{-28,-4},{-28,-29},{58,-29}}, color={255,0,255}));
-
   connect(and4.y, chaPumSta3.uNexLagPumSta) annotation (Line(points={{22,-190},
           {50,-190},{50,-164},{58,-164}}, color={255,0,255}));
-
   connect(not1.y, chaPumSta3.uLasLagPumSta) annotation (Line(points={{72,-240},
           {76,-240},{76,-212},{54,-212},{54,-167},{58,-167}}, color={255,0,255}));
-
   connect(reaToInt1.y, chaPumSta3.uNexLagPum) annotation (Line(points={{-18,-50},
           {30,-50},{30,-176},{58,-176}}, color={255,127,0}));
-
   connect(reaToInt2.y, chaPumSta3.uLasLagPum) annotation (Line(points={{-18,
           -100},{34,-100},{34,-180},{58,-180}}, color={255,127,0}));
-
   connect(pre2.y, lat.clr) annotation (Line(points={{262,70},{274,70},{274,-204},
           {-206,-204},{-206,-196},{-202,-196}}, color={255,0,255}));
-
   connect(lat.y, and1.u1) annotation (Line(points={{-178,-190},{-170,-190},{
           -170,-284},{-150,-284}}, color={255,0,255}));
-
   connect(uPumChaPro, and1.u2) annotation (Line(points={{-300,-250},{-276,-250},
           {-276,-264},{-184,-264},{-184,-292},{-150,-292}}, color={255,0,255}));
-
   connect(and1.y, chaPumSta4.uNexLagPumSta) annotation (Line(points={{-126,-284},
           {48,-284},{48,-296},{60,-296}}, color={255,0,255}));
-
   connect(uPumChaPro, not2.u) annotation (Line(points={{-300,-250},{-276,-250},
           {-276,-264},{-184,-264},{-184,-320},{-150,-320}}, color={255,0,255}));
-
   connect(lat.y, or2.u1) annotation (Line(points={{-178,-190},{-170,-190},{-170,
           -302},{-112,-302}}, color={255,0,255}));
-
   connect(not2.y, or2.u2) annotation (Line(points={{-126,-320},{-118,-320},{
           -118,-310},{-112,-310}}, color={255,0,255}));
-
   connect(or2.y, chaPumSta4.uLasLagPumSta) annotation (Line(points={{-88,-302},
           {48,-302},{48,-299},{60,-299}}, color={255,0,255}));
-
   connect(uNexEnaBoi, chaPumSta4.uNexLagPum) annotation (Line(points={{-300,
           -300},{-188,-300},{-188,-334},{26,-334},{26,-308},{60,-308}}, color={
           255,127,0}));
-
   connect(uLasDisBoi, chaPumSta4.uLasLagPum) annotation (Line(points={{-300,
           -340},{32,-340},{32,-312},{60,-312}}, color={255,127,0}));
-
   connect(chaPumSta.yHotWatPum, chaPumSta4.uHotWatPum) annotation (Line(points=
           {{80,110},{104,110},{104,-266},{52,-266},{52,-304},{60,-304}}, color=
           {255,0,255}));
-
   connect(chaPumSta1.yHotWatPum, chaPumSta2.uHotWatPum) annotation (Line(points=
          {{80,76},{100,76},{100,-16},{46,-16},{46,-34},{58,-34}}, color={255,0,
           255}));
   connect(chaPumSta1.yHotWatPum, chaPumSta3.uHotWatPum) annotation (Line(points=
          {{80,76},{100,76},{100,-154},{44,-154},{44,-172},{58,-172}}, color={
           255,0,255}));
-
   connect(chaPumSta2.yHotWatPum, yHotWatPum) annotation (Line(points={{82,-34},
           {262,-34},{262,0},{300,0}}, color={255,0,255}));
-
   connect(chaPumSta3.yHotWatPum, yHotWatPum) annotation (Line(points={{82,-172},
           {254,-172},{254,0},{300,0}}, color={255,0,255}));
-
   connect(chaPumSta4.yHotWatPum, yHotWatPum) annotation (Line(points={{84,-304},
           {244,-304},{244,0},{300,0}}, color={255,0,255}));
-
   connect(chaPumSta3.yHotWatPum, cha.u) annotation (Line(points={{82,-172},{254,
           -172},{254,36},{168,36},{168,70},{178,70}}, color={255,0,255}));
-
   connect(chaPumSta4.yHotWatPum, cha.u) annotation (Line(points={{84,-304},{244,
           -304},{244,28},{156,28},{156,70},{178,70}}, color={255,0,255}));
-
   connect(chaPumSta2.yHotWatPum, pumSpeLocDp.uHotWatPum) annotation (Line(
         points={{82,-34},{262,-34},{262,-360},{-74,-360},{-74,-416},{-62,-416}},
         color={255,0,255}));
-
   connect(chaPumSta2.yHotWatPum, pumSpeRemDp.uHotWatPum) annotation (Line(
         points={{82,-34},{262,-34},{262,-360},{-74,-360},{-74,-452},{-62,-452}},
         color={255,0,255}));
-
   connect(chaPumSta3.yHotWatPum, pumSpeFlo.uHotWatPum) annotation (Line(points=
           {{82,-172},{254,-172},{254,-368},{-82,-368},{-82,-499},{-62,-499}},
         color={255,0,255}));
-
   connect(chaPumSta3.yHotWatPum, pumSpeTem.uHotWatPum) annotation (Line(points=
           {{82,-172},{254,-172},{254,-368},{-82,-368},{-82,-530},{-62,-530}},
         color={255,0,255}));
-
   connect(chaPumSta4.yHotWatPum, pumSpeFlo.uHotWatPum) annotation (Line(points=
           {{84,-304},{244,-304},{244,-378},{-90,-378},{-90,-499},{-62,-499}},
         color={255,0,255}));
-
   connect(chaPumSta4.yHotWatPum, pumSpeTem.uHotWatPum) annotation (Line(points=
           {{84,-304},{244,-304},{244,-378},{-90,-378},{-90,-530},{-62,-530}},
         color={255,0,255}));
-
     annotation (defaultComponentName="priPumCon",
   Diagram(coordinateSystem(preserveAspectRatio=false,
           extent={{-280,-660},{280,260}}), graphics={

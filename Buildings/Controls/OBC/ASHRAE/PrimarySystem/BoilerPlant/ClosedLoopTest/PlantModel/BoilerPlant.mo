@@ -70,6 +70,7 @@ model BoilerPlant "Boiler plant model for closed loop testing"
     m_flow_nominal=mBoi_flow_nominal,
     dp_nominal=2000,
     Q_flow_nominal=Q_flow_nominal,
+    T_nominal=TBoiSup_nominal,
     fue=Buildings.Fluid.Data.Fuels.HeatingOilLowerHeatingValue()) "Boiler"
     annotation (Placement(transformation(extent={{10,-290},{-10,-270}})));
 //----------------------------------------------------------------------------//
@@ -102,12 +103,13 @@ model BoilerPlant "Boiler plant model for closed loop testing"
     m_flow_nominal=mBoi_flow_nominal,
     dp_nominal=2000,
     Q_flow_nominal=Q_flow_nominal,
+    T_nominal=TBoiSup_nominal,
     fue=Buildings.Fluid.Data.Fuels.HeatingOilLowerHeatingValue()) "Boiler"
     annotation (Placement(transformation(extent={{10,-350},{-10,-330}})));
   Fluid.Movers.SpeedControlled_y pum(
     redeclare package Medium = Media.Water,
     allowFlowReversal=false,
-    redeclare Fluid.Movers.Data.Generic per,
+    redeclare Fluid.Movers.Data.Pumps.Wilo.CronolineIL80slash220dash4slash4 per,
     inputType=Buildings.Fluid.Types.InputType.Continuous,
     addPowerToMedium=false)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},rotation=90,
@@ -120,7 +122,9 @@ model BoilerPlant "Boiler plant model for closed loop testing"
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-110,-280})));
-  Fluid.Movers.SpeedControlled_y pum1
+  Fluid.Movers.SpeedControlled_y pum1(redeclare package Medium = Media.Water,
+      redeclare Fluid.Movers.Data.Pumps.Wilo.CronolineIL80slash220dash4slash4
+      per)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},rotation=90,
         origin={-70,-170})));
   Fluid.FixedResistances.Junction           spl2(
@@ -147,7 +151,10 @@ model BoilerPlant "Boiler plant model for closed loop testing"
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-110,-70})));
-  Fluid.Actuators.Valves.TwoWayEqualPercentage val
+  Fluid.Actuators.Valves.TwoWayEqualPercentage val(
+    redeclare package Medium = Media.Water,
+    m_flow_nominal=0.1,
+    dpValve_nominal=0.1)
     annotation (Placement(transformation(extent={{-10,-80},{10,-60}})));
   Fluid.FixedResistances.Junction           spl5(
     redeclare package Medium = MediumW,
@@ -157,9 +164,15 @@ model BoilerPlant "Boiler plant model for closed loop testing"
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={110,-70})));
-  Fluid.Actuators.Valves.TwoWayEqualPercentage val1
+  Fluid.Actuators.Valves.TwoWayEqualPercentage val1(
+    redeclare package Medium = Media.Water,
+    m_flow_nominal=0.1,
+    dpValve_nominal=0.1)
     annotation (Placement(transformation(extent={{-60,-350},{-40,-330}})));
-  Fluid.Actuators.Valves.TwoWayEqualPercentage val2
+  Fluid.Actuators.Valves.TwoWayEqualPercentage val2(
+    redeclare package Medium = Media.Water,
+    m_flow_nominal=0.1,
+    dpValve_nominal=0.1)
     annotation (Placement(transformation(extent={{-60,-290},{-40,-270}})));
   CDL.Interfaces.BooleanInput uBoiSta[2] "Boiler status signal" annotation (
       Placement(transformation(extent={{-440,-30},{-400,10}}),
@@ -185,6 +198,13 @@ model BoilerPlant "Boiler plant model for closed loop testing"
   CDL.Interfaces.RealInput QRooInt_flowrate "Room internal load flowrate"
     annotation (Placement(transformation(extent={{-440,60},{-400,100}}),
         iconTransformation(extent={{-140,60},{-100,100}})));
+  Fluid.Sensors.RelativePressure senRelPre(redeclare package Medium =
+        Media.Water)
+    annotation (Placement(transformation(extent={{16,-50},{36,-30}})));
+  Fluid.Sensors.Temperature senTem(redeclare package Medium = Media.Water)
+    annotation (Placement(transformation(extent={{-140,0},{-120,20}})));
+  Fluid.Sensors.Temperature senTem1(redeclare package Medium = Media.Water)
+    annotation (Placement(transformation(extent={{106,8},{126,28}})));
 equation
   connect(theCon.port_b, vol.heatPort) annotation (Line(
       points={{40,50},{50,50},{50,30},{60,30}},
@@ -270,6 +290,14 @@ equation
           {-240,-250},{30,-250},{30,-272},{12,-272}}, color={0,0,127}));
   connect(QRooInt_flowrate, preHea.Q_flow)
     annotation (Line(points={{-420,80},{20,80}}, color={0,0,127}));
+  connect(spl4.port_2, senRelPre.port_a) annotation (Line(points={{-110,-60},{
+          -110,-40},{16,-40}}, color={0,127,255}));
+  connect(senRelPre.port_b, spl5.port_1) annotation (Line(points={{36,-40},{110,
+          -40},{110,-60}}, color={0,127,255}));
+  connect(senTem.port, spl4.port_2) annotation (Line(points={{-130,0},{-110,0},
+          {-110,-60}}, color={0,127,255}));
+  connect(senTem1.port, spl5.port_1)
+    annotation (Line(points={{116,8},{110,8},{110,-60}}, color={0,127,255}));
   annotation (Documentation(info="<html>
 <p>
 This part of the system model adds to the model that is implemented in

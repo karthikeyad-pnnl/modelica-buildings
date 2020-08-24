@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences;
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences;
 block Speed_primary_localDp
     "Pump speed control for primary-only plants where the remote DP sensor(s) is not hardwired to the plant controller, but a local DP sensor is hardwired"
 
@@ -102,7 +102,8 @@ block Speed_primary_localDp
     "Local differential pressure setpoint"
     annotation (Placement(transformation(extent={{100,-30},{120,-10}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.Speed_primary_remoteDp hotPumSpe(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Speed_primary_remoteDp
+    hotPumSpe(
     final nSen=1,
     final nPum=nPum,
     final minPumSpe=minPumSpe,

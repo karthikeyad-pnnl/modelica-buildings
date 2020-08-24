@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences;
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences;
 block EnableLag_headered
   "Sequences for enabling and disabling lag pumps for primary-only plants with headered primary pumps"
 
@@ -91,9 +91,8 @@ block EnableLag_headered
     "Count time"
     annotation (Placement(transformation(extent={{0,-90},{20,-70}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Not not3
+  CDL.Logical.Not not3
     annotation (Placement(transformation(extent={{100,-90},{120,-70}})));
-
 protected
   Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
     final p=staCon,
