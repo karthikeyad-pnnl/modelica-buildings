@@ -82,303 +82,303 @@ model Controller
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Controller
     priPumCon3(
-    isHeadered=true,
-    primaryOnly=false,
-    variablePrimary=true,
-    primarySecondaryFlowSensors=false,
-    nPum=2,
-    nBoi=2,
-    nSen=2,
-    nPum_nominal=2,
-    minPumSpe=0.1,
-    maxPumSpe=1,
-    VHotWat_flow_nominal=0.5,
-    boiDesFlo={0.5,0.5},
-    maxLocDp=10,
-    minLocDp=5,
-    offTimThr=180,
-    timPer=600,
-    staCon=-0.03,
-    relFloHys=0.01,
-    k=1,
-    Ti=0.5,
-    Td=0.1,
-    speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.flowrate)
+    final isHeadered=true,
+    final primaryOnly=false,
+    final variablePrimary=true,
+    final primarySecondaryFlowSensors=false,
+    final nPum=2,
+    final nBoi=2,
+    final nSen=2,
+    final nPum_nominal=2,
+    final minPumSpe=0.1,
+    final maxPumSpe=1,
+    final VHotWat_flow_nominal=0.5,
+    final boiDesFlo={0.5,0.5},
+    final maxLocDp=10,
+    final minLocDp=5,
+    final offTimThr=180,
+    final timPer=600,
+    final staCon=-0.03,
+    final relFloHys=0.01,
+    final k=1,
+    final Ti=0.5,
+    final Td=0.1,
+    final speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.flowrate)
     "Testing pump configuration 4"
     annotation (Placement(transformation(extent={{190,202},{210,258}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Controller
     priPumCon4(
-    isHeadered=true,
-    primaryOnly=false,
-    variablePrimary=true,
-    primarySecondaryTemperatureSensors=true,
-    nPum=2,
-    nBoi=2,
-    nSen=2,
-    numIgnReq=0,
-    nPum_nominal=2,
-    minPumSpe=0.1,
-    maxPumSpe=1,
-    VHotWat_flow_nominal=0.5,
-    boiDesFlo={0.5,0.5},
-    maxLocDp=10,
-    minLocDp=5,
-    offTimThr=180,
-    timPer=600,
-    staCon=-0.03,
-    relFloHys=0.01,
-    delTim=900,
-    samPer=120,
-    triAmo=-0.02,
-    resAmo=0.03,
-    maxRes=0.06,
-    twoReqLimLow=1.2,
-    twoReqLimHig=2,
-    oneReqLimLow=0.2,
-    oneReqLimHig=1,
-    k=1,
-    Ti=0.5,
-    Td=0.1,
-    speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature)
+    final isHeadered=true,
+    final primaryOnly=false,
+    final variablePrimary=true,
+    final primarySecondaryTemperatureSensors=true,
+    final nPum=2,
+    final nBoi=2,
+    final nSen=2,
+    final numIgnReq=0,
+    final nPum_nominal=2,
+    final minPumSpe=0.1,
+    final maxPumSpe=1,
+    final VHotWat_flow_nominal=0.5,
+    final boiDesFlo={0.5,0.5},
+    final maxLocDp=10,
+    final minLocDp=5,
+    final offTimThr=180,
+    final timPer=600,
+    final staCon=-0.03,
+    final relFloHys=0.01,
+    final delTim=900,
+    final samPer=120,
+    final triAmo=-0.02,
+    final resAmo=0.03,
+    final maxRes=0.06,
+    final twoReqLimLow=1.2,
+    final twoReqLimHig=2,
+    final oneReqLimLow=0.2,
+    final oneReqLimHig=1,
+    final k=1,
+    final Ti=0.5,
+    final Td=0.1,
+    final speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature)
     "Testing pump configuration 5"
     annotation (Placement(transformation(extent={{-170,62},{-150,118}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Controller
     priPumCon5(
-    isHeadered=true,
-    primaryOnly=false,
-    variablePrimary=true,
-    primarySecondaryTemperatureSensors=false,
-    nPum=2,
-    nBoi=2,
-    nSen=2,
-    numIgnReq=0,
-    nPum_nominal=2,
-    minPumSpe=0.1,
-    maxPumSpe=1,
-    VHotWat_flow_nominal=0.5,
-    boiDesFlo={0.5,0.5},
-    maxLocDp=10,
-    minLocDp=5,
-    offTimThr=180,
-    timPer=600,
-    staCon=-0.03,
-    relFloHys=0.01,
-    delTim=900,
-    samPer=120,
-    triAmo=-0.02,
-    resAmo=0.03,
-    maxRes=0.06,
-    twoReqLimLow=1.2,
-    twoReqLimHig=2,
-    oneReqLimLow=0.2,
-    oneReqLimHig=1,
-    k=1,
-    Ti=0.5,
-    Td=0.1,
-    speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature)
+    final isHeadered=true,
+    final primaryOnly=false,
+    final variablePrimary=true,
+    final primarySecondaryTemperatureSensors=false,
+    final nPum=2,
+    final nBoi=2,
+    final nSen=2,
+    final numIgnReq=0,
+    final nPum_nominal=2,
+    final minPumSpe=0.1,
+    final maxPumSpe=1,
+    final VHotWat_flow_nominal=0.5,
+    final boiDesFlo={0.5,0.5},
+    final maxLocDp=10,
+    final minLocDp=5,
+    final offTimThr=180,
+    final timPer=600,
+    final staCon=-0.03,
+    final relFloHys=0.01,
+    final delTim=900,
+    final samPer=120,
+    final triAmo=-0.02,
+    final resAmo=0.03,
+    final maxRes=0.06,
+    final twoReqLimLow=1.2,
+    final twoReqLimHig=2,
+    final oneReqLimLow=0.2,
+    final oneReqLimHig=1,
+    final k=1,
+    final Ti=0.5,
+    final Td=0.1,
+    final speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature)
     "Testing pump configuration 6"
     annotation (Placement(transformation(extent={{190,42},{210,98}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Controller
     priPumCon6(
-    isHeadered=true,
-    primaryOnly=false,
-    variablePrimary=false,
-    primarySecondaryTemperatureSensors=false,
-    nPum=2,
-    nBoi=2,
-    nSen=2,
-    numIgnReq=0,
-    nPum_nominal=2,
-    minPumSpe=0.1,
-    maxPumSpe=1,
-    VHotWat_flow_nominal=0.5,
-    boiDesFlo={0.5,0.5},
-    maxLocDp=10,
-    minLocDp=5,
-    offTimThr=180,
-    timPer=600,
-    staCon=-0.03,
-    relFloHys=0.01,
-    delTim=900,
-    samPer=120,
-    triAmo=-0.02,
-    resAmo=0.03,
-    maxRes=0.06,
-    twoReqLimLow=1.2,
-    twoReqLimHig=2,
-    oneReqLimLow=0.2,
-    oneReqLimHig=1,
-    k=1,
-    Ti=0.5,
-    Td=0.1,
-    speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature)
+    final isHeadered=true,
+    final primaryOnly=false,
+    final variablePrimary=false,
+    final primarySecondaryTemperatureSensors=false,
+    final nPum=2,
+    final nBoi=2,
+    final nSen=2,
+    final numIgnReq=0,
+    final nPum_nominal=2,
+    final minPumSpe=0.1,
+    final maxPumSpe=1,
+    final VHotWat_flow_nominal=0.5,
+    final boiDesFlo={0.5,0.5},
+    final maxLocDp=10,
+    final minLocDp=5,
+    final offTimThr=180,
+    final timPer=600,
+    final staCon=-0.03,
+    final relFloHys=0.01,
+    final delTim=900,
+    final samPer=120,
+    final triAmo=-0.02,
+    final resAmo=0.03,
+    final maxRes=0.06,
+    final twoReqLimLow=1.2,
+    final twoReqLimHig=2,
+    final oneReqLimLow=0.2,
+    final oneReqLimHig=1,
+    final k=1,
+    final Ti=0.5,
+    final Td=0.1,
+    final speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature)
     "Testing pump configuration 7"
     annotation (Placement(transformation(extent={{-180,-118},{-160,-62}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Controller
     priPumCon7(
-    isHeadered=false,
-    primaryOnly=false,
-    variablePrimary=true,
-    nPum=2,
-    nBoi=2,
-    nSen=2,
-    nPum_nominal=2,
-    minPumSpe=0.1,
-    maxPumSpe=1,
-    VHotWat_flow_nominal=0.5,
-    boiDesFlo={0.5,0.5},
-    maxLocDp=10,
-    minLocDp=5,
-    offTimThr=180,
-    timPer=600,
-    staCon=-0.03,
-    relFloHys=0.01,
-    k=1,
-    Ti=0.5,
-    Td=0.1,
-    speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.flowrate)
+    final isHeadered=false,
+    final primaryOnly=false,
+    final variablePrimary=true,
+    final nPum=2,
+    final nBoi=2,
+    final nSen=2,
+    final nPum_nominal=2,
+    final minPumSpe=0.1,
+    final maxPumSpe=1,
+    final VHotWat_flow_nominal=0.5,
+    final boiDesFlo={0.5,0.5},
+    final maxLocDp=10,
+    final minLocDp=5,
+    final offTimThr=180,
+    final timPer=600,
+    final staCon=-0.03,
+    final relFloHys=0.01,
+    final k=1,
+    final Ti=0.5,
+    final Td=0.1,
+    final speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.flowrate)
     "Testing pump configuration 8"
     annotation (Placement(transformation(extent={{210,-138},{230,-82}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Controller
     priPumCon8(
-    isHeadered=false,
-    primaryOnly=false,
-    variablePrimary=true,
-    primarySecondaryFlowSensors=false,
-    nPum=2,
-    nBoi=2,
-    nSen=2,
-    nPum_nominal=2,
-    minPumSpe=0.1,
-    maxPumSpe=1,
-    VHotWat_flow_nominal=0.5,
-    boiDesFlo={0.5,0.5},
-    maxLocDp=10,
-    minLocDp=5,
-    offTimThr=180,
-    timPer=600,
-    staCon=-0.03,
-    relFloHys=0.01,
-    k=1,
-    Ti=0.5,
-    Td=0.1,
-    speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.flowrate)
+    final isHeadered=false,
+    final primaryOnly=false,
+    final variablePrimary=true,
+    final primarySecondaryFlowSensors=false,
+    final nPum=2,
+    final nBoi=2,
+    final nSen=2,
+    final nPum_nominal=2,
+    final minPumSpe=0.1,
+    final maxPumSpe=1,
+    final VHotWat_flow_nominal=0.5,
+    final boiDesFlo={0.5,0.5},
+    final maxLocDp=10,
+    final minLocDp=5,
+    final offTimThr=180,
+    final timPer=600,
+    final staCon=-0.03,
+    final relFloHys=0.01,
+    final k=1,
+    final Ti=0.5,
+    final Td=0.1,
+    final speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.flowrate)
     "Testing pump configuration 9"
     annotation (Placement(transformation(extent={{-180,-298},{-160,-242}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Controller
     priPumCon9(
-    isHeadered=false,
-    primaryOnly=false,
-    variablePrimary=true,
-    primarySecondaryTemperatureSensors=true,
-    nPum=2,
-    nBoi=2,
-    nSen=2,
-    numIgnReq=0,
-    nPum_nominal=2,
-    minPumSpe=0.1,
-    maxPumSpe=1,
-    VHotWat_flow_nominal=0.5,
-    boiDesFlo={0.5,0.5},
-    maxLocDp=10,
-    minLocDp=5,
-    offTimThr=180,
-    timPer=600,
-    staCon=-0.03,
-    relFloHys=0.01,
-    delTim=900,
-    samPer=120,
-    triAmo=-0.02,
-    resAmo=0.03,
-    maxRes=0.06,
-    twoReqLimLow=1.2,
-    twoReqLimHig=2,
-    oneReqLimLow=0.2,
-    oneReqLimHig=1,
-    k=1,
-    Ti=0.5,
-    Td=0.1,
-    speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature)
+    final isHeadered=false,
+    final primaryOnly=false,
+    final variablePrimary=true,
+    final primarySecondaryTemperatureSensors=true,
+    final nPum=2,
+    final nBoi=2,
+    final nSen=2,
+    final numIgnReq=0,
+    final nPum_nominal=2,
+    final minPumSpe=0.1,
+    final maxPumSpe=1,
+    final VHotWat_flow_nominal=0.5,
+    final boiDesFlo={0.5,0.5},
+    final maxLocDp=10,
+    final minLocDp=5,
+    final offTimThr=180,
+    final timPer=600,
+    final staCon=-0.03,
+    final relFloHys=0.01,
+    final delTim=900,
+    final samPer=120,
+    final triAmo=-0.02,
+    final resAmo=0.03,
+    final maxRes=0.06,
+    final twoReqLimLow=1.2,
+    final twoReqLimHig=2,
+    final oneReqLimLow=0.2,
+    final oneReqLimHig=1,
+    final k=1,
+    final Ti=0.5,
+    final Td=0.1,
+    final speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature)
     "Testing pump configuration 10"
     annotation (Placement(transformation(extent={{210,-308},{230,-252}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Controller
     priPumCon10(
-    isHeadered=false,
-    primaryOnly=false,
-    variablePrimary=true,
-    primarySecondaryTemperatureSensors=false,
-    nPum=2,
-    nBoi=2,
-    nSen=2,
-    numIgnReq=0,
-    nPum_nominal=2,
-    minPumSpe=0.1,
-    maxPumSpe=1,
-    VHotWat_flow_nominal=0.5,
-    boiDesFlo={0.5,0.5},
-    maxLocDp=10,
-    minLocDp=5,
-    offTimThr=180,
-    timPer=600,
-    staCon=-0.03,
-    relFloHys=0.01,
-    delTim=900,
-    samPer=120,
-    triAmo=-0.02,
-    resAmo=0.03,
-    maxRes=0.06,
-    twoReqLimLow=1.2,
-    twoReqLimHig=2,
-    oneReqLimLow=0.2,
-    oneReqLimHig=1,
-    k=1,
-    Ti=0.5,
-    Td=0.1,
-    speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature)
+    final isHeadered=false,
+    final primaryOnly=false,
+    final variablePrimary=true,
+    final primarySecondaryTemperatureSensors=false,
+    final nPum=2,
+    final nBoi=2,
+    final nSen=2,
+    final numIgnReq=0,
+    final nPum_nominal=2,
+    final minPumSpe=0.1,
+    final maxPumSpe=1,
+    final VHotWat_flow_nominal=0.5,
+    final boiDesFlo={0.5,0.5},
+    final maxLocDp=10,
+    final minLocDp=5,
+    final offTimThr=180,
+    final timPer=600,
+    final staCon=-0.03,
+    final relFloHys=0.01,
+    final delTim=900,
+    final samPer=120,
+    final triAmo=-0.02,
+    final resAmo=0.03,
+    final maxRes=0.06,
+    final twoReqLimLow=1.2,
+    final twoReqLimHig=2,
+    final oneReqLimLow=0.2,
+    final oneReqLimHig=1,
+    final k=1,
+    final Ti=0.5,
+    final Td=0.1,
+    final speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature)
     "Testing pump configuration 11"
     annotation (Placement(transformation(extent={{-170,-458},{-150,-402}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Controller
     priPumCon11(
-    isHeadered=false,
-    primaryOnly=false,
-    variablePrimary=false,
-    primarySecondaryTemperatureSensors=false,
-    nPum=2,
-    nBoi=2,
-    nSen=2,
-    numIgnReq=0,
-    nPum_nominal=2,
-    minPumSpe=0.1,
-    maxPumSpe=1,
-    VHotWat_flow_nominal=0.5,
-    boiDesFlo={0.5,0.5},
-    maxLocDp=10,
-    minLocDp=5,
-    offTimThr=180,
-    timPer=600,
-    staCon=-0.03,
-    relFloHys=0.01,
-    delTim=900,
-    samPer=120,
-    triAmo=-0.02,
-    resAmo=0.03,
-    maxRes=0.06,
-    twoReqLimLow=1.2,
-    twoReqLimHig=2,
-    oneReqLimLow=0.2,
-    oneReqLimHig=1,
-    k=1,
-    Ti=0.5,
-    Td=0.1,
-    speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature)
+    final isHeadered=false,
+    final primaryOnly=false,
+    final variablePrimary=false,
+    final primarySecondaryTemperatureSensors=false,
+    final nPum=2,
+    final nBoi=2,
+    final nSen=2,
+    final numIgnReq=0,
+    final nPum_nominal=2,
+    final minPumSpe=0.1,
+    final maxPumSpe=1,
+    final VHotWat_flow_nominal=0.5,
+    final boiDesFlo={0.5,0.5},
+    final maxLocDp=10,
+    final minLocDp=5,
+    final offTimThr=180,
+    final timPer=600,
+    final staCon=-0.03,
+    final relFloHys=0.01,
+    final delTim=900,
+    final samPer=120,
+    final triAmo=-0.02,
+    final resAmo=0.03,
+    final maxRes=0.06,
+    final twoReqLimLow=1.2,
+    final twoReqLimHig=2,
+    final oneReqLimLow=0.2,
+    final oneReqLimHig=1,
+    final k=1,
+    final Ti=0.5,
+    final Td=0.1,
+    final speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature)
     "Testing pump configuration 12"
     annotation (Placement(transformation(extent={{190,-488},{210,-432}})));
 
@@ -387,7 +387,8 @@ model Controller
     "Pump rotation"
     annotation (Placement(transformation(extent={{-220,440},{-200,460}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre1[2](pre_u_start=fill(false, 2))
+  Buildings.Controls.OBC.CDL.Logical.Pre pre1[2](
+    final pre_u_start=fill(false, 2))
     "Logical pre block"
     annotation (Placement(transformation(extent={{-130,390},{-110,410}})));
 
@@ -412,7 +413,8 @@ model Controller
     "Pump rotation"
     annotation (Placement(transformation(extent={{140,430},{160,450}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre2[2](pre_u_start=fill(false, 2))
+  Buildings.Controls.OBC.CDL.Logical.Pre pre2[2](
+    final pre_u_start=fill(false, 2))
     "Logical pre block"
     annotation (Placement(transformation(extent={{230,380},{250,400}})));
 
@@ -443,7 +445,8 @@ model Controller
     "Pump rotation"
     annotation (Placement(transformation(extent={{-220,290},{-200,310}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre3[2](pre_u_start=fill(false, 2))
+  Buildings.Controls.OBC.CDL.Logical.Pre pre3[2](
+    final pre_u_start=fill(false, 2))
     "Logical pre block"
     annotation (Placement(transformation(extent={{-140,240},{-120,260}})));
 
@@ -452,336 +455,406 @@ model Controller
     annotation (Placement(transformation(extent={{-310,190},{-290,210}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin5(
-    amplitude=0.1,
-    freqHz=1/900,
-    offset=0.25) "Sine signal"
+    final amplitude=0.1,
+    final freqHz=1/900,
+    final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{-214,208},{-194,228}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin6(
-    amplitude=0.1,
-    freqHz=1/3600,
-    offset=0.25) "Sine signal"
+    final amplitude=0.1,
+    final freqHz=1/3600,
+    final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{-280,210},{-260,230}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol(trueHoldDuration=10, falseHoldDuration=0)
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "True-hold for signal visualization"
     annotation (Placement(transformation(extent={{-130,280},{-110,300}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul1(period=1800, startTime=15)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul1(
+    final period=1800,
+    final startTime=15)
     "Boolean pulse signal"
     annotation (Placement(transformation(extent={{-280,170},{-260,190}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con9(k=true)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con9(
+    final k=true)
     "Boolean true source"
     annotation (Placement(transformation(extent={{-250,210},{-230,230}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt3
-                                      [2](k={2,1})
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt3[2](
+    final k={2,1})
     "Pump rotation"
     annotation (Placement(transformation(extent={{140,270},{160,290}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre4[2](pre_u_start=fill(false, 2))
+  Buildings.Controls.OBC.CDL.Logical.Pre pre4[2](
+    final pre_u_start=fill(false, 2))
     "Logical pre block"
     annotation (Placement(transformation(extent={{220,220},{240,240}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con12(k=0.25)
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con12(
+    final k=0.25)
     "Constant Real source"
     annotation (Placement(transformation(extent={{50,170},{70,190}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin7(
-    amplitude=0.1,
-    freqHz=1/900,
-    offset=0) "Sine signal"
+    final amplitude=0.1,
+    final freqHz=1/900,
+    final offset=0)
+    "Sine signal"
     annotation (Placement(transformation(extent={{140,188},{160,208}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin8(
-    amplitude=0.1,
-    freqHz=1/3600,
-    offset=0) "Sine signal"
+    final amplitude=0.1,
+    final freqHz=1/3600,
+    final offset=0)
+    "Sine signal"
     annotation (Placement(transformation(extent={{80,190},{100,210}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol1(trueHoldDuration=10, falseHoldDuration=0)
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol1(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "True-hold for signal visualization"
     annotation (Placement(transformation(extent={{230,260},{250,280}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul3(period=1800, startTime=15)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul3(
+    final period=1800,
+    final startTime=15)
     "Boolean pulse signal"
     annotation (Placement(transformation(extent={{80,150},{100,170}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con13(k=true)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con13(
+    final k=true)
     "Boolean true source"
     annotation (Placement(transformation(extent={{110,190},{130,210}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt4
-                                      [2](k={2,1})
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt4[2](
+    final k={2,1})
     "Pump rotation"
     annotation (Placement(transformation(extent={{-220,130},{-200,150}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre5[2](pre_u_start=fill(false, 2))
+  Buildings.Controls.OBC.CDL.Logical.Pre pre5[2](
+    final pre_u_start=fill(false, 2))
     "Logical pre block"
     annotation (Placement(transformation(extent={{-140,80},{-120,100}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con16(k=0.25)
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con16(
+    final k=0.25)
     "Constant Real source"
     annotation (Placement(transformation(extent={{-310,30},{-290,50}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin9(
-    amplitude=1.5,
-    freqHz=1/3600,
-    phase=3.1415926535898,
-    offset=1) "Sine signal"
+    final amplitude=1.5,
+    final freqHz=1/3600,
+    final phase=3.1415926535898,
+    final offset=1)
+    "Sine signal"
     annotation (Placement(transformation(extent={{-214,48},{-194,68}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin10(
-    amplitude=0.1,
-    freqHz=1/3600,
-    offset=0.25) "Sine signal"
+    final amplitude=0.1,
+    final freqHz=1/3600,
+    final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{-280,50},{-260,70}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol2(trueHoldDuration=10, falseHoldDuration=0)
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol2(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "True-hold for signal visualization"
     annotation (Placement(transformation(extent={{-130,120},{-110,140}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul5(period=1800, startTime=15)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul5(
+    final period=1800,
+    final startTime=15)
     "Boolean pulse signal"
     annotation (Placement(transformation(extent={{-280,10},{-260,30}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con17(k=true)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con17(
+    final k=true)
     "Boolean true source"
     annotation (Placement(transformation(extent={{-250,50},{-230,70}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con18(k=1)
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con18(
+    final k=1)
     "Constant Real source"
     annotation (Placement(transformation(extent={{-310,-10},{-290,10}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt5
-                                      [2](k={2,1})
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt5[2](
+    final k={2,1})
     "Pump rotation"
     annotation (Placement(transformation(extent={{140,110},{160,130}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre6[2](pre_u_start=fill(false, 2))
+  Buildings.Controls.OBC.CDL.Logical.Pre pre6[2](
+    final pre_u_start=fill(false, 2))
     "Logical pre block"
     annotation (Placement(transformation(extent={{220,60},{240,80}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con21(k=0.25)
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con21(
+    final k=0.25)
     "Constant Real source"
     annotation (Placement(transformation(extent={{50,10},{70,30}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin11[2](
-    amplitude=fill(1.5, 2),
-    freqHz=fill(1/3600, 2),
-    phase=fill(3.14, 2),
-    offset=fill(1, 2),
-    startTime=fill(0, 2)) "Sine signal"
+    final amplitude=fill(1.5, 2),
+    final freqHz=fill(1/3600, 2),
+    final phase=fill(3.14, 2),
+    final offset=fill(1, 2),
+    final startTime=fill(0, 2)) "Sine signal"
     annotation (Placement(transformation(extent={{146,28},{166,48}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin12(
-    amplitude=0.1,
-    freqHz=1/3600,
-    offset=0.25) "Sine signal"
+    final amplitude=0.1,
+    final freqHz=1/3600,
+    final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{80,30},{100,50}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol3(trueHoldDuration=10, falseHoldDuration=0)
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol3(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "True-hold for signal visualization"
     annotation (Placement(transformation(extent={{230,100},{250,120}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul7(period=1800, startTime=15)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul7(
+    final period=1800,
+    final startTime=15)
     "Boolean pulse signal"
     annotation (Placement(transformation(extent={{80,-10},{100,10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con22(k=true)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con22(
+    final k=true)
     "Boolean true source"
     annotation (Placement(transformation(extent={{110,30},{130,50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con23(k=1)
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con23(
+    final k=1)
     "Constant Real source"
     annotation (Placement(transformation(extent={{50,-30},{70,-10}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt6
-                                      [2](k={2,1})
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt6[2](
+    final k={2,1})
     "Pump rotation"
     annotation (Placement(transformation(extent={{-230,-50},{-210,-30}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre7[2](pre_u_start=fill(false, 2))
+  Buildings.Controls.OBC.CDL.Logical.Pre pre7[2](
+    final pre_u_start=fill(false, 2))
     "Logical pre block"
     annotation (Placement(transformation(extent={{-150,-100},{-130,-80}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin14(
-    amplitude=0.1,
-    freqHz=1/3600,
-    offset=0.25) "Sine signal"
+    final amplitude=0.1,
+    final freqHz=1/3600,
+    final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{-290,-130},{-270,-110}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol4(trueHoldDuration=10, falseHoldDuration=0)
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol4(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "True-hold for signal visualization"
     annotation (Placement(transformation(extent={{-140,-60},{-120,-40}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul9(period=1800, startTime=15)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul9(
+    final period=1800,
+    final startTime=15)
     "Boolean pulse signal"
     annotation (Placement(transformation(extent={{-290,-170},{-270,-150}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con27(k=true)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con27(
+    final k=true)
     "Boolean true source"
     annotation (Placement(transformation(extent={{-260,-130},{-240,-110}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt7(k=2)
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt7(
+    final k=2)
     "Pump rotation"
     annotation (Placement(transformation(extent={{130,-150},{150,-130}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre8[2](pre_u_start=fill(false, 2))
+  Buildings.Controls.OBC.CDL.Logical.Pre pre8[2](
+    final pre_u_start=fill(false, 2))
     "Logical pre block"
     annotation (Placement(transformation(extent={{240,-120},{260,-100}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con29(k=0.25)
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con29(
+    final k=0.25)
     "Constant Real source"
     annotation (Placement(transformation(extent={{70,-170},{90,-150}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin13(
-    amplitude=0.5,
-    freqHz=1/900,
-    offset=0.25) "Sine signal"
+    final amplitude=0.5,
+    final freqHz=1/900,
+    final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{166,-152},{186,-132}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin15(
-    amplitude=0.1,
-    freqHz=1/3600,
-    offset=0.25) "Sine signal"
+    final amplitude=0.1,
+    final freqHz=1/3600,
+    final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{100,-150},{120,-130}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol5(trueHoldDuration=10, falseHoldDuration=0)
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol5(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "True-hold for signal visualization"
     annotation (Placement(transformation(extent={{250,-80},{270,-60}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul11(period=1800, startTime=10)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul11(
+    final period=1800,
+    final startTime=10)
     "Boolean pulse signal"
     annotation (Placement(transformation(extent={{100,-190},{120,-170}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt8(k=2)
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt8(
+    final k=2)
     "Pump rotation"
     annotation (Placement(transformation(extent={{-260,-310},{-240,-290}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre9[2](pre_u_start=fill(false, 2))
+  Buildings.Controls.OBC.CDL.Logical.Pre pre9[2](
+    final pre_u_start=fill(false, 2))
     "Logical pre block"
     annotation (Placement(transformation(extent={{-150,-280},{-130,-260}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con32(k=0.25)
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con32(
+    final k=0.25)
     "Constant Real source"
     annotation (Placement(transformation(extent={{-320,-330},{-300,-310}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin16(
-    amplitude=0.5,
-    freqHz=1/900,
-    offset=0) "Sine signal"
+    final amplitude=0.5,
+    final freqHz=1/900,
+    final offset=0) "Sine signal"
     annotation (Placement(transformation(extent={{-230,-312},{-210,-292}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin17(
-    amplitude=0.1,
-    freqHz=1/3600,
-    offset=0.25) "Sine signal"
+    final amplitude=0.1,
+    final freqHz=1/3600,
+    final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{-290,-310},{-270,-290}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol6(trueHoldDuration=10, falseHoldDuration=0)
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol6(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "True-hold for signal visualization"
     annotation (Placement(transformation(extent={{-140,-240},{-120,-220}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul13(period=1800, startTime=10)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul13(
+    final period=1800,
+    final startTime=10)
     "Boolean pulse signal"
     annotation (Placement(transformation(extent={{-290,-350},{-270,-330}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt9(k=2)
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt9(
+    final k=2)
     "Pump rotation"
     annotation (Placement(transformation(extent={{130,-320},{150,-300}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre10
-                      [2](pre_u_start=fill(false, 2)) "Logical pre block"
+  Buildings.Controls.OBC.CDL.Logical.Pre pre10[2](
+    final pre_u_start=fill(false, 2)) "Logical pre block"
     annotation (Placement(transformation(extent={{240,-290},{260,-270}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con35(k=0.25)
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con35(
+    final k=0.25)
     "Constant Real source"
     annotation (Placement(transformation(extent={{70,-340},{90,-320}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin18(
-    amplitude=1.5,
-    freqHz=1/3600,
-    phase(displayUnit="deg") = 3.1415926535898,
-    offset=0.25) "Sine signal"
+    final amplitude=1.5,
+    final freqHz=1/3600,
+    final phase(displayUnit="deg") = 3.1415926535898,
+    final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{166,-322},{186,-302}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin19(
-    amplitude=0.1,
-    freqHz=1/3600,
-    offset=0.25) "Sine signal"
+    final amplitude=0.1,
+    final freqHz=1/3600,
+    final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{100,-320},{120,-300}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol7(trueHoldDuration=10, falseHoldDuration=0)
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol7(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "True-hold for signal visualization"
     annotation (Placement(transformation(extent={{250,-250},{270,-230}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul15(period=1800, startTime=10)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul15(
+    final period=1800,
+    final startTime=10)
     "Boolean pulse signal"
     annotation (Placement(transformation(extent={{100,-360},{120,-340}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con37(k=0.25)
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con37(
+    final k=0.25)
     "Constant Real source"
     annotation (Placement(transformation(extent={{70,-380},{90,-360}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt10(k=2)
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt10(
+    final k=2)
     "Pump rotation"
     annotation (Placement(transformation(extent={{-250,-470},{-230,-450}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre11
-                      [2](pre_u_start=fill(false, 2)) "Logical pre block"
+  Buildings.Controls.OBC.CDL.Logical.Pre pre11[2](
+    final pre_u_start=fill(false, 2)) "Logical pre block"
     annotation (Placement(transformation(extent={{-140,-440},{-120,-420}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con39(k=0.25)
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con39(
+    final k=0.25)
     "Constant Real source"
     annotation (Placement(transformation(extent={{-310,-490},{-290,-470}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin20[2](
-    amplitude=fill(1.5, 2),
-    freqHz=fill(1/3600, 2),
-    phase=fill(3.14, 2),
-    offset=fill(1, 2),
-    startTime=fill(0, 2)) "Sine signal"
+    final amplitude=fill(1.5, 2),
+    final freqHz=fill(1/3600, 2),
+    final phase=fill(3.14, 2),
+    final offset=fill(1, 2),
+    final startTime=fill(0, 2)) "Sine signal"
     annotation (Placement(transformation(extent={{-214,-472},{-194,-452}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin21(
-    amplitude=0.1,
-    freqHz=1/3600,
-    offset=0.25) "Sine signal"
+    final amplitude=0.1,
+    final freqHz=1/3600,
+    final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{-280,-470},{-260,-450}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol8(trueHoldDuration=10, falseHoldDuration=0)
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol8(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "True-hold for signal visualization"
     annotation (Placement(transformation(extent={{-130,-400},{-110,-380}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul17(period=1800, startTime=10)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul17(
+    final period=1800,
+    final startTime=10)
     "Boolean pulse signal"
     annotation (Placement(transformation(extent={{-280,-510},{-260,-490}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con41(k=1)
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con41(
+    final k=1)
     "Constant Real source"
     annotation (Placement(transformation(extent={{-310,-530},{-290,-510}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt11(k=2)
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt11(
+    final k=2)
     "Pump rotation"
     annotation (Placement(transformation(extent={{120,-500},{140,-480}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre12
-                      [2](pre_u_start=fill(false, 2)) "Logical pre block"
+  Buildings.Controls.OBC.CDL.Logical.Pre pre12[2](
+    final pre_u_start=fill(false, 2)) "Logical pre block"
     annotation (Placement(transformation(extent={{220,-470},{240,-450}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin22(
-    amplitude=0.1,
-    freqHz=1/3600,
-    offset=0.25) "Sine signal"
+    final amplitude=0.1,
+    final freqHz=1/3600,
+    final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{80,-500},{100,-480}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol9(trueHoldDuration=10, falseHoldDuration=0)
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol9(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
     "True-hold for signal visualization"
     annotation (Placement(transformation(extent={{230,-430},{250,-410}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul19(period=1800, startTime=10)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul19(
+    final period=1800,
+    final startTime=10)
     "Boolean pulse signal"
     annotation (Placement(transformation(extent={{80,-540},{100,-520}})));
 
@@ -831,92 +904,99 @@ model Controller
     annotation (Placement(transformation(extent={{160,-540},{180,-520}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul[2](
-    amplitude=fill(1, 2),
-    width=fill(0.95, 2),
-    period=fill(3600, 2),
-    startTime=fill(10, 2)) "Real pulse signal"
+    final amplitude=fill(1, 2),
+    final width=fill(0.95, 2),
+    final period=fill(3600, 2),
+    final startTime=fill(10, 2)) "Real pulse signal"
     annotation (Placement(transformation(extent={{-310,408},{-290,428}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con1(k=1)
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con1(
+    final k=1)
     "Constant Real source"
     annotation (Placement(transformation(extent={{-260,440},{-240,460}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul1[2](
-    amplitude=fill(1, 2),
-    width=fill(0.95, 2),
-    period=fill(3600, 2),
-    startTime=fill(10, 2)) "Real pulse signal"
+    final amplitude=fill(1, 2),
+    final width=fill(0.95, 2),
+    final period=fill(3600, 2),
+    final startTime=fill(10, 2)) "Real pulse signal"
     annotation (Placement(transformation(extent={{40,398},{60,418}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con3(k=1)
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con3(
+    final k=1)
     "Constant Real source"
     annotation (Placement(transformation(extent={{80,380},{100,400}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul2[2](
-    amplitude=fill(1, 2),
-    width=fill(0.95, 2),
-    period=fill(3600, 2),
-    startTime=fill(10, 2)) "Real pulse signal"
+    final amplitude=fill(1, 2),
+    final width=fill(0.95, 2),
+    final period=fill(3600, 2),
+    final startTime=fill(10, 2)) "Real pulse signal"
     annotation (Placement(transformation(extent={{-300,260},{-280,280}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul3[2](
-    amplitude=fill(1, 2),
-    width=fill(0.95, 2),
-    period=fill(3600, 2),
-    startTime=fill(10, 2)) "Real pulse signal"
+    final amplitude=fill(1, 2),
+    final width=fill(0.95, 2),
+    final period=fill(3600, 2),
+    final startTime=fill(10, 2)) "Real pulse signal"
     annotation (Placement(transformation(extent={{60,240},{80,260}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul4[2](
-    amplitude=fill(1, 2),
-    width=fill(0.95, 2),
-    period=fill(3600, 2),
-    startTime=fill(10, 2)) "Real pulse signal"
+    final amplitude=fill(1, 2),
+    final width=fill(0.95, 2),
+    final period=fill(3600, 2),
+    final startTime=fill(10, 2)) "Real pulse signal"
     annotation (Placement(transformation(extent={{-300,100},{-280,120}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul5[2](
-    amplitude=fill(1, 2),
-    width=fill(0.95, 2),
-    period=fill(3600, 2),
-    startTime=fill(10, 2)) "Real pulse signal"
+    final amplitude=fill(1, 2),
+    final width=fill(0.95, 2),
+    final period=fill(3600, 2),
+    final startTime=fill(10, 2)) "Real pulse signal"
     annotation (Placement(transformation(extent={{60,80},{80,100}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul6[2](
-    amplitude=fill(1, 2),
-    width=fill(0.95, 2),
-    period=fill(3600, 2),
-    startTime=fill(10, 2)) "Real pulse signal"
+    final amplitude=fill(1, 2),
+    final width=fill(0.95, 2),
+    final period=fill(3600, 2),
+    final startTime=fill(10, 2)) "Real pulse signal"
     annotation (Placement(transformation(extent={{-280,-80},{-260,-60}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol10(trueHoldDuration=3300,
-      falseHoldDuration=0) "Hold boiler on signal"
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol10(
+    final trueHoldDuration=3300,
+    final falseHoldDuration=0) "Hold boiler on signal"
     annotation (Placement(transformation(extent={{130,-110},{150,-90}})));
 
   Buildings.Controls.OBC.CDL.Logical.Or or2 "Logical Or"
     annotation (Placement(transformation(extent={{160,-80},{180,-60}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol11(trueHoldDuration=3300,
-      falseHoldDuration=0) "Hold boiler on signal"
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol11(
+    final trueHoldDuration=3300,
+    final falseHoldDuration=0) "Hold boiler on signal"
     annotation (Placement(transformation(extent={{-260,-270},{-240,-250}})));
 
   Buildings.Controls.OBC.CDL.Logical.Or or1 "Logical Or"
     annotation (Placement(transformation(extent={{-230,-240},{-210,-220}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol12(trueHoldDuration=3300,
-      falseHoldDuration=0) "Hold boiler on signal"
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol12(
+    final trueHoldDuration=3300,
+    final falseHoldDuration=0) "Hold boiler on signal"
     annotation (Placement(transformation(extent={{130,-280},{150,-260}})));
 
   Buildings.Controls.OBC.CDL.Logical.Or or3 "Logical Or"
     annotation (Placement(transformation(extent={{170,-250},{190,-230}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol13(trueHoldDuration=3300,
-      falseHoldDuration=0) "Hold boiler on signal"
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol13(
+    final trueHoldDuration=3300,
+    final falseHoldDuration=0) "Hold boiler on signal"
     annotation (Placement(transformation(extent={{-250,-430},{-230,-410}})));
 
   Buildings.Controls.OBC.CDL.Logical.Or or4 "Logical Or"
     annotation (Placement(transformation(extent={{-210,-400},{-190,-380}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol14(trueHoldDuration=3300,
-      falseHoldDuration=0) "Hold boiler on signal"
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol14(
+    final trueHoldDuration=3300,
+    final falseHoldDuration=0) "Hold boiler on signal"
     annotation (Placement(transformation(extent={{110,-460},{130,-440}})));
 
   Buildings.Controls.OBC.CDL.Logical.Or or5 "Logical Or"
