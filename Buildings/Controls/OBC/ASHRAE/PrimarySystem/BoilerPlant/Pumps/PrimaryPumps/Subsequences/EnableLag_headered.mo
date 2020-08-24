@@ -91,7 +91,7 @@ block EnableLag_headered
     "Count time"
     annotation (Placement(transformation(extent={{0,-90},{20,-70}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Not not3
+  Buildings.Controls.OBC.CDL.Logical.Not not3 "Logical Not"
     annotation (Placement(transformation(extent={{100,-90},{120,-70}})));
 
 protected

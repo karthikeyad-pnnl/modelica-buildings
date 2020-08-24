@@ -8,8 +8,10 @@ model EnableLead_headered
     annotation (Placement(transformation(extent={{0,-10},{20,10}})));
 
   CDL.Continuous.Sources.Pulse pul(period=600, startTime=300)
+    "Real pulse signal"
     annotation (Placement(transformation(extent={{-50,20},{-30,40}})));
   CDL.Continuous.Sources.Pulse pul1(period=1000, startTime=500)
+    "Real pulse signal"
     annotation (Placement(transformation(extent={{-50,-40},{-30,-20}})));
 equation
 

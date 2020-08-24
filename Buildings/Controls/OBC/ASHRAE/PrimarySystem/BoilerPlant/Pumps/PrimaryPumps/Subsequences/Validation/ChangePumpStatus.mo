@@ -15,27 +15,32 @@ model ChangePumpStatus
     annotation (Placement(transformation(extent={{-130,-10},{-110,10}})));
 
   Buildings.Controls.OBC.CDL.Integers.OnCounter onCouInt
+    "Boolean True pulse counter"
     annotation (Placement(transformation(extent={{-100,-6},{-88,6}})));
 
   Buildings.Controls.OBC.CDL.Integers.GreaterThreshold intGreThr(threshold=3)
+    "Switch pump staging to staging-down after 3 pump stage-ups"
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi
+  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi "Logical switch"
     annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
 
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi1
+  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi1 "Logical switch"
     annotation (Placement(transformation(extent={{-40,10},{-20,30}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Constant con(k=false)
+    "Constant Boolean false"
     annotation (Placement(transformation(extent={{-130,70},{-110,90}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Not not1
+  Buildings.Controls.OBC.CDL.Logical.Not not1 "Logical Not"
     annotation (Placement(transformation(extent={{-10,10},{10,30}})));
 
   Buildings.Controls.OBC.CDL.Integers.Add addInt(k1=-1)
+    "Generate stage setpoints for staging down processes"
     annotation (Placement(transformation(extent={{-40,-50},{-20,-30}})));
 
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(k=7)
+    "Constant Integer source"
     annotation (Placement(transformation(extent={{-100,-60},{-80,-40}})));
 
 equation

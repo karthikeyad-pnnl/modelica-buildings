@@ -4,79 +4,79 @@ model Controller
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Controller
     priPumCon(
-    isHeadered=true,
-    primaryOnly=true,
-    variablePrimary=true,
-    nPum=2,
-    nBoi=2,
-    nSen=2,
-    nPum_nominal=2,
-    minPumSpe=0.1,
-    maxPumSpe=1,
-    VHotWat_flow_nominal=0.5,
-    boiDesFlo={0.5,0.5},
-    maxLocDp=5*6894.75,
-    minLocDp=5*6894.75,
-    offTimThr=180,
-    timPer=600,
-    staCon=-0.03,
-    relFloHys=0.01,
-    k=1,
-    Ti=10,
-    Td=0.1,
-    speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP)
+    final isHeadered=true,
+    final primaryOnly=true,
+    final variablePrimary=true,
+    final nPum=2,
+    final nBoi=2,
+    final nSen=2,
+    final nPum_nominal=2,
+    final minPumSpe=0.1,
+    final maxPumSpe=1,
+    final VHotWat_flow_nominal=0.5,
+    final boiDesFlo={0.5,0.5},
+    final maxLocDp=5*6894.75,
+    final minLocDp=5*6894.75,
+    final offTimThr=180,
+    final timPer=600,
+    final staCon=-0.03,
+    final relFloHys=0.01,
+    final k=1,
+    final Ti=10,
+    final Td=0.1,
+    final speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP)
     "Testing pump configuration 1"
     annotation (Placement(transformation(extent={{-170,372},{-150,428}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Controller
     priPumCon1(
-    isHeadered=true,
-    primaryOnly=true,
-    variablePrimary=true,
-    nPum=2,
-    nBoi=2,
-    nSen=2,
-    nPum_nominal=2,
-    minPumSpe=0.1,
-    maxPumSpe=1,
-    VHotWat_flow_nominal=0.5,
-    boiDesFlo={0.5,0.5},
-    maxLocDp=10,
-    minLocDp=5,
-    offTimThr=180,
-    timPer=600,
-    staCon=-0.03,
-    relFloHys=0.01,
-    k=1,
-    Ti=0.5,
-    Td=0.1,
-    speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.localDP)
+    final isHeadered=true,
+    final primaryOnly=true,
+    final variablePrimary=true,
+    final nPum=2,
+    final nBoi=2,
+    final nSen=2,
+    final nPum_nominal=2,
+    final minPumSpe=0.1,
+    final maxPumSpe=1,
+    final VHotWat_flow_nominal=0.5,
+    final boiDesFlo={0.5,0.5},
+    final maxLocDp=10,
+    final minLocDp=5,
+    final offTimThr=180,
+    final timPer=600,
+    final staCon=-0.03,
+    final relFloHys=0.01,
+    final k=1,
+    final Ti=0.5,
+    final Td=0.1,
+    final speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.localDP)
     "Testing pump configuration 2"
     annotation (Placement(transformation(extent={{190,362},{210,418}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Controller
     priPumCon2(
-    isHeadered=true,
-    primaryOnly=false,
-    variablePrimary=true,
-    nPum=2,
-    nBoi=2,
-    nSen=2,
-    nPum_nominal=2,
-    minPumSpe=0.1,
-    maxPumSpe=1,
-    VHotWat_flow_nominal=0.5,
-    boiDesFlo={0.5,0.5},
-    maxLocDp=10,
-    minLocDp=5,
-    offTimThr=180,
-    timPer=600,
-    staCon=-0.03,
-    relFloHys=0.01,
-    k=1,
-    Ti=0.5,
-    Td=0.1,
-    speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.flowrate)
+    final isHeadered=true,
+    final primaryOnly=false,
+    final variablePrimary=true,
+    final nPum=2,
+    final nBoi=2,
+    final nSen=2,
+    final nPum_nominal=2,
+    final minPumSpe=0.1,
+    final maxPumSpe=1,
+    final VHotWat_flow_nominal=0.5,
+    final boiDesFlo={0.5,0.5},
+    final maxLocDp=10,
+    final minLocDp=5,
+    final offTimThr=180,
+    final timPer=600,
+    final staCon=-0.03,
+    final relFloHys=0.01,
+    final k=1,
+    final Ti=0.5,
+    final Td=0.1,
+    final speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.flowrate)
     "Testing pump configuration 3"
     annotation (Placement(transformation(extent={{-170,222},{-150,278}})));
 
@@ -888,7 +888,7 @@ model Controller
     annotation (Placement(transformation(extent={{-280,-80},{-260,-60}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol10(trueHoldDuration=3300,
-      falseHoldDuration=0)
+      falseHoldDuration=0) "Hold boiler on signal"
     annotation (Placement(transformation(extent={{130,-110},{150,-90}})));
 
   Buildings.Controls.OBC.CDL.Logical.Or or2 "Logical Or"
@@ -948,9 +948,8 @@ equation
   connect(con5.y, priPumCon1.uMinPriPumSpeCon) annotation (Line(points={{62,340},
           {180,340},{180,378},{188,378}}, color={0,0,127}));
 
-  connect(sin3.y, priPumCon1.VHotWat_flow) annotation (Line(points={{102,360},{
-          142,360},{142,394},{166,394},{166,405},{188,405}},
-                                                         color={0,0,127}));
+  connect(sin3.y, priPumCon1.VHotWat_flow) annotation (Line(points={{102,360},{142,
+          360},{142,394},{166,394},{166,405},{188,405}}, color={0,0,127}));
 
   connect(sin2.y, priPumCon1.dpHotWat_remote) annotation (Line(points={{168,358},
           {174,358},{174,384},{188,384}}, color={0,0,127}));
@@ -1356,8 +1355,8 @@ equation
   connect(edg4.y, priPumCon11.uOnOff) annotation (Line(points={{182,-530},{186,
           -530},{186,-454},{188,-454}}, color={255,0,255}));
 
-  connect(pul.y, priPumCon.uHotIsoVal) annotation (Line(points={{-288,418},{
-          -172,418}},                       color={0,0,127}));
+  connect(pul.y, priPumCon.uHotIsoVal) annotation (Line(points={{-288,418},{-172,
+          418}},                            color={0,0,127}));
 
   connect(con1.y, priPumCon.dpHotWatSet) annotation (Line(points={{-238,450},{
           -234,450},{-234,391},{-172,391}}, color={0,0,127}));

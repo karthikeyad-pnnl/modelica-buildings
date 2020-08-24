@@ -9,7 +9,7 @@ model EnableLead_dedicated
 protected
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul(
     final period=3600,
-    final startTime=300)
+    final startTime=300) "Boolean pulse source"
     annotation (Placement(transformation(extent={{-50,-10},{-30,10}})));
 
 equation
