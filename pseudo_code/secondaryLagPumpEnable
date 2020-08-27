@@ -1,0 +1,46 @@
+# Calculations
+hotWaterFlowrateRatio
+
+# Boolean flag
+haveFlowSensor # TRUE: Flow sensor in secondary circuit; FALSE: No flow sensor in secondary circuit
+variableSecondary # TRUE: Variable secondary pumps; FALSE: Fixed-speed secondary pumps
+
+# Parameters
+nPum # Number of pumps in secondary circuit
+
+# Inputs
+VHotWat_flow
+uHotWatPum[nPum]
+IF variableSecondary:
+	IF haveFlowSensor:
+		IF (hotWaterFlowrateRatio > length(uHotWatPum)/nPum - 0.03) FOR (time > 10 minutes):
+			SET nextLagPump = TRUE
+		ELSE IF (hotWaterFlowrateRatio < (length(uHotWatPum)-1)/nPum - 0.03) FOR (time > 10 minutes):
+			SET lastLagPump = FALSE
+		ELSE:
+			DO NOTHING
+		ENDIF
+	ELSE:  # how about the section of 5.3.7.4?
+		IF (pumpSpeed > 0.9 FOR 5 minutes) OR (pumpSpeed > 0.99 FOR 1 minute):
+			SET nextLagPump = TRUE
+		ELSE:
+			DO NOTHING
+		ENDIF
+		IF (pumpSpeed < 0.4 FOR 10 minutes):
+			SET lastLagPump = FALSE
+		ELSE:
+			DO NOTHING
+		ENDIF
+	ENDIF
+ELSE:
+	IF nPrimaryPumps > nSecondaryPumps:
+		SET nextLagPump = TRUE
+	ELSE:
+		DO NOTHING
+	ENDIF
+	IF nPrimaryPumps < nSecondaryPumps:
+		SET lastLagPump = FALSE
+	ELSE:
+		DO NOTHING
+	ENDIF
+ENDIF

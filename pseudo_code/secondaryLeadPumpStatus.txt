@@ -1,0 +1,9 @@
+#Inputs
+plantEnable
+supplyResetRequests
+
+IF plantEnable == TRUE AND supplyResetRequests > 0:
+	SET leadPumpStatus = TRUE
+ELSE:
+	SET leadPumpStatus = FALSE
+ENDIF

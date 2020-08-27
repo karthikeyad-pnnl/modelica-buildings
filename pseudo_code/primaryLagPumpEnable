@@ -21,7 +21,7 @@ IF haveHeadered:
 	ENDIF
 ELSE:  # how about the section of 5.3.7.4?
 	IF length(uHotWatPum) < length (uBoi):
-		SET nextLagPump`= TRUE
+		SET nextLagPump = TRUE
 	ELSE:
 		DO NOTHING
 	ENDIF
