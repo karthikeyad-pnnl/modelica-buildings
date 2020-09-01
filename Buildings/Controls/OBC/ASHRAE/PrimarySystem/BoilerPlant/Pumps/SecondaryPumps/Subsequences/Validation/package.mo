@@ -1,5 +1,7 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences;
-package Validation "Collection of validation models"
+
+package Validation
+    "Collection of validation models"
 
 
 annotation (preferredView="info", Documentation(info="<html>
@@ -35,4 +37,5 @@ used for continuous validation whenever models in the library change.
           pattern=LinePattern.None,
           fillPattern=FillPattern.Solid,
           points={{-58.0,46.0},{42.0,-14.0},{-58.0,-74.0},{-58.0,46.0}})}));
+
 end Validation;

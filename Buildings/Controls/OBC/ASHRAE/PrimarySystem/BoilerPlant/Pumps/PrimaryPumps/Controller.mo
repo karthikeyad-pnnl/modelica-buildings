@@ -8,24 +8,24 @@ block Controller
 
   parameter Boolean primaryOnly = false
     "True: Plant is primary-only;
- False: Plant is primary-secondary"
+     False: Plant is primary-secondary"
     annotation (Dialog(group="Plant parameters"));
 
   parameter Boolean variablePrimary = false
     "True: Variable-speed primary pumps;
- False: Fixed-speed primary pumps"
+     False: Fixed-speed primary pumps"
     annotation (Dialog(group="Plant parameters"));
 
   parameter Boolean primarySecondaryFlowSensors=true
     "True: Flowrate sensors in primary and secondary loops;
- False: Flowrate sensor in decoupler"
+     False: Flowrate sensor in decoupler"
     annotation (Dialog(tab="Pump control parameters",
       group="Flowrate-based speed regulation",
       enable= speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.flowrate));
 
   parameter Boolean primarySecondaryTemperatureSensors=true
     "True: Temperature sensors in primary and secondary loops;
- False: Temperature sensors in boiler supply and secondary loop"
+     False: Temperature sensors in boiler supply and secondary loop"
     annotation (Dialog(tab="Pump control parameters",
       group="Temperature-based speed regulation",
       enable= speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
@@ -413,6 +413,20 @@ block Controller
     "Enable lag pump for primary-only plants using differential pressure pump speed control"
     annotation (Placement(transformation(extent={{-200,-10},{-180,10}})));
 
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.Speed_primary_localDp
+    pumSpeLocDp(
+    final nSen=nSen,
+    final nPum=nPum,
+    final minLocDp=minLocDp,
+    final maxLocDp=maxLocDp,
+    final minPumSpe=minPumSpe,
+    final maxPumSpe=maxPumSpe,
+    final k=k,
+    final Ti=Ti,
+    final Td=Td) if primaryOnly and variablePrimary and localDPRegulated
+    "Hot water pump speed control with local DP sensor"
+    annotation (Placement(transformation(extent={{-60,-430},{-40,-410}})));
+
 protected
   parameter Boolean remoteDPRegulated = (speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP)
     "Boolean flag for pump speed control with remote differential pressure";
@@ -441,23 +455,8 @@ protected
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.EnableLead_headered
     enaHeaLeaPum(
-    final nBoi=nBoi) if isHeadered
-    "Enable lead pump of headered pumps"
+    final nBoi=nBoi) if isHeadered "Enable lead pump of headered pumps"
     annotation (Placement(transformation(extent={{-200,60},{-180,80}})));
-
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.Speed_primary_localDp
-    pumSpeLocDp(
-    final nSen=nSen,
-    final nPum=nPum,
-    final minLocDp=minLocDp,
-    final maxLocDp=maxLocDp,
-    final minPumSpe=minPumSpe,
-    final maxPumSpe=maxPumSpe,
-    final k=k,
-    final Ti=Ti,
-    final Td=Td) if primaryOnly and variablePrimary and localDPRegulated
-    "Hot water pump speed control with local DP sensor"
-    annotation (Placement(transformation(extent={{-60,-430},{-40,-410}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.Speed_primary_remoteDp
     pumSpeRemDp(
@@ -502,8 +501,7 @@ protected
     final twoReqLimHig=twoReqLimHig,
     final oneReqLimLow=oneReqLimLow,
     final oneReqLimHig=oneReqLimHig) if not primaryOnly and variablePrimary
-     and temperatureRegulated
-    "Pump speed control using temperature sensors"
+     and temperatureRegulated "Pump speed control using temperature sensors"
     annotation (Placement(transformation(extent={{-60,-548},{-40,-528}})));
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea[nBoi] if not

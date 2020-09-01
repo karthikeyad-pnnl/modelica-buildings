@@ -1,6 +1,8 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences;
-block EnableLag_headered
-  "Sequences for enabling and disabling lag pumps for primary-only plants with headered primary pumps"
+
+block EnableLag_variableSecondary_flowrate
+ 
+    "Sequence for enabling and disabling lag pumps for variable-speed secondary pumps with secondary loop flowrate sensor"
 
   parameter Integer nPum = 2
     "Total number of pumps";
@@ -91,8 +93,6 @@ block EnableLag_headered
     "Count time"
     annotation (Placement(transformation(extent={{0,-90},{20,-70}})));
 
-  CDL.Logical.Not not3
-    annotation (Placement(transformation(extent={{100,-90},{120,-70}})));
 protected
   Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
     final p=staCon,
@@ -129,13 +129,13 @@ protected
     "Add real inputs"
     annotation (Placement(transformation(extent={{-80,-90},{-60,-70}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr(final
-      threshold=timPer)
+  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr(
+    final threshold=timPer)
     "Check if the time is greater than delay time period"
     annotation (Placement(transformation(extent={{40,30},{60,50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr1(final
-      threshold=timPer)
+  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr1(
+    final threshold=timPer)
     "Check if the time is greater than delay time period"
     annotation (Placement(transformation(extent={{40,-90},{60,-70}})));
 
@@ -151,7 +151,8 @@ protected
     "Logical and"
     annotation (Placement(transformation(extent={{40,-130},{60,-110}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre2 "Breaks algebraic loops"
+  Buildings.Controls.OBC.CDL.Logical.Pre pre2
+    "Breaks algebraic loops"
     annotation (Placement(transformation(extent={{-80,-150},{-60,-130}})));
 
   Buildings.Controls.OBC.CDL.Logical.Edge edg1
@@ -169,6 +170,10 @@ protected
   Buildings.Controls.OBC.CDL.Logical.And and1
     "Logical and"
     annotation (Placement(transformation(extent={{40,70},{60,90}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Not not3
+    "Logical Not"
+    annotation (Placement(transformation(extent={{100,-90},{120,-70}})));
 
 equation
   connect(VHotWat_flow,hotWatFloRat. u)
@@ -264,12 +269,15 @@ equation
 
   connect(greEquThr.y, yUp)
     annotation (Line(points={{62,40},{160,40}}, color={255,0,255}));
+
   connect(greEquThr1.y, not3.u)
     annotation (Line(points={{62,-80},{98,-80}}, color={255,0,255}));
+
   connect(not3.y, yDown)
     annotation (Line(points={{122,-80},{160,-80}}, color={255,0,255}));
+
 annotation (
-  defaultComponentName="enaLagPriPum",
+  defaultComponentName="enaLagSecPum",
   Icon(coordinateSystem(preserveAspectRatio=false,
     extent={{-100,-100},{100,100}}),
       graphics={
@@ -285,19 +293,19 @@ annotation (
   Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-140,-160},{140,160}})),
   Documentation(info="<html>
 <p>
-Block that enables and disables lag primary hot water pump, for primary-only plants
-with headered, variable-speed primary pumps, according to ASHRAE RP-1711, March, 2020
-draft, section 5.3.6.4.
+Block that enables and disables lag secondary hot water pump, for plants with 
+variable-speed secondary pumps and flowrate sensor in secondary loop, according
+to ASHRAE RP-1711, March, 2020 draft, section 5.3.7.3.
 </p>
 <p>
-Hot water pump shall be staged as a function of hot water flow ratio (HWFR), 
+Hot water pump shall be staged as a function of secondary hot water flow ratio (SHWFR), 
 i.e. the ratio of current hot water flow <code>VHotWat_flow</code> to design
 flow <code>VHotWat_flow_nominal</code>, and the number of pumps <code>num_nominal</code>
 that operate at design conditions. Pumps are assumed to be equally sized.
 </p>
 <pre>
                   VHotWat_flow
-      HWFR = ---------------------- 
+      SHWFR = ---------------------- 
               VHotWat_flow_nominal
 </pre>
 <p>
@@ -305,20 +313,23 @@ that operate at design conditions. Pumps are assumed to be equally sized.
 true for time <code>timPer</code>:
 </p>
 <pre>        
-      HWFR &gt; Number_of_operating_pumps/num_nominal - 0.03                  
+      SHWFR &gt;
+ Number_of_operating_pumps/num_nominal - 0.03                  
 </pre>
 <p>
 2. Shut off the last lag pump whenever the following is true for <code>timPer</code>:
 </p>
 <pre>           
-      HWFR &le; (Number_of_operating_pumps - 1)/num_nominal - 0.03
+      SHWFR &le;
+ (Number_of_operating_pumps - 1)/num_nominal - 0.03
 </pre>
 </html>", revisions="<html>
 <ul>
 <li>
-July 30, 2020, by Karthik Devaprasad:<br/>
+August 25, 2020, by Karthik Devaprasad:<br/>
 First implementation.
 </li>
 </ul>
 </html>"));
-end EnableLag_headered;
+
+end EnableLag_variableSecondary_flowrate;

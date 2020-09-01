@@ -68,27 +68,47 @@ model BoilerPlantValidation "Validation for boiler plant model"
     smoothness=Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments,
     table=[-6,0; 8,-QRooInt_flow; 18,0],
     timeScale=3600)   "Time table for internal heat gain"
-    annotation (Placement(transformation(extent={{-360,70},{-340,90}})));
+    annotation (Placement(transformation(extent={{-360,74},{-340,94}})));
   CDL.Logical.Sources.Constant con[2](k=fill(true, 2))
     annotation (Placement(transformation(extent={{-390,50},{-370,70}})));
-  CDL.Continuous.Sources.Constant con1[2](k=fill(1, 2))
-    annotation (Placement(transformation(extent={{-390,20},{-370,40}})));
   CDL.Continuous.Sources.Constant con2(k=0)
     annotation (Placement(transformation(extent={{-350,20},{-330,40}})));
+  CDL.Continuous.Hysteresis hys(uLow=273.15 + 21.7, uHigh=273.15 + 23.89)
+    annotation (Placement(transformation(extent={{-260,54},{-240,74}})));
+  CDL.Logical.Not not1
+    annotation (Placement(transformation(extent={{-222,54},{-202,74}})));
+  CDL.Routing.BooleanReplicator booRep(nout=2)
+    annotation (Placement(transformation(extent={{-180,54},{-160,74}})));
+  CDL.Conversions.BooleanToReal booToRea
+    annotation (Placement(transformation(extent={{-180,20},{-160,40}})));
+  CDL.Routing.RealReplicator reaRep(nout=2)
+    annotation (Placement(transformation(extent={{-150,20},{-130,40}})));
+  CDL.Continuous.Sources.Constant con1(k=-2*Q_flow_nominal + 5000)
+    annotation (Placement(transformation(extent={{-392,10},{-372,30}})));
 equation
 
-  connect(timTab.y[1], boilerPlant.QRooInt_flowrate) annotation (Line(points={{
-          -338,80},{-320,80},{-320,68},{-302,68}}, color={0,0,127}));
-  connect(con.y, boilerPlant.uBoiSta) annotation (Line(points={{-368,60},{-320,60},
-          {-320,65},{-302,65}}, color={255,0,255}));
-  connect(con1.y, boilerPlant.uHotIsoVal) annotation (Line(points={{-368,30},{-360,
-          30},{-360,56},{-314,56},{-314,62},{-302,62}}, color={0,0,127}));
   connect(con.y, boilerPlant.uPumSta) annotation (Line(points={{-368,60},{-320,60},
           {-320,58},{-302,58}}, color={255,0,255}));
-  connect(con1.y, boilerPlant.uPumSpe) annotation (Line(points={{-368,30},{-360,
-          30},{-360,55},{-302,55}}, color={0,0,127}));
   connect(con2.y, boilerPlant.uBypValSig) annotation (Line(points={{-328,30},{-316,
           30},{-316,52},{-302,52}}, color={0,0,127}));
+  connect(boilerPlant.yZonTem, hys.u)
+    annotation (Line(points={{-278,64},{-262,64}}, color={0,0,127}));
+  connect(hys.y, not1.u)
+    annotation (Line(points={{-238,64},{-224,64}}, color={255,0,255}));
+  connect(not1.y, booRep.u)
+    annotation (Line(points={{-200,64},{-182,64}}, color={255,0,255}));
+  connect(booRep.y, boilerPlant.uBoiSta) annotation (Line(points={{-158,64},{
+          -148,64},{-148,88},{-314,88},{-314,65},{-302,65}}, color={255,0,255}));
+  connect(not1.y, booToRea.u) annotation (Line(points={{-200,64},{-192,64},{
+          -192,30},{-182,30}}, color={255,0,255}));
+  connect(booToRea.y, reaRep.u)
+    annotation (Line(points={{-158,30},{-152,30}}, color={0,0,127}));
+  connect(reaRep.y, boilerPlant.uHotIsoVal) annotation (Line(points={{-128,30},
+          {-128,10},{-308,10},{-308,62},{-302,62}}, color={0,0,127}));
+  connect(reaRep.y, boilerPlant.uPumSpe) annotation (Line(points={{-128,30},{
+          -128,10},{-308,10},{-308,55},{-302,55}}, color={0,0,127}));
+  connect(con1.y, boilerPlant.QRooInt_flowrate) annotation (Line(points={{-370,
+          20},{-360,20},{-360,68},{-302,68}}, color={0,0,127}));
   annotation (Documentation(info="<html>
 <p>
 This part of the system model adds to the model that is implemented in
@@ -199,5 +219,9 @@ First implementation.
     __Dymola_Commands(file=
      "modelica://Buildings/Resources/Scripts/Dymola/Examples/Tutorial/Boiler/System6.mos"
         "Simulate and plot"),
-    experiment(Tolerance=1e-6, StopTime=172800));
+    experiment(
+      StopTime=6000,
+      Interval=1,
+      Tolerance=1e-06,
+      __Dymola_Algorithm="Cvode"));
 end BoilerPlantValidation;

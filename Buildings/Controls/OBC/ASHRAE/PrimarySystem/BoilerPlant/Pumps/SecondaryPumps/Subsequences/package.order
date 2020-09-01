@@ -1,9 +1,7 @@
-EnableLag_headered
-EnableLead_dedicated
-EnableLead_headered
-Speed_primary_localDp
-Speed_primary_remoteDp
+EnableLag_variableSecondary_flowrate
+EnableLead
+Speed_secondary_localDp
+Speed_secondary_remoteDp
 Validation
-Speed_primarySecondary_flow
-Speed_primarySecondary_temperature
 ChangePumpStatus
+EnableLag_variableSecondary_pumpSpeed

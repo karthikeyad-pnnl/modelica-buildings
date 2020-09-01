@@ -1,5 +1,7 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps;
-package Subsequences "Hot water pump control sequences"
+
+package Subsequences
+    "Hot water pump control sequences"
 
 
 annotation (
@@ -41,4 +43,5 @@ Icon(graphics={
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
           extent={{-80.0,0.0},{-20.0,60.0}})}));
+
 end Subsequences;

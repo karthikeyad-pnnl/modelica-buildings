@@ -1,6 +1,8 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences;
-block Speed_primary_localDp
-    "Pump speed control for primary-only plants where the remote DP sensor(s) is not hardwired to the plant controller, but a local DP sensor is hardwired"
+
+block Speed_secondary_localDp
+ 
+    "Secondary pump speed control for primary-secondary plants where the remote DP sensor(s) is not hardwired to the plant controller, but a local DP sensor is hardwired"
 
   parameter Integer nSen = 2
     "Total number of remote differential pressure sensors";
@@ -11,7 +13,8 @@ block Speed_primary_localDp
   parameter Real minLocDp(
     final min=0,
     displayUnit="Pa",
-    final unit= "Pa",
+    final unit=
+    "Pa",
     final quantity="PressureDifference")=5*6894.75
     "Minimum hot water loop local differential pressure setpoint";
 
@@ -102,7 +105,7 @@ block Speed_primary_localDp
     "Local differential pressure setpoint"
     annotation (Placement(transformation(extent={{100,-30},{120,-10}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Speed_primary_remoteDp
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Speed_secondary_remoteDp
     hotPumSpe(
     final nSen=1,
     final nPum=nPum,
@@ -110,7 +113,8 @@ block Speed_primary_localDp
     final maxPumSpe=maxPumSpe,
     final k=k,
     final Ti=Ti,
-    final Td=Td) "Calculate pump speed based on pressure setpoint"
+    final Td=Td)
+    "Calculate pump speed based on pressure setpoint"
     annotation (Placement(transformation(extent={{60,80},{80,100}})));
 
 protected
@@ -129,7 +133,8 @@ protected
     annotation (Placement(transformation(extent={{0,-30},{20,-10}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
-    final nu=nPum) "Check if any hot water pumps are enabled"
+    final nu=nPum)
+    "Check if any hot water pumps are enabled"
     annotation (Placement(transformation(extent={{-50,-60},{-30,-40}})));
 
   Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep(
@@ -218,14 +223,19 @@ equation
 
   connect(hotPumSpe.yHotWatPumSpe, yHotWatPumSpe)
     annotation (Line(points={{82,90},{160,90}}, color={0,0,127}));
+
   connect(mulOr.y, booRep.u)
     annotation (Line(points={{-28,-50},{-22,-50}}, color={255,0,255}));
+
   connect(uHotWatPum, mulOr.u[1:nPum]) annotation (Line(points={{-160,-50},{-106,-50},
           {-106,-50},{-52,-50}},     color={255,0,255}));
+
   connect(uHotWatPum, hotPumSpe.uHotWatPum) annotation (Line(points={{-160,-50},
           {-130,-50},{-130,98},{58,98}}, color={255,0,255}));
+
   connect(locDpSet.y, hotPumSpe.dpHotWatSet) annotation (Line(points={{122,-20},
           {130,-20},{130,72},{40,72},{40,82},{58,82}}, color={0,0,127}));
+
   connect(dpHotWat_local, hotPumSpe.dpHotWat[1])
     annotation (Line(points={{-160,90},{58,90}}, color={0,0,127}));
 
@@ -270,11 +280,11 @@ annotation (
   Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-140,-140},{140,140}})),
   Documentation(info="<html>
 <p>
-Block that controls speed of enabled hot water pumps for primary-only plants where
+Block that controls speed of secondary pumps for primary-secondary plants where
 the remote pressure differential (DP) sensor(s) is not hardwired to the plant controller,
 but a local DP sensor is hardwired to the plant controller, 
-according to ASHRAE RP-1711, March, 2020 draft, sections 5.3.6.7, 5.3.6.8 and
-5.3.6.9.
+according to ASHRAE RP-1711, March, 2020 draft, sections 5.3.7.7, 5.3.7.8 and
+5.3.7.9.
 </p>
 <ol>
 <li>
@@ -301,9 +311,10 @@ from each of the remote loops.
 </html>", revisions="<html>
 <ul>
 <li>
-August 3, 2020, by Karthik Devaprasad:<br/>
+August 25, 2020, by Karthik Devaprasad:<br/>
 First implementation.
 </li>
 </ul>
 </html>"));
-end Speed_primary_localDp;
+
+end Speed_secondary_localDp;

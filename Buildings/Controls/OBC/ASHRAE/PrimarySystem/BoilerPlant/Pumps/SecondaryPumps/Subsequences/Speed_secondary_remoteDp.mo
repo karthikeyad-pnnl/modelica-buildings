@@ -1,6 +1,8 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences;
-block Speed_primary_remoteDp
-    "Pump speed control for primary-only plants where the remote DP sensor(s) is hardwired to the plant controller"
+
+block Speed_secondary_remoteDp
+ 
+    "Secondary pump speed control for primary-secondary plants where the remote DP sensor(s) is hardwired to the plant controller"
 
   parameter Integer nSen = 2
     "Total number of remote differential pressure sensors";
@@ -192,10 +194,13 @@ equation
 
   connect(uHotWatPum, mulOr.u[1:nPum]) annotation (Line(points={{-140,0},{-122,0},{
           -122,0},{-102,0}},       color={255,0,255}));
+
   connect(mulOr.y, swi.u2) annotation (Line(points={{-78,0},{-50,0},{-50,100},{78,
           100}}, color={255,0,255}));
+
   connect(mulOr.y, booRep.u) annotation (Line(points={{-78,0},{-50,0},{-50,-40},
           {-22,-40}}, color={255,0,255}));
+
 annotation (
   defaultComponentName="hotPumSpe",
   Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
@@ -232,10 +237,10 @@ annotation (
   Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-120,-120},{120,120}})),
   Documentation(info="<html>
 <p>
-Block that outputs hot water pump speed setpoint for primary-only plants with
-headered, variable-speed pumps where the remote pressure differential sensor is
+Block that outputs secondary pump speed setpoint for primary-secondary plants with
+variable-speed secondary pumps where the remote pressure differential sensor is
 hardwired to the plant controller, according to ASHRAE RP-1711, March, 2020 draft, 
-sections 5.3.6.5 and 5.3.6.6.
+sections 5.3.7.5 and 5.3.7.6.
 </p>
 <ol>
 <li>
@@ -255,9 +260,10 @@ of all DP sensor loops.
 </html>", revisions="<html>
 <ul>
 <li>
-August 3, 2020, by Karthik Devaprasad:<br/>
+August 25, 2020, by Karthik Devaprasad:<br/>
 First implementation.
 </li>
 </ul>
 </html>"));
-end Speed_primary_remoteDp;
+
+end Speed_secondary_remoteDp;

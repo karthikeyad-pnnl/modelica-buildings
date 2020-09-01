@@ -1,9 +1,12 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Validation;
-model Speed_primary_localDp
-    "Validate sequence of controlling hot water pump speed for primary-only plants with local DP sensor hardwired to the plant controller"
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Speed_primary_localDp
-    hotPumSpe(final nSen=2, final nPum=2)
+model Speed_secondary_localDp
+ 
+    "Validate sequence of controlling secondary pump speed for primary-secondary plants with local DP sensor hardwired to the plant controller"
+
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Speed_secondary_localDp
+    hotPumSpe(
+    final nSen=2, final nPum=2)
     "Hot water pump speed control based on local pressure difference sensor"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
 
@@ -63,13 +66,13 @@ equation
 
 annotation (
   experiment(StopTime=10.0, Tolerance=1e-06),
-  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Pumps/PrimaryPumps/Subsequences/Validation/Speed_primary_localDp.mos"
+  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Pumps/SecondaryPumps/Subsequences/Validation/Speed_secondary_localDp.mos"
     "Simulate and plot"),
   Documentation(info="<html>
 <p>
 This example validates
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.Speed_primary_localDp\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.Speed_primary_localDp</a>.
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Speed_secondary_localDp\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Speed_secondary_localDp</a>.
 </p>
 </html>", revisions="<html>
 <ul>
@@ -91,4 +94,5 @@ First implementation.
                 fillPattern = FillPattern.Solid,
                 points = {{-36,60},{64,0},{-36,-60},{-36,60}})}), Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
-end Speed_primary_localDp;
+
+end Speed_secondary_localDp;

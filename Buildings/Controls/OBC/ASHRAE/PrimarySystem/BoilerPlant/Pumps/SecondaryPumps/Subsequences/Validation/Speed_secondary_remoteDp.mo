@@ -1,8 +1,10 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Validation;
-model Speed_primary_remoteDp
-    "Validate sequence of controlling hot water pump speed for primary-only plants with remote DP sensor hardwired to the plant controller"
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Speed_primary_remoteDp
+model Speed_secondary_remoteDp
+ 
+    "Validate sequence for controlling secondary pump speed for primary-secondary plants with remote DP sensor hardwired to the plant controller"
+
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Speed_secondary_remoteDp
     hotPumSpe(nSen=2, nPum=2)
     "Hot water pump speed control based on remote hardwired differential pressure sensor"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
@@ -52,13 +54,13 @@ equation
 
 annotation (
   experiment(StopTime=10.0, Tolerance=1e-06),
-  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Pumps/PrimaryPumps/Subsequences/Validation/Speed_primary_remoteDp.mos"
+  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Pumps/SecondaryPumps/Subsequences/Validation/Speed_secondary_remoteDp.mos"
     "Simulate and plot"),
   Documentation(info="<html>
 <p>
 This example validates
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.Speed_primary_remoteDp\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.Speed_primary_remoteDp</a>.
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Speed_secondary_remoteDp\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Speed_secondary_remoteDp</a>.
 </p>
 </html>", revisions="<html>
 <ul>
@@ -80,4 +82,5 @@ First implementation.
                 fillPattern = FillPattern.Solid,
                 points = {{-36,60},{64,0},{-36,-60},{-36,60}})}), Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
-end Speed_primary_remoteDp;
+
+end Speed_secondary_remoteDp;

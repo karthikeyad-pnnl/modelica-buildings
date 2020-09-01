@@ -382,6 +382,77 @@ model Controller
     "Testing pump configuration 12"
     annotation (Placement(transformation(extent={{190,-488},{210,-432}})));
 
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
+    "True-hold for signal visualization"
+    annotation (Placement(transformation(extent={{-130,280},{-110,300}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol1(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
+    "True-hold for signal visualization"
+    annotation (Placement(transformation(extent={{230,260},{250,280}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol2(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
+    "True-hold for signal visualization"
+    annotation (Placement(transformation(extent={{-130,120},{-110,140}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol3(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
+    "True-hold for signal visualization"
+    annotation (Placement(transformation(extent={{230,100},{250,120}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol4(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
+    "True-hold for signal visualization"
+    annotation (Placement(transformation(extent={{-140,-60},{-120,-40}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol5(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
+    "True-hold for signal visualization"
+    annotation (Placement(transformation(extent={{250,-80},{270,-60}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol6(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
+    "True-hold for signal visualization"
+    annotation (Placement(transformation(extent={{-140,-240},{-120,-220}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol7(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
+    "True-hold for signal visualization"
+    annotation (Placement(transformation(extent={{250,-250},{270,-230}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol8(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
+    "True-hold for signal visualization"
+    annotation (Placement(transformation(extent={{-130,-400},{-110,-380}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol9(
+    final trueHoldDuration=10,
+    final falseHoldDuration=0)
+    "True-hold for signal visualization"
+    annotation (Placement(transformation(extent={{230,-430},{250,-410}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol10(
+    final trueHoldDuration=3300,
+    final falseHoldDuration=0) "Hold boiler on signal"
+    annotation (Placement(transformation(extent={{130,-110},{150,-90}})));
+
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol11(
+    final trueHoldDuration=3300,
+    final falseHoldDuration=0) "Hold boiler on signal"
+    annotation (Placement(transformation(extent={{-260,-270},{-240,-250}})));
+
+protected
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt[2](
     final k={2,1})
     "Pump rotation"
@@ -466,12 +537,6 @@ model Controller
     final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{-280,210},{-260,230}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol(
-    final trueHoldDuration=10,
-    final falseHoldDuration=0)
-    "True-hold for signal visualization"
-    annotation (Placement(transformation(extent={{-130,280},{-110,300}})));
-
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul1(
     final period=1800,
     final startTime=15)
@@ -512,12 +577,6 @@ model Controller
     "Sine signal"
     annotation (Placement(transformation(extent={{80,190},{100,210}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol1(
-    final trueHoldDuration=10,
-    final falseHoldDuration=0)
-    "True-hold for signal visualization"
-    annotation (Placement(transformation(extent={{230,260},{250,280}})));
-
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul3(
     final period=1800,
     final startTime=15)
@@ -557,12 +616,6 @@ model Controller
     final freqHz=1/3600,
     final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{-280,50},{-260,70}})));
-
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol2(
-    final trueHoldDuration=10,
-    final falseHoldDuration=0)
-    "True-hold for signal visualization"
-    annotation (Placement(transformation(extent={{-130,120},{-110,140}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul5(
     final period=1800,
@@ -609,12 +662,6 @@ model Controller
     final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{80,30},{100,50}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol3(
-    final trueHoldDuration=10,
-    final falseHoldDuration=0)
-    "True-hold for signal visualization"
-    annotation (Placement(transformation(extent={{230,100},{250,120}})));
-
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul7(
     final period=1800,
     final startTime=15)
@@ -646,12 +693,6 @@ model Controller
     final freqHz=1/3600,
     final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{-290,-130},{-270,-110}})));
-
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol4(
-    final trueHoldDuration=10,
-    final falseHoldDuration=0)
-    "True-hold for signal visualization"
-    annotation (Placement(transformation(extent={{-140,-60},{-120,-40}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul9(
     final period=1800,
@@ -691,12 +732,6 @@ model Controller
     final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{100,-150},{120,-130}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol5(
-    final trueHoldDuration=10,
-    final falseHoldDuration=0)
-    "True-hold for signal visualization"
-    annotation (Placement(transformation(extent={{250,-80},{270,-60}})));
-
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul11(
     final period=1800,
     final startTime=10)
@@ -730,12 +765,6 @@ model Controller
     final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{-290,-310},{-270,-290}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol6(
-    final trueHoldDuration=10,
-    final falseHoldDuration=0)
-    "True-hold for signal visualization"
-    annotation (Placement(transformation(extent={{-140,-240},{-120,-220}})));
-
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul13(
     final period=1800,
     final startTime=10)
@@ -768,12 +797,6 @@ model Controller
     final freqHz=1/3600,
     final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{100,-320},{120,-300}})));
-
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol7(
-    final trueHoldDuration=10,
-    final falseHoldDuration=0)
-    "True-hold for signal visualization"
-    annotation (Placement(transformation(extent={{250,-250},{270,-230}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul15(
     final period=1800,
@@ -814,12 +837,6 @@ model Controller
     final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{-280,-470},{-260,-450}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol8(
-    final trueHoldDuration=10,
-    final falseHoldDuration=0)
-    "True-hold for signal visualization"
-    annotation (Placement(transformation(extent={{-130,-400},{-110,-380}})));
-
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul17(
     final period=1800,
     final startTime=10)
@@ -845,12 +862,6 @@ model Controller
     final freqHz=1/3600,
     final offset=0.25) "Sine signal"
     annotation (Placement(transformation(extent={{80,-500},{100,-480}})));
-
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol9(
-    final trueHoldDuration=10,
-    final falseHoldDuration=0)
-    "True-hold for signal visualization"
-    annotation (Placement(transformation(extent={{230,-430},{250,-410}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul19(
     final period=1800,
@@ -962,18 +973,8 @@ model Controller
     final startTime=fill(10, 2)) "Real pulse signal"
     annotation (Placement(transformation(extent={{-280,-80},{-260,-60}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol10(
-    final trueHoldDuration=3300,
-    final falseHoldDuration=0) "Hold boiler on signal"
-    annotation (Placement(transformation(extent={{130,-110},{150,-90}})));
-
   Buildings.Controls.OBC.CDL.Logical.Or or2 "Logical Or"
     annotation (Placement(transformation(extent={{160,-80},{180,-60}})));
-
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol11(
-    final trueHoldDuration=3300,
-    final falseHoldDuration=0) "Hold boiler on signal"
-    annotation (Placement(transformation(extent={{-260,-270},{-240,-250}})));
 
   Buildings.Controls.OBC.CDL.Logical.Or or1 "Logical Or"
     annotation (Placement(transformation(extent={{-230,-240},{-210,-220}})));
@@ -1003,7 +1004,6 @@ model Controller
     annotation (Placement(transformation(extent={{150,-430},{170,-410}})));
 
 equation
-
   connect(conInt.y, priPumCon.uPumLeaLag) annotation (Line(points={{-198,450},{-180,
           450},{-180,427},{-172,427}}, color={255,127,0}));
 
