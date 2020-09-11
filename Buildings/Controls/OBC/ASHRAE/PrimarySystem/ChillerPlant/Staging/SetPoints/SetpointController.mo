@@ -6,7 +6,7 @@ block SetpointController
     "true = plant has a WSE, false = plant does not have WSE"
     annotation (Dialog(tab="General", group="Plant configuration parameters"));
 
-  parameter Boolean serChi = false
+  parameter Boolean is_serChi = false
     "true = series chillers plant; false = parallel chillers plant"
     annotation (Dialog(tab="General", group="Plant configuration parameters"));
 
@@ -18,13 +18,19 @@ block SetpointController
     "Number of chillers"
     annotation (Dialog(tab="General", group="Chiller configuration parameters"));
 
-  parameter Modelica.SIunits.Power chiDesCap[nChi]
+  parameter Real chiDesCap[nChi](
+     final unit=fill("W",nChi),
+     final quantity=fill("Power",nChi),
+     displayUnit=fill("W",nChi))
     "Design chiller capacities vector"
-    annotation (Dialog(tab="General", group="Chiller configuration parameters"));
+    annotation (Evaluate=true, Dialog(tab="General", group="Chiller configuration parameters"));
 
-  parameter Modelica.SIunits.Power chiMinCap[nChi]
+  parameter Real chiMinCap[nChi](
+     final unit=fill("W",nChi),
+     final quantity=fill("Power",nChi),
+     displayUnit=fill("W",nChi))
     "Chiller minimum cycling loads vector"
-    annotation (Dialog(tab="General", group="Chiller configuration parameters"));
+    annotation (Evaluate=true, Dialog(tab="General", group="Chiller configuration parameters"));
 
   parameter Integer chiTyp[nChi]={
     Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Types.ChillerAndStageTypes.positiveDisplacement,
@@ -49,42 +55,42 @@ block SetpointController
   parameter Real delayStaCha(
     final unit="s",
     final quantity="Time",
-    final displayUnit="h")=900
+    displayUnit="h")=900
       "Hold period for each stage change"
     annotation (Dialog(tab="Time parameters", group="Hold and delay parameters"));
 
   parameter Real parLoaRatDelay(
     final unit="s",
     final quantity="Time",
-    final displayUnit="h")=900
+    displayUnit="h")=900
       "Enable delay for operating and staging part load ratio condition"
     annotation (Dialog(tab="Time parameters", group="Hold and delay parameters"));
 
   parameter Real faiSafTruDelay(
     final unit="s",
     final quantity="Time",
-    final displayUnit="h")=900
+    displayUnit="h")=900
       "Enable delay for failsafe condition"
     annotation (Dialog(tab="Time parameters", group="Hold and delay parameters"));
 
   parameter Real effConTruDelay(
     final unit="s",
     final quantity="Time",
-    final displayUnit="h")=900
+    displayUnit="h")=900
       "Enable delay for efficiency condition"
     annotation (Dialog(tab="Time parameters", group="Hold and delay parameters"));
 
   parameter Real shortTDelay(
     final unit="s",
     final quantity="Time",
-    final displayUnit="h")=600
+    displayUnit="h")=600
       "Short enable delay for staging from zero to first available stage up"
     annotation(Evaluate=true, Dialog(enable=have_WSE, tab="Time parameters", group="Hold and delay parameters"));
 
   parameter Real longTDelay(
     final unit="s",
     final quantity="Time",
-    final displayUnit="h")=1200
+    displayUnit="h")=1200
       "Long enable delay for staging from zero to first available stage up"
     annotation(Evaluate=true, Dialog(enable=have_WSE, tab="Time parameters", group="Hold and delay parameters"));
 
@@ -123,41 +129,66 @@ block SetpointController
     "Maximum stage up or down part load ratio for variable speed centrifugal stage types"
     annotation(Evaluate=true, Dialog(enable=anyVsdCen, tab="Conditionals", group="Staging part load ratio parameters"));
 
-  parameter Modelica.SIunits.TemperatureDifference smallTDif = 1
-    "Offset between the chilled water supply temperature and its setpoint for the long condition"
+  parameter Real smallTDif(
+    final unit="K",
+    final quantity="TemperatureDifference",
+    displayUnit="degC")=1
+      "Offset between the chilled water supply temperature and its setpoint for the long condition"
     annotation(Evaluate=true, Dialog(enable=have_WSE, tab="Conditionals", group="Value comparison parameters"));
 
-  parameter Modelica.SIunits.TemperatureDifference largeTDif = 2
-    "Offset between the chilled water supply temperature and its setpoint for the short condition"
+  parameter Real largeTDif(
+    final unit="K",
+    final quantity="TemperatureDifference",
+    displayUnit="degC")=2
+      "Offset between the chilled water supply temperature and its setpoint for the short condition"
     annotation(Evaluate=true, Dialog(enable=have_WSE, tab="Conditionals", group="Value comparison parameters"));
 
-  parameter Modelica.SIunits.TemperatureDifference faiSafTDif = 1
-    "Offset between the chilled water supply temperature and its setpoint for the failsafe condition"
+  parameter Real faiSafTDif(
+    final unit="K",
+    final quantity="TemperatureDifference",
+    displayUnit="degC")=1
+      "Offset between the chilled water supply temperature and its setpoint for the failsafe condition"
     annotation (Dialog(tab="Conditionals", group="Value comparison parameters"));
 
-  parameter Modelica.SIunits.PressureDifference dpDif = 2 * 6895
-    "Offset between the chilled water pump diferential static pressure and its setpoint"
+  parameter Real dpDif(
+    final unit="Pa",
+    final quantity="PressureDifference",
+    displayUnit="Pa")=2 * 6895
+      "Offset between the chilled water pump diferential static pressure and its setpoint"
     annotation (Dialog(tab="Conditionals", group="Value comparison parameters"));
 
-  parameter Modelica.SIunits.TemperatureDifference TDif = 1
-    "Offset between the chilled water supply temperature and its setpoint for staging down to WSE only"
+  parameter Real TDif(
+    final unit="K",
+    final quantity="TemperatureDifference",
+    displayUnit="degC")=1
+      "Offset between the chilled water supply temperature and its setpoint for staging down to WSE only"
     annotation (Dialog(tab="Conditionals", group="Value comparison parameters"));
 
-  parameter Modelica.SIunits.TemperatureDifference TDifHys = 1
-    "Hysteresis deadband for temperature"
+  parameter Real TDifHys(
+    final unit="K",
+    final quantity="TemperatureDifference",
+    displayUnit="degC")=1
+      "Hysteresis deadband for temperature"
     annotation (Dialog(tab="Conditionals", group="Value comparison parameters"));
 
-  parameter Modelica.SIunits.PressureDifference faiSafDpDif = 2 * 6895
-    "Offset between the chilled water differential pressure and its setpoint"
+  parameter Real faiSafDpDif(
+    final unit="Pa",
+    final quantity="PressureDifference",
+    displayUnit="Pa")=2 * 6895
+      "Offset between the chilled water differential pressure and its setpoint"
     annotation (Dialog(tab="Conditionals", group="Value comparison parameters"));
 
-  parameter Modelica.SIunits.PressureDifference dpDifHys = 0.5 * 6895
-    "Pressure difference hysteresis deadband"
+  parameter Real dpDifHys(
+    final unit="Pa",
+    final quantity="PressureDifference",
+    displayUnit="Pa")=0.5 * 6895
+      "Pressure difference hysteresis deadband"
     annotation (Dialog(tab="Conditionals", group="Value comparison parameters"));
 
   parameter Real effConSigDif(
     final min=0,
-    final max=1) = 0.05
+    final max=1,
+    final unit="1") = 0.05
     "Signal hysteresis deadband"
     annotation (Dialog(tab="Conditionals", group="Value comparison parameters"));
 
@@ -201,21 +232,21 @@ block SetpointController
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uLifMin(
     final unit="K",
-    final quantity="ThermodynamicTemperature") if anyVsdCen
+    final quantity="TemperatureDifference") if anyVsdCen
     "Minimum chiller lift"
     annotation (Placement(transformation(extent={{-442,-30},{-402,10}}),
         iconTransformation(extent={{-140,-40},{-100,0}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uLif(
     final unit="K",
-    final quantity="ThermodynamicTemperature") if anyVsdCen
+    final quantity="TemperatureDifference") if anyVsdCen
     "Chiller lift"
     annotation (Placement(transformation(extent={{-442,30},{-402,70}}),
         iconTransformation(extent={{-140,0},{-100,40}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uLifMax(
     final unit="K",
-    final quantity="ThermodynamicTemperature") if anyVsdCen
+    final quantity="TemperatureDifference") if anyVsdCen
     "Maximum chiller lift"
     annotation (Placement(transformation(extent={{-442,0},{-402,40}}),
         iconTransformation(extent={{-140,-20},{-100,20}})));
@@ -242,14 +273,14 @@ block SetpointController
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput dpChiWatPumSet(
     final unit="Pa",
-    final quantity="PressureDifference") if not serChi
+    final quantity="PressureDifference") if not is_serChi
     "Chilled water pump differential static pressure setpoint"
     annotation (Placement(transformation(extent={{-442,200},{-402,240}}),
       iconTransformation(extent={{-140,-90},{-100,-50}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput dpChiWatPum(
     final unit="Pa",
-    final quantity="PressureDifference") if not serChi
+    final quantity="PressureDifference") if not is_serChi
     "Chilled water pump differential static pressure"
     annotation (Placement(transformation(extent={{-442,170},{-402,210}}),
     iconTransformation(extent={{-140,-70},{-100,-30}})));
@@ -310,7 +341,7 @@ block SetpointController
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Staging.SetPoints.Subsequences.Up staUp(
     final have_WSE=have_WSE,
-    final serChi=serChi,
+    final is_serChi=is_serChi,
     final effConTruDelay=effConTruDelay,
     final faiSafTruDelay=faiSafTruDelay,
     final shortTDelay=shortTDelay,
@@ -326,7 +357,7 @@ block SetpointController
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Staging.SetPoints.Subsequences.Down staDow(
     final have_WSE=have_WSE,
-    final serChi=serChi,
+    final is_serChi=is_serChi,
     final parLoaRatDelay=parLoaRatDelay,
     final faiSafTruDelay=faiSafTruDelay,
     final faiSafTDif=faiSafTDif,
@@ -338,7 +369,7 @@ block SetpointController
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Staging.SetPoints.Subsequences.CapacityRequirement capReq(
     final avePer = avePer,
     final holPer = delayStaCha) "Capacity requirement"
-    annotation (Placement(transformation(extent={{-322,300},{-302,320}})));
+    annotation (Placement(transformation(extent={{-320,300},{-300,320}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Staging.SetPoints.Subsequences.Capacities cap(
     final nSta=nSta) "Design and minimum capacities for relevant chiller stages"
@@ -398,12 +429,14 @@ equation
           color={255,0,255}));
   connect(conf.yAva, sta.uAva) annotation (Line(points={{-338,-178},{-332,-178},
           {-332,-216},{-322,-216}},color={255,0,255}));
-  connect(TChiWatSupSet, capReq.TChiWatSupSet) annotation (Line(points={{-422,370},
-          {-370,370},{-370,319},{-324,319}}, color={0,0,127}));
-  connect(TChiWatRet, capReq.TChiWatRet) annotation (Line(points={{-422,300},{-374,
-          300},{-374,314},{-324,314}}, color={0,0,127}));
+  connect(TChiWatSupSet, capReq.TChiWatSupSet) annotation (Line(points={{-422,
+          370},{-370,370},{-370,319},{-322,319}},
+                                             color={0,0,127}));
+  connect(TChiWatRet, capReq.TChiWatRet) annotation (Line(points={{-422,300},{
+          -374,300},{-374,314},{-322,314}},
+                                       color={0,0,127}));
   connect(VChiWat_flow, capReq.VChiWat_flow) annotation (Line(points={{-422,270},
-          {-370,270},{-370,309},{-324,309}}, color={0,0,127}));
+          {-370,270},{-370,309},{-322,309}}, color={0,0,127}));
   connect(conf.yDesCap, cap.uDesCap) annotation (Line(points={{-338,-162},{-322,
           -162},{-322,-161},{-272,-161}}, color={0,0,127}));
   connect(conf.yMinCap, cap.uMinCap) annotation (Line(points={{-338,-166},{-312,
@@ -414,7 +447,7 @@ equation
           {-282,-173},{-272,-173}}, color={255,127,0}));
   connect(sta.yHig, cap.uHig) annotation (Line(points={{-298,-211},{-280,-211},
           {-280,-176},{-272,-176}},color={255,0,255}));
-  connect(capReq.y, PLRs.uCapReq) annotation (Line(points={{-300,310},{-194,310},
+  connect(capReq.y, PLRs.uCapReq) annotation (Line(points={{-298,310},{-194,310},
           {-194,-176},{-184,-176}},
                                   color={0,0,127}));
   connect(cap.yDes, PLRs.uCapDes) annotation (Line(points={{-248,-162},{-234,
@@ -504,8 +537,8 @@ equation
           {-102,-116}}, color={255,127,0}));
   connect(uSta, staDow.u) annotation (Line(points={{-420,-60},{-328,-60},{-328,-239},
           {-102,-239}}, color={255,127,0}));
-  connect(chaPro, capReq.chaPro) annotation (Line(points={{-420,-140},{-350,-140},
-          {-350,302},{-324,302}},       color={255,0,255}));
+  connect(chaPro, capReq.chaPro) annotation (Line(points={{-420,-140},{-350,
+          -140},{-350,302},{-322,302}}, color={255,0,255}));
   connect(sta.yAvaUp, cha.uAvaUp) annotation (Line(points={{-298,-203},{-292,-203},
           {-292,-148},{-40,-148},{-40,-164},{-22,-164}}, color={255,127,0}));
   connect(sta.yAvaDow, cha.uAvaDow) annotation (Line(points={{-298,-206},{-290,-206},
@@ -549,7 +582,7 @@ equation
   connect(staDow.y, yDow) annotation (Line(points={{-78,-230},{-60,-230},{-60,
           40},{138,40}}, color={255,0,255}));
   annotation (defaultComponentName = "staSetCon",
-        Icon(coordinateSystem(extent={{-100,-160},{100,160}}, initialScale=0.2),
+        Icon(coordinateSystem(extent={{-100,-220},{100,200}}, initialScale=0.2),
         graphics={
         Rectangle(
         extent={{-100,-220},{100,200}},
@@ -571,47 +604,47 @@ equation
           pattern=LinePattern.Dash,
           textString="TChiWatSup"),
         Text(
-          extent={{-96,-182},{-50,-200}},
+          extent={{-96,-182},{-40,-198}},
           lineColor={0,0,127},
           pattern=LinePattern.Dash,
           textString="TWsePre"),
         Text(
-          extent={{-100,-166},{-32,-176}},
+          extent={{-98,-160},{-24,-178}},
           lineColor={0,0,127},
           pattern=LinePattern.Dash,
           textString="TChiWatRet"),
         Text(
-          extent={{-96,-196},{-32,-224}},
+          extent={{-98,-196},{-14,-222}},
           lineColor={0,0,127},
           pattern=LinePattern.Dash,
           textString="TChiWat_flow"),
         Text(
-          extent={{-96,-122},{-12,-158}},
+          extent={{-96,-128},{8,-152}},
           lineColor={0,0,127},
           pattern=LinePattern.Dash,
           textString="uTowFanSpeMax"),
         Text(
-          extent={{-94,-50},{-4,-90}},
+          extent={{-94,-60},{0,-82}},
           lineColor={0,0,127},
           pattern=LinePattern.Dash,
           textString="dpChiWatPumSet"),
         Text(
-          extent={{-94,-34},{-26,-64}},
+          extent={{-96,-38},{-10,-58}},
           lineColor={0,0,127},
           pattern=LinePattern.Dash,
           textString="dpChiWatPum"),
         Text(
-          extent={{-96,-12},{-56,-28}},
+          extent={{-96,-12},{-48,-30}},
           lineColor={0,0,127},
           pattern=LinePattern.Dash,
           textString="uLifMin"),
         Text(
-          extent={{-96,12},{-52,-10}},
+          extent={{-96,12},{-46,-6}},
           lineColor={0,0,127},
           pattern=LinePattern.Dash,
           textString="uLifMax"),
         Text(
-          extent={{-100,26},{-70,14}},
+          extent={{-100,32},{-68,14}},
           lineColor={0,0,127},
           pattern=LinePattern.Dash,
           textString="uLif"),
@@ -621,22 +654,22 @@ equation
           pattern=LinePattern.Dash,
           textString="uSta
 "),     Text(
-          extent={{-94,202},{-48,180}},
+          extent={{-98,200},{-46,180}},
           lineColor={217,67,180},
           pattern=LinePattern.Dash,
           textString="uWseSta"),
         Text(
-          extent={{-94,180},{-58,164}},
+          extent={{-100,180},{-50,164}},
           lineColor={217,67,180},
           pattern=LinePattern.Dash,
           textString="chaPro"),
         Text(
-          extent={{-96,138},{-66,126}},
+          extent={{-96,142},{-68,120}},
           lineColor={217,67,180},
           pattern=LinePattern.Dash,
           textString="uPla"),
         Text(
-          extent={{-94,160},{-48,142}},
+          extent={{-96,160},{-44,142}},
           lineColor={217,67,180},
           pattern=LinePattern.Dash,
           textString="uChiAva"),
@@ -656,7 +689,7 @@ equation
           pattern=LinePattern.Dash,
           textString="yChiSet[]"),
         Text(
-          extent={{-96,-110},{-44,-128}},
+          extent={{-98,-110},{-48,-126}},
           lineColor={0,0,127},
           pattern=LinePattern.Dash,
           textString="uTunPar"),
@@ -676,7 +709,7 @@ equation
           pattern=LinePattern.Dash,
           textString="yChaDowEdg"),
         Text(
-          extent={{-16,-156},{92,-202}},
+          extent={{-12,-154},{96,-200}},
           lineColor={0,0,127},
           pattern=LinePattern.Dash,
           textString="yOpeParLoaRatMin"),

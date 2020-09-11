@@ -24,15 +24,32 @@ model ControllerTwo "Validates lead/lag and lead/standby equipment rotation cont
     final lag=false,
     final continuous=true,
     final weeInt=false,
+    final rotationPeriod=1800,
     final houOfDay=2,
     final weeCou=1,
     final weekday=6,
-    final dayCou=3) "Lead/standby rotation for continuously operating devices"
-    annotation (Placement(transformation(extent={{-20,-70},{0,-50}})));
+    final dayCou=3)
+    "Lead/standby rotation for continuously operating device. Rotation time is measured from simulation start"
+    annotation (Placement(transformation(extent={{-20,-40},{0,-20}})));
+
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Generic.EquipmentRotation.ControllerTwo
+    conLeaSch(
+    final lag=false,
+    final continuous=true,
+    final minLim=false,
+    final simTimSta=false,
+    weeInt=false,
+    zerTim=Buildings.Controls.OBC.CDL.Types.ZeroTime.Custom,
+    yearRef=2020,
+    houOfDay=2,
+    weekday=3,
+    dayCou=1)
+    "Lead/standby rotation for continuous operation"
+    annotation (Placement(transformation(extent={{-20,-80},{0,-60}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel1[2](
-    final delayTime={600,600},
+  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel1[2](final delayTime={300,
+        400},
     final delayOnInit={true,true})
     "Emulates device start-up time"
     annotation (Placement(transformation(extent={{20,-70},{40,-50}})));
@@ -49,9 +66,15 @@ protected
     annotation (Placement(transformation(extent={{60,-20},{80,0}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse leadLoad(
+<<<<<<< HEAD
     final width=0.8,
     final period=7200) "Lead device ON/OFF status"
     annotation (Placement(transformation(extent={{-100,60},{-80,80}})));
+=======
+    final width=0.8, final period(displayUnit="s") = 7200)
+                       "Lead device ON/OFF status"
+    annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
+>>>>>>> 024a6d81ac340c21d9a606e1445f8d50ff8d20a0
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse lagLoad(
     final width=0.2,
@@ -91,7 +114,7 @@ equation
   connect(pre1.y, leaSta.uDevSta) annotation (Line(points={{82,-10},{90,-10},{
           90,-30},{-28,-30},{-28,-16},{-22,-16}}, color={255,0,255}));
           annotation (
-   experiment(StopTime=1000000.0, Tolerance=1e-06),
+   experiment(StopTime=100000.0, Tolerance=1e-06),
     __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/ChillerPlant/Generic/EquipmentRotation/Validation/ControllerTwo.mos"
     "Simulate and plot"),
   Documentation(info="<html>

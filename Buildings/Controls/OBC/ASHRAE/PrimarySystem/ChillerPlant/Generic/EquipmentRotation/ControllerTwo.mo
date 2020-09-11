@@ -13,10 +13,33 @@ block ControllerTwo
     "Initial roles: true = lead, false = lag/standby"
     annotation (Evaluate=true, Dialog(tab="Advanced", group="Initiation"));
 
-  parameter Modelica.SIunits.Time stagingRuntime(
-    final displayUnit = "h") = 43200
-    "Staging runtime for each device"
-    annotation (Evaluate=true, Dialog(enable=not continuous));
+  parameter Boolean simTimSta = true
+    "Measure rotation time from the simulation start"
+    annotation(Evaluate=true, Dialog(group="Scheduler", enable=continuous));
+
+  parameter Boolean weeInt = true
+    "Rotation is scheduled in: true = weekly intervals; false = daily intervals"
+    annotation(Evaluate=true, Dialog(group="Scheduler", enable=not simTimSta));
+
+  parameter Real rotationPeriod(
+    final unit="s",
+    final quantity="Time",
+    displayUnit="h") = 1209600
+    "Rotation time period measured from simulation start"
+    annotation(Dialog(group="Scheduler", enable=simTimSta));
+
+  parameter Real minLeaRuntime(
+    final unit="s",
+    final quantity="Time",
+    displayUnit="h") = 43200
+    "Minimum cumulative runtime period for a current lead device before rotation may occur"
+    annotation (Evaluate=true, Dialog(enable=(not continuous and minLim)));
+
+  parameter Real offset(
+    final unit="s",
+    final quantity="Time") = 0
+    "Offset that is added to 'time', may be used for computing time in a different time zone"
+    annotation(Evaluate=true, Dialog(group="Calendar", enable=(continuous and not simTimSta)));
 
   parameter Buildings.Controls.OBC.CDL.Types.ZeroTime zerTim = Buildings.Controls.OBC.CDL.Types.ZeroTime.NY2019
     "Enumeration for choosing how reference time (time = 0) should be defined"
@@ -36,7 +59,7 @@ block ControllerTwo
 
   parameter Integer houOfDay = 2
     "Rotation hour of the day: 0 = midnight; 23 = 11pm"
-    annotation(Dialog(group="Scheduler"));
+    annotation(Evaluate=true, Dialog(group="Scheduler", enable=not simTimSta));
 
   parameter Integer weeCou = 1 "Number of weeks"
     annotation (Evaluate=true, Dialog(enable=weeInt, group="Scheduler"));

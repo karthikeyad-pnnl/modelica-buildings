@@ -14,10 +14,22 @@ block Scheduler
     "Offset that is added to 'time', may be used for computing time in different time zone"
     annotation(Dialog(group="Calendar"));
 
-  parameter Boolean weeInt = true
-    "Rotation is scheduled in: true = weekly intervals; false = daily intervals";
+  parameter Real rotationPeriod(
+    final unit="s",
+    final quantity="Time",
+    displayUnit="h") = 1209600
+    "Rotation time period measured from simulation start"
+    annotation(Dialog(group="Calendar", enable=simTimSta));
 
-  parameter Integer houOfDay = 2 "Rotation hour of the day: 0 = midnight; 23 = 11pm";
+  parameter Boolean simTimSta = true
+    "Measure rotation time from the simulation start";
+
+  parameter Boolean weeInt = false
+    "Rotation is scheduled in: true = weekly intervals; false = daily intervals"
+    annotation (Evaluate=true, Dialog(enable=not simTimSta));
+
+  parameter Integer houOfDay = 2 "Rotation hour of the day: 0 = midnight; 23 = 11pm"
+    annotation (Evaluate=true, Dialog(enable=not simTimSta));
 
   parameter Integer weeCou = 1 "Number of weeks"
     annotation (Evaluate=true, Dialog(enable=weeInt));
