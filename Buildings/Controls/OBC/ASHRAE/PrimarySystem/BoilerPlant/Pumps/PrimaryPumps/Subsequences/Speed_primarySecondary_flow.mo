@@ -91,6 +91,20 @@ block Speed_primarySecondary_flow
       iconTransformation(extent={{100,-20},{140,20}})));
 
 protected
+  Buildings.Controls.OBC.CDL.Continuous.PIDWithReset conPID(
+    final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
+    final k=1,
+    final Ti=0.5,
+    final Td=0.1,
+    final yMax=1,
+    final yMin=0)
+    "PID loop to regulate flow through decoupler leg"
+    annotation (Placement(transformation(extent={{20,-10},{40,10}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Edge edg
+    "Reset PID loop when it is activated"
+    annotation (Placement(transformation(extent={{-40,-30},{-20,-10}})));
+
   Buildings.Controls.OBC.CDL.Continuous.Line pumSpe
     "Pump speed"
     annotation (Placement(transformation(extent={{60,50},{80,70}})));
@@ -103,19 +117,6 @@ protected
   Buildings.Controls.OBC.CDL.Continuous.Division div if primarySecondarySensors
     "Normalize flow-rate value"
     annotation (Placement(transformation(extent={{-60,-80},{-40,-60}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.LimPID conPID(
-    final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
-    final k=k,
-    final Ti=Ti,
-    final Td=Td,
-    final yMax=1,
-    final yMin=0,
-    final reverseActing=true,
-    final reset=Buildings.Controls.OBC.CDL.Types.Reset.Parameter,
-    final y_reset=0)
-    "Pump speed controller"
-    annotation (Placement(transformation(extent={{20,-10},{40,10}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
     final nu=nPum)
@@ -192,23 +193,25 @@ equation
           {-106,-46},{-102,-46}}, color={0,0,127}));
   connect(add2.y, div.u1) annotation (Line(points={{-78,-40},{-70,-40},{-70,-64},
           {-62,-64}}, color={0,0,127}));
-  connect(conPID.y, pumSpe.u)
-    annotation (Line(points={{42,0},{50,0},{50,60},{58,60}}, color={0,0,127}));
   connect(addPar.y, div.u2) annotation (Line(points={{-78,-70},{-70,-70},{-70,-76},
           {-62,-76}}, color={0,0,127}));
   connect(VHotWatPri_flow, addPar.u) annotation (Line(points={{-140,-30},{-110,-30},
           {-110,-70},{-102,-70}}, color={0,0,127}));
-  connect(mulOr.y, conPID.trigger) annotation (Line(points={{-78,0},{-50,0},{-50,
-          -30},{24,-30},{24,-12}}, color={255,0,255}));
-  connect(div.y, conPID.u_m)
-    annotation (Line(points={{-38,-70},{30,-70},{30,-12}}, color={0,0,127}));
-  connect(zer.y, conPID.u_s) annotation (Line(points={{-58,90},{-30,90},{-30,0},
-          {18,0}}, color={0,0,127}));
 
   connect(VHotWatDec_flow, gai.u)
     annotation (Line(points={{-140,-100},{-62,-100}}, color={0,0,127}));
+  connect(zer.y, conPID.u_s) annotation (Line(points={{-58,90},{-30,90},{-30,0},
+          {18,0}}, color={0,0,127}));
+  connect(mulOr.y, edg.u) annotation (Line(points={{-78,0},{-50,0},{-50,-20},{
+          -42,-20}}, color={255,0,255}));
+  connect(edg.y, conPID.trigger)
+    annotation (Line(points={{-18,-20},{24,-20},{24,-12}}, color={255,0,255}));
+  connect(div.y, conPID.u_m)
+    annotation (Line(points={{-38,-70},{30,-70},{30,-12}}, color={0,0,127}));
   connect(gai.y, conPID.u_m)
     annotation (Line(points={{-38,-100},{30,-100},{30,-12}}, color={0,0,127}));
+  connect(conPID.y, pumSpe.u)
+    annotation (Line(points={{42,0},{50,0},{50,60},{58,60}}, color={0,0,127}));
 annotation (
   defaultComponentName="hotPumSpe",
   Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
@@ -223,7 +226,7 @@ annotation (
           lineColor={0,0,255},
           textString="%name")}),
   Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-120,-120},{120,120}})),
-  Documentation(info="<html>
+Documentation(info="<html>
 <p>
 Block that outputs hot water pump speed setpoint for primary-secondary plants with
 variable-speed primary pumps with flow sensors present in the primary and secondary
@@ -232,10 +235,10 @@ sections 5.3.6.12 and 5.3.6.13.
 </p>
 <p>
 When any hot water pump is proven on, <code>uHotWatPum = true</code>, 
-pump speed<code>yHotWatPumSpe</code> will be controlled by a reverse acting PID loop maintaining the
-flowrate through the decoupler at zero. PID loop output shall be mapped from minimum
-pump speed (<code>minPumSpe</code>) at 0% to maximum pump speed
-(<code>maxPumSpe</code>) at 100%.
+pump speed<code>yHotWatPumSpe</code> will be controlled by a reverse acting PID
+loop maintaining the flowrate through the decoupler at zero. PID loop output 
+shall be mapped from minimum pump speed (<code>minPumSpe</code>) at 0% to maximum
+pump speed(<code>maxPumSpe</code>) at 100%.
 <ol>
 <li>
 When the plant has flowrate sensors in the primary and secondary loops,
@@ -245,8 +248,9 @@ loop <code>VHotWatPri_flow</code> and the measured flowrate in secondary loop
 (<code>VHotWatPri_flow - VHotWatSec_flow</code>) and generate the control signal.
 </li>
 <li>
-When the plant has a flowrate sensor in the decoupler, <code>primarySecondarySensors = false</code>,
-the measured flowrate through the decoupler is used to calculate the control signal.
+When the plant has a flowrate sensor in the decoupler, 
+<code>primarySecondarySensors = false</code>, the measured flowrate through the
+decoupler is used to calculate the control signal.
 </li>
 </ol>
 </p>

@@ -139,6 +139,11 @@ block Speed_primarySecondary_temperature
     annotation (Placement(transformation(extent={{120,80},{160,120}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
+  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi1
+    "Integer switch"
+    annotation (Placement(transformation(extent={{40,40},{60,60}})));
+
+protected
   Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(
     final uLow=twoReqLimLow,
     final uHigh=twoReqLimHig)
@@ -169,10 +174,6 @@ block Speed_primarySecondary_temperature
     final k=2)
     "Constant integer source"
     annotation (Placement(transformation(extent={{-30,60},{-10,80}})));
-
-  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi1
-    "Integer switch"
-    annotation (Placement(transformation(extent={{40,40},{60,60}})));
 
   Buildings.Controls.OBC.ASHRAE.G36_PR1.Generic.SetPoints.TrimAndRespond triRes(
     final iniSet=maxPumSpe,
@@ -344,18 +345,18 @@ equation
 annotation (
   defaultComponentName="hotPumSpe",
   Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
-       graphics={
-        Rectangle(
-          extent={{-100,-100},{100,100}},
-          lineColor={0,0,127},
-          fillColor={255,255,255},
-          fillPattern=FillPattern.Solid),
-        Text(
-          extent={{-100,150},{100,110}},
-          lineColor={0,0,255},
-          textString="%name")}),
+  graphics={
+    Rectangle(
+      extent={{-100,-100},{100,100}},
+      lineColor={0,0,127},
+      fillColor={255,255,255},
+      fillPattern=FillPattern.Solid),
+    Text(
+      extent={{-100,150},{100,110}},
+      lineColor={0,0,255},
+      textString="%name")}),
   Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-120,-120},{120,120}})),
-  Documentation(info="<html>
+Documentation(info="<html>
 <p>
 Block that outputs hot water pump speed setpoint for primary-secondary plants with
 variable-speed primary pumps where the temperature sensors are present in the primary

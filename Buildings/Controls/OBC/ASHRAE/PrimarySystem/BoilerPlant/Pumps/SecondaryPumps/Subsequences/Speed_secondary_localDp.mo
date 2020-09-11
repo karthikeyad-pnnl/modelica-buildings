@@ -1,7 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences;
-
 block Speed_secondary_localDp
- 
     "Secondary pump speed control for primary-secondary plants where the remote DP sensor(s) is not hardwired to the plant controller, but a local DP sensor is hardwired"
 
   parameter Integer nSen = 2
@@ -67,6 +65,7 @@ block Speed_secondary_localDp
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput dpHotWat_local(
     final unit="Pa",
+    displayUnit="Pa",
     final quantity="PressureDifference")
     "Hot water differential static pressure from local sensor"
     annotation (Placement(transformation(extent={{-180,70},{-140,110}}),
@@ -91,7 +90,8 @@ block Speed_secondary_localDp
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yHotWatPumSpe(
     final min=minPumSpe,
     final max=maxPumSpe,
-    final unit="1")
+    final unit="1",
+    displayUnit="1")
     "Hot water pump speed"
     annotation (Placement(transformation(extent={{140,70},{180,110}}),
       iconTransformation(extent={{100,-20},{140,20}})));
@@ -115,27 +115,27 @@ block Speed_secondary_localDp
     final Ti=Ti,
     final Td=Td)
     "Calculate pump speed based on pressure setpoint"
-    annotation (Placement(transformation(extent={{60,80},{80,100}})));
+    annotation (Placement(transformation(extent={{100,80},{120,100}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Continuous.LimPID conPID[nSen](
-    final controllerType=fill(Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
-        nSen),
-    final k=fill(k, nSen),
-    final Ti=fill(Ti, nSen),
-    final Td=fill(Td, nSen),
-    final yMax=fill(1, nSen),
-    final yMin=fill(0, nSen),
-    final reverseActing=fill(true, nSen),
-    final reset=fill(Buildings.Controls.OBC.CDL.Types.Reset.Parameter, nSen),
-    final y_reset=fill(0, nSen))
-    "Pump speed controller"
+  Buildings.Controls.OBC.CDL.Continuous.PIDWithReset conPID[nSen](
+    final controllerType=fill(Buildings.Controls.OBC.CDL.Types.SimpleController.PID,nSen),
+    final k=fill(1,nSen),
+    final Ti=fill(0.5,nSen),
+    final Td=fill(0.1,nSen),
+    final yMax=fill(1,nSen),
+    final yMin=fill(0,nSen))
+    "PID controller for regulating local differential pressure"
     annotation (Placement(transformation(extent={{0,-30},{20,-10}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Edge edg
+    "Reset PID loop when activated"
+    annotation (Placement(transformation(extent={{-80,-60},{-60,-40}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
     final nu=nPum)
     "Check if any hot water pumps are enabled"
-    annotation (Placement(transformation(extent={{-50,-60},{-30,-40}})));
+    annotation (Placement(transformation(extent={{-120,-60},{-100,-40}})));
 
   Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep(
     final nout=nSen)
@@ -145,7 +145,7 @@ protected
   Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
     final nout=nSen)
     "Replicate boolean input"
-    annotation (Placement(transformation(extent={{-20,-60},{0,-40}})));
+    annotation (Placement(transformation(extent={{-40,-60},{-20,-40}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant zer(
     final k=0)
@@ -177,12 +177,6 @@ protected
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
 
 equation
-  connect(conPID.y, maxRemDP.u)
-    annotation (Line(points={{22,-20},{38,-20}}, color={0,0,127}));
-
-  connect(booRep.y, conPID.trigger)
-    annotation (Line(points={{2,-50},{4,-50},{4,-32}},   color={255,0,255}));
-
   connect(dpHotWatSet, reaRep.u)
     annotation (Line(points={{-160,-120},{-122,-120}}, color={0,0,127}));
 
@@ -215,106 +209,109 @@ equation
   connect(one.y, reaRep1.u)
     annotation (Line(points={{-98,20},{-90,20},{-90,0},{-82,0}}, color={0,0,127}));
 
-  connect(reaRep1.y, conPID.u_s)
-    annotation (Line(points={{-58,0},{-20,0},{-20,-20},{-2,-20}}, color={0,0,127}));
-
-  connect(div.y, conPID.u_m)
-    annotation (Line(points={{-18,-100},{10,-100},{10,-32}}, color={0,0,127}));
-
   connect(hotPumSpe.yHotWatPumSpe, yHotWatPumSpe)
-    annotation (Line(points={{82,90},{160,90}}, color={0,0,127}));
+    annotation (Line(points={{122,90},{160,90}},color={0,0,127}));
 
-  connect(mulOr.y, booRep.u)
-    annotation (Line(points={{-28,-50},{-22,-50}}, color={255,0,255}));
-
-  connect(uHotWatPum, mulOr.u[1:nPum]) annotation (Line(points={{-160,-50},{-106,-50},
-          {-106,-50},{-52,-50}},     color={255,0,255}));
+  connect(uHotWatPum, mulOr.u[1:nPum]) annotation (Line(points={{-160,-50},{-122,
+          -50}},                     color={255,0,255}));
 
   connect(uHotWatPum, hotPumSpe.uHotWatPum) annotation (Line(points={{-160,-50},
-          {-130,-50},{-130,98},{58,98}}, color={255,0,255}));
+          {-130,-50},{-130,98},{98,98}}, color={255,0,255}));
 
   connect(locDpSet.y, hotPumSpe.dpHotWatSet) annotation (Line(points={{122,-20},
-          {130,-20},{130,72},{40,72},{40,82},{58,82}}, color={0,0,127}));
+          {130,-20},{130,70},{90,70},{90,82},{98,82}}, color={0,0,127}));
 
   connect(dpHotWat_local, hotPumSpe.dpHotWat[1])
-    annotation (Line(points={{-160,90},{58,90}}, color={0,0,127}));
+    annotation (Line(points={{-160,90},{98,90}}, color={0,0,127}));
+
+  connect(mulOr.y, edg.u)
+    annotation (Line(points={{-98,-50},{-82,-50}}, color={255,0,255}));
+  connect(edg.y, booRep.u)
+    annotation (Line(points={{-58,-50},{-42,-50}}, color={255,0,255}));
+  connect(booRep.y, conPID.trigger)
+    annotation (Line(points={{-18,-50},{4,-50},{4,-32}}, color={255,0,255}));
+  connect(div.y, conPID.u_m)
+    annotation (Line(points={{-18,-100},{10,-100},{10,-32}}, color={0,0,127}));
+  connect(reaRep1.y, conPID.u_s) annotation (Line(points={{-58,0},{-20,0},{-20,-20},
+          {-2,-20}}, color={0,0,127}));
+  connect(conPID.y, maxRemDP.u[1:nSen]) annotation (Line(points={{22,-20},{30,-20},
+          {30,-20},{38,-20}}, color={0,0,127}));
 
 annotation (
   defaultComponentName="hotPumSpe",
   Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
-       graphics={
-        Rectangle(
-          extent={{-100,-100},{100,100}},
-          lineColor={0,0,127},
-          fillColor={255,255,255},
-          fillPattern=FillPattern.Solid),
-        Text(
-          extent={{-100,150},{100,110}},
-          lineColor={0,0,255},
-          textString="%name"),
-        Text(
-          extent={{-98,52},{-44,30}},
-          lineColor={255,0,255},
-          pattern=LinePattern.Dash,
-          textString="uHotWatPum"),
-        Text(
-          extent={{-98,-30},{-30,-52}},
-          lineColor={0,0,127},
-          pattern=LinePattern.Dash,
-          textString="dpHotWat_remote"),
-        Text(
-          extent={{22,12},{98,-10}},
-          lineColor={0,0,127},
-          pattern=LinePattern.Dash,
-          textString="yHotWatPumSpe"),
-        Text(
-          extent={{-98,-68},{-34,-90}},
-          lineColor={0,0,127},
-          pattern=LinePattern.Dash,
-          textString="dpHotWatSet"),
-        Text(
-          extent={{-98,92},{-30,70}},
-          lineColor={0,0,127},
-          pattern=LinePattern.Dash,
-          textString="dpHotWat_local")}),
+    graphics={
+      Rectangle(
+        extent={{-100,-100},{100,100}},
+        lineColor={0,0,127},
+        fillColor={255,255,255},
+        fillPattern=FillPattern.Solid),
+      Text(
+        extent={{-100,150},{100,110}},
+        lineColor={0,0,255},
+        textString="%name"),
+      Text(
+        extent={{-98,52},{-44,30}},
+        lineColor={255,0,255},
+        pattern=LinePattern.Dash,
+        textString="uHotWatPum"),
+      Text(
+        extent={{-98,-30},{-30,-52}},
+        lineColor={0,0,127},
+        pattern=LinePattern.Dash,
+        textString="dpHotWat_remote"),
+      Text(
+        extent={{22,12},{98,-10}},
+        lineColor={0,0,127},
+        pattern=LinePattern.Dash,
+        textString="yHotWatPumSpe"),
+      Text(
+        extent={{-98,-68},{-34,-90}},
+        lineColor={0,0,127},
+        pattern=LinePattern.Dash,
+        textString="dpHotWatSet"),
+      Text(
+        extent={{-98,92},{-30,70}},
+        lineColor={0,0,127},
+        pattern=LinePattern.Dash,
+        textString="dpHotWat_local")}),
   Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-140,-140},{140,140}})),
   Documentation(info="<html>
-<p>
-Block that controls speed of secondary pumps for primary-secondary plants where
-the remote pressure differential (DP) sensor(s) is not hardwired to the plant controller,
-but a local DP sensor is hardwired to the plant controller, 
-according to ASHRAE RP-1711, March, 2020 draft, sections 5.3.7.7, 5.3.7.8 and
-5.3.7.9.
-</p>
-<ol>
-<li>
-Remote dP <code>dpHotWat_remote</code> shall be maintained at setpoint <code>dpHotWatSet</code>
-by a reverse acting PID loop running in the controller to which the remote sensor is wired.
-The loop output shall be a dP setpoint for the local primary loop dP sensor
-hardwired to the plant controller. Reset local dP from <code>minLocDp</code>, 
-e.g. 5 psi (34473.8 Pa), at 0% loop output to <code>maxLocDp</code> at 100%
-loop output.
-</li>
-<li>
-When any pump is proven on, pump speed shall be controlled by a reverse acting
-PID loop maintaining the local primary dP <code>dpHotWat_local</code> at the DP setpoint output
-from the remote sensor control loop. All pumps receive the same speed signal. 
-PID loop output shall be mapped from minimum pump speed (<code>minPumSpe</code>) 
-at 0% to maximum pump speed (<code>maxPumSpe</code>) at 100%.
-</li>
-<li>
-Where multiple remote DP sensors exist, a PID loop shall run for each sensor.
-The DP setpoint for the local DP sensor shall be the highest DP setpoint output
-from each of the remote loops.
-</li>
-</ol>
-</html>", revisions="<html>
-<ul>
-<li>
-August 25, 2020, by Karthik Devaprasad:<br/>
-First implementation.
-</li>
-</ul>
-</html>"));
-
+    <p>
+    Block that controls speed of secondary pumps for primary-secondary plants where
+    the remote pressure differential (DP) sensor(s) is not hardwired to the plant controller,
+    but a local DP sensor is hardwired to the plant controller, 
+    according to ASHRAE RP-1711, March, 2020 draft, sections 5.3.7.7, 5.3.7.8 and
+    5.3.7.9.
+    </p>
+    <ol>
+    <li>
+    Remote dP <code>dpHotWat_remote</code> shall be maintained at setpoint <code>dpHotWatSet</code>
+    by a reverse acting PID loop running in the controller to which the remote sensor is wired.
+    The loop output shall be a dP setpoint for the local primary loop dP sensor
+    hardwired to the plant controller. Reset local dP from <code>minLocDp</code>, 
+    e.g. 5 psi (34473.8 Pa), at 0% loop output to <code>maxLocDp</code> at 100%
+    loop output.
+    </li>
+    <li>
+    When any pump is proven on, pump speed shall be controlled by a reverse acting
+    PID loop maintaining the local primary dP <code>dpHotWat_local</code> at the DP setpoint output
+    from the remote sensor control loop. All pumps receive the same speed signal. 
+    PID loop output shall be mapped from minimum pump speed (<code>minPumSpe</code>) 
+    at 0% to maximum pump speed (<code>maxPumSpe</code>) at 100%.
+    </li>
+    <li>
+    Where multiple remote DP sensors exist, a PID loop shall run for each sensor.
+    The DP setpoint for the local DP sensor shall be the highest DP setpoint output
+    from each of the remote loops.
+    </li>
+    </ol>
+    </html>", revisions="<html>
+    <ul>
+    <li>
+    August 25, 2020, by Karthik Devaprasad:<br/>
+    First implementation.
+    </li>
+    </ul>
+    </html>"));
 end Speed_secondary_localDp;

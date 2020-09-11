@@ -1,7 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences;
-
 block Speed_secondary_remoteDp
- 
     "Secondary pump speed control for primary-secondary plants where the remote DP sensor(s) is hardwired to the plant controller"
 
   parameter Integer nSen = 2
@@ -76,17 +74,18 @@ block Speed_secondary_remoteDp
     annotation (Placement(transformation(extent={{60,50},{80,70}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Continuous.LimPID conPID[nSen](
-    final controllerType=fill(Buildings.Controls.OBC.CDL.Types.SimpleController.PID, nSen),
-    final k=fill(k, nSen),
-    final Ti=fill(Ti, nSen),
-    final Td=fill(Td, nSen),
-    final yMax=fill(1, nSen),
-    final yMin=fill(0, nSen),
-    final reverseActing=fill(true, nSen),
-    final reset=fill(Buildings.Controls.OBC.CDL.Types.Reset.Parameter, nSen),
-    final y_reset=fill(0, nSen))
-    "Pump speed controller"
+  Buildings.Controls.OBC.CDL.Logical.Edge edg
+    "Reset PID loop when activated"
+    annotation (Placement(transformation(extent={{-40,-50},{-20,-30}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.PIDWithReset conPID[nSen](
+    final controllerType=fill(Buildings.Controls.OBC.CDL.Types.SimpleController.PID,nSen),
+    final k=fill(1,nSen),
+    final Ti=fill(0.5,nSen),
+    final Td=fill(0.1,nSen),
+    final yMax=fill(1,nSen),
+    final yMin=fill(0,nSen))
+    "PID controller for regulating pump speed"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
@@ -102,7 +101,7 @@ protected
   Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
     final nout=nSen)
     "Replicate boolean input"
-    annotation (Placement(transformation(extent={{-20,-50},{0,-30}})));
+    annotation (Placement(transformation(extent={{-10,-50},{10,-30}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant pumSpe_min(
     final k=minPumSpe)
@@ -138,12 +137,6 @@ protected
     annotation (Placement(transformation(extent={{80,90},{100,110}})));
 
 equation
-  connect(conPID.y, maxLoo.u)
-    annotation (Line(points={{42,0},{58,0}}, color={0,0,127}));
-
-  connect(booRep.y, conPID.trigger)
-    annotation (Line(points={{2,-40},{24,-40},{24,-12}}, color={255,0,255}));
-
   connect(dpHotWatSet, reaRep.u)
     annotation (Line(points={{-140,-100},{-102,-100}}, color={0,0,127}));
 
@@ -171,15 +164,9 @@ equation
     annotation (Line(points={{-78,-100},{-40,-100},{-40,-86},{-22,-86}},
       color={0,0,127}));
 
-  connect(div.y, conPID.u_m)
-    annotation (Line(points={{2,-80},{30,-80},{30,-12}}, color={0,0,127}));
-
   connect(one.y, reaRep1.u)
     annotation (Line(points={{-58,40},{-40,40},{-40,0},{-22,0}},
       color={0,0,127}));
-
-  connect(reaRep1.y, conPID.u_s)
-    annotation (Line(points={{2,0},{18,0}}, color={0,0,127}));
 
   connect(pumSpe.y, swi.u1)
     annotation (Line(points={{82,60},{100,60},{100,80},{60,80},{60,108},{78,108}},
@@ -198,8 +185,20 @@ equation
   connect(mulOr.y, swi.u2) annotation (Line(points={{-78,0},{-50,0},{-50,100},{78,
           100}}, color={255,0,255}));
 
-  connect(mulOr.y, booRep.u) annotation (Line(points={{-78,0},{-50,0},{-50,-40},
-          {-22,-40}}, color={255,0,255}));
+  connect(reaRep1.y, conPID.u_s)
+    annotation (Line(points={{2,0},{18,0}}, color={0,0,127}));
+  connect(div.y, conPID.u_m)
+    annotation (Line(points={{2,-80},{30,-80},{30,-12}}, color={0,0,127}));
+  connect(booRep.y, conPID.trigger)
+    annotation (Line(points={{12,-40},{24,-40},{24,-12}},color={255,0,255}));
+  connect(conPID.y, maxLoo.u[1:nSen])
+    annotation (Line(points={{42,0},{50,0},{50,0},{58,0}},   color={0,0,127}));
+
+  connect(booRep.u, edg.y) annotation (Line(points={{-12,-40},{-20,-40},{-20,
+          -40},{-18,-40}},
+                      color={255,0,255}));
+  connect(mulOr.y, edg.u) annotation (Line(points={{-78,0},{-50,0},{-50,-40},{
+          -42,-40}}, color={255,0,255}));
 
 annotation (
   defaultComponentName="hotPumSpe",
@@ -265,5 +264,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-
 end Speed_secondary_remoteDp;

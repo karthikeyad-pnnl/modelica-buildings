@@ -9,7 +9,7 @@ model MinimumFlowSetpoint
     final boiStaMat={{1,0},{0,1},{1,1}},
     final minFloSet={0.1,0.3},
     final maxFloSet={0.25,0.9},
-    final bypSetTim=1)
+    bypSetRat=0.1)
     "Test minimum flow setpoint reset for stage-up process"
     annotation (Placement(transformation(extent={{70,50},{90,70}})));
 
@@ -20,26 +20,26 @@ model MinimumFlowSetpoint
     final boiStaMat={{1,0},{0,1},{1,1}},
     final minFloSet={0.1,0.3},
     final maxFloSet={0.25,0.9},
-    final bypSetTim=1)
+    bypSetRat=0.1)
     "Test minimum flow setpoint reset for stage-down process"
     annotation (Placement(transformation(extent={{70,-70},{90,-50}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol(
-    final trueHoldDuration=2,
+    final trueHoldDuration=5,
     final falseHoldDuration=0)
     "Hold pulse signal for visualization and to generate end of stage change signal"
     annotation (Placement(transformation(extent={{0,30},{20,50}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol1(
-    final trueHoldDuration=2,
+    final trueHoldDuration=5,
     final falseHoldDuration=0)
     "Hold pulse signal for visualization and to generate end of stage change signal"
     annotation (Placement(transformation(extent={{0,-90},{20,-70}})));
 
-//protected
+protected
   Buildings.Controls.OBC.CDL.Continuous.Sources.Ramp ram(
     final height=3,
-    final duration=12,
+    final duration=45,
     final offset=0,
     final startTime=0)
     "Ramp source for stage setpoint"
@@ -79,7 +79,7 @@ model MinimumFlowSetpoint
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Ramp ram1(
     final height=-3,
-    final duration=12,
+    final duration=45,
     final offset=4,
     final startTime=0) "Ramp source for stage setpoint"
     annotation (Placement(transformation(extent={{-90,-110},{-70,-90}})));
@@ -237,7 +237,7 @@ equation
       </html>", revisions="<html>
       <ul>
       <li>
-      August 16, 2020, by Karthik Devaprasad:<br/>
+      September 9, 2020, by Karthik Devaprasad:<br/>
       First implementation.
       </li>
       </ul>

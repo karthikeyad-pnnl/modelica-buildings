@@ -58,15 +58,18 @@ block EnableLag_variableSecondary_pumpSpeed
     annotation (Placement(transformation(extent={{140,-110},{180,-70}}),
       iconTransformation(extent={{100,-60},{140,-20}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Timer tim
+  Buildings.Controls.OBC.CDL.Logical.Timer tim(
+    final t=timPer)
     "Hysteresis loop enable timer"
     annotation (Placement(transformation(extent={{-70,50},{-50,70}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Timer tim1
+  Buildings.Controls.OBC.CDL.Logical.Timer tim1(
+    final t=timPer1)
     "Hysteresis loop enable timer"
     annotation (Placement(transformation(extent={{-70,-10},{-50,10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Timer tim2
+  Buildings.Controls.OBC.CDL.Logical.Timer tim2(
+    final t=timPer2)
     "Hysteresis loop enable timer"
     annotation (Placement(transformation(extent={{-50,-100},{-30,-80}})));
 
@@ -89,11 +92,6 @@ protected
     "Hysteresis for disabling last lag pump"
     annotation (Placement(transformation(extent={{-120,-100},{-100,-80}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr(
-    final threshold=timPer)
-    "Check if delay period is satisfied"
-    annotation (Placement(transformation(extent={{-30,50},{-10,70}})));
-
   Buildings.Controls.OBC.CDL.Logical.Pre pre1
     "Logical pre block"
     annotation (Placement(transformation(extent={{0,-50},{20,-30}})));
@@ -113,11 +111,6 @@ protected
   Buildings.Controls.OBC.CDL.Logical.Or or2
     "Logical Or"
     annotation (Placement(transformation(extent={{100,20},{120,40}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr1(
-    final threshold=timPer1)
-    "Check if delay period is satisfied"
-    annotation (Placement(transformation(extent={{-30,-10},{-10,10}})));
 
   Buildings.Controls.OBC.CDL.Logical.Edge edg1
     "Edge detector"
@@ -151,11 +144,6 @@ protected
     "Logical And"
     annotation (Placement(transformation(extent={{100,-140},{120,-120}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr2(
-    final threshold=timPer2)
-    "Check if delay period is satisfied"
-    annotation (Placement(transformation(extent={{-20,-100},{0,-80}})));
-
   Buildings.Controls.OBC.CDL.Logical.Not not5
     "Logical Not"
     annotation (Placement(transformation(extent={{70,-100},{90,-80}})));
@@ -170,9 +158,6 @@ equation
   connect(uPumSpe, hys2.u) annotation (Line(points={{-160,0},{-130,0},{-130,-90},
           {-122,-90}},color={0,0,127}));
 
-  connect(tim.y, greEquThr.u)
-    annotation (Line(points={{-48,60},{-32,60}},   color={0,0,127}));
-
   connect(edg.y, not1.u)
     annotation (Line(points={{62,100},{68,100}}, color={255,0,255}));
 
@@ -185,14 +170,8 @@ equation
   connect(and2.y, tim.u) annotation (Line(points={{122,100},{132,100},{132,86},{
           -80,86},{-80,60},{-72,60}},     color={255,0,255}));
 
-  connect(greEquThr.y, or2.u1) annotation (Line(points={{-8,60},{46,60},{46,30},
-          {98,30}}, color={255,0,255}));
-
   connect(or2.y, yUp)
     annotation (Line(points={{122,30},{160,30}}, color={255,0,255}));
-
-  connect(tim1.y, greEquThr1.u)
-    annotation (Line(points={{-48,0},{-32,0}}, color={0,0,127}));
 
   connect(edg1.y, not2.u)
     annotation (Line(points={{62,-40},{68,-40}},
@@ -209,14 +188,8 @@ equation
   connect(hys1.y, and1.u2) annotation (Line(points={{-98,0},{-90,0},{-90,-20},{96,
           -20},{96,-48},{98,-48}}, color={255,0,255}));
 
-  connect(greEquThr1.y, or2.u2)
-    annotation (Line(points={{-8,0},{0,0},{0,22},{98,22}}, color={255,0,255}));
-
   connect(hys2.y, not3.u)
     annotation (Line(points={{-98,-90},{-92,-90}}, color={255,0,255}));
-
-  connect(tim2.y, greEquThr2.u)
-    annotation (Line(points={{-28,-90},{-22,-90}}, color={0,0,127}));
 
   connect(not3.y, and3.u2) annotation (Line(points={{-68,-90},{-60,-90},{-60,-150},
           {94,-150},{94,-138},{98,-138}}, color={255,0,255}));
@@ -227,17 +200,11 @@ equation
   connect(and3.y, tim2.u) annotation (Line(points={{122,-130},{130,-130},{130,-110},
           {-56,-110},{-56,-90},{-52,-90}}, color={255,0,255}));
 
-  connect(greEquThr2.y,pre2. u) annotation (Line(points={{2,-90},{6,-90},{6,-130},
-          {8,-130}}, color={255,0,255}));
-
   connect(pre2.y, edg2.u)
     annotation (Line(points={{32,-130},{38,-130}}, color={255,0,255}));
 
   connect(edg2.y, not4.u)
     annotation (Line(points={{62,-130},{68,-130}}, color={255,0,255}));
-
-  connect(greEquThr2.y, not5.u)
-    annotation (Line(points={{2,-90},{68,-90}}, color={255,0,255}));
 
   connect(not5.y, yDown)
     annotation (Line(points={{92,-90},{160,-90}}, color={255,0,255}));
@@ -251,46 +218,53 @@ equation
   connect(pre1.y, edg.u) annotation (Line(points={{22,-40},{30,-40},{30,100},{38,
           100}}, color={255,0,255}));
 
+  connect(tim.passed, or2.u1) annotation (Line(points={{-48,52},{90,52},{90,30},
+          {98,30}}, color={255,0,255}));
+  connect(tim1.passed, or2.u2) annotation (Line(points={{-48,-8},{90,-8},{90,22},
+          {98,22}}, color={255,0,255}));
+  connect(tim2.passed, not5.u) annotation (Line(points={{-28,-98},{50,-98},{50,
+          -90},{68,-90}}, color={255,0,255}));
+  connect(tim2.passed, pre2.u) annotation (Line(points={{-28,-98},{-10,-98},{
+          -10,-130},{8,-130}}, color={255,0,255}));
 annotation (
   defaultComponentName="enaLagSecPum",
-  Icon(coordinateSystem(preserveAspectRatio=false,
-    extent={{-100,-100},{100,100}}),
-      graphics={
-        Rectangle(
-          extent={{-100,-100},{100,100}},
-          lineColor={0,0,127},
-          fillColor={255,255,255},
-          fillPattern=FillPattern.Solid),
-        Text(
-          extent={{-100,150},{100,110}},
-          lineColor={0,0,255},
-          textString="%name")}),
+  Icon(coordinateSystem(preserveAspectRatio=false,extent={{-100,-100},{100,100}}),
+    graphics={
+      Rectangle(
+        extent={{-100,-100},{100,100}},
+        lineColor={0,0,127},
+        fillColor={255,255,255},
+        fillPattern=FillPattern.Solid),
+      Text(
+        extent={{-100,150},{100,110}},
+        lineColor={0,0,255},
+        textString="%name")}),
   Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-140,-160},{140,160}})),
   Documentation(info="<html>
-<p>
-Block that enables and disables lag secondary hot water pump, for plants with 
-variable-speed secondary pumps and no flowrate sensor in secondary loop, according
-to ASHRAE RP-1711, March, 2020 draft, section 5.3.7.4.
-</p>
-<p>
-<ol>
-<li>
-Stage up <code>yUp = true</code> when speed <code>uPumSpe</code> exceeds speed limit
-<code>speLim</code> for time period <code>timPer</code> or <code>speLim1</code>
-for <code>timPer1</code>.
-</li>
-<li>
-Stage down <code>yDown = false</code> when <code>uPumSpe</code> falls below <code>speLim2</code>
-for <code>timPer2</code>.
-</li>
-</ol>
-</p>
-</html>", revisions="<html>
-<ul>
-<li>
-August 25, 2020, by Karthik Devaprasad:<br/>
-First implementation.
-</li>
-</ul>
-</html>"));
+    <p>
+    Block that enables and disables lag secondary hot water pump, for plants with 
+    variable-speed secondary pumps and no flowrate sensor in secondary loop, according
+    to ASHRAE RP-1711, March, 2020 draft, section 5.3.7.4.
+    </p>
+    <p>
+    <ol>
+    <li>
+    Stage up <code>yUp = true</code> when speed <code>uPumSpe</code> exceeds speed limit
+    <code>speLim</code> for time period <code>timPer</code> or <code>speLim1</code>
+    for <code>timPer1</code>.
+    </li>
+    <li>
+    Stage down <code>yDown = false</code> when <code>uPumSpe</code> falls below <code>speLim2</code>
+    for <code>timPer2</code>.
+    </li>
+    </ol>
+    </p>
+    </html>", revisions="<html>
+    <ul>
+    <li>
+    August 25, 2020, by Karthik Devaprasad:<br/>
+    First implementation.
+    </li>
+    </ul>
+    </html>"));
 end EnableLag_variableSecondary_pumpSpeed;

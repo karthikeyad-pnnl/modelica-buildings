@@ -83,18 +83,21 @@ block EnableLag_headered
     "Add parameter"
     annotation (Placement(transformation(extent={{-40,-50},{-20,-30}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Timer tim
+  Buildings.Controls.OBC.CDL.Logical.Timer tim(
+    final t=timPer)
     "Count time"
     annotation (Placement(transformation(extent={{0,30},{20,50}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Timer tim1
+  Buildings.Controls.OBC.CDL.Logical.Timer tim1(
+    final t=timPer)
     "Count time"
     annotation (Placement(transformation(extent={{0,-90},{20,-70}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Not not3 "Logical Not"
+protected
+  Buildings.Controls.OBC.CDL.Logical.Not not3
+    "Logical Not"
     annotation (Placement(transformation(extent={{100,-90},{120,-70}})));
 
-protected
   Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
     final p=staCon,
     final k=1/nPum_nominal)
@@ -130,16 +133,6 @@ protected
     "Add real inputs"
     annotation (Placement(transformation(extent={{-80,-90},{-60,-70}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr(final
-      threshold=timPer)
-    "Check if the time is greater than delay time period"
-    annotation (Placement(transformation(extent={{40,30},{60,50}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr1(final
-      threshold=timPer)
-    "Check if the time is greater than delay time period"
-    annotation (Placement(transformation(extent={{40,-90},{60,-70}})));
-
   Buildings.Controls.OBC.CDL.Logical.Edge edg
     "Rising edge"
     annotation (Placement(transformation(extent={{-40,-150},{-20,-130}})));
@@ -152,7 +145,8 @@ protected
     "Logical and"
     annotation (Placement(transformation(extent={{40,-130},{60,-110}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre2 "Breaks algebraic loops"
+  Buildings.Controls.OBC.CDL.Logical.Pre pre2
+    "Breaks algebraic loops"
     annotation (Placement(transformation(extent={{-80,-150},{-60,-130}})));
 
   Buildings.Controls.OBC.CDL.Logical.Edge edg1
@@ -194,12 +188,6 @@ equation
   connect(add1.y,hys1. u)
     annotation (Line(points={{-58,-80},{-42,-80}}, color={0,0,127}));
 
-  connect(tim.y, greEquThr.u)
-    annotation (Line(points={{22,40},{38,40}}, color={0,0,127}));
-
-  connect(tim1.y, greEquThr1.u)
-    annotation (Line(points={{22,-80},{38,-80}}, color={0,0,127}));
-
   connect(addPar1.y, addPar2.u)
     annotation (Line(points={{-58,-40},{-42,-40}}, color={0,0,127}));
 
@@ -228,9 +216,6 @@ equation
   connect(edg.u, pre2.y)
     annotation (Line(points={{-42,-140},{-58,-140}}, color={255,0,255}));
 
-  connect(greEquThr1.y, pre2.u) annotation (Line(points={{62,-80},{80,-80},{80,-100},
-          {-100,-100},{-100,-140},{-82,-140}}, color={255,0,255}));
-
   connect(hys1.y, and2.u1)
     annotation (Line(points={{-18,-80},{-14,-80},{-14,-120},{38,-120}},
       color={255,0,255}));
@@ -249,10 +234,6 @@ equation
   connect(edg1.u, pre1.y)
     annotation (Line(points={{-42,100},{-58,100}}, color={255,0,255}));
 
-  connect(greEquThr.y, pre1.u)
-    annotation (Line(points={{62,40},{70,40},{70,60},{-86,60},{-86,100},
-      {-82,100}}, color={255,0,255}));
-
   connect(not2.y, and1.u1)
     annotation (Line(points={{22,100},{30,100},{30,80},{38,80}}, color={255,0,255}));
 
@@ -263,12 +244,17 @@ equation
     annotation (Line(points={{62,80},{70,80},{70,66},{-6,66},{-6,40},{-2,40}},
       color={255,0,255}));
 
-  connect(greEquThr.y, yUp)
-    annotation (Line(points={{62,40},{160,40}}, color={255,0,255}));
-  connect(greEquThr1.y, not3.u)
-    annotation (Line(points={{62,-80},{98,-80}}, color={255,0,255}));
   connect(not3.y, yDown)
     annotation (Line(points={{122,-80},{160,-80}}, color={255,0,255}));
+  connect(tim.passed, yUp) annotation (Line(points={{22,32},{60,32},{60,40},{
+          160,40}}, color={255,0,255}));
+  connect(tim.passed, pre1.u) annotation (Line(points={{22,32},{60,32},{60,40},
+          {80,40},{80,120},{-90,120},{-90,100},{-82,100}}, color={255,0,255}));
+  connect(tim1.passed, not3.u) annotation (Line(points={{22,-88},{40,-88},{40,
+          -80},{98,-80}}, color={255,0,255}));
+  connect(tim1.passed, pre2.u) annotation (Line(points={{22,-88},{40,-88},{40,
+          -100},{-90,-100},{-90,-140},{-82,-140}}, color={255,0,255}));
+
 annotation (
   defaultComponentName="enaLagPriPum",
   Icon(coordinateSystem(preserveAspectRatio=false,

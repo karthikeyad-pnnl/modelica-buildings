@@ -3,8 +3,9 @@ block EnableLead
     "Sequence to enable or disable the lead secondary pump of boiler plants"
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uPlaEna
-    "Primary pump status signal" annotation (Placement(transformation(extent={{-140,
-            20},{-100,60}}), iconTransformation(extent={{-140,20},{-100,60}})));
+    "Primary pump status signal"
+    annotation (Placement(transformation(extent={{-140,20},{-100,60}}),
+      iconTransformation(extent={{-140,20},{-100,60}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput supResReq
     "Hot water supply reset requests"
@@ -26,7 +27,6 @@ protected
     annotation (Placement(transformation(extent={{-20,-10},{0,10}})));
 
 equation
-
   connect(supResReq, intGreThr.u)
     annotation (Line(points={{-120,-40},{-82,-40}}, color={255,127,0}));
 
@@ -38,6 +38,7 @@ equation
 
   connect(uPlaEna, and2.u1) annotation (Line(points={{-120,40},{-40,40},{-40,0},
           {-22,0}}, color={255,0,255}));
+
 annotation (
   defaultComponentName="enaLeaSecPum",
   Icon(coordinateSystem(preserveAspectRatio=false), graphics={
@@ -52,23 +53,23 @@ annotation (
           textString="%name")}),
   Diagram(coordinateSystem(preserveAspectRatio=false)),
   Documentation(info="<html>
-<p>
-Block that enables and disables lead secondary hot water pump, for plants
-with variable-speed hot water pumps, according to ASHRAE RP-1711, March 2020 draft, 
-section 5.3.7.2.
-</p>
-<li>
-The lead secondary hot water pump shall be enabled <code>yLea = true</code> when
-boiler plant is enabled <code>uPlaEna = true</code> and hot water reset requests 
-are being received from the loads, ie, <code>supResReq &gt; 0</code> and shall 
-be disabled otherwise.
-</li>
-</html>", revisions="<html>
-<ul>
-<li>
-August 25, 2020, by Karthik Devaprasad:<br/>
-First implementation.
-</li>
-</ul>
-</html>"));
+  <p>
+  Block that enables and disables lead secondary hot water pump, for plants
+  with variable-speed hot water pumps, according to ASHRAE RP-1711, March 2020 draft, 
+  section 5.3.7.2.
+  </p>
+  <li>
+  The lead secondary hot water pump shall be enabled <code>yLea = true</code> when
+  boiler plant is enabled <code>uPlaEna = true</code> and hot water reset requests 
+  are being received from the loads, ie, <code>supResReq &gt; 0</code> and shall 
+  be disabled otherwise.
+  </li>
+  </html>", revisions="<html>
+  <ul>
+  <li>
+  August 25, 2020, by Karthik Devaprasad:<br/>
+  First implementation.
+  </li>
+  </ul>
+  </html>"));
 end EnableLead;

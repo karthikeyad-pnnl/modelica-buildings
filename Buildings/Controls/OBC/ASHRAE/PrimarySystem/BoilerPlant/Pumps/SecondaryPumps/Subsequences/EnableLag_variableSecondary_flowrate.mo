@@ -1,7 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences;
-
 block EnableLag_variableSecondary_flowrate
- 
     "Sequence for enabling and disabling lag pumps for variable-speed secondary pumps with secondary loop flowrate sensor"
 
   parameter Integer nPum = 2
@@ -85,12 +83,14 @@ block EnableLag_variableSecondary_flowrate
     "Add parameter"
     annotation (Placement(transformation(extent={{-40,-50},{-20,-30}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Timer tim
-    "Count time"
+  Buildings.Controls.OBC.CDL.Logical.Timer tim(
+    final t=timPer)
+    "Count time for which stage-up condition is satisfied"
     annotation (Placement(transformation(extent={{0,30},{20,50}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Timer tim1
-    "Count time"
+  Buildings.Controls.OBC.CDL.Logical.Timer tim1(
+    final t=timPer)
+    "Count time for which stage-down condition is satisfied"
     annotation (Placement(transformation(extent={{0,-90},{20,-70}})));
 
 protected
@@ -128,16 +128,6 @@ protected
     final k2=-1)
     "Add real inputs"
     annotation (Placement(transformation(extent={{-80,-90},{-60,-70}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr(
-    final threshold=timPer)
-    "Check if the time is greater than delay time period"
-    annotation (Placement(transformation(extent={{40,30},{60,50}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr1(
-    final threshold=timPer)
-    "Check if the time is greater than delay time period"
-    annotation (Placement(transformation(extent={{40,-90},{60,-70}})));
 
   Buildings.Controls.OBC.CDL.Logical.Edge edg
     "Rising edge"
@@ -198,12 +188,6 @@ equation
   connect(add1.y,hys1. u)
     annotation (Line(points={{-58,-80},{-42,-80}}, color={0,0,127}));
 
-  connect(tim.y, greEquThr.u)
-    annotation (Line(points={{22,40},{38,40}}, color={0,0,127}));
-
-  connect(tim1.y, greEquThr1.u)
-    annotation (Line(points={{22,-80},{38,-80}}, color={0,0,127}));
-
   connect(addPar1.y, addPar2.u)
     annotation (Line(points={{-58,-40},{-42,-40}}, color={0,0,127}));
 
@@ -232,9 +216,6 @@ equation
   connect(edg.u, pre2.y)
     annotation (Line(points={{-42,-140},{-58,-140}}, color={255,0,255}));
 
-  connect(greEquThr1.y, pre2.u) annotation (Line(points={{62,-80},{80,-80},{80,-100},
-          {-100,-100},{-100,-140},{-82,-140}}, color={255,0,255}));
-
   connect(hys1.y, and2.u1)
     annotation (Line(points={{-18,-80},{-14,-80},{-14,-120},{38,-120}},
       color={255,0,255}));
@@ -253,10 +234,6 @@ equation
   connect(edg1.u, pre1.y)
     annotation (Line(points={{-42,100},{-58,100}}, color={255,0,255}));
 
-  connect(greEquThr.y, pre1.u)
-    annotation (Line(points={{62,40},{70,40},{70,60},{-86,60},{-86,100},
-      {-82,100}}, color={255,0,255}));
-
   connect(not2.y, and1.u1)
     annotation (Line(points={{22,100},{30,100},{30,80},{38,80}}, color={255,0,255}));
 
@@ -267,69 +244,67 @@ equation
     annotation (Line(points={{62,80},{70,80},{70,66},{-6,66},{-6,40},{-2,40}},
       color={255,0,255}));
 
-  connect(greEquThr.y, yUp)
-    annotation (Line(points={{62,40},{160,40}}, color={255,0,255}));
-
-  connect(greEquThr1.y, not3.u)
-    annotation (Line(points={{62,-80},{98,-80}}, color={255,0,255}));
-
   connect(not3.y, yDown)
     annotation (Line(points={{122,-80},{160,-80}}, color={255,0,255}));
 
+  connect(tim.passed, yUp) annotation (Line(points={{22,32},{40,32},{40,40},{
+          160,40},{160,40}}, color={255,0,255}));
+  connect(tim.passed, pre1.u) annotation (Line(points={{22,32},{40,32},{40,60},
+          {-80,60},{-80,84},{-90,84},{-90,100},{-82,100}}, color={255,0,255}));
+  connect(tim1.passed, not3.u) annotation (Line(points={{22,-88},{40,-88},{40,
+          -80},{98,-80}}, color={255,0,255}));
+  connect(tim1.passed, pre2.u) annotation (Line(points={{22,-88},{40,-88},{40,
+          -100},{-90,-100},{-90,-140},{-82,-140}}, color={255,0,255}));
 annotation (
   defaultComponentName="enaLagSecPum",
-  Icon(coordinateSystem(preserveAspectRatio=false,
-    extent={{-100,-100},{100,100}}),
-      graphics={
-        Rectangle(
-          extent={{-100,-100},{100,100}},
-          lineColor={0,0,127},
-          fillColor={255,255,255},
-          fillPattern=FillPattern.Solid),
-        Text(
-          extent={{-100,150},{100,110}},
-          lineColor={0,0,255},
-          textString="%name")}),
+  Icon(coordinateSystem(preserveAspectRatio=false,extent={{-100,-100},{100,100}}),
+    graphics={
+      Rectangle(
+        extent={{-100,-100},{100,100}},
+        lineColor={0,0,127},
+        fillColor={255,255,255},
+        fillPattern=FillPattern.Solid),
+      Text(
+        extent={{-100,150},{100,110}},
+        lineColor={0,0,255},
+        textString="%name")}),
   Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-140,-160},{140,160}})),
   Documentation(info="<html>
-<p>
-Block that enables and disables lag secondary hot water pump, for plants with 
-variable-speed secondary pumps and flowrate sensor in secondary loop, according
-to ASHRAE RP-1711, March, 2020 draft, section 5.3.7.3.
-</p>
-<p>
-Hot water pump shall be staged as a function of secondary hot water flow ratio (SHWFR), 
-i.e. the ratio of current hot water flow <code>VHotWat_flow</code> to design
-flow <code>VHotWat_flow_nominal</code>, and the number of pumps <code>num_nominal</code>
-that operate at design conditions. Pumps are assumed to be equally sized.
-</p>
-<pre>
-                  VHotWat_flow
-      SHWFR = ---------------------- 
-              VHotWat_flow_nominal
-</pre>
-<p>
-1. Start the next lag pump <code>yNexLagPum</code> whenever the following is 
-true for time <code>timPer</code>:
-</p>
-<pre>        
-      SHWFR &gt;
- Number_of_operating_pumps/num_nominal - 0.03                  
-</pre>
-<p>
-2. Shut off the last lag pump whenever the following is true for <code>timPer</code>:
-</p>
-<pre>           
-      SHWFR &le;
- (Number_of_operating_pumps - 1)/num_nominal - 0.03
-</pre>
-</html>", revisions="<html>
-<ul>
-<li>
-August 25, 2020, by Karthik Devaprasad:<br/>
-First implementation.
-</li>
-</ul>
-</html>"));
-
+  <p>
+  Block that enables and disables lag secondary hot water pump, for plants with 
+  variable-speed secondary pumps and flowrate sensor in secondary loop, according
+  to ASHRAE RP-1711, March, 2020 draft, section 5.3.7.3.
+  </p>
+  <p>
+  Hot water pump shall be staged as a function of secondary hot water flow ratio (SHWFR), 
+  i.e. the ratio of current hot water flow <code>VHotWat_flow</code> to design
+  flow <code>VHotWat_flow_nominal</code>, and the number of pumps <code>num_nominal</code>
+  that operate at design conditions. Pumps are assumed to be equally sized.
+  </p>
+  <pre>
+                     VHotWat_flow
+        SHWFR = ---------------------- 
+                 VHotWat_flow_nominal
+  </pre>
+  <p>
+  1. Start the next lag pump <code>yNexLagPum</code> whenever the following is 
+  true for time <code>timPer</code>:
+  </p>
+  <pre>        
+        SHWFR &gt; Number_of_operating_pumps/num_nominal - 0.03                  
+  </pre>
+  <p>
+  2. Shut off the last lag pump whenever the following is true for <code>timPer</code>:
+  </p>
+  <pre>           
+        SHWFR &le; (Number_of_operating_pumps - 1)/num_nominal - 0.03
+  </pre>
+  </html>", revisions="<html>
+  <ul>
+  <li>
+  August 25, 2020, by Karthik Devaprasad:<br/>
+  First implementation.
+  </li>
+  </ul>
+  </html>"));
 end EnableLag_variableSecondary_flowrate;

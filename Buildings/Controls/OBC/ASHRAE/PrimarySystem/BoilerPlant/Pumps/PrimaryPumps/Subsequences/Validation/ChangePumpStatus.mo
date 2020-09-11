@@ -3,14 +3,20 @@ model ChangePumpStatus
     "Validate sequence for changing pump status"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.ChangePumpStatus
-    chaPumSta(nPum=3) "Test instance for pump status change sequence"
+    chaPumSta(
+    final nPum=3)
+    "Test instance for pump status change sequence"
     annotation (Placement(transformation(extent={{60,-10},{82,10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre[3](pre_u_start=fill(false, 3))
+protected
+  Buildings.Controls.OBC.CDL.Logical.Pre pre[3](
+    final pre_u_start=fill(false, 3))
     "Logical pre block"
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.SampleTrigger samTri(period=5, startTime=1)
+  Buildings.Controls.OBC.CDL.Logical.Sources.SampleTrigger samTri(
+    final period=5,
+    final startTime=1)
     "Sample trigger"
     annotation (Placement(transformation(extent={{-130,-10},{-110,10}})));
 
@@ -18,33 +24,39 @@ model ChangePumpStatus
     "Boolean True pulse counter"
     annotation (Placement(transformation(extent={{-100,-6},{-88,6}})));
 
-  Buildings.Controls.OBC.CDL.Integers.GreaterThreshold intGreThr(threshold=3)
+  Buildings.Controls.OBC.CDL.Integers.GreaterThreshold intGreThr(
+    final t=3)
     "Switch pump staging to staging-down after 3 pump stage-ups"
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi "Logical switch"
+  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi
+    "Logical switch"
     annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
 
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi1 "Logical switch"
+  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi1
+    "Logical switch"
     annotation (Placement(transformation(extent={{-40,10},{-20,30}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con(k=false)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con(
+    final k=false)
     "Constant Boolean false"
     annotation (Placement(transformation(extent={{-130,70},{-110,90}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Not not1 "Logical Not"
+  Buildings.Controls.OBC.CDL.Logical.Not not1
+    "Logical Not"
     annotation (Placement(transformation(extent={{-10,10},{10,30}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Add addInt(k1=-1)
+  Buildings.Controls.OBC.CDL.Integers.Add addInt(
+    final k1=-1)
     "Generate stage setpoints for staging down processes"
     annotation (Placement(transformation(extent={{-40,-50},{-20,-30}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(k=7)
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(
+    final k=7)
     "Constant Integer source"
     annotation (Placement(transformation(extent={{-100,-60},{-80,-40}})));
 
 equation
-
   connect(pre.y, chaPumSta.uHotWatPum) annotation (Line(points={{112,0},{120,0},
           {120,20},{40,20},{40,0},{58,0}}, color={255,0,255}));
 
@@ -104,19 +116,19 @@ annotation (
   __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Pumps/PrimaryPumps/Subsequences/Validation/ChangePumpStatus.mos"
     "Simulate and plot"),
   Documentation(info="<html>
-<p>
-This example validates
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.ChangePumpStatus\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.ChangePumpStatus</a>.
-</p>
-</html>", revisions="<html>
-<ul>
-<li>
-August 19, 2020, by Karthik Devaprasad:<br/>
-First implementation.
-</li>
-</ul>
-</html>"),
+    <p>
+    This example validates
+    <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.ChangePumpStatus\">
+    Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.ChangePumpStatus</a>.
+    </p>
+    </html>", revisions="<html>
+    <ul>
+    <li>
+    August 19, 2020, by Karthik Devaprasad:<br/>
+    First implementation.
+    </li>
+    </ul>
+    </html>"),
   Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
                          graphics={
         Ellipse(lineColor = {75,138,73},

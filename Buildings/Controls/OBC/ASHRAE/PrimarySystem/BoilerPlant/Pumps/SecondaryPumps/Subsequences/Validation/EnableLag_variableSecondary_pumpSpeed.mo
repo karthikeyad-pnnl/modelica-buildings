@@ -1,7 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Validation;
-
 model EnableLag_variableSecondary_pumpSpeed
- 
     "Validate sequence for enabling variable-speed secondary lag pumps with no flowrate sensor in secondary loop"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.EnableLag_variableSecondary_pumpSpeed
@@ -34,6 +32,7 @@ protected
     final duration=3500,
     final offset=0,
     final startTime=0)
+    "Ramp input"
     annotation (Placement(transformation(extent={{-70,-10},{-50,10}})));
 
 equation
@@ -65,16 +64,15 @@ First implementation.
 </ul>
 </html>"),
   Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
-                         graphics={
-        Ellipse(lineColor = {75,138,73},
-                fillColor={255,255,255},
-                fillPattern = FillPattern.Solid,
-                extent = {{-100,-100},{100,100}}),
-        Polygon(lineColor = {0,0,255},
-                fillColor = {75,138,73},
-                pattern = LinePattern.None,
-                fillPattern = FillPattern.Solid,
-                points = {{-36,60},{64,0},{-36,-60},{-36,60}})}), Diagram(
-        coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
-
+    graphics={
+      Ellipse(lineColor = {75,138,73},
+              fillColor={255,255,255},
+              fillPattern = FillPattern.Solid,
+              extent = {{-100,-100},{100,100}}),
+      Polygon(lineColor = {0,0,255},
+              fillColor = {75,138,73},
+              pattern = LinePattern.None,
+              fillPattern = FillPattern.Solid,
+              points = {{-36,60},{64,0},{-36,-60},{-36,60}})}),
+  Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
 end EnableLag_variableSecondary_pumpSpeed;

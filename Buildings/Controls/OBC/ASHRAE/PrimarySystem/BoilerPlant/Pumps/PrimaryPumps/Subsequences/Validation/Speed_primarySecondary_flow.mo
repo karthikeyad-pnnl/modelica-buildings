@@ -43,7 +43,7 @@ protected
     final freqHz=1/10,
     final amplitude=0.5)
     "Flowrate sensor reading from decoupler"
-    annotation (Placement(transformation(extent={{0,-10},{20,10}})));
+    annotation (Placement(transformation(extent={{0,-50},{20,-30}})));
 
 equation
   connect(pumSta.y, hotPumSpe.uHotWatPum) annotation (Line(points={{-58,40},{-50,
@@ -55,7 +55,8 @@ equation
   connect(pumSta.y, hotPumSpe1.uHotWatPum) annotation (Line(points={{-58,40},{30,
           40},{30,5},{38,5}}, color={255,0,255}));
   connect(decFloSen.y, hotPumSpe1.VHotWatDec_flow)
-    annotation (Line(points={{22,0},{30,0},{30,-5},{38,-5}}, color={0,0,127}));
+    annotation (Line(points={{22,-40},{30,-40},{30,-5},{38,-5}},
+                                                             color={0,0,127}));
 
 annotation (
   experiment(StopTime=10.0, Tolerance=1e-06),

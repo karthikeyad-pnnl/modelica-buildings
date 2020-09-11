@@ -73,7 +73,7 @@ protected
 
   Buildings.Controls.OBC.CDL.Logical.LogicalSwitch addPum[nPum]
     "Add pump"
-    annotation (Placement(transformation(extent={{60,-30},{80,-10}})));
+    annotation (Placement(transformation(extent={{60,-10},{80,10}})));
 
   Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep(
     final nout=nPum)
@@ -136,8 +136,8 @@ equation
   connect(uHotWatPum, remPum.u1) annotation (Line(points={{-120,0},{4,0},{4,-52},
           {48,-52}}, color={255,0,255}));
 
-  connect(enaPum.y, addPum.u1) annotation (Line(points={{32,-40},{40,-40},{40,-12},
-          {58,-12}}, color={255,0,255}));
+  connect(enaPum.y, addPum.u1) annotation (Line(points={{32,-40},{40,-40},{40,8},
+          {58,8}},   color={255,0,255}));
 
   connect(lasLagPumSta.y, pumSta.u1)
     annotation (Line(points={{2,-80},{18,-80}}, color={255,0,255}));
@@ -152,14 +152,14 @@ equation
   connect(booRep2.y, remPum.u2) annotation (Line(points={{-58,50},{-36,50},{-36,
           -60},{48,-60}}, color={255,0,255}));
 
-  connect(booRep1.y, addPum.u2) annotation (Line(points={{-58,80},{-24,80},{-24,
-          -20},{58,-20}}, color={255,0,255}));
+  connect(booRep1.y, addPum.u2) annotation (Line(points={{-58,80},{50,80},{50,0},
+          {58,0}},        color={255,0,255}));
 
   connect(remPum.y, addPum.u3) annotation (Line(points={{72,-60},{80,-60},{80,-40},
-          {50,-40},{50,-28},{58,-28}}, color={255,0,255}));
+          {50,-40},{50,-8},{58,-8}},   color={255,0,255}));
 
-  connect(addPum.y, yHotWatPum) annotation (Line(points={{82,-20},{90,-20},{90,0},
-          {120,0}}, color={255,0,255}));
+  connect(addPum.y, yHotWatPum) annotation (Line(points={{82,0},{120,0}},
+                    color={255,0,255}));
 
   connect(conInt.y, intEqu2.u2) annotation (Line(points={{-68,20},{-66,20},{-66,
           -48},{-62,-48}}, color={255,127,0}));
@@ -183,32 +183,31 @@ annotation (
           textString="%name")}),
   Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
   Documentation(info="<html>
-<p>
-Block that changes the status of pumps. This sequence is not directly specified 
-in RP-1711. It provides a side calculation pertaining to generalization of the staging 
-sequences for any number of pumps and stages provided by the 
-user.
-</p>
-<p>
-<ol>
-<li>
-When the block receives the index of next lag pump to be enabled <code>uNexLagPum</code>
-and a <code>true</code> pulse on the next lag pump status <code>uNexLagPumSta</code>, it changes
-the pump status <code>yHotWatPum[uNexLagPum]</code> to <code>true</code>.
-</li>
-<li>
-When the block receives the index of last lag pump to be disabled <code>uLasLagPum</code>
-and a <code>false</code> pulse on the last lag pump status <code>uLasLagPumSta</code>, it changes
-the pump status <code>yHotWatPum[uLasLagPum]</code> to <code>false</code>.
-</li>
-</ol>
-</p>
-</html>", revisions="<html>
-<ul>
-<li>
-August 19, 2020, by Karthik Devaprasad:<br/>
-First implementation.
-</li>
-</ul>
-</html>"));
+  <p>
+  Block that changes the status of pumps. This sequence is not directly specified 
+  in RP-1711. It provides a side calculation pertaining to generalization of the staging 
+  sequences for any number of pumps and stages provided by the user.
+  </p>
+  <p>
+  <ol>
+  <li>
+  When the block receives the index of next lag pump to be enabled <code>uNexLagPum</code>
+  and a <code>true</code> pulse on the next lag pump status <code>uNexLagPumSta</code>,
+  it changes the pump status <code>yHotWatPum[uNexLagPum]</code> to <code>true</code>.
+  </li>
+  <li>
+  When the block receives the index of last lag pump to be disabled <code>uLasLagPum</code>
+  and a <code>false</code> pulse on the last lag pump status <code>uLasLagPumSta</code>, it changes
+  the pump status <code>yHotWatPum[uLasLagPum]</code> to <code>false</code>.
+  </li>
+  </ol>
+  </p>
+  </html>", revisions="<html>
+  <ul>
+  <li>
+  August 19, 2020, by Karthik Devaprasad:<br/>
+  First implementation.
+  </li>
+  </ul>
+  </html>"));
 end ChangePumpStatus;

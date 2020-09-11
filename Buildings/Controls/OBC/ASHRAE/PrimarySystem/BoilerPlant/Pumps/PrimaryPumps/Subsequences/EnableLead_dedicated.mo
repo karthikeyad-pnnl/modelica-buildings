@@ -31,22 +31,10 @@ protected
     "Logical not"
     annotation (Placement(transformation(extent={{-80,-60},{-60,-40}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Timer tim
-    "Measures boiler OFF time"
+  Buildings.Controls.OBC.CDL.Logical.Timer tim(
+    final t=offTimThr)
+    "Check if boiler disable time is greater than threshold"
     annotation (Placement(transformation(extent={{-40,-60},{-20,-40}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr(
-    final threshold=offTimThr)
-    "Check if the boiler has been OFF for more than 3 minutes"
-    annotation (Placement(transformation(extent={{0,-60},{20,-40}})));
-
-  Buildings.Controls.OBC.CDL.Logical.And and2
-    "Logical and"
-    annotation (Placement(transformation(extent={{0,10},{20,30}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Not not3
-    "Logical not"
-    annotation (Placement(transformation(extent={{-60,10},{-40,30}})));
 
 equation
   connect(uPlaEna, leaPumSta.u)
@@ -64,22 +52,8 @@ equation
     annotation (Line(points={{-58,-50},{-42,-50}},
                                                color={255,0,255}));
 
-  connect(tim.y, greEquThr.u)
-    annotation (Line(points={{-18,-50},{-2,-50}},
-                                              color={0,0,127}));
-
-  connect(uPlaEna, not3.u) annotation (Line(points={{-120,50},{-80,50},{-80,20},
-          {-62,20}}, color={255,0,255}));
-
-  connect(not3.y, and2.u1)
-    annotation (Line(points={{-38,20},{-2,20}},
-      color={255,0,255}));
-
-  connect(and2.y, leaPumSta.clr)
-    annotation (Line(points={{22,20},{40,20},{40,-6},{58,-6}}, color={255,0,255}));
-
-  connect(greEquThr.y, and2.u2) annotation (Line(points={{22,-50},{30,-50},{30,0},
-          {-10,0},{-10,12},{-2,12}},  color={255,0,255}));
+  connect(tim.passed, leaPumSta.clr) annotation (Line(points={{-18,-58},{50,-58},
+          {50,-6},{58,-6}}, color={255,0,255}));
 annotation (
   defaultComponentName="enaLeaPriPum_dedicated",
   Icon(coordinateSystem(preserveAspectRatio=false), graphics={

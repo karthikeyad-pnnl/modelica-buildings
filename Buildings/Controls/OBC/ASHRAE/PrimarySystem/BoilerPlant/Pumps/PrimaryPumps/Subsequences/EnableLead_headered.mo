@@ -20,7 +20,8 @@ block EnableLead_headered
 
 protected
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr[nBoi](
-    final threshold=fill(0.975, nBoi))
+    final t=fill(0.975,nBoi),
+    final h=fill(0.025,nBoi))
     "Determine if the isolation valve is open based on valve position"
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
 
@@ -77,7 +78,7 @@ annotation (
           extent={{-94,12},{-40,-10}},
           lineColor={255,0,255},
           pattern=LinePattern.Dash,
-          textString="uChiIsoVal"),
+          textString="uHotIsoVal"),
         Text(
           extent={{42,12},{96,-10}},
           lineColor={255,0,255},
