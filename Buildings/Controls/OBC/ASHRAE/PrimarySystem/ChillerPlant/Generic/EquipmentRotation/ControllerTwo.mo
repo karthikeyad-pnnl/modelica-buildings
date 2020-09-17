@@ -49,14 +49,6 @@ block ControllerTwo
     "Year when time = 0, used if zerTim=Custom"
     annotation(Evaluate=true, Dialog(group="Calendar", enable=zerTim==Buildings.Controls.OBC.CDL.Types.ZeroTime.Custom and continuous));
 
-  parameter Modelica.SIunits.Time offset = 0
-    "Offset that is added to 'time', may be used for computing time in a different time zone"
-    annotation(Evaluate=true, Dialog(group="Calendar", enable=continuous));
-
-  parameter Boolean weeInt = true
-    "Rotation is scheduled in: true = weekly intervals; false = daily intervals"
-    annotation(Dialog(group="Scheduler"));
-
   parameter Integer houOfDay = 2
     "Rotation hour of the day: 0 = midnight; 23 = 11pm"
     annotation(Evaluate=true, Dialog(group="Scheduler", enable=not simTimSta));

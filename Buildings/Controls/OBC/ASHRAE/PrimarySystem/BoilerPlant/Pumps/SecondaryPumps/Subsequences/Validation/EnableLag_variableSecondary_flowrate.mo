@@ -1,7 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.Validation;
-
 model EnableLag_variableSecondary_flowrate
- 
     "Validate sequence for enabling variable-speed secondary lag pumps with flowrate sensor in secondary loop"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.EnableLag_variableSecondary_flowrate
@@ -88,5 +86,4 @@ First implementation.
                 fillPattern = FillPattern.Solid,
                 points = {{-36,60},{64,0},{-36,-60},{-36,60}})}), Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
-
 end EnableLag_variableSecondary_flowrate;

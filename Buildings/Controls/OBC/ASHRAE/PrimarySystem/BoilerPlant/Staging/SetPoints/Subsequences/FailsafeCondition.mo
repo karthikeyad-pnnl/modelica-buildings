@@ -62,14 +62,9 @@ protected
     annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
 
   Buildings.Controls.OBC.CDL.Logical.Timer tim(
-    accumulate=false)
+    final t=delEna)
     "Time since condition has been met"
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr(
-    final threshold=delEna)
-    "Compare time to enable delay"
-    annotation (Placement(transformation(extent={{80,-10},{100,10}})));
 
   Buildings.Controls.OBC.CDL.Logical.Not not1
     "Logical Not"
@@ -90,10 +85,6 @@ equation
   connect(add2.y, hys.u)
     annotation (Line(points={{-58,0},{-42,0}},
       color={0,0,127}));
-  connect(tim.y, greEquThr.u)
-    annotation (Line(points={{62,0},{78,0}}, color={0,0,127}));
-  connect(greEquThr.y, yFaiCon)
-    annotation (Line(points={{102,0},{140,0}}, color={255,0,255}));
   connect(not1.u, uStaChaProEnd)
     annotation (Line(points={{-42,-50},{-140,-50}}, color={255,0,255}));
   connect(hys.y, and2.u1)
@@ -103,6 +94,8 @@ equation
   connect(and2.y, tim.u)
     annotation (Line(points={{22,0},{38,0}}, color={255,0,255}));
 
+  connect(tim.passed, yFaiCon) annotation (Line(points={{62,-8},{80,-8},{80,0},{
+          140,0}}, color={255,0,255}));
 annotation (defaultComponentName = "faiSafCon",
   Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
     graphics={

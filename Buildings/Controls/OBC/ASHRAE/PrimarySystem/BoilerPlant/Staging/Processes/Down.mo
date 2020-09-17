@@ -79,7 +79,8 @@ block Down
     annotation (Placement(transformation(extent={{-280,60},{-240,100}}),
       iconTransformation(extent={{-140,0},{-100,40}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uPumChaPro
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uPumChaPro if not
+    primaryOnly
     "Pulse indicating all pump change processes have been completed and pumps have been proved on"
     annotation (Placement(transformation(extent={{-280,-210},{-240,-170}}),
       iconTransformation(extent={{-140,-200},{-100,-160}})));
@@ -130,21 +131,27 @@ block Down
     annotation (Placement(transformation(extent={{280,30},{320,70}}),
       iconTransformation(extent={{100,90},{140,130}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yPumChaPro
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yPumChaPro if not
+    primaryOnly
     "Pulse indicating start of pump change process"
     annotation (Placement(transformation(extent={{280,-260},{320,-220}}),
-      iconTransformation(extent={{100,-190},{140,-150}})));
+      iconTransformation(extent={{100,-210},{140,-170}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yOnOff
     "Signal indicating whether stage change involves simultaneous turning on
     and turning off of boilers"
     annotation (Placement(transformation(extent={{280,-130},{320,-90}}),
-      iconTransformation(extent={{100,-50},{140,-10}})));
+      iconTransformation(extent={{100,-60},{140,-20}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yNexEnaBoi
     "Boiler index of next boiler being enabled"
     annotation (Placement(transformation(extent={{280,-170},{320,-130}}),
-      iconTransformation(extent={{100,-120},{140,-80}})));
+      iconTransformation(extent={{100,-110},{140,-70}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yLasDisBoi
+    "Boiler index of last boiler being disabled"
+    annotation (Placement(transformation(extent={{280,-210},{320,-170}}),
+      iconTransformation(extent={{100,-160},{140,-120}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yHotWatIsoVal[nBoi](
     final min=fill(0, nBoi),
@@ -155,6 +162,11 @@ block Down
       iconTransformation(extent={{100,20},{140,60}})));
 
 protected
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con(
+    final k=true) if primaryOnly
+    "Constant Boolean True signal"
+    annotation (Placement(transformation(extent={{-150,-160},{-130,-140}})));
+
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.ResetMinBypass minBypRes(
     final delEna=delEnaMinFloSet,
     final relFloDif=relFloDif) if primaryOnly
@@ -209,15 +221,15 @@ protected
     "Logical pre block"
     annotation (Placement(transformation(extent={{200,-60},{220,-40}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Latch lat3
+  Buildings.Controls.OBC.CDL.Logical.Latch lat3 if not primaryOnly
     "Hold process completion signal after pump enable process"
     annotation (Placement(transformation(extent={{-140,-200},{-120,-180}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Latch lat4
+  Buildings.Controls.OBC.CDL.Logical.Latch lat4 if not primaryOnly
     "Hold process completion signal after pump disable process"
     annotation (Placement(transformation(extent={{160,-200},{180,-180}})));
 
-  Buildings.Controls.OBC.CDL.Logical.And and4
+  Buildings.Controls.OBC.CDL.Logical.And and4 if not primaryOnly
     "Check for pump disable completion after start of pump disable process"
     annotation (Placement(transformation(extent={{132,-200},{152,-180}})));
 
@@ -225,15 +237,15 @@ protected
     "Detect change in process completion status and send out pulse signal"
     annotation (Placement(transformation(extent={{230,40},{250,60}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Edge edg1
+  Buildings.Controls.OBC.CDL.Logical.Edge edg1 if not primaryOnly
     "Generate pulse to signal start of pump change process"
     annotation (Placement(transformation(extent={{-100,-260},{-80,-240}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Edge edg2
+  Buildings.Controls.OBC.CDL.Logical.Edge edg2 if not primaryOnly
     "Generate pulse to signal start of pump change process"
     annotation (Placement(transformation(extent={{140,-246},{160,-226}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Or or2
+  Buildings.Controls.OBC.CDL.Logical.Or or2 if not primaryOnly
     "Check for pump change proces start signal"
     annotation (Placement(transformation(extent={{210,-250},{230,-230}})));
 
@@ -402,7 +414,8 @@ equation
           -110},{98,-110}}, color={255,0,255}));
 
   connect(swi1.y, yHotWatIsoVal) annotation (Line(points={{122,-110},{134,-110},
-          {134,-90},{210,-90},{210,-70},{300,-70}}, color={0,0,127}));
+          {134,-100},{210,-100},{210,-70},{300,-70}},
+                                                    color={0,0,127}));
 
   connect(and1.y, truDel1.u) annotation (Line(points={{22,0},{28,0},{28,60},{
           -10,60},{-10,100},{-2,100}},
@@ -503,6 +516,12 @@ equation
   connect(nexBoi.yEnaSmaBoi, yNexEnaBoi) annotation (Line(points={{-148,-75},{-76,
           -75},{-76,-86},{260,-86},{260,-150},{300,-150}}, color={255,127,0}));
 
+  connect(con.y, and1.u2) annotation (Line(points={{-128,-150},{-48,-150},{-48,-26},
+          {-10,-26},{-10,-8},{-2,-8}}, color={255,0,255}));
+  connect(con.y, and3.u2) annotation (Line(points={{-128,-150},{0,-150},{0,-180},
+          {110,-180},{110,-150},{184,-150},{184,-8},{188,-8}}, color={255,0,255}));
+  connect(nexBoi.yLasDisBoi, yLasDisBoi) annotation (Line(points={{-148,-70},{
+          60,-70},{60,-90},{250,-90},{250,-190},{300,-190}}, color={255,127,0}));
 annotation (
   defaultComponentName="dowProCon",
   Diagram(coordinateSystem(preserveAspectRatio=false,

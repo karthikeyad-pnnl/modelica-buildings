@@ -56,19 +56,14 @@ protected
     "Logical and"
     annotation (Placement(transformation(extent={{120,70},{140,90}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Timer tim
+  Buildings.Controls.OBC.CDL.Logical.Timer tim(
+    final t=delEna)
     "Time after achiving setpoint"
     annotation (Placement(transformation(extent={{40,-30},{60,-10}})));
 
   Buildings.Controls.OBC.CDL.Logical.And and2
     "Logical and"
     annotation (Placement(transformation(extent={{-80,70},{-60,90}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr(
-    final
-      threshold=delEna)
-    "Check if it has been threshold time after new setpoint achieved"
-    annotation (Placement(transformation(extent={{80,-30},{100,-10}})));
 
   Buildings.Controls.OBC.CDL.Logical.Not not1
     "Logical not"
@@ -83,7 +78,8 @@ protected
     annotation (Placement(transformation(extent={{-100,-70},{-80,-50}})));
 
   Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
-    final p=1e-6, final k=1)
+    final p=1e-6,
+    final k=1)
     "Add a small positive to avoid zero output"
     annotation (Placement(transformation(extent={{-140,-90},{-120,-70}})));
 
@@ -120,9 +116,6 @@ equation
     annotation (Line(points={{-180,40},{-140,40},{-140,72},{-82,72}},
       color={255,0,255}));
 
-  connect(tim.y, greEquThr.u)
-    annotation (Line(points={{62,-20},{78,-20}}, color={0,0,127}));
-
   connect(and2.y, and1.u1)
     annotation (Line(points={{-58,80},{-10,80},{-10,88},{118,88}},
       color={255,0,255}));
@@ -136,10 +129,6 @@ equation
 
   connect(lat.y, and1.u2)
     annotation (Line(points={{102,40},{108,40},{108,80},{118,80}},
-      color={255,0,255}));
-
-  connect(greEquThr.y, and1.u3)
-    annotation (Line(points={{102,-20},{114,-20},{114,72},{118,72}},
       color={255,0,255}));
 
   connect(VMinHotWatSet_flow, addPar.u)
@@ -193,6 +182,8 @@ equation
   connect(add2.u2, VMinHotWatSet_flow) annotation (Line(points={{-150,-26},{-154,
           -26},{-154,-80},{-180,-80}}, color={0,0,127}));
 
+  connect(tim.passed, and1.u3) annotation (Line(points={{62,-28},{114,-28},{114,
+          72},{118,72}}, color={255,0,255}));
 annotation (
   defaultComponentName="minBypRes",
   Icon(graphics={

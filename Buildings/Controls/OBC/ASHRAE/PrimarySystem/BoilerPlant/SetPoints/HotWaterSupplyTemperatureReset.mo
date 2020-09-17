@@ -98,7 +98,7 @@ block HotWaterSupplyTemperatureReset
   parameter Real holTimVal(
     final unit="s",
     final displayUnit="s",
-    final quantity="Time") = 900
+    final quantity="Time") = 600
     "Minimum setpoint hold time for stage change process"
     annotation(Dialog(group="Plant parameters"));
 
@@ -144,6 +144,14 @@ block HotWaterSupplyTemperatureReset
       iconTransformation(extent={{100,-60},{140,-20}})));
 
 protected
+  parameter Integer staIndVal[nSta] = {i for i in 1:nSta}
+    "Parameter to generate vector of boiler stage indices";
+
+  Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep2[nSta](
+    final nout=fill(nSta, nSta))
+    "Replicate stage-type vector into matrix"
+    annotation (Placement(transformation(extent={{-100,-80},{-80,-60}})));
+
   Buildings.Controls.OBC.CDL.Integers.LessEqual intLesEqu[nSta]
     "Identify stage indices up to current stage setpoint"
     annotation (Placement(transformation(extent={{-40,-120},{-20,-100}})));
@@ -157,7 +165,7 @@ protected
     annotation (Placement(transformation(extent={{0,-80},{20,-60}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con1[nSta](
-    final k=0)
+    final k=fill(0, nSta))
     "Constant zero source"
     annotation (Placement(transformation(extent={{-120,-40},{-100,-20}})));
 
@@ -166,16 +174,16 @@ protected
     annotation (Placement(transformation(extent={{10,60},{30,80}})));
 
   Buildings.Controls.OBC.CDL.Routing.RealExtractor extIndSig[nSta](
-    final nin=nSta)
-    "Extract stage type for current stage"
-    annotation (Placement(transformation(extent={{-80,-80},{-60,-60}})));
+    final nin=fill(nSta, nSta))
+    "Extract stage type for each stage"
+    annotation (Placement(transformation(extent={{-70,-80},{-50,-60}})));
 
   Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea[nSta]
     "Integer to Real conversion"
-    annotation (Placement(transformation(extent={{-120,-80},{-100,-60}})));
+    annotation (Placement(transformation(extent={{-130,-80},{-110,-60}})));
 
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
-    final threshold=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler)
+    final t=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler)
     "Check for non-condensing boilers that are already enabled"
     annotation (Placement(transformation(extent={{60,-80},{80,-60}})));
 
@@ -233,7 +241,7 @@ protected
     annotation (Placement(transformation(extent={{-120,-260},{-100,-240}})));
 
   Buildings.Controls.OBC.CDL.Integers.GreaterThreshold greThr1[nBoi](
-    final threshold=fill(Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler,nBoi))
+    final t=fill(Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler,nBoi))
     "Identify non-condensing boilers in plant"
     annotation (Placement(transformation(extent={{-80,-260},{-60,-240}})));
 
@@ -290,9 +298,8 @@ protected
     "Element-wise product"
     annotation (Placement(transformation(extent={{60,-280},{80,-260}})));
 
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant staInd[nSta](
-    final k=staIndVal)
-    "Index of boiler plant stages"
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant staInd[nSta](final k=
+        staIndVal) "Index of boiler plant stages"
     annotation (Placement(transformation(extent={{-120,-110},{-100,-90}})));
 
   Buildings.Controls.OBC.CDL.Continuous.MultiMax mulMax(
@@ -349,11 +356,8 @@ equation
   connect(swi1.y, swi.u3) annotation (Line(points={{32,70},{40,70},{40,-8},{98,-8}},
         color={0,0,127}));
 
-  connect(extIndSig.u, intToRea.y)
-    annotation (Line(points={{-82,-70},{-98,-70}}, color={0,0,127}));
-
   connect(intToRea.u, uTyp)
-    annotation (Line(points={{-122,-70},{-160,-70}}, color={255,127,0}));
+    annotation (Line(points={{-132,-70},{-160,-70}}, color={255,127,0}));
 
   connect(greThr.y, swi1.u2) annotation (Line(points={{82,-70},{90,-70},{90,-50},
           {-10,-50},{-10,70},{8,70}},
@@ -415,26 +419,21 @@ equation
   connect(pro1.y, add2.u2) annotation (Line(points={{82,-270},{90,-270},{90,-236},
           {98,-236}}, color={0,0,127}));
 
-  connect(staInd.y, extIndSig.index) annotation (Line(points={{-98,-100},{-70,-100},
-          {-70,-82}}, color={255,127,0}));
-
-  connect(staInd.y, intLesEqu.u1) annotation (Line(points={{-98,-100},{-50,-100},
-          {-50,-110},{-42,-110}}, color={255,127,0}));
-
   connect(uCurStaSet, intRep.u) annotation (Line(points={{-160,-120},{-120,-120},
           {-120,-118},{-82,-118}}, color={255,127,0}));
 
   connect(intRep.y, intLesEqu.u2)
     annotation (Line(points={{-58,-118},{-42,-118}}, color={255,127,0}));
 
-  connect(extIndSig.y, swi3.u1) annotation (Line(points={{-58,-70},{-20,-70},{-20,
+  connect(extIndSig.y, swi3.u1) annotation (Line(points={{-48,-70},{-20,-70},{-20,
           -62},{-2,-62}}, color={0,0,127}));
 
   connect(intLesEqu.y, swi3.u2) annotation (Line(points={{-18,-110},{-10,-110},{
           -10,-70},{-2,-70}}, color={255,0,255}));
 
-  connect(con1.y, swi3.u3) annotation (Line(points={{-98,-30},{-54,-30},{-54,-78},
-          {-2,-78}}, color={0,0,127}));
+  connect(con1.y, swi3.u3) annotation (Line(points={{-98,-30},{-80,-30},{-80,-40},
+          {-44,-40},{-44,-78},{-2,-78}},
+                     color={0,0,127}));
 
   connect(swi3.y, mulMax.u[1:nSta]) annotation (Line(points={{22,-70},{26,-70},{26,
           -70},{28,-70}},           color={0,0,127}));
@@ -442,6 +441,14 @@ equation
   connect(mulMax.y, greThr.u) annotation (Line(points={{52,-70},{58,-70},{58,-70},
           {58,-70}}, color={0,0,127}));
 
+  connect(intToRea.y, reaRep2.u)
+    annotation (Line(points={{-108,-70},{-102,-70}}, color={0,0,127}));
+  connect(reaRep2.y, extIndSig.u)
+    annotation (Line(points={{-78,-70},{-72,-70}}, color={0,0,127}));
+  connect(staInd.y, extIndSig.index) annotation (Line(points={{-98,-100},{-60,-100},
+          {-60,-82}}, color={255,127,0}));
+  connect(staInd.y, intLesEqu.u1) annotation (Line(points={{-98,-100},{-50,-100},
+          {-50,-110},{-42,-110}}, color={255,127,0}));
   annotation(defaultComponentName="hotWatSupTemRes",
     Diagram(coordinateSystem(preserveAspectRatio=false,
       extent={{-140,-320},{140,120}})),

@@ -295,7 +295,7 @@ block Controller
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uMinPriPumSpeCon(
     final unit="1",
-    displayUnit="1") if variablePrimary
+    displayUnit="1") if variablePrimary and not primaryOnly
     "Minimum allowed pump speed for non-condensing boilers"
     annotation (Placement(transformation(extent={{-320,-500},{-280,-460}}),
       iconTransformation(extent={{-140,-140},{-100,-100}})));
@@ -425,6 +425,7 @@ block Controller
     "Hot water pump speed control with local DP sensor"
     annotation (Placement(transformation(extent={{-60,-430},{-40,-410}})));
 
+
 protected
   parameter Boolean remoteDPRegulated = (speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP)
     "Boolean flag for pump speed control with remote differential pressure";
@@ -440,6 +441,11 @@ protected
 
   parameter Integer pumInd[nPum]={i for i in 1:nPum}
     "Pump index, {1,2,...,n}";
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(
+    final k=0) if primaryOnly
+    "Constant Real zero signal"
+    annotation (Placement(transformation(extent={{40,-406},{60,-386}})));
 
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
     final t=0,
@@ -1090,6 +1096,8 @@ equation
           -48,-120},{-48,32},{-32,32}}, color={255,127,0}));
   connect(mulSumInt.y, intLesEquThr1.u) annotation (Line(points={{-178,-120},{8,
           -120},{8,-10},{16,-10}}, color={255,127,0}));
+  connect(con.y, max.u1) annotation (Line(points={{62,-396},{82,-396},{82,-480},
+          {132,-480}}, color={0,0,127}));
 annotation (defaultComponentName="priPumCon",
   Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-280,-660},{280,260}}),
   graphics={

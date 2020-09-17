@@ -125,8 +125,7 @@ protected
     "Boolean to Real conversion"
     annotation (Placement(transformation(extent={{200,0},{220,20}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr1(
-    final threshold=0.5)
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr1(t=0.5)
     "Check if plant is still enabled"
     annotation (Placement(transformation(extent={{280,0},{300,20}})));
 

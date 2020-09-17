@@ -6,7 +6,7 @@ model MinimumFlowSetpoint
     minBoiFloSet(
     final nBoi=2,
     final nSta=3,
-    final boiStaMat={{1,0},{0,1},{1,1}},
+    final staMat={{1,0},{0,1},{1,1}},
     final minFloSet={0.1,0.3},
     final maxFloSet={0.25,0.9},
     bypSetRat=0.1)
@@ -17,7 +17,7 @@ model MinimumFlowSetpoint
     minBoiFloSet1(
     final nBoi=2,
     final nSta=3,
-    final boiStaMat={{1,0},{0,1},{1,1}},
+    final staMat={{1,0},{0,1},{1,1}},
     final minFloSet={0.1,0.3},
     final maxFloSet={0.25,0.9},
     bypSetRat=0.1)

@@ -10,7 +10,7 @@ block MinimumFlowSetpoint
     final min=1) = 5
     "Total number of stages";
 
-  parameter Integer boiStaMat[nSta, nBoi] = {{1,0,0},{0,1,0},{1,1,0},{0,1,1},{1,1,1}}
+  parameter Integer staMat[nSta, nBoi] = {{1,0,0},{0,1,0},{1,1,0},{0,1,1},{1,1,1}}
     "Boiler staging matrix";
 
   parameter Real minFloSet[nBoi](
@@ -62,7 +62,7 @@ block MinimumFlowSetpoint
     annotation (Placement(transformation(extent={{320,-90},{360,-50}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
-protected
+//protected
   parameter Integer boiInd[nBoi]={i for i in 1:nBoi}
     "Boiler index, {1,2,...,n}";
 
@@ -108,7 +108,7 @@ protected
     annotation (Placement(transformation(extent={{-120,-190},{-100,-170}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con2[nSta,nBoi](
-    final k=boiStaMat)
+    final k=staMat)
     "Boiler staging matrix"
     annotation (Placement(transformation(extent={{-120,-230},{-100,-210}})));
 
@@ -136,8 +136,11 @@ protected
     "Element-wise division"
     annotation (Placement(transformation(extent={{-20,-160},{0,-140}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar[nSta,nBoi](
-    final p=fill(1e-6, nSta, nBoi),
+  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar[nSta,nBoi](final p=
+        fill(
+        1e-8,
+        nSta,
+        nBoi),
     final k=fill(1, nSta, nBoi))
     "Prevent divison by zero"
     annotation (Placement(transformation(extent={{-50,-190},{-30,-170}})));
@@ -150,7 +153,7 @@ protected
     annotation (Placement(transformation(extent={{20,-160},{40,-140}})));
 
   Buildings.Controls.OBC.CDL.Continuous.MatrixGain matGai(
-    final K=boiStaMat)
+    final K=staMat)
     "Sum of maximum flowrates of operating boilers"
     annotation (Placement(transformation(extent={{-40,-230},{-20,-210}})));
 

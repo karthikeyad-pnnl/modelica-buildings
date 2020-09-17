@@ -65,20 +65,18 @@ model PlantEnable
     "Table defining when plant can be enabled"
     annotation (Placement(transformation(extent={{-150,-120},{-130,-100}})));
 
-protected
+//protected
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol(
     final trueHoldDuration=plaOnThrTim,
     final falseHoldDuration=plaOffThrTim)
     "Ensure plant stays continuously enabled/disabled for the required minimum time"
     annotation (Placement(transformation(extent={{120,-10},{140,10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
-    final threshold=0.5)
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(t=0.5)
     "Check if schedule lets the controller enable the plant or not"
     annotation (Placement(transformation(extent={{-120,-120},{-100,-100}})));
 
-  Buildings.Controls.OBC.CDL.Integers.GreaterThreshold intGreThr(
-    final threshold=nIgnReq)
+  Buildings.Controls.OBC.CDL.Integers.GreaterThreshold intGreThr(t=nIgnReq)
     "Check if number of requests is greater than number of requests to be ignored"
     annotation (Placement(transformation(extent={{-120,40},{-100,60}})));
 
@@ -91,8 +89,7 @@ protected
     "Check if all the conditions for enabling plant have been met"
     annotation (Placement(transformation(extent={{-10,80},{10,100}})));
 
-  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
-    final nu=3)
+  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(nu=3)
     "Check if any conditions except plant-on time have been satisfied to disable plant"
     annotation (Placement(transformation(extent={{30,-80},{50,-60}})));
 
@@ -115,14 +112,9 @@ protected
     "Logical Not"
     annotation (Placement(transformation(extent={{-70,-40},{-50,-20}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Timer tim1
+  Buildings.Controls.OBC.CDL.Logical.Timer tim1(t=staOnReqTim)
     "Time since number of requests was greater than number of ignores"
     annotation (Placement(transformation(extent={{-40,-40},{-20,-20}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr1(
-    final threshold=staOnReqTim)
-    "Time limit for receiving requests to maintain status on"
-    annotation (Placement(transformation(extent={{-10,-40},{10,-20}})));
 
   Buildings.Controls.OBC.CDL.Logical.Not not2
     "Logical Not"
@@ -141,9 +133,6 @@ equation
   connect(not3.y, tim1.u)
     annotation (Line(points={{-48,-30},{-42,-30}},
       color={255,0,255}));
-  connect(tim1.y, greThr1.u)
-    annotation (Line(points={{-18,-30},{-12,-30}},
-      color={0,0,127}));
   connect(not2.u, hys.y)
     annotation (Line(points={{-12,-70},{-20,-70},{-20,-50},{-98,-50}},
       color={255,0,255}));
@@ -161,15 +150,6 @@ equation
       color={255,0,255}));
   connect(mulAnd.y, lat.u)
     annotation (Line(points={{12,90},{60,90},{60,0},{78,0}},
-      color={255,0,255}));
-  connect(greThr1.y, mulOr.u[1])
-    annotation (Line(points={{12,-30},{20,-30},{20,-65.3333},{28,-65.3333}},
-      color={255,0,255}));
-  connect(not2.y, mulOr.u[2])
-    annotation (Line(points={{12,-70},{20,-70},{20,-70},{28,-70}},
-      color={255,0,255}));
-  connect(not1.y, mulOr.u[3])
-    annotation (Line(points={{12,-110},{20,-110},{20,-74.6667},{28,-74.6667}},
       color={255,0,255}));
   connect(intGreThr.u, supResReq)
     annotation (Line(points={{-122,50},{-180,50}},
@@ -190,6 +170,12 @@ equation
     annotation (Line(points={{142,0},{180,0}},
       color={255,0,255}));
 
+  connect(tim1.passed, mulOr.u[1]) annotation (Line(points={{-18,-38},{20,-38},
+          {20,-65.3333},{28,-65.3333}}, color={255,0,255}));
+  connect(not2.y, mulOr.u[2]) annotation (Line(points={{12,-70},{20,-70},{20,
+          -70},{28,-70}}, color={255,0,255}));
+  connect(not1.y, mulOr.u[3]) annotation (Line(points={{12,-110},{20,-110},{20,
+          -74.6667},{28,-74.6667}}, color={255,0,255}));
   annotation (defaultComponentName = "plaEna",
     Icon(graphics={
       Rectangle(

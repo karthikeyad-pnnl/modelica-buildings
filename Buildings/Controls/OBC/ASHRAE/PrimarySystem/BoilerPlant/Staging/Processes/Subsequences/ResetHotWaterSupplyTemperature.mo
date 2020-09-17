@@ -64,7 +64,7 @@ protected
     "Index vector of boiler plant stages";
 
   Buildings.Controls.OBC.CDL.Continuous.LessThreshold lesThr(
-    final threshold=2)
+    final t=2)
     "Pass True if all preceding stages are condensing boiler type stages"
     annotation (Placement(transformation(extent={{80,-70},{100,-50}})));
 
@@ -110,7 +110,7 @@ protected
     annotation (Placement(transformation(extent={{-140,-30},{-120,-10}})));
 
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr1(
-    final threshold=1)
+    final t=1)
     "Identify if current stage setpoint is a non-condensing boiler stage"
     annotation (Placement(transformation(extent={{-60,-30},{-40,-10}})));
 

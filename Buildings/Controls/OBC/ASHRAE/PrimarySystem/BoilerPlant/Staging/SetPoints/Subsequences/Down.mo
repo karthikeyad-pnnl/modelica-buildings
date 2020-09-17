@@ -336,50 +336,29 @@ protected
     annotation (Placement(transformation(extent={{20,-180},{40,-160}})));
 
   Buildings.Controls.OBC.CDL.Integers.GreaterThreshold intGreThr(
-    final threshold=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler)
+    final t=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler)
     "Check for non-condensing boilers in stage"
     annotation (Placement(transformation(extent={{60,-180},{80,-160}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Timer tim
+  Buildings.Controls.OBC.CDL.Logical.Timer tim(
+    final t=delDesCapNonConBoi)
     "Time since condition has been met"
-    annotation (Placement(transformation(extent={{-20,-50},{0,-30}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr(
-    final threshold=delDesCapNonConBoi)
-    "Compare time to enable delay"
     annotation (Placement(transformation(extent={{60,-30},{80,-10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr1(
-    final threshold=delDesCapConBoi)
-    "Compare time to enable delay"
-    annotation (Placement(transformation(extent={{60,-70},{80,-50}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Timer tim1 if primaryOnly
+  Buildings.Controls.OBC.CDL.Logical.Timer tim1(
+    final t=delBypVal) if primaryOnly
     "Time since condition has been met"
     annotation (Placement(transformation(extent={{-20,-10},{0,10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Timer tim2 if not primaryOnly
+  Buildings.Controls.OBC.CDL.Logical.Timer tim2(
+    final t=delTRetDif) if not primaryOnly
     "Time since condition has been met"
     annotation (Placement(transformation(extent={{-20,-110},{0,-90}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr2(
-    final threshold=delTRetDif) if not primaryOnly
-    "Compare time to enable delay"
-    annotation (Placement(transformation(extent={{20,-116},{40,-96}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr3(
-    final threshold=delBypVal) if primaryOnly
-    "Compare time to enable delay"
-    annotation (Placement(transformation(extent={{20,-10},{40,10}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Timer tim3
+  Buildings.Controls.OBC.CDL.Logical.Timer tim3(
+    final t=delMinFir)
     "Time since condition has been met"
     annotation (Placement(transformation(extent={{-20,34},{0,54}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr4(
-    final threshold=delMinFir)
-    "Compare time to enable delay"
-    annotation (Placement(transformation(extent={{20,34},{40,54}})));
 
   Buildings.Controls.OBC.CDL.Routing.RealExtractor extIndSig1(
     final nin=nSta) if not primaryOnly
@@ -419,6 +398,11 @@ protected
   Buildings.Controls.OBC.CDL.Logical.Not not5
     "Logical Not"
     annotation (Placement(transformation(extent={{-120,80},{-100,100}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Timer tim4(
+    final t=delDesCapConBoi)
+    "Time since condition has been met"
+    annotation (Placement(transformation(extent={{60,-70},{80,-50}})));
 
 equation
   connect(faiSafCon.TSupSet, THotWatSupSet) annotation (Line(points={{-162,135},
@@ -494,28 +478,6 @@ equation
                        color={255,0,255}));
   connect(uStaChaProEnd, faiSafCon.uStaChaProEnd) annotation (Line(points={{-200,
           90},{-166,90},{-166,125},{-162,125}}, color={255,0,255}));
-  connect(tim.y, greEquThr.u) annotation (Line(points={{2,-40},{50,-40},{50,-20},
-          {58,-20}}, color={0,0,127}));
-  connect(greEquThr.y, logSwi.u1) annotation (Line(points={{82,-20},{90,-20},{90,
-          -32},{98,-32}}, color={255,0,255}));
-  connect(greEquThr1.u, tim.y) annotation (Line(points={{58,-60},{50,-60},{50,-40},
-          {2,-40}}, color={0,0,127}));
-  connect(greEquThr1.y, logSwi.u3) annotation (Line(points={{82,-60},{90,-60},{90,
-          -48},{98,-48}}, color={255,0,255}));
-  connect(greEquThr2.u, tim2.y) annotation (Line(points={{18,-106},{10,-106},{10,
-          -100},{2,-100}}, color={0,0,127}));
-  connect(greEquThr2.y, or1.u2)
-    annotation (Line(points={{42,-106},{58,-106}}, color={255,0,255}));
-  connect(tim1.y, greEquThr3.u)
-    annotation (Line(points={{2,0},{18,0}}, color={0,0,127}));
-  connect(greEquThr3.y, or2.u2) annotation (Line(points={{42,0},{50,0},{50,10},{
-          58,10}}, color={255,0,255}));
-  connect(greEquThr4.u, tim3.y)
-    annotation (Line(points={{18,44},{2,44}}, color={0,0,127}));
-  connect(greEquThr4.y, or2.u1) annotation (Line(points={{42,44},{46,44},{46,18},
-          {58,18}}, color={255,0,255}));
-  connect(greEquThr4.y, or1.u1) annotation (Line(points={{42,44},{46,44},{46,-98},
-          {58,-98}}, color={255,0,255}));
   connect(con2.y, extIndSig1.u)
     annotation (Line(points={{-148,-130},{-142,-130}}, color={0,0,127}));
   connect(uCur, extIndSig1.index) annotation (Line(points={{-30,-220},{-30,-190},
@@ -533,7 +495,8 @@ equation
   connect(tim1.u, and4.y)
     annotation (Line(points={{-22,0},{-28,0}}, color={255,0,255}));
   connect(and5.y, tim.u)
-    annotation (Line(points={{-28,-40},{-22,-40}}, color={255,0,255}));
+    annotation (Line(points={{-28,-40},{-10,-40},{-10,-20},{58,-20}},
+                                                   color={255,0,255}));
   connect(tim2.u, and6.y)
     annotation (Line(points={{-22,-100},{-28,-100}}, color={255,0,255}));
   connect(hys4.y, and4.u1)
@@ -553,6 +516,20 @@ equation
   connect(not5.y, and6.u2) annotation (Line(points={{-98,90},{-60,90},{-60,-108},
           {-52,-108}}, color={255,0,255}));
 
+  connect(tim.passed, logSwi.u1) annotation (Line(points={{82,-28},{90,-28},{90,
+          -32},{98,-32}}, color={255,0,255}));
+  connect(tim4.passed, logSwi.u3) annotation (Line(points={{82,-68},{90,-68},{90,
+          -48},{98,-48}}, color={255,0,255}));
+  connect(and5.y, tim4.u) annotation (Line(points={{-28,-40},{-10,-40},{-10,-60},
+          {58,-60}}, color={255,0,255}));
+  connect(tim3.passed, or2.u1) annotation (Line(points={{2,36},{40,36},{40,18},{
+          58,18}}, color={255,0,255}));
+  connect(tim1.passed, or2.u2) annotation (Line(points={{2,-8},{50,-8},{50,10},{
+          58,10}}, color={255,0,255}));
+  connect(tim2.passed, or1.u2) annotation (Line(points={{2,-108},{20,-108},{20,-106},
+          {58,-106}}, color={255,0,255}));
+  connect(tim3.passed, or1.u1) annotation (Line(points={{2,36},{40,36},{40,-98},
+          {58,-98}}, color={255,0,255}));
   annotation(defaultComponentName = "staDow",
     Icon(coordinateSystem(extent={{-100,-160},{100,190}}),
       graphics={

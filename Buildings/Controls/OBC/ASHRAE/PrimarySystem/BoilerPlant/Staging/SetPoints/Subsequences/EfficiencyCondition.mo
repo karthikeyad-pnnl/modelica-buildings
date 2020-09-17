@@ -94,6 +94,8 @@ block EfficiencyCondition
     annotation (Placement(transformation(extent={{160,-20},{200,20}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
+  CDL.Continuous.AddParameter addPar(p=1e-8, k=1)
+    annotation (Placement(transformation(extent={{-90,-80},{-70,-60}})));
 protected
   Buildings.Controls.OBC.CDL.Continuous.Division div
     "Divider to get relative value of required heating capacity"
@@ -140,7 +142,7 @@ protected
     annotation (Placement(transformation(extent={{-40,-110},{-20,-90}})));
 
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
-    final threshold=1)
+    final t=1)
     "Check for non-condensing boilers"
     annotation (Placement(transformation(extent={{30,-110},{50,-90}})));
 
@@ -159,25 +161,17 @@ protected
   Buildings.Controls.OBC.CDL.Continuous.Add add1(
     final k2=-1)
     "Adder"
-    annotation (Placement(transformation(extent={{-80,-50},{-60,-30}})));
+    annotation (Placement(transformation(extent={{-90,-50},{-70,-30}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Timer tim
+  Buildings.Controls.OBC.CDL.Logical.Timer tim(
+    final t=delCapReq)
     "Time since condition has been met"
     annotation (Placement(transformation(extent={{20,60},{40,80}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Timer tim1
+  Buildings.Controls.OBC.CDL.Logical.Timer tim1(
+    final t=delCapReq)
     "Time since condition has been met"
     annotation (Placement(transformation(extent={{20,20},{40,40}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr(
-    final threshold=delCapReq)
-    "Compare time to enable delay"
-    annotation (Placement(transformation(extent={{60,60},{80,80}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.GreaterEqualThreshold greEquThr1(
-    final threshold=delCapReq)
-    "Compare time to enable delay"
-    annotation (Placement(transformation(extent={{60,20},{80,40}})));
 
   Buildings.Controls.OBC.CDL.Logical.And and1
     "Turn on timer when hysteresis turns on and reset it when hysteresis turns
@@ -199,15 +193,13 @@ equation
       color={0,0,127}));
   connect(div1.u2, uCapDes) annotation (Line(points={{-82,64},{-90,64},{-90,70},
           {-114,70},{-114,100},{-140,100}}, color={0,0,127}));
-  connect(add1.u1, VHotWat_flow) annotation (Line(points={{-82,-34},{-110,-34},{
-          -110,-20},{-140,-20}},  color={0,0,127}));
-  connect(add1.u2, VUpMinSet_flow) annotation (Line(points={{-82,-46},{-110,-46},
+  connect(add1.u1, VHotWat_flow) annotation (Line(points={{-92,-34},{-110,-34},
+          {-110,-20},{-140,-20}}, color={0,0,127}));
+  connect(add1.u2, VUpMinSet_flow) annotation (Line(points={{-92,-46},{-110,-46},
           {-110,-60},{-140,-60}}, color={0,0,127}));
   connect(add1.y, div2.u1)
-    annotation (Line(points={{-58,-40},{-50,-40},{-50,-44},{-42,-44}},
+    annotation (Line(points={{-68,-40},{-50,-40},{-50,-44},{-42,-44}},
       color={0,0,127}));
-  connect(div2.u2, VUpMinSet_flow) annotation (Line(points={{-42,-56},{-50,-56},
-          {-50,-60},{-140,-60}}, color={0,0,127}));
   connect(div2.y, hys.u)
     annotation (Line(points={{-18,-50},{28,-50}},
       color={0,0,127}));
@@ -254,14 +246,6 @@ equation
           {-140,60}}, color={0,0,127}));
   connect(div1.u1, uCapReq) annotation (Line(points={{-82,76},{-100,76},{-100,60},
           {-140,60}}, color={0,0,127}));
-  connect(tim1.y, greEquThr1.u)
-    annotation (Line(points={{42,30},{58,30}}, color={0,0,127}));
-  connect(tim.y, greEquThr.u)
-    annotation (Line(points={{42,70},{58,70}}, color={0,0,127}));
-  connect(greEquThr.y, logSwi.u1) annotation (Line(points={{82,70},{86,70},{86,58},
-          {98,58}}, color={255,0,255}));
-  connect(greEquThr1.y, logSwi.u3) annotation (Line(points={{82,30},{86,30},{86,
-          42},{98,42}}, color={255,0,255}));
   connect(hys1.y, and1.u1)
     annotation (Line(points={{-18,70},{-12,70}}, color={255,0,255}));
   connect(and1.y, tim.u)
@@ -277,6 +261,14 @@ equation
   connect(not1.y, and1.u2) annotation (Line(points={{-18,-180},{-16,-180},{-16,62},
           {-12,62}}, color={255,0,255}));
 
+  connect(tim.passed, logSwi.u1) annotation (Line(points={{42,62},{80,62},{80,58},
+          {98,58}}, color={255,0,255}));
+  connect(tim1.passed, logSwi.u3) annotation (Line(points={{42,22},{80,22},{80,42},
+          {98,42}}, color={255,0,255}));
+  connect(VUpMinSet_flow, addPar.u) annotation (Line(points={{-140,-60},{-110,
+          -60},{-110,-70},{-92,-70}}, color={0,0,127}));
+  connect(addPar.y, div2.u2) annotation (Line(points={{-68,-70},{-50,-70},{-50,
+          -56},{-42,-56}}, color={0,0,127}));
 annotation (
   defaultComponentName = "effCon",
   Icon(

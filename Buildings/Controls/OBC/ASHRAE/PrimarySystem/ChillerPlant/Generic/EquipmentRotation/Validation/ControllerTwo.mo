@@ -66,15 +66,9 @@ protected
     annotation (Placement(transformation(extent={{60,-20},{80,0}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse leadLoad(
-<<<<<<< HEAD
-    final width=0.8,
-    final period=7200) "Lead device ON/OFF status"
-    annotation (Placement(transformation(extent={{-100,60},{-80,80}})));
-=======
     final width=0.8, final period(displayUnit="s") = 7200)
                        "Lead device ON/OFF status"
     annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
->>>>>>> 024a6d81ac340c21d9a606e1445f8d50ff8d20a0
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse lagLoad(
     final width=0.2,

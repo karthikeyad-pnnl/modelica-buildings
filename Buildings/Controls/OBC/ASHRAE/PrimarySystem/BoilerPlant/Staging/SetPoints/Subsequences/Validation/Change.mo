@@ -77,8 +77,7 @@ protected
     example from the top"
     annotation (Placement(transformation(extent={{-160,220},{-140,240}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
-    final threshold=0.5)
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(t=0.5)
     "Greater than threshold"
     annotation (Placement(transformation(extent={{-120,220},{-100,240}})));
 
@@ -135,8 +134,7 @@ protected
     "Stage up signal, if simultaneous stage up and down signals are generated the plant will stage down"
     annotation (Placement(transformation(extent={{-160,-140},{-140,-120}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr2(
-    final threshold=0.5)
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr2(t=0.5)
     "Greater threshold"
     annotation (Placement(transformation(extent={{-120,-140},{-100,-120}})));
 
@@ -163,8 +161,7 @@ protected
     "Adder"
     annotation (Placement(transformation(extent={{140,-200},{160,-180}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr3(
-    final threshold=0.5)
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr3(t=0.5)
     "Greater than threshold"
     annotation (Placement(transformation(extent={{-120,-180},{-100,-160}})));
 
@@ -227,8 +224,7 @@ protected
     "Plant enable"
     annotation (Placement(transformation(extent={{-200,20},{-180,40}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr1(
-    final threshold=0.5)
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr1(t=0.5)
     "Greater than threshold"
     annotation (Placement(transformation(extent={{-160,20},{-140,40}})));
 

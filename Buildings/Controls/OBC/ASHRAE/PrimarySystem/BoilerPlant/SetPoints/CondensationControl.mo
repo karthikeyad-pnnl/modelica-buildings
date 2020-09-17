@@ -14,26 +14,26 @@ block CondensationControl
 
   parameter Real TRetSet(
     final unit="K",
-    final displayUnit="K",
-    final quantity="ThermodynamicTemperature") = 60
+    displayUnit="K",
+    final quantity="ThermodynamicTemperature") = 333.15
     "Minimum hot water return temperature for optimal non-condensing boiler performance";
 
   parameter Real TRetMinAll(
     final unit="K",
-    final displayUnit="K",
-    final quantity="ThermodynamicTemperature") = 57.2
+    displayUnit="K",
+    final quantity="ThermodynamicTemperature") = 330.35
     "Minimum allowed hot water return temperature for non-condensing boiler";
 
   parameter Real minSecPumSpe(
     final unit="1",
-    final displayUnit="1",
+    displayUnit="1",
     final min=0,
     final max=1) = 0
     "Minimum secondary pump speed";
 
   parameter Real minPriPumSpeSta[nSta](
     final unit=fill("1",nSta),
-    final displayUnit=fill("1",nSta),
+    displayUnit=fill("1",nSta),
     final min=fill(0,nSta),
     final max=fill(1,nSta)) = {0,0,0,0,0}
     "Vector of minimum primary pump speed for each stage";
@@ -109,7 +109,7 @@ protected
     annotation (Placement(transformation(extent={{-90,-80},{-70,-60}})));
 
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
-    final threshold=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler)
+    final t=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler)
     "Identify if current stage is condensing type or non-condensing type"
     annotation (Placement(transformation(extent={{-10,-80},{10,-60}})));
 
