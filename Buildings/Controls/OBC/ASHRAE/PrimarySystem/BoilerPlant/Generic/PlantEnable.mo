@@ -1,5 +1,5 @@
 ﻿within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic;
-model PlantEnable
+block PlantEnable
   "Sequence to enable/disable boiler plant based on heating hot-water requirements"
 
   parameter Integer nIgnReq(
@@ -65,27 +65,34 @@ model PlantEnable
     "Table defining when plant can be enabled"
     annotation (Placement(transformation(extent={{-150,-120},{-130,-100}})));
 
-//protected
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol(
-    final trueHoldDuration=plaOnThrTim,
-    final falseHoldDuration=plaOffThrTim)
-    "Ensure plant stays continuously enabled/disabled for the required minimum time"
-    annotation (Placement(transformation(extent={{120,-10},{140,10}})));
+  Buildings.Controls.OBC.CDL.Logical.Timer tim(t=plaOnThrTim)
+    "Time since plant has been enabled"
+    annotation (Placement(transformation(extent={{10,0},{30,20}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(t=0.5)
+  Buildings.Controls.OBC.CDL.Logical.Timer tim2(t=plaOffThrTim)
+    "Time since plant has been disabled"
+    annotation (Placement(transformation(extent={{10,50},{30,70}})));
+
+  CDL.Logical.And and2
+    "Check if all conditions for disabling plant have been met"
+    annotation (Placement(transformation(extent={{80,-40},{100,-20}})));
+protected
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
+    final t=0.5)
     "Check if schedule lets the controller enable the plant or not"
     annotation (Placement(transformation(extent={{-120,-120},{-100,-100}})));
 
-  Buildings.Controls.OBC.CDL.Integers.GreaterThreshold intGreThr(t=nIgnReq)
+  Buildings.Controls.OBC.CDL.Integers.GreaterThreshold intGreThr(
+    final t=nIgnReq)
     "Check if number of requests is greater than number of requests to be ignored"
     annotation (Placement(transformation(extent={{-120,40},{-100,60}})));
 
   Buildings.Controls.OBC.CDL.Logical.Latch lat
     "Maintain plant status till the conditions to change it are met"
-    annotation (Placement(transformation(extent={{80,-10},{100,10}})));
+    annotation (Placement(transformation(extent={{120,-10},{140,10}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd(
-    final nu=3)
+    final nu=4)
     "Check if all the conditions for enabling plant have been met"
     annotation (Placement(transformation(extent={{-10,80},{10,100}})));
 
@@ -97,7 +104,8 @@ model PlantEnable
     "Logical Not"
     annotation (Placement(transformation(extent={{-10,-120},{10,-100}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(final p=TOutLoc,
+  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
+    final p=TOutLoc,
     final k=-1)
     "Compare measured outdoor air temperature to boiler lockout temperature"
     annotation (Placement(transformation(extent={{-150,-60},{-130,-40}})));
@@ -116,6 +124,14 @@ model PlantEnable
     "Time since number of requests was greater than number of ignores"
     annotation (Placement(transformation(extent={{-40,-40},{-20,-20}})));
 
+  Buildings.Controls.OBC.CDL.Logical.Not not4
+    "Logical Not"
+    annotation (Placement(transformation(extent={{-20,50},{0,70}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Pre pre1
+    "Logical pre block"
+    annotation (Placement(transformation(extent={{-60,40},{-40,60}})));
+
   Buildings.Controls.OBC.CDL.Logical.Not not2
     "Logical Not"
     annotation (Placement(transformation(extent={{-10,-80},{10,-60}})));
@@ -131,51 +147,53 @@ equation
     annotation (Line(points={{-122,-50},{-128,-50}},
       color={0,0,127}));
   connect(not3.y, tim1.u)
-    annotation (Line(points={{-48,-30},{-42,-30}},
-      color={255,0,255}));
-  connect(not2.u, hys.y)
-    annotation (Line(points={{-12,-70},{-20,-70},{-20,-50},{-98,-50}},
-      color={255,0,255}));
-  connect(intGreThr.y, not3.u)
-    annotation (Line(points={{-98,50},{-80,50},{-80,-30},{-72,-30}},
-      color={255,0,255}));
-  connect(greThr.y, mulAnd.u[1])
-    annotation (Line(points={{-98,-110},{-92,-110},{-92,94.6667},{-12,94.6667}},
-      color={255,0,255}));
-  connect(hys.y, mulAnd.u[2])
-    annotation (Line(points={{-98,-50},{-86,-50},{-86,90},{-12,90}},
-      color={255,0,255}));
-  connect(intGreThr.y, mulAnd.u[3])
-    annotation (Line(points={{-98,50},{-80,50},{-80,85.3333},{-12,85.3333}},
-      color={255,0,255}));
-  connect(mulAnd.y, lat.u)
-    annotation (Line(points={{12,90},{60,90},{60,0},{78,0}},
-      color={255,0,255}));
+    annotation (Line(points={{-48,-30},{-42,-30}}, color={255,0,255}));
+  connect(not4.y, tim2.u)
+    annotation (Line(points={{2,60},{8,60}}, color={255,0,255}));
+  connect(not2.u, hys.y) annotation (Line(points={{-12,-70},{-20,-70},{-20,-50},
+  {-98,-50}}, color={255,0,255}));
+  connect(intGreThr.y, not3.u) annotation (Line(points={{-98,50},{-80,50},{-80,-30},
+  {-72,-30}}, color={255,0,255}));
+  connect(pre1.y, not4.u) annotation (Line(points={{-38,50},{-30,50},{-30,60},{-22,
+          60}},
+        color={255,0,255}));
+  connect(greThr.y, mulAnd.u[1]) annotation (Line(points={{-98,-110},{-92,-110},
+          {-92,95.25},{-12,95.25}},
+                             color={255,0,255}));
+  connect(hys.y, mulAnd.u[2]) annotation (Line(points={{-98,-50},{-86,-50},{-86,
+          91.75},{-12,91.75}},  color={255,0,255}));
+  connect(intGreThr.y, mulAnd.u[3]) annotation (Line(points={{-98,50},{-80,50},
+          {-80,88.25},{-12,88.25}}, color={255,0,255}));
+  connect(mulAnd.y, lat.u) annotation (Line(points={{12,90},{110,90},{110,0},{118,
+          0}},      color={255,0,255}));
+  connect(and2.y, lat.clr) annotation (Line(points={{102,-30},{110,-30},{110,-6},
+          {118,-6}}, color={255,0,255}));
+  connect(not2.y, mulOr.u[1]) annotation (Line(points={{12,-70},{20,-70},{20,
+          -65.3333},{28,-65.3333}},
+                     color={255,0,255}));
+  connect(not1.y, mulOr.u[2]) annotation (Line(points={{12,-110},{20,-110},{20,-70},
+          {28,-70}},      color={255,0,255}));
+  connect(mulOr.y, and2.u2) annotation (Line(points={{52,-70},{70,-70},{70,-38},
+          {78,-38}}, color={255,0,255}));
   connect(intGreThr.u, supResReq)
     annotation (Line(points={{-122,50},{-180,50}},
       color={255,127,0}));
   connect(addPar.u, TOut)
-    annotation (Line(points={{-152,-50},{-180,-50}},
-      color={0,0,127}));
+    annotation (Line(points={{-152,-50},{-180,-50}}, color={0,0,127}));
+  connect(lat.y, yPla)
+    annotation (Line(points={{142,0},{180,0}}, color={255,0,255}));
+  connect(lat.y, pre1.u) annotation (Line(points={{142,0},{150,0},{150,30},{-70,
+          30},{-70,50},{-62,50}}, color={255,0,255}));
+  connect(pre1.y, tim.u) annotation (Line(points={{-38,50},{-30,50},{-30,10},{8,
+          10}}, color={255,0,255}));
   connect(enaSch.y[1], greThr.u)
-    annotation (Line(points={{-128,-110},{-122,-110}},
-      color={0,0,127}));
-  connect(mulOr.y, lat.clr)
-    annotation (Line(points={{52,-70},{60,-70},{60,-6},{78,-6}},
-      color={255,0,255}));
-  connect(truFalHol.u, lat.y)
-    annotation (Line(points={{118,0},{102,0}},
-      color={255,0,255}));
-  connect(truFalHol.y, yPla)
-    annotation (Line(points={{142,0},{180,0}},
-      color={255,0,255}));
-
-  connect(tim1.passed, mulOr.u[1]) annotation (Line(points={{-18,-38},{20,-38},
-          {20,-65.3333},{28,-65.3333}}, color={255,0,255}));
-  connect(not2.y, mulOr.u[2]) annotation (Line(points={{12,-70},{20,-70},{20,
-          -70},{28,-70}}, color={255,0,255}));
-  connect(not1.y, mulOr.u[3]) annotation (Line(points={{12,-110},{20,-110},{20,
-          -74.6667},{28,-74.6667}}, color={255,0,255}));
+    annotation (Line(points={{-128,-110},{-122,-110}}, color={0,0,127}));
+  connect(tim.passed, and2.u1) annotation (Line(points={{32,2},{70,2},{70,-30},
+          {78,-30}},color={255,0,255}));
+  connect(tim1.passed, mulOr.u[3]) annotation (Line(points={{-18,-38},{20,-38},
+          {20,-74.6667},{28,-74.6667}},color={255,0,255}));
+  connect(tim2.passed, mulAnd.u[4]) annotation (Line(points={{32,52},{50,52},{
+          50,110},{-20,110},{-20,84.75},{-12,84.75}}, color={255,0,255}));
   annotation (defaultComponentName = "plaEna",
     Icon(graphics={
       Rectangle(
