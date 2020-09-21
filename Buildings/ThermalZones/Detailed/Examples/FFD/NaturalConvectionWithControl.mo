@@ -13,6 +13,7 @@ model NaturalConvectionWithControl
     annotation (Placement(transformation(extent={{30,-10},{50,10}})));
   Buildings.Controls.Continuous.LimPID conPID(
     yMin=0,
+    controllerType=Modelica.Blocks.Types.SimpleController.PI,
     Ti=120,
     k=1,
     yMax=2)

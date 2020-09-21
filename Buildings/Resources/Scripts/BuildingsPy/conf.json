@@ -48,17 +48,14 @@
    "model_name": "Buildings.Utilities.IO.Python36.Examples.SimpleRoom"
   },
   {
-    "jmodelica": {
-        "translate": false
+       "jmodelica": {
+         "translate": false
     },
-    "optimica": {
-        "simulate": false
-    },
- "model_name": "Buildings.Utilities.IO.Python36.Functions.Examples.Exchange"
+    "model_name": "Buildings.Utilities.IO.Python36.Functions.Examples.Exchange"
   },
   {
-    "jmodelica": {
-      "translate": false
+       "jmodelica": {
+         "translate": false
     },
     "model_name": "Buildings.Utilities.IO.Python36.Functions.Examples.ExchangeWithPassPythonObject"
   },

@@ -220,6 +220,7 @@ partial model PartialDataCenter
     each k=m1_flow_chi_nominal) "Gain effect"
     annotation (Placement(transformation(extent={{-130,60},{-110,80}})));
   Buildings.Applications.DataCenters.ChillerCooled.Controls.CoolingTowerSpeed cooTowSpeCon(
+    controllerType=Modelica.Blocks.Types.SimpleController.PI,
     yMin=0,
     Ti=60,
     k=0.1)
@@ -244,6 +245,7 @@ partial model PartialDataCenter
     "Mass flowrate of variable speed pumps"
     annotation (Placement(transformation(extent={{-220,-6},{-200,14}})));
   Buildings.Controls.Continuous.LimPID pumSpe(
+    controllerType=Modelica.Blocks.Types.SimpleController.PI,
     Ti=40,
     yMin=0.2,
     k=0.1)
@@ -256,8 +258,9 @@ partial model PartialDataCenter
     "Pump speed signal"
     annotation (Placement(transformation(extent={{-120,-20},{-100,0}})));
   Buildings.Controls.Continuous.LimPID ahuValSig(
-        Ti=40,
-    reverseActing=false,
+    controllerType=Modelica.Blocks.Types.SimpleController.PI,
+    Ti=40,
+    reverseAction=true,
     yMin=yValMinAHU,
     k=0.01)          "Valve position signal for the AHU"
     annotation (Placement(transformation(extent={{-82,-90},{-62,-70}})));
@@ -266,8 +269,9 @@ partial model PartialDataCenter
     annotation (Placement(transformation(extent={{-60,166},{-44,182}})));
 
   Buildings.Controls.Continuous.LimPID ahuFanSpeCon(
-        k=0.1,
-    reverseActing=false,
+    controllerType=Modelica.Blocks.Types.SimpleController.PI,
+    k=0.1,
+    reverseAction=true,
     yMin=0.2,
     Ti=240)   "Fan speed controller "
     annotation (Placement(transformation(extent={{-120,-170},{-100,-150}})));
