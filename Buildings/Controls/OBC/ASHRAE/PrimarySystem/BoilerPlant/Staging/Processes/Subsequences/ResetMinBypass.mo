@@ -46,9 +46,8 @@ block ResetMinBypass
       iconTransformation(extent={{100,-20},{140,20}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(
-    final uLow=relFloDif - 0.01,
-    final uHigh=relFloDif + 0.01)
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(final uLow=-relFloDif,
+      final uHigh=0)
     "Check if boiler water flow rate is different from its setpoint"
     annotation (Placement(transformation(extent={{-60,-70},{-40,-50}})));
 
@@ -94,14 +93,6 @@ protected
   Buildings.Controls.OBC.CDL.Logical.Edge edg2
     "Rising edge"
     annotation (Placement(transformation(extent={{40,30},{60,50}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Abs abs
-    "Absolute value"
-    annotation (Placement(transformation(extent={{-120,-30},{-100,-10}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Not not2
-    "Logical not"
-    annotation (Placement(transformation(extent={{-20,-70},{0,-50}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Add add2(
     final k2=-1)
@@ -158,23 +149,9 @@ equation
   connect(edg2.y, lat.u)
     annotation (Line(points={{62,40},{78,40}}, color={255,0,255}));
 
-  connect(abs.y, div.u1)
-    annotation (Line(points={{-98,-20},{-90,-20},{-90,-40},{-110,-40},{-110,-54},
-      {-102,-54}}, color={0,0,127}));
-
-  connect(hys.y, not2.u)
-    annotation (Line(points={{-38,-60},{-22,-60}}, color={255,0,255}));
-
   connect(and2.y, and3.u1)
     annotation (Line(points={{-58,80},{-10,80},{-10,-20},{-2,-20}},
       color={255,0,255}));
-
-  connect(not2.y, and3.u2)
-    annotation (Line(points={{2,-60},{10,-60},{10,-40},{-10,-40},{-10,-28},
-      {-2,-28}}, color={255,0,255}));
-
-  connect(abs.u, add2.y)
-    annotation (Line(points={{-122,-20},{-126,-20}}, color={0,0,127}));
 
   connect(add2.u1, VHotWat_flow) annotation (Line(points={{-150,-14},{-154,-14},
           {-154,-20},{-180,-20}}, color={0,0,127}));
@@ -184,6 +161,10 @@ equation
 
   connect(tim.passed, and1.u3) annotation (Line(points={{62,-28},{114,-28},{114,
           72},{118,72}}, color={255,0,255}));
+  connect(add2.y, div.u1) annotation (Line(points={{-126,-20},{-110,-20},{-110,
+          -54},{-102,-54}}, color={0,0,127}));
+  connect(hys.y, and3.u2) annotation (Line(points={{-38,-60},{-10,-60},{-10,-28},
+          {-2,-28}}, color={255,0,255}));
 annotation (
   defaultComponentName="minBypRes",
   Icon(graphics={

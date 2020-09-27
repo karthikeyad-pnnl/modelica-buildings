@@ -4,8 +4,8 @@ record customPumpCurves
   extends Generic(
     use_powerCharacteristic=true,
     speed_rpm_nominal=1450,
-    power(V_flow={0, 0.000302, 0.000604}, P={0, 60, 0}),
-    pressure(V_flow={0, 0.000302, 0.000604}, dp={358704,179352,0}));
+    power(V_flow={0, 0.006}, P={0, 200}),
+    pressure(V_flow={0, 0.006}, dp={120000,30000}));
   annotation (
 defaultComponentPrefixes="parameter",
 defaultComponentName="per",

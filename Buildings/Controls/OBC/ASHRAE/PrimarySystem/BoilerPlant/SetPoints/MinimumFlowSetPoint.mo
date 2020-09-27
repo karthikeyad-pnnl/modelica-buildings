@@ -62,7 +62,7 @@ block MinimumFlowSetpoint
     annotation (Placement(transformation(extent={{320,-90},{360,-50}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
-//protected
+protected
   parameter Integer boiInd[nBoi]={i for i in 1:nBoi}
     "Boiler index, {1,2,...,n}";
 
@@ -296,8 +296,7 @@ block MinimumFlowSetpoint
     "Timer for change of setpoint"
     annotation (Placement(transformation(extent={{228,-50},{248,-30}})));
 
-  Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel(
-    final samplePeriod=1e-3)
+  Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel(final samplePeriod=0.1)
     "Unit delay for Real signal"
     annotation (Placement(transformation(extent={{140,-120},{160,-100}})));
 

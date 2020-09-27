@@ -84,6 +84,12 @@ block Up
     "Relative error to the flow setpoint for checking if it has been achieved"
     annotation (Dialog(tab="Advanced"));
 
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uPlaEna
+    "Plant enable signal"
+    annotation (
+      Placement(transformation(extent={{-280,-150},{-240,-110}}),
+        iconTransformation(extent={{-140,-200},{-100,-160}})));
+
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uStaUpPro
     "Pulse indicating start of stage up process"
     annotation (Placement(transformation(extent={{-280,-20},{-240,20}}),
@@ -98,7 +104,7 @@ block Up
     primaryOnly
     "Pulse indicating all pump change processes have been completed and pumps have been proved on"
     annotation (Placement(transformation(extent={{-280,-210},{-240,-170}}),
-      iconTransformation(extent={{-140,-200},{-100,-160}})));
+      iconTransformation(extent={{-140,-240},{-100,-200}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uBoiSet[nBoi]
     "Boiler status setpoint: true=ON"
@@ -189,7 +195,7 @@ block Up
     annotation (Placement(transformation(extent={{280,-90},{320,-50}}),
       iconTransformation(extent={{100,20},{140,60}})));
 
-protected
+//protected
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.ResetMinBypass minBypRes(
     final delEna=delEnaMinFloSet,
     final relFloDif=relFloDif) if primaryOnly
@@ -322,7 +328,19 @@ protected
   Buildings.Controls.OBC.CDL.Logical.Sources.Constant con(
     final k=true) if primaryOnly
     "Constant Boolean True signal"
-    annotation (Placement(transformation(extent={{-170,-160},{-150,-140}})));
+    annotation (Placement(transformation(extent={{-200,-170},{-180,-150}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Edge edg3
+    "Rising edge detector"
+    annotation (Placement(transformation(extent={{-220,-140},{-200,-120}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Latch lat2
+    "Latch to plant enable enable signal until end of plant enabling process"
+    annotation (Placement(transformation(extent={{-162,-140},{-142,-120}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Or or1
+    "Pass upstream device status when plant is enabled or stage up process has started"
+    annotation (Placement(transformation(extent={{-120,-140},{-100,-120}})));
 
 equation
 
@@ -406,9 +424,6 @@ equation
   connect(uStaTyp, hotWatSupTemRes.uStaTyp) annotation (Line(points={{-260,-40},
           {-186,-40},{-186,-23},{-172,-23}}, color={255,127,0}));
 
-  connect(uStaUpPro, lat.u)
-    annotation (Line(points={{-260,0},{-224,0}}, color={255,0,255}));
-
   connect(lat3.y, and1.u2) annotation (Line(points={{-118,-190},{-48,-190},{-48,
           -30},{-10,-30},{-10,-8},{-2,-8}}, color={255,0,255}));
 
@@ -456,19 +471,6 @@ equation
 
   connect(truDel.y, edg2.u) annotation (Line(points={{122,0},{126,0},{126,-236},
           {138,-236}}, color={255,0,255}));
-
-  connect(minBypRes.yMinBypRes, edg1.u) annotation (Line(points={{-148,20},{-110,
-          20},{-110,-250},{-102,-250}}, color={255,0,255}));
-
-  connect(hotWatSupTemRes.yHotWatSupTemRes, edg1.u) annotation (Line(points={{-148,
-          -20},{-110,-20},{-110,-250},{-102,-250}}, color={255,0,255}));
-
-  connect(minBypRes.yMinBypRes, lat5.u) annotation (Line(points={{-148,20},{
-          -110,20},{-110,40},{-72,40}},
-                                   color={255,0,255}));
-
-  connect(hotWatSupTemRes.yHotWatSupTemRes, lat5.u) annotation (Line(points={{-148,
-          -20},{-110,-20},{-110,40},{-72,40}}, color={255,0,255}));
 
   connect(pre1.y, lat5.clr) annotation (Line(points={{222,-50},{230,-50},{230,-80},
           {-100,-80},{-100,34},{-72,34}}, color={255,0,255}));
@@ -529,22 +531,6 @@ equation
   connect(nexBoi.yOnOff, logSwi.u2) annotation (Line(points={{-148,-60},{170,-60},
           {170,-24},{220,-24},{220,-10},{228,-10}}, color={255,0,255}));
 
-  connect(logSwi.y, edg.u) annotation (Line(points={{252,-10},{260,-10},{260,20},
-          {220,20},{220,50},{228,50}}, color={255,0,255}));
-
-  connect(minBypRes.yMinBypRes, booRep.u) annotation (Line(points={{-148,20},{
-          -110,20},{-110,-130},{-2,-130}}, color={255,0,255}));
-
-  connect(hotWatSupTemRes.yHotWatSupTemRes, booRep.u) annotation (Line(points={
-          {-148,-20},{-110,-20},{-110,-130},{-2,-130}}, color={255,0,255}));
-
-  connect(minBypRes.yMinBypRes, enaHotWatIsoVal.uUpsDevSta) annotation (Line(
-        points={{-148,20},{-110,20},{-110,-5},{-72,-5}}, color={255,0,255}));
-
-  connect(hotWatSupTemRes.yHotWatSupTemRes, enaHotWatIsoVal.uUpsDevSta)
-    annotation (Line(points={{-148,-20},{-110,-20},{-110,-5},{-72,-5}}, color={
-          255,0,255}));
-
   connect(uHotWatIsoVal, disHotWatIsoVal1.uHotWatIsoVal) annotation (Line(
         points={{-260,120},{144,120},{144,5},{148,5}}, color={0,0,127}));
 
@@ -560,19 +546,46 @@ equation
   connect(lat1.y, and1.u1) annotation (Line(points={{-10,-110},{-6,-110},{-6,0},
           {-2,0}}, color={255,0,255}));
 
-  connect(con.y, and1.u2) annotation (Line(points={{-148,-150},{-48,-150},{-48,-30},
+  connect(con.y, and1.u2) annotation (Line(points={{-178,-160},{-48,-160},{-48,-30},
           {-10,-30},{-10,-8},{-2,-8}}, color={255,0,255}));
-  connect(con.y, and3.u2) annotation (Line(points={{-148,-150},{10,-150},{10,-180},
+  connect(con.y, and3.u2) annotation (Line(points={{-178,-160},{10,-160},{10,-180},
           {110,-180},{110,-160},{184,-160},{184,-8},{188,-8}}, color={255,0,255}));
   connect(nexBoi.yDisSmaBoi, yLasDisBoi) annotation (Line(points={{-148,-56},{140,
           -56},{140,-154},{210,-154},{210,-190},{300,-190}}, color={255,127,0}));
+  connect(uStaUpPro, lat.u)
+    annotation (Line(points={{-260,0},{-224,0}}, color={255,0,255}));
+  connect(logSwi.y, edg.u) annotation (Line(points={{252,-10},{260,-10},{260,20},
+          {220,20},{220,50},{228,50}}, color={255,0,255}));
+  connect(uPlaEna, edg3.u)
+    annotation (Line(points={{-260,-130},{-222,-130}}, color={255,0,255}));
+  connect(edg3.y, lat2.u)
+    annotation (Line(points={{-198,-130},{-164,-130}}, color={255,0,255}));
+  connect(pre1.y, lat2.clr) annotation (Line(points={{222,-50},{230,-50},{230,-216},
+          {-170,-216},{-170,-136},{-164,-136}}, color={255,0,255}));
+  connect(lat2.y, or1.u1)
+    annotation (Line(points={{-140,-130},{-122,-130}}, color={255,0,255}));
+  connect(or1.y, lat5.u) annotation (Line(points={{-98,-130},{-88,-130},{-88,-100},
+          {-120,-100},{-120,40},{-72,40}}, color={255,0,255}));
+  connect(or1.y, enaHotWatIsoVal.uUpsDevSta) annotation (Line(points={{-98,-130},
+          {-88,-130},{-88,-100},{-120,-100},{-120,-5},{-72,-5}}, color={255,0,255}));
+  connect(or1.y, booRep.u)
+    annotation (Line(points={{-98,-130},{-2,-130}}, color={255,0,255}));
+  connect(minBypRes.yMinBypRes, or1.u2) annotation (Line(points={{-148,20},{-130,
+          20},{-130,-138},{-122,-138}}, color={255,0,255}));
+  connect(minBypRes.yMinBypRes, edg1.u) annotation (Line(points={{-148,20},{-130,
+          20},{-130,-150},{-110,-150},{-110,-250},{-102,-250}}, color={255,0,255}));
+  connect(hotWatSupTemRes.yHotWatSupTemRes, or1.u2) annotation (Line(points={{-148,
+          -20},{-136,-20},{-136,-138},{-122,-138}}, color={255,0,255}));
+  connect(hotWatSupTemRes.yHotWatSupTemRes, edg1.u) annotation (Line(points={{-148,
+          -20},{-136,-20},{-136,-150},{-110,-150},{-110,-250},{-102,-250}},
+        color={255,0,255}));
 annotation (
   defaultComponentName="upProCon",
   Diagram(coordinateSystem(preserveAspectRatio=false,
           extent={{-240,-260},{280,260}})),
-    Icon(coordinateSystem(extent={{-100,-200},{100,200}}), graphics={
+    Icon(coordinateSystem(extent={{-100,-240},{100,200}}), graphics={
         Rectangle(
-        extent={{-100,-200},{100,200}},
+        extent={{-100,-240},{100,200}},
         lineColor={0,0,127},
         fillColor={255,255,255},
         fillPattern=FillPattern.Solid,

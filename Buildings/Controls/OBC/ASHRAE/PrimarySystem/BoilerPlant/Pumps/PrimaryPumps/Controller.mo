@@ -381,9 +381,8 @@ block Controller
       iconTransformation(extent={{-140,-290},{-100,-250}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yHotWatPum[nPum]
-    "Hot water pump status"
-    annotation (Placement(transformation(extent={{280,-20},{320,20}}),
-      iconTransformation(extent={{100,-20},{140,20}})));
+    "Hot water pump status" annotation (Placement(transformation(extent={{280,-20},
+            {320,20}}), iconTransformation(extent={{100,-20},{140,20}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yPumChaPro if not
     primaryOnly

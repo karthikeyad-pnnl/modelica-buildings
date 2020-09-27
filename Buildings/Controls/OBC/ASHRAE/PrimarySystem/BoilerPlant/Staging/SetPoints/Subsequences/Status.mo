@@ -160,8 +160,7 @@ protected
     "If no higher stage is available, output current stage"
     annotation (Placement(transformation(extent={{180,100},{200,120}})));
 
-  Buildings.Controls.OBC.CDL.Integers.LessEqualThreshold intLesEquThr(
-    final t=0)
+  Buildings.Controls.OBC.CDL.Integers.LessEqualThreshold intLesEquThr(final t=0)
     "If the current stage is the lowest available the input value equals 0"
     annotation (Placement(transformation(extent={{100,-80},{120,-60}})));
 
@@ -196,10 +195,6 @@ protected
     final nu=nSta)
     "Logical or"
     annotation (Placement(transformation(extent={{-380,-140},{-360,-120}})));
-
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(final k=1)
-    "Zero"
-    annotation (Placement(transformation(extent={{100,-40},{120,-20}})));
 
   Buildings.Controls.OBC.CDL.Logical.And and4
     "Logical And"
@@ -285,8 +280,6 @@ equation
           {-302,200}}, color={255,127,0}));
   connect(u, extStaAva.index) annotation (Line(points={{-440,80},{-300,80},{
           -300,-180},{-190,-180},{-190,-162}}, color={255,127,0}));
-  connect(conInt.y, intSwi1.u1) annotation (Line(points={{122,-30},{160,-30},{160,
-          -62},{178,-62}},     color={255,127,0}));
   connect(intSwi1.y, yAvaDow) annotation (Line(points={{202,-70},{320,-70},{320,
           -40},{460,-40}}, color={255,127,0}));
   connect(intSwi1.y, intSwi2.u1) annotation (Line(points={{202,-70},{220,-70},{220,
@@ -309,6 +302,8 @@ equation
           {18,-240}}, color={255,0,255}));
   connect(not1.y, yAvaCur)
     annotation (Line(points={{42,-240},{460,-240}}, color={255,0,255}));
+  connect(u, intSwi1.u1) annotation (Line(points={{-440,80},{-300,80},{-300,-20},
+          {160,-20},{160,-62},{178,-62}}, color={255,127,0}));
   annotation (defaultComponentName = "sta",
         Icon(graphics={
         Rectangle(

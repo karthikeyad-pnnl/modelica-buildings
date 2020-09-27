@@ -223,7 +223,7 @@ equation
     Diagram(coordinateSystem(
       preserveAspectRatio=false, extent={{-100,-120},{100,120}})),
     experiment(
-      StopTime=10,
+      StopTime=60,
       Interval=1,
       Tolerance=1e-06),
       __Dymola_Commands(file="./Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/SetPoints/Validation/MinimumFlowSetpoint.mos"
