@@ -107,15 +107,12 @@ equation
   connect(edg.y, or2.u1) annotation (Line(points={{-38,100},{-36,100},{-36,90},
           {-30,90}},
                 color={255,0,255}));
-  connect(or2.y, plaDis.uStaChaPro) annotation (Line(points={{-6,90},{-4,90},{
-          -4,82},{8,82}},
-                       color={255,0,255}));
-  connect(or2.y, plaDis1.uStaChaPro) annotation (Line(points={{-6,90},{-4,90},{
-          -4,-8},{8,-8}},
-                       color={255,0,255}));
-  connect(or2.y, plaDis2.uStaChaPro) annotation (Line(points={{-6,90},{-4,90},{
-          -4,-108},{8,-108}},
-                         color={255,0,255}));
+  connect(or2.y, plaDis.uStaChaProEnd) annotation (Line(points={{-6,90},{-4,90},
+          {-4,82},{8,82}}, color={255,0,255}));
+  connect(or2.y, plaDis1.uStaChaProEnd) annotation (Line(points={{-6,90},{-4,90},
+          {-4,-8},{8,-8}}, color={255,0,255}));
+  connect(or2.y, plaDis2.uStaChaProEnd) annotation (Line(points={{-6,90},{-4,90},
+          {-4,-108},{8,-108}}, color={255,0,255}));
   connect(truFalHol4.y, falEdg1.u)
     annotation (Line(points={{62,10},{68,10}}, color={255,0,255}));
   connect(falEdg1.y, pre.u) annotation (Line(points={{92,10},{94,10},{94,32},{

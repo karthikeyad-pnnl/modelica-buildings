@@ -94,7 +94,8 @@ model BoilerPlant "Boiler plant model for closed loop testing"
     Q_flow_nominal=Q_flow_nominal,
     T_a_nominal=TRadSup_nominal,
     T_b_nominal=TRadRet_nominal,
-    TAir_nominal=TAir_nominal)   "Radiator"
+    TAir_nominal=TAir_nominal,
+    dp_nominal=15000)            "Radiator"
     annotation (Placement(transformation(extent={{0,-20},{20,0}})));
 
 //----------------------------------------------------------------------------//
@@ -107,7 +108,7 @@ model BoilerPlant "Boiler plant model for closed loop testing"
     redeclare package Medium = MediumW,
     energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
     m_flow_nominal=mBoi_flow_nominal1,
-    dp_nominal=2000,
+    dp_nominal=5000,
     Q_flow_nominal=boiCap1,
     T_nominal=TBoiSup_nominal,
     effCur=Buildings.Fluid.Types.EfficiencyCurves.Constant,
@@ -143,7 +144,7 @@ model BoilerPlant "Boiler plant model for closed loop testing"
     redeclare package Medium = MediumW,
     energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
     m_flow_nominal=mBoi_flow_nominal2,
-    dp_nominal=2000,
+    dp_nominal=5000,
     Q_flow_nominal=boiCap2,
     T_nominal=TBoiSup_nominal,
     effCur=Buildings.Fluid.Types.EfficiencyCurves.Constant,
@@ -153,7 +154,7 @@ model BoilerPlant "Boiler plant model for closed loop testing"
     annotation (Placement(transformation(extent={{10,-350},{-10,-330}})));
   Fluid.Movers.SpeedControlled_y pum(
     redeclare package Medium = Media.Water,
-    allowFlowReversal=false,
+    allowFlowReversal=true,
     redeclare Fluid.Movers.Data.Pumps.Wilo.customPumpCurves per,
     inputType=Buildings.Fluid.Types.InputType.Continuous,
     addPowerToMedium=false) "Hot water primary pump-1"
@@ -168,7 +169,8 @@ model BoilerPlant "Boiler plant model for closed loop testing"
         rotation=90,
         origin={-110,-280})));
   Fluid.Movers.SpeedControlled_y pum1(redeclare package Medium = Media.Water,
-      redeclare Fluid.Movers.Data.Pumps.Wilo.customPumpCurves per,
+    allowFlowReversal=true,
+    redeclare Fluid.Movers.Data.Pumps.Wilo.customPumpCurves per,
     inputType=Buildings.Fluid.Types.InputType.Continuous,
     addPowerToMedium=false) "Hot water primary pump-2"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},rotation=90,
@@ -199,7 +201,7 @@ model BoilerPlant "Boiler plant model for closed loop testing"
         origin={-110,-90})));
   Fluid.Actuators.Valves.TwoWayEqualPercentage val(
     redeclare package Medium = Media.Water,
-    m_flow_nominal=mRad_flow_nominal,
+    m_flow_nominal=mRad_flow_nominal/2,
     dpValve_nominal=0.1) "Minimum flow bypass valve"
     annotation (Placement(transformation(extent={{0,-100},{20,-80}})));
   Fluid.FixedResistances.Junction           spl5(

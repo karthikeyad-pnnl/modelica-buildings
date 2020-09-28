@@ -69,10 +69,6 @@ model Controller
     "Staging matrix with stage as row index and boiler as column index"
     annotation(Dialog(tab="General", group="Boiler plant configuration parameters"));
 
-  parameter Integer iniSta = 1
-    "Initial boiler plant stage"
-    annotation(Dialog(tab="General", group="Boiler plant configuration parameters"));
-
   parameter Real boiDesCap[nBoi](
     final unit="W",
     final displayUnit="W",
@@ -388,12 +384,18 @@ model Controller
     "Enable delay after minimum flow setpoint is achieved in bypass valve"
     annotation (Dialog(tab="Staging process parameters",group="Time and delay parameters"));
 
+  parameter Real chaHotWatIsoRat(
+    final unit="1/s",
+    final displayUnit="1/s") = 1/60
+    "Rate at which to slowly change isolation valve, should be determined in the field"
+    annotation (Dialog(tab="Staging process parameters",group="Time and delay parameters"));
+
   parameter Real chaIsoValTim(
     final unit="s",
     final displayUnit="s",
     final quantity="time") = 60
     "Time to slowly change isolation valve, should be determined in the field"
-    annotation (Dialog(tab="Staging process parameters",group="Time and delay parameters"));
+    annotation (Dialog(group="Time and delay parameters"));
 
   parameter Real delPreBoiEna(
     final unit="s",
@@ -698,7 +700,6 @@ model Controller
     boiTyp=boiTyp,
     nSta=nSta,
     staMat=staMat,
-    iniSta=iniSta,
     boiDesCap=boiDesCap,
     boiFirMin=boiFirMin,
     bMinPriPumSpeSta=bMinPriPumSpeSta,
@@ -748,7 +749,7 @@ model Controller
             annotation (Placement(transformation(extent={{120,20},{140,60}})));
   Pumps.PrimaryPumps.Controller priPumCon(
     isHeadered=isHeadered,
-    primaryOnly=primaryOnly,
+    primaryOnly=true,
     variablePrimary=variablePrimary,
     nPum=nPumPri,
     nBoi=nBoi,
@@ -760,6 +761,7 @@ model Controller
     boiDesFlo=boiDesFlo,
     offTimThr=offTimThr_priPum,
     timPer=timPer_priPum,
+    delBoiDis=delBoiEna,
     staCon=staCon_priPum,
     relFloHys=relFloHys_priPum,
     k=k_priPum,
@@ -941,7 +943,6 @@ model Controller
     primaryOnly=primaryOnly,
     isHeadered=isHeadered,
     nBoi=nBoi,
-    chaHotWatIsoTim=chaIsoValTim,
     delBoiDis=delBoiEna)
     annotation (Placement(transformation(extent={{240,60},{260,80}})));
 equation
@@ -998,8 +999,8 @@ equation
           -150},{-140,-138},{-122,-138}},      color={255,0,255}));
   connect(con.y, minBoiFloSet1.uStaChaPro) annotation (Line(points={{-148,-150},
           {-140,-150},{-140,-142},{-122,-142}}, color={255,0,255}));
-  connect(conInt2.y, priPumCon.uPumLeaLag) annotation (Line(points={{82,-128},{
-          94,-128},{94,-113},{118,-113}},   color={255,127,0}));
+  connect(conInt2.y, priPumCon.uPumLeaLag) annotation (Line(points={{82,-128},{94,
+          -128},{94,-113},{118,-113}},      color={255,127,0}));
   connect(supResReq, hotWatSupTemRes.nHotWatSupResReq) annotation (Line(points={{-220,
           130},{-116,130},{-116,74},{-62,74}},        color={255,127,0}));
   connect(supResReq, plaEna.supResReq) annotation (Line(points={{-220,130},{
@@ -1161,29 +1162,29 @@ equation
           0,255}));
   connect(plaDis.yHotWatIsoVal, yHotWatIsoVal) annotation (Line(points={{262,67},
           {280,67},{280,70},{320,70}},   color={0,0,127}));
-  connect(plaDis.yHotWatIsoVal, uniDel2.u) annotation (Line(points={{262,67},{
-          280,67},{280,50},{174,50},{174,30},{178,30}},   color={0,0,127}));
-  connect(plaDis.yBoi, yBoi) annotation (Line(points={{262,77},{280,77},{280,
-          140},{320,140}}, color={255,0,255}));
-  connect(plaDis.yBoi, pre5.u) annotation (Line(points={{262,77},{280,77},{280,
-          160},{164,160},{164,180},{168,180}}, color={255,0,255}));
-  connect(or2.y, plaDis.uStaChaPro) annotation (Line(points={{242,0},{250,0},{
-          250,40},{220,40},{220,62},{238,62}}, color={255,0,255}));
-  connect(swi.y, plaDis.uHotWatIsoVal) annotation (Line(points={{202,70},{220,
-          70},{220,70},{238,70}},
-                              color={0,0,127}));
-  connect(logSwi1.y, plaDis.uBoi) annotation (Line(points={{192,140},{230,140},
-          {230,74},{238,74}}, color={255,0,255}));
+  connect(plaDis.yHotWatIsoVal, uniDel2.u) annotation (Line(points={{262,67},{280,
+          67},{280,50},{174,50},{174,30},{178,30}},       color={0,0,127}));
+  connect(plaDis.yBoi, yBoi) annotation (Line(points={{262,77},{280,77},{280,140},
+          {320,140}},      color={255,0,255}));
+  connect(plaDis.yBoi, pre5.u) annotation (Line(points={{262,77},{280,77},{280,160},
+          {164,160},{164,180},{168,180}},      color={255,0,255}));
+  connect(or2.y, plaDis.uStaChaProEnd) annotation (Line(points={{242,0},{250,0},
+          {250,40},{220,40},{220,62},{238,62}}, color={255,0,255}));
+  connect(swi.y, plaDis.uHotWatIsoVal) annotation (Line(points={{202,70},{220,70},
+          {220,70},{238,70}}, color={0,0,127}));
+  connect(logSwi1.y, plaDis.uBoi) annotation (Line(points={{192,140},{230,140},{
+          230,74},{238,74}}, color={255,0,255}));
   connect(plaDis.yStaChaPro, pre1.u) annotation (Line(points={{262,63},{266,63},
           {266,-22},{60,-22},{60,-50},{68,-50}}, color={255,0,255}));
-  connect(plaDis.yPumChaPro, priPumCon.uPumChaPro) annotation (Line(points={{
-          262,73},{270,73},{270,-90},{98,-90},{98,-137},{118,-137}}, color={255,
+  connect(plaDis.yPumChaPro, priPumCon.uPumChaPro) annotation (Line(points={{262,
+          73},{270,73},{270,-90},{98,-90},{98,-137},{118,-137}}, color={255,0,255}));
+  connect(plaEna.yPla, plaDis.uPla) annotation (Line(points={{-158,-10},{-126,-10},
+          {-126,100},{94,100},{94,124},{226,124},{226,78},{238,78}}, color={255,
           0,255}));
-  connect(plaEna.yPla, plaDis.uPla) annotation (Line(points={{-158,-10},{-126,
-          -10},{-126,100},{94,100},{94,124},{226,124},{226,78},{238,78}}, color
-        ={255,0,255}));
-  connect(priPumCon.yPumChaPro, plaDis.uPumChaPro) annotation (Line(points={{
-          142,-126},{214,-126},{214,66},{238,66}}, color={255,0,255}));
+  connect(priPumCon.yPumChaPro, plaDis.uPumChaPro) annotation (Line(points={{142,
+          -126},{214,-126},{214,66},{238,66}}, color={255,0,255}));
+  connect(plaEna.yPla, priPumCon.uPlaEna) annotation (Line(points={{-158,-10},{-130,
+          -10},{-130,-78},{90,-78},{90,-119},{118,-119}}, color={255,0,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-200,
             -200},{300,240}})),                                  Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-200,-200},{300,

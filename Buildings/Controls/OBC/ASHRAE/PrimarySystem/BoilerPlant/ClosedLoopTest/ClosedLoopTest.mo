@@ -39,7 +39,6 @@ model ClosedLoopTest "Closed loop testing model"
         Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler},
     nSta=3,
     staMat=[1,0; 0,1; 1,1],
-    iniSta=0,
     boiDesCap={15000*0.8,15000*0.8},
     boiFirMin={0.2,0.3},
     minFloSet={0.2*0.0003,0.3*0.0003},
@@ -55,6 +54,8 @@ model ClosedLoopTest "Closed loop testing model"
     maxPumSpe=1,
     VHotWat_flow_nominal=0.0006,
     boiDesFlo={0.0003,0.0003},
+    maxLocDp=5000,
+    minLocDp=5000,
     speedControlType_priPum=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP,
     minPriPumSpeSta={0,0,0})
     annotation (Placement(transformation(extent={{-52,-20},{-10,20}})));
@@ -64,18 +65,25 @@ model ClosedLoopTest "Closed loop testing model"
   CDL.Continuous.Sources.Constant con(k=273.15 + 24)
     "Zone temperature setpoint"
     annotation (Placement(transformation(extent={{10,50},{30,70}})));
-  CDL.Continuous.Sources.Constant con2(k=0)
-    "Heating load"
-    annotation (Placement(transformation(extent={{-40,70},{-20,90}})));
   CDL.Continuous.Add add2(k2=-1)
     annotation (Placement(transformation(extent={{40,-60},{60,-40}})));
   CDL.Conversions.RealToInteger reaToInt
     annotation (Placement(transformation(extent={{70,-60},{90,-40}})));
-  CDL.Continuous.Sources.Constant con1(k=273.15 + 14)
-    "Heating load"
-    annotation (Placement(transformation(extent={{-90,50},{-70,70}})));
   CDL.Logical.Sources.Constant con3[2](k={true,true})
     annotation (Placement(transformation(extent={{-60,-60},{-40,-40}})));
+  BoundaryConditions.WeatherData.ReaderTMY3 weaDat(filNam=
+        Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"))
+    "Weather data reader"
+    annotation (Placement(transformation(extent={{-90,50},{-70,70}})));
+  BoundaryConditions.WeatherData.Bus weaBus
+    annotation (Placement(transformation(extent={{-60,50},{-40,70}}),
+        iconTransformation(extent={{-12,36},{8,56}})));
+  CDL.Continuous.Sources.TimeTable                        timTab(
+    extrapolation=Buildings.Controls.OBC.CDL.Types.Extrapolation.Periodic,
+    smoothness=Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments,
+    table=[-6,0; 8,10000; 18,0],
+    timeScale=3600)   "Time table for internal heat gain"
+    annotation (Placement(transformation(extent={{-30,70},{-10,90}})));
 equation
 
   connect(controller.yBoi, boilerPlant.uBoiSta)
@@ -95,9 +103,8 @@ equation
                                                              color={0,0,127}));
   connect(con.y, conPID.u_s)
     annotation (Line(points={{32,60},{48,60}}, color={0,0,127}));
-  connect(conPID.y, boilerPlant.uRadIsoVal) annotation (Line(points={{72,60},{
-          78,60},{78,34},{38,34},{38,-9},{40,-9}},
-                                                color={0,0,127}));
+  connect(conPID.y, boilerPlant.uRadIsoVal) annotation (Line(points={{72,60},{78,
+          60},{78,34},{38,34},{38,-9},{40,-9}}, color={0,0,127}));
   connect(con.y, add2.u1) annotation (Line(points={{32,60},{34,60},{34,-44},{38,
           -44}}, color={0,0,127}));
   connect(reaToInt.u, add2.y)
@@ -105,11 +112,8 @@ equation
   connect(reaToInt.y, controller.supResReq) annotation (Line(points={{92,-50},{
           96,-50},{96,-64},{-64,-64},{-64,7.27273},{-53.68,7.27273}},
                                                       color={255,127,0}));
-  connect(con2.y, boilerPlant.QRooInt_flowrate) annotation (Line(points={{-18,80},
-          {-10,80},{-10,28},{20,28},{20,9},{40,9}}, color={0,0,127}));
-  connect(boilerPlant.yZonTem, conPID.u_m) annotation (Line(points={{64,6},{80,
-          6},{80,28},{60,28},{60,48}},
-                                    color={0,0,127}));
+  connect(boilerPlant.yZonTem, conPID.u_m) annotation (Line(points={{64,6},{80,6},
+          {80,28},{60,28},{60,48}}, color={0,0,127}));
   connect(boilerPlant.yZonTem, add2.u2) annotation (Line(points={{64,6},{80,6},{
           80,-30},{30,-30},{30,-56},{38,-56}}, color={0,0,127}));
   connect(boilerPlant.ySupTem, controller.TSup) annotation (Line(points={{64,2},{
@@ -126,14 +130,36 @@ equation
         points={{64,-9},{112,-9},{112,-80},{-80,-80},{-80,-7.27273},{-53.68,
           -7.27273}},                                                    color={
           0,0,127}));
-  connect(con1.y, controller.TOut) annotation (Line(points={{-68,60},{-60,60},{
-          -60,3.63636},{-53.68,3.63636}},
-                                   color={0,0,127}));
-  connect(con1.y, boilerPlant.TOutAir) annotation (Line(points={{-68,60},{0,60},
-          {0,-20},{43,-20},{43,-12}}, color={0,0,127}));
   connect(con3.y, controller.uBoiAva) annotation (Line(points={{-38,-50},{-30,
           -50},{-30,-30},{-60,-30},{-60,-14.5455},{-53.68,-14.5455}},
                                                               color={255,0,255}));
+  connect(weaDat.weaBus,weaBus)  annotation (Line(
+      points={{-70,60},{-50,60}},
+      color={255,204,51},
+      thickness=0.5,
+      smooth=Smooth.None), Text(
+      textString="%second",
+      index=1,
+      extent={{6,3},{6,3}}));
+  connect(weaBus.TDryBul, controller.TOut) annotation (Line(
+      points={{-50,60},{-28,60},{-28,40},{-72,40},{-72,3.63636},{-53.68,3.63636}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+
+  connect(weaBus.TDryBul, boilerPlant.TOutAir) annotation (Line(
+      points={{-50,60},{-28,60},{-28,40},{8,40},{8,-20},{43,-20},{43,-12}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-3,-6},{-3,-6}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(timTab.y[1], boilerPlant.QRooInt_flowrate)
+    annotation (Line(points={{-8,80},{0,80},{0,9},{40,9}}, color={0,0,127}));
   annotation (Documentation(info="<html>
 <p>
 This part of the system model adds to the model that is implemented in
@@ -245,7 +271,7 @@ First implementation.
      "modelica://Buildings/Resources/Scripts/Dymola/Examples/Tutorial/Boiler/System6.mos"
         "Simulate and plot"),
     experiment(
-      StopTime=3600,
+      StopTime=43200,
       Tolerance=1e-06,
       __Dymola_Algorithm="Cvode"),
     Icon(coordinateSystem(extent={{-100,-100},{180,100}})));

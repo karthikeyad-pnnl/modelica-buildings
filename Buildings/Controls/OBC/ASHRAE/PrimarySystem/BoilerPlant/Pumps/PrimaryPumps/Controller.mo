@@ -121,6 +121,14 @@ block Controller
     "Delay time period for enabling and disabling lag pumps"
     annotation (Dialog(tab="Pump control parameters", group="Pump staging parameters"));
 
+  parameter Real delBoiDis(
+    final unit="s",
+    displayUnit="s",
+    final quantity="time",
+    final min=0)=180
+    "Time delay after boilers have been disabled before completing disabling process"
+    annotation (Dialog(tab="Pump control parameters", group="Pump staging parameters"));
+
   parameter Real staCon(
     final unit="1",
     displayUnit="1") = -0.03
@@ -256,7 +264,7 @@ block Controller
     annotation (Placement(transformation(extent={{-320,120},{-280,160}}),
       iconTransformation(extent={{-140,220},{-100,260}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uPlaEna if not isHeadered
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uPlaEna
     "Plant enabling status"
     annotation (Placement(transformation(extent={{-320,90},{-280,130}}),
       iconTransformation(extent={{-140,190},{-100,230}})));
@@ -425,7 +433,7 @@ block Controller
     annotation (Placement(transformation(extent={{-60,-430},{-40,-410}})));
 
 
-protected
+//protected
   parameter Boolean remoteDPRegulated = (speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP)
     "Boolean flag for pump speed control with remote differential pressure";
 
@@ -440,6 +448,10 @@ protected
 
   parameter Integer pumInd[nPum]={i for i in 1:nPum}
     "Pump index, {1,2,...,n}";
+
+  CDL.Logical.LogicalSwitch logSwi[nPum] if primaryOnly and isHeadered
+                                         "Logical switch"
+    annotation (Placement(transformation(extent={{210,-42},{230,-22}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(
     final k=0) if primaryOnly
@@ -726,6 +738,19 @@ protected
     "Lag pump disable"
     annotation (Placement(transformation(extent={{-110,-312},{-90,-292}})));
 
+  CDL.Logical.Not not3 if primaryOnly and isHeadered "Logical Not"
+    annotation (Placement(transformation(extent={{-200,30},{-180,50}})));
+  CDL.Logical.TrueDelay truDel(delayTime=delBoiDis) if primaryOnly and
+    isHeadered "Time delay after plant disable signal has been received"
+    annotation (Placement(transformation(extent={{-120,30},{-100,50}})));
+  CDL.Logical.Edge edg if primaryOnly and isHeadered "Rising edge detector"
+    annotation (Placement(transformation(extent={{-80,30},{-60,50}})));
+  CDL.Routing.BooleanReplicator booRep(nout=nPum) if primaryOnly and isHeadered
+    "Boolean replicator"
+    annotation (Placement(transformation(extent={{128,-6},{148,14}})));
+  CDL.Logical.Sources.Constant con1[nPum](k=fill(false, nPum)) if primaryOnly
+     and isHeadered "Constant Boolean False signal"
+    annotation (Placement(transformation(extent={{176,-6},{196,14}})));
 equation
   connect(enaDedLeaPum.uPlaEna, uPlaEna) annotation (Line(points={{-202,115},{-240,
           115},{-240,110},{-300,110}}, color={255,0,255}));
@@ -1009,9 +1034,6 @@ equation
           {100,76},{100,-172},{128,-172}},                            color={
           255,0,255}));
 
-  connect(chaPumSta2.yHotWatPum, yHotWatPum) annotation (Line(points={{150,-32},
-          {262,-32},{262,0},{300,0}}, color={255,0,255}));
-
   connect(chaPumSta3.yHotWatPum, yHotWatPum) annotation (Line(points={{152,-172},
           {254,-172},{254,0},{300,0}}, color={255,0,255}));
 
@@ -1024,14 +1046,6 @@ equation
 
   connect(chaPumSta4.yHotWatPum, cha.u) annotation (Line(points={{84,-304},{244,
           -304},{244,28},{156,28},{156,70},{178,70}}, color={255,0,255}));
-
-  connect(chaPumSta2.yHotWatPum, pumSpeLocDp.uHotWatPum) annotation (Line(
-        points={{150,-32},{262,-32},{262,-360},{-74,-360},{-74,-416},{-62,-416}},
-        color={255,0,255}));
-
-  connect(chaPumSta2.yHotWatPum, pumSpeRemDp.uHotWatPum) annotation (Line(
-        points={{150,-32},{262,-32},{262,-360},{-74,-360},{-74,-452},{-62,-452}},
-        color={255,0,255}));
 
   connect(chaPumSta3.yHotWatPum, pumSpeFlo.uHotWatPum) annotation (Line(points={{152,
           -172},{254,-172},{254,-368},{-82,-368},{-82,-499},{-62,-499}},
@@ -1097,6 +1111,27 @@ equation
           -120},{8,-10},{16,-10}}, color={255,127,0}));
   connect(con.y, max.u1) annotation (Line(points={{62,-396},{82,-396},{82,-480},
           {132,-480}}, color={0,0,127}));
+  connect(chaPumSta2.yHotWatPum, logSwi.u3) annotation (Line(points={{150,-32},
+          {166,-32},{166,-40},{208,-40}},color={255,0,255}));
+  connect(logSwi.y, yHotWatPum) annotation (Line(points={{232,-32},{262,-32},{
+          262,0},{300,0}},
+                       color={255,0,255}));
+  connect(logSwi.y, pumSpeLocDp.uHotWatPum) annotation (Line(points={{232,-32},
+          {262,-32},{262,-356},{-74,-356},{-74,-416},{-62,-416}},color={255,0,255}));
+  connect(logSwi.y, pumSpeRemDp.uHotWatPum) annotation (Line(points={{232,-32},
+          {262,-32},{262,-356},{-74,-356},{-74,-452},{-62,-452}},color={255,0,255}));
+  connect(uPlaEna, not3.u) annotation (Line(points={{-300,110},{-240,110},{-240,
+          40},{-202,40}}, color={255,0,255}));
+  connect(truDel.u, not3.y)
+    annotation (Line(points={{-122,40},{-178,40}}, color={255,0,255}));
+  connect(edg.u, truDel.y)
+    annotation (Line(points={{-82,40},{-98,40}}, color={255,0,255}));
+  connect(booRep.y, logSwi.u2) annotation (Line(points={{150,4},{170,4},{170,
+          -32},{208,-32}}, color={255,0,255}));
+  connect(edg.y, booRep.u) annotation (Line(points={{-58,40},{-38,40},{-38,50},
+          {118,50},{118,4},{126,4}}, color={255,0,255}));
+  connect(con1.y, logSwi.u1) annotation (Line(points={{198,4},{202,4},{202,-24},
+          {208,-24}}, color={255,0,255}));
 annotation (defaultComponentName="priPumCon",
   Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-280,-660},{280,260}}),
   graphics={

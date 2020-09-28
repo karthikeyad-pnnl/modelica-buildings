@@ -233,7 +233,7 @@ block Down
     "Failsafe condition"
     annotation (Placement(transformation(extent={{-160,120},{-140,140}})));
 
-protected
+//protected
   Buildings.Controls.OBC.CDL.Logical.Not not1
     "Logical Not"
     annotation (Placement(transformation(extent={{-120,120},{-100,140}})));

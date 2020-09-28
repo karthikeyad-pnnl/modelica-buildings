@@ -1,5 +1,5 @@
 ﻿within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic;
-block PlantDisable
+block PlantDisable_stageHold
   "Sequence to disable boiler plant components when plant has to be disabled"
 
   parameter Boolean primaryOnly = false
@@ -11,10 +11,8 @@ block PlantDisable
   parameter Integer nBoi=3
     "Total number of boilers in the plant";
 
-  parameter Real chaHotWatIsoRat(
-    final unit="1/s",
-    final displayUnit="1/s") = 1/60
-    "Rate at which to slowly change isolation valve, should be determined in the field";
+  parameter Real chaHotWatIsoTim=60
+    "Time to slowly change isolation valve, should be determined in the field";
 
   parameter Real delBoiDis=180
     "Time delay after boilers have been disabled before completing disabling process";
@@ -29,11 +27,11 @@ block PlantDisable
 
   CDL.Interfaces.BooleanInput uBoi[nBoi] "Boiler enable status signal"
     annotation (Placement(transformation(extent={{-200,30},{-160,70}}),
-        iconTransformation(extent={{-140,20},{-100,60}})));
+        iconTransformation(extent={{-140,30},{-100,70}})));
   CDL.Interfaces.RealInput uHotWatIsoVal[nBoi] if isHeadered
     "Boiler hot water isolation valve position vector"
-    annotation (Placement(transformation(extent={{-200,-60},{-160,-20}}),
-      iconTransformation(extent={{-140,-20},{-100,20}})));
+    annotation (Placement(transformation(extent={{-200,-70},{-160,-30}}),
+      iconTransformation(extent={{-140,-40},{-100,0}})));
 
   CDL.Logical.Latch lat
     "Hold true/false signal based on whether the plant was enabled/disabled last"
@@ -60,6 +58,8 @@ block PlantDisable
   CDL.Discrete.TriggeredSampler triSam[nBoi]
     "Identify indices of enabled boilers when plant was disabledboilers "
     annotation (Placement(transformation(extent={{-20,40},{0,60}})));
+  CDL.Conversions.BooleanToReal booToRea[nBoi] "Boolean to Real conversion"
+    annotation (Placement(transformation(extent={{-120,40},{-100,60}})));
   CDL.Integers.Sources.Constant conInt[nBoi](k=boiInd)
     "Vector of boiler indices"
     annotation (Placement(transformation(extent={{-150,60},{-130,80}})));
@@ -72,21 +72,23 @@ block PlantDisable
   CDL.Routing.BooleanReplicator booRep(nout=nBoi) "Boolean replicator"
     annotation (Placement(transformation(extent={{-40,70},{-20,90}})));
   Subsequences.HWIsoVal disHotWatIsoVal[nBoi](
-    nBoi=fill(nBoi, nBoi),
-    chaHotWatIsoRat=fill(chaHotWatIsoRat, nBoi),
-    endValPos=fill(0, nBoi)) if
-                    isHeadered
+    nBoi=nBoi,
+    chaHotWatIsoTim=chaHotWatIsoTim,
+    iniValPos=1,
+    endValPos=0) if isHeadered
     "Disable boiler hot water isolation valve for all disabled boilers simultaneously"
     annotation (Placement(transformation(extent={{20,-60},{40,-40}})));
   CDL.Logical.LogicalSwitch logSwi[nBoi]
     "Pass input boiler enable status when plant is enabled and disable all boilers when plant is disabled"
-    annotation (Placement(transformation(extent={{140,40},{160,60}})));
+    annotation (Placement(transformation(extent={{80,40},{100,60}})));
   CDL.Routing.BooleanReplicator booRep1(nout=nBoi) "Boolean replicator"
     annotation (Placement(transformation(extent={{-40,110},{-20,130}})));
   CDL.Routing.RealReplicator reaRep[nBoi](nout=nBoi) if isHeadered
                                                      "Real replicator"
-    annotation (Placement(transformation(extent={{-80,-50},{-60,-30}})));
-  CDL.Logical.Not not1 "Logical Not"
+    annotation (Placement(transformation(extent={{-140,-60},{-120,-40}})));
+  CDL.Logical.Not not1[nBoi] "Logical Not"
+    annotation (Placement(transformation(extent={{-140,-20},{-120,0}})));
+  CDL.Logical.MultiAnd mulAnd(nu=nBoi) "Multi And"
     annotation (Placement(transformation(extent={{-100,-20},{-80,0}})));
   CDL.Routing.BooleanReplicator booRep2(nout=nBoi)
                                                   "Boolean replicator"
@@ -101,7 +103,7 @@ block PlantDisable
   CDL.Interfaces.BooleanInput uPumChaPro if not primaryOnly
     "Signal from pump controller indicating stage-up/stage-down has been completed"
     annotation (Placement(transformation(extent={{-200,-100},{-160,-60}}),
-        iconTransformation(extent={{-140,-60},{-100,-20}})));
+        iconTransformation(extent={{-140,-70},{-100,-30}})));
   CDL.Logical.And and2
     "Pass through stage change completion signal from staging process controller when plant is enabled"
     annotation (Placement(transformation(extent={{-10,-130},{10,-110}})));
@@ -135,17 +137,21 @@ block PlantDisable
   CDL.Logical.MultiOr mulOr1(nu=1) if not primaryOnly and not isHeadered
                                      "Multi Or"
     annotation (Placement(transformation(extent={{-10,-100},{10,-80}})));
-  CDL.Continuous.Hysteresis hys[nBoi](uLow=0, uHigh=0.01)
-    "Hysteresis block"
-    annotation (Placement(transformation(extent={{-120,30},{-100,50}})));
-  CDL.Conversions.BooleanToReal booToRea[nBoi] "Boolean to Real conversion"
-    annotation (Placement(transformation(extent={{-90,30},{-70,50}})));
-  CDL.Discrete.TriggeredSampler triSam1
-                                      [nBoi]
-    "Sample isolation valve position when they start to close"
-    annotation (Placement(transformation(extent={{-120,-50},{-100,-30}})));
-  CDL.Logical.Switch swi[nBoi] "Real switch"
-    annotation (Placement(transformation(extent={{140,-60},{160,-40}})));
+  CDL.Logical.Latch lat2
+    "Hold pump change status after receiving signal from primary pump controller"
+    annotation (Placement(transformation(extent={{60,100},{80,120}})));
+  CDL.Logical.LogicalSwitch logSwi1
+                                  [nBoi]
+    "Ensure disable process is not started when the plant is changing stages"
+    annotation (Placement(transformation(extent={{140,40},{160,60}})));
+  CDL.Routing.BooleanReplicator booRep3(nout=nBoi) "Boolean replicator"
+    annotation (Placement(transformation(extent={{100,100},{120,120}})));
+  CDL.Logical.And and3 "Logical And"
+    annotation (Placement(transformation(extent={{20,100},{40,120}})));
+  CDL.Interfaces.BooleanInput uStaChaProSta
+    "Signal from staging setpoint controller indicating stage-up/stage-down has started"
+    annotation (Placement(transformation(extent={{-200,-20},{-160,20}}),
+        iconTransformation(extent={{-140,0},{-100,40}})));
 equation
   connect(edg.y, lat.u)
     annotation (Line(points={{-98,120},{-82,120}}, color={255,0,255}));
@@ -155,6 +161,10 @@ equation
           {-122,90}}, color={255,0,255}));
   connect(falEdg.y, lat.clr) annotation (Line(points={{-98,90},{-90,90},{-90,114},
           {-82,114}}, color={255,0,255}));
+  connect(uBoi, booToRea.u)
+    annotation (Line(points={{-180,50},{-122,50}}, color={255,0,255}));
+  connect(booToRea.y, pro.u2) annotation (Line(points={{-98,50},{-60,50},{-60,44},
+          {-52,44}}, color={0,0,127}));
   connect(conInt.y, intToRea.u)
     annotation (Line(points={{-128,70},{-92,70}}, color={255,127,0}));
   connect(intToRea.y, pro.u1) annotation (Line(points={{-68,70},{-60,70},{-60,56},
@@ -166,23 +176,36 @@ equation
   connect(falEdg.y, booRep.u)
     annotation (Line(points={{-98,90},{-50,90},{-50,80},{-42,80}},
                                                  color={255,0,255}));
-  connect(booRep.y, triSam.trigger) annotation (Line(points={{-18,80},{-4,80},{-4,
-          74},{10,74},{10,34},{-10,34},{-10,38.2}},
+  connect(booRep.y, triSam.trigger) annotation (Line(points={{-18,80},{-4,80},{
+          -4,74},{10,74},{10,34},{-10,34},{-10,38.2}},
                                     color={255,0,255}));
   connect(lat.y, booRep1.u)
     annotation (Line(points={{-58,120},{-42,120}}, color={255,0,255}));
   connect(uBoi, logSwi.u1) annotation (Line(points={{-180,50},{-140,50},{-140,
-          16},{70,16},{70,58},{138,58}},
-                                       color={255,0,255}));
+          30},{70,30},{70,58},{78,58}},color={255,0,255}));
   connect(booRep1.y, logSwi.u3) annotation (Line(points={{-18,120},{-10,120},{
-          -10,70},{60,70},{60,42},{138,42}},
+          -10,70},{60,70},{60,42},{78,42}},
                          color={255,0,255}));
-  connect(reaRep.y, disHotWatIsoVal.uHotWatIsoVal) annotation (Line(points={{-58,-40},
-          {0,-40},{0,-45},{18,-45}},           color={0,0,127}));
+  connect(uHotWatIsoVal, reaRep.u)
+    annotation (Line(points={{-180,-50},{-142,-50}}, color={0,0,127}));
+  connect(reaRep.y, disHotWatIsoVal.uHotWatIsoVal) annotation (Line(points={{-118,
+          -50},{10,-50},{10,-45},{18,-45}},    color={0,0,127}));
   connect(reaToInt.y, disHotWatIsoVal.nexChaBoi) annotation (Line(points={{42,50},
           {50,50},{50,24},{10,24},{10,-42},{18,-42}},    color={255,127,0}));
+  connect(booRep1.y, not1.u) annotation (Line(points={{-18,120},{-10,120},{-10,
+          70},{60,70},{60,10},{-150,10},{-150,-10},{-142,-10}},
+                                            color={255,0,255}));
+  connect(not1.y, disHotWatIsoVal.chaPro) annotation (Line(points={{-118,-10},{
+          -110,-10},{-110,-58},{18,-58}},
+                                      color={255,0,255}));
+  connect(not1.y, mulAnd.u[1:nBoi])
+    annotation (Line(points={{-118,-10},{-102,-10}}, color={255,0,255}));
+  connect(booRep2.y, disHotWatIsoVal.uUpsDevSta) annotation (Line(points={{2,-10},
+          {6,-10},{6,-55},{18,-55}},   color={255,0,255}));
   connect(booRep2.u, truDel.y)
     annotation (Line(points={{-22,-10},{-38,-10}}, color={255,0,255}));
+  connect(mulAnd.y, truDel.u)
+    annotation (Line(points={{-78,-10},{-62,-10}}, color={255,0,255}));
   connect(disHotWatIsoVal.yHotWatIsoVal, extIndSig.u) annotation (Line(points={{42,-56},
           {70,-56},{70,-50},{78,-50}},         color={0,0,127}));
   connect(conInt.y, extIndSig.index) annotation (Line(points={{-128,70},{-126,70},
@@ -218,48 +241,36 @@ equation
           -98},{118,-98}}, color={255,0,255}));
   connect(disHotWatIsoVal.yEnaHotWatIsoVal, mulAnd2.u[1:nBoi]) annotation (Line(
         points={{42,-44},{66,-44},{66,-90},{78,-90}}, color={255,0,255}));
-  connect(lat1.y, mulOr1.u[1]) annotation (Line(points={{-78,-80},{-20,-80},{-20,
-          -90},{-12,-90}},color={255,0,255}));
+  connect(lat1.y, mulOr1.u[1]) annotation (Line(points={{-78,-80},{-20,-80},{
+          -20,-90},{-12,-90}},
+                          color={255,0,255}));
   connect(mulOr1.y, or2.u1) annotation (Line(points={{12,-90},{48,-90},{48,-136},
           {110,-136},{110,-120},{118,-120}}, color={255,0,255}));
+  connect(extIndSig.y, yHotWatIsoVal)
+    annotation (Line(points={{102,-50},{200,-50}}, color={0,0,127}));
+  connect(logSwi1.y, yBoi)
+    annotation (Line(points={{162,50},{200,50}}, color={255,0,255}));
+  connect(logSwi.y, logSwi1.u3) annotation (Line(points={{102,50},{120,50},{120,
+          42},{138,42}}, color={255,0,255}));
+  connect(uBoi, logSwi1.u1) annotation (Line(points={{-180,50},{-140,50},{-140,
+          30},{110,30},{110,58},{138,58}}, color={255,0,255}));
   connect(booRep1.y, logSwi.u2) annotation (Line(points={{-18,120},{-10,120},{
-          -10,70},{60,70},{60,50},{138,50}},
-                                         color={255,0,255}));
+          -10,70},{60,70},{60,50},{78,50}}, color={255,0,255}));
+  connect(lat2.y, booRep3.u)
+    annotation (Line(points={{82,110},{98,110}}, color={255,0,255}));
+  connect(booRep3.y, logSwi1.u2) annotation (Line(points={{122,110},{130,110},{
+          130,50},{138,50}}, color={255,0,255}));
+  connect(and2.y, lat2.clr) annotation (Line(points={{12,-120},{54,-120},{54,
+          104},{58,104}}, color={255,0,255}));
+  connect(and3.y, lat2.u)
+    annotation (Line(points={{42,110},{58,110}}, color={255,0,255}));
+  connect(lat.y, and3.u1) annotation (Line(points={{-58,120},{-50,120},{-50,106},
+          {0,106},{0,110},{18,110}}, color={255,0,255}));
+  connect(uStaChaProSta, and3.u2) annotation (Line(points={{-180,0},{-154,0},{
+          -154,16},{6,16},{6,102},{18,102}}, color={255,0,255}));
   connect(lat.y, and2.u2) annotation (Line(points={{-58,120},{-50,120},{-50,106},
           {0,106},{0,80},{66,80},{66,-32},{-40,-32},{-40,-128},{-12,-128}},
         color={255,0,255}));
-  connect(logSwi.y, yBoi)
-    annotation (Line(points={{162,50},{200,50}}, color={255,0,255}));
-  connect(hys.y, booToRea.u)
-    annotation (Line(points={{-98,40},{-92,40}}, color={255,0,255}));
-  connect(uHotWatIsoVal, hys.u) annotation (Line(points={{-180,-40},{-154,-40},
-          {-154,40},{-122,40}},color={0,0,127}));
-  connect(booToRea.y, pro.u2) annotation (Line(points={{-68,40},{-60,40},{-60,44},
-          {-52,44}}, color={0,0,127}));
-  connect(not1.y, truDel.u)
-    annotation (Line(points={{-78,-10},{-62,-10}}, color={255,0,255}));
-  connect(lat.y, not1.u) annotation (Line(points={{-58,120},{-50,120},{-50,106},
-          {0,106},{0,80},{66,80},{66,8},{-110,8},{-110,-10},{-102,-10}}, color=
-          {255,0,255}));
-  connect(booRep2.y, disHotWatIsoVal.chaPro) annotation (Line(points={{2,-10},{
-          6,-10},{6,-58},{18,-58}}, color={255,0,255}));
-  connect(booRep2.y, disHotWatIsoVal.uUpsDevSta) annotation (Line(points={{2,
-          -10},{6,-10},{6,-55},{18,-55}}, color={255,0,255}));
-  connect(uHotWatIsoVal, triSam1.u)
-    annotation (Line(points={{-180,-40},{-122,-40}}, color={0,0,127}));
-  connect(triSam1.y, reaRep.u)
-    annotation (Line(points={{-98,-40},{-82,-40}}, color={0,0,127}));
-  connect(booRep.y, triSam1.trigger) annotation (Line(points={{-18,80},{-4,80},
-          {-4,74},{10,74},{10,26},{-130,26},{-130,-60},{-110,-60},{-110,-51.8}},
-        color={255,0,255}));
-  connect(extIndSig.y, swi.u3) annotation (Line(points={{102,-50},{110,-50},{
-          110,-58},{138,-58}}, color={0,0,127}));
-  connect(booRep1.y, swi.u2) annotation (Line(points={{-18,120},{-10,120},{-10,
-          70},{60,70},{60,42},{120,42},{120,-50},{138,-50}}, color={255,0,255}));
-  connect(uHotWatIsoVal, swi.u1) annotation (Line(points={{-180,-40},{-140,-40},
-          {-140,-66},{130,-66},{130,-42},{138,-42}}, color={0,0,127}));
-  connect(swi.y, yHotWatIsoVal)
-    annotation (Line(points={{162,-50},{200,-50}}, color={0,0,127}));
   annotation (defaultComponentName = "plaDis",
     Icon(graphics={
       Rectangle(
@@ -376,4 +387,4 @@ equation
     </li>
     </ul>
     </html>"));
-end PlantDisable;
+end PlantDisable_stageHold;
