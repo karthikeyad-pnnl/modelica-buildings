@@ -47,20 +47,27 @@ model ClosedLoopTest "Closed loop testing model"
     nPumPri=2,
     isHeadered=true,
     TMinSupNonConBoi = 333.2,
+    k_bypVal=1,
+    Ti_bypVal=50,
+    Td_bypVal=0,
     variablePrimary=true,
     nSen_remoteDp=1,
     nPum_nominal=2,
     minPumSpe=0.1,
     maxPumSpe=1,
-    VHotWat_flow_nominal=0.0006,
+    VHotWat_flow_nominal=0.00035,
     boiDesFlo={0.0003,0.0003},
-    maxLocDp=5000,
-    minLocDp=5000,
+    maxLocDp=1000,
+    minLocDp=1000,
+    k_priPum=1,
+    Ti_priPum=90,
+    Td_priPum=3,
     speedControlType_priPum=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP,
     minPriPumSpeSta={0,0,0})
     annotation (Placement(transformation(extent={{-52,-20},{-10,20}})));
 
-  CDL.Continuous.PID conPID
+  CDL.Continuous.PID conPID(controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.P,
+      k=1)
     annotation (Placement(transformation(extent={{50,50},{70,70}})));
   CDL.Continuous.Sources.Constant con(k=273.15 + 24)
     "Zone temperature setpoint"
@@ -271,7 +278,7 @@ First implementation.
      "modelica://Buildings/Resources/Scripts/Dymola/Examples/Tutorial/Boiler/System6.mos"
         "Simulate and plot"),
     experiment(
-      StopTime=43200,
+      StopTime=6000,
       Tolerance=1e-06,
       __Dymola_Algorithm="Cvode"),
     Icon(coordinateSystem(extent={{-100,-100},{180,100}})));

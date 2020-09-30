@@ -723,7 +723,7 @@ model Controller
     annotation (Placement(transformation(extent={{-100,-20},{-80,16}})));
 
   Staging.Processes.Up upProCon(
-    primaryOnly=true,
+    primaryOnly=primaryOnly,
     isHeadered=isHeadered,
     nBoi=nBoi,
     nSta=nSta,
@@ -738,7 +738,7 @@ model Controller
     relFloDif=sigDif)
             annotation (Placement(transformation(extent={{120,76},{140,116}})));
   Staging.Processes.Down dowProCon(
-    primaryOnly=true,
+    primaryOnly=primaryOnly,
     isHeadered=isHeadered,
     nBoi=nBoi,
     nSta=nSta,
@@ -749,7 +749,7 @@ model Controller
             annotation (Placement(transformation(extent={{120,20},{140,60}})));
   Pumps.PrimaryPumps.Controller priPumCon(
     isHeadered=isHeadered,
-    primaryOnly=true,
+    primaryOnly=primaryOnly,
     variablePrimary=variablePrimary,
     nPum=nPumPri,
     nBoi=nBoi,

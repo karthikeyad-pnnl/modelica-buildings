@@ -95,7 +95,7 @@ model BoilerPlant "Boiler plant model for closed loop testing"
     T_a_nominal=TRadSup_nominal,
     T_b_nominal=TRadRet_nominal,
     TAir_nominal=TAir_nominal,
-    dp_nominal=15000)            "Radiator"
+    dp_nominal=20000)            "Radiator"
     annotation (Placement(transformation(extent={{0,-20},{20,0}})));
 
 //----------------------------------------------------------------------------//
@@ -201,7 +201,7 @@ model BoilerPlant "Boiler plant model for closed loop testing"
         origin={-110,-90})));
   Fluid.Actuators.Valves.TwoWayEqualPercentage val(
     redeclare package Medium = Media.Water,
-    m_flow_nominal=mRad_flow_nominal/2,
+    m_flow_nominal=mRad_flow_nominal,
     dpValve_nominal=0.1) "Minimum flow bypass valve"
     annotation (Placement(transformation(extent={{0,-100},{20,-80}})));
   Fluid.FixedResistances.Junction           spl5(
@@ -316,6 +316,24 @@ model BoilerPlant "Boiler plant model for closed loop testing"
     annotation (Placement(transformation(extent={{80,-20},{100,0}})));
   CDL.Routing.RealReplicator reaRep(nout=1)
     annotation (Placement(transformation(extent={{180,-140},{200,-120}})));
+  Fluid.Sensors.VolumeFlowRate senVolFlo1(redeclare package Medium =
+        Media.Water, m_flow_nominal=mRad_flow_nominal)
+    "Volume flow-rate through primary circuit"
+    annotation (Placement(transformation(extent={{-180,-210},{-160,-190}})));
+  Fluid.Sensors.VolumeFlowRate senVolFlo2(redeclare package Medium =
+        Media.Water, m_flow_nominal=mRad_flow_nominal)
+    "Volume flow-rate through primary circuit"
+    annotation (Placement(transformation(extent={{-90,-210},{-70,-190}})));
+  Fluid.Actuators.Valves.TwoWayEqualPercentage val4(
+    redeclare package Medium = Media.Water,
+    m_flow_nominal=mRad_flow_nominal,
+    dpValve_nominal=10)  "Minimum flow bypass valve"
+    annotation (Placement(transformation(extent={{-160,-120},{-140,-100}})));
+  Fluid.Actuators.Valves.TwoWayEqualPercentage val5(
+    redeclare package Medium = Media.Water,
+    m_flow_nominal=mRad_flow_nominal,
+    dpValve_nominal=0.1) "Minimum flow bypass valve"
+    annotation (Placement(transformation(extent={{-80,-150},{-60,-130}})));
 equation
   connect(theCon.port_b, vol.heatPort) annotation (Line(
       points={{40,50},{50,50},{50,30},{60,30}},
@@ -340,17 +358,6 @@ equation
 
   connect(spl1.port_2, spl2.port_1)
     annotation (Line(points={{-110,-270},{-110,-240}}, color={0,127,255}));
-  connect(spl2.port_2, pum.port_a)
-    annotation (Line(points={{-110,-220},{-110,-200},{-150,-200},{-150,-180}},
-                                                       color={0,127,255}));
-  connect(spl2.port_3, pum1.port_a) annotation (Line(points={{-100,-230},{-70,
-          -230},{-70,-180}},
-                       color={0,127,255}));
-  connect(pum.port_b, spl3.port_1)
-    annotation (Line(points={{-150,-160},{-150,-154},{-110,-154},{-110,-140}},
-                                                       color={0,127,255}));
-  connect(pum1.port_b, spl3.port_3) annotation (Line(points={{-70,-160},{-70,-130},
-          {-100,-130}}, color={0,127,255}));
   connect(spl4.port_3, val.port_a)
     annotation (Line(points={{-100,-90},{0,-90}},   color={0,127,255}));
   connect(val.port_b, spl5.port_3)
@@ -433,6 +440,27 @@ equation
     annotation (Line(points={{202,-130},{260,-130}}, color={0,0,127}));
   connect(senRelPre.p_rel, reaRep.u) annotation (Line(points={{10,-59},{10,-66},
           {160,-66},{160,-130},{178,-130}}, color={0,0,127}));
+  connect(senVolFlo1.port_b, pum.port_a) annotation (Line(points={{-160,-200},{
+          -150,-200},{-150,-180}}, color={0,127,255}));
+  connect(senVolFlo1.port_a, spl2.port_2) annotation (Line(points={{-180,-200},
+          {-188,-200},{-188,-220},{-140,-220},{-140,-200},{-110,-200},{-110,
+          -220}}, color={0,127,255}));
+  connect(spl2.port_3, senVolFlo2.port_a) annotation (Line(points={{-100,-230},
+          {-90,-230},{-90,-200}}, color={0,127,255}));
+  connect(senVolFlo2.port_b, pum1.port_a)
+    annotation (Line(points={{-70,-200},{-70,-180}}, color={0,127,255}));
+  connect(pum.port_b, val4.port_a) annotation (Line(points={{-150,-160},{-150,
+          -140},{-168,-140},{-168,-110},{-160,-110}}, color={0,127,255}));
+  connect(val4.port_b, spl3.port_1) annotation (Line(points={{-140,-110},{-130,
+          -110},{-130,-146},{-110,-146},{-110,-140}}, color={0,127,255}));
+  connect(val5.port_a, pum1.port_b) annotation (Line(points={{-80,-140},{-90,
+          -140},{-90,-154},{-70,-154},{-70,-160}}, color={0,127,255}));
+  connect(val5.port_b, spl3.port_3) annotation (Line(points={{-60,-140},{-54,
+          -140},{-54,-124},{-88,-124},{-88,-130},{-100,-130}}, color={0,127,255}));
+  connect(booToRea[1].y, val4.y) annotation (Line(points={{-358,-90},{-150,-90},
+          {-150,-98}}, color={0,0,127}));
+  connect(booToRea[2].y, val5.y) annotation (Line(points={{-358,-90},{-126,-90},
+          {-126,-104},{-70,-104},{-70,-128}}, color={0,0,127}));
   annotation (Documentation(info="<html>
 <p>
 This part of the system model adds to the model that is implemented in

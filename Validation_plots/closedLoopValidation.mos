@@ -4,10 +4,12 @@ removePlots(false);
 createPlot(id=1, position={751, 500, 733, 459}, y={"controller.plaEna.yPla"}, range={0.0, 44000.0, -1.0, 2.0}, grid=true, colors={{28,108,200}});
 createPlot(id=1, position={751, 500, 733, 62}, y={"controller.staSetCon.cha.ySta"}, range={0.0, 44000.0, -5.0, 5.0}, grid=true, subPlot=2, colors={{28,108,200}});
 createPlot(id=1, position={751, 500, 733, 61}, y={"controller.staSetCon.yBoi[1]", "controller.staSetCon.yBoi[2]"}, range={0.0, 44000.0, -1.0, 2.0}, grid=true, subPlot=3, colors={{28,108,200}, {28,108,200}});
-createPlot(id=1, position={751, 500, 733, 61}, y={"controller.yHotWatIsoVal[1]"}, range={0.0, 44000.0, -1.0, 2.0}, grid=true, subPlot=4, colors={{28,108,200}});
-createPlot(id=1, position={751, 500, 733, 61}, y={"controller.yHotWatIsoVal[2]"}, range={0.0, 44000.0, -1.0, 2.0}, grid=true, subPlot=5, colors={{28,108,200}});
-createPlot(id=1, position={751, 500, 733, 62}, y={"controller.yPum[1]", "controller.yPum[2]"}, range={0.0, 44000.0, -1.0, 2.0}, grid=true, subPlot=6, colors={{28,108,200}, {28,108,200}});
-createPlot(id=1, position={751, 500, 733, 61}, y={"controller.yBoi[1]", "controller.yBoi[2]"}, range={0.0, 44000.0, -1.0, 2.0}, grid=true, subPlot=7, colors={{28,108,200}, {28,108,200}});
+createPlot(id=1, position={751, 500, 733, 61}, y={"controller.VHotWat_flow", "controller.minBoiFloSet.VHotWatMinSet_flow"}, range={0.0, 44000.0, -1.0, 2.0}, grid=true, subPlot=4, colors={{28,108,200}, {238,46,47}});
+createPlot(id=1, position={751, 500, 733, 61}, y={"controller.yHotWatIsoVal[1]"}, range={0.0, 44000.0, -1.0, 2.0}, grid=true, subPlot=5, colors={{28,108,200}});
+createPlot(id=1, position={751, 500, 733, 61}, y={"controller.yHotWatIsoVal[2]"}, range={0.0, 44000.0, -1.0, 2.0}, grid=true, subPlot=6, colors={{28,108,200}});
+createPlot(id=1, position={751, 500, 733, 62}, y={"controller.yPum[1]", "controller.yPum[2]"}, range={0.0, 44000.0, -1.0, 2.0}, grid=true, subPlot=7, colors={{28,108,200}, {28,108,200}});
+createPlot(id=1, position={751, 500, 733, 61}, y={"controller.yBoi[1]", "controller.yBoi[2]"}, range={0.0, 44000.0, -1.0, 2.0}, grid=true, subPlot=8, colors={{28,108,200}, {28,108,200}});
+
 createPlot(id=2, position={751, 0, 733, 461}, y={"boilerPlant.yZonTem"}, range={0.0, 44000.0, 10.0, 30.0}, grid=true, colors={{28,108,200}}, displayUnits={"degC"});
 createPlot(id=2, position={751, 0, 733, 61}, y={"boilerPlant.ySupTem", "boilerPlant.yRetTem"}, range={0.0, 44000.0, 0.0, 100.0}, grid=true, subPlot=2, colors={{28,108,200}, {238,46,47}}, displayUnits={"degC", "degC"});
 createPlot(id=2, position={751, 0, 733, 62}, y={"boilerPlant.VHotWat_flow", "controller.minBoiFloSet1[1].VHotWatMinSet_flow", 
@@ -20,3 +22,11 @@ createPlot(id=3, position={0, 0, 735, 959}, y={"controller.priPumCon.enaLagHotPu
 createPlot(id=3, position={0, 0, 735, 317}, y={"controller.priPumCon.yHotWatPum[1]", "controller.priPumCon.yHotWatPum[2]"}, range={0.0, 44000.0, -0.2, 1.2000000000000002}, grid=true, subPlot=2, colors={{28,108,200}, {28,108,200}});
 createPlot(id=3, position={0, 0, 735, 316}, y={"controller.priPumCon.yPumSpe[1]"}, range={0.0, 44000.0, -0.2, 1.2000000000000002}, grid=true, subPlot=3, colors={{28,108,200}});
 
+createPlot(id=5, position={0, 0, 732, 959}, y={"controller.staSetCon.u"}, range={0.0, 14000.0, -1.0, 4.0}, grid=true, colors={{28,108,200}});
+createPlot(id=5, position={0, 0, 732, 155}, y={"controller.staSetCon.capReq1.y", "controller.staSetCon.cap.yUpMin"}, range={0.0, 14000.0, -500000.0, 1500000.0}, autoscale=false, grid=true, subPlot=2, colors={{28,108,200}, {238,46,47}}, range2={0.06, 0.12});
+createPlot(id=5, position={0, 0, 732, 156}, y={"controller.staSetCon.capReq1.y", "controller.staSetCon.cap.yMin"}, range={0.0, 14000.0, -1000000.0, 3000000.0}, grid=true, subPlot=3, colors={{28,108,200}, {238,46,47}});
+createPlot(id=5, position={0, 0, 732, 156}, y={"controller.staSetCon.capReq1.y", "controller.staSetCon.cap.yDowDes"}, range={0.0, 14000.0, -1000000.0, 3000000.0}, grid=true, subPlot=4, colors={{28,108,200}, {238,46,47}});
+createPlot(id=5, position={0, 0, 732, 155}, y={"controller.staSetCon.VHotWat_flow", "controller.staSetCon.VMinSet_flow[1]", "controller.staSetCon.VMinSet_flow[2]", "controller.staSetCon.VMinSet_flow[3]"}, range={0.0, 14000.0, -0.02, 0.06}, grid=true, subPlot=5, colors={{28,108,200}, {238,46,47}, {0,140,72}, {217,67,180}});
+createPlot(id=5, position={0, 0, 732, 156}, y={"controller.staSetCon.uBypValPos"}, range={0.0, 14000.0, -1.0, 2.0}, grid=true, subPlot=6, colors={{28,108,200}});
+createPlot(id=5, position={748, 0, 731, 959}, y={"controller.staSetCon.ySta"}, range={0.0, 14000.0, -1.0, 4.0}, grid=true, subPlot=7, colors={{28,108,200}});
+createPlot(id=5, position={748, 0, 731, 188}, y={"controller.staSetCon.yBoi[1]", "controller.staSetCon.yBoi[2]"}, range={0.0, 14000.0, -0.5, 1.5}, grid=true, subPlot=8, colors={{28,108,200}, {28,108,200}});
