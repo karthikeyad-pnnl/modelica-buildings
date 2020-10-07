@@ -1,6 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant;
 package Generic "Generic control sequences"
-
   annotation(Icon(graphics={
         Rectangle(
           lineColor={200,200,200},

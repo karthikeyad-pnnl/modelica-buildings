@@ -18,13 +18,6 @@ block PlantEnable
     final displayUnit="K") = 300
     "Boiler lock-out temperature for outdoor air";
 
-  parameter Real locDt(
-    final unit="K",
-    final displayUnit="K",
-    final quantity="ThermodynamicTemperature") = 1
-    "Temperature deadband for boiler lockout"
-    annotation (Dialog(tab="Advanced"));
-
   parameter Real plaOffThrTim(
     final unit="s",
     final displayUnit="s") = 900
@@ -40,9 +33,16 @@ block PlantEnable
     final displayUnit="s") = 180
     "Time-limit for receiving hot-water requests to maintain enabled plant on";
 
+  parameter Real locDt(
+    final unit="K",
+    final displayUnit="K",
+    final quantity="ThermodynamicTemperature") = 1
+    "Temperature deadband for boiler lockout"
+    annotation (Dialog(tab="Advanced"));
+
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput supResReq
     "Number of heating hot-water requests"
-    annotation(Placement(transformation(extent={{-200,30},{-160,70}}),
+    annotation (Placement(transformation(extent={{-200,30},{-160,70}}),
       iconTransformation(extent={{-140,30},{-100,70}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TOut(
@@ -51,7 +51,7 @@ block PlantEnable
     final quantity="ThermodynamicTemperature")
     "Measured outdoor air temperature"
     annotation (Placement(transformation(extent={{-200,-70},{-160,-30}}),
-      iconTransformation(extent={{-140,-70},{-100,-30}})));
+        iconTransformation(extent={{-140,-70},{-100,-30}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yPla
     "Plant enable signal"
@@ -71,11 +71,8 @@ block PlantEnable
 
   Buildings.Controls.OBC.CDL.Logical.Timer tim2(t=plaOffThrTim)
     "Time since plant has been disabled"
-    annotation (Placement(transformation(extent={{10,50},{30,70}})));
+    annotation (Placement(transformation(extent={{10,60},{30,80}})));
 
-  CDL.Logical.And and2
-    "Check if all conditions for disabling plant have been met"
-    annotation (Placement(transformation(extent={{80,-40},{100,-20}})));
 protected
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
     final t=0.5)
@@ -94,11 +91,16 @@ protected
   Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd(
     final nu=4)
     "Check if all the conditions for enabling plant have been met"
-    annotation (Placement(transformation(extent={{-10,80},{10,100}})));
+    annotation (Placement(transformation(extent={{80,110},{100,130}})));
 
-  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(nu=3)
+  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
+    final nu=3)
     "Check if any conditions except plant-on time have been satisfied to disable plant"
     annotation (Placement(transformation(extent={{30,-80},{50,-60}})));
+
+  Buildings.Controls.OBC.CDL.Logical.And and2
+    "Check if all conditions have been met to disable the plant"
+    annotation (Placement(transformation(extent={{80,-40},{100,-20}})));
 
   Buildings.Controls.OBC.CDL.Logical.Not not1
     "Logical Not"
@@ -126,7 +128,7 @@ protected
 
   Buildings.Controls.OBC.CDL.Logical.Not not4
     "Logical Not"
-    annotation (Placement(transformation(extent={{-20,50},{0,70}})));
+    annotation (Placement(transformation(extent={{-20,60},{0,80}})));
 
   Buildings.Controls.OBC.CDL.Logical.Pre pre1
     "Logical pre block"
@@ -138,34 +140,29 @@ protected
 
 equation
   connect(yPla, yPla)
-    annotation (Line(points={{180,0},{180,0}},
-      color={255,0,255}));
+    annotation (Line(points={{180,0},{180,0}}, color={255,0,255}));
   connect(greThr.y, not1.u)
-    annotation (Line(points={{-98,-110},{-12,-110}},
-      color={255,0,255}));
-  connect(hys.u, addPar.y)
-    annotation (Line(points={{-122,-50},{-128,-50}},
-      color={0,0,127}));
+    annotation (Line(points={{-98,-110},{-12,-110}}, color={255,0,255}));
+  connect(hys.u, addPar.y) annotation (Line(points={{-122,-50},{-128,-50}}, color={0,0,127}));
   connect(not3.y, tim1.u)
     annotation (Line(points={{-48,-30},{-42,-30}}, color={255,0,255}));
   connect(not4.y, tim2.u)
-    annotation (Line(points={{2,60},{8,60}}, color={255,0,255}));
+    annotation (Line(points={{2,70},{8,70}}, color={255,0,255}));
   connect(not2.u, hys.y) annotation (Line(points={{-12,-70},{-20,-70},{-20,-50},
   {-98,-50}}, color={255,0,255}));
   connect(intGreThr.y, not3.u) annotation (Line(points={{-98,50},{-80,50},{-80,-30},
   {-72,-30}}, color={255,0,255}));
-  connect(pre1.y, not4.u) annotation (Line(points={{-38,50},{-30,50},{-30,60},{-22,
-          60}},
-        color={255,0,255}));
+  connect(pre1.y, not4.u) annotation (Line(points={{-38,50},{-30,50},{-30,70},{-22,
+  70}}, color={255,0,255}));
   connect(greThr.y, mulAnd.u[1]) annotation (Line(points={{-98,-110},{-92,-110},
-          {-92,95.25},{-12,95.25}},
+          {-92,125.25},{78,125.25}},
                              color={255,0,255}));
   connect(hys.y, mulAnd.u[2]) annotation (Line(points={{-98,-50},{-86,-50},{-86,
-          91.75},{-12,91.75}},  color={255,0,255}));
-  connect(intGreThr.y, mulAnd.u[3]) annotation (Line(points={{-98,50},{-80,50},
-          {-80,88.25},{-12,88.25}}, color={255,0,255}));
-  connect(mulAnd.y, lat.u) annotation (Line(points={{12,90},{110,90},{110,0},{118,
-          0}},      color={255,0,255}));
+          121.75},{78,121.75}}, color={255,0,255}));
+  connect(intGreThr.y, mulAnd.u[3]) annotation (Line(points={{-98,50},{-80,50},{
+          -80,118.25},{78,118.25}}, color={255,0,255}));
+  connect(mulAnd.y, lat.u) annotation (Line(points={{102,120},{110,120},{110,0},
+          {118,0}}, color={255,0,255}));
   connect(and2.y, lat.clr) annotation (Line(points={{102,-30},{110,-30},{110,-6},
           {118,-6}}, color={255,0,255}));
   connect(not2.y, mulOr.u[1]) annotation (Line(points={{12,-70},{20,-70},{20,
@@ -176,8 +173,7 @@ equation
   connect(mulOr.y, and2.u2) annotation (Line(points={{52,-70},{70,-70},{70,-38},
           {78,-38}}, color={255,0,255}));
   connect(intGreThr.u, supResReq)
-    annotation (Line(points={{-122,50},{-180,50}},
-      color={255,127,0}));
+    annotation (Line(points={{-122,50},{-180,50}}, color={255,127,0}));
   connect(addPar.u, TOut)
     annotation (Line(points={{-152,-50},{-180,-50}}, color={0,0,127}));
   connect(lat.y, yPla)
@@ -188,64 +184,51 @@ equation
           10}}, color={255,0,255}));
   connect(enaSch.y[1], greThr.u)
     annotation (Line(points={{-128,-110},{-122,-110}}, color={0,0,127}));
-  connect(tim.passed, and2.u1) annotation (Line(points={{32,2},{70,2},{70,-30},
-          {78,-30}},color={255,0,255}));
+  connect(tim2.passed, mulAnd.u[4]) annotation (Line(points={{32,62},{60,62},{60,
+          114},{78,114},{78,114.75}}, color={255,0,255}));
+  connect(tim.passed, and2.u1) annotation (Line(points={{32,2},{70,2},{70,-30},{
+          78,-30}}, color={255,0,255}));
   connect(tim1.passed, mulOr.u[3]) annotation (Line(points={{-18,-38},{20,-38},
           {20,-74.6667},{28,-74.6667}},color={255,0,255}));
-  connect(tim2.passed, mulAnd.u[4]) annotation (Line(points={{32,52},{50,52},{
-          50,110},{-20,110},{-20,84.75},{-12,84.75}}, color={255,0,255}));
   annotation (defaultComponentName = "plaEna",
-    Icon(graphics={
-      Rectangle(
-        extent={{-100,100},{100,-100}},
-        lineColor={0,0,0},
-        fillColor={255,255,255},
-        fillPattern=FillPattern.Solid,
-        lineThickness=0.1),
-      Rectangle(
-        extent={{-100,100},{100,-100}},
-        lineColor={28,108,200},
-        fillColor={255,255,255},
-        fillPattern=FillPattern.Solid,
-        lineThickness=5,
-        borderPattern=BorderPattern.Raised),
-      Text(
-        extent={{-120,146},{100,108}},
-        lineColor={0,0,255},
-        textString="%name"),
-      Ellipse(
-        extent={{-80,80},{80,-80}},
-        lineColor={28,108,200},
-        fillColor={170,255,213},
-        fillPattern=FillPattern.Solid),
-      Ellipse(
-        extent={{-90,90},{90,-90}},
-        lineColor={28,108,200}),
-      Rectangle(
-        extent={{-75,2},{75,-2}},
-        lineColor={28,108,200},
-        fillColor={28,108,200},
-        fillPattern=FillPattern.Solid),
-      Text(
-        extent={{-66,46},{76,10}},
-        lineColor={28,108,200},
-        textString="START"),
-      Text(
-        extent={{-66,-8},{76,-44}},
-        lineColor={28,108,200},
-        textString="STOP")},
-      coordinateSystem(
-        preserveAspectRatio=false,
-        extent={{-100,-100},{100,100}})),
-  Diagram(
-    coordinateSystem(preserveAspectRatio=false,
-    extent={{-160,-140},{160,140}})),
-  Documentation(
-    info="<html>
+  Icon(graphics={
+        Rectangle(
+          extent={{-100,100},{100,-100}},
+          lineColor={0,0,0},
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid,
+          lineThickness=0.1),
+        Rectangle(
+          extent={{-100,100},{100,-100}},
+          lineColor={28,108,200},
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid,
+          lineThickness=5,
+          borderPattern=BorderPattern.Raised),
+        Text(
+          extent={{-120,146},{100,108}},
+          lineColor={0,0,255},
+          textString="%name"),
+        Ellipse(extent={{-80,80},{80,-80}}, lineColor={28,108,200},fillColor={170,255,213},
+          fillPattern=FillPattern.Solid),
+        Ellipse(extent={{-90,90},{90,-90}}, lineColor={28,108,200}),
+        Rectangle(extent={{-75,2},{75,-2}}, lineColor={28,108,200},
+          fillColor={28,108,200},
+          fillPattern=FillPattern.Solid),
+        Text(
+          extent={{-66,46},{76,10}},
+          lineColor={28,108,200},
+          textString="START"),
+        Text(
+          extent={{-66,-8},{76,-44}},
+          lineColor={28,108,200},
+          textString="STOP")},
+          coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
+  Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-160,-140},{160,140}})),
+  Documentation(info="<html>
     <p>
-    Block that generates boiler plant enable signal according to ASHRAE RP-1711
-    Advanced Sequences of Operation for HVAC Systems Phase II – Central Plants
-    and Hydronic Systems (March 23, 2020), section 5.3.2.1, 5.3.2.2, and 5.3.2.3.
+    Block that generates boiler plant enable signal according to sections 5.3.2.1,
+    5.3.2.2, and 5.3.2.3 in RP-1711, March 2020 draft.
     </p>
     <p>
     The boiler plant should be enabled and disabled according to the following
@@ -253,13 +236,13 @@ equation
     </p>
     <ol>
     <li>
-    An enabling schedule should be included to allow operators to lock out the 
+    An enabling schedule should be included to allow operators to lock out the
     boiler plant during off-hour, e.g. to allow off-hour operation of HVAC systems
     except the boiler plant. The default schedule shall be 24/7 and be adjustable.
     </li>
     <li>
     The plant should be enabled when the plant has been continuously disabled
-    for at least <code>plaOffThrTim</code> and: 
+    for at least <code>plaOffThrTim</code> and:
     <ul>
     <li>
     Number of boiler plant requests <code>supResReq</code> is greater than
@@ -305,7 +288,7 @@ equation
     revisions="<html>
     <ul>
     <li>
-    May 18, 2020, by Karthik Devaprasad:<br/>
+    May 7, 2020, by Karthik Devaprasad:<br/>
     First implementation.
     </li>
     </ul>
