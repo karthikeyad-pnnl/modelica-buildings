@@ -1,6 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints;
-block MinimumFlowSetpoint
-    "Hot water minimum flow setpoint"
+block MinimumFlowSetPoint "Hot water minimum flow setpoint"
 
   parameter Integer nBoi(
     final min=1) = 3
@@ -296,7 +295,8 @@ protected
     "Timer for change of setpoint"
     annotation (Placement(transformation(extent={{228,-50},{248,-30}})));
 
-  Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel(final samplePeriod=0.1)
+  Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel(
+    final samplePeriod=1e-3)
     "Unit delay for Real signal"
     annotation (Placement(transformation(extent={{140,-120},{160,-100}})));
 
@@ -706,4 +706,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end MinimumFlowSetpoint;
+end MinimumFlowSetPoint;

@@ -1,10 +1,13 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Validation;
 model Controller "Validation model for boiler plant control sequence"
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Controller controller(primaryOnly=true,
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Controller_primaryOnly
+    controller(
+    primaryOnly=true,
     nBoi=2,
     boiTyp={Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler,
         Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler},
+
     nSta=3,
     staMat=[1,0; 0,1; 1,1],
     iniSta=0,
@@ -15,7 +18,7 @@ model Controller "Validation model for boiler plant control sequence"
     bypSetRat=0.00001,
     nPumPri=2,
     isHeadered=true,
-    TMinSupNonConBoi = 333.2,
+    TMinSupNonConBoi=333.2,
     variablePrimary=true,
     nSen_remoteDp=1,
     nPum_nominal=2,
@@ -24,6 +27,7 @@ model Controller "Validation model for boiler plant control sequence"
     VHotWat_flow_nominal=0.0006,
     boiDesFlo={0.0003,0.0003},
     speedControlType_priPum=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP,
+
     minPriPumSpeSta={0,0,0})
     annotation (Placement(transformation(extent={{0,-20},{42,20}})));
   CDL.Integers.Sources.Constant supResReq(k=4)
@@ -44,7 +48,8 @@ model Controller "Validation model for boiler plant control sequence"
   CDL.Continuous.Sources.Constant dPHotWat[1](k={34000})
     "Measured differential pressure between hot water supply and return"
     annotation (Placement(transformation(extent={{-60,-90},{-40,-70}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Controller controller1(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Controller_primaryOnly
+    controller1(
     primaryOnly=true,
     nBoi=2,
     boiTyp={Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler,
@@ -72,6 +77,7 @@ model Controller "Validation model for boiler plant control sequence"
 
     minPriPumSpeSta={0,0,0})
     annotation (Placement(transformation(extent={{120,-20},{162,20}})));
+
   CDL.Integers.Sources.Constant supResReq1(k=2)
     "Number of requests from heating load"
     annotation (Placement(transformation(extent={{60,60},{80,80}})));
@@ -96,7 +102,8 @@ model Controller "Validation model for boiler plant control sequence"
   CDL.Logical.Sources.Constant uBoiAva1[2](k={true,true})
     "Boiler availability status vector"
     annotation (Placement(transformation(extent={{60,-120},{80,-100}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Controller controller2(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Controller_primaryOnly
+    controller2(
     primaryOnly=true,
     nBoi=2,
     boiTyp={Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler,
@@ -124,6 +131,7 @@ model Controller "Validation model for boiler plant control sequence"
 
     minPriPumSpeSta={0,0,0})
     annotation (Placement(transformation(extent={{0,-240},{42,-200}})));
+
   CDL.Integers.Sources.Constant supResReq2(k=4)
     "Number of requests from heating load"
     annotation (Placement(transformation(extent={{-60,-160},{-40,-140}})));
@@ -147,49 +155,62 @@ model Controller "Validation model for boiler plant control sequence"
     annotation (Placement(transformation(extent={{-60,-340},{-40,-320}})));
 equation
   connect(supResReq.y, controller.supResReq) annotation (Line(points={{-38,70},
-          {-8,70},{-8,7.27273},{-2,7.27273}}, color={255,127,0}));
+          {-8,70},{-8,7.27273},{-1.68,7.27273}},
+                                              color={255,127,0}));
   connect(TOut.y, controller.TOut) annotation (Line(points={{-38,40},{-12,40},{
-          -12,3.63636},{-2,3.63636}}, color={0,0,127}));
-  connect(TSup.y, controller.TSup) annotation (Line(points={{-38,10},{-16,10},{-16,
-          1.77636e-15},{-2,1.77636e-15}},
+          -12,3.63636},{-1.68,3.63636}},
+                                      color={0,0,127}));
+  connect(TSup.y, controller.TSup) annotation (Line(points={{-38,10},{-16,10},{
+          -16,1.77636e-15},{-1.68,1.77636e-15}},
                       color={0,0,127}));
   connect(TRet.y, controller.TRet) annotation (Line(points={{-38,-20},{-32,-20},
-          {-32,-3.63636},{-2,-3.63636}},
+          {-32,-3.63636},{-1.68,-3.63636}},
                              color={0,0,127}));
-  connect(dPHotWat.y, controller.dpHotWat_remote) annotation (Line(points={{-38,
-          -80},{-20,-80},{-20,-10.9091},{-2,-10.9091}}, color={0,0,127}));
-  connect(VHotWat_flow[4].y, controller.VHotWat_flow) annotation (Line(points={
-          {-38,-50},{-26,-50},{-26,-7.27273},{-2,-7.27273}}, color={0,0,127}));
+  connect(dPHotWat.y, controller.dpHotWat_remote) annotation (Line(points={{-38,-80},
+          {-20,-80},{-20,-10.9091},{-1.68,-10.9091}},   color={0,0,127}));
+  connect(VHotWat_flow[4].y, controller.VHotWat_flow) annotation (Line(points={{-38,-50},
+          {-26,-50},{-26,-7.27273},{-1.68,-7.27273}},        color={0,0,127}));
   connect(supResReq1.y, controller1.supResReq) annotation (Line(points={{82,70},
-          {112,70},{112,7.27273},{118,7.27273}}, color={255,127,0}));
+          {112,70},{112,7.27273},{118.32,7.27273}},
+                                                 color={255,127,0}));
   connect(TOut1.y, controller1.TOut) annotation (Line(points={{82,40},{108,40},
-          {108,3.63636},{118,3.63636}}, color={0,0,127}));
+          {108,3.63636},{118.32,3.63636}},
+                                        color={0,0,127}));
   connect(TSup1.y, controller1.TSup) annotation (Line(points={{82,10},{104,10},
-          {104,0},{118,0}}, color={0,0,127}));
+          {104,0},{118.32,0}},
+                            color={0,0,127}));
   connect(TRet1.y, controller1.TRet) annotation (Line(points={{82,-20},{88,-20},
-          {88,-3.63636},{118,-3.63636}}, color={0,0,127}));
-  connect(dPHotWat1.y, controller1.dpHotWat_remote) annotation (Line(points={{
-          82,-80},{100,-80},{100,-10.9091},{118,-10.9091}}, color={0,0,127}));
+          {88,-3.63636},{118.32,-3.63636}},
+                                         color={0,0,127}));
+  connect(dPHotWat1.y, controller1.dpHotWat_remote) annotation (Line(points={{82,-80},
+          {100,-80},{100,-10.9091},{118.32,-10.9091}},      color={0,0,127}));
   connect(uBoiAva.y, controller.uBoiAva) annotation (Line(points={{-38,-110},{
-          -8,-110},{-8,-14.5455},{-2,-14.5455}}, color={255,0,255}));
+          -8,-110},{-8,-14.5455},{-1.68,-14.5455}},
+                                                 color={255,0,255}));
   connect(uBoiAva1.y, controller1.uBoiAva) annotation (Line(points={{82,-110},{
-          112,-110},{112,-14.5455},{118,-14.5455}}, color={255,0,255}));
-  connect(VHotWat_flow1[1].y, controller1.VHotWat_flow) annotation (Line(points
-        ={{82,-50},{94,-50},{94,-7.27273},{118,-7.27273}}, color={0,0,127}));
+          112,-110},{112,-14.5455},{118.32,-14.5455}},
+                                                    color={255,0,255}));
+  connect(VHotWat_flow1[1].y, controller1.VHotWat_flow) annotation (Line(points={{82,-50},
+          {94,-50},{94,-7.27273},{118.32,-7.27273}},       color={0,0,127}));
   connect(supResReq2.y, controller2.supResReq) annotation (Line(points={{-38,
-          -150},{-8,-150},{-8,-212.727},{-2,-212.727}}, color={255,127,0}));
+          -150},{-8,-150},{-8,-212.727},{-1.68,-212.727}},
+                                                        color={255,127,0}));
   connect(TOut2.y, controller2.TOut) annotation (Line(points={{-38,-180},{-12,
-          -180},{-12,-216.364},{-2,-216.364}}, color={0,0,127}));
+          -180},{-12,-216.364},{-1.68,-216.364}},
+                                               color={0,0,127}));
   connect(TSup2.y, controller2.TSup) annotation (Line(points={{-38,-210},{-16,
-          -210},{-16,-220},{-2,-220}}, color={0,0,127}));
+          -210},{-16,-220},{-1.68,-220}},
+                                       color={0,0,127}));
   connect(TRet2.y, controller2.TRet) annotation (Line(points={{-38,-240},{-32,
-          -240},{-32,-223.636},{-2,-223.636}}, color={0,0,127}));
-  connect(dPHotWat2.y, controller2.dpHotWat_remote) annotation (Line(points={{
-          -38,-300},{-20,-300},{-20,-230.909},{-2,-230.909}}, color={0,0,127}));
-  connect(VHotWat_flow2[4].y, controller2.VHotWat_flow) annotation (Line(points
-        ={{-38,-270},{-26,-270},{-26,-227.273},{-2,-227.273}}, color={0,0,127}));
+          -240},{-32,-223.636},{-1.68,-223.636}},
+                                               color={0,0,127}));
+  connect(dPHotWat2.y, controller2.dpHotWat_remote) annotation (Line(points={{-38,
+          -300},{-20,-300},{-20,-230.909},{-1.68,-230.909}},  color={0,0,127}));
+  connect(VHotWat_flow2[4].y, controller2.VHotWat_flow) annotation (Line(points={{-38,
+          -270},{-26,-270},{-26,-227.273},{-1.68,-227.273}},   color={0,0,127}));
   connect(uBoiAva2.y, controller2.uBoiAva) annotation (Line(points={{-38,-330},
-          {-8,-330},{-8,-234.545},{-2,-234.545}}, color={255,0,255}));
+          {-8,-330},{-8,-234.545},{-1.68,-234.545}},
+                                                  color={255,0,255}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-380},{180,
             100}}),

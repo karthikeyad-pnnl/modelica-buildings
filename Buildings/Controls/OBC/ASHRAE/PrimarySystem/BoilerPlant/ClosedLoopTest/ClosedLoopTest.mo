@@ -39,10 +39,12 @@ model ClosedLoopTest "Closed loop testing model"
 
   PlantModel.BoilerPlant boilerPlant(TRadRet_nominal=273.15 + 50)
     annotation (Placement(transformation(extent={{42,-10},{62,10}})));
-  Controller controller(primaryOnly=true,
+  Controller_primaryOnly controller(
+    primaryOnly=true,
     nBoi=2,
     boiTyp={Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler,
         Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler},
+
     nSta=3,
     staMat=[1,0; 0,1; 1,1],
     boiDesCap={15000*0.8,15000*0.8},
@@ -52,7 +54,7 @@ model ClosedLoopTest "Closed loop testing model"
     bypSetRat=0.000005,
     nPumPri=2,
     isHeadered=true,
-    TMinSupNonConBoi = 333.2,
+    TMinSupNonConBoi=333.2,
     k_bypVal=1,
     Ti_bypVal=50,
     Td_bypVal=0,
@@ -69,6 +71,7 @@ model ClosedLoopTest "Closed loop testing model"
     Ti_priPum=90,
     Td_priPum=3,
     speedControlType_priPum=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP,
+
     minPriPumSpeSta={0,0,0})
     annotation (Placement(transformation(extent={{-52,-20},{-10,20}})));
 
