@@ -7,11 +7,8 @@ block HWIsoVal
 
   parameter Real chaHotWatIsoRat(
     final unit="1/s",
-    final displayUnit="1/s") = 1/60
-    "Rate at which to slowly change isolation valve, should be determined in the field";
-
-  parameter Real endValPos
-    "Ending valve position, if it needs to turn on boiler, the value should be 1";
+    displayUnit="1/s") = 1/60
+    "Rate at which to slowly close isolation valve, should be determined in the field";
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uUpsDevSta
     "Status of device reset before enabling or disabling isolation valve"
@@ -36,9 +33,9 @@ block HWIsoVal
     annotation (Placement(transformation(extent={{-200,-120},{-160,-80}}),
       iconTransformation(extent={{-140,30},{-100,70}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yEnaHotWatIsoVal
-    "Status of hot water isolation valve control: true=enabled valve is fully open"
-    annotation (Placement(transformation(extent={{180,120},{220,160}}),
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yDisHotWatIsoVal
+    "Status of hot water isolation valve control: true=disabled valve is fully closed"
+   annotation (Placement(transformation(extent={{180,120},{220,160}}),
       iconTransformation(extent={{100,40},{140,80}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yHotWatIsoVal[nBoi](
@@ -49,23 +46,22 @@ block HWIsoVal
     annotation (Placement(transformation(extent={{180,-60},{220,-20}}),
       iconTransformation(extent={{100,-80},{140,-40}})));
 
-  CDL.Routing.RealExtractor extIndSig(nin=nBoi)
-    "Identify isolation valve position for boiler being disabled"
-    annotation (Placement(transformation(extent={{-100,40},{-80,60}})));
-  CDL.Continuous.AddParameter addPar(p=1e-6,
-                                          k=1/chaHotWatIsoRat)
-    "Determine time required to change valve position"
-    annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
-  CDL.Continuous.Greater gre
-    annotation (Placement(transformation(extent={{60,110},{80,130}})));
-//protected
+protected
   final parameter Integer boiInd[nBoi]={i for i in 1:nBoi}
     "Boiler index, {1,2,...,nBoi}";
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con8(
-    final k=endValPos)
-    "Ending valve position"
-    annotation (Placement(transformation(extent={{0,40},{20,60}})));
+  Buildings.Controls.OBC.CDL.Routing.RealExtractor extIndSig(nin=nBoi)
+    "Identify isolation valve position for boiler being disabled"
+    annotation (Placement(transformation(extent={{-100,40},{-80,60}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
+    final p=1e-6,
+    final k=1/chaHotWatIsoRat)
+    "Determine time required to change valve position"
+    annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.Greater gre
+    annotation (Placement(transformation(extent={{60,110},{80,130}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con9(
     final k=0)
@@ -171,9 +167,6 @@ equation
     annotation (Line(points={{22,100},{30,100},{30,88},{38,88}},
       color={0,0,127}));
 
-  connect(con8.y, lin1.f2)
-    annotation (Line(points={{22,50},{30,50},{30,72},{38,72}}, color={0,0,127}));
-
   connect(tim.y, lin1.u)
     annotation (Line(points={{-78,80},{38,80}}, color={0,0,127}));
 
@@ -265,7 +258,7 @@ equation
     annotation (Line(points={{102,220},{120,220},{120,148},{138,148}},
       color={255,0,255}));
 
-  connect(and5.y,yEnaHotWatIsoVal)
+  connect(and5.y,yDisHotWatIsoVal)
     annotation (Line(points={{162,140},{200,140}}, color={255,0,255}));
 
   connect(or2.y, mulAnd1.u)
@@ -290,24 +283,36 @@ equation
 
   connect(nexChaBoi, extIndSig.index)
     annotation (Line(points={{-180,0},{-90,0},{-90,38}}, color={255,127,0}));
+
   connect(extIndSig.y, lin1.f1) annotation (Line(points={{-78,50},{-50,50},{-50,
           84},{38,84}}, color={0,0,127}));
+
   connect(addPar.y, lin1.x2) annotation (Line(points={{-18,50},{-10,50},{-10,76},
           {38,76}}, color={0,0,127}));
+
   connect(extIndSig.y, addPar.u)
     annotation (Line(points={{-78,50},{-42,50}}, color={0,0,127}));
+
   connect(tim.y, gre.u1) annotation (Line(points={{-78,80},{-60,80},{-60,120},{58,
           120}}, color={0,0,127}));
+
   connect(addPar.y, gre.u2) annotation (Line(points={{-18,50},{-10,50},{-10,76},
           {34,76},{34,112},{58,112}}, color={0,0,127}));
+
   connect(gre.y, and5.u3) annotation (Line(points={{82,120},{120,120},{120,132},
           {138,132}}, color={255,0,255}));
+
   connect(uHotWatIsoVal, extIndSig.u) annotation (Line(points={{-180,-100},{
           -110,-100},{-110,50},{-102,50}}, color={0,0,127}));
+
   connect(uHotWatIsoVal, swi2.u3) annotation (Line(points={{-180,-100},{40,-100},
           {40,-18},{58,-18}}, color={0,0,127}));
+
   connect(uHotWatIsoVal, swi1.u3) annotation (Line(points={{-180,-100},{40,-100},
           {40,-68},{58,-68}}, color={0,0,127}));
+
+  connect(con9.y, lin1.f2) annotation (Line(points={{22,100},{30,100},{30,72},{38,
+          72}}, color={0,0,127}));
 annotation (
   defaultComponentName="enaHotWatIsoVal",
   Diagram(
@@ -380,36 +385,24 @@ annotation (
         textString="yHotWatIsoVal")}),
   Documentation(info="<html>
   <p>
-  Block updates boiler hot water isolation valve enabling-disabling status when 
+  Block updates boiler hot water isolation valve position when 
   there is stage change command (<code>chaPro=true</code>). It will also generate 
-  status to indicate if the valve reset process has finished.
+  status <code>yDisHotWatIsoVal=true</code> to indicate if the valve reset process has finished.
   This block is not based on any specific section in RP-1711, but has been designed
-  to carry out the hot water isolation valve operations in the staging sequences
-  defined in 5.3.3.
+  to carry out the hot water isolation valve operations in the plant disable sequences
+  defined in 5.3.2.5.
   </p>
   <ul>
   <li>
-  When there is stage up command (<code>chaPro=true</code>) and next boiler has 
-  been enabled (<code>uUpsDevSta=true</code>), the hot water isolation valve of
-  next enabling boiler indicated by <code>nexChaBoi</code> will be enabled 
-  (<code>iniValPos=0</code>, <code>endValPos=1</code>). 
-  </li>
-  <li>
-  When there is stage down command (<code>chaPro=true</code>) and the disabling
-  boiler (<code>nexChaBoi</code>) or its associated pump has been shut off 
-  (<code>uUpsDevSta=true</code>), the boiler's isolation valve will be disabled
-  (<code>iniValPos=1</code>, <code>endValPos=0</code>).
+  When there is a plant disable command (<code>chaPro=true</code>) and the boiler 
+  being diabled (<code>nexChaBoi</code>) has been shut off (<code>uUpsDevSta=true</code>), 
+  the boiler's isolation valve will be fully closed at a rate of change of position 
+  <code>chaHotWatIsoRat</code>.
   </li>
   </ul>
   <p>
-  The valve opens or closes in a time period <code>chaHotWatIsoTim</code>, which
-  can be defined as per the valve specification. 
-  </p>
-  <p>
   This sequence will generate array <code>yHoyWatIsoVal</code> which indicates 
-  hot water isolation valve position setpoint. <code>yEnaHotWatIsoVal</code> 
-  will be true when all the enabled valves are fully open and all the disabled valves
-  are fully closed. 
+  hot water isolation valve position.
   </p>
   </html>", revisions="<html>
   <ul>

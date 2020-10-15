@@ -1,5 +1,5 @@
 BypassValvePosition
-HotWaterSupplyTemperatureReset
-PumpSpeed
 CondensationControl
+HotWaterSupplyTemperatureReset
 MinimumFlowSetpoint
+PumpSpeed

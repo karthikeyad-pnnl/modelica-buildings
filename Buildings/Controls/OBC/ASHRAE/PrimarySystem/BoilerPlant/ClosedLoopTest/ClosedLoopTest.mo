@@ -6,6 +6,12 @@ model ClosedLoopTest "Closed loop testing model"
   replaceable package MediumW =
       Buildings.Media.Water "Medium model";
 
+  parameter Real TSet(
+    final unit="K",
+    displayUnit="degC",
+    final quantity="ThermodynamicTemperature") = 273.15+21.11
+    "Temperature setpoint for zone";
+
 //----------------------------------------------------------------------------//
 
 //----------------------------------------------------------------------------//
@@ -33,10 +39,12 @@ model ClosedLoopTest "Closed loop testing model"
 
   PlantModel.BoilerPlant boilerPlant(TRadRet_nominal=273.15 + 50)
     annotation (Placement(transformation(extent={{42,-10},{62,10}})));
-  Controller controller(primaryOnly=true,
+  Controller_primaryOnly controller(
+    primaryOnly=true,
     nBoi=2,
     boiTyp={Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler,
         Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler},
+
     nSta=3,
     staMat=[1,0; 0,1; 1,1],
     boiDesCap={15000*0.8,15000*0.8},
@@ -46,7 +54,7 @@ model ClosedLoopTest "Closed loop testing model"
     bypSetRat=0.000005,
     nPumPri=2,
     isHeadered=true,
-    TMinSupNonConBoi = 333.2,
+    TMinSupNonConBoi=333.2,
     k_bypVal=1,
     Ti_bypVal=50,
     Td_bypVal=0,
@@ -63,13 +71,14 @@ model ClosedLoopTest "Closed loop testing model"
     Ti_priPum=90,
     Td_priPum=3,
     speedControlType_priPum=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP,
+
     minPriPumSpeSta={0,0,0})
     annotation (Placement(transformation(extent={{-52,-20},{-10,20}})));
 
   CDL.Continuous.PID conPID(controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.P,
       k=1)
     annotation (Placement(transformation(extent={{50,50},{70,70}})));
-  CDL.Continuous.Sources.Constant con(k=273.15 + 24)
+  CDL.Continuous.Sources.Constant con(k=273.15 + 21.11)
     "Zone temperature setpoint"
     annotation (Placement(transformation(extent={{10,50},{30,70}})));
   CDL.Continuous.Add add2(k2=-1)
@@ -119,23 +128,22 @@ equation
   connect(reaToInt.y, controller.supResReq) annotation (Line(points={{92,-50},{
           96,-50},{96,-64},{-64,-64},{-64,7.27273},{-53.68,7.27273}},
                                                       color={255,127,0}));
-  connect(boilerPlant.yZonTem, conPID.u_m) annotation (Line(points={{64,6},{80,6},
+  connect(boilerPlant.yZonTem, conPID.u_m) annotation (Line(points={{64,8},{80,8},
           {80,28},{60,28},{60,48}}, color={0,0,127}));
-  connect(boilerPlant.yZonTem, add2.u2) annotation (Line(points={{64,6},{80,6},{
+  connect(boilerPlant.yZonTem, add2.u2) annotation (Line(points={{64,8},{80,8},{
           80,-30},{30,-30},{30,-56},{38,-56}}, color={0,0,127}));
-  connect(boilerPlant.ySupTem, controller.TSup) annotation (Line(points={{64,2},{
-          100,2},{100,-68},{-68,-68},{-68,1.77636e-15},{-53.68,1.77636e-15}},
+  connect(boilerPlant.ySupTem, controller.TSup) annotation (Line(points={{64,4},{
+          100,4},{100,-68},{-68,-68},{-68,1.77636e-15},{-53.68,1.77636e-15}},
                                                         color={0,0,127}));
-  connect(boilerPlant.yRetTem, controller.TRet) annotation (Line(points={{64,-2},
-          {104,-2},{104,-72},{-72,-72},{-72,-3.63636},{-53.68,-3.63636}},
+  connect(boilerPlant.yRetTem, controller.TRet) annotation (Line(points={{64,0},{
+          104,0},{104,-72},{-72,-72},{-72,-3.63636},{-53.68,-3.63636}},
                                                            color={0,0,127}));
   connect(boilerPlant.yHotWatDp, controller.dpHotWat_remote) annotation (Line(
-        points={{64,-6},{108,-6},{108,-76},{-76,-76},{-76,-10.9091},{-53.68,
-          -10.9091}},
+        points={{64,-4},{108,-4},{108,-76},{-76,-76},{-76,-10.9091},{-53.68,-10.9091}},
         color={0,0,127}));
   connect(boilerPlant.VHotWat_flow, controller.VHotWat_flow) annotation (Line(
-        points={{64,-9},{112,-9},{112,-80},{-80,-80},{-80,-7.27273},{-53.68,
-          -7.27273}},                                                    color={
+        points={{64,-8},{112,-8},{112,-80},{-80,-80},{-80,-7.27273},{-53.68,-7.27273}},
+                                                                         color={
           0,0,127}));
   connect(con3.y, controller.uBoiAva) annotation (Line(points={{-38,-50},{-30,
           -50},{-30,-30},{-60,-30},{-60,-14.5455},{-53.68,-14.5455}},
@@ -278,7 +286,7 @@ First implementation.
      "modelica://Buildings/Resources/Scripts/Dymola/Examples/Tutorial/Boiler/System6.mos"
         "Simulate and plot"),
     experiment(
-      StopTime=6000,
+      StopTime=86400,
       Tolerance=1e-06,
       __Dymola_Algorithm="Cvode"),
     Icon(coordinateSystem(extent={{-100,-100},{180,100}})));
