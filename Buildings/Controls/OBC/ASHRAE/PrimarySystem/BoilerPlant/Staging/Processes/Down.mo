@@ -93,7 +93,7 @@ block Down
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uStaSet
     "Boiler stage setpoint index"
     annotation (Placement(transformation(extent={{-280,-100},{-240,-60}}),
-      iconTransformation(extent={{-140,-160},{-100,-120}})));
+      iconTransformation(extent={{-140,-120},{-100,-80}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput VMinHotWatSet_flow(
     final quantity="VolumeFlowRate",
@@ -161,6 +161,9 @@ block Down
     annotation (Placement(transformation(extent={{280,-90},{320,-50}}),
       iconTransformation(extent={{100,20},{140,60}})));
 
+  CDL.Interfaces.BooleanInput uPlaEna "Plant enable signal" annotation (
+      Placement(transformation(extent={{-280,-150},{-240,-110}}),
+        iconTransformation(extent={{-140,-160},{-100,-120}})));
 protected
   Buildings.Controls.OBC.CDL.Logical.Sources.Constant con(
     final k=true) if primaryOnly
@@ -522,6 +525,8 @@ equation
           {110,-180},{110,-150},{184,-150},{184,-8},{188,-8}}, color={255,0,255}));
   connect(nexBoi.yLasDisBoi, yLasDisBoi) annotation (Line(points={{-148,-70},{
           60,-70},{60,-90},{250,-90},{250,-190},{300,-190}}, color={255,127,0}));
+  connect(uPlaEna, nexBoi.uPlaEna) annotation (Line(points={{-260,-130},{-180,
+          -130},{-180,-64},{-172,-64}}, color={255,0,255}));
 annotation (
   defaultComponentName="dowProCon",
   Diagram(coordinateSystem(preserveAspectRatio=false,

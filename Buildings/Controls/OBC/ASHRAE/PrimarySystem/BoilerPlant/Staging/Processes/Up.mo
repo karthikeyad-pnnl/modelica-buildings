@@ -579,6 +579,8 @@ equation
   connect(hotWatSupTemRes.yHotWatSupTemRes, edg1.u) annotation (Line(points={{-148,
           -20},{-136,-20},{-136,-150},{-110,-150},{-110,-250},{-102,-250}},
         color={255,0,255}));
+  connect(uPlaEna, nexBoi.uPlaEna) annotation (Line(points={{-260,-130},{-226,
+          -130},{-226,-58},{-172,-58}}, color={255,0,255}));
 annotation (
   defaultComponentName="upProCon",
   Diagram(coordinateSystem(preserveAspectRatio=false,

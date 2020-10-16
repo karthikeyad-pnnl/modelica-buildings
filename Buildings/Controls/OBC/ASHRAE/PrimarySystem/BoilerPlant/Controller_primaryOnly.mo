@@ -952,8 +952,9 @@ equation
   connect(staSetCon.ySta, upProCon.uStaSet) annotation (Line(points={{-78,4},{
           20,4},{20,85.0909},{118,85.0909}},
                                 color={255,127,0}));
-  connect(staSetCon.ySta, dowProCon.uStaSet) annotation (Line(points={{-78,4},{20,
-          4},{20,26},{118,26}}, color={255,127,0}));
+  connect(staSetCon.ySta, dowProCon.uStaSet) annotation (Line(points={{-78,4},{
+          20,4},{20,30},{118,30}},
+                                color={255,127,0}));
   connect(staSetCon.yStaTyp, upProCon.uStaTyp) annotation (Line(points={{-78,8},
           {24,8},{24,88.7273},{118,88.7273}},
                                     color={255,127,0}));
@@ -1184,6 +1185,8 @@ equation
           -126},{214,-126},{214,66},{238,66}}, color={255,0,255}));
   connect(plaEna.yPla, priPumCon.uPlaEna) annotation (Line(points={{-158,-10},{-130,
           -10},{-130,-78},{90,-78},{90,-119},{118,-119}}, color={255,0,255}));
+  connect(plaEna.yPla, dowProCon.uPlaEna) annotation (Line(points={{-158,-10},{
+          -126,-10},{-126,100},{70,100},{70,26},{118,26}}, color={255,0,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-200,
             -200},{300,240}})),                                  Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-200,-200},{300,

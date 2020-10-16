@@ -45,7 +45,7 @@ block NextBoiler
     annotation (Placement(transformation(extent={{220,-180},{260,-140}}),
       iconTransformation(extent={{100,-110},{140,-70}})));
 
-protected
+// protected
   parameter Integer boiInd[nBoi]={i for i in 1:nBoi}
     "Boiler index, {1,2,...,n}";
 
@@ -157,7 +157,7 @@ protected
   Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
     final nout=nBoi)
     "Replicate boolean input"
-    annotation (Placement(transformation(extent={{-154,-170},{-134,-150}})));
+    annotation (Placement(transformation(extent={{-130,-170},{-110,-150}})));
 
   Buildings.Controls.OBC.CDL.Logical.Edge edg[nBoi]
     "Detect boilers being turned on"
@@ -167,16 +167,28 @@ protected
     "Detect boilers being turned off"
     annotation (Placement(transformation(extent={{-200,-110},{-180,-90}})));
 
+  CDL.Interfaces.BooleanInput                        uPlaEna
+    "Plant enable signal"
+    annotation (Placement(transformation(extent={{-260,-70},{-220,-30}}),
+      iconTransformation(extent={{-140,0},{-100,40}})));
+  CDL.Routing.BooleanReplicator                        booRep1(final nout=nBoi)
+    "Replicate boolean input"
+    annotation (Placement(transformation(extent={{-200,-60},{-180,-40}})));
+  CDL.Logical.And enaDis1[nBoi]
+    "Check if enabling and disabling boilers at the same process"
+    annotation (Placement(transformation(extent={{-172,30},{-152,50}})));
+  CDL.Logical.And enaDis2[nBoi]
+    "Check if enabling and disabling boilers at the same process"
+    annotation (Placement(transformation(extent={{-170,-110},{-150,-90}})));
 equation
 
-  connect(chaPro, endPro.u)
-    annotation (Line(points={{-240,-160},{-212,-160}}, color={255,0,255}));
+  connect(booRep.y,enaBoi. clr) annotation (Line(points={{-108,-160},{-100,-160},
+          {-100,-140},{-130,-140},{-130,34},{-122,34}},
+                                  color={255,0,255}));
 
-  connect(booRep.y,enaBoi. clr) annotation (Line(points={{-132,-160},{-130,-160},
-          {-130,34},{-122,34}},   color={255,0,255}));
-
-  connect(booRep.y,disBoi. clr) annotation (Line(points={{-132,-160},{-130,-160},
-          {-130,-106},{-122,-106}}, color={255,0,255}));
+  connect(booRep.y,disBoi. clr) annotation (Line(points={{-108,-160},{-100,-160},
+          {-100,-140},{-130,-140},{-130,-106},{-122,-106}},
+                                    color={255,0,255}));
 
   connect(enaBoi.y,anyEnaBoi. u) annotation (Line(points={{-98,40},{-90,40},{-90,
           -20},{-82,-20}},color={255,0,255}));
@@ -283,27 +295,34 @@ equation
   connect(proInt7.y,yEnaSmaBoi)
     annotation (Line(points={{202,-160},{240,-160}}, color={255,127,0}));
 
-  connect(falEdg.y, disBoi.u)
-    annotation (Line(points={{-178,-100},{-122,-100}}, color={255,0,255}));
-
   connect(falEdg.u, uBoiSet) annotation (Line(points={{-202,-100},{-212,-100},{
           -212,0},{-240,0}}, color={255,0,255}));
 
   connect(edg.u, uBoiSet) annotation (Line(points={{-202,40},{-212,40},{-212,0},
           {-240,0}}, color={255,0,255}));
 
-  connect(edg.y, enaBoi.u)
-    annotation (Line(points={{-178,40},{-122,40}}, color={255,0,255}));
-
+  connect(chaPro, endPro.u)
+    annotation (Line(points={{-240,-160},{-212,-160}}, color={255,0,255}));
   connect(endPro.y, booRep.u)
-    annotation (Line(points={{-188,-160},{-156,-160}}, color={255,0,255}));
-
-  connect(endPro.y, dowPro.clr) annotation (Line(points={{-188,-160},{-160,-160},
-          {-160,84},{-122,84}}, color={255,0,255}));
-
-  connect(endPro.y, upPro.clr) annotation (Line(points={{-188,-160},{-160,-160},
-          {-160,154},{-122,154}}, color={255,0,255}));
-
+    annotation (Line(points={{-188,-160},{-132,-160}}, color={255,0,255}));
+  connect(endPro.y, upPro.clr) annotation (Line(points={{-188,-160},{-136,-160},
+          {-136,154},{-122,154}}, color={255,0,255}));
+  connect(endPro.y, dowPro.clr) annotation (Line(points={{-188,-160},{-136,-160},
+          {-136,84},{-122,84}}, color={255,0,255}));
+  connect(uPlaEna, booRep1.u)
+    annotation (Line(points={{-240,-50},{-202,-50}}, color={255,0,255}));
+  connect(edg.y, enaDis1.u1)
+    annotation (Line(points={{-178,40},{-174,40}}, color={255,0,255}));
+  connect(booRep1.y, enaDis1.u2) annotation (Line(points={{-178,-50},{-176,-50},
+          {-176,32},{-174,32}}, color={255,0,255}));
+  connect(enaDis1.y, enaBoi.u)
+    annotation (Line(points={{-150,40},{-122,40}}, color={255,0,255}));
+  connect(falEdg.y, enaDis2.u1)
+    annotation (Line(points={{-178,-100},{-172,-100}}, color={255,0,255}));
+  connect(booRep1.y, enaDis2.u2) annotation (Line(points={{-178,-50},{-176,-50},
+          {-176,-108},{-172,-108}}, color={255,0,255}));
+  connect(enaDis2.y, disBoi.u)
+    annotation (Line(points={{-148,-100},{-122,-100}}, color={255,0,255}));
 annotation (
   defaultComponentName="nexBoi",
   Diagram(coordinateSystem(preserveAspectRatio=false,

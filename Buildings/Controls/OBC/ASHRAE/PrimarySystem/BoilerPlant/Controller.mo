@@ -2,32 +2,42 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant;
 model Controller
     "Boiler plant controller"
 
-  parameter Boolean primaryOnly = false
+  parameter Boolean have_priOnl = false
     "Is the boiler plant a primary-only, condensing boiler plant?"
     annotation(Dialog(tab="General", group="Boiler plant configuration parameters"));
 
-  parameter Boolean isHeadered = true
-    "True: Headered hot water pumps;
-     False: Dedicated hot water pumps"
+  parameter Boolean have_heaPriPum = true
+    "True: Headered primary hot water pumps;
+     False: Dedicated primary hot water pumps"
     annotation(Dialog(tab="General", group="Boiler plant configuration parameters"));
 
-  parameter Boolean variablePrimary = false
+  parameter Boolean have_varPriPum = false
     "True: Variable-speed primary pumps;
      False: Fixed-speed primary pumps"
     annotation(Dialog(tab="General", group="Boiler plant configuration parameters"));
 
-  parameter Boolean primarySecondaryFlowSensors=false "True: Flowrate sensors in primary and secondary loops;
-     False: Flowrate sensor in decoupler";
+  parameter Boolean have_secFloSen=false
+    "True: Flowrate sensor in secondary loop;
+    False: Flowrate sensor in decoupler"
+    annotation(Dialog(tab="General",
+      group="Boiler plant configuration parameters",
+      enable = not have_priOnl));
 
-  parameter Boolean primarySecondaryTemperatureSensors=false "True: Temperature sensors in primary and secondary loops;
-     False: Temperature sensors in boiler supply and secondary loop"
-     annotation (Dialog(tab="Primary pump control parameters",
-       group="Temperature-based speed regulation",
-       enable = speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
+  parameter Boolean have_priSecTemSen=false
+    "True: Temperature sensors in primary and secondary loops;
+    False: Temperature sensors in boiler supply and secondary loop"
+    annotation (Dialog(tab="Primary pump control parameters",
+      group="General parameters",
+      enable = speConTypPri == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
+
+  parameter Boolean have_varSecPum = false
+    "True: Variable-speed secondary pumps;
+    False: Fixed-speed secondary pumps"
+    annotation (Dialog(group="Boiler plant configuration parameters"));
 
   parameter Integer nIgnReq(
     final min=0) = 0
-    "Number of hot-water requests to be ignored before enablng boiler plant loop"
+    "Number of hot-water requests to be ignored before enabling boiler plant loop"
     annotation(dialog(tab="Plant enable/disable parameters"));
 
   parameter Integer nSchRow(
@@ -61,20 +71,36 @@ model Controller
     "Number of hot-water supply temperature reset requests to be ignored"
     annotation(Dialog(tab="Supply temperature reset parameters", group="Trim-and-Respond Logic parameters"));
 
-  parameter Integer nSen_remoteDp = 2
-    "Total number of remote differential pressure sensors"
-    annotation(Dialog(tab="General", group="Boiler plant configuration parameters"));
+  parameter Integer nSenPri = 2
+    "Total number of remote differential pressure sensors in primary loop"
+    annotation(Dialog(tab="General",
+      group="Boiler plant configuration parameters",
+      enable = have_remDPRegPri or have_locDPRegPri));
 
   parameter Integer numIgnReq = 0
     "Number of ignored requests"
     annotation (Dialog(tab="Primary pump control parameters",
       group="Temperature-based speed regulation",
-      enable= speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
+      enable= speConTyp == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
 
-  parameter Integer nPum_nominal(
+  parameter Integer nPumPri_nominal(
     final max=nPumPri,
     final min=1) = nPumPri
     "Total number of pumps that operate at design conditions"
+    annotation (Dialog(group="Boiler plant configuration parameters"));
+
+  parameter Integer nPumSec = 2
+    "Total number of secondary hot water pumps"
+    annotation (Dialog(group="Boiler plant configuration parameters"));
+
+  parameter Integer nSenSec=2
+    "Total number of remote differential pressure sensors in secondary loop"
+    annotation (Dialog(group="Boiler plant configuration parameters"));
+
+  parameter Integer nPumSec_nominal(
+    final max=nPum,
+    final min=1) = nPumSec
+    "Total number of pumps that operate at design conditions in secondary loop"
     annotation (Dialog(group="Boiler plant configuration parameters"));
 
   parameter Real schTab[nSchRow,2] = [0,1;6,1;18,1;24,1]
@@ -124,18 +150,6 @@ model Controller
     displayUnit="1")
     "Boiler minimum firing ratio"
     annotation(Dialog(tab="General", group="Boiler plant configuration parameters"));
-
-  parameter Real bMinPriPumSpeSta[nSta](
-    final unit="1",
-    displayUnit="1",
-    final max=1,
-    final min=0) = {0,0,0}
-    "Minimum primary pump speed for the boiler plant stage"
-    annotation(Evaluate=true,
-      Dialog(enable=not
-                       (primaryOnly),
-        tab="General",
-        group="Boiler plant configuration parameters"));
 
   parameter Real delStaCha(
     final unit="s",
@@ -190,14 +204,14 @@ model Controller
     final unit="1",
     displayUnit="1") = 0.1
     "Signal hysteresis deadband for flowrate measurements"
-    annotation (Dialog(tab="Advanced", group="Efficiency condition parameters"));
+    annotation (Dialog(tab="Staging setpoint parameters", group="Advanced"));
 
   parameter Real TDifHys(
     final unit="K",
     displayUnit="K",
     final quantity="TemperatureDifference") = 1
     "Temperature deadband for hysteresis loop"
-    annotation(Dialog(tab="Advanced", group="Failsafe condition parameters"));
+    annotation (Dialog(tab="Staging setpoint parameters", group="Advanced"));
 
   parameter Real fraMinFir(
     final unit="1",
@@ -242,7 +256,7 @@ model Controller
     annotation (
       Evaluate=true,
       Dialog(
-        enable=primaryOnly,
+        enable=have_priOnl,
         tab="Staging setpoint parameters",
         group="Staging down parameters"));
 
@@ -256,7 +270,7 @@ model Controller
       Evaluate=true,
       Dialog(
         enable=not
-                  (primaryOnly),
+                  (have_priOnl),
         tab="Staging setpoint parameters",
         group="Staging down parameters"));
 
@@ -269,7 +283,7 @@ model Controller
       Evaluate=true,
       Dialog(
         enable=not
-                  (primaryOnly),
+                  (have_priOnl),
         tab="Staging setpoint parameters",
         group="Staging down parameters"));
 
@@ -280,16 +294,16 @@ model Controller
     annotation (
       Evaluate=true,
       Dialog(
-        enable=primaryOnly,
-        tab="Advanced",
-        group="Staging down parameters"));
+        enable=have_priOnl,
+        tab="Staging setpoint parameters",
+        group="Advanced"));
 
   parameter Real dTemp(
     final unit="K",
     displayUnit="K",
     final quantity="TemperatureDifference") = 0.1
     "Hysteresis deadband for measured temperatures"
-    annotation (Dialog(tab="Advanced", group="Failsafe condition parameters"));
+    annotation (Dialog(tab="Staging setpoint parameters", group="Advanced"));
 
   parameter Real minFloSet[nBoi](
     final unit="m3/s",
@@ -335,7 +349,7 @@ model Controller
     final quantity="TemperatureDifference") = -10
     "The offset for hot water setpoint temperature for condensing boilers in 
     non-condensing stage type"
-    annotation(Dialog(tab="Supply temperature reset parameters", group="Boiler plant configuration parameters"));
+    annotation(Dialog(tab="Supply temperature reset parameters", group="General parameters"));
 
   parameter Real THotWatSetMinNonConBoi(
     final unit="K",
@@ -391,7 +405,7 @@ model Controller
     displayUnit="s",
     final quantity="Time") = 600
     "Minimum setpoint hold time for stage change process"
-    annotation(Dialog(tab="Supply temperature reset parameters", group="Boiler plant configuration parameters"));
+    annotation(Dialog(tab="Supply temperature reset parameters", group="General parameters"));
 
   parameter Real TMinSupNonConBoi(
     final unit="K",
@@ -424,7 +438,7 @@ model Controller
   parameter Real chaIsoValTim(
     final unit="s",
     displayUnit="s",
-    final quantity="time") = 60
+    final quantity="time") = 1/chaIsoValRat
     "Time to slowly change isolation valve position from fully closed to fully open,
     should be determined in the field"
     annotation (Dialog(tab="Staging process parameters", group="Time and delay parameters"));
@@ -476,28 +490,28 @@ model Controller
     "Time constant of derivative block"
     annotation(Dialog(tab="Bypass valve control parameters"));
 
-  parameter Real minPumSpe(
+  parameter Real minPumSpePri(
     final unit="1",
     displayUnit="1",
     final min=0,
     final max=maxPumSpe) = 0.1
     "Minimum pump speed"
-    annotation (Dialog(group="Pump parameters", enable=variablePrimary));
+    annotation (Dialog(tab="Primary pump control parameters", group="General parameters", enable=have_varPriPum));
 
-  parameter Real maxPumSpe(
+  parameter Real maxPumSpePri(
     final unit="1",
     displayUnit="1",
     final min=minPumSpe,
     final max=1) = 1
     "Maximum pump speed"
-    annotation (Dialog(group="Pump parameters", enable=variablePrimary));
+    annotation (Dialog(tab="Primary pump control parameters", group="General parameters", enable=have_varPriPum));
 
-  parameter Real VHotWat_flow_nominal(
+  parameter Real VHotWatPri_flow_nominal(
     final min=1e-6,
     final unit="m3/s",
     displayUnit="m3/s",
     final quantity="VolumeFlowRate") = 0.5
-    "Total plant design hot water flow rate"
+    "Plant design hot water flow rate thorugh primary loop"
     annotation (Dialog(group="Boiler plant configuration parameters"));
 
   parameter Real boiDesFlo[nBoi](
@@ -508,24 +522,24 @@ model Controller
     "Vector of design flowrates for all boilers in plant"
     annotation (Dialog(group="Boiler plant configuration parameters"));
 
-  parameter Real maxLocDp(
+  parameter Real maxLocDpPri(
     final unit="Pa",
     displayUnit="Pa",
     final quantity="PressureDifference",
     final min=1e-6) = 5*6894.75
-    "Maximum hot water loop local differential pressure setpoint"
+    "Maximum primary loop local differential pressure setpoint"
     annotation (Dialog(tab="Primary pump control parameters", group="DP-based speed regulation",
-      enable = speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.localDP));
+      enable = speConTyp == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.localDP));
 
-  parameter Real minLocDp(
+  parameter Real minLocDpPri(
     final unit="Pa",
     displayUnit="Pa",
     final quantity="PressureDifference",
     final min=1e-6) = 5*6894.75
-    "Minimum hot water loop local differential pressure setpoint"
+    "Minimum primary loop local differential pressure setpoint"
     annotation (Dialog(tab="Primary pump control parameters",
       group="DP-based speed regulation",
-      enable = speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.localDP));
+      enable = speConTyp == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.localDP));
 
   parameter Real offTimThr_priPum(
     final unit="s",
@@ -563,7 +577,7 @@ model Controller
     "Delay time"
     annotation (Dialog(tab="Primary pump control parameters",
       group="Temperature-based speed regulation",
-      enable = speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
+      enable = speConTyp == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
 
   parameter Real samPer_priPum(
     final unit="s",
@@ -573,7 +587,7 @@ model Controller
     "Sample period of component"
     annotation (Dialog(tab="Primary pump control parameters",
       group="Temperature-based speed regulation",
-      enable = speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
+      enable = speConTyp == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
 
   parameter Real triAmo_priPum(
     final unit="1",
@@ -581,7 +595,7 @@ model Controller
     "Trim amount"
     annotation (Dialog(tab="Primary pump control parameters",
       group="Temperature-based speed regulation",
-      enable = speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
+      enable = speConTyp == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
 
   parameter Real resAmo_priPum(
     final unit="1",
@@ -589,7 +603,7 @@ model Controller
     "Respond amount"
     annotation (Dialog(tab="Primary pump control parameters",
       group="Temperature-based speed regulation",
-      enable = speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
+      enable = speConTyp == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
 
   parameter Real maxRes_priPum(
     final unit="1",
@@ -597,7 +611,7 @@ model Controller
     "Maximum response per time interval"
     annotation (Dialog(tab="Primary pump control parameters",
       group="Temperature-based speed regulation",
-      enable = speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
+      enable = speConTyp == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
 
   parameter Real twoReqLimLow_priPum(
     final unit="K",
@@ -606,7 +620,7 @@ model Controller
     "Lower limit of hysteresis loop sending two requests"
     annotation (Dialog(tab="Primary pump control parameters",
       group="Temperature-based speed regulation",
-      enable = speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
+      enable = speConTyp == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
 
   parameter Real twoReqLimHig_priPum(
     final unit="K",
@@ -615,7 +629,7 @@ model Controller
     "Higher limit of hysteresis loop sending two requests"
     annotation (Dialog(tab="Primary pump control parameters",
       group="Temperature-based speed regulation",
-      enable = speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
+      enable = speConTyp == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
 
   parameter Real oneReqLimLow_priPum(
     final unit="K",
@@ -624,7 +638,7 @@ model Controller
     "Lower limit of hysteresis loop sending one request"
     annotation (Dialog(tab="Primary pump control parameters",
       group="Temperature-based speed regulation",
-      enable = speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
+      enable = speConTyp == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
 
   parameter Real oneReqLimHig_priPum(
     final unit="K",
@@ -633,7 +647,7 @@ model Controller
     "Higher limit of hysteresis loop sending one request"
     annotation (Dialog(tab="Primary pump control parameters",
       group="Temperature-based speed regulation",
-      enable = speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
+      enable = speConTyp == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
 
   parameter Real k_priPum(
     final unit="1",
@@ -657,11 +671,6 @@ model Controller
     final min=0) = 0.1
     "Time constant of derivative block"
     annotation (Dialog(tab="Primary pump control parameters", group="PID parameters"));
-
-  parameter Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes
-    speedControlType_priPum = Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP
-    "Speed regulation method"
-    annotation (Dialog(group="Boiler plant configuration parameters", enable=variablePrimary));
 
   parameter Real TRetSet(
     final unit="K",
@@ -691,34 +700,7 @@ model Controller
     final min=fill(0,nSta),
     final max=fill(1,nSta)) = {0,0,0,0,0}
     "Vector of minimum primary pump speed for each stage"
-    annotation(Dialog(tab="Condensation control parameters"));
-
-    ////////////Secondary pump parameters
-
-    parameter Boolean variableSecondary = false
-    "True: Variable-speed secondary pumps;
-    False: Fixed-speed secondary pumps"
-    annotation (Dialog(group="Plant parameters"));
-
-  parameter Boolean secondaryFlowSensor = true
-    "True: Flow sensor in secondary loop;
-    False: No flow sensor in secondary loop"
-    annotation (Dialog(group="Plant parameters",
-      enable=variableSecondary));
-
-  parameter Integer nPumSec = 2
-    "Total number of secondary hot water pumps"
-    annotation (Dialog(group="Plant parameters"));
-
-  parameter Integer nSenSec=2
-    "Total number of remote differential pressure sensors in secondary loop"
-    annotation (Dialog(group="Plant parameters"));
-
-  parameter Integer nPumSec_nominal(
-    final max=nPum,
-    final min=1) = nPumSec
-    "Total number of pumps that operate at design conditions in secondary loop"
-    annotation (Dialog(group="Plant parameters"));
+    annotation(Dialog(group="Boiler plant configuration parameters"));
 
   parameter Real minPumSpeSec(
     final unit="1",
@@ -726,7 +708,9 @@ model Controller
     final min=0,
     final max=maxPumSpe) = 0.1
     "Minimum pump speed"
-    annotation (Dialog(group="Pump parameters", enable=variableSecondary));
+    annotation (Dialog(tab="Secondary pump control parameters",
+      group="General parameters",
+      enable=have_varSecPum));
 
   parameter Real maxPumSpeSec(
     final unit="1",
@@ -734,7 +718,9 @@ model Controller
     final min=minPumSpe,
     final max=1) = 1
     "Maximum pump speed"
-    annotation (Dialog(group="Pump parameters", enable=variableSecondary));
+    annotation (Dialog(tab="Secondary pump control parameters",
+      group="General parameters",
+      enable=have_varSecPum));
 
   parameter Real VHotWatSec_flow_nominal(
     final min=1e-6,
@@ -742,7 +728,7 @@ model Controller
     displayUnit="m3/s",
     final quantity="VolumeFlowRate") = 0.5
     "Secondary loop design hot water flow rate"
-    annotation (Dialog(group="Plant parameters"));
+    annotation (Dialog(group="Boiler plant configuration parameters"));
 
   parameter Real maxLocDpSec(
     final unit="Pa",
@@ -751,7 +737,7 @@ model Controller
     final min=1e-6) = 5*6894.75
     "Maximum hot water loop local differential pressure setpoint in secondary loop"
     annotation (Dialog(tab="Secondary pump control parameters", group="DP-based speed regulation",
-      enable = speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.localDP));
+      enable = speConTyp == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.localDP));
 
   parameter Real minLocDpSec(
     final unit="Pa",
@@ -759,9 +745,9 @@ model Controller
     final quantity="PressureDifference",
     final min=1e-6) = 5*6894.75
     "Minimum hot water loop local differential pressure setpoint in secondary loop"
-    annotation (Dialog(tab="Pump control parameters",
+    annotation (Dialog(tab="Secondary pump control parameters",
       group="DP-based speed regulation",
-      enable = speedControlType == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.localDP));
+      enable = speConTyp == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.localDP));
 
   parameter Real offTimThr(
     final unit="s",
@@ -769,9 +755,9 @@ model Controller
     final quantity="time",
     final min=0) = 180
     "Threshold to check lead boiler off time"
-    annotation (Dialog(tab="Pump control parameters",
+    annotation (Dialog(tab="Secondary pump control parameters",
       group="Pump staging parameters",
-      enable=variableSecondary and secondaryFlowSensor));
+      enable=have_varSecPum and have_secFloSen));
 
   parameter Real timPerSec(
     final unit="s",
@@ -779,77 +765,77 @@ model Controller
     final quantity="time",
     final min=0) = 600
     "Delay time period for enabling and disabling secondary lag pumps"
-    annotation (Dialog(tab="Pump control parameters",
+    annotation (Dialog(tab="Secondary pump control parameters",
       group="Pump staging parameters",
-      enable=variableSecondary and secondaryFlowSensor));
+      enable=have_varSecPum and have_secFloSen));
 
   parameter Real staConSec(
     final unit="1",
     displayUnit="1") = -0.03
     "Constant used in the staging equation"
-    annotation (Dialog(tab="Pump control parameters",
+    annotation (Dialog(tab="Secondary pump control parameters",
       group="Pump staging parameters",
-      enable=variableSecondary and secondaryFlowSensor));
+      enable=have_varSecPum and have_secFloSen));
 
   parameter Real speLim(
     final unit="1",
     displayUnit="1") = 0.9
     "Speed limit with longer enable delay for enabling next lag pump"
-    annotation (Dialog(tab="Pump control parameters",
+    annotation (Dialog(tab="Secondary pump control parameters",
       group="Pump staging parameters",
-      enable=variableSecondary and not secondaryFlowSensor));
+      enable=have_varSecPum and not have_secFloSen));
 
   parameter Real speLim1(
     final unit="1",
     displayUnit="1") = 0.99
     "Speed limit with shorter enable delay for enabling next lag pump"
-    annotation (Dialog(tab="Pump control parameters",
+    annotation (Dialog(tab="Secondary pump control parameters",
       group="Pump staging parameters",
-      enable=variableSecondary and not secondaryFlowSensor));
+      enable=have_varSecPum and not have_secFloSen));
 
   parameter Real speLim2(
     final unit="1",
     displayUnit="1") = 0.4
     "Speed limit for disabling last lag pump"
-    annotation (Dialog(tab="Pump control parameters",
+    annotation (Dialog(tab="Secondary pump control parameters",
       group="Pump staging parameters",
-      enable=variableSecondary and not secondaryFlowSensor));
+      enable=have_varSecPum and not have_secFloSen));
 
   parameter Real timPer1(
     final unit="s",
     displayUnit="s",
     final quantity="time") = 300
     "Delay time period for enabling next lag pump at speed limit speLim"
-    annotation (Dialog(tab="Pump control parameters",
+    annotation (Dialog(tab="Secondary pump control parameters",
       group="Pump staging parameters",
-      enable=variableSecondary and not secondaryFlowSensor));
+      enable=have_varSecPum and not have_secFloSen));
 
   parameter Real timPer2(
     final unit="s",
     displayUnit="s",
     final quantity="time") = 60
     "Delay time period for enabling next lag pump at speed limit speLim1"
-    annotation (Dialog(tab="Pump control parameters",
+    annotation (Dialog(tab="Secondary pump control parameters",
       group="Pump staging parameters",
-      enable=variableSecondary and not secondaryFlowSensor));
+      enable=have_varSecPum and not have_secFloSen));
 
   parameter Real timPer3(
     final unit="s",
     displayUnit="s",
     final quantity="time") = 600
     "Delay time period for disabling last lag pump"
-    annotation (Dialog(tab="Pump control parameters",
+    annotation (Dialog(tab="Secondary pump control parameters",
       group="Pump staging parameters",
-      enable=variableSecondary and not secondaryFlowSensor));
+      enable=have_varSecPum and not have_secFloSen));
 
   parameter Real k_sec(
     final unit="1",
     displayUnit="1",
     final min=0) = 1
     "Gain of controller"
-    annotation (Dialog(tab="Pump control parameters",
+    annotation (Dialog(tab="Secondary pump control parameters",
       group="PID parameters",
-      enable=variableSecondary));
+      enable=have_varSecPum));
 
   parameter Real Ti_sec(
     final unit="s",
@@ -857,9 +843,9 @@ model Controller
     final quantity="time",
     final min=0) = 0.5
     "Time constant of integrator block"
-    annotation (Dialog(tab="Pump control parameters",
+    annotation (Dialog(tab="Secondary pump control parameters",
       group="PID parameters",
-      enable=variableSecondary));
+      enable=have_varSecPum));
 
   parameter Real Td_sec(
     final unit="s",
@@ -867,16 +853,205 @@ model Controller
     final quantity="time",
     final min=0) = 0.1
     "Time constant of derivative block"
-    annotation (Dialog(tab="Pump control parameters",
+    annotation (Dialog(tab="Secondary pump control parameters",
       group="PID parameters",
-      enable=variableSecondary));
+      enable=have_varSecPum));
+
+  parameter Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes
+    speConTypPri = Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP
+    "Primary pump speed regulation method"
+    annotation (Dialog(group="Boiler plant configuration parameters", enable=have_varPriPum));
 
   parameter Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.SecondaryPumpSpeedControlTypes
-    speedControlTypeSec = Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.SecondaryPumpSpeedControlTypes.remoteDP
-    "Speed regulation method"
-    annotation (Dialog(group="Plant parameters", enable=variableSecondary));
+    speConTypSec = Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.SecondaryPumpSpeedControlTypes.remoteDP
+    "Secondary pump speed regulation method"
+    annotation (Dialog(group="Boiler plant configuration parameters", enable=have_varSecPum));
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uBoiAva[nBoi]
+    "Boiler availability status signal"
+    annotation (Placement(transformation(extent={{-240,-110},{-200,-70}}),
+      iconTransformation(extent={{-140,-20},{-100,20}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput supResReq
+    "Hot water supply reset requests"
+    annotation (Placement(transformation(extent={{-240,110},{-200,150}}),
+      iconTransformation(extent={{-140,190},{-100,230}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput TOut(
+    final unit="K",
+    displayUnit="degC",
+    final quantity="ThermodynamicTemperature")
+    "Measured outdoor air temperature"
+    annotation (Placement(transformation(extent={{-240,80},{-200,120}}),
+      iconTransformation(extent={{-140,160},{-100,200}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput TSupPri(
+    final unit="K",
+    displayUnit="degC",
+    final quantity="ThermodynamicTemperature")
+    "Measured hot water supply temperature"
+    annotation (Placement(transformation(extent={{-240,50},{-200,90}}),
+      iconTransformation(extent={{-140,130},{-100,170}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput TRetPri(
+    final unit="K",
+    displayUnit="degC",
+    final quantity="ThermodynamicTemperature")
+    "Measured hot water primary return temperature"
+    annotation (Placement(transformation(extent={{-240,20},{-200,60}}),
+      iconTransformation(extent={{-140,100},{-100,140}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput VHotWatPri_flow(
+    final unit="m3/s",
+    displayUnit="m3/s",
+    final quantity="VolumeFlowRate")
+    "Measured hot water primary circuit flowrate"
+    annotation (Placement(transformation(extent={{-240,-10},{-200,30}}),
+      iconTransformation(extent={{-140,70},{-100,110}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput dpHotWatPri_remote[nSenPri_remoteDp](
+    final unit=fill("Pa",nSenPri_remoteDp),
+    displayUnit=fill("Pa",nSenPri_remoteDp),
+    final quantity=fill("PressureDifference",nSenPri_remoteDp)) if
+    have_varPriPum and (have_remDPRegPri or have_locDPRegPri)
+    "Measured differential pressure between hot water supply and return in primary circuit"
+    annotation (Placement(transformation(extent={{-240,-70},{-200,-30}}),
+      iconTransformation(extent={{-140,10},{-100,50}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput TRetSec(
+    final unit="K",
+    displayUnit="degC",
+    final quantity="ThermodynamicTemperature") if not have_priOnl
+    "Measured hot water secondary return temperature"
+    annotation (Placement(transformation(extent={{-240,-40},{-200,0}}),
+      iconTransformation(extent={{-140,40},{-100,80}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput VHotWatSec_flow(
+    final unit="m3/s",
+    displayUnit="m3/s",
+    final quantity="VolumeFlowRate") if not have_priOnl and have_varPriPum
+     and have_floRegPri and have_secFloSen
+    "Measured hot water secondary circuit flowrate"
+    annotation (Placement(transformation(extent={{-240,-230},{-200,-190}}),
+      iconTransformation(extent={{-140,-50},{-100,-10}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput VHotWatDec_flow(
+    final unit="m3/s",
+    displayUnit="m3/s",
+    final quantity="VolumeFlowRate") if not have_priOnl and have_varPriPum
+     and have_floRegPri and not have_secFloSen
+    "Measured hot water flowrate through decoupler leg"
+    annotation (Placement(transformation(extent={{-240,-260},{-200,-220}}),
+      iconTransformation(extent={{-140,-80},{-100,-40}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput TSupSec(
+    final unit="K",
+    displayUnit="degC",
+    final quantity="ThermodynamicTemperature") if not have_priOnl and
+    have_varPriPum and have_temRegPri and
+    have_priSecTemSen
+    "Measured hot water supply temperature in secondary circuit"
+    annotation (Placement(transformation(extent={{-240,-290},{-200,-250}}),
+      iconTransformation(extent={{-140,-110},{-100,-70}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput TSupBoi[nBoi](
+    final unit=fill("K", nBoi),
+    displayUnit=fill("degC", nBoi),
+    final quantity=fill("ThermodynamicTemperature", nBoi)) if not have_priOnl
+     and have_varPriPum and have_temRegPri and not have_priSecTemSen
+    "Measured hot water supply temperatureat boiler outlets"
+    annotation (Placement(transformation(extent={{-240,-320},{-200,-280}}),
+      iconTransformation(extent={{-140,-140},{-100,-100}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput dpHotWatSec_remote[nSenSec_remoteDp](
+    final unit=fill("Pa",nSenSec_remoteDp),
+    displayUnit=fill("Pa",nSenSec_remoteDp),
+    final quantity=fill("PressureDifference",nSenSec_remoteDp)) if not
+    have_priOnl and have_varSecPum and (have_remDPRegSec or
+    have_locDPRegSec)
+    "Measured differential pressure between hot water supply and return in secondary circuit"
+    annotation (Placement(transformation(extent={{-240,-350},{-200,-310}}),
+      iconTransformation(extent={{-140,-170},{-100,-130}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput dpHotWatPri_local(
+    final unit="Pa",
+    displayUnit="Pa",
+    final quantity="PressureDifference") if have_varPriPum and have_locDPRegPri
+    "Measured differential pressure between hot water supply and return in primary circuit"
+    annotation (Placement(transformation(extent={{-240,-380},{-200,-340}}),
+      iconTransformation(extent={{-140,-200},{-100,-160}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput dpHotWatSec_local(
+    final unit="Pa",
+    displayUnit="Pa",
+    final quantity="PressureDifference") if not have_priOnl and
+    have_varSecPum and have_locDPRegSec
+    "Measured differential pressure between hot water supply and return in secondary circuit"
+    annotation (Placement(transformation(extent={{-240,-410},{-200,-370}}),
+      iconTransformation(extent={{-140,-230},{-100,-190}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yBoi[nBoi]
+    "Boiler status vector"
+    annotation (Placement(transformation(extent={{300,120},{340,160}}),
+      iconTransformation(extent={{100,70},{140,110}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yPriPum[nPumPri]
+    "Primary pump enable status vector"
+    annotation (Placement(transformation(extent={{300,-160},{340,-120}}),
+      iconTransformation(extent={{100,-20},{140,20}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput ySecPum[nPumSec] if not have_priOnl
+    "Secondary pump enable status vector"
+    annotation (Placement(transformation(extent={{300,-320},{340,-280}}),
+      iconTransformation(extent={{100,-80},{140,-40}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yHotWatIsoVal[nBoi](
+    final unit=fill("1",nBoi),
+    displayUnit=fill("1",nBoi)) if have_heaPriPum
+    "Boiler hot water isolation valve position vector"
+    annotation (Placement(transformation(extent={{300,50},{340,90}}),
+      iconTransformation(extent={{100,40},{140,80}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yPriPumSpe[nPumPri](
+    final unit=fill("1",nPumPri),
+    displayUnit=fill("1",nPumPri)) if have_varPriPum
+    "Primary pump speed vector"
+    annotation (Placement(transformation(extent={{300,-190},{340,-150}}),
+      iconTransformation(extent={{100,-50},{140,-10}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yBypValPos(
+    final unit="1",
+    displayUnit="1") if have_priOnl
+    "Bypass valve position"
+    annotation (Placement(transformation(extent={{300,-50},{340,-10}}),
+      iconTransformation(extent={{100,10},{140,50}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput ySecPumSpe[nPumSec](
+    final unit=fill("1",nPumSec),
+    displayUnit=fill("1",nPumSec)) if not have_priOnl and have_varSecPum
+    "Secondary pump speed vector"
+    annotation (Placement(transformation(extent={{300,-350},{340,-310}}),
+      iconTransformation(extent={{100,-110},{140,-70}})));
 
 // protected
+  parameter Boolean have_remDPRegPri = (speConTypPri == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP)
+    "Boolean flag for primary pump speed control with remote differential pressure";
+
+  parameter Boolean have_locDPRegPri = (speConTypPri == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.localDP)
+    "Boolean flag for primary pump speed control with local differential pressure";
+
+  parameter Boolean have_temRegPri = (speConTypPri == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature)
+    "Boolean flag for primary pump speed control with temperature readings";
+
+  parameter Boolean have_floRegPri = (speConTypPri == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.flowrate)
+    "Boolean flag for primary pump speed control with flowrate readings";
+
+  parameter Boolean have_remDPRegSec = (speConTypSec == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.SecondaryPumpSpeedControlTypes.remoteDP)
+    "Boolean flag for secondary pump speed control with remote differential pressure";
+
+  parameter Boolean have_locDPRegSec = (speConTypSec == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.SecondaryPumpSpeedControlTypes.localDP)
+    "Boolean flag for secondary pump speed control with local differential pressure";
+
   parameter Integer staInd[nSta]={i for i in 1:nSta}
     "Staging indices starting at 1";
 
@@ -898,7 +1073,7 @@ model Controller
     annotation (Placement(transformation(extent={{-180,-20},{-160,0}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.SetpointController staSetCon(
-    primaryOnly=primaryOnly,
+    have_priOnl=have_priOnl,
     nBoi=nBoi,
     boiTyp=boiTyp,
     nSta=nSta,
@@ -927,8 +1102,8 @@ model Controller
     annotation (Placement(transformation(extent={{-100,-20},{-80,16}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Up upProCon(
-    primaryOnly=primaryOnly,
-    isHeadered=isHeadered,
+    have_priOnl=have_priOnl,
+    have_heaPriPum=have_heaPriPum,
     nBoi=nBoi,
     nSta=nSta,
     TMinSupNonConBoi=TMinSupNonConBoi,
@@ -941,11 +1116,11 @@ model Controller
     sigDif=TDifHys,
     relFloDif=sigDif)
     "Stage-up process controller"
-            annotation (Placement(transformation(extent={{120,76},{140,116}})));
+    annotation (Placement(transformation(extent={{120,76},{140,116}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Down dowProCon(
-    primaryOnly=primaryOnly,
-    isHeadered=isHeadered,
+    have_priOnl=have_priOnl,
+    have_heaPriPum=have_heaPriPum,
     nBoi=nBoi,
     nSta=nSta,
     chaIsoValTim=chaIsoValTim,
@@ -953,38 +1128,50 @@ model Controller
     boiChaProOnTim=boiChaProOnTim,
     delBoiEna=delBoiEna)
     "Stage-down process controller"
-            annotation (Placement(transformation(extent={{120,20},{140,60}})));
+    annotation (Placement(transformation(extent={{120,20},{140,60}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Controller priPumCon(
-    isHeadered=false,
-    primaryOnly=false,
-    variablePrimary=true,
-    primarySecondaryFlowSensors=primarySecondaryFlowSensors,
-    primarySecondaryTemperatureSensors=primarySecondaryTemperatureSensors,
+    have_heaPriPum=have_heaPriPum,
+    have_priOnl=have_priOnl,
+    have_varPriPum=true,
+    have_secFloSen=have_secFloSen,
+    have_priSecTemSen=have_priSecTemSen,
     nPum=nPumPri,
     nBoi=nBoi,
-    nSen=nSenPri_remoteDp,
+    nSen=nSenPri,
+    numIgnReq=numIgnReq,
     nPum_nominal=nPumPri,
-    minPumSpe=minPumSpe,
-    maxPumSpe=maxPumSpe,
-    VHotWat_flow_nominal=VHotWat_flow_nominal,
+    minPumSpe=minPumSpePri,
+    maxPumSpe=maxPumSpePri,
+    VHotWat_flow_nominal=VHotWatPri_flow_nominal,
     boiDesFlo=boiDesFlo,
+    maxLocDp=maxLocDpPri,
+    minLocDp=minLocDpPri,
     offTimThr=offTimThr_priPum,
     timPer=timPer_priPum,
     delBoiDis=delBoiEna,
     staCon=staCon_priPum,
     relFloHys=relFloHys_priPum,
+    delTim=delTim_priPum,
+    samPer=samAPer_priPum,
+    triAmo=triAmo_priPum,
+    resAmo=resAmo_priPum,
+    maxRes=maxRes_priPum,
+    twoReqLimLow=twoReqLimLow_priPum,
+    twoReqLimHig=twoReqLimHig_priPum,
+    oneReqLimLow=oneReqLimLow_priPum,
+    oneReqLimHig=oneReqLimHig_priPum,
     k=k_priPum,
     Ti=Ti_priPum,
     Td=Td_priPum,
-    speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature)
+    speConTyp=speConTypPri)
     "Primary pump controller"
     annotation (Placement(transformation(extent={{120,-168},{140,-112}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.BypassValve.BypassValvePosition bypValPos(nPum=nPumPri,
     k=k_bypVal,
     Ti=Ti_bypVal,
-    Td=Td_bypVal) if primaryOnly
+    Td=Td_bypVal) if have_priOnl
     "Bypass valve controller"
     annotation (Placement(transformation(extent={{120,-50},{140,-30}})));
 
@@ -1014,7 +1201,7 @@ model Controller
     staMat=staMat,
     minFloSet=minFloSet,
     maxFloSet=maxFloSet,
-    bypSetRat=bypSetRat) if primaryOnly
+    bypSetRat=bypSetRat) if have_priOnl
     "Minimum flow setpoint for the primary loop"
     annotation (Placement(transformation(extent={{112,170},{132,190}})));
 
@@ -1023,8 +1210,8 @@ model Controller
     annotation (Placement(transformation(extent={{220,-10},{240,10}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.CondensationControl conSet(
-    primaryOnly=primaryOnly,
-    variablePrimary=variablePrimary,
+    have_priOnl=have_priOnl,
+    have_varPriPum=have_varPriPum,
     nSta=nSta,
     TRetSet=TRetSet,
     TRetMinAll=TRetMinAll,
@@ -1041,7 +1228,7 @@ model Controller
     "Logical switch"
     annotation (Placement(transformation(extent={{-10,150},{10,170}})));
 
-  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi
+  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi if have_priOnl
     "Integer switch"
     annotation (Placement(transformation(extent={{-10,110},{10,130}})));
 
@@ -1057,28 +1244,23 @@ model Controller
     maxFloSet=fill(maxFloSet, nSta),
     bypSetRat=fill(bypSetRat, nSta))
     "Calculate vector of minimum flow setpoints for all stages"
-    annotation (Placement(transformation(extent={{-110,-342},{-90,-322}})));
+    annotation (Placement(transformation(extent={{-110,-340},{-90,-320}})));
 
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt[nSta](k=fill(0, nSta))
     "Constant zero Integer source"
-    annotation (Placement(transformation(extent={{-160,-322},{-140,-302}})));
+    annotation (Placement(transformation(extent={{-160,-320},{-140,-300}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Constant con[nSta](k=fill(false, nSta))
     "Constant Boolean False signal"
-    annotation (Placement(transformation(extent={{-160,-352},{-140,-332}})));
+    annotation (Placement(transformation(extent={{-160,-350},{-140,-330}})));
 
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt1[nSta](k=staInd)
     "Constant stage Integer source"
-    annotation (Placement(transformation(extent={{-160,-382},{-140,-362}})));
+    annotation (Placement(transformation(extent={{-160,-380},{-140,-360}})));
 
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt2[nPumPri](k=
         priPumInd)           "Constant stage Integer source"
     annotation (Placement(transformation(extent={{60,-138},{80,-118}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput supResReq
-    "Hot water supply reset requests"
-    annotation (Placement(transformation(extent={{-240,110},{-200,150}}),
-        iconTransformation(extent={{-140,190},{-100,230}})));
 
   Buildings.Controls.OBC.CDL.Discrete.TriggeredSampler triSam
     "Sample stage setpoint when stage change process is complete"
@@ -1092,56 +1274,10 @@ model Controller
     "Integer to Real converter"
     annotation (Placement(transformation(extent={{-70,-50},{-50,-30}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput TOut(
-    final unit="K",
-    displayUnit="degC",
-    quantity="ThermodynamicTemperature")
-                                        "Measured outdoor air temperature" annotation (
-      Placement(transformation(extent={{-240,80},{-200,120}}),
-        iconTransformation(extent={{-140,160},{-100,200}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput TSupPri(
-    final unit="K",
-    displayUnit="degC",
-    quantity="ThermodynamicTemperature")
-    "Measured hot water supply temperature" annotation (Placement(
-        transformation(extent={{-240,50},{-200,90}}), iconTransformation(extent={{-140,
-            130},{-100,170}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput TRetPri(
-    final unit="K",
-    displayUnit="degC",
-    quantity="ThermodynamicTemperature")
-    "Measured hot water primary return temperature" annotation (Placement(
-        transformation(extent={{-240,20},{-200,60}}), iconTransformation(extent={{-140,
-            100},{-100,140}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput VHotWatPri_flow(
-    final unit="m3/s",
-    displayUnit="m3/s",
-    quantity="VolumeFlowRate") "Measured hot water primary circuit flowrate"
-    annotation (Placement(transformation(extent={{-240,-10},{-200,30}}),
-        iconTransformation(extent={{-140,70},{-100,110}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput dpHotWatPri_remote[
-    nSenPri_remoteDp]
-    "Measured differential pressure between hot water supply and return in primary circuit"
-    annotation (Placement(transformation(extent={{-240,-70},{-200,-30}}),
-        iconTransformation(extent={{-140,10},{-100,50}})));
-
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant dpHotWatSet(k=
-        priMaxLocDp) "Differential pressure setpoint for primary circuit"
+        priMaxLocDp) if have_priOnl
+                     "Differential pressure setpoint for primary circuit"
     annotation (Placement(transformation(extent={{60,-180},{80,-160}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yBoi[nBoi]
-    "Boiler status vector" annotation (
-      Placement(transformation(extent={{300,120},{340,160}}),
-        iconTransformation(extent={{100,70},{140,110}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yPriPum[nPumPri]
-    "Primary pump enable status vector" annotation (Placement(transformation(
-          extent={{300,-160},{340,-120}}), iconTransformation(extent={{100,-20},
-            {140,20}})));
 
   Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi1[nBoi]
     "Logical switch"
@@ -1151,25 +1287,9 @@ model Controller
     "Boolean replicator"
     annotation (Placement(transformation(extent={{40,110},{60,130}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch swi[nBoi] if isHeadered
+  Buildings.Controls.OBC.CDL.Logical.Switch swi[nBoi] if have_heaPriPum
     "Real switch"
     annotation (Placement(transformation(extent={{180,60},{200,80}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yHotWatIsoVal[nBoi] if
-    isHeadered
-    "Boiler hot water isolation valve position vector" annotation (Placement(
-        transformation(extent={{300,50},{340,90}}), iconTransformation(extent={{100,40},
-            {140,80}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yPriPumSpe[nPumPri] if
-    variablePrimary
-    "Primary pump speed vector" annotation (Placement(transformation(extent={{
-            300,-190},{340,-150}}), iconTransformation(extent={{100,-50},{140,-10}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yBypValPos if primaryOnly
-    "Bypass valve position" annotation (
-      Placement(transformation(extent={{300,-50},{340,-10}}),
-        iconTransformation(extent={{100,10},{140,50}})));
 
   Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt1
     "Real to Integer conversion"
@@ -1179,7 +1299,8 @@ model Controller
     "Integer to Real conversion"
     annotation (Placement(transformation(extent={{-110,170},{-90,190}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre3[nPumPri] "Logical pre block"
+  Buildings.Controls.OBC.CDL.Logical.Pre pre3[nPumPri]
+    "Logical pre block"
     annotation (Placement(transformation(extent={{160,-120},{180,-100}})));
 
   Buildings.Controls.OBC.CDL.Logical.Pre pre4
@@ -1190,15 +1311,15 @@ model Controller
     "Logical pre block"
     annotation (Placement(transformation(extent={{170,170},{190,190}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre6
+  Buildings.Controls.OBC.CDL.Logical.Pre pre6 if have_priOnl
     "Logical pre block"
     annotation (Placement(transformation(extent={{40,150},{60,170}})));
 
-  Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea2
+  Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea2 if have_priOnl
     "Integer to Real conversion"
     annotation (Placement(transformation(extent={{20,210},{40,230}})));
 
-  Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt2
+  Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt2 if have_priOnl
     "Real to Integer conversion"
     annotation (Placement(transformation(extent={{80,210},{100,230}})));
 
@@ -1210,121 +1331,97 @@ model Controller
     "Unit delay"
     annotation (Placement(transformation(extent={{-80,170},{-60,190}})));
 
-  Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel1(samplePeriod=1)
+  Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel1(samplePeriod=1) if
+    have_priOnl
     "Unit delay"
     annotation (Placement(transformation(extent={{50,210},{70,230}})));
 
   Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel2[nBoi](samplePeriod=1) if
-    isHeadered
+    have_heaPriPum
     "Unit delay"
     annotation (Placement(transformation(extent={{180,20},{200,40}})));
 
   Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea3[nSta]
     "Integer to Real conversion"
-    annotation (Placement(transformation(extent={{-130,-382},{-110,-362}})));
+    annotation (Placement(transformation(extent={{-130,-380},{-110,-360}})));
 
   Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel3[nSta](samplePeriod=fill(1, nSta))
     "Unit delay"
-    annotation (Placement(transformation(extent={{-100,-382},{-80,-362}})));
+    annotation (Placement(transformation(extent={{-100,-380},{-80,-360}})));
 
   Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt3[nSta]
     "Real to Integer conversion"
-    annotation (Placement(transformation(extent={{-70,-382},{-50,-362}})));
+    annotation (Placement(transformation(extent={{-70,-380},{-50,-360}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uBoiAva[nBoi]
-    "Boiler availability status signal"
-    annotation (Placement(transformation(extent={{-240,-110},{-200,-70}}),
-        iconTransformation(extent={{-140,-20},{-100,20}})));
-
-  Generic.PlantDisable plaDis(
-    primaryOnly=primaryOnly,
-    isHeadered=isHeadered,
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.PlantDisable plaDis(
+    have_priOnl=have_priOnl,
+    have_heaPriPum=have_heaPriPum,
     nBoi=nBoi,
     chaHotWatIsoRat=chaIsolValRat,
     delBoiDis=delBoiEna)
+    "Plant disable process controller"
     annotation (Placement(transformation(extent={{240,60},{260,80}})));
 
-  Pumps.SecondaryPumps.Controller secPumCon(variableSecondary=true,
-    secondaryFlowSensor=true,
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Controller secPumCon(
+    have_varSecPum=have_varSecPum,
+    have_secFloSen=have_secFloSen,
     nPum=nPumSec,
     nPumPri=nPumPri,
     nBoi=nBoi,
     nSen=nSenSec_remoteDp,
     nPum_nominal=nPum,
-    speedControlType=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.SecondaryPumpSpeedControlTypes.remoteDP) if not
-    primaryOnly
+    minPumSpe=minPumSpeSec,
+    maxPumSpe=maxPumSpeSec,
+    VHotWat_flow_nominal=VHotWatSec_flow_nominal,
+    maxLocDp=maxLocDpSec,
+    minLocDp=minLocDpSec,
+    offTimThr=offTimThr,
+    delBoiDis=delBoiEna,
+    timPer=timPerSec,
+    staCon=staConSec,
+    relFloHys=relFloHys_SecPum,
+    speLim=speLim,
+    speLim1=speLim1,
+    speLim2=speLim2,
+    timPer1=timPer1,
+    timPer2=timPer2,
+    timPer3=timPer3,
+    k=k_sec,
+    Ti=Ti_sec,
+    Td=Td_sec,
+    speConTyp=speConTypSec) if not have_priOnl
+    "Secondary pump controller"
     annotation (Placement(transformation(extent={{120,-320},{140,-280}})));
-  CDL.Discrete.UnitDelay uniDel4(samplePeriod=1) "Unit delay"
+
+  Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel4(samplePeriod=1)
+    "Unit delay"
     annotation (Placement(transformation(extent={{180,-200},{200,-180}})));
-  CDL.Interfaces.RealInput TRetSec(
-    final unit="K",
-    displayUnit="degC",
-    quantity="ThermodynamicTemperature")
-    "Measured hot water secondary return temperature" annotation (Placement(
-        transformation(extent={{-240,-40},{-200,0}}), iconTransformation(extent={{-140,40},
-            {-100,80}})));
-  CDL.Logical.IntegerSwitch                        intSwi1
+
+  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch                        intSwi1 if not have_priOnl
     "Integer switch"
     annotation (Placement(transformation(extent={{60,-220},{80,-200}})));
-  CDL.Logical.MultiOr mulOr(nu=3) "Multi Or"
+
+  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(nu=3)
+    "Multi Or"
     annotation (Placement(transformation(extent={{30,-180},{50,-160}})));
-  CDL.Logical.Pre pre2 "Logical pre block"
+
+  Buildings.Controls.OBC.CDL.Logical.Pre pre2 if not have_priOnl
+                       "Logical pre block"
     annotation (Placement(transformation(extent={{200,-130},{220,-110}})));
-  CDL.Interfaces.RealInput VHotWatSec_flow(
-    final unit="m3/s",
-    displayUnit="m3/s",
-    quantity="VolumeFlowRate") "Measured hot water secondary circuit flowrate"
-    annotation (Placement(transformation(extent={{-240,-230},{-200,-190}}),
-        iconTransformation(extent={{-140,-50},{-100,-10}})));
-  CDL.Integers.Sources.Constant conInt3[nPumSec](k=secPumInd)
+
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt3[nPumSec](k=secPumInd) if not
+    have_priOnl
     "Constant stage Integer source"
     annotation (Placement(transformation(extent={{60,-280},{80,-260}})));
-  CDL.Interfaces.RealInput VHotWatDec_flow(
-    final unit="m3/s",
-    displayUnit="m3/s",
-    quantity="VolumeFlowRate")
-    "Measured hot water flowrate through decoupler leg" annotation (Placement(
-        transformation(extent={{-240,-260},{-200,-220}}), iconTransformation(
-          extent={{-140,-80},{-100,-40}})));
-  CDL.Interfaces.RealInput TSupSec(
-    final unit="K",
-    displayUnit="degC",
-    quantity="ThermodynamicTemperature")
-    "Measured hot water supply temperature in secondary circuit" annotation (
-      Placement(transformation(extent={{-240,-290},{-200,-250}}),
-        iconTransformation(extent={{-140,-110},{-100,-70}})));
-  CDL.Interfaces.RealInput TSupBoi[nBoi](
-    final unit=fill("K", nBoi),
-    displayUnit=fill("degC", nBoi),
-    quantity=fill("ThermodynamicTemperature", nBoi))
-    "Measured hot water supply temperatureat boiler outlets" annotation (
-      Placement(transformation(extent={{-240,-320},{-200,-280}}),
-        iconTransformation(extent={{-140,-140},{-100,-100}})));
-  CDL.Interfaces.BooleanOutput ySecPum[nPumSec] if not primaryOnly
-    "Secondary pump enable status vector" annotation (Placement(transformation(
-          extent={{300,-320},{340,-280}}), iconTransformation(extent={{100,-80},
-            {140,-40}})));
-  CDL.Logical.Pre                        pre7[nPumSec] "Logical pre block"
+
+  Buildings.Controls.OBC.CDL.Logical.Pre                        pre7[nPumSec] if not have_priOnl
+                                                       "Logical pre block"
     annotation (Placement(transformation(extent={{160,-290},{180,-270}})));
-  CDL.Continuous.Sources.Constant                        dpHotWatSet1(k=
-        secMaxLocDp) "Differential pressure setpoint for secondary circuit"
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant                        dpHotWatSet1(k=
+        secMaxLocDp) if not have_priOnl
+                     "Differential pressure setpoint for secondary circuit"
     annotation (Placement(transformation(extent={{60,-330},{80,-310}})));
-  CDL.Interfaces.RealOutput ySecPumSpe[nPumSec] if not primaryOnly and
-    variableSecondary                           "Secondary pump speed vector"
-    annotation (Placement(transformation(extent={{300,-350},{340,-310}}),
-        iconTransformation(extent={{100,-110},{140,-70}})));
-  CDL.Interfaces.RealInput dpHotWatSec_remote[nSenSec_remoteDp]
-    "Measured differential pressure between hot water supply and return in secondary circuit"
-    annotation (Placement(transformation(extent={{-240,-350},{-200,-310}}),
-        iconTransformation(extent={{-140,-170},{-100,-130}})));
-  CDL.Interfaces.RealInput dpHotWatPri_local
-    "Measured differential pressure between hot water supply and return in primary circuit"
-    annotation (Placement(transformation(extent={{-240,-380},{-200,-340}}),
-        iconTransformation(extent={{-140,-200},{-100,-160}})));
-  CDL.Interfaces.RealInput dpHotWatSec_local
-    "Measured differential pressure between hot water supply and return in secondary circuit"
-    annotation (Placement(transformation(extent={{-240,-410},{-200,-370}}),
-        iconTransformation(extent={{-140,-230},{-100,-190}})));
 
 equation
   connect(staSetCon.yBoi, upProCon.uBoiSet) annotation (Line(points={{-78,-12},{
@@ -1386,17 +1483,17 @@ equation
           {-74,8},{-74,38},{-110,38},{-110,66},{-62,66}},    color={255,127,0}));
 
   connect(minBoiFloSet1.VHotWatMinSet_flow, staSetCon.VMinSet_flow) annotation (
-     Line(points={{-88,-332},{-80,-332},{-80,-88},{-114,-88},{-114,3},{-102,3}},
+     Line(points={{-88,-330},{-80,-330},{-80,-88},{-114,-88},{-114,3},{-102,3}},
         color={0,0,127}));
 
-  connect(conInt.y, minBoiFloSet1.uLasDisBoi) annotation (Line(points={{-138,
-          -312},{-130,-312},{-130,-326},{-112,-326}}, color={255,127,0}));
+  connect(conInt.y, minBoiFloSet1.uLasDisBoi) annotation (Line(points={{-138,-310},
+          {-130,-310},{-130,-324},{-112,-324}},       color={255,127,0}));
 
-  connect(con.y, minBoiFloSet1.uOnOff) annotation (Line(points={{-138,-342},{
-          -130,-342},{-130,-330},{-112,-330}}, color={255,0,255}));
+  connect(con.y, minBoiFloSet1.uOnOff) annotation (Line(points={{-138,-340},{-130,
+          -340},{-130,-328},{-112,-328}},      color={255,0,255}));
 
-  connect(con.y, minBoiFloSet1.uStaChaPro) annotation (Line(points={{-138,-342},
-          {-130,-342},{-130,-334},{-112,-334}}, color={255,0,255}));
+  connect(con.y, minBoiFloSet1.uStaChaPro) annotation (Line(points={{-138,-340},
+          {-130,-340},{-130,-332},{-112,-332}}, color={255,0,255}));
 
   connect(conInt2.y, priPumCon.uPumLeaLag) annotation (Line(points={{82,-128},{
           94,-128},{94,-112.933},{118,-112.933}},
@@ -1593,21 +1690,21 @@ equation
           210,30},{210,10},{102,10},{102,103},{118,103}},  color={0,0,127}));
 
   connect(conInt1.y, intToRea3.u)
-    annotation (Line(points={{-138,-372},{-132,-372}}, color={255,127,0}));
+    annotation (Line(points={{-138,-370},{-132,-370}}, color={255,127,0}));
 
   connect(intToRea3.y, uniDel3.u)
-    annotation (Line(points={{-108,-372},{-102,-372}},
+    annotation (Line(points={{-108,-370},{-102,-370}},
                                                      color={0,0,127}));
 
   connect(uniDel3.y, reaToInt3.u)
-    annotation (Line(points={{-78,-372},{-72,-372}}, color={0,0,127}));
+    annotation (Line(points={{-78,-370},{-72,-370}}, color={0,0,127}));
 
-  connect(reaToInt3.y, minBoiFloSet1.uStaSet) annotation (Line(points={{-48,
-          -372},{-40,-372},{-40,-352},{-120,-352},{-120,-338},{-112,-338}},
+  connect(reaToInt3.y, minBoiFloSet1.uStaSet) annotation (Line(points={{-48,-370},
+          {-40,-370},{-40,-350},{-120,-350},{-120,-336},{-112,-336}},
         color={255,127,0}));
 
   connect(priPumCon.yHotWatPum, pre3.u) annotation (Line(points={{142,-140},{
-          150,-140},{150,-110},{158,-110}}, color={255,0,255}));
+          146,-140},{146,-110},{158,-110}}, color={255,0,255}));
 
   connect(pre3.y, bypValPos.uPumSta) annotation (Line(points={{182,-110},{190,
           -110},{190,-16},{106,-16},{106,-42},{118,-42}}, color={255,0,255}));
@@ -1668,54 +1765,71 @@ equation
         color={0,0,127}));
   connect(hotWatSupTemRes.TPlaHotWatSupSet, upProCon.THotWatSup) annotation (
       Line(points={{-38,74},{-34,74},{-34,107},{118,107}}, color={0,0,127}));
+
   connect(TRetPri, staSetCon.THotWatRetPri) annotation (Line(points={{-220,40},
           {-172,40},{-172,30},{-120,30},{-120,-3},{-102,-3}}, color={0,0,127}));
+
   connect(TRetSec, staSetCon.THotWatRetSec) annotation (Line(points={{-220,-20},
           {-190,-20},{-190,-30},{-132,-30},{-132,-6},{-102,-6}}, color={0,0,127}));
+
   connect(upProCon.yNexEnaBoi, intSwi1.u1) annotation (Line(points={{142,92},{152,
           92},{152,-190},{50,-190},{50,-202},{58,-202}}, color={255,127,0}));
+
   connect(dowProCon.yNexEnaBoi, intSwi1.u3) annotation (Line(points={{142,36},{154,
           36},{154,-194},{52,-194},{52,-218},{58,-218}}, color={255,127,0}));
+
   connect(lat.y, intSwi1.u2) annotation (Line(points={{-34,30},{-30,30},{-30,12},
           {18,12},{18,-210},{58,-210}}, color={255,0,255}));
+
   connect(intSwi1.y, priPumCon.uNexEnaBoi) annotation (Line(points={{82,-210},{
           106,-210},{106,-138.133},{118,-138.133}},
                                         color={255,127,0}));
   connect(upProCon.yPumChaPro, mulOr.u[1]) annotation (Line(points={{142,84},{
           148,84},{148,-4},{26,-4},{26,-165.333},{28,-165.333}},
                                                              color={255,0,255}));
+
   connect(dowProCon.yPumChaPro, mulOr.u[2]) annotation (Line(points={{142,28},{
           144,28},{144,2},{22,2},{22,-170},{28,-170}},
                                                    color={255,0,255}));
+
   connect(plaDis.yPumChaPro, mulOr.u[3]) annotation (Line(points={{262,72},{270,
           72},{270,-76},{20,-76},{20,-174.667},{28,-174.667}}, color={255,0,255}));
+
   connect(mulOr.y, priPumCon.uPumChaPro) annotation (Line(points={{52,-170},{54,
           -170},{54,-154},{100,-154},{100,-135.333},{118,-135.333}},
                                                              color={255,0,255}));
+
   connect(priPumCon.yPumChaPro, pre2.u) annotation (Line(points={{142,-126.933},
           {190,-126.933},{190,-120},{198,-120}},
                                         color={255,0,255}));
+
   connect(pre2.y, upProCon.uPumChaPro) annotation (Line(points={{222,-120},{230,
           -120},{230,-14},{92,-14},{92,77},{118,77}}, color={255,0,255}));
+
   connect(pre2.y, dowProCon.uPumChaPro) annotation (Line(points={{222,-120},{230,
           -120},{230,-14},{92,-14},{92,22},{118,22}}, color={255,0,255}));
+
   connect(pre2.y, plaDis.uPumChaPro) annotation (Line(points={{222,-120},{230,-120},
           {230,-14},{214,-14},{214,66},{238,66}}, color={255,0,255}));
+
   connect(staSetCon.yChaUpEdg, priPumCon.uStaUp) annotation (Line(points={{-78,0},
           {58,0},{58,-74},{92,-74},{92,-129.733},{118,-129.733}},
                                                           color={255,0,255}));
-  connect(logSwi.y, priPumCon.uOnOff) annotation (Line(points={{12,160},{12,-22},
-          {56,-22},{56,-72},{96,-72},{96,-132.533},{118,-132.533}},
+  connect(logSwi.y, priPumCon.uOnOff) annotation (Line(points={{12,160},{14,160},
+          {14,-22},{56,-22},{56,-72},{96,-72},{96,-132.533},{118,-132.533}},
                                                             color={255,0,255}));
+
   connect(plaDis.yBoi, priPumCon.uBoiSta) annotation (Line(points={{262,76},{
           274,76},{274,-88},{112,-88},{112,-126.933},{118,-126.933}},
                                                           color={255,0,255}));
   connect(conSet.yMinPriPumSpe, priPumCon.uMinPriPumSpeCon) annotation (Line(
         points={{82,-100},{88,-100},{88,-153.067},{118,-153.067}},
                                                            color={0,0,127}));
+
   connect(conInt3.y, secPumCon.uPumLeaLag) annotation (Line(points={{82,-270},{
           90,-270},{90,-281.8},{118,-281.8}},
                                            color={255,127,0}));
+
   connect(VHotWatSec_flow, priPumCon.VHotWatSec_flow) annotation (Line(points={{-220,
           -210},{8,-210},{8,-224},{114,-224},{114,-155.867},{118,-155.867}},
         color={0,0,127}));
@@ -1723,48 +1837,67 @@ equation
           -240},{-190,-240},{-190,-212},{6,-212},{6,-226},{116,-226},{116,
           -158.667},{118,-158.667}},
                              color={0,0,127}));
+
   connect(TSupPri, priPumCon.THotWatPri) annotation (Line(points={{-220,70},{
           -168,70},{-168,34},{-110,34},{-110,-84},{0,-84},{0,-186},{112,-186},{
           112,-161.467},{118,-161.467}},                      color={0,0,127}));
+
   connect(TSupSec, priPumCon.THotWatSec) annotation (Line(points={{-220,-270},{
           -186,-270},{-186,-214},{2,-214},{2,-230},{108,-230},{108,-164.267},{
           118,-164.267}},
                   color={0,0,127}));
+
   connect(TSupBoi, priPumCon.THotWatBoiSup) annotation (Line(points={{-220,-300},
           {-184,-300},{-184,-216},{0,-216},{0,-232},{110,-232},{110,-167.067},{
           118,-167.067}},
                   color={0,0,127}));
+
   connect(secPumCon.yHotWatPum, ySecPum)
     annotation (Line(points={{142,-300},{320,-300}}, color={255,0,255}));
+
   connect(secPumCon.yHotWatPum, pre7.u) annotation (Line(points={{142,-300},{
           150,-300},{150,-280},{158,-280}}, color={255,0,255}));
+
   connect(pre7.y, secPumCon.uHotWatPum) annotation (Line(points={{182,-280},{
           190,-280},{190,-260},{110,-260},{110,-286},{118,-286}}, color={255,0,
           255}));
   connect(supResReq, secPumCon.supResReq) annotation (Line(points={{-220,130},{
           -116,130},{-116,-110},{14,-110},{14,-294},{118,-294}}, color={255,127,
           0}));
+
   connect(plaEna.yPla, secPumCon.uPlaEna) annotation (Line(points={{-158,-10},{
           -130,-10},{-130,-78},{12,-78},{12,-290},{118,-290}}, color={255,0,255}));
+
   connect(VHotWatSec_flow, secPumCon.VHotWat_flow) annotation (Line(points={{
           -220,-210},{8,-210},{8,-298},{118,-298}}, color={0,0,127}));
+
   connect(conSet.yMaxSecPumSpe, secPumCon.uMaxSecPumSpeCon) annotation (Line(
         points={{82,-106},{98,-106},{98,-318},{118,-318}}, color={0,0,127}));
+
   connect(dpHotWatSet1.y, secPumCon.dpHotWatSet) annotation (Line(points={{82,-320},
           {86,-320},{86,-314},{118,-314}},       color={0,0,127}));
+
   connect(secPumCon.yPumSpe, ySecPumSpe) annotation (Line(points={{142,-310},{
           280,-310},{280,-330},{320,-330}}, color={0,0,127}));
+
   connect(dpHotWatSec_remote, secPumCon.dpHotWat_remote) annotation (Line(
         points={{-220,-330},{-180,-330},{-180,-286},{86,-286},{86,-310},{118,
           -310}}, color={0,0,127}));
+
   connect(dpHotWatPri_local, priPumCon.dpHotWat_local) annotation (Line(points={{-220,
           -360},{-178,-360},{-178,-234},{96,-234},{96,-144.667},{118,-144.667}},
                       color={0,0,127}));
+
   connect(dpHotWatSec_local, secPumCon.dpHotWat_local) annotation (Line(points=
           {{-220,-390},{100,-390},{100,-306},{118,-306}}, color={0,0,127}));
+
   connect(reaToInt2.y, priPumCon.uLasDisBoi) annotation (Line(points={{102,220},
           {208,220},{208,-72},{226,-72},{226,-212},{102,-212},{102,-141.867},{
           118,-141.867}}, color={255,127,0}));
+
+  connect(priPumCon.yHotWatPum, secPumCon.uPriPumSta) annotation (Line(points={
+          {142,-140},{146,-140},{146,-258},{106,-258},{106,-302},{118,-302}},
+        color={255,0,255}));
   annotation (Icon(coordinateSystem(extent={{-100,-220},{100,220}}),
        graphics={
         Rectangle(
