@@ -44,7 +44,6 @@ model ClosedLoopTest "Closed loop testing model"
     nBoi=2,
     boiTyp={Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler,
         Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler},
-
     nSta=3,
     staMat=[1,0; 0,1; 1,1],
     boiDesCap={15000*0.8,15000*0.8},
@@ -71,7 +70,6 @@ model ClosedLoopTest "Closed loop testing model"
     Ti_priPum=90,
     Td_priPum=3,
     speedControlType_priPum=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP,
-
     minPriPumSpeSta={0,0,0})
     annotation (Placement(transformation(extent={{-52,-20},{-10,20}})));
 
@@ -286,7 +284,8 @@ First implementation.
      "modelica://Buildings/Resources/Scripts/Dymola/Examples/Tutorial/Boiler/System6.mos"
         "Simulate and plot"),
     experiment(
-      StopTime=86400,
+      StartTime=259200,
+      StopTime=345600,
       Tolerance=1e-06,
       __Dymola_Algorithm="Cvode"),
     Icon(coordinateSystem(extent={{-100,-100},{180,100}})));

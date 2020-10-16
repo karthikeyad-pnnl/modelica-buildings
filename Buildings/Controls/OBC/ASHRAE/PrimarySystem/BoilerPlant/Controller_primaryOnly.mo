@@ -792,7 +792,7 @@ model Controller_primaryOnly "Boiler plant controller"
     holTimVal=holTimVal)
     annotation (Placement(transformation(extent={{-60,60},{-40,80}})));
 
-  SetPoints.MinimumFlowSetpoint minBoiFloSet(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.MinimumFlowSetPoint minBoiFloSet(
     nBoi=nBoi,
     nSta=nSta,
     staMat=staMat,
@@ -821,7 +821,7 @@ model Controller_primaryOnly "Boiler plant controller"
   CDL.Logical.Latch lat1
     "Latch to identify if staging process is complete or not"
     annotation (Placement(transformation(extent={{-154,60},{-134,80}})));
-  SetPoints.MinimumFlowSetpoint minBoiFloSet1[nSta](
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.MinimumFlowSetPoint minBoiFloSet1[nSta](
     nBoi=fill(nBoi, nSta),
     nSta=fill(nSta, nSta),
     staMat=fill(staMat, nSta),

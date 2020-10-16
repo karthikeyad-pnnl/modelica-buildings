@@ -295,8 +295,7 @@ protected
     "Timer for change of setpoint"
     annotation (Placement(transformation(extent={{228,-50},{248,-30}})));
 
-  Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel(
-    final samplePeriod=1e-3)
+  Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel(final samplePeriod=1)
     "Unit delay for Real signal"
     annotation (Placement(transformation(extent={{140,-120},{160,-100}})));
 
