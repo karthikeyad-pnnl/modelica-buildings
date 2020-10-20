@@ -44,6 +44,7 @@ model ClosedLoopTest_legacy "Closed loop testing model"
     isHeadered=true,
     variablePrimary=true,
     nSen_remoteDp=1,
+    VHotWat_flow_nominal=0.0006,
     speedControlType_priPum=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP,
     nBoi=2,
     boiTyp={Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler,
