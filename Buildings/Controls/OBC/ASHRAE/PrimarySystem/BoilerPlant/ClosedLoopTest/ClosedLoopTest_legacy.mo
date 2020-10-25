@@ -276,7 +276,7 @@ First implementation.
         "Simulate and plot"),
     experiment(
       StartTime=259200,
-      StopTime=345600,
+      StopTime=518400,
       Tolerance=1e-06,
       __Dymola_Algorithm="Cvode"),
     Icon(coordinateSystem(extent={{-120,-100},{120,100}})));

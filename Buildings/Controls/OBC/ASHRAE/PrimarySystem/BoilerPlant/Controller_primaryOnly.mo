@@ -929,12 +929,6 @@ model Controller_primaryOnly "Boiler plant controller"
     annotation (Placement(transformation(extent={{50,210},{70,230}})));
   CDL.Discrete.UnitDelay uniDel2[nBoi](samplePeriod=1)
     annotation (Placement(transformation(extent={{180,20},{200,40}})));
-  CDL.Conversions.IntegerToReal intToRea3[nSta]
-    annotation (Placement(transformation(extent={{-120,-190},{-100,-170}})));
-  CDL.Discrete.UnitDelay uniDel3[nSta](samplePeriod=fill(1, nSta))
-    annotation (Placement(transformation(extent={{-90,-190},{-70,-170}})));
-  CDL.Conversions.RealToInteger reaToInt3[nSta]
-    annotation (Placement(transformation(extent={{-60,-190},{-40,-170}})));
   CDL.Interfaces.BooleanInput uBoiAva[nBoi] "Boiler availability status signal"
     annotation (Placement(transformation(extent={{-240,-110},{-200,-70}}),
         iconTransformation(extent={{-240,-160},{-200,-120}})));
@@ -1136,15 +1130,6 @@ equation
   connect(uniDel2.y, upProCon.uHotWatIsoVal) annotation (Line(points={{202,30},
           {210,30},{210,10},{102,10},{102,103.273},{118,103.273}},
                                                            color={0,0,127}));
-  connect(conInt1.y, intToRea3.u)
-    annotation (Line(points={{-148,-180},{-122,-180}}, color={255,127,0}));
-  connect(intToRea3.y, uniDel3.u)
-    annotation (Line(points={{-98,-180},{-92,-180}}, color={0,0,127}));
-  connect(uniDel3.y, reaToInt3.u)
-    annotation (Line(points={{-68,-180},{-62,-180}}, color={0,0,127}));
-  connect(reaToInt3.y, minBoiFloSet1.uStaSet) annotation (Line(points={{-38,
-          -180},{-30,-180},{-30,-160},{-130,-160},{-130,-146},{-122,-146}},
-        color={255,127,0}));
   connect(priPumCon.yHotWatPum, pre3.u) annotation (Line(points={{142,-140},{
           150,-140},{150,-110},{158,-110}}, color={255,0,255}));
   connect(pre3.y, bypValPos.uPumSta) annotation (Line(points={{182,-110},{190,
@@ -1187,6 +1172,8 @@ equation
           -10},{-130,-78},{90,-78},{90,-119},{118,-119}}, color={255,0,255}));
   connect(plaEna.yPla, dowProCon.uPlaEna) annotation (Line(points={{-158,-10},{
           -126,-10},{-126,100},{70,100},{70,26},{118,26}}, color={255,0,255}));
+  connect(conInt1.y, minBoiFloSet1.uStaSet) annotation (Line(points={{-148,-180},
+          {-132,-180},{-132,-146},{-122,-146}}, color={255,127,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-200,
             -200},{300,240}})),                                  Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-200,-200},{300,
