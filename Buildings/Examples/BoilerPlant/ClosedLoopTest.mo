@@ -69,12 +69,12 @@ model ClosedLoopTest "Closed loop testing model"
     annotation (Placement(transformation(extent={{150,20},{170,40}})));
   Controls.OBC.CDL.Logical.Latch lat
     annotation (Placement(transformation(extent={{140,100},{160,120}})));
-  Controls.OBC.CDL.Logical.Timer tim2(t=30) "Timer"
+  Controls.OBC.CDL.Logical.Timer tim2(t=60) "Timer"
     annotation (Placement(transformation(extent={{120,60},{140,80}})));
   Controls.OBC.CDL.Logical.Not not1
     annotation (Placement(transformation(extent={{90,60},{110,80}})));
 
-protected
+// protected
   Buildings.Controls.OBC.CDL.Continuous.PID conPID(
     final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
     final k=1*10e-4,
@@ -233,9 +233,9 @@ First implementation.
      "modelica://Buildings/Resources/Scripts/Dymola/Examples/BoilerPlant/ClosedLoopTest.mos"
         "Simulate and plot"),
     experiment(
-      StartTime=432000,
-      StopTime=777600,
-      Interval=1,
+      StartTime=172800,
+      StopTime=345600,
+      Interval=60,
       Tolerance=1e-06,
       __Dymola_Algorithm="Cvode"),
     Icon(coordinateSystem(extent={{-100,-100},{100,100}})));

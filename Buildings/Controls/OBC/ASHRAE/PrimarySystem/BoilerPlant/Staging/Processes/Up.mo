@@ -147,13 +147,13 @@ block Up
     annotation (Placement(transformation(extent={{-280,220},{-240,260}}),
       iconTransformation(extent={{-140,170},{-100,210}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatSup(
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatSupSet(
     final unit="K",
     displayUnit="K",
     final quantity="ThermodynamicTemperature") if not have_priOnl
-    "Measured hot water supply temperature"
-    annotation (Placement(transformation(extent={{-280,140},{-240,180}}),
-      iconTransformation(extent={{-140,90},{-100,130}})));
+    "Hot water supply temperature setpoint" annotation (Placement(
+        transformation(extent={{-280,140},{-240,180}}), iconTransformation(
+          extent={{-140,90},{-100,130}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uHotWatIsoVal[nBoi](
     final min=fill(0, nBoi),
@@ -203,7 +203,7 @@ block Up
     annotation (Placement(transformation(extent={{280,-90},{320,-50}}),
       iconTransformation(extent={{100,20},{140,60}})));
 
-protected
+// protected
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.ResetMinBypass minBypRes(
     final delEna=delEnaMinFloSet,
     final relFloDif=relFloDif) if have_priOnl
@@ -403,7 +403,7 @@ equation
   connect(VMinHotWatSet_flow, minBypRes.VMinHotWatSet_flow) annotation (Line(
         points={{-260,200},{-180,200},{-180,12},{-172,12}}, color={0,0,127}));
 
-  connect(THotWatSup, hotWatSupTemRes.THotWatSup) annotation (Line(points={{
+  connect(THotWatSupSet, hotWatSupTemRes.THotWatSup) annotation (Line(points={{
           -260,160},{-186,160},{-186,-17},{-172,-17}}, color={0,0,127}));
 
   connect(uHotWatIsoVal, enaHotWatIsoVal.uHotWatIsoVal) annotation (Line(points={{-260,

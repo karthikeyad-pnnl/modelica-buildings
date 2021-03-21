@@ -25,11 +25,11 @@ model BoilerPlant
     "Boiler capacity for boiler-2"
     annotation(dialog(group="Boiler parameters"));
 
-  parameter Real boiEff1[1] = {0.8}
+  parameter Real boiEff1[6] = {0.6246, 0.7711, -1.2077*10e-15, 0.008576, -0.005933, 0.003156}
     "Efficiency for boiler-1"
     annotation(dialog(group="Boiler parameters"));
 
-  parameter Real boiEff2[1] = {0.8}
+  parameter Real boiEff2[6] = {0.6246, 0.7711, -1.2077*10e-15, 0.008576, -0.005933, 0.003156}
     "Efficiency for boiler-2"
     annotation(dialog(group="Boiler parameters"));
 
@@ -205,7 +205,7 @@ model BoilerPlant
     final dp_nominal=5000,
     final Q_flow_nominal=boiCap1,
     final T_nominal=TBoiSup_nominal,
-    final effCur=Buildings.Fluid.Types.EfficiencyCurves.Constant,
+    final effCur=Buildings.Fluid.Types.EfficiencyCurves.QuadraticLinear,
     final a=boiEff1,
     final fue=Fluid.Data.Fuels.NaturalGasHigherHeatingValue(),
     final UA=boiCap1/39.81)
@@ -510,6 +510,10 @@ model BoilerPlant
   Controls.OBC.CDL.Routing.BooleanReplicator booRep(nout=2)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{-170,-170},{-150,-150}})));
+  Fluid.Sensors.RelativePressure           senRelPre1(redeclare package Medium =
+        Media.Water)
+    "Differential pressure sensor between hot water supply and return"
+    annotation (Placement(transformation(extent={{-90,-4},{-70,16}})));
 equation
   connect(theCon.port_b, vol.heatPort) annotation (Line(
       points={{120,180},{130,180},{130,160},{140,160}},
@@ -773,6 +777,10 @@ equation
           -116},{120,-116},{120,-142},{112,-142}}, color={0,0,127}));
   connect(spl6.port_2, preSou.ports[1]) annotation (Line(points={{160,-150},{
           210,-150},{210,-200},{240,-200}}, color={0,127,255}));
+  connect(senRelPre1.port_b, spl3.port_2) annotation (Line(points={{-70,6},{-50,
+          6},{-50,10},{-30,10}}, color={0,127,255}));
+  connect(senRelPre1.port_a, spl2.port_2) annotation (Line(points={{-90,6},{
+          -104,6},{-104,-90},{-30,-90}}, color={0,127,255}));
   annotation (defaultComponentName="boiPla",
     Documentation(info="<html>
       <p>
