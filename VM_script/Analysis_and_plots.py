@@ -8,6 +8,8 @@ import utilities
 
 simulation_results_folder = '/home/developer/models/Buildings'
 processed_results_folder = '/home/developer/models/extracted_simulation_data'
+# simulation_results_folder = 'C:\Buildings_library\modelica-buildings\Buildings'
+# processed_results_folder = 'C:\Buildings_library\modelica-buildings\Buildings\processed_results'
 
 datapoints = {
         'boilerPlant.senVolFlo2.V_flow': 'boiler1_flowrate', 
@@ -70,7 +72,6 @@ def generate_csv(data_file_name):
     var_names = simulation_data_raw.varNames()
     print(var_names)
 
-
     simulation_data = pd.DataFrame()
 
     for datapoint in list(datapoints):
@@ -97,6 +98,8 @@ def generate_csv(data_file_name):
     simulation_data['zone_temperature_deviation'] = simulation_data['zone_temp'] - (273.15 + 21.11)
 
     print('Saving csv for ', data_file_name)
+    if not os.path.isdir(processed_results_folder):
+        os.mkdir(processed_results_folder)
     simulation_data.to_csv(os.path.join(processed_results_folder, (result_file_name + '.csv')))
     print('csv saved.')
 

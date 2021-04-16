@@ -1,2 +1,2 @@
-﻿openModel("C:\Users\deva713\OneDrive - PNNL\Documents\Git_repos\modelica-buildings\Buildings\package.mo");
-simulateModel("Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.Validation.HotWaterSupplyTemperatureReset", startTime=-1.8144e+06,tolerance=1e-6, stopTime=1.8144e+06, method="dassl", resultFile="simulation_results");
+﻿openModel("C:\Buildings_library\modelica-buildings\Buildings\package.mo");
+simulateModel("Buildings.Examples.BoilerPlant.ClosedLoopTest_baseline", startTime=0,tolerance=1e-6, stopTime=7200, method="dassl", resultFile="baseline_case");

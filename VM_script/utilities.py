@@ -48,14 +48,14 @@ def find_relevant_files(list_of_identifiers, folder_name='.'):
     
     for item in list_of_items:
         identifier_flags = []
-        if os.path.isfile(item):
-            for identifier in list_of_identifiers:
-                identifier_flags.append(identifier in item)
+        # if os.path.isfile(item):
+        for identifier in list_of_identifiers:
+            identifier_flags.append(identifier in item)
 
-            if False in identifier_flags:
-                next
-            else:
-                list_of_reqd_files.append(item)
+        if False in identifier_flags:
+            next
+        else:
+            list_of_reqd_files.append(item)
 
     return list_of_reqd_files
 
