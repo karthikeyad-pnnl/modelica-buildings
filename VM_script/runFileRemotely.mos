@@ -1,5 +1,5 @@
 ﻿Advanced.TranslationInCommandLog:=true;
 openModel("/home/developer/models/Buildings/package.mo");
-simulateModel("Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Subsequences.Validation.BoilerPlantEnabler", startTime=0,tolerance=1e-6, stopTime=7200, method="dassl", resultFile="simulation_results");
+simulateModel("Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Subsequences.Validation.PlantEnable", startTime=0,tolerance=1e-6, stopTime=7200, method="dassl", resultFile="simulation_results");
 savelog("/home/developer/models/simulation_log.txt");
 exit();
