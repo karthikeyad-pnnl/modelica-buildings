@@ -6,8 +6,8 @@ import matplotlib.pyplot as plt
 import pandas as pd
 import utilities
 
-simulation_results_folder = 'home/developer/models/Buildings'
-processed_results_folder = 'home/developer/models/extracted_simulation_data'
+simulation_results_folder = '/home/developer/models/Buildings'
+processed_results_folder = '/home/developer/models/extracted_simulation_data'
 
 datapoints = {
         'boilerPlant.senVolFlo2.V_flow': 'boiler1_flowrate', 
@@ -50,11 +50,11 @@ bar_plot_datapoints = {
         'Total plant energy consumed': 'total_plant_consumption'
     }
 
-main()
-
 def main():
     mat_file_list = utilities.find_relevant_files('.mat', simulation_results_folder)
+    print('Found .mat files: ', mat_file_list)
     for mat_file in mat_file_list:
+        print('Generating csv for ', mat_file)
         generate_csv(mat_file)
     generate_plots
 
@@ -96,7 +96,10 @@ def generate_csv(data_file_name):
     simulation_data['total_plant_consumption'] = simulation_data['total_boiler_consumption'] + simulation_data['pumps_power_consumption']
     simulation_data['zone_temperature_deviation'] = simulation_data['zone_temp'] - (273.15 + 21.11)
 
+    print('Saving csv for ', data_file_name)
     simulation_data.to_csv(os.path.join(processed_results_folder, (result_file_name + '.csv')))
+    print('csv saved.')
+
 
 
 # # Plots
@@ -291,3 +294,5 @@ def generate_plots():
     data_summary['%age reduction in plant energy consumption'] = (max(data_summary['Total plant energy consumed']) - data_summary['Total plant energy consumed']) * 100 / max(data_summary['Total plant energy consumed'])
 
     data_summary.to_csv('data_summary.csv')
+
+main()
