@@ -50,6 +50,8 @@ bar_plot_datapoints = {
         'Total plant energy consumed': 'total_plant_consumption'
     }
 
+main()
+
 def main():
     mat_file_list = utilities.find_relevant_files('.mat', simulation_results_folder)
     for mat_file in mat_file_list:
