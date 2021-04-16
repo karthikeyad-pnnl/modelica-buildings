@@ -44,6 +44,7 @@ def find_relevant_files(list_of_identifiers, folder_name='.'):
     list_of_reqd_files = []
 
     list_of_items = os.listdir(folder_name)
+    print('Found files: ', list_of_items)
     
     for item in list_of_items:
         identifier_flags = []
