@@ -53,7 +53,7 @@ bar_plot_datapoints = {
     }
 
 def main():
-    mat_file_list = utilities.find_relevant_files(['.mat'], simulation_results_folder)
+    mat_file_list = utilities.find_relevant_files(['case_study', '.mat'], simulation_results_folder)
     print('Found .mat files: ', mat_file_list)
     for mat_file in mat_file_list:
         print('Generating csv for ', mat_file)

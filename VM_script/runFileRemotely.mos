@@ -1,5 +1,8 @@
 ﻿Advanced.TranslationInCommandLog:=true;
 openModel("/home/developer/models/Buildings/package.mo");
-simulateModel("Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.Validation.PlantEnable", startTime=0,tolerance=1e-6, stopTime=7200, method="dassl", resultFile="PlantEnable");
+simulateModel("Buildings.Examples.BoilerPlant.ClosedLoopTest_baseline", startTime=0,tolerance=1e-6, stopTime=7200, method="dassl", resultFile="case_study_scenario_1");
+simulateModel("Buildings.Examples.BoilerPlant.ClosedLoopTest_baseline_requestReset", startTime=0,tolerance=1e-6, stopTime=7200, method="dassl", resultFile="case_study_scenario_3");
+simulateModel("Buildings.Examples.BoilerPlant.ClosedLoopTest_baseline_1711Staging", startTime=0,tolerance=1e-6, stopTime=7200, method="dassl", resultFile="case_study_scenario_4");
+simulateModel("Buildings.Examples.BoilerPlant.ClosedLoopTest", startTime=0,tolerance=1e-6, stopTime=7200, method="dassl", resultFile="case_study_scenario_5");
 savelog("/home/developer/models/simulation_log.txt");
 exit();
