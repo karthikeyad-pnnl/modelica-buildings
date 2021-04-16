@@ -86,5 +86,3 @@ def main():
         file_writer = open(save_file_path, 'w')
         file_writer.writelines(modified_text_data)
         file_writer.close()
-
-main()
