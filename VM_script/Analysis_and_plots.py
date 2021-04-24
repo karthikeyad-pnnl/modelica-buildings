@@ -5,6 +5,9 @@ import os
 import matplotlib.pyplot as plt
 import pandas as pd
 import utilities
+from eppy.modeleditor import IDF
+import csv
+import shutil
 
 simulation_results_folder = '/home/developer/models/Buildings'
 processed_results_folder = '/home/developer/models/extracted_simulation_data'
@@ -51,6 +54,31 @@ bar_plot_datapoints = {
         'Pumps power consumed': 'pumps_power_consumption',
         'Total plant energy consumed': 'total_plant_consumption'
     }
+
+weather_file_location = os.path.join('C:\\WeatherData')
+weather_file_dictionary = {
+    'Albuquerque': 'USA_NM_Albuquerque.Intl.AP.723650_TMY3', 
+    'Atlanta': 'USA_GA_Atlanta-Hartsfield.Jackson.Intl.AP.722190_TMY3', 
+    'Buffalo': 'USA_NY_Buffalo.Niagara.Intl.AP.725280_TMY3', 
+    'Denver': 'USA_CO_Denver-Aurora-Buckley.AFB.724695_TMY3', 
+    'Dubai': 'ARE_Abu.Dhabi_IWEC', 
+    'ElPaso': 'USA_TX_El.Paso.Intl.AP.722700_TMY3', 
+    'Fairbanks': 'USA_AK_Fairbanks.Intl.AP.702610_TMY3', 
+    'GreatFalls': 'USA_MT_Great.Falls.Intl.AP.727750_TMY3', 
+    'HoChiMinh': 'VNM_Ho.Chi.Minh.City-Tan.Son.Nhat.AP.489000_IWEC2', 
+    'Honolulu': 'USA_HI_Honolulu.Intl.AP.911820_TMY3', 
+    'InternationalFalls': 'USA_MN_International.Falls.Intl.AP.727470_TMY3', 
+    'NewDelhi': 'IND_Delhi_New.Delhi-Safdarjung.AP.421820_IWEC2', 
+    'NewYork': 'USA_NY_New.York-John.F.Kennedy.Intl.AP.744860_TMY3', 
+    'PortAngeles': 'USA_WA_Port.Angeles-William.R.Fairchild.Intl.AP.727885_TMY3', 
+    'Rochester': 'USA_MN_Rochester.Intl.AP.726440_TMY3', 
+    'SanDiego': 'USA_CA_San.Diego-Brown.Field.Muni.AP.722904_TMY3', 
+    'Seattle': 'USA_WA_Seattle-Tacoma.Intl.AP.727930_TMY3', 
+    'Tampa': 'USA_FL_Tampa.Intl.AP.722110_TMY3', 
+    'Tucson': 'USA_AZ_Tucson.Intl.AP.722740_TMY3'}
+
+idd_path = os.path.join('C:\EnergyPlusV9-0-1', 'Energy+.idd')
+IDF.setiddname(idd_path)
 
 def main():
     mat_file_list = utilities.find_relevant_files(['case_study', '.mat'], simulation_results_folder)
@@ -140,7 +168,6 @@ def configure_axes(axes):
     axes.spines['bottom'].set_visible(False)
     axes.grid(color='lightgrey', linewidth=0.25)
     return
-
 
 # ---------------------------------------------------------------------------
 # helper functions and scripts
@@ -298,4 +325,101 @@ def generate_plots():
 
     data_summary.to_csv('data_summary.csv')
 
-main()
+def building_mass_compilation_from_idfs(idf_folder):
+    idf_folder_path = os.path.join(idf_folder)
+    summary_file_path = os.path.join(idf_folder, 'Building_mass_summary_file.csv')
+
+    list_of_idfs = utilities.find_relevant_files(['.idf'], idf_folder_path)
+
+    building_thermal_capacitance_data = [['Building IDF', 'Building thermal capacitance']]
+
+    for idf in list_of_idfs:
+        print('Analyzing IDF file ', idf)
+        idf_path = os.path.join(idf_folder_path, idf)
+        building_thermal_mass = utilities.get_thermal_mass_from_idf(idf_path)
+        building_thermal_capacitance_data.append([idf.rstrip('.idf'), str(building_thermal_mass)])
+
+    # building_thermal_capacitance_data = str(building_thermal_capacitance_data)
+    csv_file = open(summary_file_path, 'w')
+    csv_writer = csv.writer(csv_file)
+    # for line in building_thermal_capacitance_data:
+    #     csv_writer.writerow(line)
+    csv_writer.writerows(building_thermal_capacitance_data)
+    csv_file.close()
+    print(building_thermal_capacitance_data)
+
+def output_variables_cleanup(idf_folder, dest_folder = None):
+    idf_folder_path = os.path.join(idf_folder)
+    if dest_folder == None:
+        dest_folder_path = idf_folder_path
+    else:
+        dest_folder_path = os.path.join(dest_folder)
+    if not os.path.isdir(dest_folder_path):
+        os.mkdir(dest_folder_path)
+
+    list_of_idfs = utilities.find_relevant_files(['.idf'], idf_folder_path)
+
+    for idf in list_of_idfs:
+        print('Modifying IDF file ', idf)
+        idf_path = os.path.join(idf_folder_path, idf)
+        idf_data = IDF(idf_path)
+        modified_idf_data = utilities.delete_all_existing_output_variables(idf_data)
+
+        output_file_path = os.path.join(dest_folder_path, idf)
+        modified_idf_data.save(output_file_path)
+
+def output_variables_addition(idf_folder, dest_folder = None):
+    idf_folder_path = os.path.join(idf_folder)
+    if dest_folder == None:
+        dest_folder_path = idf_folder_path
+    else:
+        dest_folder_path = os.path.join(dest_folder)
+    if not os.path.isdir(dest_folder_path):
+        os.mkdir(dest_folder_path)
+
+    list_of_idfs = utilities.find_relevant_files(['.idf'], idf_folder_path)
+
+    for idf in list_of_idfs:
+        print('Adding output variable to IDF file ', idf)
+        idf_path = os.path.join(idf_folder_path, idf)
+        idf_data = IDF(idf_path)
+        modified_idf_data = utilities.add_output_variable_to_file(idf_data, 'Boiler Heating Rate', 'HeatSys1 Boiler', 'timestep')
+
+        output_file_path = os.path.join(dest_folder_path, idf)
+        modified_idf_data.save(output_file_path)
+
+# output_variables_cleanup('C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\OpenBuildingControl\\boiler_plant_case_study\\ASHRAE901_OfficeLarge_STD2004', 
+#                          'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\OpenBuildingControl\\boiler_plant_case_study\\modified_idfs')
+# output_variables_addition('C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\OpenBuildingControl\\boiler_plant_case_study\\modified_idfs')
+
+def deploy_idfs(idf_folder, dest_folder = None):
+    global weather_file_dictionary
+
+    idf_folder_path = os.path.join(idf_folder)
+    if dest_folder is None:
+        dest_folder_path = idf_folder_path
+    else:
+        dest_folder_path = os.path.join(dest_folder)
+    if not os.path.isdir(dest_folder_path):
+        os.mkdir(dest_folder_path)
+
+    list_of_idfs = utilities.find_relevant_files(['.idf'], idf_folder_path)
+
+    for idf in list_of_idfs:
+        print('Running IDF file ', idf)
+        origin_path = os.path.join(idf_folder_path, idf)
+        location_name = idf.rstrip('.idf').split('_')[3]
+        for proper_location_name in list(weather_file_dictionary):
+            if location_name in proper_location_name:
+                location_name = proper_location_name
+                break
+        dest_path = os.path.join(dest_folder_path, location_name)
+        if not os.path.isdir(dest_path):
+            os.mkdir(dest_path)
+
+        shutil.copy(origin_path, dest_path)
+
+idf_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\OpenBuildingControl\\boiler_plant_case_study\\modified_idfs'
+simulation_runs_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\OpenBuildingControl\\boiler_plant_case_study\\simulation_runs'
+deploy_idfs(idf_folder, simulation_runs_folder)
+
