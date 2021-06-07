@@ -1,5 +1,6 @@
 import os
 from eppy.modeleditor import IDF
+import csv
 
 idd_path = os.path.join('C:\EnergyPlusV9-0-1', 'Energy+.idd')
 IDF.setiddname(idd_path)
@@ -73,6 +74,21 @@ def delete_all_existing_output_variables(idf_data):
 
 
     print(len(idf_data.idfobjects['Output:Variable'.upper()]))
+
+    return idf_data
+
+def delete_all_existing_objects(idf_data, object_name):
+
+    print(len(idf_data.idfobjects[object_name.upper()]))
+
+    output_variables = idf_data.idfobjects[object_name.upper()]
+    while len(output_variables) > 0:
+        for variable in output_variables:
+            idf_data.removeidfobject(variable)
+        output_variables = idf_data.idfobjects[object_name.upper()]
+
+
+    print(len(idf_data.idfobjects[object_name.upper()]))
 
     return idf_data
 
@@ -152,3 +168,89 @@ def main():
         file_writer = open(save_file_path, 'w')
         file_writer.writelines(modified_text_data)
         file_writer.close()
+
+def find_zone_areas(result_file):
+    from eppy.results import readhtml
+    import os
+    import csv
+    
+    result_file_path = os.path.join(result_file)
+    print('Reading HTML')
+    result_data =  open(result_file_path, 'r').read()
+    print('Parsing HTML')
+    result_tables = readhtml.titletable(result_data)
+
+    print('Compiling table titles')
+    table_titles = [result_table[0] for result_table in result_tables]
+
+    print('Searching for required table')
+    for title in table_titles:
+        if 'Zone Summary' in title:
+            reqd_table_index = table_titles.index(title)
+            print('Found table')
+            break
+    
+    reqd_table = result_tables[reqd_table_index]
+    reqd_data = reqd_table[1]
+    headers = reqd_data[0]
+    zone_name_column = 0
+    area_column = 1
+
+    zone_area_table = []
+    for row in reqd_data:
+        zone_area_table.append([row[zone_name_column], row[area_column]])
+
+    output_file_name = ('./zone_areas.csv')
+    csv_file = open(output_file_name, 'w')
+    csv_writer = csv.writer(csv_file)
+    csv_writer.writerows(zone_area_table)
+    csv_file.close()
+
+def turn_off_all_internal_loads(idf_data):
+    people_loads = idf_data.idfobjects['People'.upper()]
+    lighting_loads = idf_data.idfobjects['Lights'.upper()]
+    electric_loads = idf_data.idfobjects['ElectricEquipment'.upper()]
+
+    list_of_loads = [people_loads, lighting_loads, electric_loads]
+
+    for load_type in list_of_loads:
+        for load in load_type:
+            if (load.key == 'Lights') or (load.key == 'ElectricEquipment'):
+                load.Schedule_Name = "ALWAYS_OFF"
+            else:
+                load.Number_of_People_Schedule_Name = 'ALWAYS_OFF'
+
+def turn_on_internal_loads(idf_data, internal_load_key, schedule_name):
+    list_of_loads = idf_data.idfobjects[internal_load_key.upper()]
+
+    for load in list_of_loads:
+        if (load.key == 'Lights') or (load.key == 'ElectricEquipment'):
+            load.Schedule_Name = schedule_name
+        else:
+            load.Number_of_People_Schedule_Name = schedule_name
+
+def find_active_loads(idf_data):
+    people_loads = idf_data.idfobjects['People'.upper()]
+    lighting_loads = idf_data.idfobjects['Lights'.upper()]
+    electric_loads = idf_data.idfobjects['ElectricEquipment'.upper()]
+
+    list_of_loads = [people_loads, lighting_loads, electric_loads]
+
+    active_loads = [['Load name', 'Zone', 'Design level', 'Design level method']]
+    for load_type in list_of_loads:
+        for load in load_type:
+            if (load.key == 'Lights') or (load.key == 'ElectricEquipment'):
+                if 'always_on' in load.Schedule_Name.lower():
+                    active_loads.append([load.Name, load.Zone_or_ZoneList_Name, load.Design_Level, load.Design_Level_Calculation_Method])
+            else:
+                if 'always_on' in load.Number_of_People_Schedule_Name.lower():
+                    active_loads.append([load.Name, load.Zone_or_ZoneList_Name, load.Design_Level, load.Design_Level_Calculation_Method])
+    
+    csv_file = open('./active_loads.csv', 'w')
+    csv_writer = csv.writer(csv_file)
+    csv_writer.writerows(active_loads)
+    csv_file.close()
+
+# idf_data = IDF('./step_test_loads_and_equipment_off.idf')
+# turn_on_internal_loads(idf_data, 'ElectricEquipment', 'ALWAYS_ON')
+# idf_data.save('./step_test_loads_and_equipment_off.idf')

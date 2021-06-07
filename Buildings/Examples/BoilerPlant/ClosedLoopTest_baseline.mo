@@ -195,8 +195,9 @@ equation
     annotation (Line(points={{102,110},{108,110}}, color={255,0,255}));
   connect(booToInt.y, controller.supResReq) annotation (Line(points={{192,60},{196,
           60},{196,-100},{-50,-100},{-50,29},{-42,29}}, color={255,127,0}));
-  connect(conPID.y, hys1.u) annotation (Line(points={{72,60},{76,60},{76,30},{88,
-          30}}, color={0,0,127}));
+  connect(conPID.y, hys1.u) annotation (Line(points={{72,60},{76,60},{76,30},{
+          88,30}},
+                color={0,0,127}));
   connect(hys1.y, tim1.u)
     annotation (Line(points={{112,30},{118,30}}, color={255,0,255}));
   connect(tim1.passed, booToInt1.u) annotation (Line(points={{142,22},{146,22},{

@@ -1,5 +1,6 @@
 
 from buildingspy.io.outputfile import Reader
+import scipy.io as sio
 from buildingspy.io.postprocess import Plotter
 import os
 import matplotlib.pyplot as plt
@@ -9,34 +10,39 @@ from eppy.modeleditor import IDF
 import csv
 import shutil
 
-simulation_results_folder = '/home/developer/models/Buildings'
-processed_results_folder = '/home/developer/models/extracted_simulation_data'
-# simulation_results_folder = 'C:\Buildings_library\modelica-buildings\Buildings'
-# processed_results_folder = 'C:\Buildings_library\modelica-buildings\Buildings\processed_results'
+# simulation_results_folder = '/home/developer/models/Buildings'
+# processed_results_folder = '/home/developer/models/extracted_simulation_data'
+simulation_results_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\Git_repos\\modelica-buildings\\raw_mat_files\\Changed_boiler_capacity'
+processed_results_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\Git_repos\\modelica-buildings\\raw_mat_files\\Changed_boiler_capacity\\processed_results_Jan_2_5_coefficient'
+# simulation_results_folder = 'C:\Buildings_library\modelica-buildings\raw_mat_files'
+# processed_results_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\Git_repos\\modelica-buildings\\raw_mat_files\\processed_results_051121'
 
 datapoints = {
-        'boilerPlant.senVolFlo2.V_flow': 'boiler1_flowrate', 
-        'boilerPlant.senTem3.T': 'boiler1_supply_temp', 
-        'boilerPlant.senTem1.T': 'radiator_return_temp', 
-        'boilerPlant.senVolFlo1.V_flow': 'boiler2_flowrate', 
-        'boilerPlant.senTem2.T': 'boiler2_supply_temp', 
-        'boilerPlant.pum.P': 'pump1_power',
-        'boilerPlant.pum1.P': 'pump2_power',
-        'boilerPlant.yZonTem': 'zone_temp',
-        'boilerPlant.TOutAir': 'outdoor_air_temp',
-        'boilerPlant.senTem.T': 'radiator_supply_temp',
-        'boilerPlant.senVolFlo.V_flow': 'radiator_flowrate',
-        'boilerPlant.boi1.T': 'boiler1_temp',
-        'boilerPlant.boi.T': 'boiler2_temp',
-        'boilerPlant.val1.y_actual': 'boiler1_isoVal_position',
-        'boilerPlant.val2.y_actual': 'boiler2_isoVal_position',
-        'boilerPlant.boi1.y': 'boiler1_actuatorSignal',
-        'boilerPlant.boi.y': 'boiler2_actuatorSignal',
-        'boilerPlant.boi1.QFue_flow': 'boiler1_fuelUse',
-        'boilerPlant.boi.QFue_flow': 'boiler2_fuelUse',
-        'boilerPlant.TBoiHotWatSupSet[1]': 'boiler1_supSet',
-        'boilerPlant.TBoiHotWatSupSet[2]': 'boiler2_supSet',
-        'boilerPlant.senRelPre1.p_rel': 'pumps_dP'}
+        'boiPla.boi1.m_flow': 'boiler1_massflowrate', 
+        'boiPla.senTem3.T': 'boiler1_supply_temp', 
+        'boiPla.senTem1.T': 'radiator_return_temp', 
+        'boiPla.boi.m_flow': 'boiler2_massflowrate', 
+        'boiPla.senTem2.T': 'boiler2_supply_temp', 
+        'boiPla.pum.P': 'pump1_power',
+        'boiPla.pum1.P': 'pump2_power',
+        'zoneModel_simplified.y': 'zone_temp',
+        'boiPla.TOut': 'outdoor_air_temp',
+        'boiPla.ySupTem': 'radiator_supply_temp',
+        'boiPla.senVolFlo.V_flow': 'radiator_flowrate',
+        'boiPla.boi1.T': 'boiler1_temp',
+        'boiPla.boi.T': 'boiler2_temp',
+        'boiPla.val1.y_actual': 'boiler1_isoVal_position',
+        'boiPla.val2.y_actual': 'boiler2_isoVal_position',
+        'boiPla.boi1.y': 'boiler1_actuatorSignal',
+        'boiPla.boi.y': 'boiler2_actuatorSignal',
+        'boiPla.boi1.QFue_flow': 'boiler1_fuelUse',
+        'boiPla.boi.QFue_flow': 'boiler2_fuelUse',
+        'boiPla.TBoiHotWatSupSet[1]': 'boiler1_supSet',
+        'boiPla.TBoiHotWatSupSet[2]': 'boiler2_supSet',
+        'boiPla.senRelPre1.p_rel': 'pumps_dP',
+        'boiPla.boi1.y': 'boiler1_partloadratio',
+        'boiPla.boi.y': 'boiler2_partloadratio',
+        'controller.plaEna.yPla': 'plant_enable_signal'}
 
 line_plot_datapoints = {
     'Boiler power consumed': 'total_boiler_consumption',
@@ -81,12 +87,12 @@ idd_path = os.path.join('C:\EnergyPlusV9-0-1', 'Energy+.idd')
 IDF.setiddname(idd_path)
 
 def main():
-    mat_file_list = utilities.find_relevant_files(['case_study', '.mat'], simulation_results_folder)
+    mat_file_list = utilities.find_relevant_files(['case_study', '15mins', 'Jan', '2_5', '.mat'], simulation_results_folder)
     print('Found .mat files: ', mat_file_list)
     for mat_file in mat_file_list:
         print('Generating csv for ', mat_file)
         generate_csv(mat_file)
-    generate_plots
+    generate_plots()
 
 def generate_csv(data_file_name):
     # data_file_name = "simulation_results_trial_4.mat"
@@ -96,9 +102,11 @@ def generate_csv(data_file_name):
 
     result_file_name = data_file_name.rstrip('.mat')
     data_file = os.path.join(simulation_results_folder, data_file_name)
+    print(data_file)
     simulation_data_raw = Reader(data_file, 'dymola')
+    # simulation_data_raw = sio.loadmat(data_file)
     var_names = simulation_data_raw.varNames()
-    print(var_names)
+    # print(var_names)
 
     simulation_data = pd.DataFrame()
 
@@ -115,8 +123,8 @@ def generate_csv(data_file_name):
     simulation_data = simulation_data.groupby('minute').mean()
 
     simulation_data['zone_thermal_load'] = 1000 * 4200 * simulation_data['radiator_flowrate'] * (simulation_data['radiator_supply_temp'] - simulation_data['radiator_return_temp'])
-    simulation_data['boiler1_power_generation'] = -1000 * 4200 * simulation_data['boiler1_flowrate'] * (simulation_data['boiler1_supply_temp'] - simulation_data['radiator_return_temp'])
-    simulation_data['boiler2_power_generation'] = -1000 * 4200 * simulation_data['boiler2_flowrate'] * (simulation_data['boiler2_supply_temp'] - simulation_data['radiator_return_temp'])
+    simulation_data['boiler1_power_generation'] = 4200 * simulation_data['boiler1_massflowrate'] * (simulation_data['boiler1_supply_temp'] - simulation_data['radiator_return_temp'])
+    simulation_data['boiler2_power_generation'] = 4200 * simulation_data['boiler2_massflowrate'] * (simulation_data['boiler2_supply_temp'] - simulation_data['radiator_return_temp'])
     simulation_data['boiler1_power_consumption'] = simulation_data['boiler1_fuelUse']
     simulation_data['boiler2_power_consumption'] = simulation_data['boiler2_fuelUse']
     simulation_data['pumps_power_consumption'] = simulation_data['pump1_power'] + simulation_data['pump2_power']
@@ -271,7 +279,8 @@ def generate_plots():
     global line_plot_datapoints
     global bar_plot_datapoints
 
-    list_of_results = os.listdir(processed_results_folder)
+    # list_of_results = os.listdir(processed_results_folder)
+    list_of_results = utilities.find_relevant_files(['case_study', '.csv'], processed_results_folder)
     scenario_names = []
     for result in list_of_results:
         scenario_names.append(result.rstrip('.csv'))
@@ -290,9 +299,8 @@ def generate_plots():
         plt.legend(['Baseline', 'Baseline+RequestReset', 'Baseline+1711Staging', 'Full1711'], fontsize=16)
         plt.xticks(fontsize=16)
         plt.yticks(fontsize=16)
-        plt.savefig((datapoint + '.png'))
-        plt.show()    
-
+        plt.savefig(os.path.join(processed_results_folder, (datapoint + '.png')))
+        # plt.show()    
     
     plt.close()
     for datapoint in list(bar_plot_datapoints):
@@ -308,7 +316,8 @@ def generate_plots():
         plt.ylabel('Energy consumed (W-min)', fontsize=16)
         plt.yticks(fontsize=12)
         plt.xticks(data_summary.columns, fontsize=12)
-        plt.show()
+        plt.savefig(os.path.join(processed_results_folder, (datapoint + '.png')))
+        # plt.show()
 
     plt.close()
     data_summary = pd.DataFrame(columns = list(bar_plot_datapoints))
@@ -323,7 +332,7 @@ def generate_plots():
 
     data_summary['%age reduction in plant energy consumption'] = (max(data_summary['Total plant energy consumed']) - data_summary['Total plant energy consumed']) * 100 / max(data_summary['Total plant energy consumed'])
 
-    data_summary.to_csv('data_summary.csv')
+    data_summary.to_csv(os.path.join(processed_results_folder, 'data_summary.csv'))
 
 def building_mass_compilation_from_idfs(idf_folder):
     idf_folder_path = os.path.join(idf_folder)
@@ -419,7 +428,28 @@ def deploy_idfs(idf_folder, dest_folder = None):
 
         shutil.copy(origin_path, dest_path)
 
-idf_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\OpenBuildingControl\\boiler_plant_case_study\\modified_idfs'
-simulation_runs_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\OpenBuildingControl\\boiler_plant_case_study\\simulation_runs'
-deploy_idfs(idf_folder, simulation_runs_folder)
+# idf_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\OpenBuildingControl\\boiler_plant_case_study\\modified_idfs'
+# simulation_runs_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\OpenBuildingControl\\boiler_plant_case_study\\simulation_runs'
+# deploy_idfs(idf_folder, simulation_runs_folder)
 
+def calculate_envelope_heat_transfer(output_csv_file):
+    csv_file_path = os.path.join(output_csv_file)
+    output_data = pd.read_csv(csv_file_path)
+
+    column_total = pd.DataFrame(index = output_data.index)
+    column_total['total'] = 0
+    column_headers = output_data.columns.tolist()
+    for header in column_headers:
+        if 'Total Heat Loss Rate' in header:
+            column_total['total'] += -output_data[header]
+        if 'Total Heat Gain Rate' in header:
+            column_total['total'] += output_data[header]
+        if 'Total Heat Loss Energy' in header:
+            column_total['total'] += -output_data[header]/60
+        if 'Total Heat Gain Energy' in header:
+            column_total['total'] += output_data[header]/60
+
+    column_total.to_csv(os.path.join(os.path.dirname(csv_file_path), 'window_infiltration_energyTransfer.csv'))
+
+# calculate_envelope_heat_transfer('C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\OpenBuildingControl\\boiler_plant_case_study\\simulation_runs\\step_test\\step_test_loads_and_equipment_off_windowsAndInfiltration.csv')
+main()

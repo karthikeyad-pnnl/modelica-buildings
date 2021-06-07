@@ -663,8 +663,6 @@ equation
           {280,-140},{280,-174},{30,-174},{30,-143},{15,-143}},color={0,0,127}));
   connect(spl2.port_3, val5.port_a) annotation (Line(points={{-20,-100},{10,-100},
           {10,-80}}, color={0,127,255}));
-  connect(val3.y_actual, yBypValSig) annotation (Line(points={{35,127},{50,127},
-          {50,230},{200,230},{200,180},{340,180}}, color={0,0,127}));
   connect(uPumSpe, pro[1].u2) annotation (Line(points={{-340,0},{-288,0},{-288,
           -16},{-212,-16}}, color={0,0,127}));
   connect(uPumSpe, pro[2].u2) annotation (Line(points={{-340,0},{-292,0},{-292,
@@ -781,6 +779,8 @@ equation
           6},{-50,10},{-30,10}}, color={0,127,255}));
   connect(senRelPre1.port_a, spl2.port_2) annotation (Line(points={{-90,6},{
           -104,6},{-104,-90},{-30,-90}}, color={0,127,255}));
+  connect(val.y_actual, yBypValSig) annotation (Line(points={{95,47},{168,47},{168,
+          180},{340,180}}, color={0,0,127}));
   annotation (defaultComponentName="boiPla",
     Documentation(info="<html>
       <p>

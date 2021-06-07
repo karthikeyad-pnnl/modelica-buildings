@@ -6,3 +6,5 @@ ClosedLoopTest_baseline
 ClosedLoopTest_baseline_requestReset
 ClosedLoopTest_baseline_1711Staging
 ClosedLoopTest_baseline_OAReset
+StepTest
+BoilerLoadSimulation

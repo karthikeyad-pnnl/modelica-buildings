@@ -396,8 +396,8 @@ equation
   connect(conInt.y, addInt.u2) annotation (Line(points={{-178,-246},{-166,-246},
           {-166,-222},{-162,-222}},
                                  color={255,127,0}));
-  connect(THotWatSup, add2.u1) annotation (Line(points={{-420,170},{-280,170},{
-          -280,176},{-262,176}}, color={0,0,127}));
+  connect(THotWatSup, add2.u1) annotation (Line(points={{-420,170},{-288,170},{
+          -288,176},{-262,176}}, color={0,0,127}));
   connect(THotWatRet, add2.u2) annotation (Line(points={{-420,250},{-270,250},{
           -270,164},{-262,164}}, color={0,0,127}));
   connect(hys.u, add2.y)

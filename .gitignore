@@ -73,3 +73,7 @@ tmp-eplus-*
 eplus*
 sqlite*
 */tmp-simulation*
+
+#Added by Karthik Devaprasad - PNNL
+#########################################
+*.xlsx
