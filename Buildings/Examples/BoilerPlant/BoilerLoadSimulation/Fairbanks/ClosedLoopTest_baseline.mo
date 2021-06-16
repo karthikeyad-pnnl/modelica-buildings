@@ -237,14 +237,6 @@ equation
       textString="%second",
       index=1,
       extent={{6,3},{6,3}}));
-  connect(weaBus.TDryBul, boiPla.TOut) annotation (Line(
-      points={{-110,70},{-82,70},{-82,-19},{-62,-19}},
-      color={255,204,51},
-      thickness=0.5), Text(
-      string="%first",
-      index=-1,
-      extent={{-6,3},{-6,3}},
-      horizontalAlignment=TextAlignment.Right));
   connect(weaBus.TDryBul, controller.TOut) annotation (Line(
       points={{-110,70},{-110,40},{-120,40},{-120,12},{-112,12}},
       color={255,204,51},
@@ -253,13 +245,15 @@ equation
       index=-1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
+  connect(zoneModel_simplified.y, boiPla.TZon) annotation (Line(points={{-18,60},
+          {-10,60},{-10,12},{-72,12},{-72,-19},{-62,-19}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,160}})),
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,
             160}})),
     experiment(
-      StartTime=2764800,
-      StopTime=5184000,
+      StartTime=700000,
+      StopTime=2764800,
       Interval=900,
       __Dymola_Algorithm="Cvode"));
 end ClosedLoopTest_baseline;

@@ -12,8 +12,12 @@ import shutil
 
 # simulation_results_folder = '/home/developer/models/Buildings'
 # processed_results_folder = '/home/developer/models/extracted_simulation_data'
-simulation_results_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\Git_repos\\modelica-buildings\\raw_mat_files\\Changed_boiler_capacity'
-processed_results_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\Git_repos\\modelica-buildings\\raw_mat_files\\Changed_boiler_capacity\\processed_results_Jan_2_5_coefficient'
+simulation_results_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\Git_repos\\modelica-buildings\\raw_mat_files\\Buffalo-post060921'
+filter_list = ['case_study', '15mins', 'Mar', '.mat']
+separator = '_'
+processed_results_folder_name = separator.join(filter_list)
+# processed_results_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\Git_repos\\modelica-buildings\\raw_mat_files\\Buffalo-post060921\\processed_results_Jan'
+processed_results_folder = os.path.join(simulation_results_folder, processed_results_folder_name)
 # simulation_results_folder = 'C:\Buildings_library\modelica-buildings\raw_mat_files'
 # processed_results_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\Git_repos\\modelica-buildings\\raw_mat_files\\processed_results_051121'
 
@@ -86,8 +90,8 @@ weather_file_dictionary = {
 idd_path = os.path.join('C:\EnergyPlusV9-0-1', 'Energy+.idd')
 IDF.setiddname(idd_path)
 
-def main():
-    mat_file_list = utilities.find_relevant_files(['case_study', '15mins', 'Jan', '2_5', '.mat'], simulation_results_folder)
+def main(filter_list):
+    mat_file_list = utilities.find_relevant_files(filter_list, simulation_results_folder)
     print('Found .mat files: ', mat_file_list)
     for mat_file in mat_file_list:
         print('Generating csv for ', mat_file)
@@ -330,9 +334,51 @@ def generate_plots():
             reqd_column = (data_summary.columns == datapoint)
             data_summary.iloc[reqd_row, reqd_column] = reqd_data
 
+    plt.close('all')
+    plot_histogram(processed_results_folder, list_of_results)
+    plot_histogram_2(processed_results_folder, list_of_results)
+
     data_summary['%age reduction in plant energy consumption'] = (max(data_summary['Total plant energy consumed']) - data_summary['Total plant energy consumed']) * 100 / max(data_summary['Total plant energy consumed'])
 
     data_summary.to_csv(os.path.join(processed_results_folder, 'data_summary.csv'))
+
+def plot_histogram(processed_results_folder, list_of_results):
+    hist_datapoints = ['boiler1_partloadratio', 'boiler2_partloadratio']
+    for result_file in list_of_results:
+        file_data = pd.read_csv(os.path.join(processed_results_folder, result_file))
+        scenario_number = find_scenario_number(result_file)
+        for datapoint in hist_datapoints:
+            filtered_data = file_data[file_data[datapoint] > 0]
+            filtered_data.describe()
+            boiler_plr_when_on = list(filtered_data[datapoint])
+            plt.hist(boiler_plr_when_on)
+            plt.ylim(0, 600)
+            plt.savefig(os.path.join(processed_results_folder, (datapoint + '_scenario_' + scenario_number + '.png')))
+            plt.close()
+
+def plot_histogram_2(processed_results_folder, list_of_results):
+    hist_datapoints = ['boiler1_partloadratio', 'boiler2_partloadratio']
+    for datapoint in hist_datapoints:
+        for result_file in list_of_results:
+            file_data = pd.read_csv(os.path.join(processed_results_folder, result_file))
+            scenario_number = find_scenario_number(result_file)
+            filtered_data = file_data[file_data[datapoint] > 0]
+            filtered_data.describe()
+            boiler_plr_when_on = list(filtered_data[datapoint])
+            if scenario_number == '5':
+                plt.hist(boiler_plr_when_on,  linestyle = '-', edgecolor = 'blue', fill = False, joinstyle = 'miter')
+            else:
+                plt.hist(boiler_plr_when_on, linestyle = '-', edgecolor = 'red', fill = False, joinstyle = 'miter')
+        plt.ylim(0, 600)
+        plt.savefig(os.path.join(processed_results_folder, (datapoint + '.png')))
+        plt.close()
+
+def find_scenario_number(result_file):
+    list_of_strings = result_file.split('_')
+    scenario_index = list_of_strings.index('scenario') + 1
+    scenario_number = list_of_strings[scenario_index]
+
+    return scenario_number
 
 def building_mass_compilation_from_idfs(idf_folder):
     idf_folder_path = os.path.join(idf_folder)
@@ -452,4 +498,6 @@ def calculate_envelope_heat_transfer(output_csv_file):
     column_total.to_csv(os.path.join(os.path.dirname(csv_file_path), 'window_infiltration_energyTransfer.csv'))
 
 # calculate_envelope_heat_transfer('C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\OpenBuildingControl\\boiler_plant_case_study\\simulation_runs\\step_test\\step_test_loads_and_equipment_off_windowsAndInfiltration.csv')
-main()
+main(filter_list)
+list_of_results = utilities.find_relevant_files(['case', '.csv'], processed_results_folder)
+# plot_histogram_2(processed_results_folder, list_of_results)

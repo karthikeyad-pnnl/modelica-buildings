@@ -225,7 +225,8 @@ equation
     annotation (Line(points={{-119,110},{-102,110}},
                                                   color={0,0,127}));
   connect(con3.y, controller.uBoiAva) annotation (Line(points={{-118,-130},{
-          -110,-130},{-110,-98},{-136,-98},{-136,-6},{-112,-6}}, color={255,0,
+          -110,-130},{-110,-100},{-136,-100},{-136,-6},{-112,-6}},
+                                                                 color={255,0,
           255}));
   connect(weaDat.weaBus,weaBus)  annotation (Line(
       points={{-130,70},{-110,70}},
@@ -235,14 +236,6 @@ equation
       textString="%second",
       index=1,
       extent={{6,3},{6,3}}));
-  connect(weaBus.TDryBul, boiPla.TOut) annotation (Line(
-      points={{-110,70},{-82,70},{-82,-19},{-62,-19}},
-      color={255,204,51},
-      thickness=0.5), Text(
-      string="%first",
-      index=-1,
-      extent={{-6,3},{-6,3}},
-      horizontalAlignment=TextAlignment.Right));
   connect(weaBus.TDryBul, controller.TOut) annotation (Line(
       points={{-110,70},{-110,40},{-120,40},{-120,12},{-112,12}},
       color={255,204,51},
@@ -251,6 +244,8 @@ equation
       index=-1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
+  connect(zoneModel_simplified.y, boiPla.TZon) annotation (Line(points={{-18,60},
+          {-10,60},{-10,14},{-64,14},{-64,-19},{-62,-19}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,160}})),
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,
@@ -258,5 +253,6 @@ equation
     experiment(
       StopTime=2764800,
       Interval=900,
+      Tolerance=0.001,
       __Dymola_Algorithm="Cvode"));
 end ClosedLoopTest_baseline;

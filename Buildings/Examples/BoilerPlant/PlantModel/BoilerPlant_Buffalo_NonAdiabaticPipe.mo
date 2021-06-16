@@ -475,14 +475,14 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe
     redeclare model HeatTransfer =
         Modelica.Fluid.Pipes.BaseClasses.HeatTransfer.ConstantFlowHeatTransfer,
     flowModel(dp_nominal=100, m_flow_nominal=mRad_flow_nominal),
-    heatTransfer(alpha0=2.5*1/0.3))
+    heatTransfer(alpha0=15*1/0.3))
     annotation (Placement(transformation(extent={{208,-8},{228,12}}, rotation=-90,
         origin={208,228})));
 
-  Controls.OBC.CDL.Interfaces.RealInput TOut(
+  Controls.OBC.CDL.Interfaces.RealInput TZon(
     final unit="K",
     displayUnit="degC",
-    final quantity="ThermodynamicTemperature") "Outdoor air temperature"
+    final quantity="ThermodynamicTemperature") "Zone air temperature"
     annotation (Placement(transformation(extent={{-360,-90},{-320,-50}}),
         iconTransformation(extent={{-140,-110},{-100,-70}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature TOut1
@@ -737,7 +737,7 @@ equation
     annotation (Line(points={{210,30},{210,20}}, color={0,127,255}));
   connect(pipe.port_b, spl6.port_2) annotation (Line(points={{210,0},{210,-150},
           {160,-150}}, color={0,127,255}));
-  connect(TOut, TOut1.T)
+  connect(TZon, TOut1.T)
     annotation (Line(points={{-340,-70},{-282,-70}}, color={0,0,127}));
   connect(TOut1.port, pipe.heatPorts[1]) annotation (Line(points={{-260,-70},{
           -150,-70},{-150,96},{226,96},{226,11.45},{214.4,11.45}}, color={191,0,

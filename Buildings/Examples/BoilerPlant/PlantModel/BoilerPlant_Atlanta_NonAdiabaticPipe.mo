@@ -295,8 +295,8 @@ model BoilerPlant_Atlanta_NonAdiabaticPipe
         Media.Water, m_flow_nominal=1000*0.0006)
     annotation (Placement(transformation(extent={{-20,110},{0,130}})));
 
-  Buildings.Fluid.Sensors.TemperatureTwoPort senTem1(redeclare package Medium
-      = Media.Water, m_flow_nominal=1000*0.0006)
+  Buildings.Fluid.Sensors.TemperatureTwoPort senTem1(redeclare package Medium =
+        Media.Water, m_flow_nominal=1000*0.0006)
     annotation (Placement(transformation(extent={{180,110},{200,130}})));
 
   Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep(nout=1)
@@ -357,11 +357,11 @@ model BoilerPlant_Atlanta_NonAdiabaticPipe
   Controls.OBC.CDL.Continuous.Add add2[2](k1=fill(-1, 2))
     "Check difference between return temperature and boiler temperature"
     annotation (Placement(transformation(extent={{100,-100},{120,-80}})));
-  Fluid.Sensors.TemperatureTwoPort           senTem2(redeclare package Medium
-      = Media.Water, m_flow_nominal=mBoi_flow_nominal1)
+  Fluid.Sensors.TemperatureTwoPort           senTem2(redeclare package Medium =
+        Media.Water, m_flow_nominal=mBoi_flow_nominal1)
     annotation (Placement(transformation(extent={{60,-160},{80,-140}})));
-  Fluid.Sensors.TemperatureTwoPort           senTem3(redeclare package Medium
-      = Media.Water, m_flow_nominal=mBoi_flow_nominal2)
+  Fluid.Sensors.TemperatureTwoPort           senTem3(redeclare package Medium =
+        Media.Water, m_flow_nominal=mBoi_flow_nominal2)
     annotation (Placement(transformation(extent={{60,-220},{80,-200}})));
   Controls.OBC.CDL.Logical.LogicalSwitch logSwi1[2]
     "Switch to signal from controller once enabling process has been completed"
@@ -411,8 +411,8 @@ model BoilerPlant_Atlanta_NonAdiabaticPipe
   Controls.OBC.CDL.Routing.BooleanReplicator booRep(nout=2)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{-160,-170},{-140,-150}})));
-  Fluid.Sensors.RelativePressure           senRelPre1(redeclare package Medium
-      = Media.Water)
+  Fluid.Sensors.RelativePressure           senRelPre1(redeclare package Medium =
+        Media.Water)
     "Differential pressure sensor between hot water supply and return"
     annotation (Placement(transformation(extent={{-90,-4},{-70,16}})));
   Modelica.Fluid.Interfaces.FluidPort_a port_a(redeclare package Medium =
@@ -479,10 +479,10 @@ model BoilerPlant_Atlanta_NonAdiabaticPipe
     annotation (Placement(transformation(extent={{208,-8},{228,12}}, rotation=-90,
         origin={208,228})));
 
-  Controls.OBC.CDL.Interfaces.RealInput TOut(
+  Controls.OBC.CDL.Interfaces.RealInput TZon(
     final unit="K",
     displayUnit="degC",
-    final quantity="ThermodynamicTemperature") "Outdoor air temperature"
+    final quantity="ThermodynamicTemperature") "Zone air temperature"
     annotation (Placement(transformation(extent={{-360,-90},{-320,-50}}),
         iconTransformation(extent={{-140,-110},{-100,-70}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature TOut1
@@ -737,7 +737,7 @@ equation
     annotation (Line(points={{210,30},{210,20}}, color={0,127,255}));
   connect(pipe.port_b, spl6.port_2) annotation (Line(points={{210,0},{210,-150},
           {160,-150}}, color={0,127,255}));
-  connect(TOut, TOut1.T)
+  connect(TZon, TOut1.T)
     annotation (Line(points={{-340,-70},{-282,-70}}, color={0,0,127}));
   connect(TOut1.port, pipe.heatPorts[1]) annotation (Line(points={{-260,-70},{
           -150,-70},{-150,96},{226,96},{226,11.45},{214.4,11.45}}, color={191,0,

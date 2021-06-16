@@ -53,7 +53,7 @@ block StepTest_NonAdiabaticPipe "Model to test step response of zone model"
     redeclare model HeatTransfer =
         Modelica.Fluid.Pipes.BaseClasses.HeatTransfer.ConstantFlowHeatTransfer,
     flowModel(dp_nominal=100, m_flow_nominal=mRad_flow_nominal),
-    heatTransfer(alpha0=5*1/0.3))
+    heatTransfer(alpha0=15*1/0.3))
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
 
   Controls.OBC.CDL.Continuous.Sources.Pulse pul(width=0.001, period=10800)

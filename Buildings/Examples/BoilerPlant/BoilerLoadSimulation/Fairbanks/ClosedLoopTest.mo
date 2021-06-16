@@ -244,14 +244,8 @@ equation
       index=-1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(weaBus.TDryBul, boiPla.TOut) annotation (Line(
-      points={{-110,70},{-82,70},{-82,-19},{-62,-19}},
-      color={255,204,51},
-      thickness=0.5), Text(
-      string="%first",
-      index=-1,
-      extent={{-6,3},{-6,3}},
-      horizontalAlignment=TextAlignment.Right));
+  connect(zoneModel_simplified.y, boiPla.TZon) annotation (Line(points={{-18,60},
+          {-10,60},{-10,4},{-76,4},{-76,-19},{-62,-19}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,160}})),
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,
@@ -260,5 +254,6 @@ equation
       StartTime=2764800,
       StopTime=5184000,
       Interval=900,
+      Tolerance=1e-06,
       __Dymola_Algorithm="Cvode"));
 end ClosedLoopTest;

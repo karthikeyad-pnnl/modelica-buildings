@@ -14,7 +14,10 @@ block ZoneModel_simplified "Zone model"
   Controls.OBC.CDL.Interfaces.RealInput u annotation (Placement(transformation(
           extent={{-240,-20},{-200,20}}), iconTransformation(extent={{-140,-20},
             {-100,20}})));
-  Controls.OBC.CDL.Interfaces.RealOutput y annotation (Placement(transformation(
+  Controls.OBC.CDL.Interfaces.RealOutput y(
+    final unit = "K",
+    displayUnit = "degC",
+    final quantity = "ThermodynamicTemperature") annotation (Placement(transformation(
           extent={{200,-20},{240,20}}), iconTransformation(extent={{100,-20},{140,
             20}})));
   Fluid.HeatExchangers.Radiators.RadiatorEN442_2           rad(
