@@ -138,7 +138,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe
     redeclare package Medium = MediumW,
     final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
     final m_flow_nominal=mBoi_flow_nominal1,
-    final dp_nominal=5000,
+    final dp_nominal=dpFixed_nominal_value,
     final Q_flow_nominal=boiCap1,
     final T_nominal=TBoiSup_nominal,
     final effCur=Buildings.Fluid.Types.EfficiencyCurves.QuadraticLinear,
@@ -157,7 +157,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe
     redeclare package Medium = MediumW,
     final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
     final m_flow_nominal=mBoi_flow_nominal2,
-    final dp_nominal=5000,
+    final dp_nominal=dpFixed_nominal_value,
     final Q_flow_nominal=boiCap2,
     final T_nominal=TBoiSup_nominal,
     final effCur=Buildings.Fluid.Types.EfficiencyCurves.Constant,
@@ -236,7 +236,8 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe
   Buildings.Fluid.Actuators.Valves.TwoWayLinear val(
     redeclare package Medium = Media.Water,
     final m_flow_nominal=mRad_flow_nominal,
-    final dpValve_nominal=0.1)
+    final dpValve_nominal=dpValve_nominal_value,
+    dpFixed_nominal=dpFixed_nominal_value)
     "Minimum flow bypass valve"
     annotation (Placement(transformation(extent={{80,30},{100,50}})));
 
@@ -253,18 +254,21 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe
   Buildings.Fluid.Actuators.Valves.TwoWayLinear val1(
     redeclare package Medium = Media.Water,
     final m_flow_nominal=mBoi_flow_nominal1,
-    final dpValve_nominal=0.1,
+    final dpValve_nominal=dpValve_nominal_value,
+    use_inputFilter=true,
     init=Modelica.Blocks.Types.Init.InitialState,
-    y_start=0)
+    y_start=0,
+    dpFixed_nominal=dpFixed_nominal_value)
     "Isolation valve for boiler-2"
     annotation (Placement(transformation(extent={{0,-220},{20,-200}})));
 
   Buildings.Fluid.Actuators.Valves.TwoWayLinear val2(
     redeclare package Medium = Media.Water,
     final m_flow_nominal=mBoi_flow_nominal2,
-    final dpValve_nominal=0.1,
+    final dpValve_nominal=dpValve_nominal_value,
     init=Modelica.Blocks.Types.Init.InitialState,
-    y_start=0)
+    y_start=0,
+    dpFixed_nominal=dpFixed_nominal_value)
     "Isolation valve for boiler-1"
     annotation (Placement(transformation(extent={{0,-160},{20,-140}})));
 
@@ -306,16 +310,20 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe
   Buildings.Fluid.Actuators.Valves.TwoWayLinear val4(
     redeclare package Medium = Media.Water,
     final m_flow_nominal=mRad_flow_nominal/2,
-    final dpValve_nominal=0.1,
-    riseTime=15)               "Valve to prevent reverse flow through pump"
+    final dpValve_nominal=dpValve_nominal_value,
+    riseTime=15,
+    dpFixed_nominal=dpFixed_nominal_value)
+                               "Valve to prevent reverse flow through pump"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,
         origin={-70,-70})));
   Buildings.Fluid.Actuators.Valves.TwoWayLinear           val5(
     redeclare package Medium = Media.Water,
     final m_flow_nominal=mRad_flow_nominal/2,
-    final dpValve_nominal=0.1,
-    riseTime=15)               "Valve to prevent reverse flow through pump"
+    final dpValve_nominal=dpValve_nominal_value,
+    riseTime=15,
+    dpFixed_nominal=dpFixed_nominal_value)
+                               "Valve to prevent reverse flow through pump"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,
         origin={10,-70})));
@@ -488,6 +496,10 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature TOut1
     "Outside temperature"
     annotation (Placement(transformation(extent={{-280,-80},{-260,-60}})));
+  parameter Modelica.SIunits.PressureDifference dpValve_nominal_value=20000
+    "Nominal pressure drop of fully open valve, used if CvData=Buildings.Fluid.Types.CvTypes.OpPoint";
+  parameter Modelica.SIunits.PressureDifference dpFixed_nominal_value=1000
+    "Pressure drop of pipe and other resistances that are in series";
 equation
   connect(spl1.port_2, spl2.port_1)
     annotation (Line(points={{-30,-140},{-30,-110}},   color={0,127,255}));

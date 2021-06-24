@@ -21,14 +21,17 @@ block ClosedLoopTest "Model to test step response of zone model"
     TRadRet_nominal=323.15,
     mRad_flow_nominal=96.323,
     V=126016.35,
-    zonTheCap=6987976290)
+    zonTheCap=6987976290,
+    vol(T_start=283.15),
+    heaCap(T(start=10)),
+    rad(dp_nominal=40000))
     annotation (Placement(transformation(extent={{-40,50},{-20,70}})));
   Modelica.Blocks.Sources.CombiTimeTable combiTimeTable(
     tableOnFile=true,
     tableName="tab1",
     fileName="C:/Users/deva713/OneDrive - PNNL/Documents/Git_repos/modelica-buildings/VM_script/inputTableTxt.txt",
     verboseRead=true,
-    columns={2},
+    columns={2,5},
     timeScale=60) "Boiler thermal load from EnergyPlus simulation"
     annotation (Placement(transformation(extent={{-140,100},{-120,120}})));
 
@@ -43,7 +46,9 @@ block ClosedLoopTest "Model to test step response of zone model"
     conPID(
       controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
       k=fill(10e-3, 2),
-      Ti=fill(90, 2)))
+      Ti=fill(90, 2)),
+    dpValve_nominal_value=20000,
+    dpFixed_nominal_value=1000)
     annotation (Placement(transformation(extent={{-60,-20},{-40,0}})));
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Controller           controller(
     final have_priOnl=true,
@@ -91,38 +96,31 @@ block ClosedLoopTest "Model to test step response of zone model"
   Fluid.Actuators.Valves.TwoWayLinear           val3(
     redeclare package Medium = Media.Water,
     final m_flow_nominal=mRad_flow_nominal,
-    final dpValve_nominal=0.1,
-    use_inputFilter=false,
+    deltaM=0.1,
+    final dpValve_nominal=0.5,
+    use_inputFilter=true,
+    y_start=0,
+    dpFixed_nominal=0,
     l=10e-10)
     "Isolation valve for radiator"
     annotation (Placement(transformation(extent={{-70,30},{-50,50}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant           con(final k=273.15 + 21.11)
+  Controls.OBC.CDL.Continuous.Sources.Constant           con(final k=21.11)
     "Zone temperature setpoint"
-    annotation (Placement(transformation(extent={{-50,80},{-30,100}})));
-  Controls.OBC.CDL.Continuous.Hysteresis hys(uLow=0.0001, uHigh=0.0005)
+    annotation (Placement(transformation(extent={{-140,130},{-120,150}})));
+  Controls.OBC.CDL.Continuous.Hysteresis hys(uLow=0.05, uHigh=0.1)
     "Check if radiator control valve opening is above threshold for enabling boiler plant"
     annotation (Placement(transformation(extent={{10,130},{30,150}})));
-  Controls.OBC.CDL.Logical.Timer tim(t=30) "Timer"
-    annotation (Placement(transformation(extent={{40,130},{60,150}})));
   Controls.OBC.CDL.Conversions.BooleanToInteger booToInt
-    annotation (Placement(transformation(extent={{100,80},{120,100}})));
-  Controls.OBC.CDL.Continuous.Hysteresis hys1(uLow=0.00045, uHigh=0.00046)
+    annotation (Placement(transformation(extent={{100,130},{120,150}})));
+  Controls.OBC.CDL.Continuous.Hysteresis hys1(uLow=0.3, uHigh=0.35)
     "Check if radiator control valve opening is above threshold for rasing HHW supply temperature"
     annotation (Placement(transformation(extent={{20,50},{40,70}})));
-  Controls.OBC.CDL.Logical.Timer tim1(t=30) "Timer"
-    annotation (Placement(transformation(extent={{50,50},{70,70}})));
   Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1(integerTrue=3)
     annotation (Placement(transformation(extent={{80,50},{100,70}})));
-  Controls.OBC.CDL.Logical.Latch lat
-    annotation (Placement(transformation(extent={{70,130},{90,150}})));
-  Controls.OBC.CDL.Logical.Timer tim2(t=60) "Timer"
-    annotation (Placement(transformation(extent={{50,90},{70,110}})));
-  Controls.OBC.CDL.Logical.Not not1
-    annotation (Placement(transformation(extent={{20,90},{40,110}})));
   Controls.OBC.CDL.Continuous.PID           conPID(
     final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
-    final k=1*10e-4,
-    Ti=10000)
+    final k=10e-2,
+    Ti=30)
     "Radiator isolation valve controller"
     annotation (Placement(transformation(extent={{-20,80},{0,100}})));
   Controls.OBC.CDL.Discrete.UnitDelay uniDel(samplePeriod=1)
@@ -141,6 +139,8 @@ block ClosedLoopTest "Model to test step response of zone model"
     "Weather bus"
     annotation (Placement(transformation(extent={{-120,60},{-100,80}}),
         iconTransformation(extent={{-56,104},{-36,124}})));
+  Controls.OBC.CDL.Continuous.AddParameter addPar(p=273.15, k=1)
+    annotation (Placement(transformation(extent={{-60,130},{-40,150}})));
 equation
   connect(gai.y, zoneModel_simplified.u)
     annotation (Line(points={{-78,110},{-56,110},{-56,60},{-42,60}},
@@ -174,35 +174,17 @@ equation
   connect(boiPla.yHotWatDp, controller.dpHotWatPri_rem) annotation (Line(points=
          {{-38,-7},{24,-7},{24,-54},{-124,-54},{-124,-3},{-112,-3}}, color={0,0,
           127}));
-  connect(con.y,conPID. u_s)
-    annotation (Line(points={{-28,90},{-22,90}},
-                                               color={0,0,127}));
   connect(conPID.y,hys. u) annotation (Line(points={{2,90},{6,90},{6,140},{8,140}},
                  color={0,0,127}));
-  connect(hys.y,tim. u)
-    annotation (Line(points={{32,140},{38,140}},   color={255,0,255}));
-  connect(booToInt.u,lat. y) annotation (Line(points={{98,90},{96,90},{96,140},{
-          92,140}},   color={255,0,255}));
-  connect(tim.passed,lat. u) annotation (Line(points={{62,132},{64,132},{64,140},
-          {68,140}},  color={255,0,255}));
-  connect(tim2.u,not1. y)
-    annotation (Line(points={{48,100},{42,100}}, color={255,0,255}));
-  connect(hys.y,not1. u) annotation (Line(points={{32,140},{34,140},{34,118},{14,
-          118},{14,100},{18,100}}, color={255,0,255}));
-  connect(tim2.passed,lat. clr) annotation (Line(points={{72,92},{80,92},{80,118},
-          {66,118},{66,134},{68,134}},       color={255,0,255}));
   connect(zoneModel_simplified.y, conPID.u_m)
     annotation (Line(points={{-18,60},{-10,60},{-10,78}}, color={0,0,127}));
   connect(conPID.y, hys1.u)
     annotation (Line(points={{2,90},{6,90},{6,60},{18,60}}, color={0,0,127}));
-  connect(hys1.y, tim1.u)
-    annotation (Line(points={{42,60},{48,60}}, color={255,0,255}));
-  connect(tim1.passed, booToInt1.u) annotation (Line(points={{72,52},{76,52},{76,
-          60},{78,60}}, color={255,0,255}));
   connect(booToInt1.y, controller.TSupResReq) annotation (Line(points={{102,60},
           {120,60},{120,-72},{-140,-72},{-140,18},{-112,18}}, color={255,127,0}));
-  connect(booToInt.y, controller.supResReq) annotation (Line(points={{122,90},{130,
-          90},{130,-80},{-150,-80},{-150,15},{-112,15}}, color={255,127,0}));
+  connect(booToInt.y, controller.supResReq) annotation (Line(points={{122,140},
+          {130,140},{130,-80},{-150,-80},{-150,15},{-112,15}},
+                                                         color={255,127,0}));
   connect(boiPla.yBoiSta, controller.uBoi) annotation (Line(points={{-38,-13},{-10,
           -13},{-10,-14},{18,-14},{18,-52},{-120,-52},{-120,-31},{-112,-31}},
         color={255,0,255}));
@@ -221,9 +203,6 @@ equation
           -38},{-8,-76},{-112,-76},{-112,-46}},  color={0,0,127}));
   connect(conPID.y, val3.y) annotation (Line(points={{2,90},{6,90},{6,116},{-60,
           116},{-60,52}}, color={0,0,127}));
-  connect(combiTimeTable.y[1], gai.u)
-    annotation (Line(points={{-119,110},{-102,110}},
-                                                  color={0,0,127}));
   connect(con3.y, controller.uBoiAva) annotation (Line(points={{-118,-130},{
           -110,-130},{-110,-98},{-136,-98},{-136,-6},{-112,-6}}, color={255,0,
           255}));
@@ -245,12 +224,23 @@ equation
       horizontalAlignment=TextAlignment.Right));
   connect(zoneModel_simplified.y, boiPla.TZon) annotation (Line(points={{-18,60},
           {-10,60},{-10,12},{-64,12},{-64,-19},{-62,-19}}, color={0,0,127}));
+  connect(combiTimeTable.y[1], gai.u)
+    annotation (Line(points={{-119,110},{-102,110}}, color={0,0,127}));
+  connect(addPar.y, conPID.u_s) annotation (Line(points={{-38,140},{-30,140},{
+          -30,90},{-22,90}}, color={0,0,127}));
+  connect(hys.y, booToInt.u)
+    annotation (Line(points={{32,140},{98,140}}, color={255,0,255}));
+  connect(hys1.y, booToInt1.u)
+    annotation (Line(points={{42,60},{78,60}}, color={255,0,255}));
+  connect(combiTimeTable.y[2], addPar.u) annotation (Line(points={{-119,110},{
+          -110,110},{-110,140},{-62,140}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,160}})),
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,
             160}})),
     experiment(
-      StopTime=2764800,
+      StartTime=86400,
+      StopTime=864000,
       Interval=900,
       Tolerance=0.001,
       __Dymola_Algorithm="Cvode"));

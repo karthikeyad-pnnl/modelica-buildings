@@ -22,25 +22,25 @@ block ZoneModel_simplified "Zone model"
             20}})));
   Fluid.HeatExchangers.Radiators.RadiatorEN442_2           rad(
     redeclare package Medium = MediumW,
-    final m_flow_nominal=mRad_flow_nominal,
-    final Q_flow_nominal=Q_flow_nominal,
-    final T_a_nominal=TRadSup_nominal,
-    final T_b_nominal=TRadRet_nominal,
-    final TAir_nominal=TAir_nominal,
-    final dp_nominal=20000)
+    m_flow_nominal=mRad_flow_nominal,
+    Q_flow_nominal=Q_flow_nominal,
+    T_a_nominal=TRadSup_nominal,
+    T_b_nominal=TRadRet_nominal,
+    TAir_nominal=TAir_nominal,
+    dp_nominal=0)
     "Radiator"
     annotation (Placement(transformation(extent={{-10,-160},{10,-140}})));
 
-  Modelica.Thermal.HeatTransfer.Components.HeatCapacitor heaCap(final C=
+  Modelica.Thermal.HeatTransfer.Components.HeatCapacitor heaCap(C=
         zonTheCap)
     "Heat capacity for furniture and walls"
     annotation (Placement(transformation(extent={{6,14},{26,34}})));
   Fluid.MixingVolumes.MixingVolume           vol(
     redeclare package Medium = MediumA,
-    final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
-    final m_flow_nominal=mA_flow_nominal,
-    final V=1.2*V,
-    final nPorts=1)
+    energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
+    m_flow_nominal=mA_flow_nominal,
+    V=1.2*V,
+    nPorts=1)
     annotation (Placement(transformation(extent={{6,-16},{26,4}})));
   Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow preHea
     "Prescribed heat flow"

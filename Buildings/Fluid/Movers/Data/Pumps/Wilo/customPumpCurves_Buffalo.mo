@@ -5,7 +5,7 @@ record customPumpCurves_Buffalo
     use_powerCharacteristic=true,
     speed_rpm_nominal=1450,
     power(V_flow={0, 0.096323, 0.192646}, P={0, 200, 400}),
-    pressure(V_flow={0, 0.096323, 0.192646}, dp={19000,9500,0}));
+    pressure(V_flow={0, 0.096323, 0.192646}, dp={180000,90000,0}));
   annotation (
 defaultComponentPrefixes="parameter",
 defaultComponentName="per",
