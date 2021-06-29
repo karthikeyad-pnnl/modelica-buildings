@@ -47,8 +47,8 @@ block ClosedLoopTest "Model to test step response of zone model"
       controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
       k=fill(10e-3, 2),
       Ti=fill(90, 2)),
-    dpValve_nominal_value=20000,
-    dpFixed_nominal_value=1000)
+    dpValve_nominal_value(displayUnit="bar") = 20000,
+    dpFixed_nominal_value(displayUnit="bar") = 1000)
     annotation (Placement(transformation(extent={{-60,-20},{-40,0}})));
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Controller           controller(
     final have_priOnl=true,
@@ -112,7 +112,7 @@ block ClosedLoopTest "Model to test step response of zone model"
     annotation (Placement(transformation(extent={{10,130},{30,150}})));
   Controls.OBC.CDL.Conversions.BooleanToInteger booToInt
     annotation (Placement(transformation(extent={{100,130},{120,150}})));
-  Controls.OBC.CDL.Continuous.Hysteresis hys1(uLow=0.3, uHigh=0.35)
+  Controls.OBC.CDL.Continuous.Hysteresis hys1(uLow=0.5, uHigh=0.55)
     "Check if radiator control valve opening is above threshold for rasing HHW supply temperature"
     annotation (Placement(transformation(extent={{20,50},{40,70}})));
   Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1(integerTrue=3)
@@ -120,7 +120,7 @@ block ClosedLoopTest "Model to test step response of zone model"
   Controls.OBC.CDL.Continuous.PID           conPID(
     final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
     final k=10e-2,
-    Ti=30)
+    Ti=300)
     "Radiator isolation valve controller"
     annotation (Placement(transformation(extent={{-20,80},{0,100}})));
   Controls.OBC.CDL.Discrete.UnitDelay uniDel(samplePeriod=1)
@@ -239,7 +239,6 @@ equation
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,
             160}})),
     experiment(
-      StartTime=86400,
       StopTime=864000,
       Interval=900,
       Tolerance=0.001,
