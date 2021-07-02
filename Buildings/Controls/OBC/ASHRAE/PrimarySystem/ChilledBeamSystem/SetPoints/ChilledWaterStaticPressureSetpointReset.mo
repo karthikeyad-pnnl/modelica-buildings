@@ -115,7 +115,7 @@ block ChilledWaterStaticPressureSetpointReset
     annotation (Placement(transformation(extent={{100,-20},{140,20}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
-// protected
+protected
   Buildings.Controls.OBC.CDL.Logical.Timer tim[nVal](
     final t=fill(thrTimLow, nVal))
     "Check if threshold time for generating one request has been exceeded"
