@@ -11,28 +11,35 @@ block OperatingMode
   parameter Real schTab[nSchRow,2] = [0,1; 6,1; 18,1; 24,1]
     "Table defining schedule for enabling plant";
 
-  CDL.Interfaces.BooleanInput uDetOcc[nZon] "Detected occupancy" annotation (
-      Placement(transformation(extent={{-180,50},{-140,90}}),
-        iconTransformation(extent={{-140,-20},{-100,20}})));
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uDetOcc[nZon]
+    "Detected occupancy"
+    annotation (Placement(transformation(extent={{-180,50},{-140,90}}),
+      iconTransformation(extent={{-140,-20},{-100,20}})));
 
-  CDL.Interfaces.BooleanOutput yDoasEna "DOAS enable signal" annotation (
-      Placement(transformation(extent={{140,-90},{180,-50}}),
-        iconTransformation(extent={{100,-60},{140,-20}})));
-  CDL.Interfaces.BooleanOutput yChiBeaEna "Chilled beam system enable signal"
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yDoasEna
+    "DOAS enable signal"
+    annotation (Placement(transformation(extent={{140,-90},{180,-50}}),
+      iconTransformation(extent={{100,-60},{140,-20}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yChiBeaEna
+    "Chilled beam system enable signal"
     annotation (Placement(transformation(extent={{140,50},{180,90}}),
-        iconTransformation(extent={{100,20},{140,60}})));
+      iconTransformation(extent={{100,20},{140,60}})));
 
-  CDL.Interfaces.IntegerOutput yOpeMod "System operating mode signal"
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yOpeMod
+    "System operating mode signal"
     annotation (Placement(transformation(extent={{140,-20},{180,20}}),
-        iconTransformation(extent={{100,-20},{140,20}})));
+      iconTransformation(extent={{100,-20},{140,20}})));
 
-  CDL.Continuous.Sources.TimeTable                        enaSch(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable enaSch(
     final table=schTab,
     final smoothness=Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments,
-    final timeScale=3600) "Table defining when occupancy is expected"
+    final timeScale=3600)
+    "Table defining when occupancy is expected"
     annotation (Placement(transformation(extent={{-120,30},{-100,50}})));
 
-  CDL.Logical.IntegerSwitch intSwi "Integer switch"
+  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi
+    "Integer switch"
     annotation (Placement(transformation(extent={{20,80},{40,100}})));
 
 protected
@@ -40,51 +47,87 @@ protected
                                  Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Types.OperationModeTypes.unoccupiedScheduled,
                                  Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Types.OperationModeTypes.unoccupiedUnscheduled}
     "Array of integer constants associated with each mode";
-  CDL.Integers.Sources.Constant conInt(k=Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Types.OperationModeTypes.occupied)
+
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(
+    final k=Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Types.OperationModeTypes.occupied)
     "Constant integer for occupied mode"
     annotation (Placement(transformation(extent={{-60,110},{-40,130}})));
-  CDL.Logical.IntegerSwitch intSwi1 "Integer switch"
+
+  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi1
+    "Integer switch"
     annotation (Placement(transformation(extent={{-20,30},{0,50}})));
-  CDL.Integers.Sources.Constant conInt1(k=Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Types.OperationModeTypes.unoccupiedScheduled)
+
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt1(
+    final k=Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Types.OperationModeTypes.unoccupiedScheduled)
     "Constant integer for unoccupiedScheduled mode"
     annotation (Placement(transformation(extent={{-60,60},{-40,80}})));
-  CDL.Integers.Sources.Constant conInt2(k=Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Types.OperationModeTypes.unoccupiedUnscheduled)
+
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt2(
+    final k=Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Types.OperationModeTypes.unoccupiedUnscheduled)
     "Constant integer for unoccupiedUnscheduled mode"
     annotation (Placement(transformation(extent={{-60,0},{-40,20}})));
-  CDL.Logical.MultiOr mulOr(nu=nZon) "Multi Or"
+
+  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
+    final nu=nZon)
+    "Multi Or"
     annotation (Placement(transformation(extent={{-30,80},{-10,100}})));
-  CDL.Integers.Equal intEqu[3] "Check which mode is currently active"
+
+  Buildings.Controls.OBC.CDL.Integers.Equal intEqu[3]
+    "Check which mode is currently active"
     annotation (Placement(transformation(extent={{-70,-60},{-50,-40}})));
-  CDL.Integers.Sources.Constant conInt3[3](k=modInt)
+
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt3[3](
+    final k=modInt)
     "Constant integer source with operation mode enumeration"
     annotation (Placement(transformation(extent={{-120,-80},{-100,-60}})));
-  CDL.Routing.IntegerReplicator intRep(nout=3) "Integer replicator"
+
+  Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep(
+    final nout=3)
+    "Integer replicator"
     annotation (Placement(transformation(extent={{-120,-40},{-100,-20}})));
-  CDL.Logical.LogicalSwitch logSwi[3]
+
+  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi[3]
     "Logical switch for chilled beam system enable"
     annotation (Placement(transformation(extent={{0,-60},{20,-40}})));
-  CDL.Logical.Sources.Constant con[3](k={true,true,true})
+
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con[3](
+    final k={true,true,true})
     "Constant Boolean source with chilled beam system enable signals"
     annotation (Placement(transformation(extent={{-40,-40},{-20,-20}})));
-  CDL.Logical.Sources.Constant con1[3](k={true,false,true})
+
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con1[3](
+    final k={true,false,true})
     "Constant Boolean source with DOAS enable signals"
     annotation (Placement(transformation(extent={{-40,-120},{-20,-100}})));
-  CDL.Logical.Sources.Constant con2[3](k=fill(false, 3))
+
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con2[3](
+    final k=fill(false, 3))
     "Constant Boolean source with disable signals"
     annotation (Placement(transformation(extent={{-40,-80},{-20,-60}})));
-  CDL.Logical.LogicalSwitch logSwi1[3] "Logical switch for DOAS enable"
+
+  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi1[3]
+    "Logical switch for DOAS enable"
     annotation (Placement(transformation(extent={{0,-100},{20,-80}})));
-  CDL.Logical.MultiOr mulOr1(nu=3)   "Multi Or"
+
+  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr1(
+    final nu=3)
+    "Multi Or"
     annotation (Placement(transformation(extent={{40,-60},{60,-40}})));
-  CDL.Logical.MultiOr mulOr2(nu=3)   "Multi Or"
+
+  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr2(
+    final nu=3)
+    "Multi Or"
     annotation (Placement(transformation(extent={{40,-100},{60,-80}})));
 
-  CDL.Logical.Not not1 "Logical not"
+  Buildings.Controls.OBC.CDL.Logical.Not not1
+    "Logical not"
     annotation (Placement(transformation(extent={{-60,30},{-40,50}})));
 
-  CDL.Continuous.GreaterThreshold                        greThr(final t=0.5)
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
+    final t=0.5)
     "Convert Real signal to Boolean"
     annotation (Placement(transformation(extent={{-90,30},{-70,50}})));
+
 equation
   connect(enaSch.y[1],greThr. u)
     annotation (Line(points={{-98,40},{-92,40}},       color={0,0,127}));
