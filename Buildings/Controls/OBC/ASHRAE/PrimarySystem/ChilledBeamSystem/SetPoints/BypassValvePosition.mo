@@ -22,17 +22,35 @@ block BypassValvePosition
     final quantity = "PressureDifference") = 50000
     "Maximum allowed differential pressure in the chilled water loop";
 
+  parameter Real k(
+    final unit = "1",
+    displayUnit = "1") = 1 "Gain of controller";
+
+  parameter Real Ti(
+    final unit = "s",
+    displayUnit = "s",
+    final quantity = "Time") = 0.5 "Time constant of integrator block";
+
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uPumSta[nPum]
     "Pump proven On signal"
     annotation (Placement(transformation(extent={{-140,30},{-100,70}}),
-      iconTransformation(extent={{-140,-20},{-100,20}})));
+      iconTransformation(extent={{-140,30},{-100,70}})));
+
+  CDL.Interfaces.RealInput dpChiWatLoo(
+    final unit="Pa",
+    displayUnit="Pa",
+    final quantity="PressureDifference")
+    "Chilled water loop differential static pressure" annotation (Placement(
+        transformation(extent={{-140,-70},{-100,-30}}), iconTransformation(
+          extent={{-140,-70},{-100,-30}})));
+
+  CDL.Interfaces.RealInput uPumSpe "Pump speed" annotation (Placement(
+        transformation(extent={{-140,-20},{-100,20}}), iconTransformation(
+          extent={{-140,-20},{-100,20}})));
 
   CDL.Interfaces.RealOutput yBypValPos "Bypass valve position" annotation (
       Placement(transformation(extent={{100,-20},{140,20}}), iconTransformation(
-          extent={{-336,-18},{-296,22}})));
-  CDL.Interfaces.RealInput uPumSpe "Pump speed" annotation (Placement(
-        transformation(extent={{-140,-20},{-100,20}}), iconTransformation(
-          extent={{-354,-72},{-314,-32}})));
+          extent={{100,-20},{140,20}})));
 
   CDL.Logical.Switch swi
     annotation (Placement(transformation(extent={{60,-10},{80,10}})));
@@ -49,35 +67,28 @@ block BypassValvePosition
     annotation (Placement(transformation(extent={{-20,60},{0,80}})));
   CDL.Continuous.Sources.Constant con1(k=1) "Constant real source"
     annotation (Placement(transformation(extent={{-20,20},{0,40}})));
-  CDL.Interfaces.RealInput dpChiWatLoo(
-    final unit="Pa",
-    displayUnit="Pa",
-    final quantity="PressureDifference")
-    "Chilled water loop differential static pressure" annotation (Placement(
-        transformation(extent={{-140,-70},{-100,-30}}), iconTransformation(
-          extent={{-140,-20},{-100,20}})));
+
   CDL.Continuous.PID conPID(
     controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
     k=k,
     Ti=Ti,
     reverseActing=false)
     annotation (Placement(transformation(extent={{20,-60},{40,-40}})));
-  parameter Real k=1 "Gain of controller";
-  parameter Real Ti=0.5 "Time constant of integrator block";
+
   CDL.Continuous.AddParameter addPar(p=-dPChiWatMax, k=1)
     "Find error in meaured differential pressure from maximum allowed value"
     annotation (Placement(transformation(extent={{-80,-60},{-60,-40}})));
   CDL.Continuous.AddParameter addPar1(p=0, k=1/dPChiWatMax)
     "Normalize differential pressure error"
     annotation (Placement(transformation(extent={{-40,-60},{-20,-40}})));
-protected
+
   Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
-    final nu=nZon)
+    final nu=nPum)
     "Multi Or"
     annotation (Placement(transformation(extent={{-80,40},{-60,60}})));
 
 equation
-  connect(uPumSta, mulOr.u[1:nZon]) annotation (Line(points={{-120,50},{-82,50}},
+  connect(uPumSta, mulOr.u[1:nPum]) annotation (Line(points={{-120,50},{-82,50}},
                              color={255,0,255}));
   connect(uPumSpe, hys.u)
     annotation (Line(points={{-120,0},{-92,0}}, color={0,0,127}));
@@ -109,8 +120,9 @@ equation
     annotation (Line(points={{-58,-50},{-42,-50}}, color={0,0,127}));
   connect(addPar1.y, conPID.u_m) annotation (Line(points={{-18,-50},{-10,-50},{
           -10,-72},{30,-72},{30,-62}}, color={0,0,127}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
-            {120,100}}), graphics={
+  annotation (defaultComponentName = "bypValPos",
+    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
+            {100,100}}), graphics={
             Text(
               extent={{-100,150},{100,110}},
               lineColor={0,0,255},
@@ -129,53 +141,29 @@ equation
         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
         Documentation(info="<html>
         <p>
-        Sequences for calculating system operating mode in chilled beam systems.
+        Sequences for calculating pressure-relief bypass valve position in chilled beam systems.
         </p>
         <p>
-        The block determines the system operating mode setpoint <code>yOpeMod</code>
-        as well as the enable signals for the chilled beam system <code>yChiBeaEna</code>
-        and the DOAS <code>yDoasEna</code>. To do this, it uses the detected 
-        occupancy signal from the zones <code>uDetOcc</code> and the expected 
-        occupancy schedule <code>schTab</code>.
+        The block determines the bypass valve position setpoint <code>yBypValPos</code>
+        based on the pump proven on status <code>uPumSta</code>, measured pump 
+        speed <code>uPumSpe</code> and measured differential pressure across the
+        demand loop <code>dpChiWatLoo</code>.
         </p>
         <p>
-        The operating mode setpoint and the enable signals based on the inputs 
-        are as follows:
-        <br>
-        <table summary=\"allowedConfigurations\" border=\"1\">
-          <thead>
-            <tr>
-              <th>Detected occupancy</th>
-              <th>Expected occupancy schedule</th>
-              <th>System operating mode</th>
-              <th>Chilled beam system enable status</th>
-              <th>DOAS enable status</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Occupied</td>
-              <td>-</td>
-              <td>1</td>
-              <td>True</td>
-              <td>True</td>
-            </tr>
-            <tr>
-              <td>Unoccupied</td>
-              <td>Unoccupied</td>
-              <td>2</td>
-              <td>True</td>
-              <td>False</td>
-            </tr>
-            <tr>
-              <td>Unoccupied</td>
-              <td>Occupied</td>
-              <td>3</td>
-              <td>True</td>
-              <td>True</td>
-            </tr>
-          </tbody>
-        </table>
+        The setpoint is calculated as follows:
+        <ul>
+        <li>
+        when none of the pumps are proven on, the bypass valve is completely opened.
+        </li>
+        <li>
+        when any of the pumps are proven on, the bypass valve is completely closed.
+        </li>
+        <li>
+        when the pumps are proven on and are running at minimum speed, 
+        <code>yBypValPos</code> is used to regulate <code>dpChiWatLoo</code> at 
+        maximum allowed loop pressure <code>dPChiWatMax</code>.
+        </li>
+        </ul>
         </p>
         </html>"));
 end BypassValvePosition;
