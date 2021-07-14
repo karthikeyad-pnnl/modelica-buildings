@@ -52,7 +52,7 @@ block BypassValvePosition
       Placement(transformation(extent={{100,-20},{140,20}}), iconTransformation(
           extent={{100,-20},{140,20}})));
 
-  CDL.Logical.Switch swi
+  CDL.Logical.Switch swi "Real switch"
     annotation (Placement(transformation(extent={{60,-10},{80,10}})));
   CDL.Continuous.Hysteresis hys(uLow=minPumSpe + dPumSpe, uHigh=minPumSpe + 2*
         dPumSpe) "Check if pump speed is at minimum"
@@ -72,7 +72,7 @@ block BypassValvePosition
     controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
     k=k,
     Ti=Ti,
-    reverseActing=false)
+    reverseActing=false) "PID controller"
     annotation (Placement(transformation(extent={{20,-60},{40,-40}})));
 
   CDL.Continuous.AddParameter addPar(p=-dPChiWatMax, k=1)
