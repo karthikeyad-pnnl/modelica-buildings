@@ -41,7 +41,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe
     "Radiator nominal return water temperature"
     annotation(dialog(group="Radiator parameters"));
 
-  parameter Modelica.SIunits.MassFlowRate mRad_flow_nominal=0.096323 * 1000
+  parameter Modelica.SIunits.MassFlowRate mRad_flow_nominal=0.113 * 1000
     "Radiator nominal mass flow rate"
     annotation(dialog(group="Radiator parameters"));
 
@@ -296,11 +296,11 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
 
   Buildings.Fluid.Sensors.TemperatureTwoPort senTem(redeclare package Medium =
-        Media.Water, m_flow_nominal=1000*0.0006)
+        Media.Water, m_flow_nominal=mRad_flow_nominal)
     annotation (Placement(transformation(extent={{-20,110},{0,130}})));
 
   Buildings.Fluid.Sensors.TemperatureTwoPort senTem1(redeclare package Medium =
-        Media.Water, m_flow_nominal=1000*0.0006)
+        Media.Water, m_flow_nominal=mRad_flow_nominal)
     annotation (Placement(transformation(extent={{180,110},{200,130}})));
 
   Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep(nout=1)
@@ -472,9 +472,9 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe
   Modelica.Fluid.Pipes.DynamicPipe pipe(
     redeclare package Medium = MediumW,
     nParallel=1,
-    length=100,
+    length=2000,
     isCircular=true,
-    diameter=0.25,
+    diameter=0.0762,
     height_ab=0.0102,
     redeclare model FlowModel =
         Modelica.Fluid.Pipes.BaseClasses.FlowModels.NominalLaminarFlow,
@@ -482,7 +482,8 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe
     use_HeatTransfer=true,
     redeclare model HeatTransfer =
         Modelica.Fluid.Pipes.BaseClasses.HeatTransfer.ConstantFlowHeatTransfer,
-    flowModel(dp_nominal=100, m_flow_nominal=mRad_flow_nominal),
+    flowModel(dp_nominal(displayUnit="Pa") = 50000,
+                              m_flow_nominal=mRad_flow_nominal),
     heatTransfer(alpha0=15*1/0.3))
     annotation (Placement(transformation(extent={{208,-8},{228,12}}, rotation=-90,
         origin={208,228})));
@@ -496,7 +497,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature TOut1
     "Outside temperature"
     annotation (Placement(transformation(extent={{-280,-80},{-260,-60}})));
-  parameter Modelica.SIunits.PressureDifference dpValve_nominal_value=20000
+  parameter Modelica.SIunits.PressureDifference dpValve_nominal_value=6000
     "Nominal pressure drop of fully open valve, used if CvData=Buildings.Fluid.Types.CvTypes.OpPoint";
   parameter Modelica.SIunits.PressureDifference dpFixed_nominal_value=1000
     "Pressure drop of pipe and other resistances that are in series";
