@@ -529,7 +529,8 @@ equation
     Diagram(coordinateSystem(
       preserveAspectRatio=false, extent={{-360,-240},{360,240}})),
     experiment(
-      StopTime=7500,
+      StopTime=30000,
+      Interval=1,
       Tolerance=1e-06,
       __Dymola_Algorithm="Cvode"),
       __Dymola_Commands(file="./Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Validation/Controller.mos"
