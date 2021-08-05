@@ -408,7 +408,7 @@ block Controller
     final staCon=staCon,
     final relFloHys=relFloHys,
     final VHotWat_flow_nominal=VHotWat_flow_nominal) if have_priOnl and
-    have_heaPriPum
+    have_heaPriPum and (nPum > 1)
     "Enable lag pump for primary-only plants using differential pressure pump speed control"
     annotation (Placement(transformation(extent={{-200,-10},{-180,10}})));
 
@@ -609,12 +609,13 @@ block Controller
     "Sum of integer inputs"
     annotation (Placement(transformation(extent={{-200,-166},{-180,-146}})));
 
-  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt2[nPum]
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt2[nPum] if
+    have_heaPriPum and (not have_priOnl)
     "Convert boolean to integer"
     annotation (Placement(transformation(extent={{-248,-258},{-228,-238}})));
 
   Buildings.Controls.OBC.CDL.Integers.MultiSum mulSumInt2(
-    final nin=nBoi)
+    final nin=nBoi) if have_heaPriPum and (not have_priOnl)
     "Sum of integer inputs"
     annotation (Placement(transformation(extent={{-202,-258},{-182,-238}})));
 
@@ -748,6 +749,10 @@ block Controller
     "Logical Not"
     annotation (Placement(transformation(extent={{-20,-400},{0,-380}})));
 
+  CDL.Logical.Sources.Constant con2(k=false) if nPum == 1
+    annotation (Placement(transformation(extent={{-94,10},{-74,30}})));
+  CDL.Logical.Sources.Constant con3(k=true) if nPum == 1
+    annotation (Placement(transformation(extent={{-94,-32},{-74,-12}})));
 equation
   connect(enaDedLeaPum.uPlaEna, uPlaEna) annotation (Line(points={{-202,115},{-240,
           115},{-240,110},{-300,110}}, color={255,0,255}));
@@ -1101,6 +1106,10 @@ equation
   connect(not5.y, and5.u2) annotation (Line(points={{2,-390},{20,-390},{20,-360},
           {-160,-360},{-160,-266},{-10,-266},{-10,-248},{-2,-248}}, color={255,
           0,255}));
+  connect(con2.y, and3.u2) annotation (Line(points={{-72,20},{34,20},{34,24},{
+          68,24}}, color={255,0,255}));
+  connect(con3.y, or4.u2) annotation (Line(points={{-72,-22},{2,-22},{2,-28},{
+          66,-28},{66,-18},{70,-18}}, color={255,0,255}));
 annotation (defaultComponentName="priPumCon",
   Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-280,-720},{280,260}}),
   graphics={
