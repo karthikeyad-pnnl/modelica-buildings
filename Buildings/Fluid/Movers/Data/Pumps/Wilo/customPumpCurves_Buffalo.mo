@@ -4,8 +4,8 @@ record customPumpCurves_Buffalo
   extends Generic(
     use_powerCharacteristic=true,
     speed_rpm_nominal=1450,
-    power(V_flow={0, 0.096323, 0.192646}, P={0, 200, 400}),
-    pressure(V_flow={0, 0.096323, 0.192646}, dp={180000,90000,0}));
+    power(V_flow={0.011345, 0.11345, 0.2269}, P={20, 200, 400}),
+    pressure(V_flow={0.011345, 0.11345, 0.2269}, dp={220000,90000,18000}));
   annotation (
 defaultComponentPrefixes="parameter",
 defaultComponentName="per",
