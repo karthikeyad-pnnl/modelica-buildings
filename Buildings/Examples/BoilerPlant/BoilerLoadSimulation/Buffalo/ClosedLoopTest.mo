@@ -37,7 +37,7 @@ block ClosedLoopTest "Model to test step response of zone model"
 
   Controls.OBC.CDL.Continuous.Gain gai(k=-1)
     annotation (Placement(transformation(extent={{-100,100},{-80,120}})));
-  Buildings.Examples.BoilerPlant.PlantModel.BoilerPlant_Buffalo_NonAdiabaticPipe boiPla(
+  Buildings.Examples.BoilerPlant.PlantModel.BoilerPlant_Buffalo_NonAdiabaticPipe_dPMover boiPla(
     boiCap1=(1 - boiCapRat)*boiDesCap,
     boiCap2=(boiCapRat)*boiDesCap,
     mRad_flow_nominal=mRad_flow_nominal,
@@ -82,7 +82,7 @@ block ClosedLoopTest "Model to test step response of zone model"
     final nPumPri=2,
     final TMinSupNonConBoi=333.2,
     final k_bypVal=1,
-    final Ti_bypVal=50,
+    final Ti_bypVal=90,
     final Td_bypVal=10e-9,
     final boiDesFlo=controller.maxFloSet,
     final k_priPum=1,
@@ -97,10 +97,10 @@ block ClosedLoopTest "Model to test step response of zone model"
     redeclare package Medium = Media.Water,
     final m_flow_nominal=mRad_flow_nominal,
     deltaM=0.1,
-    final dpValve_nominal=0.5,
+    final dpValve_nominal=6000,
     use_inputFilter=true,
     y_start=0,
-    dpFixed_nominal=0,
+    dpFixed_nominal=1000,
     l=10e-10)
     "Isolation valve for radiator"
     annotation (Placement(transformation(extent={{-70,30},{-50,50}})));
@@ -239,8 +239,7 @@ equation
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,
             160}})),
     experiment(
-      StopTime=864000,
-      Interval=900,
-      Tolerance=0.001,
+      StopTime=8640000,
+      Interval=1,
       __Dymola_Algorithm="Cvode"));
 end ClosedLoopTest;
