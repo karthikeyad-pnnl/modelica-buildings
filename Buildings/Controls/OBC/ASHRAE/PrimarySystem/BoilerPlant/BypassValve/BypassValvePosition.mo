@@ -99,7 +99,8 @@ protected
     final Td=Td,
     final yMax=1,
     final yMin=0,
-    reverseActing=false)
+    reverseActing=false,
+    y_reset=1)
     "PID loop to regulate flow through primary loop using bypass valve"
     annotation (Placement(transformation(extent={{20,60},{40,80}})));
 
