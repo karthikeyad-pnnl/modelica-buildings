@@ -528,7 +528,7 @@ model Controller
     final min=1e-6) = 5*6894.75
     "Maximum primary loop local differential pressure setpoint"
     annotation (Dialog(tab="Primary pump control parameters", group="DP-based speed regulation",
-      enable = speConTypPri == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.localDP));
+      enable = speConTypPri == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.localDP or speConTypPri == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP));
 
   parameter Real minLocDpPri(
     final unit="Pa",
@@ -538,7 +538,7 @@ model Controller
     "Minimum primary loop local differential pressure setpoint"
     annotation (Dialog(tab="Primary pump control parameters",
       group="DP-based speed regulation",
-      enable = speConTypPri == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.localDP));
+      enable = speConTypPri == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.localDP or speConTypPri == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP));
 
   parameter Real offTimThr_priPum(
     final unit="s",
@@ -1707,8 +1707,8 @@ equation
           -230,330},{-230,-78},{90,-78},{90,-158.533},{118,-158.533}},
                                                           color={255,0,255}));
 
-  connect(hotWatSupTemRes.TPlaHotWatSupSet, upProCon.THotWatSupSet) annotation
-    (Line(points={{-118,184},{-100,184},{-100,107},{118,107}}, color={0,0,127}));
+  connect(hotWatSupTemRes.TPlaHotWatSupSet, upProCon.THotWatSupSet) annotation (
+     Line(points={{-118,184},{-100,184},{-100,107},{118,107}}, color={0,0,127}));
 
   connect(TRetPri, staSetCon.THotWatRetPri) annotation (Line(points={{-420,230},
           {-260,230},{-260,-1},{-212,-1}},                    color={0,0,127}));
