@@ -66,8 +66,8 @@ block ClosedLoopTest_singlePump
     resAmoVal=1.667,
     maxResVal=3.889,
     final VHotWatPri_flow_nominal=0.02,
-    final maxLocDpPri=4000,
-    final minLocDpPri=4000,
+    final maxLocDpPri=50000,
+    final minLocDpPri=50000,
     final VHotWatSec_flow_nominal=1e-6,
     final nBoi=2,
     final boiTyp={Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler,
@@ -103,12 +103,9 @@ block ClosedLoopTest_singlePump
     use_inputFilter=true,
     y_start=0,
     dpFixed_nominal=1000,
-    l=10e-10)
+    l=0.0001)
     "Isolation valve for radiator"
     annotation (Placement(transformation(extent={{-70,30},{-50,50}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant           con(final k=21.11)
-    "Zone temperature setpoint"
-    annotation (Placement(transformation(extent={{-140,130},{-120,150}})));
   Controls.OBC.CDL.Continuous.Hysteresis hys(uLow=0.05, uHigh=0.1)
     "Check if radiator control valve opening is above threshold for enabling boiler plant"
     annotation (Placement(transformation(extent={{10,130},{30,150}})));
@@ -143,9 +140,8 @@ block ClosedLoopTest_singlePump
         iconTransformation(extent={{-56,104},{-36,124}})));
   Controls.OBC.CDL.Continuous.AddParameter addPar(p=273.15, k=1)
     annotation (Placement(transformation(extent={{-60,130},{-40,150}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant           con1(final k=-100)
-    "Zone temperature setpoint"
-    annotation (Placement(transformation(extent={{-100,70},{-80,90}})));
+  Controls.OBC.CDL.Continuous.Limiter lim(uMax=1, uMin=0.5)
+    annotation (Placement(transformation(extent={{-80,-120},{-60,-100}})));
 equation
   connect(controller.yBoi, boiPla.uBoiSta) annotation (Line(points={{-88,0},{
           -80,0},{-80,-1},{-62,-1}},
@@ -158,8 +154,6 @@ equation
           {-72,-16},{-72,-7},{-62,-7}}, color={255,0,255}));
   connect(controller.yPriPumSpe, boiPla.uPumSpe) annotation (Line(points={{-88,-20},
           {-66,-20},{-66,-10},{-62,-10}}, color={0,0,127}));
-  connect(controller.yBypValPos, boiPla.uBypValSig) annotation (Line(points={{-88,-12},
-          {-68,-12},{-68,-13},{-62,-13}},      color={0,0,127}));
   connect(boiPla.port_b, val3.port_a) annotation (Line(points={{-56,0},{-56,8},{
           -80,8},{-80,40},{-70,40}}, color={0,127,255}));
   connect(val3.port_b, zoneModel_simplified.port_a) annotation (Line(points={{-50,
@@ -236,15 +230,18 @@ equation
     annotation (Line(points={{42,60},{78,60}}, color={255,0,255}));
   connect(combiTimeTable.y[2], addPar.u) annotation (Line(points={{-119,110},{
           -110,110},{-110,140},{-62,140}}, color={0,0,127}));
-  connect(con1.y, zoneModel_simplified.u) annotation (Line(points={{-78,80},{
-          -50,80},{-50,60},{-42,60}}, color={0,0,127}));
+  connect(gai.y, zoneModel_simplified.u) annotation (Line(points={{-78,110},{
+          -52,110},{-52,60},{-42,60}}, color={0,0,127}));
+  connect(controller.yBypValPos, lim.u) annotation (Line(points={{-88,-12},{-84,
+          -12},{-84,-110},{-82,-110}}, color={0,0,127}));
+  connect(controller.yBypValPos, boiPla.uBypValSig) annotation (Line(points={{
+          -88,-12},{-84,-12},{-84,-13},{-62,-13}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,160}})),
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,
             160}})),
     experiment(
-      StopTime=864000,
-      Interval=1,
-      Tolerance=1e-06,
-      __Dymola_Algorithm="Radau"));
+      StopTime=8640000,
+      Interval=900,
+      __Dymola_Algorithm="Cvode"));
 end ClosedLoopTest_singlePump;
