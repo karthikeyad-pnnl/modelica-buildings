@@ -12,10 +12,15 @@ import shutil
 
 # simulation_results_folder = '/home/developer/models/Buildings'
 # processed_results_folder = '/home/developer/models/extracted_simulation_data'
-simulation_results_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\Git_repos\\modelica-buildings\\raw_mat_files\\Buffalo-post060921'
-filter_list = ['case_study', '15mins', 'Mar', '.mat']
+# simulation_results_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\Git_repos\\modelica-buildings\\raw_mat_files\\Buffalo-post060921'
+simulation_results_folder = "C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\OpenBuildingControl\\boiler_plant_case_study\\modelica_simulation_results"
+# filter_list = ['ClosedLoopTest_singlePump', 'Atlanta', '100days', '.mat']
+filter_list = ['.mat']
+list_of_files = utilities.find_relevant_files(filter_list, simulation_results_folder)
+print(list_of_files)
 separator = '_'
-processed_results_folder_name = separator.join(filter_list)
+# processed_results_folder_name = separator.join(filter_list)
+processed_results_folder_name = 'a'
 # processed_results_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\Git_repos\\modelica-buildings\\raw_mat_files\\Buffalo-post060921\\processed_results_Jan'
 processed_results_folder = os.path.join(simulation_results_folder, processed_results_folder_name)
 # simulation_results_folder = 'C:\Buildings_library\modelica-buildings\raw_mat_files'
@@ -28,7 +33,7 @@ datapoints = {
         'boiPla.boi.m_flow': 'boiler2_massflowrate', 
         'boiPla.senTem2.T': 'boiler2_supply_temp', 
         'boiPla.pum.P': 'pump1_power',
-        'boiPla.pum1.P': 'pump2_power',
+        # 'boiPla.pum1.P': 'pump2_power',
         'zoneModel_simplified.y': 'zone_temp',
         'boiPla.TOut': 'outdoor_air_temp',
         'boiPla.ySupTem': 'radiator_supply_temp',
@@ -131,7 +136,7 @@ def generate_csv(data_file_name):
     simulation_data['boiler2_power_generation'] = 4200 * simulation_data['boiler2_massflowrate'] * (simulation_data['boiler2_supply_temp'] - simulation_data['radiator_return_temp'])
     simulation_data['boiler1_power_consumption'] = simulation_data['boiler1_fuelUse']
     simulation_data['boiler2_power_consumption'] = simulation_data['boiler2_fuelUse']
-    simulation_data['pumps_power_consumption'] = simulation_data['pump1_power'] + simulation_data['pump2_power']
+    simulation_data['pumps_power_consumption'] = simulation_data['pump1_power']  # + simulation_data['pump2_power']
     simulation_data['total_boiler_generation'] = simulation_data['boiler1_power_generation'] + simulation_data['boiler2_power_generation']
     simulation_data['total_boiler_consumption'] = simulation_data['boiler1_power_consumption'] + simulation_data['boiler2_power_consumption']
     simulation_data['total_plant_consumption'] = simulation_data['total_boiler_consumption'] + simulation_data['pumps_power_consumption']
@@ -284,7 +289,7 @@ def generate_plots():
     global bar_plot_datapoints
 
     # list_of_results = os.listdir(processed_results_folder)
-    list_of_results = utilities.find_relevant_files(['case_study', '.csv'], processed_results_folder)
+    list_of_results = utilities.find_relevant_files(['.csv'], processed_results_folder)
     scenario_names = []
     for result in list_of_results:
         scenario_names.append(result.rstrip('.csv'))
@@ -335,8 +340,8 @@ def generate_plots():
             data_summary.iloc[reqd_row, reqd_column] = reqd_data
 
     plt.close('all')
-    plot_histogram(processed_results_folder, list_of_results)
-    plot_histogram_2(processed_results_folder, list_of_results)
+    # plot_histogram(processed_results_folder, list_of_results)
+    # plot_histogram_2(processed_results_folder, list_of_results)
 
     data_summary['%age reduction in plant energy consumption'] = (max(data_summary['Total plant energy consumed']) - data_summary['Total plant energy consumed']) * 100 / max(data_summary['Total plant energy consumed'])
 
