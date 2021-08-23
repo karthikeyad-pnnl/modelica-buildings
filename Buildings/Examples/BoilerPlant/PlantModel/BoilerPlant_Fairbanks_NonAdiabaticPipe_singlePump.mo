@@ -269,8 +269,8 @@ model BoilerPlant_Fairbanks_NonAdiabaticPipe_singlePump
         Media.Water, m_flow_nominal=mRad_flow_nominal)
     annotation (Placement(transformation(extent={{-20,110},{0,130}})));
 
-  Buildings.Fluid.Sensors.TemperatureTwoPort senTem1(redeclare package Medium
-      = Media.Water, m_flow_nominal=mRad_flow_nominal)
+  Buildings.Fluid.Sensors.TemperatureTwoPort senTem1(redeclare package Medium =
+        Media.Water, m_flow_nominal=mRad_flow_nominal)
     annotation (Placement(transformation(extent={{180,110},{200,130}})));
 
   Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep(nout=1)
@@ -307,11 +307,11 @@ model BoilerPlant_Fairbanks_NonAdiabaticPipe_singlePump
   Controls.OBC.CDL.Continuous.Add add2[2](k1=fill(-1, 2))
     "Check difference between return temperature and boiler temperature"
     annotation (Placement(transformation(extent={{100,-100},{120,-80}})));
-  Fluid.Sensors.TemperatureTwoPort           senTem2(redeclare package Medium
-      = Media.Water, m_flow_nominal=mBoi_flow_nominal1)
+  Fluid.Sensors.TemperatureTwoPort           senTem2(redeclare package Medium =
+        Media.Water, m_flow_nominal=mBoi_flow_nominal1)
     annotation (Placement(transformation(extent={{60,-160},{80,-140}})));
-  Fluid.Sensors.TemperatureTwoPort           senTem3(redeclare package Medium
-      = Media.Water, m_flow_nominal=mBoi_flow_nominal2)
+  Fluid.Sensors.TemperatureTwoPort           senTem3(redeclare package Medium =
+        Media.Water, m_flow_nominal=mBoi_flow_nominal2)
     annotation (Placement(transformation(extent={{60,-220},{80,-200}})));
   Controls.OBC.CDL.Logical.LogicalSwitch logSwi1[2]
     "Switch to signal from controller once enabling process has been completed"
@@ -361,8 +361,8 @@ model BoilerPlant_Fairbanks_NonAdiabaticPipe_singlePump
   Controls.OBC.CDL.Routing.BooleanReplicator booRep(nout=2)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{-160,-170},{-140,-150}})));
-  Fluid.Sensors.RelativePressure           senRelPre1(redeclare package Medium
-      = Media.Water)
+  Fluid.Sensors.RelativePressure           senRelPre1(redeclare package Medium =
+        Media.Water)
     "Differential pressure sensor between hot water supply and return"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=90,
         origin={-70,-10})));

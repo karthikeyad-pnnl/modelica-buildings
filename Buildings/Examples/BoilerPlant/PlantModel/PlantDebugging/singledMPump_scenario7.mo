@@ -124,8 +124,6 @@ block singledMPump_scenario7
     Ti=300)
     "Radiator isolation valve controller"
     annotation (Placement(transformation(extent={{-40,70},{-20,90}})));
-  Controls.OBC.CDL.Continuous.AddParameter addPar(p=1, k=-1)
-    annotation (Placement(transformation(extent={{-4,-90},{16,-70}})));
   Controls.OBC.CDL.Continuous.Sources.Ramp ram(
     height=-1,
     duration=800000,
@@ -172,8 +170,6 @@ equation
           {50,50},{50,80},{-6,80},{-6,60},{-30,60},{-30,68}}, color={0,0,127}));
   connect(con.y, boiPla.uPumSta[1]) annotation (Line(points={{-18,10},{0,10},{0,
           -7},{18,-7}}, color={255,0,255}));
-  connect(conPID.y, addPar.u) annotation (Line(points={{-18,80},{-12,80},{-12,
-          -80},{-6,-80}}, color={0,0,127}));
   connect(conPID.y, val3.y) annotation (Line(points={{-18,80},{-12,80},{-12,20},
           {12,20}}, color={0,0,127}));
   connect(ram.y, boiPla.uBypValSig) annotation (Line(points={{-58,-50},{-50,-50},

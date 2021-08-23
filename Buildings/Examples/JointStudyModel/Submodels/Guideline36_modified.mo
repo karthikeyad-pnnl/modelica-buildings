@@ -1,8 +1,8 @@
-within Buildings.Examples.VAVReheat;
-model Guideline36
+within Buildings.Examples.JointStudyModel.Submodels;
+model Guideline36_modified
   "Variable air volume flow system with terminal reheat and five thermal zones"
   extends Modelica.Icons.Example;
-  extends Buildings.Examples.VAVReheat.BaseClasses.PartialOpenLoop;
+  extends Buildings.Examples.JointStudyModel.Submodels.PartialOpenLoop_modified;
 
   parameter Modelica.SIunits.VolumeFlowRate VPriSysMax_flow=m_flow_nominal/1.2
     "Maximum expected system primary airflow rate at design stage";
@@ -66,10 +66,10 @@ model Guideline36
     "Outdoor air damper control signal"
     annotation (Placement(transformation(extent={{-40,-20},{-20,0}})));
   Buildings.Controls.OBC.CDL.Logical.Switch swiFreSta "Switch for freeze stat"
-    annotation (Placement(transformation(extent={{60,-202},{80,-182}})));
+    annotation (Placement(transformation(extent={{0,-170},{20,-150}})));
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant yFreHeaCoi(final k=1)
     "Flow rate signal for heating coil when freeze stat is on"
-    annotation (Placement(transformation(extent={{0,-192},{20,-172}})));
+    annotation (Placement(transformation(extent={{-60,-160},{-40,-140}})));
   Buildings.Controls.OBC.ASHRAE.G36_PR1.AHUs.MultiZone.VAV.Controller conAHU(
     kMinOut=0.03,
     final pMaxSet=410,
@@ -132,6 +132,39 @@ model Guideline36
     "All zones in same operation mode"
     annotation (Placement(transformation(extent={{-140,220},{-120,240}})));
 
+  Buildings.Examples.JointStudyModel.Submodels.SystemRequests_modified           sysReq(
+    final samplePeriod=samplePeriod,
+    final have_heaWatCoi=true,
+    final have_heaPla=true,
+    final errTZonCoo_1=2.8,
+    final errTZonCoo_2=1.7,
+    final errTDis_1=17,
+    final errTDis_2=8.3,
+    final durTimTem=120,
+    final durTimFlo=60,
+    final durTimDisAir=300)
+    "Number of system requests"
+    annotation (Placement(transformation(extent={{140,-100},{160,-80}})));
+  Controls.OBC.CDL.Interfaces.IntegerOutput yHeaValResReq
+    "Hot water temperature reset request" annotation (Placement(transformation(
+          extent={{1400,-60},{1440,-20}}), iconTransformation(extent={{100,-40},
+            {140,0}})));
+  Controls.OBC.CDL.Interfaces.IntegerOutput yHeaPlaReq
+    "Boiler hot water supply request" annotation (Placement(transformation(
+          extent={{1400,-100},{1440,-60}}), iconTransformation(extent={{100,-80},
+            {140,-40}})));
+
+  parameter Modelica.SIunits.PressureDifference dpValve_nominal_value=6000
+    "Nominal pressure drop of fully open valve, used if CvData=Buildings.Fluid.Types.CvTypes.OpPoint";
+  parameter Modelica.SIunits.PressureDifference dpFixed_nominal_value=1000
+    "Pressure drop of pipe and other resistances that are in series";
+  Controls.OBC.CDL.Interfaces.RealOutput TZonAve
+    "Average measured zone temperature"
+    annotation (Placement(transformation(extent={{1400,400},{1440,440}}), iconTransformation(extent={{100,40},
+            {140,80}})));
+  Controls.OBC.CDL.Interfaces.RealOutput yHeaCoiSig
+    "Heating coil control signal" annotation (Placement(transformation(extent={
+            {1400,350},{1440,390}}), iconTransformation(extent={{100,0},{140,40}})));
 equation
   connect(fanSup.port_b, dpDisSupFan.port_a) annotation (Line(
       points={{320,-40},{320,0},{320,-10},{320,-10}},
@@ -271,10 +304,11 @@ equation
                                            color={0,0,127}));
   connect(yOutDam.y, eco.yExh)
     annotation (Line(points={{-18,-10},{-3,-10},{-3,-34}}, color={0,0,127}));
-  connect(freSta.y, swiFreSta.u2) annotation (Line(points={{22,-90},{40,-90},{
-          40,-192},{58,-192}}, color={255,0,255}));
-  connect(yFreHeaCoi.y, swiFreSta.u1) annotation (Line(points={{22,-182},{40,-182},
-          {40,-184},{58,-184}}, color={0,0,127}));
+  connect(freSta.y, swiFreSta.u2) annotation (Line(points={{22,-90},{40,-90},{40,
+          -120},{-10,-120},{-10,-160},{-2,-160}},
+                               color={255,0,255}));
+  connect(yFreHeaCoi.y, swiFreSta.u1) annotation (Line(points={{-38,-150},{-20,-150},
+          {-20,-152},{-2,-152}},color={0,0,127}));
   connect(zonToSys.ySumDesZonPop, conAHU.sumDesZonPop) annotation (Line(points={{302,589},
           {308,589},{308,609.778},{336,609.778}},           color={0,0,127}));
   connect(zonToSys.VSumDesPopBreZon_flow, conAHU.VSumDesPopBreZon_flow)
@@ -359,9 +393,10 @@ equation
           442,533.333},{442,40},{-16.8,40},{-16.8,-34}},
                                                      color={0,0,127}));
   connect(conAHU.yCoo, gaiCooCoi.u) annotation (Line(points={{424,544},{452,544},
-          {452,-274},{88,-274},{88,-248},{98,-248}}, color={0,0,127}));
+          {452,-200},{160,-200},{160,-170},{178,-170}},
+                                                     color={0,0,127}));
   connect(conAHU.yHea, swiFreSta.u3) annotation (Line(points={{424,554.667},{
-          458,554.667},{458,-280},{40,-280},{40,-200},{58,-200}},
+          458,554.667},{458,-276},{-20,-276},{-20,-168},{-2,-168}},
                                                               color={0,0,127}));
   connect(conAHU.ySupFanSpe, fanSup.y) annotation (Line(points={{424,618.667},{
           432,618.667},{432,-14},{310,-14},{310,-28}},
@@ -504,8 +539,23 @@ equation
           230},{-110,207},{-102,207}}, color={255,127,0}));
   connect(zonGroSta.yOpeWin, opeModSel.uOpeWin) annotation (Line(points={{-138,261},
           {-124,261},{-124,302},{-102,302}}, color={255,127,0}));
-  connect(swiFreSta.y, gaiHeaCoi.u) annotation (Line(points={{82,-192},{92,-192},
-          {92,-210},{98,-210}}, color={0,0,127}));
+  connect(val.y_actual, sysReq.uHeaVal) annotation (Line(points={{123,-155},{123,
+          -96},{138,-96}}, color={0,0,127}));
+  connect(conAHU.TSupSet, sysReq.TDisHeaSet) annotation (Line(points={{424,608},
+          {510,608},{510,300},{134,300},{134,-84},{138,-84}}, color={0,0,127}));
+  connect(TSup.T, sysReq.TDis) annotation (Line(points={{340,-29},{340,-20},{126,
+          -20},{126,-90},{138,-90}}, color={0,0,127}));
+  connect(sysReq.yHeaValResReq, yHeaValResReq) annotation (Line(points={{162,-85},
+          {1360,-85},{1360,-40},{1420,-40}},
+                                          color={255,127,0}));
+  connect(sysReq.yHeaPlaReq, yHeaPlaReq) annotation (Line(points={{162,-95},{1380,
+          -95},{1380,-80},{1420,-80}},color={255,127,0}));
+  connect(ave.y, TZonAve)
+    annotation (Line(points={{1221,420},{1420,420}}, color={0,0,127}));
+  connect(swiFreSta.y, yHeaCoiSig) annotation (Line(points={{22,-160},{60,-160},
+          {60,-220},{1350,-220},{1350,370},{1420,370}}, color={0,0,127}));
+  connect(swiFreSta.y, val.y)
+    annotation (Line(points={{22,-160},{118,-160}}, color={0,0,127}));
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-380,-320},{1400,
             680}})),
@@ -613,10 +663,6 @@ This is for
     __Dymola_Commands(file=
           "modelica://Buildings/Resources/Scripts/Dymola/Examples/VAVReheat/Guideline36.mos"
         "Simulate and plot"),
-    experiment(
-      StopTime=864000,
-      Interval=900,
-      Tolerance=1e-06,
-      __Dymola_Algorithm="Cvode"),
+    experiment(StopTime=172800, Tolerance=1e-06),
     Icon(coordinateSystem(extent={{-100,-100},{100,100}})));
-end Guideline36;
+end Guideline36_modified;
