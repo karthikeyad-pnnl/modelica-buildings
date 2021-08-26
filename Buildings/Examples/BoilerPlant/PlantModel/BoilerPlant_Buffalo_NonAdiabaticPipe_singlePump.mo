@@ -144,8 +144,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
     final effCur=Buildings.Fluid.Types.EfficiencyCurves.QuadraticLinear,
     final a=boiEff1,
     final fue=Fluid.Data.Fuels.NaturalGasHigherHeatingValue(),
-    final UA=boiCap1/39.81)
-    "Boiler"
+    final UA=boiCap1/39.81) "Boiler-2"
     annotation (Placement(transformation(extent={{110,-160},{90,-140}})));
 
   Buildings.Fluid.Sources.Boundary_pT preSou(
@@ -165,8 +164,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
     final effCur=Buildings.Fluid.Types.EfficiencyCurves.Constant,
     final a=boiEff2,
     final fue=Buildings.Fluid.Data.Fuels.HeatingOilLowerHeatingValue(),
-    final UA=boiCap2/39.81)
-    "Boiler"
+    final UA=boiCap2/39.81) "Boiler-1"
     annotation (Placement(transformation(extent={{110,-220},{90,-200}})));
 
   Buildings.Fluid.Movers.FlowControlled_m_flow pum(
@@ -228,8 +226,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
     use_inputFilter=true,
     init=Modelica.Blocks.Types.Init.InitialState,
     y_start=0,
-    dpFixed_nominal=dpFixed_nominal_value)
-    "Isolation valve for boiler-2"
+    dpFixed_nominal=dpFixed_nominal_value) "Isolation valve for boiler-1"
     annotation (Placement(transformation(extent={{0,-220},{20,-200}})));
 
   Buildings.Fluid.Actuators.Valves.TwoWayLinear val2(
@@ -238,8 +235,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
     final dpValve_nominal=dpValve_nominal_value,
     init=Modelica.Blocks.Types.Init.InitialState,
     y_start=0,
-    dpFixed_nominal=dpFixed_nominal_value)
-    "Isolation valve for boiler-1"
+    dpFixed_nominal=dpFixed_nominal_value) "Isolation valve for boiler-2"
     annotation (Placement(transformation(extent={{0,-160},{20,-140}})));
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea
@@ -267,10 +263,12 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
 
   Buildings.Fluid.Sensors.TemperatureTwoPort senTem(redeclare package Medium =
         Media.Water, m_flow_nominal=mRad_flow_nominal)
+    "HW supply temperature sensor"
     annotation (Placement(transformation(extent={{-20,110},{0,130}})));
 
   Buildings.Fluid.Sensors.TemperatureTwoPort senTem1(redeclare package Medium =
         Media.Water, m_flow_nominal=mRad_flow_nominal)
+    "HW return temperature sensor"
     annotation (Placement(transformation(extent={{180,110},{200,130}})));
 
   Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep(nout=1)
@@ -301,23 +299,19 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
     annotation (Placement(transformation(extent={{-260,30},{-240,50}})));
   Controls.OBC.CDL.Logical.Pre pre "Logical pre block"
     annotation (Placement(transformation(extent={{240,-140},{260,-120}})));
-  Controls.OBC.CDL.Continuous.Hysteresis hys3[2](uLow=fill(0.9, 2), uHigh=fill(
-        0.95, 2))                "Check for flow through boiler"
-    annotation (Placement(transformation(extent={{120,-60},{140,-40}})));
-  Controls.OBC.CDL.Continuous.Add add2[2](k1=fill(-1, 2))
-    "Check difference between return temperature and boiler temperature"
-    annotation (Placement(transformation(extent={{100,-100},{120,-80}})));
   Fluid.Sensors.TemperatureTwoPort           senTem2(redeclare package Medium =
         Media.Water, m_flow_nominal=mBoi_flow_nominal1)
+    "Boiler-2 HW supply temperature sensor"
     annotation (Placement(transformation(extent={{60,-160},{80,-140}})));
   Fluid.Sensors.TemperatureTwoPort           senTem3(redeclare package Medium =
         Media.Water, m_flow_nominal=mBoi_flow_nominal2)
+    "Boiler-1 HW supply temperature sensor"
     annotation (Placement(transformation(extent={{60,-220},{80,-200}})));
   Controls.OBC.CDL.Logical.LogicalSwitch logSwi1[2]
     "Switch to signal from controller once enabling process has been completed"
     annotation (Placement(transformation(extent={{-210,150},{-190,170}})));
   Controls.OBC.CDL.Logical.Latch lat1[2]
-    "Hold pump enable status until change process is completed"
+    "Hold boiler enable status until boiler is proven on"
     annotation (Placement(transformation(extent={{-260,150},{-240,170}})));
   Controls.OBC.CDL.Logical.Pre pre1[2] "Logical pre block"
     annotation (Placement(transformation(extent={{-300,180},{-280,200}})));
@@ -343,7 +337,8 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
   Controls.OBC.CDL.Continuous.Add add1[2](k1=fill(-1, 2))
     "Find difference between setpoint and measured temperature"
     annotation (Placement(transformation(extent={{-290,-170},{-270,-150}})));
-  Controls.OBC.CDL.Logical.Switch swi[2] "Switch"
+  Controls.OBC.CDL.Logical.Switch swi[2]
+    "Switch to PI control of part load ratio when supply temperature setpoint is achieved"
     annotation (Placement(transformation(extent={{-90,-170},{-70,-150}})));
   Fluid.FixedResistances.Junction           spl6(
     redeclare package Medium = MediumW,
@@ -356,7 +351,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
       rotation=0,
       origin={150,-150})));
   Controls.OBC.CDL.Continuous.GreaterThreshold greThr[2](h=fill(0.3, 2))
-    "Check if supply temperature setpoint is not met"
+    "Check if supply temperature setpoint is met"
     annotation (Placement(transformation(extent={{-260,-170},{-240,-150}})));
   Controls.OBC.CDL.Routing.BooleanReplicator booRep(nout=2)
     "Boolean replicator"
@@ -367,10 +362,12 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
     annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=90,
         origin={-70,-10})));
   Modelica.Fluid.Interfaces.FluidPort_a port_a(redeclare package Medium =
-        MediumW) annotation (Placement(transformation(extent={{30,230},{50,250}}),
+        MediumW) "HW inlet port"
+                 annotation (Placement(transformation(extent={{30,230},{50,250}}),
                      iconTransformation(extent={{50,90},{70,110}})));
   Modelica.Fluid.Interfaces.FluidPort_b port_b(redeclare package Medium =
-        MediumW) annotation (Placement(transformation(extent={{-50,230},{-30,250}}),
+        MediumW) "HW outlet port"
+                 annotation (Placement(transformation(extent={{-50,230},{-30,250}}),
                      iconTransformation(extent={{-70,90},{-50,110}})));
   Controls.OBC.CDL.Interfaces.RealOutput yBypValPos(
     final unit="1",
@@ -378,40 +375,34 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
     "Measured bypass valve position"
     annotation (Placement(transformation(extent={{320,130},{360,170}}),
         iconTransformation(extent={{100,100},{140,140}})));
-  Controls.OBC.CDL.Logical.Timer tim2
-                                    [2](t=fill(5, 2))
-    "Check time for which boiler status on"
-    annotation (Placement(transformation(extent={{160,-100},{180,-80}})));
-  Controls.OBC.CDL.Continuous.GreaterThreshold greThr1[2](t=fill(0, 2))
-    annotation (Placement(transformation(extent={{130,-100},{150,-80}})));
   Controls.OBC.CDL.Continuous.LessThreshold lesThr[2](t=fill(0.01, 2))
+    "Determine if boilers are proven on"
     annotation (Placement(transformation(extent={{182,-130},{202,-110}})));
   Controls.OBC.CDL.Logical.Pre pre2
                                   [2] "Logical pre block"
     annotation (Placement(transformation(extent={{240,-100},{260,-80}})));
-  Controls.OBC.CDL.Logical.TrueDelay truDel[2](delayTime=fill(60, 2))
-                                                             "True delay"
-    annotation (Placement(transformation(extent={{160,-60},{180,-40}})));
   Controls.OBC.CDL.Logical.Latch lat2[2] "Latch"
     annotation (Placement(transformation(extent={{280,-80},{300,-60}})));
-  Controls.OBC.CDL.Logical.And and2[2] "Logical And"
-    annotation (Placement(transformation(extent={{240,-70},{260,-50}})));
   Controls.OBC.CDL.Continuous.Product pro2[2]
-    "Product of boiler power and current status"
+    "Product of boiler enable status and supply temperature setpoint"
     annotation (Placement(transformation(extent={{-280,-120},{-260,-100}})));
   Controls.OBC.CDL.Logical.Latch lat3
+    "Hold boiler part load signal at 1 until supply temperature setpoint is achieved"
     annotation (Placement(transformation(extent={{-190,-170},{-170,-150}})));
   Controls.OBC.CDL.Logical.Edge edg[2]
+    "Trigger boiler enable process to meet required supply temperature setpoint"
     annotation (Placement(transformation(extent={{-280,110},{-260,130}})));
-  Controls.OBC.CDL.Logical.MultiOr mulOr1(nu=2)
+  Controls.OBC.CDL.Logical.MultiOr mulOr1(nu=2) "Multi-Or"
     annotation (Placement(transformation(extent={{-240,110},{-220,130}})));
-  Controls.OBC.CDL.Logical.MultiAnd mulAnd(nu=2)
+  Controls.OBC.CDL.Logical.MultiAnd mulAnd(nu=2) "Multi And"
     annotation (Placement(transformation(extent={{-230,-170},{-210,-150}})));
   Controls.OBC.CDL.Continuous.GreaterThreshold greThr2[2](t=fill(273.15 + 95, 2))
+    "Check if supply temperature has exceeded safe operation limit"
     annotation (Placement(transformation(extent={{-230,-214},{-210,-194}})));
-  Controls.OBC.CDL.Logical.MultiOr mulOr(nu=2)
+  Controls.OBC.CDL.Logical.MultiOr mulOr(nu=2) "Multi Or"
     annotation (Placement(transformation(extent={{-200,-214},{-180,-194}})));
   Controls.OBC.CDL.Logical.Or or2
+    "End boiler part load hold when supply temperature setpoint is achieved or if supply temperature exceeds safe operation limit"
     annotation (Placement(transformation(extent={{-160,-214},{-140,-194}})));
   Modelica.Fluid.Pipes.DynamicPipe pipe(
     redeclare package Medium = MediumW,
@@ -429,6 +420,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
     flowModel(dp_nominal(displayUnit="Pa") = 50000,
                               m_flow_nominal=mRad_flow_nominal),
     heatTransfer(alpha0=15*1/0.3))
+    "Dynamic pipe element to represent duct loss"
     annotation (Placement(transformation(extent={{208,-8},{228,12}}, rotation=-90,
         origin={208,228})));
 
@@ -448,11 +440,11 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
   Controls.OBC.CDL.Routing.BooleanReplicator booRep1(nout=1)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{280,-120},{300,-100}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant con1(k=1)
-    annotation (Placement(transformation(extent={{-96,-100},{-76,-80}})));
   Controls.OBC.CDL.Continuous.Gain gai(k=mRad_flow_nominal)
+    "Convert normalized pump speed to mass flow rate"
     annotation (Placement(transformation(extent={{-114,-20},{-94,0}})));
   Controls.OBC.CDL.Continuous.Gain gai1(k=1/mRad_flow_nominal)
+    "Convert mass flow rate back to normalized speed"
     annotation (Placement(transformation(extent={{20,-20},{40,0}})));
   Controls.OBC.CDL.Continuous.GreaterThreshold greThr3[2](t=0.02)
     annotation (Placement(transformation(extent={{180,-200},{200,-180}})));
@@ -530,10 +522,6 @@ equation
           -220,168},{-212,168}}, color={255,0,255}));
   connect(pre1.y, lat1.clr) annotation (Line(points={{-278,190},{-270,190},{
           -270,154},{-262,154}}, color={255,0,255}));
-  connect(senTem3.T, add2[1].u1) annotation (Line(points={{70,-199},{70,-188},{
-          56,-188},{56,-84},{98,-84}},            color={0,0,127}));
-  connect(senTem2.T, add2[2].u1)
-    annotation (Line(points={{70,-139},{70,-84},{98,-84}},  color={0,0,127}));
   connect(senTem3.T, conPID[1].u_m) annotation (Line(points={{70,-199},{70,-188},
           {-308,-188},{-308,-126},{-230,-126},{-230,-122}},
                                               color={0,0,127}));
@@ -573,30 +561,10 @@ equation
     annotation (Line(points={{60,-150},{20,-150}}, color={0,127,255}));
   connect(senTem3.port_a, val1.port_b)
     annotation (Line(points={{60,-210},{20,-210}}, color={0,127,255}));
-  connect(val1.y_actual, hys3[1].u) annotation (Line(points={{15,-203},{30,-203},
-          {30,-50},{118,-50}}, color={0,0,127}));
-  connect(val2.y_actual, hys3[2].u) annotation (Line(points={{15,-143},{30,-143},
-          {30,-50},{118,-50}}, color={0,0,127}));
-  connect(boi1.T, add2[1].u2) annotation (Line(points={{89,-202},{84,-202},{84,
-          -96},{98,-96}}, color={0,0,127}));
-  connect(boi.T, add2[2].u2) annotation (Line(points={{89,-142},{84,-142},{84,
-          -96},{98,-96}}, color={0,0,127}));
-  connect(greThr1.y, tim2.u)
-    annotation (Line(points={{152,-90},{158,-90}}, color={255,0,255}));
-  connect(add2.y, greThr1.u)
-    annotation (Line(points={{122,-90},{128,-90}}, color={0,0,127}));
   connect(swi.y, lesThr.u) annotation (Line(points={{-68,-160},{-60,-160},{-60,
           -120},{180,-120}}, color={0,0,127}));
-  connect(hys3.y, truDel.u)
-    annotation (Line(points={{142,-50},{158,-50}},
-                                                 color={255,0,255}));
   connect(pre2.y, lat2.clr) annotation (Line(points={{262,-90},{270,-90},{270,
           -76},{278,-76}}, color={255,0,255}));
-  connect(truDel.y, and2.u1)
-    annotation (Line(points={{182,-50},{200,-50},{200,-60},{238,-60}},
-                                                   color={255,0,255}));
-  connect(tim2.passed, and2.u2) annotation (Line(points={{182,-98},{200,-98},{
-          200,-68},{238,-68}}, color={255,0,255}));
   connect(lat2.y, yBoiSta)
     annotation (Line(points={{302,-70},{340,-70}}, color={255,0,255}));
   connect(lat2.y, pre1.u) annotation (Line(points={{302,-70},{310,-70},{310,220},

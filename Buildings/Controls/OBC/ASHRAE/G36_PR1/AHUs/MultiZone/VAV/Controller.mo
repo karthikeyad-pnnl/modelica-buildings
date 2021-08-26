@@ -679,7 +679,7 @@ block Controller
     final uCooMin=uCooMin) "AHU coil valve control"
     annotation (Placement(transformation(extent={{80,-70},{100,-50}})));
 
-protected
+// protected
   Buildings.Controls.OBC.CDL.Continuous.Division VOut_flow_normalized(
     u1(final unit="m3/s"),
     u2(final unit="m3/s"),

@@ -278,23 +278,23 @@ block Controller "Controller for room VAV box"
     final max=1,
     final unit="1")
     "Signal for heating coil valve"
-    annotation (Placement(transformation(extent={{140,-40},{180,0}}),
-        iconTransformation(extent={{100,-10},{140,30}})));
+    annotation (Placement(transformation(extent={{140,100},{180,140}}),
+        iconTransformation(extent={{100,30},{140,70}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yDam(
     final min=0,
     final max=1,
     final unit="1")
     "Signal for VAV damper"
-    annotation (Placement(transformation(extent={{140,60},{180,100}}),
-        iconTransformation(extent={{100,40},{140,80}})));
+    annotation (Placement(transformation(extent={{140,130},{180,170}}),
+        iconTransformation(extent={{100,60},{140,100}})));
   Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yZonTemResReq
     "Zone cooling supply air temperature reset request"
-    annotation (Placement(transformation(extent={{140,-100},{180,-60}}),
-        iconTransformation(extent={{100,-60},{140,-20}})));
+    annotation (Placement(transformation(extent={{140,-50},{180,-10}}),
+        iconTransformation(extent={{100,0},{140,40}})));
   Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yZonPreResReq
     "Zone static pressure reset requests"
-    annotation (Placement(transformation(extent={{140,-140},{180,-100}}),
-        iconTransformation(extent={{100,-100},{140,-60}})));
+    annotation (Placement(transformation(extent={{140,-90},{180,-50}}),
+        iconTransformation(extent={{100,-40},{140,0}})));
 
   Buildings.Controls.OBC.ASHRAE.G36_PR1.TerminalUnits.Reheat.SetPoints.ActiveAirFlow
     actAirSet(
@@ -328,7 +328,7 @@ block Controller "Controller for room VAV box"
   Buildings.Controls.OBC.ASHRAE.G36_PR1.TerminalUnits.Reheat.SystemRequests sysReq(
     final samplePeriod=samplePeriod,
     final have_heaWatCoi=have_heaWatCoi,
-    final have_heaPla=have_heaPla,
+    final have_heaPla=true,
     final errTZonCoo_1=errTZonCoo_1,
     final errTZonCoo_2=errTZonCoo_2,
     final errTDis_1=errTDis_1,
@@ -356,6 +356,13 @@ block Controller "Controller for room VAV box"
     reverseActing=false) "Cooling loop signal"
     annotation (Placement(transformation(extent={{-110,110},{-90,130}})));
 
+  CDL.Interfaces.IntegerOutput yHeaValResReq
+    "Hot water supply temperature reset requests" annotation (Placement(
+        transformation(extent={{140,-130},{180,-90}}), iconTransformation(
+          extent={{100,-70},{140,-30}})));
+  CDL.Interfaces.IntegerOutput yHeaPlaReq "Heating HW requests to plant"
+    annotation (Placement(transformation(extent={{140,-170},{180,-130}}),
+        iconTransformation(extent={{100,-100},{140,-60}})));
 protected
   Buildings.Controls.OBC.CDL.Integers.Equal isUnOcc
     "Output true if unoccupied"
@@ -385,10 +392,10 @@ equation
     annotation (Line(points={{78,-94},{58,-94},{58,-18},{42,-18}},
       color={0,0,127}));
   connect(damVal.yDam, yDam)
-    annotation (Line(points={{42,-6},{120,-6},{120,80},{160,80}},
+    annotation (Line(points={{42,-6},{120,-6},{120,150},{160,150}},
       color={0,0,127}));
   connect(damVal.yHeaVal, yVal)
-    annotation (Line(points={{42,-14},{120,-14},{120,-20},{160,-20}},
+    annotation (Line(points={{42,-14},{130,-14},{130,120},{160,120}},
       color={0,0,127}));
   connect(damVal.VDis_flow, VDis_flow)
     annotation (Line(points={{34,-22},{34,-50},{-160,-50}},color={0,0,127}));
@@ -437,10 +444,10 @@ equation
     annotation (Line(points={{-42,78},{-112,78},{-112,-170},{-160,-170}},
       color={255,127,0}));
   connect(sysReq.yZonTemResReq, yZonTemResReq)
-    annotation (Line(points={{102,-83},{120,-83},{120,-80},{160,-80}},
+    annotation (Line(points={{102,-83},{120,-83},{120,-30},{160,-30}},
       color={255,127,0}));
   connect(sysReq.yZonPreResReq, yZonPreResReq)
-    annotation (Line(points={{102,-88},{120,-88},{120,-120},{160,-120}},
+    annotation (Line(points={{102,-88},{128,-88},{128,-70},{160,-70}},
       color={255,127,0}));
   connect(actAirSet.ppmCO2, ppmCO2)
     annotation (Line(points={{-42,74},{-60,74},{-60,80},{-160,80}},
@@ -488,6 +495,10 @@ equation
   connect(sysReq.yDam_actual,yDam_actual)  annotation (Line(points={{78,-92},{-124,
           -92},{-124,-80},{-160,-80}}, color={0,0,127}));
 
+  connect(sysReq.yHeaValResReq, yHeaValResReq) annotation (Line(points={{102,
+          -94},{128,-94},{128,-110},{160,-110}}, color={255,127,0}));
+  connect(sysReq.yHeaPlaReq, yHeaPlaReq) annotation (Line(points={{102,-99},{
+          120,-99},{120,-150},{160,-150}}, color={255,127,0}));
 annotation (defaultComponentName="terUniCon",
   Icon(graphics={Rectangle(
         extent={{-100,-100},{100,100}},
@@ -503,11 +514,11 @@ annotation (defaultComponentName="terUniCon",
           lineColor={0,0,127},
           textString="TSup"),
         Text(
-          extent={{70,18},{98,4}},
+          extent={{70,58},{98,44}},
           lineColor={0,0,127},
           textString="yVal"),
         Text(
-          extent={{68,70},{96,56}},
+          extent={{68,90},{96,76}},
           lineColor={0,0,127},
           textString="yDam"),
         Text(
@@ -550,17 +561,25 @@ annotation (defaultComponentName="terUniCon",
           lineColor={0,0,127},
           textString="uWin"),
         Text(
-          extent={{22,-20},{96,-58}},
+          extent={{22,40},{96,2}},
           lineColor={0,0,127},
           textString="yZonTemResReq"),
         Text(
           extent={{24,-62},{96,-96}},
           lineColor={0,0,127},
-          textString="yZonPreResReq"),
+          textString="yHeaPlaReq"),
         Text(
           extent={{-98,-34},{-50,-44}},
           lineColor={0,0,127},
-          textString="uDam_actual")}),
+          textString="uDam_actual"),
+        Text(
+          extent={{24,-32},{96,-66}},
+          lineColor={0,0,127},
+          textString="yHeaValResReq"),
+        Text(
+          extent={{24,-2},{96,-36}},
+          lineColor={0,0,127},
+          textString="yZonPreResReq")}),
     Diagram(coordinateSystem(extent={{-140,-180},{140,180}})),
 Documentation(info="<html>
 <p>

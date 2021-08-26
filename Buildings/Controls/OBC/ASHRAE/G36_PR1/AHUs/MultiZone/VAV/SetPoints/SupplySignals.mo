@@ -70,7 +70,7 @@ block SupplySignals "Multizone VAV AHU coil valve positions"
     annotation (Placement(transformation(extent={{100,40},{140,80}}),
         iconTransformation(extent={{100,20},{140,60}})));
 
-protected
+// protected
   Buildings.Controls.OBC.CDL.Continuous.PIDWithReset conTSup(
     final controllerType=controllerType,
     final k=kTSup,

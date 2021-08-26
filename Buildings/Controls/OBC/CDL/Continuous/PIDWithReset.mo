@@ -131,7 +131,7 @@ block PIDWithReset
     "Zero input signal"
     annotation (Placement(transformation(extent={{-20,-150},{0,-130}})));
 
-protected
+// protected
   final parameter Real revAct = if reverseActing then 1 else -1
     "Switch for sign for reverse or direct acting controller";
   final parameter Boolean with_I = controllerType==Buildings.Controls.OBC.CDL.Types.SimpleController.PI or
