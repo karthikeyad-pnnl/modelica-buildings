@@ -3,9 +3,9 @@ package BaseClasses "Package with base classes for Buildings.ThermalZones.Energy
   extends Modelica.Icons.BasesPackage;
   constant String buildingsLibraryRoot=Modelica.Utilities.Strings.replace(
     string=Modelica.Utilities.Files.fullPathName(Modelica.Utilities.Files.loadResource("modelica://Buildings/legal.html")),
-    searchString="Buildings/legal.html",
-    replaceString="Buildings")
-    "Root directory of the Buildings library (used to find the spawn executable";
+    searchString="/legal.html",
+    replaceString="")
+    "Root directory of the Buildings library (used to find the spawn executable)";
 
   annotation (
     preferredView="info",
