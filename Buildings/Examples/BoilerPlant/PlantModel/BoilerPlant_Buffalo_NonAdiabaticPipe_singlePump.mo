@@ -271,7 +271,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
     "HW return temperature sensor"
     annotation (Placement(transformation(extent={{180,110},{200,130}})));
 
-  Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep(nout=1)
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(nout=1)
     "Real replicator"
     annotation (Placement(transformation(extent={{280,0},{300,20}})));
 
@@ -353,7 +353,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
   Controls.OBC.CDL.Continuous.GreaterThreshold greThr[2](h=fill(0.3, 2))
     "Check if supply temperature setpoint is met"
     annotation (Placement(transformation(extent={{-260,-170},{-240,-150}})));
-  Controls.OBC.CDL.Routing.BooleanReplicator booRep(nout=2)
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(nout=2)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{-160,-170},{-140,-150}})));
   Fluid.Sensors.RelativePressure           senRelPre1(redeclare package Medium =
@@ -392,14 +392,17 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
   Controls.OBC.CDL.Logical.Edge edg[2]
     "Trigger boiler enable process to meet required supply temperature setpoint"
     annotation (Placement(transformation(extent={{-280,110},{-260,130}})));
-  Controls.OBC.CDL.Logical.MultiOr mulOr1(nu=2) "Multi-Or"
+  Controls.OBC.CDL.Logical.MultiOr mulOr1(nin=2)
+                                                "Multi-Or"
     annotation (Placement(transformation(extent={{-240,110},{-220,130}})));
-  Controls.OBC.CDL.Logical.MultiAnd mulAnd(nu=2) "Multi And"
+  Controls.OBC.CDL.Logical.MultiAnd mulAnd(nin=2)
+                                                 "Multi And"
     annotation (Placement(transformation(extent={{-230,-170},{-210,-150}})));
   Controls.OBC.CDL.Continuous.GreaterThreshold greThr2[2](t=fill(273.15 + 95, 2))
     "Check if supply temperature has exceeded safe operation limit"
     annotation (Placement(transformation(extent={{-230,-214},{-210,-194}})));
-  Controls.OBC.CDL.Logical.MultiOr mulOr(nu=2) "Multi Or"
+  Controls.OBC.CDL.Logical.MultiOr mulOr(nin=2)
+                                               "Multi Or"
     annotation (Placement(transformation(extent={{-200,-214},{-180,-194}})));
   Controls.OBC.CDL.Logical.Or or2
     "End boiler part load hold when supply temperature setpoint is achieved or if supply temperature exceeds safe operation limit"
@@ -437,7 +440,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
     "Nominal pressure drop of fully open valve, used if CvData=Buildings.Fluid.Types.CvTypes.OpPoint";
   parameter Modelica.SIunits.PressureDifference dpFixed_nominal_value=1000
     "Pressure drop of pipe and other resistances that are in series";
-  Controls.OBC.CDL.Routing.BooleanReplicator booRep1(nout=1)
+  Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep1(nout=1)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{280,-120},{300,-100}})));
   Controls.OBC.CDL.Continuous.Gain gai(k=mRad_flow_nominal)
@@ -581,19 +584,13 @@ equation
     annotation (Line(points={{-162,-160},{-168,-160}}, color={255,0,255}));
   connect(uBoiSta, edg.u) annotation (Line(points={{-340,160},{-310,160},{-310,
           120},{-282,120}}, color={255,0,255}));
-  connect(edg.y, mulOr1.u[1:2]) annotation (Line(points={{-258,120},{-250,120},
-          {-250,116.5},{-242,116.5}}, color={255,0,255}));
   connect(mulOr1.y, lat3.u) annotation (Line(points={{-218,120},{-180,120},{
           -180,-140},{-196,-140},{-196,-160},{-192,-160}}, color={255,0,255}));
-  connect(greThr.y, mulAnd.u[1:2]) annotation (Line(points={{-238,-160},{-236,
-          -160},{-236,-163.5},{-232,-163.5}}, color={255,0,255}));
   connect(senTem3.T, greThr2[1].u) annotation (Line(points={{70,-199},{70,-188},
           {-240,-188},{-240,-204},{-232,-204}}, color={0,0,127}));
   connect(senTem2.T, greThr2[2].u) annotation (Line(points={{70,-139},{70,-126},
           {-308,-126},{-308,-188},{-240,-188},{-240,-204},{-232,-204}}, color={
           0,0,127}));
-  connect(greThr2.y, mulOr.u[1:2]) annotation (Line(points={{-208,-204},{-206,
-          -204},{-206,-207.5},{-202,-207.5}}, color={255,0,255}));
   connect(mulOr.y, or2.u1)
     annotation (Line(points={{-178,-204},{-162,-204}}, color={255,0,255}));
   connect(mulAnd.y, or2.u2) annotation (Line(points={{-208,-160},{-204,-160},{
@@ -659,6 +656,12 @@ equation
           -52,-180},{10,-180},{10,-198}}, color={0,0,127}));
   connect(uHotIsoVal[2], val2.y) annotation (Line(points={{-340,90},{-52,90},{
           -52,-110},{10,-110},{10,-138}}, color={0,0,127}));
+  connect(edg.y, mulOr1.u[1:2]) annotation (Line(points={{-258,120},{-250,120},
+          {-250,116.5},{-242,116.5}}, color={255,0,255}));
+  connect(greThr.y, mulAnd.u[1:2]) annotation (Line(points={{-238,-160},{-236,
+          -160},{-236,-163.5},{-232,-163.5}}, color={255,0,255}));
+  connect(greThr2.y, mulOr.u[1:2]) annotation (Line(points={{-208,-204},{-206,
+          -204},{-206,-207.5},{-202,-207.5}}, color={255,0,255}));
   annotation (defaultComponentName="boiPla",
     Documentation(info="<html>
       <p>
