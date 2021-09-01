@@ -79,7 +79,7 @@ model ClosedLoopTest_baseline "Closed loop testing model"
 
   Controls.OBC.CDL.Discrete.UnitDelay uniDel(samplePeriod=1)
     annotation (Placement(transformation(extent={{0,-40},{20,-20}})));
-  Controls.OBC.CDL.Routing.RealReplicator reaRep(nout=2)
+  Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(nout=2)
     annotation (Placement(transformation(extent={{30,-40},{50,-20}})));
 // protected
   Buildings.Controls.OBC.CDL.Continuous.PID conPID(

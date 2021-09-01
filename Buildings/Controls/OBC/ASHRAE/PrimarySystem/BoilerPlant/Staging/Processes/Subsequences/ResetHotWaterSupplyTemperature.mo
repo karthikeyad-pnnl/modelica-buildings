@@ -73,7 +73,7 @@ protected
     "Boiler plant stage index generator"
     annotation (Placement(transformation(extent={{-156,-70},{-136,-50}})));
 
-  Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep(
+  Buildings.Controls.OBC.CDL.Routing.IntegerScalarReplicator intRep(
     final nout=nSta)
     "Generate row vector with current stage setpoint"
     annotation (Placement(transformation(extent={{-120,-90},{-100,-70}})));

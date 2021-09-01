@@ -261,7 +261,7 @@ protected
     "Pass valve position signal from valve opening controller once the opening process starts"
     annotation (Placement(transformation(extent={{40,-140},{60,-120}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(
     final nout=nBoi) if have_heaPriPum
     "Boolean replicator"
     annotation (Placement(transformation(extent={{0,-140},{20,-120}})));
@@ -270,7 +270,7 @@ protected
     "Pass valve position signal from valve closing controller once the closing process starts"
     annotation (Placement(transformation(extent={{100,-120},{120,-100}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep1(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep1(
     final nout=nBoi) if have_heaPriPum
     "Boolean replicator"
     annotation (Placement(transformation(extent={{70,-160},{90,-140}})));

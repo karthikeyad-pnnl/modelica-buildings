@@ -316,7 +316,7 @@ model BoilerPlant_legacy "Boiler plant model for closed loop testing"
   Fluid.Sensors.TemperatureTwoPort senTem1(redeclare package Medium =
         Media.Water, m_flow_nominal=1000*0.0006)
     annotation (Placement(transformation(extent={{80,-20},{100,0}})));
-  Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep(nout=1)
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(nout=1)
     annotation (Placement(transformation(extent={{180,-140},{200,-120}})));
   Fluid.Sensors.VolumeFlowRate senVolFlo1(redeclare package Medium =
         Media.Water, m_flow_nominal=mRad_flow_nominal)

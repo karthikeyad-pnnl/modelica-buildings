@@ -36,7 +36,7 @@ protected
     "Minimum valve position for condensation control"
     annotation (Placement(transformation(extent={{-40,-70},{-20,-50}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(
     final nout=2)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{-40,-30},{-20,-10}})));

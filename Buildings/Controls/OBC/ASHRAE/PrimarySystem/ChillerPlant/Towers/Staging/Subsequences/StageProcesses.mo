@@ -53,13 +53,13 @@ protected
   Buildings.Controls.OBC.CDL.Continuous.Line lin1
     "Chilled water isolation valve setpoint"
     annotation (Placement(transformation(extent={{20,230},{40,250}})));
-  Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep(
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(
     final nout=nTowCel)
     "Replicate real input"
     annotation (Placement(transformation(extent={{100,160},{120,180}})));
   Buildings.Controls.OBC.CDL.Logical.Switch swi[nTowCel] "Logical switch"
     annotation (Placement(transformation(extent={{120,100},{140,120}})));
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(
     final nout=nTowCel)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{60,20},{80,40}})));
@@ -84,7 +84,7 @@ protected
   Buildings.Controls.OBC.CDL.Logical.And and1[nTowCel]
     "True: cells should be enabled"
     annotation (Placement(transformation(extent={{20,-150},{40,-130}})));
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep1(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep1(
     final nout=nTowCel)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{120,-80},{140,-60}})));
@@ -113,13 +113,13 @@ protected
   Buildings.Controls.OBC.CDL.Logical.LogicalSwitch newTowCell[nTowCel]
     "New tower cell status"
     annotation (Placement(transformation(extent={{100,-190},{120,-170}})));
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep2(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep2(
     final nout=nTowCel) "In the enabling process"
     annotation (Placement(transformation(extent={{40,-190},{60,-170}})));
   Buildings.Controls.OBC.CDL.Logical.LogicalSwitch disExiCel[nTowCel]
     "Disable existing cells"
     annotation (Placement(transformation(extent={{40,-220},{60,-200}})));
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep3(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep3(
     final nout=nTowCel) "In the disabling process"
     annotation (Placement(transformation(extent={{-40,-220},{-20,-200}})));
   Buildings.Controls.OBC.CDL.Logical.Sources.Constant con2[nTowCel](
@@ -143,7 +143,7 @@ protected
   Buildings.Controls.OBC.CDL.Integers.Equal intEqu[nTowCel]
     "Check if the opened valves are fully open"
     annotation (Placement(transformation(extent={{40,-40},{60,-20}})));
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep4(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep4(
     final nout=nTowCel) "In the disabling process"
     annotation (Placement(transformation(extent={{60,-270},{80,-250}})));
   Buildings.Controls.OBC.CDL.Logical.Or celChaSta[nTowCel]

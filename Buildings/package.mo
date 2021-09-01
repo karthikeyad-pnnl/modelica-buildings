@@ -438,9 +438,9 @@ have been <b style=\"color:blue\">improved</b> in a
     </td>
 </tr>
 <tr><td valign=\"top\">
-    Buildings.Controls.OBC.CDL.Routing.BooleanReplicator<br/>
-    Buildings.Controls.OBC.CDL.Routing.IntegerReplicator<br/>
-    Buildings.Controls.OBC.CDL.Routing.RealReplicator
+    Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator<br/>
+    Buildings.Controls.OBC.CDL.Routing.IntegerScalarReplicator<br/>
+    Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator
     </td>
     <td valign=\"top\">Renamed to include <code>BooleanScalarReplicator</code>, <code>IntegerScalarReplicator</code>,
                        and <code>RealScalarReplicator</code>.<br/>

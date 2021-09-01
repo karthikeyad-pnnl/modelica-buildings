@@ -63,7 +63,7 @@ protected
     "Logical And"
     annotation (Placement(transformation(extent={{-160,50},{-140,70}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(
     final nout=nBoi)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{-100,50},{-80,70}})));
@@ -107,7 +107,7 @@ protected
     "Logical or"
     annotation (Placement(transformation(extent={{40,-60},{60,-40}})));
 
-  Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep(
+  Buildings.Controls.OBC.CDL.Routing.IntegerScalarReplicator intRep(
     final nout=nBoi)
     "Replicate integer input"
     annotation (Placement(transformation(extent={{-160,110},{-140,130}})));
@@ -125,7 +125,7 @@ protected
     "Record the old boiler status"
     annotation (Placement(transformation(extent={{-20,-10},{0,10}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep1(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep1(
     final nout=nBoi)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{-60,-30},{-40,-10}})));
@@ -134,12 +134,12 @@ protected
     "Rising edge"
     annotation (Placement(transformation(extent={{-100,-30},{-80,-10}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep2(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep2(
     final nout=nBoi)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{-20,-120},{0,-100}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep3(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep3(
     final nout=nBoi)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{80,-60},{100,-40}})));
@@ -157,7 +157,7 @@ protected
     "Boiler index array"
     annotation (Placement(transformation(extent={{-160,80},{-140,100}})));
 
-  Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep1(
+  Buildings.Controls.OBC.CDL.Routing.IntegerScalarReplicator intRep1(
     final nout=nBoi)
     "Replicate integer input"
     annotation (Placement(transformation(extent={{-160,-160},{-140,-140}})));
@@ -170,7 +170,7 @@ protected
     "Logical switch"
     annotation (Placement(transformation(extent={{60,30},{80,50}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator  booRep4(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator  booRep4(
     final nout=nBoi)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{-40,30},{-20,50}})));

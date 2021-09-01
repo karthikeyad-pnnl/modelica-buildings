@@ -66,10 +66,10 @@ block Speed_primary_remoteDp
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep(
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(
     final nout=nSen) "Replicate real input"
     annotation (Placement(transformation(extent={{-100,-110},{-80,-90}})));
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(
     final nout=nSen)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{-20,-50},{0,-30}})));
@@ -88,7 +88,7 @@ protected
   Buildings.Controls.OBC.CDL.Continuous.Division div[nSen]
     "Normalized pressure difference"
     annotation (Placement(transformation(extent={{-20,-90},{0,-70}})));
-  Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep1(
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaRep1(
     final nout=nSen) "Replicate real input"
     annotation (Placement(transformation(extent={{-20,-10},{0,10}})));
   Buildings.Controls.OBC.CDL.Logical.Switch swi "Logical switch"

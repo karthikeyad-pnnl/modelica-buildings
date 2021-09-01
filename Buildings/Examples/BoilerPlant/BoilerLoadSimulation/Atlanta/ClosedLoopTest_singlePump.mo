@@ -124,7 +124,7 @@ block ClosedLoopTest_singlePump
     annotation (Placement(transformation(extent={{-20,80},{0,100}})));
   Controls.OBC.CDL.Discrete.UnitDelay uniDel(samplePeriod=1)
     annotation (Placement(transformation(extent={{-80,-48},{-60,-28}})));
-  Controls.OBC.CDL.Routing.RealReplicator reaRep(nout=2)
+  Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(nout=2)
     annotation (Placement(transformation(extent={{-40,-48},{-20,-28}})));
   Controls.OBC.CDL.Logical.Sources.Constant           con3[2](final k=fill(true,
         2))

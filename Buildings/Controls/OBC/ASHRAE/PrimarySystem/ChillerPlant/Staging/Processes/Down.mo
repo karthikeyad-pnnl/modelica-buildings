@@ -299,7 +299,7 @@ protected
     annotation (Placement(transformation(extent={{60,10},{80,30}})));
   Buildings.Controls.OBC.CDL.Logical.And and1 "Logical and"
     annotation (Placement(transformation(extent={{140,10},{160,30}})));
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep4(final nout=nChi)
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep4(final nout=nChi)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{40,70},{60,90}})));
   Buildings.Controls.OBC.CDL.Logical.Switch swi[nChi]
@@ -317,7 +317,7 @@ protected
     annotation (Placement(transformation(extent={{-40,-130},{-20,-110}})));
   Buildings.Controls.OBC.CDL.Logical.And3 and5 "Logical and"
     annotation (Placement(transformation(extent={{60,-130},{80,-110}})));
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep1(final nout=nChi)
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep1(final nout=nChi)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{60,-80},{80,-60}})));
   Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi [nChi]

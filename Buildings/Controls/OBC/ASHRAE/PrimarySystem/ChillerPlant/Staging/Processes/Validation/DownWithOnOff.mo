@@ -97,7 +97,7 @@ protected
     final k={true,false})
     "Vector of chillers status setpoint at stage one"
     annotation (Placement(transformation(extent={{-200,160},{-180,180}})));
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep2(final nout=2)
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep2(final nout=2)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{-120,130},{-100,150}})));
   Buildings.Controls.OBC.CDL.Logical.LogicalSwitch chiSet2[2]

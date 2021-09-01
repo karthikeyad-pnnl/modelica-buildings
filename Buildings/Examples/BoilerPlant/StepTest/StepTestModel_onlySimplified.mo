@@ -123,7 +123,7 @@ block StepTestModel_onlySimplified
     annotation (Placement(transformation(extent={{-152,30},{-132,50}})));
   Controls.OBC.CDL.Discrete.UnitDelay uniDel(samplePeriod=1)
     annotation (Placement(transformation(extent={{-80,-48},{-60,-28}})));
-  Controls.OBC.CDL.Routing.RealReplicator reaRep(nout=2)
+  Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(nout=2)
     annotation (Placement(transformation(extent={{-50,-48},{-30,-28}})));
   Controls.OBC.CDL.Logical.Sources.Constant           con3[2](final k=fill(true,
         2))

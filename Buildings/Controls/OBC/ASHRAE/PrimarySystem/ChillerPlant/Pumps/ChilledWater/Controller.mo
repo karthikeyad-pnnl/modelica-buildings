@@ -195,27 +195,27 @@ protected
     final k=1) if have_heaPum
     "Constant one"
     annotation (Placement(transformation(extent={{-220,190},{-200,210}})));
-  Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep(
+  Buildings.Controls.OBC.CDL.Routing.IntegerScalarReplicator intRep(
     final nout=nPum) if have_heaPum
     "Replicate integer input"
     annotation (Placement(transformation(extent={{0,220},{20,240}})));
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(
     final nout=nPum) if have_heaPum
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{0,100},{20,120}})));
-  Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep1(
+  Buildings.Controls.OBC.CDL.Routing.IntegerScalarReplicator intRep1(
     final nout=nPum) if have_heaPum
     "Replicate integer input"
     annotation (Placement(transformation(extent={{0,-60},{20,-40}})));
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep1(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep1(
     final nout=nPum) if have_heaPum
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{-40,20},{-20,40}})));
-  Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep2(
+  Buildings.Controls.OBC.CDL.Routing.IntegerScalarReplicator intRep2(
     final nout=nPum) if have_heaPum
     "Replicate integer input"
     annotation (Placement(transformation(extent={{0,-110},{20,-90}})));
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep2(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep2(
     final nout=nPum) if have_heaPum
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{-40,-20},{-20,0}})));

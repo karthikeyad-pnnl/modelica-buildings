@@ -16,8 +16,8 @@ algorithm
 <li>
 November 28, 2013, by Marcus Fuchs:<br/>
 Implementation based on Kaustubh Phalak&apos;s block
-<a href=\"modelica://Buildings.Utilities.Math.IntegerReplicator\">
-Buildings.Utilities.Math.IntegerReplicator</a>.
+<a href=\"modelica://Buildings.Utilities.Math.IntegerScalarReplicator\">
+Buildings.Utilities.Math.IntegerScalarReplicator</a>.
 </li>
 </ul>
 </html>"));

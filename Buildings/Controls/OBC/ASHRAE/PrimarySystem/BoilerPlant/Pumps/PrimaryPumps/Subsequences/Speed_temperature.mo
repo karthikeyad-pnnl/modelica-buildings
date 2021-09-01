@@ -234,7 +234,7 @@ protected
     "Logical switch"
     annotation (Placement(transformation(extent={{80,90},{100,110}})));
 
-  Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep(
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(
     final nout=nBoi) if not primarySecondarySensors
     "Real replicator"
     annotation (Placement(transformation(extent={{20,-100},{40,-80}})));

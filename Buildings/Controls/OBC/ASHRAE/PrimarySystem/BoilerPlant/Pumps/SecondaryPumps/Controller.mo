@@ -486,7 +486,7 @@ protected
     "Delay pump disable after boilers have been disabled"
     annotation (Placement(transformation(extent={{-120,108},{-100,128}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(
     final nout=nPum)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{-66,108},{-46,128}})));

@@ -1262,22 +1262,22 @@ block Controller "Chiller plant controller"
         transformation(extent={{-840,590},{-800,630}}), iconTransformation(
           extent={{-140,240},{-100,280}})));
 
-  CDL.Routing.BooleanReplicator booRep(nout=nChi) if have_WSE
+  CDL.Routing.BooleanScalarReplicator booRep(nout=nChi) if have_WSE
     "Waterside economizer status"
     annotation (Placement(transformation(extent={{-480,290},{-460,310}})));
 
-  CDL.Routing.RealReplicator conWatRetTem(final nout=nChi)
+  CDL.Routing.RealScalarReplicator conWatRetTem(final nout=nChi)
     "Condenser water return temperature"
     annotation (Placement(transformation(extent={{-640,230},{-620,250}})));
 
-  CDL.Routing.RealReplicator chiWatSupTem(final nout=nChi)
+  CDL.Routing.RealScalarReplicator chiWatSupTem(final nout=nChi)
     "Chilled water supply temperature"
     annotation (Placement(transformation(extent={{-580,210},{-560,230}})));
 
   CDL.Logical.Switch desConWatPumSpeSwi "Design condenser water pump speed"
     annotation (Placement(transformation(extent={{620,190},{640,210}})));
 
-  CDL.Routing.RealReplicator repDesConTem(final nout=nChi)
+  CDL.Routing.RealScalarReplicator repDesConTem(final nout=nChi)
     "Replicate design condenser water temperature"
     annotation (Placement(transformation(extent={{660,190},{680,210}})));
 
@@ -1299,7 +1299,7 @@ block Controller "Chiller plant controller"
   CDL.Logical.Latch lat
     annotation (Placement(transformation(extent={{620,340},{640,360}})));
 
-  CDL.Routing.BooleanReplicator uChiSwi(nout=nChi)
+  CDL.Routing.BooleanScalarReplicator uChiSwi(nout=nChi)
     "In chiller stage up process"
     annotation (Placement(transformation(extent={{660,340},{680,360}})));
 

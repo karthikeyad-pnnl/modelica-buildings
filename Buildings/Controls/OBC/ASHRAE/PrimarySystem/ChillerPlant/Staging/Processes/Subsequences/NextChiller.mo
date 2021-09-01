@@ -122,7 +122,7 @@ protected
     final k=chiInd)
     "Vector of chiller index"
     annotation (Placement(transformation(extent={{-120,-10},{-100,10}})));
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(
     final nout=nChi)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{-160,-170},{-140,-150}})));

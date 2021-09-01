@@ -67,7 +67,7 @@ protected
     annotation (Placement(transformation(extent={{-220,-80},{-200,-60}})));
   Buildings.Controls.OBC.CDL.Continuous.Add add3 "Add real inputs"
     annotation (Placement(transformation(extent={{-80,-30},{-60,-10}})));
-  Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep(
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(
     final nout=totChiSta) "Replicate real input"
     annotation (Placement(transformation(extent={{-40,-30},{-20,-10}})));
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con4[totChiSta](

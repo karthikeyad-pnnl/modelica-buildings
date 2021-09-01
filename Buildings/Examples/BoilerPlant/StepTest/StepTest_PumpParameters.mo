@@ -153,7 +153,7 @@ block StepTest_PumpParameters
     Td=3,
     yMax=1,
     yMin=0.1) annotation (Placement(transformation(extent={{40,50},{60,70}})));
-  Controls.OBC.CDL.Routing.RealReplicator reaRep(nout=2)
+  Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(nout=2)
     annotation (Placement(transformation(extent={{80,50},{100,70}})));
   Controls.OBC.CDL.Continuous.Product pro[2]
     annotation (Placement(transformation(extent={{-110,20},{-90,40}})));

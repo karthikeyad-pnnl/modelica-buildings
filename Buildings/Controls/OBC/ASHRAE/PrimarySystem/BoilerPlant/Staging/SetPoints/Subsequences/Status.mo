@@ -79,7 +79,7 @@ protected
     "Switch"
     annotation (Placement(transformation(extent={{360,70},{380,90}})));
 
-  Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep(
+  Buildings.Controls.OBC.CDL.Routing.IntegerScalarReplicator intRep(
     final nout=nSta)
     "Replicates signal to a length equal the stage count"
     annotation (Placement(transformation(extent={{-300,190},{-280,210}})));

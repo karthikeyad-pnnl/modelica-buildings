@@ -59,7 +59,7 @@ protected
     "Returns true if all devices are disabled"
     annotation (Placement(transformation(extent={{-60,-20},{-40,0}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep1(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep1(
     final nout=nDev) "Booolean replicator"
     annotation (Placement(transformation(extent={{20,10},{40,30}})));
 

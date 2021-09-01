@@ -67,7 +67,7 @@ protected
     "Check for stage change sigal and upstream device status"
     annotation (Placement(transformation(extent={{-160,130},{-140,150}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(
     final nout=nBoi)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{-100,130},{-80,150}})));
@@ -107,7 +107,7 @@ protected
     "Logical switch"
     annotation (Placement(transformation(extent={{160,40},{180,60}})));
 
-  Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep(
+  Buildings.Controls.OBC.CDL.Routing.IntegerScalarReplicator intRep(
     final nout=nBoi)
     "Replicate integer input"
     annotation (Placement(transformation(extent={{-160,190},{-140,210}})));
@@ -124,7 +124,7 @@ protected
     "Record the old boiler hot water isolation valve status"
     annotation (Placement(transformation(extent={{-20,90},{0,110}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep1(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep1(
     final nout=nBoi)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{-60,60},{-40,80}})));
@@ -133,12 +133,12 @@ protected
     "Rising edge detector"
     annotation (Placement(transformation(extent={{-100,60},{-80,80}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep2(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep2(
     final nout=nBoi)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{-20,-10},{0,10}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep3(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep3(
     final nout=nBoi)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{80,40},{100,60}})));
@@ -152,7 +152,7 @@ protected
     "Boiler index array"
     annotation (Placement(transformation(extent={{-160,160},{-140,180}})));
 
-  Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep1(
+  Buildings.Controls.OBC.CDL.Routing.IntegerScalarReplicator intRep1(
     final nout=nBoi)
     "Replicate integer input"
     annotation (Placement(transformation(extent={{-160,-90},{-140,-70}})));
@@ -161,7 +161,7 @@ protected
     "Check next enabling isolation valve"
     annotation (Placement(transformation(extent={{-100,-90},{-80,-70}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep4(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep4(
     final nout=nBoi)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{-80,-170},{-60,-150}})));
@@ -178,7 +178,7 @@ protected
     "Record the old boiler hot water isolation valve status"
     annotation (Placement(transformation(extent={{-80,-220},{-60,-200}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep5(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep5(
     final nout=nBoi)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{-120,-250},{-100,-230}})));
@@ -205,7 +205,7 @@ protected
     "Logical switch"
     annotation (Placement(transformation(extent={{160,-130},{180,-110}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep6(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep6(
     final nout=nBoi)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{100,-130},{120,-110}})));

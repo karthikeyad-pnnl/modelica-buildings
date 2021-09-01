@@ -1,5 +1,5 @@
 within Buildings.Utilities.Math;
-block IntegerReplicator "Integer signal replicator"
+block IntegerScalarReplicator "Integer signal replicator"
   extends Modelica.Blocks.Icons.IntegerBlock;
   parameter Integer nout=1 "Number of outputs";
   Modelica.Blocks.Interfaces.IntegerInput u "Connector of integer input signal"
@@ -35,4 +35,4 @@ This block replicates the integer input signal to an array of <code>nout</code> 
 <li>July 27, 2012, by Kaustubh Phalak:<br/>First implementation. </li>
 </ul>
 </html>"));
-end IntegerReplicator;
+end IntegerScalarReplicator;

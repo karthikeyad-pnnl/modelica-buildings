@@ -1,5 +1,5 @@
 within Buildings.Utilities.Math;
-block BooleanReplicator "Boolean signal replicator"
+block BooleanScalarReplicator "Boolean signal replicator"
   extends Modelica.Blocks.Icons.BooleanBlock;
   parameter Integer nout=1 "Number of outputs";
   Modelica.Blocks.Interfaces.BooleanInput u "Connector of boolean input signal"
@@ -40,4 +40,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end BooleanReplicator;
+end BooleanScalarReplicator;

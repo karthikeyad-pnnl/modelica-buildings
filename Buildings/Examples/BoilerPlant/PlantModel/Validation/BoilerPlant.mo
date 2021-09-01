@@ -37,7 +37,7 @@ model BoilerPlant
     "Logical Not"
     annotation (Placement(transformation(extent={{20,10},{40,30}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(
     final nout=2)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{80,10},{100,30}})));
@@ -46,7 +46,7 @@ model BoilerPlant
     "Boolean to Real conversion"
     annotation (Placement(transformation(extent={{50,-30},{70,-10}})));
 
-  Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep(
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(
     final nout=2)
     "Real replicator"
     annotation (Placement(transformation(extent={{80,-30},{100,-10}})));

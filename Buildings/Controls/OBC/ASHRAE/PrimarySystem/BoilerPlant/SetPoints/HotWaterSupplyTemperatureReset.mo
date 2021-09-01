@@ -230,7 +230,7 @@ protected
     "Generate binary vector to identify non-condensing boilers"
     annotation (Placement(transformation(extent={{-40,-280},{-20,-260}})));
 
-  Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep(
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(
     final nout=nBoi)
     "Convert temperature setpoint into vector"
     annotation (Placement(transformation(extent={{10,-200},{30,-180}})));
@@ -262,7 +262,7 @@ protected
     "Ensure condensing boiler setpoint does not exceed design setpoint"
     annotation (Placement(transformation(extent={{-80,-180},{-60,-160}})));
 
-  Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep1(
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaRep1(
     final nout=nBoi)
     "Convert temperature setpoint into vector"
     annotation (Placement(transformation(extent={{10,-310},{30,-290}})));

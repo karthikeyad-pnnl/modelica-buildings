@@ -241,7 +241,7 @@ protected
     "Hold true signal once first stage change is completed"
     annotation (Placement(transformation(extent={{-40,60},{-20,80}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(
     final nout=nBoi)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
@@ -331,7 +331,7 @@ protected
     "Hold true signal once first stage change is completed"
     annotation (Placement(transformation(extent={{330,60},{350,80}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep1(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep1(
     final nout=nBoi)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{280,60},{300,80}})));
@@ -433,7 +433,7 @@ protected
     "Hold true signal once first stage change is completed"
     annotation (Placement(transformation(extent={{-50,-280},{-30,-260}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep4(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep4(
     final nout=nBoi)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{-90,-280},{-70,-260}})));

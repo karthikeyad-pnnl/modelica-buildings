@@ -307,7 +307,7 @@ protected
     "Hold true signal once first stage change is completed"
     annotation (Placement(transformation(extent={{-70,60},{-50,80}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(
     final nout=nBoi)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{-110,60},{-90,80}})));
@@ -408,7 +408,7 @@ protected
     "Hold true signal once first stage change is completed"
     annotation (Placement(transformation(extent={{310,60},{330,80}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep1(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep1(
     final nout=nBoi)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{270,60},{290,80}})));
@@ -509,7 +509,7 @@ protected
     "Hold true signal once first stage change is completed"
     annotation (Placement(transformation(extent={{-70,-270},{-50,-250}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep2(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep2(
     final nout=nBoi)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{-110,-270},{-90,-250}})));
@@ -610,7 +610,7 @@ protected
     "Hold true signal once first stage change is completed"
     annotation (Placement(transformation(extent={{510,-270},{530,-250}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep3(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep3(
     final nout=nBoi)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{470,-270},{490,-250}})));
@@ -703,7 +703,7 @@ protected
     "Hold true signal once first stage change is completed"
     annotation (Placement(transformation(extent={{700,60},{720,80}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep4(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep4(
     final nout=nBoi)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{650,60},{670,80}})));

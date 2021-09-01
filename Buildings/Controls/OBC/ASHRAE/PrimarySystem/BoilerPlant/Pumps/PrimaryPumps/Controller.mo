@@ -715,7 +715,7 @@ block Controller
     "Logical switch"
     annotation (Placement(transformation(extent={{182,-42},{202,-22}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(
     final nout=nPum)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{142,30},{162,50}})));

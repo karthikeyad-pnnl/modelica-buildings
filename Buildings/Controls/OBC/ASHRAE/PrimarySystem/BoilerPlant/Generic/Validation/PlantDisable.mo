@@ -114,7 +114,7 @@ protected
     "Real switch"
     annotation (Placement(transformation(extent={{-50,-60},{-30,-40}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(
     final nout=2)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{-90,40},{-70,60}})));

@@ -1349,7 +1349,7 @@ protected
     "Logical switch"
     annotation (Placement(transformation(extent={{180,260},{200,280}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(
     final nout=nBoi)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{120,260},{140,280}})));

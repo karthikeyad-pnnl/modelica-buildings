@@ -374,7 +374,7 @@ model BoilerPlant
         Media.Water, m_flow_nominal=1000*0.0006)
     annotation (Placement(transformation(extent={{180,110},{200,130}})));
 
-  Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep(nout=1)
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(nout=1)
     "Real replicator"
     annotation (Placement(transformation(extent={{280,0},{300,20}})));
 
@@ -451,7 +451,7 @@ model BoilerPlant
   Controls.OBC.CDL.Continuous.Add add2[2](k2=fill(-1, 2))
     "Check difference between return temperature and boiler temperature"
     annotation (Placement(transformation(extent={{160,-100},{180,-80}})));
-  Controls.OBC.CDL.Routing.RealReplicator           reaRep1(nout=2)
+  Controls.OBC.CDL.Routing.RealScalarReplicator           reaRep1(nout=2)
     "Real replicator"
     annotation (Placement(transformation(extent={{270,30},{290,50}})));
   Fluid.Sensors.TemperatureTwoPort           senTem2(redeclare package Medium =
@@ -507,7 +507,7 @@ model BoilerPlant
     annotation (Placement(transformation(extent={{-230,-170},{-210,-150}})));
   Controls.OBC.CDL.Logical.MultiOr mulOr(nu=2)
     annotation (Placement(transformation(extent={{-200,-170},{-180,-150}})));
-  Controls.OBC.CDL.Routing.BooleanReplicator booRep(nout=2)
+  Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(nout=2)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{-170,-170},{-150,-150}})));
   Fluid.Sensors.RelativePressure           senRelPre1(redeclare package Medium =

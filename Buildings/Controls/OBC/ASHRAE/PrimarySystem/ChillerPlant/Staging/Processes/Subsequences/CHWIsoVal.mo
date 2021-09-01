@@ -72,7 +72,7 @@ protected
   Buildings.Controls.OBC.CDL.Discrete.TriggeredSampler triSam[nChi]
     "Record the old chiller chilled water isolation valve status"
     annotation (Placement(transformation(extent={{-80,-110},{-60,-90}})));
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(final nout=nChi)
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(final nout=nChi)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{20,-150},{40,-130}})));
   Buildings.Controls.OBC.CDL.Logical.And and2
@@ -82,7 +82,7 @@ protected
     annotation (Placement(transformation(extent={{-40,-210},{-20,-190}})));
   Buildings.Controls.OBC.CDL.Logical.Switch swi[nChi] "Logical switch"
     annotation (Placement(transformation(extent={{120,-50},{140,-30}})));
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep1(final nout=nChi)
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep1(final nout=nChi)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{60,-180},{80,-160}})));
   Buildings.Controls.OBC.CDL.Logical.Not not2[nChi] "Logical not"
@@ -94,10 +94,10 @@ protected
   Buildings.Controls.OBC.CDL.Integers.Equal intEqu[nChi]
     "Check next enabling isolation valve"
     annotation (Placement(transformation(extent={{-20,0},{0,20}})));
-  Buildings.Controls.OBC.CDL.Routing.IntegerReplicator intRep(final nout=nChi)
+  Buildings.Controls.OBC.CDL.Routing.IntegerScalarReplicator intRep(final nout=nChi)
     "Replicate integer input"
     annotation (Placement(transformation(extent={{-80,0},{-60,20}})));
-  Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep(final nout=nChi)
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(final nout=nChi)
     "Replicate real input"
     annotation (Placement(transformation(extent={{80,70},{100,90}})));
   Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys3[nChi](

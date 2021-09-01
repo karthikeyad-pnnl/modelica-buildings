@@ -72,7 +72,7 @@ protected
     "Pass input boiler enable status when plant is enabled and disable all boilers when plant is disabled"
     annotation (Placement(transformation(extent={{140,40},{160,60}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep1(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep1(
     final nout=nBoi)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{-40,110},{-20,130}})));
@@ -81,7 +81,7 @@ protected
     "Logical Not"
     annotation (Placement(transformation(extent={{-130,-20},{-110,0}})));
 
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep2(
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep2(
     final nout=nBoi) if have_heaPriPum
     "Boolean replicator"
     annotation (Placement(transformation(extent={{-20,-20},{0,0}})));

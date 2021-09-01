@@ -14,8 +14,8 @@ algorithm
 <ul>
 <li>November 28, 2013, by Marcus Fuchs:<br/>
 Implementation based on Kaustubh Phalak&apos;s block
-<a href=\"modelica://Buildings.Utilities.Math.BooleanReplicator\">
-Buildings.Utilities.Math.BooleanReplicator</a>.
+<a href=\"modelica://Buildings.Utilities.Math.BooleanScalarReplicator\">
+Buildings.Utilities.Math.BooleanScalarReplicator</a>.
 </li>
 </ul>
 </html>"));

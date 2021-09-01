@@ -286,7 +286,7 @@ protected
     annotation (Placement(transformation(extent={{-80,-30},{-60,-10}})));
   Buildings.Controls.OBC.CDL.Logical.Switch swi[nChi] "Logical switch"
     annotation (Placement(transformation(extent={{200,-150},{220,-130}})));
-  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(final nout=nChi)
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(final nout=nChi)
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{140,-180},{160,-160}})));
   Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi[nChi] "Logical switch"

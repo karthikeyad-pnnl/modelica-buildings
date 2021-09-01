@@ -273,7 +273,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump_splitterPressure
         Media.Water, m_flow_nominal=mRad_flow_nominal)
     annotation (Placement(transformation(extent={{180,110},{200,130}})));
 
-  Buildings.Controls.OBC.CDL.Routing.RealReplicator reaRep(nout=1)
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(nout=1)
     "Real replicator"
     annotation (Placement(transformation(extent={{280,0},{300,20}})));
 
@@ -358,7 +358,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump_splitterPressure
   Controls.OBC.CDL.Continuous.GreaterThreshold greThr[2](h=fill(0.3, 2))
     "Check if supply temperature setpoint is not met"
     annotation (Placement(transformation(extent={{-260,-170},{-240,-150}})));
-  Controls.OBC.CDL.Routing.BooleanReplicator booRep(nout=2)
+  Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(nout=2)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{-160,-170},{-140,-150}})));
   Fluid.Sensors.RelativePressure           senRelPre1(redeclare package Medium =
@@ -445,7 +445,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump_splitterPressure
     "Nominal pressure drop of fully open valve, used if CvData=Buildings.Fluid.Types.CvTypes.OpPoint";
   parameter Modelica.SIunits.PressureDifference dpFixed_nominal_value=1000
     "Pressure drop of pipe and other resistances that are in series";
-  Controls.OBC.CDL.Routing.BooleanReplicator booRep1(nout=1)
+  Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep1(nout=1)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{280,-120},{300,-100}})));
   Controls.OBC.CDL.Continuous.Sources.Constant con(k=0)
