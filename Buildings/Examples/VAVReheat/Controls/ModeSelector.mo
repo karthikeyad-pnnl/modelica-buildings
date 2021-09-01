@@ -93,19 +93,19 @@ model ModeSelector "Finite State Machine for the operational modes"
   Modelica.StateGraph.TransitionWithSignal t8
     "changes to occupied in case precooling is deactivated"
     annotation (Placement(transformation(extent={{30,-30},{50,-10}})));
-  Modelica.Blocks.MathInteger.Sum sum(nu=6)
+  Modelica.Blocks.MathInteger.Sum sum(nin=6)
     annotation (Placement(transformation(extent={{-192,134},{-180,146}})));
   Modelica.Blocks.Interfaces.BooleanOutput yFan
     "True if the fans are to be switched on"
     annotation (Placement(transformation(extent={{220,80},{260,120}}),
         iconTransformation(extent={{220,80},{260,120}})));
-  Modelica.Blocks.MathBoolean.Or or1(nu=4)
+  Modelica.Blocks.MathBoolean.Or or1(nin=4)
     annotation (Placement(transformation(extent={{160,-10},{180,10}})));
   Modelica.Blocks.Interfaces.BooleanOutput yEco
     "True if the economizer is enabled" annotation (Placement(transformation(
           extent={{220,-120},{260,-80}}), iconTransformation(extent={{220,-120},
             {260,-80}})));
-  Modelica.Blocks.MathBoolean.Or or2(nu=2) "Occupied or pre-cool mode"
+  Modelica.Blocks.MathBoolean.Or or2(nin=2) "Occupied or pre-cool mode"
     annotation (Placement(transformation(extent={{160,-50},{180,-30}})));
   Buildings.Controls.OBC.CDL.Logical.And and3
     "(Occupied or pre-cool mode) and fan on"

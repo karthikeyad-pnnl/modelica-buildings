@@ -69,7 +69,7 @@ protected
   Modelica.Blocks.Sources.Constant TMin(final k=TEvaMin)
     "Evaporator minimum temperature"
     annotation (Placement(transformation(extent={{-92,30},{-80,42}})));
-  Modelica.Blocks.MathBoolean.And on(nu=3) "Compressor status"
+  Modelica.Blocks.MathBoolean.And on(nin=3) "Compressor status"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
 
   Modelica.Blocks.Logical.Hysteresis hysdTConEva(

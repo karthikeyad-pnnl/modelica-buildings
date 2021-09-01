@@ -737,7 +737,7 @@ block Controller
     "Logical Not"
     annotation (Placement(transformation(extent={{-140,-400},{-120,-380}})));
 
-  Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd(nu=nPum) if not have_priOnl
+  Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd(nin=nPum) if not have_priOnl
     "Check if all pumps are at desired status"
     annotation (Placement(transformation(extent={{-100,-400},{-80,-380}})));
 

@@ -101,7 +101,7 @@ protected
     annotation (Placement(transformation(extent={{120,-130},{140,-110}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd1(
-    final nu=nBoi) if have_priOnl and have_heaPriPum
+    final nin=nBoi) if have_priOnl and have_heaPriPum
     "Multi And"
     annotation (Placement(transformation(extent={{80,-126},{100,-106}})));
 
@@ -123,12 +123,12 @@ protected
 
 
   Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd2(
-    final nu=nBoi) if not have_priOnl and have_heaPriPum
+    final nin=nBoi) if not have_priOnl and have_heaPriPum
     "Multi And"
     annotation (Placement(transformation(extent={{80,-100},{100,-80}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr1(
-    final nu=1) if not have_priOnl and not have_heaPriPum
+    final nin=1) if not have_priOnl and not have_heaPriPum
     "Multi Or"
     annotation (Placement(transformation(extent={{-10,-100},{10,-80}})));
 

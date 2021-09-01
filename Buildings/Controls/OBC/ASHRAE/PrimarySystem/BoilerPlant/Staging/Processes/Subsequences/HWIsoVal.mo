@@ -167,7 +167,7 @@ protected
     annotation (Placement(transformation(extent={{40,210},{60,230}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd1(
-    final nu=nBoi)
+    final nin=nBoi)
     "Logical and"
     annotation (Placement(transformation(extent={{80,210},{100,230}})));
 

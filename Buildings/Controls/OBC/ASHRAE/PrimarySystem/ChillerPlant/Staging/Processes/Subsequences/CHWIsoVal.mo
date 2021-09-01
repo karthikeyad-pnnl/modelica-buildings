@@ -118,7 +118,7 @@ protected
     annotation (Placement(transformation(extent={{0,210},{20,230}})));
   Buildings.Controls.OBC.CDL.Logical.Or  or2[nChi] "Logicla or"
     annotation (Placement(transformation(extent={{40,210},{60,230}})));
-  Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd1(final nu=nChi)
+  Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd1(final nin=nChi)
     "Logical and"
     annotation (Placement(transformation(extent={{80,210},{100,230}})));
   Buildings.Controls.OBC.CDL.Logical.And3 and5

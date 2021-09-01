@@ -126,7 +126,7 @@ protected
     annotation (Placement(transformation(extent={{-70,-60},{-50,-40}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
-    final nu=nPum)
+    final nin=nPum)
     "Check if any hot water pumps are enabled"
     annotation (Placement(transformation(extent={{-110,-60},{-90,-40}})));
 

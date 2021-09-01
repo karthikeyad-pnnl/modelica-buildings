@@ -400,13 +400,13 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump_dPMover
     annotation (Placement(transformation(extent={{-190,-170},{-170,-150}})));
   Controls.OBC.CDL.Logical.Edge edg[2]
     annotation (Placement(transformation(extent={{-280,110},{-260,130}})));
-  Controls.OBC.CDL.Logical.MultiOr mulOr1(nu=2)
+  Controls.OBC.CDL.Logical.MultiOr mulOr1(nin=2)
     annotation (Placement(transformation(extent={{-240,110},{-220,130}})));
-  Controls.OBC.CDL.Logical.MultiAnd mulAnd(nu=2)
+  Controls.OBC.CDL.Logical.MultiAnd mulAnd(nin=2)
     annotation (Placement(transformation(extent={{-230,-170},{-210,-150}})));
   Controls.OBC.CDL.Continuous.GreaterThreshold greThr2[2](t=fill(273.15 + 95, 2))
     annotation (Placement(transformation(extent={{-230,-214},{-210,-194}})));
-  Controls.OBC.CDL.Logical.MultiOr mulOr(nu=2)
+  Controls.OBC.CDL.Logical.MultiOr mulOr(nin=2)
     annotation (Placement(transformation(extent={{-200,-214},{-180,-194}})));
   Controls.OBC.CDL.Logical.Or or2
     annotation (Placement(transformation(extent={{-160,-214},{-140,-194}})));

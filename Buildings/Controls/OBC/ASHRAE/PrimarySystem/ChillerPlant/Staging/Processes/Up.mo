@@ -280,9 +280,9 @@ protected
   Buildings.Controls.OBC.CDL.Logical.Sources.Constant con(final k=false)
     "False constant"
     annotation (Placement(transformation(extent={{-200,70},{-180,90}})));
-  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(final nu=nChi) "Multiple or"
+  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(final nin=nChi) "Multiple or"
     annotation (Placement(transformation(extent={{-80,0},{-60,20}})));
-  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr1(final nu=nChi) "Multiple or"
+  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr1(final nin=nChi) "Multiple or"
     annotation (Placement(transformation(extent={{-80,-30},{-60,-10}})));
   Buildings.Controls.OBC.CDL.Logical.Switch swi[nChi] "Logical switch"
     annotation (Placement(transformation(extent={{200,-150},{220,-130}})));

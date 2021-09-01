@@ -430,7 +430,7 @@ public
       expr={2,1},
       y_default=0,
       use_pre_as_default=false,
-      nu=2) annotation (Placement(transformation(extent={{140,-50},{180,-30}})));
+      nin=2) annotation (Placement(transformation(extent={{140,-50},{180,-30}})));
     Modelica.Blocks.Interfaces.IntegerOutput stage "Coil stage control signal"
       annotation (Placement(transformation(extent={{218,-50},{238,-30}})));
     Modelica.Blocks.Logical.Not not1

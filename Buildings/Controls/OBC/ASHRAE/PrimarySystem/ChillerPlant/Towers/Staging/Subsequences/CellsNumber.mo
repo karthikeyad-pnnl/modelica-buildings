@@ -118,7 +118,7 @@ protected
     "Chiller stage index in the staging process"
     annotation (Placement(transformation(extent={{-160,10},{-140,30}})));
   Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
-    final nu=nConWatPum)
+    final nin=nConWatPum)
     "Check if any condenser water pump is running"
     annotation (Placement(transformation(extent={{-140,-170},{-120,-150}})));
 

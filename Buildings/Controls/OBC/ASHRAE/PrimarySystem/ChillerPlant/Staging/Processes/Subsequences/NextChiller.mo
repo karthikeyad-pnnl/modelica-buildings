@@ -54,10 +54,10 @@ block NextChiller "Identify next enable and disable chillers"
   Buildings.Controls.OBC.CDL.Logical.Latch disChi[nChi]
     "True when the chiller should be disabled"
     annotation (Placement(transformation(extent={{-120,-110},{-100,-90}})));
-  Buildings.Controls.OBC.CDL.Logical.MultiOr anyEnaChi(final nu=nChi)
+  Buildings.Controls.OBC.CDL.Logical.MultiOr anyEnaChi(final nin=nChi)
     "Check if there is any enabling chiller"
     annotation (Placement(transformation(extent={{-80,-30},{-60,-10}})));
-  Buildings.Controls.OBC.CDL.Logical.MultiOr anyDisChi(final nu=nChi)
+  Buildings.Controls.OBC.CDL.Logical.MultiOr anyDisChi(final nin=nChi)
     "Check if there is any disabling chiller"
     annotation (Placement(transformation(extent={{-80,-70},{-60,-50}})));
   Buildings.Controls.OBC.CDL.Logical.And enaDis

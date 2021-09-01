@@ -205,7 +205,7 @@ model Case600FF
           constrainedby Modelica.Icons.Record
     "Reference results from ASHRAE/ANSI Standard 140"
     annotation (Placement(transformation(extent={{80,40},{94,54}})));
-  Modelica.Blocks.Math.MultiSum multiSum(nu=1)
+  Modelica.Blocks.Math.MultiSum multiSum(nin=1)
     "Multi sum for infiltration air flow rate"
     annotation (Placement(transformation(extent={{-78,-80},{-66,-68}})));
   Controls.OBC.CDL.Continuous.MovingMean TRooHou(delta=3600)

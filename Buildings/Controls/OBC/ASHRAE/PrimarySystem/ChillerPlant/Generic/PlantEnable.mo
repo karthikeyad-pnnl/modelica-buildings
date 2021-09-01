@@ -82,7 +82,7 @@ protected
     annotation (Placement(transformation(extent={{-140,80},{-120,100}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd(
-    final nu=4) "Logical and receiving multiple input"
+    final nin=4) "Logical and receiving multiple input"
     annotation (Placement(transformation(extent={{40,70},{60,90}})));
 
   Buildings.Controls.OBC.CDL.Logical.Timer enaTim(

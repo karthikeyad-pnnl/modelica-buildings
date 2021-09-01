@@ -19,7 +19,7 @@ equation
     i=10,
     nTimTot=6,
     TStep=timSer,
-    nu=cat(1,linspace(0.4,2,5),linspace(2.8,6,5)));
+    nin=cat(1,linspace(0.4,2,5),linspace(2.8,6,5)));
 
 annotation (experiment(Tolerance=1e-6, StopTime=1.0),
 __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Fluid/Geothermal/Borefields/BaseClasses/HeatTransfer/LoadAggregation/Validation/AggregationWeightingFactors.mos"

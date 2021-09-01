@@ -103,10 +103,10 @@ partial model HeatingCoolingHotWater3Clusters
         transformation(extent={{-348,182},{-332,198}}), iconTransformation(
           extent={{-328,64},{-308,84}})));
 
-  Modelica.Blocks.Math.MultiSum PHea(nu=16)
+  Modelica.Blocks.Math.MultiSum PHea(nin=16)
     "Electrical energy use for space heating and hot water"
     annotation (Placement(transformation(extent={{604,364},{616,376}})));
-  Modelica.Blocks.Math.MultiSum PCoo(nu=8) "Electrical energy use for cooling"
+  Modelica.Blocks.Math.MultiSum PCoo(nin=8) "Electrical energy use for cooling"
     annotation (Placement(transformation(extent={{604,324},{616,336}})));
   Modelica.Blocks.Continuous.Integrator EEleHea(y(unit="J"))
     "Electrical energy for space heating and hot water"
@@ -114,13 +114,13 @@ partial model HeatingCoolingHotWater3Clusters
   Modelica.Blocks.Continuous.Integrator EEleCoo(y(unit="J"))
     "Electrical energy for cooling"
     annotation (Placement(transformation(extent={{640,320},{660,340}})));
-  Modelica.Blocks.Math.MultiSum QHea(nu=8)
+  Modelica.Blocks.Math.MultiSum QHea(nin=8)
     "Thermal energy use for space heating"
     annotation (Placement(transformation(extent={{604,284},{616,296}})));
-  Modelica.Blocks.Math.MultiSum QHotWat(nu=8)
+  Modelica.Blocks.Math.MultiSum QHotWat(nin=8)
     "Thermal energy use for hot water"
     annotation (Placement(transformation(extent={{604,244},{616,256}})));
-  Modelica.Blocks.Math.MultiSum QCoo(nu=8) "Thermal energy use for cooling"
+  Modelica.Blocks.Math.MultiSum QCoo(nin=8) "Thermal energy use for cooling"
     annotation (Placement(transformation(extent={{604,204},{616,216}})));
   Modelica.Blocks.Continuous.Integrator ETheHea(y(unit="J"))
     "Thermal energy for space heating"

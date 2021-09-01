@@ -273,7 +273,7 @@ model RenewableSources
   Modelica.Blocks.Continuous.Integrator EWin
     "Energy produced by the wind turbine"
     annotation (Placement(transformation(extent={{200,-14},{220,6}})));
-  Modelica.Blocks.Math.MultiSum PSol(nu=7, y(unit="W"))
+  Modelica.Blocks.Math.MultiSum PSol(nin=7, y(unit="W"))
     "Total produced solar power"
     annotation (Placement(transformation(extent={{174,64},{186,76}})));
   Modelica.Blocks.Continuous.Integrator ESol

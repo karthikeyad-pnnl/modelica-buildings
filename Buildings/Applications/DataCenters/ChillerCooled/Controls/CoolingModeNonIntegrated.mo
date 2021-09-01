@@ -56,7 +56,7 @@ model CoolingModeNonIntegrated
         rotation=-90,
         origin={-20,20})));
   Modelica.Blocks.MathInteger.MultiSwitch swi(
-    nu=2,
+    nin=2,
     y_default=0,
     expr={Integer(Buildings.Applications.DataCenters.Types.CoolingModes.FreeCooling),
         Integer(Buildings.Applications.DataCenters.Types.CoolingModes.FullMechanical)})

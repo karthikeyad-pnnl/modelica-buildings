@@ -15,7 +15,7 @@ model Case650
     peakHea(Min = 0*1000, Max = 0*1000, Mean = 0 * 1000),
     peakCoo(Min= -5.831*1000, Max = -6.679*1000, Mean= -6.321*1000)),
     gaiHea(k=0),
-    multiSum(nu=2));
+    multiSum(nin=2));
 
   BaseClasses.DaySchedule vent(table=[      0, -1703.16/3600;
                                        7*3600, -1703.16/3600;

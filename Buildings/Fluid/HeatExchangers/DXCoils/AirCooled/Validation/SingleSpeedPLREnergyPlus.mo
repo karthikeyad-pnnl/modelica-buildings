@@ -306,7 +306,7 @@ model SingleSpeedPLREnergyPlus
     annotation (Placement(transformation(extent={{0,-80},{20,-60}})));
   UnitDelay XEvaOutEPlu(samplePeriod=3600)
     annotation (Placement(transformation(extent={{0,-140},{20,-120}})));
-  Modelica.Blocks.Math.MultiSum multiSum(nu=2)
+  Modelica.Blocks.Math.MultiSum multiSum(nin=2)
     annotation (Placement(transformation(extent={{118,-120},{130,-108}})));
   Modelica.Blocks.Sources.Constant small(k=-1e-9)
     "Small value to avoid division by zero"

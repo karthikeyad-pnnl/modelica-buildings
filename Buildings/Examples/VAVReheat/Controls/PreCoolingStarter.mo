@@ -13,7 +13,7 @@ block PreCoolingStarter "Outputs true when precooling should start"
     annotation (Placement(transformation(extent={{-40,-80},{-20,-60}})));
   Modelica.Blocks.Logical.LessThreshold greater1(threshold=TOutLim)
     annotation (Placement(transformation(extent={{-40,-40},{-20,-20}})));
-  Modelica.Blocks.MathBoolean.And and3(nu=3)
+  Modelica.Blocks.MathBoolean.And and3(nin=3)
     annotation (Placement(transformation(extent={{28,-6},{40,6}})));
 equation
   connect(controlBus.dTNexOcc, greater2.u) annotation (Line(

@@ -28,7 +28,7 @@ model BatteryControl "Controller for battery"
         0.01)
     annotation (Placement(transformation(extent={{-120,-130},{-100,-110}})));
   Modelica.Blocks.Math.MultiSwitch multiSwitch1(
-    nu=2,
+    nin=2,
     expr={200e3,-400e3})
     annotation (Placement(transformation(extent={{104,-10},{120,10}})));
   Modelica.StateGraph.InitialStep off "Off state"

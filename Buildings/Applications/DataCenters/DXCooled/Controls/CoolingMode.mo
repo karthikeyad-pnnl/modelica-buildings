@@ -80,7 +80,7 @@ model CoolingMode
   inner Modelica.StateGraph.StateGraphRoot stateGraphRoot
     annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
   Modelica.Blocks.MathInteger.MultiSwitch swi(
-    nu=3,
+    nin=3,
     y_default=0,
     expr={Integer(Types.CoolingModes.FreeCooling),
           Integer(Types.CoolingModes.PartialMechanical),

@@ -69,7 +69,7 @@ protected
     if Medium.nXi > 0 "Conversion from X_w to X"
     annotation (Placement(transformation(extent={{-40,46},{-20,66}})));
 
-  Modelica.Blocks.Math.MultiSum multiSum(final nu=nPorts, final k=fill(1,
+  Modelica.Blocks.Math.MultiSum multiSum(final nin=nPorts, final k=fill(1,
         nPorts)) "Sum of air mass flow rates"
     annotation (Placement(transformation(extent={{4,72},{16,84}})));
 

@@ -77,7 +77,7 @@ public
     annotation (Placement(transformation(extent={{60,-26},{80,-6}})));
   Modelica.Blocks.Sources.Constant QAbsSW_flow(k=0) "Absorbed solar radiation"
     annotation (Placement(transformation(extent={{-100,-100},{-80,-80}})));
-  Modelica.Blocks.Math.MultiSum sumJ(nu=2)
+  Modelica.Blocks.Math.MultiSum sumJ(nin=2)
     "Sum of radiosity from construction to room model"
     annotation (Placement(transformation(extent={{-20,0},{-8,12}})));
 equation

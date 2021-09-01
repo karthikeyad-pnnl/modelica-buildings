@@ -1165,7 +1165,7 @@ protected
     annotation (Placement(transformation(extent={{160,-430},{180,-410}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
-    final nu=nPumPri)
+    final nin=nPumPri)
     "Multi Or"
     annotation (Placement(transformation(extent={{200,-430},{220,-410}})));
 

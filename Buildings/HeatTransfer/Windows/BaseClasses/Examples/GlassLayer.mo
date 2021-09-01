@@ -89,10 +89,10 @@ model GlassLayer "Test model for glass layer heat transfer"
   Buildings.HeatTransfer.Windows.BaseClasses.ShadingSignal shaCon(haveShade=
         true) "Bounds the shading signal"
     annotation (Placement(transformation(extent={{-120,100},{-100,120}})));
-  Modelica.Blocks.Math.MultiSum sumJOut(nu=2)
+  Modelica.Blocks.Math.MultiSum sumJOut(nin=2)
     "Sum of radiosities at outer surface"
     annotation (Placement(transformation(extent={{-30,-68},{-42,-56}})));
-  Modelica.Blocks.Math.MultiSum sumJRoo(nu=2)
+  Modelica.Blocks.Math.MultiSum sumJRoo(nin=2)
     "Sum of radiosities at room surface"
     annotation (Placement(transformation(extent={{44,-60},{56,-48}})));
 equation

@@ -132,7 +132,7 @@ protected
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
   Buildings.Controls.OBC.CDL.Logical.Switch swi "Logical switch"
     annotation (Placement(transformation(extent={{100,110},{120,130}})));
-  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(final nu=nPum)
+  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(final nin=nPum)
     "Check if there is any pump enabled"
     annotation (Placement(transformation(extent={{-120,-50},{-100,-30}})));
 

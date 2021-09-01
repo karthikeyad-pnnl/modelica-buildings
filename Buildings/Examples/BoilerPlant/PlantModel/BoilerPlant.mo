@@ -505,7 +505,7 @@ model BoilerPlant
   Controls.OBC.CDL.Continuous.GreaterThreshold greThr[2](h=0.3)
     "Check if supply temperature setpoint is not met"
     annotation (Placement(transformation(extent={{-230,-170},{-210,-150}})));
-  Controls.OBC.CDL.Logical.MultiOr mulOr(nu=2)
+  Controls.OBC.CDL.Logical.MultiOr mulOr(nin=2)
     annotation (Placement(transformation(extent={{-200,-170},{-180,-150}})));
   Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(nout=2)
     "Boolean replicator"

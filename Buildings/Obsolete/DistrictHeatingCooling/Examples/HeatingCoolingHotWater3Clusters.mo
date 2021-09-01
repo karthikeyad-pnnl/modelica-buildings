@@ -3,7 +3,7 @@ model HeatingCoolingHotWater3Clusters
   "Validation model for a system with three clusters of buildings"
   extends
     Buildings.Obsolete.DistrictHeatingCooling.Examples.BaseClasses.HeatingCoolingHotWater3Clusters(
-      PHea(nu=17), PCoo(nu=9));
+      PHea(nin=17), PCoo(nin=9));
   extends Modelica.Icons.Example;
     package Medium = Buildings.Media.Water "Fluid in the pipes";
 

@@ -16,7 +16,7 @@ equation
         i=5,
         QAgg_flow=pre(QAggShi_flow),
         rCel={1,1,1,2,2},
-        nu={1,2,3,5,7},
+        nin={1,2,3,5,7},
         curTim=time);
   end when;
 

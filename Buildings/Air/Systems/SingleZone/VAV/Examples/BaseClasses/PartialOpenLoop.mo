@@ -40,7 +40,7 @@ partial model PartialOpenLoop
   Modelica.Blocks.Continuous.Integrator ECoo
   "Total cooling energy"
     annotation (Placement(transformation(extent={{40,-110},{60,-90}})));
-  Modelica.Blocks.Math.MultiSum EHVAC(nu=4)
+  Modelica.Blocks.Math.MultiSum EHVAC(nin=4)
   "Total HVAC energy"
     annotation (Placement(transformation(extent={{80,-80},{100,-60}})));
   Modelica.Blocks.Continuous.Integrator EPum

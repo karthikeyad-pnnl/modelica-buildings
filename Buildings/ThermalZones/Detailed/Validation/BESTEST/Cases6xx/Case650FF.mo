@@ -6,7 +6,7 @@ model Case650FF
       minT( Min=-23.0+273.15, Max=-21.6+273.15, Mean=-22.7+273.15),
       maxT( Min=63.2+273.15, Max=68.2+273.15, Mean=64.7+273.15),
       meanT(Min=18.0+273.15, Max=19.6+273.15, Mean=18.7+273.15)),
-  multiSum(nu=2));
+  multiSum(nin=2));
   BaseClasses.DaySchedule vent(table=[      0, -1703.16/3600;
                                        7*3600, -1703.16/3600;
                                        7*3600,             0;

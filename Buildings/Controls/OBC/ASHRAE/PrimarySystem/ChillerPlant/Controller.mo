@@ -1226,7 +1226,7 @@ block Controller "Chiller plant controller"
     annotation(Placement(transformation(extent={{800,-560},{840,-520}}),
       iconTransformation(extent={{100,50},{140,90}})));
 
-  CDL.Logical.MultiOr mulOr(nu=nChiWatPum)
+  CDL.Logical.MultiOr mulOr(nin=nChiWatPum)
     annotation(Placement(transformation(extent={{-640,-110},{-620,-90}})));
 
   CDL.Continuous.MultiMax conWatPumSpe(nin=nConWatPum)

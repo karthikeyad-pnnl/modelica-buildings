@@ -99,7 +99,7 @@ initial equation
     i=i,
     nTimTot=nTimTot,
     TStep=timSer,
-    nu=nu);
+    nin=nu);
 
   dTStepdt = kappa[1]/tLoaAgg;
 
@@ -136,7 +136,7 @@ equation
       i=i,
       QAgg_flow=QAgg_flow,
       rCel=rCel,
-      nu=nu,
+      nin=nu,
       curTim=(time - t_start));
 
     // Determine the temperature change at the next aggregation step (assuming

@@ -188,7 +188,7 @@ protected
     annotation (Placement(transformation(extent={{-20,-230},{0,-210}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd(
-    final nu=nBoi+1)
+    final nin=nBoi+1)
     "Multi-input Logical And"
     annotation (Placement(transformation(extent={{52,-230},{72,-210}})));
 

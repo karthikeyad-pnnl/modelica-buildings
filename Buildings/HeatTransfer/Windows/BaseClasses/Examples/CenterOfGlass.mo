@@ -87,7 +87,7 @@ model CenterOfGlass "Test model for center of glas heat transfer"
   Modelica.Blocks.Sources.Constant QAbs[size(glaSys.glass, 1)](each k=0)
     "Solar radiation absorbed by glass"
     annotation (Placement(transformation(extent={{-160,-120},{-140,-100}})));
-  Modelica.Blocks.Math.MultiSum sumJ(nu=2)
+  Modelica.Blocks.Math.MultiSum sumJ(nin=2)
     "Sum of radiosities from the two surfaces"
     annotation (Placement(transformation(extent={{50,-140},{62,-128}})));
 equation

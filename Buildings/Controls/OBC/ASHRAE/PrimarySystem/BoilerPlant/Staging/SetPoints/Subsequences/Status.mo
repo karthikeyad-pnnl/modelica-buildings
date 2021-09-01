@@ -193,7 +193,7 @@ protected
     annotation (Placement(transformation(extent={{-340,-140},{-320,-120}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
-    final nu=nSta)
+    final nin=nSta)
     "Logical or"
     annotation (Placement(transformation(extent={{-380,-140},{-360,-120}})));
 

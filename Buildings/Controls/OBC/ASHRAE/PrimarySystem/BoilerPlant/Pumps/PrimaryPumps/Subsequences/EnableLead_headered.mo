@@ -40,7 +40,7 @@ protected
     annotation (Placement(transformation(extent={{-40,-50},{-20,-30}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
-    final nu=nBoi)
+    final nin=nBoi)
     "Check if there are any hot water isolation valves opened"
     annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
 

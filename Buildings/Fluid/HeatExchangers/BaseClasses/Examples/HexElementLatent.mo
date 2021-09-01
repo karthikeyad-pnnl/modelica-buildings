@@ -100,7 +100,7 @@ model HexElementLatent
     initType=Modelica.Blocks.Types.Init.SteadyState,
     redeclare package Medium = Medium_A) "Enthalpy flow rate sensor"
     annotation (Placement(transformation(extent={{40,-44},{60,-24}})));
-  Modelica.Blocks.Math.MultiSum netEne(nu=4, k={1,-1,1,-1})
+  Modelica.Blocks.Math.MultiSum netEne(nin=4, k={1,-1,1,-1})
     "Net energy balance (needs to be zero)"
     annotation (Placement(transformation(extent={{76,34},{88,46}})));
 equation

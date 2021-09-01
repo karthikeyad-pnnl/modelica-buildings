@@ -189,7 +189,7 @@ partial model PartialSeries "Partial model for series network"
   Buildings.Experimental.DHC.Loads.BaseClasses.ConstraintViolation conVio(
     final uMin=datDes.TLooMin,
     final uMax=datDes.TLooMax,
-    final nu=3+nBui)
+    final nin=3+nBui)
     "Check if loop temperatures are within given range"
     annotation (Placement(transformation(extent={{320,10},{340,30}})));
 equation

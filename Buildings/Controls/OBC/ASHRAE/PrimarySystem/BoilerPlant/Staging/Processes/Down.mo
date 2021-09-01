@@ -289,7 +289,7 @@ protected
     annotation (Placement(transformation(extent={{-32,-120},{-12,-100}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
-    final nu=1) if not have_priOnl
+    final nin=1) if not have_priOnl
     "Pass enable signal for plants that are not primary-only"
     annotation (Placement(transformation(extent={{-170,50},{-150,70}})));
 

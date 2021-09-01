@@ -73,9 +73,9 @@ model Shade "Test model for exterior shade heat transfer"
   Modelica.Blocks.Math.Gain GConUns(k=10*A, y(unit="W/K"))
     "Convection coefficient for unshade part of window"
     annotation (Placement(transformation(extent={{-60,-130},{-40,-110}})));
-  Modelica.Blocks.Math.MultiSum sumJRoo(nu=2) "Sum of room side radiosity"
+  Modelica.Blocks.Math.MultiSum sumJRoo(nin=2) "Sum of room side radiosity"
     annotation (Placement(transformation(extent={{44,-76},{56,-64}})));
-  Modelica.Blocks.Math.MultiSum sumJOut(nu=2) "Sum of outdoor side radiosity"
+  Modelica.Blocks.Math.MultiSum sumJOut(nin=2) "Sum of outdoor side radiosity"
     annotation (Placement(transformation(extent={{-46,-72},{-58,-60}})));
   Buildings.HeatTransfer.Windows.BaseClasses.ShadeConvection extShaCon(A=A,
       thisSideHasShade=true) "Convection model of exterior shade"

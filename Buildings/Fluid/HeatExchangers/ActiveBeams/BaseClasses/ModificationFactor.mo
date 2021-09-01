@@ -63,7 +63,7 @@ protected
   Modelica.Blocks.Math.Product pro_1 "Ratio of actual/nominal air flow rate"
     annotation (Placement(transformation(extent={{-10,10},{10,30}})));
 
-  Modelica.Blocks.Math.MultiProduct mulPro(final nu=3)
+  Modelica.Blocks.Math.MultiProduct mulPro(final nin=3)
     "Product of the three modification factors"
     annotation (Placement(transformation(extent={{64,-6},{76,6}})));
 

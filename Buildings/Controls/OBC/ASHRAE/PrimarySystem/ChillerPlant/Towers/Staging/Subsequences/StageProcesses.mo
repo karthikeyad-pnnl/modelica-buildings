@@ -71,7 +71,7 @@ protected
     final uLow=fill(0.925, nTowCel),
     final uHigh=fill(0.975, nTowCel)) "Check if isolation valve is open more than 95%"
     annotation (Placement(transformation(extent={{-60,-70},{-40,-50}})));
-  Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd1(final nu=nTowCel)
+  Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd1(final nin=nTowCel)
     "Logical and"
     annotation (Placement(transformation(extent={{80,-40},{100,-20}})));
   Buildings.Controls.OBC.CDL.Logical.And and5
@@ -99,7 +99,7 @@ protected
   Buildings.Controls.OBC.CDL.Logical.Not not1[nTowCel] "Logical and"
     annotation (Placement(transformation(extent={{-60,160},{-40,180}})));
   Buildings.Controls.OBC.CDL.Logical.MultiAnd enaCel(
-    final nu=nTowCel) "New cells should be enabled"
+    final nin=nTowCel) "New cells should be enabled"
     annotation (Placement(transformation(extent={{-20,160},{0,180}})));
   Buildings.Controls.OBC.CDL.Logical.Switch celPosSet
     "Slowly change the opening setpoint to 1 of the enabling cells isolation valve, or change the setpoint to 0 of the disabling cells"
@@ -126,10 +126,10 @@ protected
     final k=fill(false, nTowCel)) "Disable cells"
     annotation (Placement(transformation(extent={{-80,-200},{-60,-180}})));
   Buildings.Controls.OBC.CDL.Logical.MultiOr staPro(
-    final nu=nTowCel) "In tower staging process"
+    final nin=nTowCel) "In tower staging process"
     annotation (Placement(transformation(extent={{20,290},{40,310}})));
   Buildings.Controls.OBC.CDL.Logical.MultiOr opeVal(
-    final nu=nTowCel) "Check if there is any opened valve"
+    final nin=nTowCel) "Check if there is any opened valve"
     annotation (Placement(transformation(extent={{0,-10},{20,10}})));
   Buildings.Controls.OBC.CDL.Logical.And and3
     "Check if the opened valves are fully open"
@@ -155,7 +155,7 @@ protected
   Buildings.Controls.OBC.CDL.Logical.Edge edg[nTowCel] "Check if there is any cell being enabled"
     annotation (Placement(transformation(extent={{-120,-310},{-100,-290}})));
   Buildings.Controls.OBC.CDL.Logical.MultiOr endStaPro(
-    final nu=nTowCel)
+    final nin=nTowCel)
     "Check if there is any cell changed status so it means that the staging process is done"
     annotation (Placement(transformation(extent={{0,-290},{20,-270}})));
   Buildings.Controls.OBC.CDL.Logical.Latch lat[nTowCel] "Change cells status"

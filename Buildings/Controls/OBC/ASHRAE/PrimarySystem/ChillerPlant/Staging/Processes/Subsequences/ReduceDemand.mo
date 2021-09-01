@@ -75,7 +75,7 @@ protected
     annotation (Placement(transformation(extent={{-40,-120},{-20,-100}})));
   Buildings.Controls.OBC.CDL.Logical.Not not1[nChi] "Logical not"
     annotation (Placement(transformation(extent={{40,-120},{60,-100}})));
-  Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd(final nu=nChi)
+  Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd(final nin=nChi)
     "Current chillers demand have been lower than 80%"
     annotation (Placement(transformation(extent={{80,-120},{100,-100}})));
   Buildings.Controls.OBC.CDL.Logical.Edge edg

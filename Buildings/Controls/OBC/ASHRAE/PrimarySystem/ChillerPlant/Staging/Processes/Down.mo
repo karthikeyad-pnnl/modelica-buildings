@@ -323,9 +323,9 @@ protected
   Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi [nChi]
     "Chillers head pressure control status"
     annotation (Placement(transformation(extent={{140,-80},{160,-60}})));
-  Buildings.Controls.OBC.CDL.Logical.MultiOr  mulOr(final nu=nChi) "Multiple or"
+  Buildings.Controls.OBC.CDL.Logical.MultiOr  mulOr(final nin=nChi) "Multiple or"
     annotation (Placement(transformation(extent={{-80,-200},{-60,-180}})));
-  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr1(final nu=nChi) "Multiple or"
+  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr1(final nin=nChi) "Multiple or"
     annotation (Placement(transformation(extent={{-80,-230},{-60,-210}})));
   Buildings.Controls.OBC.CDL.Logical.Latch lat
     "Logical latch, maintain ON signal until condition changes"

@@ -44,15 +44,15 @@ protected
     annotation (Placement(transformation(extent={{80,10},{100,30}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
-    final nu=nDev) "Array or"
+    final nin=nDev) "Array or"
     annotation (Placement(transformation(extent={{120,10},{140,30}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiAnd allOn(
-    final nu=nDev) "Outputs true if all devices are enabled"
+    final nin=nDev) "Outputs true if all devices are enabled"
     annotation (Placement(transformation(extent={{-60,20},{-40,40}})));
 
   Buildings.Controls.OBC.CDL.Logical.MultiOr anyOn(
-    final nu=nDev) "Checks if any device is disabled"
+    final nin=nDev) "Checks if any device is disabled"
     annotation (Placement(transformation(extent={{-100,-20},{-80,0}})));
 
   Buildings.Controls.OBC.CDL.Logical.Not allOff

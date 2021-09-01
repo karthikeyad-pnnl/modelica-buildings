@@ -388,7 +388,7 @@ model TwoRoomsWithStorage
   Airflow.Multizone.Orifice lea2(redeclare package Medium = MediumA, A=0.01^2)
     "Leakage of facade of room"
     annotation (Placement(transformation(extent={{320,170},{340,190}})));
-  Modelica.Blocks.MathBoolean.Or pumOnSig(nu=3) "Signal for pump being on"
+  Modelica.Blocks.MathBoolean.Or pumOnSig(nin=3) "Signal for pump being on"
     annotation (Placement(transformation(extent={{660,-100},{680,-80}})));
   Modelica.Blocks.Math.BooleanToReal booToReaBoi "Signal converter for boiler"
     annotation (Placement(transformation(extent={{420,-100},{400,-80}})));

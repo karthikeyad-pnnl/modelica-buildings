@@ -102,7 +102,7 @@ model CoolingMode
 
   Modelica.Blocks.MathInteger.MultiSwitch swi(
     y_default=0,
-    nu=3,
+    nin=3,
     expr={Integer(Buildings.Applications.DataCenters.Types.CoolingModes.FreeCooling),
           Integer(Buildings.Applications.DataCenters.Types.CoolingModes.PartialMechanical),
           Integer(Buildings.Applications.DataCenters.Types.CoolingModes.FullMechanical)})
