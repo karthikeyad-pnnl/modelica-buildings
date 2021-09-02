@@ -30,7 +30,8 @@ block ClosedLoopTest_singlePump
   Modelica.Blocks.Sources.CombiTimeTable combiTimeTable(
     tableOnFile=true,
     tableName="tab1",
-    fileName="C:/Users/deva713/OneDrive - PNNL/Documents/Git_repos/modelica-buildings/VM_script/inputTableTxt.txt",
+    fileName=
+        "C:/buildings_library/buildings_library_pnnl/VM_script/inputTableTxt.txt",
     verboseRead=true,
     columns={2,5},
     timeScale=60) "Boiler thermal load from EnergyPlus simulation"
