@@ -1,17 +1,11 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.ZoneRegulation;
 block Controller "Controller for room CAV box and chilled beam manifold"
 
-  parameter Real samplePeriod(
+  parameter Real conSenOnThr(
     final unit="s",
-    final quantity="Time")
-    "Sample period of component, set to the same value as the trim and respond that process yPreSetReq";
-  parameter Real V_flow_nominal(
-    final unit="m3/s",
-    final quantity="VolumeFlowRate")
-    "Volume flow rate of this thermal zone";
-  parameter Real AFlo(
-    final unit="m2",
-    final quantity="Area") "Area of the zone";
+    displayUnit="s",
+    final quantity="Time") = 60
+    "Threshold time for condensation sensor signal before CAV damper is completely opened";
 
   parameter Buildings.Controls.OBC.CDL.Types.SimpleController controllerTypeCoo=
      Buildings.Controls.OBC.CDL.Types.SimpleController.PI "Type of controller"
@@ -61,31 +55,6 @@ block Controller "Controller for room CAV box and chilled beam manifold"
       enable=controllerTypeHea == Buildings.Controls.OBC.CDL.Types.SimpleController.PD
           or controllerTypeHea == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
 
-  parameter Buildings.Controls.OBC.CDL.Types.SimpleController controllerTypeVal=
-    Buildings.Controls.OBC.CDL.Types.SimpleController.PI
-    "Type of controller"
-    annotation (Dialog(group="Valve"));
-
-  parameter Real kVal=0.5
-    "Gain of controller for valve control"
-    annotation (Dialog(group="Valve"));
-
-  parameter Real TiVal(
-    final unit="s",
-    final quantity="Time")=300
-    "Time constant of integrator block for valve control"
-    annotation(Dialog(group="Valve",
-    enable=controllerTypeVal == Buildings.Controls.OBC.CDL.Types.SimpleController.PI
-        or controllerTypeVal == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
-
-  parameter Real TdVal(
-    final unit="s",
-    final quantity="Time")=0.1
-    "Time constant of derivative block for valve control"
-    annotation (Dialog(group="Valve",
-      enable=controllerTypeVal == Buildings.Controls.OBC.CDL.Types.SimpleController.PD
-          or controllerTypeVal == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
-
   parameter Buildings.Controls.OBC.CDL.Types.SimpleController controllerTypeDam=
     Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "Type of controller"
@@ -111,211 +80,86 @@ block Controller "Controller for room CAV box and chilled beam manifold"
       enable=controllerTypeDam == Buildings.Controls.OBC.CDL.Types.SimpleController.PD
           or controllerTypeDam == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
 
-  parameter Boolean have_occSen=false
-    "Set to true if the zone has occupancy sensor"
-    annotation (Dialog(tab="Airflow setpoint", group="Zone sensors"));
-  parameter Boolean have_winSen=false
-    "Set to true if the zone has window status sensor"
-    annotation (Dialog(tab="Airflow setpoint", group="Zone sensors"));
-  parameter Boolean have_CO2Sen=false
-    "Set to true if the zone has CO2 sensor"
-    annotation (Dialog(tab="Airflow setpoint", group="Zone sensors"));
-  parameter Real VDisCooSetMax_flow(
+  parameter Real Vdes_occ(
     final unit="m3/s",
-    final quantity="VolumeFlowRate")=V_flow_nominal
-    "Zone maximum cooling airflow setpoint"
-    annotation (Dialog(tab="Airflow setpoint", group="Nominal conditions"));
-  parameter Real VDisSetMin_flow(
-    final unit="m3/s",
-    final quantity="VolumeFlowRate")=0.15*V_flow_nominal
-    "Zone minimum airflow setpoint"
-    annotation (Dialog(tab="Airflow setpoint", group="Nominal conditions"));
-  parameter Real VDisHeaSetMax_flow(
-    final unit="m3/s",
-    final quantity="VolumeFlowRate")=0.3*V_flow_nominal
-    "Zone maximum heating airflow setpoint"
-    annotation (Dialog(tab="Airflow setpoint", group="Nominal conditions"));
-  parameter Real VDisConMin_flow(
-    final unit="m3/s",
-    final quantity="VolumeFlowRate")=0.1*V_flow_nominal
-    "VAV box controllable minimum"
-    annotation (Dialog(tab="Airflow setpoint", group="Nominal conditions"));
-  parameter Real VOutPerAre_flow(final unit = "m3/(s.m2)")=3e-4
-    "Outdoor air rate per unit area"
-    annotation (Dialog(tab="Airflow setpoint", group="Nominal conditions"));
-  parameter Real VOutPerPer_flow(
-    final unit="m3/s",
-    final quantity="VolumeFlowRate")=2.5e-3
-    "Outdoor air rate per person"
-    annotation (Dialog(tab="Airflow setpoint", group="Nominal conditions"));
-  parameter Real CO2Set=894 "CO2 setpoint in ppm"
-    annotation (Dialog(tab="Airflow setpoint", group="Nominal conditions"));
-  parameter Real dTDisZonSetMax(
-    final unit="K",
-    displayUnit="K",
-    final quantity="TemperatureDifference")=11
-    "Zone maximum discharge air temperature above heating setpoint"
-    annotation (Dialog(tab="Damper and valve", group="Parameters"));
-  parameter Real TDisMin(
-    final quantity="ThermodynamicTemperature",
-    final unit = "K",
-    displayUnit = "degC")=283.15
-    "Lowest discharge air temperature"
-    annotation (Dialog(tab="Damper and valve", group="Parameters"));
-  parameter Boolean have_heaWatCoi=true
-    "Flag, true if there is a hot water coil"
-    annotation (Dialog(tab="System requests", group="Parameters"));
-  parameter Boolean have_heaPla=false
-    "Flag, true if there is a boiler plant"
-    annotation (Dialog(tab="System requests", group="Parameters"));
-  parameter Real errTZonCoo_1(
-    final unit="K",
-    displayUnit="K",
-    final quantity="TemperatureDifference")=2.8
-    "Limit value of difference between zone temperature and cooling setpoint
-    for generating 3 cooling SAT reset requests"
-    annotation (Dialog(tab="System requests", group="Parameters"));
-  parameter Real errTZonCoo_2(
-    final unit="K",
-    displayUnit="K",
-    final quantity="TemperatureDifference")=1.7
-    "Limit value of difference between zone temperature and cooling setpoint
-    for generating 2 cooling SAT reset requests"
-    annotation (Dialog(tab="System requests", group="Parameters"));
-  parameter Real errTDis_1(
-    final unit="K",
-    displayUnit="K",
-    final quantity="TemperatureDifference")=17
-    "Limit value of difference between discharge air temperature and its setpoint
-    for generating 3 hot water reset requests"
-    annotation (Dialog(tab="System requests", group="Parameters"));
-  parameter Real errTDis_2(
-    final unit="K",
-    displayUnit="K",
-    final quantity="TemperatureDifference")=8.3
-    "Limit value of difference between discharge air temperature and its setpoint
-    for generating 2 hot water reset requests"
-    annotation (Dialog(tab="System requests", group="Parameters"));
-  parameter Real durTimTem(
-    final unit="s",
-    final quantity="Time")=120
-    "Duration time of zone temperature exceeds setpoint"
-    annotation (Dialog(tab="System requests", group="Duration times"));
-  parameter Real durTimFlo(
-    final unit="s",
-    final quantity="Time")=60
-    "Duration time of airflow rate less than setpoint"
-    annotation (Dialog(tab="System requests", group="Duration times"));
-  parameter Real durTimDisAir(
-    final unit="s",
-    final quantity="Time")=300
-    "Duration time of discharge air temperature is less than setpoint"
-    annotation (Dialog(tab="System requests", group="Duration times"));
+    displayUnit="m3/s",
+    final quantity="VolumeFlowRate")
+    "Design air volume flow rate when zone is occupied"
+    annotation (Dialog(group="Airflow setpoints"));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput TZonHeaSet(
-    final quantity="ThermodynamicTemperature",
-    final unit = "K",
-    displayUnit = "degC")
-    "Setpoint temperature for room for heating"
-    annotation (Placement(transformation(extent={{-180,140},{-140,180}}),
-        iconTransformation(extent={{-140,80},{-100,120}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput TZonCooSet(
-    final quantity="ThermodynamicTemperature",
-    final unit = "K",
-    displayUnit = "degC")
-    "Setpoint temperature for room for cooling"
-    annotation (Placement(transformation(extent={{-180,100},{-140,140}}),
-        iconTransformation(extent={{-140,60},{-100,100}})));
+  parameter Real Vdes_unoccSch(
+    final unit="m3/s",
+    displayUnit="m3/s",
+    final quantity="VolumeFlowRate")
+    "Design air volume flow rate when zone is unoccupied during scheduled unoccupancy"
+    annotation (Dialog(group="Airflow setpoints"));
+
+  parameter Real VDes_unoccUnsch(
+    final unit="m3/s",
+    displayUnit="m3/s",
+    final quantity="VolumeFlowRate")
+    "Design air volume flow rate when zone is unoccupied during scheduled occupancy"
+    annotation (Dialog(group="Airflow setpoints"));
+
+  CDL.Interfaces.BooleanInput uConSen
+    "Signal from condensation sensor in zone"
+    annotation (Placement(transformation(extent={{-180,20},{-140,60}}),
+        iconTransformation(extent={{-140,0},{-100,40}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uOpeMod
+    "Zone operation mode"
+    annotation (Placement(transformation(extent={{-180,-190},{-140,-150}}),
+        iconTransformation(extent={{-140,-80},{-100,-40}})));
+
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TZon(
     final quantity="ThermodynamicTemperature",
     final unit = "K",
     displayUnit = "degC")
-    "Measured room temperature"
-    annotation (Placement(transformation(extent={{-180,-34},{-140,6}}),
-        iconTransformation(extent={{-140,-20},{-100,20}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput TDis(
-    final quantity="ThermodynamicTemperature",
-    final unit = "K",
-    displayUnit = "degC")
-    "Measured supply air temperature after heating coil"
-    annotation (Placement(transformation(extent={{-180,-130},{-140,-90}}),
-        iconTransformation(extent={{-140,-80},{-100,-40}})));
+    "Measured zone temperature"
+    annotation (Placement(transformation(extent={{-180,100},{-140,140}}),
+        iconTransformation(extent={{-140,40},{-100,80}})));
+
   Buildings.Controls.OBC.CDL.Interfaces.RealInput VDis_flow(
     final unit="m3/s",
     final quantity="VolumeFlowRate")
     "Measured discharge airflow rate"
     annotation (Placement(transformation(extent={{-180,-70},{-140,-30}}),
         iconTransformation(extent={{-140,-40},{-100,0}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput TSupAHU(
-    final quantity="ThermodynamicTemperature",
-    final unit = "K",
-    displayUnit = "degC")
-    "AHU supply air temperature"
-    annotation (Placement(transformation(extent={{-180,-160},{-140,-120}}),
-        iconTransformation(extent={{-140,-100},{-100,-60}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput ppmCO2 if have_CO2Sen
-    "Measured CO2 concentration"
-    annotation (Placement(transformation(extent={{-180,60},{-140,100}}),
-        iconTransformation(extent={{-140,40},{-100,80}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput nOcc if have_occSen
-    "Number of occupants"
-    annotation (Placement(transformation(extent={{-180,30},{-140,70}}),
-        iconTransformation(extent={{-140,20},{-100,60}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uWin if have_winSen
-    "Window status, true if open, false if closed"
-    annotation (Placement(transformation(extent={{-180,0},{-140,40}}),
-        iconTransformation(extent={{-140,0},{-100,40}})));
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uOpeMod
-    "Zone operation mode"
-    annotation (Placement(transformation(extent={{-180,-190},{-140,-150}}),
-        iconTransformation(extent={{-140,-120},{-100,-80}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput yDam_actual
-    "Actual VAV damper position"
-    annotation (Placement(transformation(extent={{-180,-100},{-140,-60}}),
-        iconTransformation(extent={{-140,-60},{-100,-20}})));
+
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yChiVal(
     final min=0,
     final max=1,
-    final unit="1") "Signal for chilled beam manifold valve" annotation (
-      Placement(transformation(extent={{140,-20},{180,20}}), iconTransformation(
-          extent={{100,-10},{140,30}})));
+    final unit="1")
+    "Signal for chilled beam manifold valve"
+    annotation (Placement(transformation(extent={{140,20},{180,60}}),
+      iconTransformation(extent={{100,-20},{140,20}})));
+
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yDam(
     final min=0,
     final max=1,
-    final unit="1")
-    "Signal for VAV damper"
-    annotation (Placement(transformation(extent={{140,60},{180,100}}),
-        iconTransformation(extent={{100,40},{140,80}})));
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yZonTemResReq
-    "Zone cooling supply air temperature reset request"
-    annotation (Placement(transformation(extent={{140,-100},{180,-60}}),
+    final unit="1") "Signal for CAV damper"
+    annotation (Placement(transformation(extent={{140,-50},{180,-10}}),
         iconTransformation(extent={{100,-60},{140,-20}})));
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yZonPreResReq
-    "Zone static pressure reset requests"
-    annotation (Placement(transformation(extent={{140,-140},{180,-100}}),
-        iconTransformation(extent={{100,-100},{140,-60}})));
 
-  Buildings.Controls.OBC.ASHRAE.G36_PR1.TerminalUnits.Reheat.SystemRequests sysReq(
-    final samplePeriod=samplePeriod,
-    final have_heaWatCoi=false,
-    final have_heaPla=false,
-    final errTZonCoo_1=errTZonCoo_1,
-    final errTZonCoo_2=errTZonCoo_2,
-    final errTDis_1=errTDis_1,
-    final errTDis_2=errTDis_2,
-    final durTimTem=durTimTem,
-    final durTimFlo=durTimFlo,
-    final durTimDisAir=durTimDisAir)
-    "Number of system requests"
-    annotation (Placement(transformation(extent={{80,-100},{100,-80}})));
+  CDL.Interfaces.RealOutput yReh(
+    final min=0,
+    final max=1,
+    final unit="1") "Reheat signal to CAV terminal" annotation (Placement(
+        transformation(extent={{140,140},{180,180}}),
+                                                    iconTransformation(extent={{100,20},
+            {140,60}})));
+
+protected
   Buildings.Controls.OBC.CDL.Continuous.PIDWithReset conHeaLoo(
     final controllerType=controllerTypeHea,
     final k=kHea,
     final Ti=TiHea,
     final Td=TdHea,
     final yMax=1,
-    final yMin=0) "Heating loop signal"
-    annotation (Placement(transformation(extent={{-110,150},{-90,170}})));
+    final yMin=0)
+    "Heating loop signal"
+    annotation (Placement(transformation(extent={{0,150},{20,170}})));
+
   Buildings.Controls.OBC.CDL.Continuous.PIDWithReset conCooLoo(
     final controllerType=controllerTypeCoo,
     final k=kCoo,
@@ -323,194 +167,163 @@ block Controller "Controller for room CAV box and chilled beam manifold"
     final Td=TdCoo,
     final yMax=1,
     final yMin=0,
-    reverseActing=false) "Cooling loop signal"
-    annotation (Placement(transformation(extent={{-110,110},{-90,130}})));
+    reverseActing=false)
+    "Cooling loop signal"
+    annotation (Placement(transformation(extent={{0,110},{20,130}})));
 
-  CDL.Interfaces.RealOutput yReh(
-    final min=0,
-    final max=1,
-    final unit="1") "Reheat signal to CAV terminal" annotation (Placement(
-        transformation(extent={{140,20},{180,60}}), iconTransformation(extent={
-            {100,-10},{140,30}})));
-protected
+  CDL.Continuous.PIDWithReset conDam(
+    final controllerType=controllerTypeDam,
+    final k=kDam,
+    final Ti=TiDam,
+    final Td=TdHea,
+    final yMax=1,
+    final yMin=0) "Damper control"
+    annotation (Placement(transformation(extent={{0,-40},{20,-20}})));
+  CDL.Continuous.Product pro[3]
+    "Product of required volume flow rate for a given mode and the current mode status"
+    annotation (Placement(transformation(extent={{-60,-40},{-40,-20}})));
+  CDL.Continuous.MultiSum mulSum(
+    final nin=3) "Find required volume flow rate"
+    annotation (Placement(transformation(extent={{-30,-40},{-10,-20}})));
+  CDL.Continuous.Sources.Constant con[3](final k={Vdes_occ,VDes_unoccSch,
+        VDes_unoccUnsch}) "Design volume fliow rates for each operation mode"
+    annotation (Placement(transformation(extent={{-100,-20},{-80,0}})));
+  CDL.Routing.IntegerReplicator intRep(final nout=3) "Integer replicator"
+    annotation (Placement(transformation(extent={{-110,-90},{-90,-70}})));
+  CDL.Integers.Equal intEqu[3] "Find current mode from all possible modes"
+    annotation (Placement(transformation(extent={{-80,-90},{-60,-70}})));
+  CDL.Conversions.BooleanToReal booToRea[3] "Boolean to Real conversion"
+    annotation (Placement(transformation(extent={{-50,-90},{-30,-70}})));
+
+  CDL.Logical.Not not1 "Logical Not"
+    annotation (Placement(transformation(extent={{10,30},{30,50}})));
+  CDL.Conversions.BooleanToReal booToRea1 "Boolean to Real conversion"
+    annotation (Placement(transformation(extent={{50,30},{70,50}})));
+  CDL.Continuous.Product pro1 "Product"
+    annotation (Placement(transformation(extent={{90,30},{110,50}})));
+  CDL.Utilities.Assert assMes(message="Condensation detected in the zone")
+    "Zone condensation warning"
+    annotation (Placement(transformation(extent={{50,60},{70,80}})));
+  SetPoints.ZoneTemperature TZonSet "Zone temperature setpoint controller"
+    annotation (Placement(transformation(extent={{-100,110},{-80,130}})));
+  CDL.Logical.Switch swi
+    annotation (Placement(transformation(extent={{80,-40},{100,-20}})));
+  CDL.Continuous.Sources.Constant con1(final k=1) "Constant CAV damper open signal"
+    annotation (Placement(transformation(extent={{0,0},{20,20}})));
+  CDL.Logical.Timer tim(final t=ConSenOnThr)
+    "Check if condensation sensor signal has been on for time beyond threshold"
+    annotation (Placement(transformation(extent={{30,-20},{50,0}})));
+
   Buildings.Controls.OBC.CDL.Integers.Equal isUnOcc
     "Output true if unoccupied"
-    annotation (Placement(transformation(extent={{-18,-160},{2,-140}})));
-  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conIntUn(
-    final k=Buildings.Controls.OBC.ASHRAE.G36_PR1.Types.OperationModes.unoccupied)
+    annotation (Placement(transformation(extent={{-20,-160},{0,-140}})));
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conIntUn(final k=
+        Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Types.OperationModeTypes.occupied)
     "Constant signal for unoccupied mode"
     annotation (Placement(transformation(extent={{-60,-160},{-40,-140}})));
-  Buildings.Controls.OBC.CDL.Logical.Not isNotUn
-  "Output true if not unoccupied"
-    annotation (Placement(transformation(extent={{20,-160},{40,-140}})));
 
+  CDL.Integers.Sources.Constant conInt[3](final k={Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Types.OperationModeTypes.occupied,
+        Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Types.OperationModeTypes.unoccupiedScheduled,
+        Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Types.OperationModeTypes.unoccupiedUnscheduled})
+    "List of possible modes"
+    annotation (Placement(transformation(extent={{-110,-120},{-90,-100}})));
 equation
-  connect(sysReq.TZonCooSet, TZonCooSet)
-    annotation (Line(points={{78,-82},{-120,-82},{-120,120},{-160,120}},
-      color={0,0,127}));
-  connect(sysReq.TZon, TZon)
-    annotation (Line(points={{78,-84},{0,-84},{0,-14},{-160,-14}},
-      color={0,0,127}));
-  connect(sysReq.VDis_flow, VDis_flow)
-    annotation (Line(points={{78,-90},{34,-90},{34,-50},{-160,-50}},
-      color={0,0,127}));
-  connect(sysReq.TDis, TDis)
-    annotation (Line(points={{78,-96},{26,-96},{26,-110},{-160,-110}},
-      color={0,0,127}));
-  connect(sysReq.yZonTemResReq, yZonTemResReq)
-    annotation (Line(points={{102,-83},{120,-83},{120,-80},{160,-80}},
-      color={255,127,0}));
-  connect(sysReq.yZonPreResReq, yZonPreResReq)
-    annotation (Line(points={{102,-88},{120,-88},{120,-120},{160,-120}},
-      color={255,127,0}));
-  connect(TZonHeaSet, conHeaLoo.u_s)
-    annotation (Line(points={{-160,160},{-112,160}}, color={0,0,127}));
-  connect(TZonCooSet, conCooLoo.u_s)
-    annotation (Line(points={{-160,120},{-112,120}}, color={0,0,127}));
   connect(TZon, conHeaLoo.u_m)
-    annotation (Line(points={{-160,-14},{-122,-14},{-122,140},{-100,140},{-100,148}},
+    annotation (Line(points={{-160,120},{-130,120},{-130,140},{10,140},{10,148}},
                    color={0,0,127}));
   connect(TZon, conCooLoo.u_m)
-    annotation (Line(points={{-160,-14},{-122,-14},{-122,100},{-100,100},{-100,108}},
+    annotation (Line(points={{-160,120},{-130,120},{-130,100},{10,100},{10,108}},
                    color={0,0,127}));
-  connect(conCooLoo.y, sysReq.uCoo)
-    annotation (Line(points={{-88,120},{8,120},{8,-86},{78,-86}},
-      color={0,0,127}));
   connect(conIntUn.y, isUnOcc.u1)
-    annotation (Line(points={{-38,-150},{-20,-150}}, color={255,127,0}));
+    annotation (Line(points={{-38,-150},{-22,-150}}, color={255,127,0}));
   connect(uOpeMod, isUnOcc.u2) annotation (Line(points={{-160,-170},{-32,-170},{
-          -32,-158},{-20,-158}}, color={255,127,0}));
-  connect(isUnOcc.y, isNotUn.u)
-    annotation (Line(points={{4,-150},{18,-150}},   color={255,0,255}));
-  connect(isNotUn.y, conCooLoo.trigger) annotation (Line(points={{42,-150},{60,-150},
-          {60,-120},{-116,-120},{-116,104},{-106,104},{-106,108}}, color={255,0,
-          255}));
-  connect(isNotUn.y, conHeaLoo.trigger) annotation (Line(points={{42,-150},{60,-150},
-          {60,-120},{-116,-120},{-116,142},{-106,142},{-106,148}}, color={255,0,
-          255}));
-  connect(sysReq.yDam_actual,yDam_actual)  annotation (Line(points={{78,-92},{-124,
-          -92},{-124,-80},{-160,-80}}, color={0,0,127}));
+          -32,-158},{-22,-158}}, color={255,127,0}));
 
-  connect(conCooLoo.y, yChiVal) annotation (Line(points={{-88,120},{8,120},{8,0},
-          {160,0}}, color={0,0,127}));
-annotation (defaultComponentName="terUniCon",
+  connect(conHeaLoo.y, yReh)
+    annotation (Line(points={{22,160},{160,160}}, color={0,0,127}));
+  connect(VDis_flow, conDam.u_m)
+    annotation (Line(points={{-160,-50},{10,-50},{10,-42}}, color={0,0,127}));
+  connect(conDam.u_s, mulSum.y)
+    annotation (Line(points={{-2,-30},{-8,-30}}, color={0,0,127}));
+  connect(pro.y, mulSum.u[1:3]) annotation (Line(points={{-38,-30},{-36,-30},{
+          -36,-31.3333},{-32,-31.3333}},
+                                     color={0,0,127}));
+  connect(con.y, pro.u1) annotation (Line(points={{-78,-10},{-70,-10},{-70,-24},
+          {-62,-24}}, color={0,0,127}));
+  connect(uOpeMod, intRep.u) annotation (Line(points={{-160,-170},{-120,-170},{-120,
+          -80},{-112,-80}}, color={255,127,0}));
+  connect(intRep.y, intEqu.u1)
+    annotation (Line(points={{-88,-80},{-82,-80}}, color={255,127,0}));
+  connect(isUnOcc.y, conDam.trigger) annotation (Line(points={{2,-150},{12,-150},
+          {12,-60},{4,-60},{4,-42}}, color={255,0,255}));
+  connect(isUnOcc.y, conCooLoo.trigger) annotation (Line(points={{2,-150},{12,-150},
+          {12,-60},{-110,-60},{-110,90},{4,90},{4,108}}, color={255,0,255}));
+  connect(isUnOcc.y, conHeaLoo.trigger) annotation (Line(points={{2,-150},{12,-150},
+          {12,-60},{-110,-60},{-110,144},{4,144},{4,148}}, color={255,0,255}));
+  connect(conInt.y, intEqu.u2) annotation (Line(points={{-88,-110},{-86,-110},{-86,
+          -88},{-82,-88}}, color={255,127,0}));
+  connect(intEqu.y, booToRea.u)
+    annotation (Line(points={{-58,-80},{-52,-80}}, color={255,0,255}));
+  connect(booToRea.y, pro.u2) annotation (Line(points={{-28,-80},{-20,-80},{-20,
+          -56},{-80,-56},{-80,-36},{-62,-36}}, color={0,0,127}));
+  connect(uConSen, not1.u)
+    annotation (Line(points={{-160,40},{8,40}}, color={255,0,255}));
+  connect(not1.y, booToRea1.u)
+    annotation (Line(points={{32,40},{48,40}}, color={255,0,255}));
+  connect(booToRea1.y, pro1.u2) annotation (Line(points={{72,40},{80,40},{80,34},
+          {88,34}}, color={0,0,127}));
+  connect(conCooLoo.y, pro1.u1) annotation (Line(points={{22,120},{80,120},{80,46},
+          {88,46}}, color={0,0,127}));
+  connect(pro1.y, yChiVal)
+    annotation (Line(points={{112,40},{160,40}}, color={0,0,127}));
+  connect(not1.y, assMes.u) annotation (Line(points={{32,40},{40,40},{40,70},{48,
+          70}}, color={255,0,255}));
+  connect(TZonSet.TZonHeaSet, conHeaLoo.u_s) annotation (Line(points={{-78,126},
+          {-20,126},{-20,160},{-2,160}}, color={0,0,127}));
+  connect(TZonSet.TZonCooSet, conCooLoo.u_s) annotation (Line(points={{-78,114},
+          {-20,114},{-20,120},{-2,120}}, color={0,0,127}));
+  connect(uOpeMod, TZonSet.uOpeMod) annotation (Line(points={{-160,-170},{-120,-170},
+          {-120,120},{-102,120}}, color={255,127,0}));
+  connect(swi.y, yDam)
+    annotation (Line(points={{102,-30},{160,-30}}, color={0,0,127}));
+  connect(conDam.y, swi.u3) annotation (Line(points={{22,-30},{60,-30},{60,-38},
+          {78,-38}}, color={0,0,127}));
+  connect(con1.y, swi.u1) annotation (Line(points={{22,10},{70,10},{70,-22},{78,
+          -22}}, color={0,0,127}));
+  connect(uConSen, tim.u) annotation (Line(points={{-160,40},{-20,40},{-20,-10},
+          {28,-10}}, color={255,0,255}));
+  connect(tim.passed, swi.u2) annotation (Line(points={{52,-18},{66,-18},{66,-30},
+          {78,-30}}, color={255,0,255}));
+annotation (defaultComponentName="zonRegCon",
   Icon(graphics={Rectangle(
         extent={{-100,-100},{100,100}},
         lineColor={0,0,127},
         fillColor={255,255,255},
         fillPattern=FillPattern.Solid),
         Text(
-          extent={{-100,-54},{-78,-64}},
-          lineColor={0,0,127},
-          textString="TDis"),
-        Text(
-          extent={{-100,-70},{-70,-82}},
-          lineColor={0,0,127},
-          textString="TSup"),
-        Text(
-          extent={{70,18},{98,4}},
-          lineColor={0,0,127},
-          textString="yVal"),
-        Text(
-          extent={{68,70},{96,56}},
-          lineColor={0,0,127},
-          textString="yDam"),
-        Text(
-          extent={{-98,100},{-46,88}},
-          lineColor={0,0,127},
-          textString="TZonHeaSet"),
-        Text(
-          extent={{-98,-14},{-68,-26}},
-          lineColor={0,0,127},
-          textString="VDis_flow"),
-        Text(
           extent={{-120,160},{114,108}},
           textString="%name",
-          lineColor={0,0,255}),
-        Text(
-          extent={{-96,6},{-74,-8}},
-          lineColor={0,0,127},
-          textString="TZon"),
-        Text(
-          extent={{-100,84},{-46,74}},
-          lineColor={0,0,127},
-          textString="TZonCooSet"),
-        Text(
-          extent={{-100,-86},{-52,-98}},
-          lineColor={0,0,127},
-          textString="uOpeMod"),
-        Text(
-          visible=have_occSen,
-          extent={{-100,36},{-74,26}},
-          lineColor={0,0,127},
-          textString="nOcc"),
-        Text(
-          visible=have_CO2Sen,
-          extent={{-96,60},{-58,42}},
-          lineColor={0,0,127},
-          textString="ppmCO2"),
-        Text(
-          visible=have_winSen,
-          extent={{-100,14},{-72,4}},
-          lineColor={0,0,127},
-          textString="uWin"),
-        Text(
-          extent={{22,-20},{96,-58}},
-          lineColor={0,0,127},
-          textString="yZonTemResReq"),
-        Text(
-          extent={{24,-62},{96,-96}},
-          lineColor={0,0,127},
-          textString="yZonPreResReq"),
-        Text(
-          extent={{-98,-34},{-50,-44}},
-          lineColor={0,0,127},
-          textString="uDam_actual")}),
+          lineColor={0,0,255})}),
     Diagram(coordinateSystem(extent={{-140,-180},{140,180}})),
 Documentation(info="<html>
 <p>
-Controller for terminal box of VAV system with reheat according to ASHRAE
-Guideline 36, Part 5.E. It outputs damper position <code>yDam</code>,
-hot water valve position <code>yVal</code>, AHU cooling supply temperature
-setpoint reset request <code>yZonTemResReq</code>, and static pressure setpoint
-reset request <code>yZonPreResReq</code>.
+Zone temperature regulation controller for terminal box of CAV DOAS system with 
+reheat and chilled beam mainfold valves. It outputs damper position <code>yDam</code>,
+reheat signal <code>yReh</code>, and chilled water manifold control valve position
+<code>yVal</code>.
 </p>
-<p>The sequence consists of four subsequences. </p>
-<h4>a. Heating and cooling control loop</h4>
 <p>
-The subsequence is implementd according to Part 5.B.5. The measured zone
-temperature <code>TZon</code>, zone setpoints temperatures <code>TZonHeaSet</code> and
-<code>TZonCooSet</code> are inputs to the block <code>conHeaLoo</code> and
-<code>conCooLoo</code> to generate the control loop signal.
-</p>
-<h4>b. Active airflow setpoint calculation</h4>
-<p>
-This sequence sets the active maximum and minimum airflow according to
-Part 5.E.3-5. Depending on operation modes <code>uOpeMod</code>, it sets the
-airflow rate limits for cooling and heating supply. See
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.G36_PR1.TerminalUnits.Reheat.SetPoints.ActiveAirFlow\">
-Buildings.Controls.OBC.ASHRAE.G36_PR1.TerminalUnits.Reheat.SetPoints.ActiveAirFlow</a>.
-</p>
-<h4>c. Damper and valve control</h4>
-<p>
-This sequence sets the damper and valve position for VAV reheat terminal unit.
-The implementation is according to Part 5.E.6. According to heating and cooling
-control loop signal, it calculates the discharge air temperature setpoint
-<code>TDisHeaSet</code>. Along with the defined maximum and minimum airflow, measured
-zone temperature, the sequence outputs <code>yDam</code>, <code>yVal</code>,
-<code>TDisHeaSet</code> and discharge airflow rate setpoint <code>VDisSet_flow</code>.
-See <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.G36_PR1.TerminalUnits.Reheat.DamperValves\">
-Buildings.Controls.OBC.ASHRAE.G36_PR1.TerminalUnits.Reheat.DamperValves</a>.
-</p>
-<h4>d. System reset requests generation</h4>
-<p>
-According to Part 5.E.9, this sequence outputs the system reset requests, i.e.
-cooling supply air temperature reset requests <code>yZonTemResReq</code>,
-static pressure reset requests <code>yZonPreResReq</code>, hot water reset
-requests <code>yHeaValResReq</code>, and the boiler plant reset requests
-<code>yHeaPlaReq</code>. See
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.G36_PR1.TerminalUnits.Reheat.SystemRequests\">
-Buildings.Controls.OBC.ASHRAE.G36_PR1.TerminalUnits.Reheat.SystemRequests</a>.
+Each signal is calculated as follows.
+<ul>
+<li>
+Reheat signal
+<ol>
+<li>
+Generate the CAV reheat 
+</li>
+</ol>
+</li>
+</ul>
 </p>
 </html>", revisions="<html>
 <ul>

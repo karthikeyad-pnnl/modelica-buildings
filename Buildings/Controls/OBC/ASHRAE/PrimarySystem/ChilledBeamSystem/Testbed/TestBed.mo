@@ -486,8 +486,9 @@ equation
           {156,-20},{210,-20},{210,-28}}, color={0,0,127}));
   connect(uCAVDam, demux1.u)
     annotation (Line(points={{-360,110},{-322,110}}, color={0,0,127}));
-  connect(demux1.y[1], cor.yVAV) annotation (Line(points={{-300,113.5},{96,
-          113.5},{96,108}}, color={0,0,127}));
+  connect(demux1.y[1], cor.yVAV) annotation (Line(points={{-300,113.5},{80,
+          113.5},{80,108},{96,108}},
+                            color={0,0,127}));
   connect(demux1.y[2], cor1.yVAV) annotation (Line(points={{-300,106.5},{70,
           106.5},{70,8},{96,8}}, color={0,0,127}));
   connect(uCAVReh, demux2.u)
