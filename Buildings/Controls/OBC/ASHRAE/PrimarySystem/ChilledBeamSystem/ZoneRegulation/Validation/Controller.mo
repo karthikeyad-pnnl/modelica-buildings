@@ -1,6 +1,6 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.ZoneRegulation.Validation;
 model Controller
-    "Validate zone temperature setpoint controller"
+  "Validate zone temperature setpoint controller"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.ZoneRegulation.Controller
     zonRegCon(
