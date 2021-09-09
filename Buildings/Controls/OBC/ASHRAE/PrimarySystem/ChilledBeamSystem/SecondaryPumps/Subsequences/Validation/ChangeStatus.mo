@@ -1,5 +1,7 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SecondaryPumps.Subsequences.Validation;
-model ChangeStatus "Validate sequence for changing pump status"
+
+model ChangeStatus
+    "Validate sequence for changing pump status"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SecondaryPumps.Subsequences.ChangeStatus
     chaPumSta(
@@ -107,8 +109,10 @@ equation
 
   connect(pre.y, chaPumSta.uChiWatPum) annotation (Line(points={{112,0},{120,0},
           {120,20},{40,20},{40,0},{58,0}}, color={255,0,255}));
+
   connect(chaPumSta.yChiWatPum, pre.u)
     annotation (Line(points={{82,0},{88,0}}, color={255,0,255}));
+
 annotation (
   experiment(StopTime=3600.0, Tolerance=1e-06),
   __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/ChilledBeamSystem/SecondaryPumps/Subsequences/Validation/ChangeStatus.mos"
@@ -139,4 +143,5 @@ First implementation.
                 fillPattern = FillPattern.Solid,
                 points = {{-36,60},{64,0},{-36,-60},{-36,60}})}), Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-140,-100},{140,100}})));
+
 end ChangeStatus;
