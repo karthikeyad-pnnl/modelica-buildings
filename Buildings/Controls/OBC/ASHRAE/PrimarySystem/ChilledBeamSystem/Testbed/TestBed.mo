@@ -1,5 +1,4 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Testbed;
-
 block TestBed
 
   replaceable package MediumA = Buildings.Media.Air
@@ -249,8 +248,7 @@ block TestBed
     p=100000,
     T=285.15,
     nPorts=2)
-    "Sink for chillede water"
-                                      annotation (Placement(transformation(
+    "Sink for chillede water"         annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={290,-170})));
@@ -678,5 +676,4 @@ equation
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-340,-200},
             {340,200}})),                                        Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-340,-200},{340,200}})));
-
 end TestBed;

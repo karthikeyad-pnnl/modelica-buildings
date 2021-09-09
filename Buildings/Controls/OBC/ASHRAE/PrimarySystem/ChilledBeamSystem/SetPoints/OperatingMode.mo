@@ -11,10 +11,9 @@ block OperatingMode
   parameter Real schTab[nSchRow,2] = [0,1; 6,1; 18,1; 24,1]
     "Table defining schedule for enabling plant";
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uDetOcc[nZon]
-    "Detected occupancy"
-    annotation (Placement(transformation(extent={{-180,50},{-140,90}}),
-      iconTransformation(extent={{-140,-20},{-100,20}})));
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uDetOcc
+    "Detected occupancy" annotation (Placement(transformation(extent={{-180,70},
+            {-140,110}}), iconTransformation(extent={{-140,-20},{-100,20}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yDoasEna
     "DOAS enable signal"
@@ -36,10 +35,9 @@ block OperatingMode
     final smoothness=Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments,
     final timeScale=3600)
     "Table defining when occupancy is expected"
-    annotation (Placement(transformation(extent={{-120,30},{-100,50}})));
+    annotation (Placement(transformation(extent={{-130,30},{-110,50}})));
 
-  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi
-    "Integer switch"
+  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi "Integer switch"
     annotation (Placement(transformation(extent={{20,80},{40,100}})));
 
 protected
@@ -66,11 +64,6 @@ protected
     final k=Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Types.OperationModeTypes.unoccupiedUnscheduled)
     "Constant integer for unoccupiedUnscheduled mode"
     annotation (Placement(transformation(extent={{-60,0},{-40,20}})));
-
-  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(
-    final nu=nZon)
-    "Multi Or"
-    annotation (Placement(transformation(extent={{-30,80},{-10,100}})));
 
   Buildings.Controls.OBC.CDL.Integers.Equal intEqu[3]
     "Check which mode is currently active"
@@ -121,16 +114,16 @@ protected
 
   Buildings.Controls.OBC.CDL.Logical.Not not1
     "Logical not"
-    annotation (Placement(transformation(extent={{-60,30},{-40,50}})));
+    annotation (Placement(transformation(extent={{-70,30},{-50,50}})));
 
   Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
     final t=0.5)
     "Convert Real signal to Boolean"
-    annotation (Placement(transformation(extent={{-90,30},{-70,50}})));
+    annotation (Placement(transformation(extent={{-100,30},{-80,50}})));
 
 equation
   connect(enaSch.y[1],greThr. u)
-    annotation (Line(points={{-98,40},{-92,40}},       color={0,0,127}));
+    annotation (Line(points={{-108,40},{-102,40}},     color={0,0,127}));
   connect(conInt.y, intSwi.u1) annotation (Line(points={{-38,120},{10,120},{10,98},
           {18,98}}, color={255,127,0}));
   connect(conInt1.y, intSwi1.u1) annotation (Line(points={{-38,70},{-30,70},{-30,
@@ -140,11 +133,6 @@ equation
                        color={255,127,0}));
   connect(intSwi1.y, intSwi.u3) annotation (Line(points={{2,40},{10,40},{10,82},
           {18,82}}, color={255,127,0}));
-  connect(uDetOcc, mulOr.u[1:nZon]) annotation (Line(points={{-160,70},{-120,70},
-          {-120,90},{-32,90}},
-                             color={255,0,255}));
-  connect(mulOr.y, intSwi.u2)
-    annotation (Line(points={{-8,90},{18,90}},color={255,0,255}));
   connect(intSwi.y, intRep.u)
     annotation (Line(points={{42,90},{50,90},{50,-10},{-130,-10},{-130,-30},{-122,
           -30}},                               color={255,127,0}));
@@ -176,9 +164,11 @@ equation
   connect(intSwi.y, yOpeMod) annotation (Line(points={{42,90},{50,90},{50,0},{160,
           0}}, color={255,127,0}));
   connect(greThr.y, not1.u)
-    annotation (Line(points={{-68,40},{-62,40}}, color={255,0,255}));
+    annotation (Line(points={{-78,40},{-72,40}}, color={255,0,255}));
   connect(not1.y, intSwi1.u2)
-    annotation (Line(points={{-38,40},{-22,40}}, color={255,0,255}));
+    annotation (Line(points={{-48,40},{-22,40}}, color={255,0,255}));
+  connect(uDetOcc, intSwi.u2)
+    annotation (Line(points={{-160,90},{18,90}}, color={255,0,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}}), graphics={
             Text(

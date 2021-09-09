@@ -3,3 +3,6 @@ SetPoints
 Testbed
 Types
 ZoneRegulation
+ClosedLoopTesting
+SystemController
+TerminalController
