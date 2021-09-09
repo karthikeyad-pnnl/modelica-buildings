@@ -3,17 +3,28 @@ model ZoneTemperature
   "Validate zone temperature setpoint controller"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ZoneTemperature
-    TZonSet "Zone temperature setpoint controller"
+    TZonSet
+    "Zone temperature setpoint controller"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
-  CDL.Conversions.RealToInteger reaToInt "Real to Integer conversion"
+
+protected
+  Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt
+    "Real to Integer conversion"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
-  CDL.Continuous.Sources.Ramp ram(height=3, duration=90) "Ramp input signal"
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Ramp ram(
+    final height=3,
+    final duration=90)
+    "Ramp input signal"
     annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
+
 equation
   connect(reaToInt.y, TZonSet.uOpeMod)
     annotation (Line(points={{12,0},{18,0}}, color={255,127,0}));
+
   connect(ram.y, reaToInt.u)
     annotation (Line(points={{-18,0},{-12,0}}, color={0,0,127}));
+
 annotation (
   experiment(
       StopTime=90,
@@ -31,7 +42,7 @@ Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ZoneTemp
 </html>", revisions="<html>
 <ul>
 <li>
-July 1, 2021, by Karthik Devaprasad:<br/>
+September 9, 2021, by Karthik Devaprasad:<br/>
 First implementation.
 </li>
 </ul>

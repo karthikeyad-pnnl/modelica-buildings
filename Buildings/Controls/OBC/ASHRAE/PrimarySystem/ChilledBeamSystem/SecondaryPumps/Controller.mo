@@ -1,6 +1,6 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SecondaryPumps;
 block Controller
-    "Controller for chilled water pumps in chilled beam systems"
+  "Controller for chilled water pumps in chilled beam systems"
 
   parameter Integer nPum = 2
     "Total number of chilled water pumps"
@@ -157,15 +157,23 @@ block Controller
     "Enable and disable lag pumps using pump speed"
     annotation (Placement(transformation(extent={{-120,28},{-100,48}})));
 
-  CDL.Logical.LogicalSwitch logSwi[nPum] "Logical switch"
-    annotation (Placement(transformation(extent={{180,-10},{200,10}})));
-  CDL.Logical.Sources.Constant con[nPum](k=fill(false, nPum)) "Boolean source"
-    annotation (Placement(transformation(extent={{122,-40},{142,-20}})));
-  CDL.Routing.BooleanReplicator booRep(nout=nPum) "Boolean replicator"
-    annotation (Placement(transformation(extent={{118,86},{138,106}})));
 protected
   parameter Integer pumInd[nPum]={i for i in 1:nPum}
     "Pump index, {1,2,...,n}";
+
+  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi[nPum]
+    "Logical switch"
+    annotation (Placement(transformation(extent={{180,-10},{200,10}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con[nPum](
+    final k=fill(false, nPum))
+    "Boolean source"
+    annotation (Placement(transformation(extent={{122,-40},{142,-20}})));
+
+  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(
+    final nout=nPum)
+    "Boolean replicator"
+    annotation (Placement(transformation(extent={{118,86},{138,106}})));
 
   Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel(
     final samplePeriod=1)
@@ -349,43 +357,61 @@ equation
 
   connect(enaLagSecPum.yUp, and1.u1)
     annotation (Line(points={{-98,42},{-32,42}}, color={255,0,255}));
+
   connect(intGreEquThr.y, and1.u2) annotation (Line(points={{-98,8},{-40,8},{-40,
           34},{-32,34}},      color={255,0,255}));
+
   connect(intLesEquThr.y, or3.u2) annotation (Line(points={{-96,-26},{-28,-26},{
           -28,-6},{-22,-6}},  color={255,0,255}));
+
   connect(enaLagSecPum.yDown, or3.u1) annotation (Line(points={{-98,34},{-48,34},
           {-48,2},{-22,2}}, color={255,0,255}));
+
   connect(and1.y, chaPumSta4.uNexLagPumSta) annotation (Line(points={{-8,42},{28,
           42},{28,8},{120,8}},  color={255,0,255}));
+
   connect(or3.y, chaPumSta4.uLasLagPumSta) annotation (Line(points={{2,2},{20,2},
           {20,5},{120,5}},  color={255,0,255}));
 
   connect(uValPos, enaLeaPum.uValPos)
     annotation (Line(points={{-300,80},{-202,80}}, color={0,0,127}));
+
   connect(uChiWatPum, chaPumSta1.uChiWatPum) annotation (Line(points={{-300,130},
           {-260,130},{-260,100},{42,100},{42,78},{56,78}}, color={255,0,255}));
+
   connect(chaPumSta1.yChiWatPum, chaPumSta4.uChiWatPum) annotation (Line(points=
          {{80,78},{100,78},{100,0},{120,0}}, color={255,0,255}));
+
   connect(uChiWatPum, pumSpeRemDp.uChiWatPum) annotation (Line(points={{-300,130},
           {-260,130},{-260,-182},{-22,-182}}, color={255,0,255}));
+
   connect(dpChiWat_remote, pumSpeRemDp.dpChiWat) annotation (Line(points={{-300,
           -160},{-40,-160},{-40,-190},{-22,-190}}, color={0,0,127}));
+
   connect(dpChiWatSet, pumSpeRemDp.dpChiWatSet) annotation (Line(points={{-300,-190},
           {-62,-190},{-62,-198},{-22,-198}}, color={0,0,127}));
+
   connect(pumSpeRemDp.yChiWatPumSpe, yPumSpe) annotation (Line(points={{2,-190},
           {150,-190},{150,-190},{300,-190}}, color={0,0,127}));
+
   connect(pumSpeRemDp.yChiWatPumSpe, uniDel.u) annotation (Line(points={{2,-190},
           {40,-190},{40,-220},{-220,-220},{-220,38},{-202,38}}, color={0,0,127}));
+
   connect(logSwi.y, yChiWatPum)
     annotation (Line(points={{202,0},{300,0}}, color={255,0,255}));
+
   connect(con.y, logSwi.u3) annotation (Line(points={{144,-30},{162,-30},{162,-8},
           {178,-8}}, color={255,0,255}));
+
   connect(chaPumSta4.yChiWatPum, logSwi.u1) annotation (Line(points={{144,0},{162,
           0},{162,8},{178,8}}, color={255,0,255}));
+
   connect(booRep.y, logSwi.u2) annotation (Line(points={{140,96},{170,96},{170,0},
           {178,0}}, color={255,0,255}));
+
   connect(enaLeaPum.yLea, booRep.u) annotation (Line(points={{-178,80},{-62,80},
           {-62,96},{116,96}}, color={255,0,255}));
+
 annotation (defaultComponentName="secPumCon",
   Diagram(coordinateSystem(preserveAspectRatio=false,
           extent={{-280,-240},{280,200}}),

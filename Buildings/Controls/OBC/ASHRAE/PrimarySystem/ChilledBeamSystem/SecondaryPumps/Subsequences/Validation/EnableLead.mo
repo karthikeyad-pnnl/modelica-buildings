@@ -1,11 +1,14 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SecondaryPumps.Subsequences.Validation;
 model EnableLead
-    "Validate sequence for enabling lead pump of chilled beam systems"
+  "Validate sequence for enabling lead pump of chilled beam systems"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SecondaryPumps.Subsequences.EnableLead
-    enaLeaPum(final nVal=2) "Enable lead chilled water pump"
+    enaLeaPum(
+    final nVal=2)
+    "Enable lead chilled water pump"
     annotation (Placement(transformation(extent={{10,-10},{30,10}})));
 
+protected
   Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul[2](
     final period={180,360},
     final shift=fill(10, 2))
