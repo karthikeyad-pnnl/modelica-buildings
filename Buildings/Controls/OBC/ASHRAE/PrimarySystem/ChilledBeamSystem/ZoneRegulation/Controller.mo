@@ -1,5 +1,5 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.ZoneRegulation;
-block Controller "Controller for room CAV box and chilled beam manifold"
+block Controller "Controller for zone CAV box and chilled beam manifold"
 
   parameter Real conSenOnThr(
     final unit="s",
@@ -80,26 +80,51 @@ block Controller "Controller for room CAV box and chilled beam manifold"
       enable=controllerTypeDam == Buildings.Controls.OBC.CDL.Types.SimpleController.PD
           or controllerTypeDam == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
 
-  parameter Real Vdes_occ(
+  parameter Real VDes_occ(
     final unit="m3/s",
     displayUnit="m3/s",
     final quantity="VolumeFlowRate")
     "Design air volume flow rate when zone is occupied"
-    annotation (Dialog(group="Airflow setpoints"));
+    annotation (Dialog(tab="Setpoints", group="Airflow setpoints"));
 
-  parameter Real Vdes_unoccSch(
+  parameter Real VDes_unoccSch(
     final unit="m3/s",
     displayUnit="m3/s",
     final quantity="VolumeFlowRate")
     "Design air volume flow rate when zone is unoccupied during scheduled unoccupancy"
-    annotation (Dialog(group="Airflow setpoints"));
+    annotation (Dialog(tab="Setpoints", group="Airflow setpoints"));
 
   parameter Real VDes_unoccUnsch(
     final unit="m3/s",
     displayUnit="m3/s",
     final quantity="VolumeFlowRate")
     "Design air volume flow rate when zone is unoccupied during scheduled occupancy"
-    annotation (Dialog(group="Airflow setpoints"));
+    annotation (Dialog(tab="Setpoints", group="Airflow setpoints"));
+
+  parameter Real zonOccHeaSet(
+    final unit="K",
+    displayUnit="K",
+    final quantity="ThermodynamicTemperature")=293.15
+    "Zone heating setpoint when it is occupied"
+    annotation (Dialog(tab="Setpoints", group="Zone temperature setpoints"));
+  parameter Real zonUnoccHeaSet(
+    final unit="K",
+    displayUnit="K",
+    final quantity="ThermodynamicTemperature")=290.15
+    "Zone heating setpoint when it is unoccupied"
+    annotation (Dialog(tab="Setpoints", group="Zone temperature setpoints"));
+  parameter Real zonOccCooSet(
+    final unit="K",
+    displayUnit="K",
+    final quantity="ThermodynamicTemperature")=296.15
+    "Zone cooling setpoint when it is occupied"
+    annotation (Dialog(tab="Setpoints", group="Zone temperature setpoints"));
+  parameter Real zonUnoccCooSet(
+    final unit="K",
+    displayUnit="K",
+    final quantity="ThermodynamicTemperature")=299.15
+    "Zone cooling setpoint when it is unoccupied"
+    annotation (Dialog(tab="Setpoints", group="Zone temperature setpoints"));
 
   CDL.Interfaces.BooleanInput uConSen
     "Signal from condensation sensor in zone"
@@ -149,6 +174,17 @@ block Controller "Controller for room CAV box and chilled beam manifold"
                                                     iconTransformation(extent={{100,20},
             {140,60}})));
 
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ZoneTemperature TZonSet(
+    zonOccHeaSet=zonOccHeaSet,
+    zonUnoccHeaSet=zonUnoccHeaSet,
+    zonOccCooSet=zonOccCooSet,
+    zonUnoccCooSet=zonUnoccCooSet)  "Zone temperature setpoint controller"
+    annotation (Placement(transformation(extent={{-100,110},{-80,130}})));
+
+  CDL.Continuous.MultiSum mulSum(
+    final nin=3) "Find required volume flow rate"
+    annotation (Placement(transformation(extent={{-30,-40},{-10,-20}})));
+
 protected
   Buildings.Controls.OBC.CDL.Continuous.PIDWithReset conHeaLoo(
     final controllerType=controllerTypeHea,
@@ -182,10 +218,8 @@ protected
   CDL.Continuous.Product pro[3]
     "Product of required volume flow rate for a given mode and the current mode status"
     annotation (Placement(transformation(extent={{-60,-40},{-40,-20}})));
-  CDL.Continuous.MultiSum mulSum(
-    final nin=3) "Find required volume flow rate"
-    annotation (Placement(transformation(extent={{-30,-40},{-10,-20}})));
-  CDL.Continuous.Sources.Constant con[3](final k={Vdes_occ,VDes_unoccSch,
+
+  CDL.Continuous.Sources.Constant con[3](final k={VDes_occ,VDes_unoccSch,
         VDes_unoccUnsch}) "Design volume fliow rates for each operation mode"
     annotation (Placement(transformation(extent={{-100,-20},{-80,0}})));
   CDL.Routing.IntegerReplicator intRep(final nout=3) "Integer replicator"
@@ -204,15 +238,14 @@ protected
   CDL.Utilities.Assert assMes(message="Condensation detected in the zone")
     "Zone condensation warning"
     annotation (Placement(transformation(extent={{50,60},{70,80}})));
-  SetPoints.ZoneTemperature TZonSet "Zone temperature setpoint controller"
-    annotation (Placement(transformation(extent={{-100,110},{-80,130}})));
+
   CDL.Logical.Switch swi
     annotation (Placement(transformation(extent={{80,-40},{100,-20}})));
   CDL.Continuous.Sources.Constant con1(final k=1) "Constant CAV damper open signal"
     annotation (Placement(transformation(extent={{0,0},{20,20}})));
-  CDL.Logical.Timer tim(final t=ConSenOnThr)
+  CDL.Logical.Timer tim(final t=conSenOnThr)
     "Check if condensation sensor signal has been on for time beyond threshold"
-    annotation (Placement(transformation(extent={{30,-20},{50,0}})));
+    annotation (Placement(transformation(extent={{-48,30},{-28,50}})));
 
   Buildings.Controls.OBC.CDL.Integers.Equal isUnOcc
     "Output true if unoccupied"
@@ -227,6 +260,7 @@ protected
         Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Types.OperationModeTypes.unoccupiedUnscheduled})
     "List of possible modes"
     annotation (Placement(transformation(extent={{-110,-120},{-90,-100}})));
+
 equation
   connect(TZon, conHeaLoo.u_m)
     annotation (Line(points={{-160,120},{-130,120},{-130,140},{10,140},{10,148}},
@@ -266,8 +300,6 @@ equation
     annotation (Line(points={{-58,-80},{-52,-80}}, color={255,0,255}));
   connect(booToRea.y, pro.u2) annotation (Line(points={{-28,-80},{-20,-80},{-20,
           -56},{-80,-56},{-80,-36},{-62,-36}}, color={0,0,127}));
-  connect(uConSen, not1.u)
-    annotation (Line(points={{-160,40},{8,40}}, color={255,0,255}));
   connect(not1.y, booToRea1.u)
     annotation (Line(points={{32,40},{48,40}}, color={255,0,255}));
   connect(booToRea1.y, pro1.u2) annotation (Line(points={{72,40},{80,40},{80,34},
@@ -290,10 +322,13 @@ equation
           {78,-38}}, color={0,0,127}));
   connect(con1.y, swi.u1) annotation (Line(points={{22,10},{70,10},{70,-22},{78,
           -22}}, color={0,0,127}));
-  connect(uConSen, tim.u) annotation (Line(points={{-160,40},{-20,40},{-20,-10},
-          {28,-10}}, color={255,0,255}));
-  connect(tim.passed, swi.u2) annotation (Line(points={{52,-18},{66,-18},{66,-30},
-          {78,-30}}, color={255,0,255}));
+  connect(uConSen, tim.u) annotation (Line(points={{-160,40},{-50,40}},
+                     color={255,0,255}));
+  connect(tim.passed, swi.u2) annotation (Line(points={{-26,32},{-10,32},{-10,-8},
+          {66,-8},{66,-30},{78,-30}},
+                     color={255,0,255}));
+  connect(tim.passed, not1.u) annotation (Line(points={{-26,32},{-10,32},{-10,40},
+          {8,40}}, color={255,0,255}));
 annotation (defaultComponentName="zonRegCon",
   Icon(graphics={Rectangle(
         extent={{-100,-100},{100,100}},
@@ -314,47 +349,67 @@ reheat signal <code>yReh</code>, and chilled water manifold control valve positi
 </p>
 <p>
 Each signal is calculated as follows.
-<ul>
-<li>
-Reheat signal
 <ol>
 <li>
-Generate the CAV reheat 
-</li>
-</ol>
+Reheat signal
+<ul>
+<li>
+The CAV reheat signal <code>yReh</code> is generated using a PI-controller to 
+maintain the measured zone temperature <code>TZon</code> at or above the zone heating 
+setpoint <code>TZonHeaSet</code> from 
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ZoneTemperature\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ZoneTemperature</a>.
 </li>
 </ul>
+</li>
+<li>
+Damper signal
+<ul>
+<li>
+The CAV damper position signal <code>yDam</code> is modified based on the operating
+mode signal <code>uOpeMod</code>.
+</li>
+<li>
+When the operating mode is <code>occupied</code>, <code>yDam</code> is adjusted
+to supply air at volume flow rate <code>Vdes_occ</code>.
+</li>
+<li>
+When the operating mode is <code>unoccupiedUnscheduled</code>, <code>yDam</code>
+is adjusted to supply air at volume flow rate <code>Vdes_unoccUnsch</code>.
+</li>
+<li>
+When the operating mode is <code>unoccupiedScheduled</code>, <code>yDam</code>
+is adjusted to supply air at volume flow rate <code>Vdes_unoccSch</code>.
+</li>
+<li>
+When a continuous signal is received from the condensation sensor in the zone 
+<code>uConSen</code> for time <code>conSenOnThr</code>, <code>yDam</code> is set
+to fully open.
+</li>
+</ul>
+</li>
+<li>
+Chilled beam control valve position
+<ul>
+<li>
+The chilled beam control valve position <code>yVal</code> is adjusted using a 
+PI-controller to regulate <code>TZon</code> at or below the zone cooling setpoint
+<code>TZonCooSet</code> from 
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ZoneTemperature\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ZoneTemperature</a>.
+</li>
+<li>
+If <code>uConSen</code> is continuously enabled for time <code>conSenOnThr</code>,
+<code>yVal</code> is set to fully closed. An alarm is generated for the operator.
+</li>
+</ul>
+</li>
+</ol>
 </p>
 </html>", revisions="<html>
 <ul>
 <li>
-October 9, 2020, by Jianjun Hu:<br/>
-Changed the default heating maximum airflow setpoint to 30% of the zone nominal airflow.<br/>
-This is for
-<a href=\"https://github.com/lbl-srg/modelica-buildings/issues/2172\">issue 2172</a>.
-</li>
-<li>
-April 18, 2020, by Jianjun Hu:<br/>
-Added actual VAV damper position as the input for generating system request.<br/>
-This is for
-<a href=\"https://github.com/lbl-srg/modelica-buildings/issues/1873\">issue 1873</a>.
-</li>
-<li>
-March 06, 2020, by Jianjun Hu:<br/>
-Added default component name.<br/>
-This is for
-<a href=\"https://github.com/lbl-srg/modelica-buildings/issues/1809\">issue 1809</a>.
-</li>
-<li>
-November 15, 2017, by Michael Wetter:<br/>
-Added integrator reset.
-</li>
-<li>
-October 27, 2017, by Jianjun Hu:<br/>
-Moved it from example package.
-</li>
-<li>
-September 25, 2017, by Michael Wetter:<br/>
+September 9, 2021, by Karthik Devaprasad:<br/>
 First implementation.
 </li>
 </ul>
