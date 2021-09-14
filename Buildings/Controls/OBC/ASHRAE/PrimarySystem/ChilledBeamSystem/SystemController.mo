@@ -28,6 +28,36 @@ block SystemController "Main chilled beam system controller"
     "Maximum pump speed"
     annotation (Dialog(group="Pump parameters"));
 
+  parameter Real valPosClo(
+    final unit="1",
+    displayUnit="1")=0.05
+    "Valve position at which it is deemed to be closed"
+    annotation (Dialog(tab="Pump control parameters",
+      group="Pump enable parameters"));
+
+  parameter Real valPosOpe(
+    final unit="1",
+    displayUnit="1")=0.1
+    "Valve position at which it is deemed to be open"
+    annotation (Dialog(tab="Pump control parameters",
+      group="Pump enable parameters"));
+
+  parameter Real valOpeThr(
+    final unit="s",
+    displayUnit="s",
+    final quantity="time")=30
+    "Minimum threshold time for which a valve has to be open to enable lead pump"
+    annotation (Dialog(tab="Pump control parameters",
+      group="Pump enable parameters"));
+
+  parameter Real valCloThr(
+    final unit="s",
+    displayUnit="s",
+    final quantity="time")=60
+    "Minimum threshold time for which all valves have to be closed to disable lead pump"
+    annotation (Dialog(tab="Pump control parameters",
+      group="Pump enable parameters"));
+
   parameter Real speLim(
     final unit="1",
     displayUnit="1") = 0.75
@@ -260,7 +290,22 @@ block SystemController "Main chilled beam system controller"
     Ti=TiPumSpe,
     Td=TdPumSpe)
     annotation (Placement(transformation(extent={{0,20},{20,40}})));
-  SetPoints.ChilledWaterStaticPressureSetpointReset chiWatStaPreSetRes
+  SetPoints.ChilledWaterStaticPressureSetpointReset chiWatStaPreSetRes(
+    nVal=nVal,
+    nPum=nPum,
+    valPosLowClo=valPosLowClo,
+    valPosLowOpe=valPosLowOpe,
+    valPosHigClo=valPosHigClo,
+    valPosHigOpe=valPosHigOpe,
+    chiWatStaPreMax=chiWatStaPreMax,
+    chiWatStaPreMin=chiWatStaPreMin,
+    triAmoVal=triAmoVal,
+    resAmoVal=resAmoVal,
+    maxResVal=maxResVal,
+    samPerVal=samPerVal,
+    delTimVal=delTimVal,
+    thrTimLow=thrTimLow,
+    thrTimHig=thrTimHig)
     annotation (Placement(transformation(extent={{-40,-70},{-20,-50}})));
   SetPoints.BypassValvePosition bypValPos(
     nPum=nPum,

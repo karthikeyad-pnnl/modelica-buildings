@@ -30,6 +30,36 @@ block Controller
     "Maximum pump speed"
     annotation (Dialog(group="Pump parameters"));
 
+  parameter Real valPosClo(
+    final unit="1",
+    displayUnit="1")=0.05
+    "Valve position at which it is deemed to be closed"
+    annotation (Dialog(tab="Pump control parameters",
+      group="Pump enable parameters"));
+
+  parameter Real valPosOpe(
+    final unit="1",
+    displayUnit="1")=0.1
+    "Valve position at which it is deemed to be open"
+    annotation (Dialog(tab="Pump control parameters",
+      group="Pump enable parameters"));
+
+  parameter Real valOpeThr(
+    final unit="s",
+    displayUnit="s",
+    final quantity="time")=30
+    "Minimum threshold time for which a valve has to be open to enable lead pump"
+    annotation (Dialog(tab="Pump control parameters",
+      group="Pump enable parameters"));
+
+  parameter Real valCloThr(
+    final unit="s",
+    displayUnit="s",
+    final quantity="time")=60
+    "Minimum threshold time for which all valves have to be closed to disable lead pump"
+    annotation (Dialog(tab="Pump control parameters",
+      group="Pump enable parameters"));
+
   parameter Real speLim(
     final unit="1",
     displayUnit="1") = 0.75
@@ -181,7 +211,12 @@ protected
     annotation (Placement(transformation(extent={{-200,28},{-180,48}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SecondaryPumps.Subsequences.EnableLead
-    enaLeaPum
+    enaLeaPum(
+    nVal=nVal,
+    valPosClo=valPosClo,
+    valPosOpe=valPosOpe,
+    valOpeThr=valOpeThr,
+    valCloThr=valCloThr)
     "Enable lead pump"
     annotation (Placement(transformation(extent={{-200,70},{-180,90}})));
 
