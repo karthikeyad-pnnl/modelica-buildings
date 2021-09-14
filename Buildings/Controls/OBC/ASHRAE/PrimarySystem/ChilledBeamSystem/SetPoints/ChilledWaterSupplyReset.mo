@@ -2,129 +2,137 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints;
 block ChilledWaterSupplyReset
   "Sequence to generate static pressure setpoint for chilled water loop"
 
-  parameter Integer nVal = 3
-    "Number of chilled water control valves on chilled beam manifolds";
+  parameter Real valPosLowCloReq(
+    final unit="1",
+    displayUnit="1") = 0.05
+    "Lower limit for sending one request for chilled water supply"
+    annotation(Dialog(group="Chilled water supply parameters"));
 
-  parameter Integer nPum = 2
-    "Number of chilled water pumps in chilled beam system";
+  parameter Real valPosLowOpeReq(
+    final unit="1",
+    displayUnit="1") = 0.1
+    "Upper limit for sending one request for chilled water supply"
+    annotation(Dialog(group="Chilled water supply parameters"));
 
-  parameter Real valPosLowClo(
+  parameter Real valPosHigCloReq(
     final unit="1",
     displayUnit="1") = 0.45
-    "Lower limit for sending one request to Trim-and-Respond logic"
-    annotation(Dialog(group="Control valve parameters"));
+    "Lower limit for sending two requests for chilled water supply"
+    annotation(Dialog(group="Chilled water supply parameters"));
 
-  parameter Real valPosLowOpe(
+  parameter Real valPosHigOpeReq(
     final unit="1",
     displayUnit="1") = 0.5
-    "Upper limit for sending one request to Trim-and-Respond logic"
-    annotation(Dialog(group="Control valve parameters"));
+    "Upper limit for sending two requests for chilled water supply"
+    annotation(Dialog(group="Chilled water supply parameters"));
 
-  parameter Real valPosHigClo(
-    final unit="1",
-    displayUnit="1") = 0.95
-    "Lower limit for sending two requests to Trim-and-Respond logic"
-    annotation(Dialog(group="Control valve parameters"));
-
-  parameter Real valPosHigOpe(
-    final unit="1",
-    displayUnit="1") = 0.99
-    "Upper limit for sending two requests to Trim-and-Respond logic"
-    annotation(Dialog(group="Control valve parameters"));
-
-  parameter Real chiWatStaPreMax(
-    final unit="Pa",
-    displayUnit="Pa",
-    final quantity="Pressure") = 30000
-    "Maximum chilled water loop static pressure setpoint"
-    annotation(Dialog(group="Trim-and-Respond parameters"));
-
-  parameter Real chiWatStaPreMin(
-    final unit="Pa",
-    displayUnit="Pa",
-    final quantity="Pressure") = 20000
-    "Minimum chilled water loop static pressure setpoint"
-    annotation(Dialog(group="Trim-and-Respond parameters"));
-
-  parameter Real triAmoVal(
-    final unit="Pa",
-    displayUnit="Pa",
-    final quantity="PressureDifference") = -500
-    "Static pressure trim amount"
-    annotation(Dialog(group="Trim-and-Respond parameters"));
-
-  parameter Real resAmoVal(
-    final unit="Pa",
-    displayUnit="Pa",
-    final quantity="PressureDifference") = 750
-    "Static pressure respond amount"
-    annotation(Dialog(group="Trim-and-Respond parameters"));
-
-  parameter Real maxResVal(
-    final unit="Pa",
-    displayUnit="Pa",
-    final quantity="PressureDifference") = 1000
-    "Static pressure maximum respond amount"
-    annotation(Dialog(group="Trim-and-Respond parameters"));
-
-  parameter Real samPerVal(
+  parameter Real thrTimLowReq(
     final unit="s",
     displayUnit="s",
-    final quantity="Duration") = 30
-    "Sample period duration"
-    annotation(Dialog(group="Trim-and-Respond parameters"));
+    final quantity="Duration") = 300
+    "Threshold time for generating one chilled water supply request"
+    annotation(Dialog(group="Chilled water supply parameters"));
 
-  parameter Real delTimVal(
-    final unit="s",
-    displayUnit="min",
-    final quantity="Duration") = 120
-    "Delay period duration"
-    annotation(Dialog(group="Trim-and-Respond parameters"));
-
-  parameter Real thrTimLow(
+  parameter Real thrTimHigReq(
     final unit="s",
     displayUnit="s",
     final quantity="Duration") = 60
-    "Threshold time for generating one request"
-    annotation(Dialog(group="Control valve parameters"));
+    "Threshold time for generating two chilled water supply requests"
+    annotation(Dialog(group="Chilled water supply parameters"));
 
-  parameter Real thrTimHig(
+  parameter Real valPosLowCloTemRes(
+    final unit="1",
+    displayUnit="1") = 0.45
+    "Lower limit for sending one request for chilled water temperature reset"
+    annotation(Dialog(group="Chilled water temperature reset parameters"));
+
+  parameter Real valPosLowOpeTemRes(
+    final unit="1",
+    displayUnit="1") = 0.5
+    "Upper limit for sending one request for chilled water temperature reset"
+    annotation(Dialog(group="Chilled water temperature reset parameters"));
+
+  parameter Real valPosHigCloTemRes(
+    final unit="1",
+    displayUnit="1") = 0.95
+    "Lower limit for sending two requests for chilled water temperature reset"
+    annotation(Dialog(group="Chilled water temperature reset parameters"));
+
+  parameter Real valPosHigOpeTemRes(
+    final unit="1",
+    displayUnit="1") = 0.99
+    "Upper limit for sending two requests for chilled water temperature reset"
+    annotation(Dialog(group="Chilled water temperature reset parameters"));
+
+  parameter Real thrTimLowTemRes(
     final unit="s",
     displayUnit="s",
-    final quantity="Duration") = 30
-    "Threshold time for generating two requests"
-    annotation(Dialog(group="Control valve parameters"));
+    final quantity="Duration") = 300
+    "Threshold time for generating one chilled water temperature reset request"
+    annotation(Dialog(group="Chilled water temperature reset parameters"));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uValPos(final unit=fill("1",
-        nVal), displayUnit=fill("1", nVal))
-    "Chilled water control valve position on chilled beams" annotation (
-      Placement(transformation(extent={{-140,-20},{-100,20}}),
-        iconTransformation(extent={{-140,-20},{-100,20}})));
+  parameter Real thrTimHigTemRes(
+    final unit="s",
+    displayUnit="s",
+    final quantity="Duration") = 60
+    "Threshold time for generating two chilled water temperature reset requests"
+    annotation(Dialog(group="Chilled water temperature reset parameters"));
 
-  CDL.Interfaces.IntegerOutput yChiWatSupReq
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uConSen
+    "Signal indicating condensation detected in zone"
+    annotation (Placement(transformation(extent={{-140,-100},{-100,-60}}),
+      iconTransformation(extent={{-140,-60},{-100,-20}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uValPos(
+    final unit="1",
+    displayUnit="1")
+    "Chilled water control valve position on chilled beams"
+    annotation (Placement(transformation(extent={{-140,20},{-100,60}}),
+      iconTransformation(extent={{-140,20},{-100,60}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yChiWatSupReq
     "Number of requests for chilled water supply"
     annotation (Placement(transformation(extent={{100,40},{140,80}})));
-  CDL.Interfaces.IntegerOutput TChiWatSupReq
+
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput TChiWatReq
     "Number of requests for chilled water supply temperature reset"
-    annotation (Placement(transformation(extent={{100,-60},{140,-20}})));
+    annotation (Placement(transformation(extent={{100,-80},{140,-40}})));
+
 protected
-  Buildings.Controls.OBC.CDL.Logical.Timer tim(final t=fill(thrTimLow, nVal))
+  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi
+    "Integer switch"
+    annotation (Placement(transformation(extent={{70,-70},{90,-50}})));
+
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(
+    final k=0)
+    "Constant Integer source"
+    annotation (Placement(transformation(extent={{20,-90},{40,-70}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Not not1
+    "Logical Not"
+    annotation (Placement(transformation(extent={{-90,-90},{-70,-70}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Timer tim(
+    final t=thrTimLowReq)
     "Check if threshold time for generating one request has been exceeded"
     annotation (Placement(transformation(extent={{-50,70},{-30,90}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Timer tim1(final t=fill(thrTimHig, nVal))
+  Buildings.Controls.OBC.CDL.Logical.Timer tim1(
+    final t=thrTimHigReq)
     "Check if threshold time for generating two requests has been exceeded"
-    annotation (Placement(transformation(extent={{-50,30},{-30,50}})));
+    annotation (Placement(transformation(extent={{-50,40},{-30,60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys1(final uLow=fill(
-        valPosLowCloReq, nVal), final uHigh=fill(valPosLowOpeReq, nVal))
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys1(
+    final uLow=valPosLowCloReq,
+    final uHigh=valPosLowOpeReq)
     "Check if chilled water control valve is at limit required to send one request"
     annotation (Placement(transformation(extent={{-80,70},{-60,90}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys2(final uLow=fill(
-        valPosHigClo, nVal), final uHigh=fill(valPosHigOpe, nVal))
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys2(
+    final uLow=valPosHigCloReq,
+    final uHigh=valPosHigOpeReq)
     "Check if chilled water control valve is at limit required to send two requests"
-    annotation (Placement(transformation(extent={{-80,30},{-60,50}})));
+    annotation (Placement(transformation(extent={{-80,40},{-60,60}})));
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt
     "Boolean to Integer conversion"
@@ -133,82 +141,99 @@ protected
   Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1(
     final integerTrue=2)
     "Boolean to Integer conversion"
-    annotation (Placement(transformation(extent={{10,30},{30,50}})));
+    annotation (Placement(transformation(extent={{10,40},{30,60}})));
 
   Buildings.Controls.OBC.CDL.Integers.Max maxInt
     "Find maximum integer output"
     annotation (Placement(transformation(extent={{40,50},{60,70}})));
 
-protected
-  CDL.Logical.Timer tim2(final t=fill(thrTimLow, nVal))
+  Buildings.Controls.OBC.CDL.Logical.Timer tim2(
+    final t=thrTimLowTemRes)
     "Check if threshold time for generating one request has been exceeded"
-    annotation (Placement(transformation(extent={{-50,-30},{-30,-10}})));
-  CDL.Logical.Timer tim3(final t=fill(thrTimHig, nVal))
+    annotation (Placement(transformation(extent={{-50,-20},{-30,0}})));
+
+  Buildings.Controls.OBC.CDL.Logical.Timer tim3(
+    final t=thrTimHigTemRes)
     "Check if threshold time for generating two requests has been exceeded"
-    annotation (Placement(transformation(extent={{-50,-70},{-30,-50}})));
-  CDL.Continuous.Hysteresis hys3(final uLow=fill(valPosLowClo, nVal), final
-      uHigh=fill(valPosLowOpe, nVal))
+    annotation (Placement(transformation(extent={{-50,-60},{-30,-40}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys3(
+    final uLow=valPosLowCloTemRes,
+    final uHigh=valPosLowOpeTemRes)
     "Check if chilled water control valve is at limit required to send one request"
-    annotation (Placement(transformation(extent={{-80,-30},{-60,-10}})));
-  CDL.Continuous.Hysteresis hys4(final uLow=fill(valPosHigClo, nVal), final
-      uHigh=fill(valPosHigOpe, nVal))
+    annotation (Placement(transformation(extent={{-80,-20},{-60,0}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys4(
+    final uLow=valPosHigCloTemRes,
+    final uHigh=valPosHigOpeTemRes)
     "Check if chilled water control valve is at limit required to send two requests"
-    annotation (Placement(transformation(extent={{-80,-70},{-60,-50}})));
-  CDL.Conversions.BooleanToInteger                        booToInt2
+    annotation (Placement(transformation(extent={{-80,-60},{-60,-40}})));
+
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt2
     "Boolean to Integer conversion"
-    annotation (Placement(transformation(extent={{10,-30},{30,-10}})));
-  CDL.Conversions.BooleanToInteger                        booToInt3(final
-      integerTrue=2)
+    annotation (Placement(transformation(extent={{10,-20},{30,0}})));
+
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt3(
+    final integerTrue=2)
     "Boolean to Integer conversion"
-    annotation (Placement(transformation(extent={{10,-70},{30,-50}})));
-  CDL.Integers.Max                        maxInt1
+    annotation (Placement(transformation(extent={{10,-60},{30,-40}})));
+
+  Buildings.Controls.OBC.CDL.Integers.Max maxInt1
     "Find maximum integer output"
-    annotation (Placement(transformation(extent={{40,-50},{60,-30}})));
+    annotation (Placement(transformation(extent={{40,-40},{60,-20}})));
+
 equation
 
-  connect(uValPos, hys1.u) annotation (Line(points={{-120,0},{-90,0},{-90,80},{
-          -82,80}},  color={0,0,127}));
+  connect(uValPos, hys1.u) annotation (Line(points={{-120,40},{-90,40},{-90,80},
+          {-82,80}}, color={0,0,127}));
 
-  connect(uValPos, hys2.u) annotation (Line(points={{-120,0},{-90,0},{-90,40},{
-          -82,40}},  color={0,0,127}));
+  connect(uValPos, hys2.u) annotation (Line(points={{-120,40},{-90,40},{-90,50},
+          {-82,50}}, color={0,0,127}));
 
   connect(booToInt.y, maxInt.u1) annotation (Line(points={{32,80},{36,80},{36,
           66},{38,66}},
                     color={255,127,0}));
 
-  connect(booToInt1.y, maxInt.u2) annotation (Line(points={{32,40},{36,40},{36,
-          54},{38,54}},
-                    color={255,127,0}));
+  connect(booToInt1.y, maxInt.u2) annotation (Line(points={{32,50},{36,50},{36,54},
+          {38,54}}, color={255,127,0}));
 
   connect(hys1.y, tim.u)
     annotation (Line(points={{-58,80},{-52,80}},   color={255,0,255}));
   connect(hys2.y, tim1.u)
-    annotation (Line(points={{-58,40},{-52,40}},   color={255,0,255}));
+    annotation (Line(points={{-58,50},{-52,50}},   color={255,0,255}));
   connect(tim.passed, booToInt.u) annotation (Line(points={{-28,72},{-10,72},{
           -10,80},{8,80}}, color={255,0,255}));
-  connect(tim1.passed, booToInt1.u) annotation (Line(points={{-28,32},{-10,32},
-          {-10,40},{8,40}}, color={255,0,255}));
-  connect(booToInt2.y, maxInt1.u1) annotation (Line(points={{32,-20},{36,-20},{
-          36,-34},{38,-34}}, color={255,127,0}));
-  connect(booToInt3.y, maxInt1.u2) annotation (Line(points={{32,-60},{36,-60},{
-          36,-46},{38,-46}}, color={255,127,0}));
+  connect(tim1.passed, booToInt1.u) annotation (Line(points={{-28,42},{-10,42},{
+          -10,50},{8,50}},  color={255,0,255}));
+  connect(booToInt2.y, maxInt1.u1) annotation (Line(points={{32,-10},{36,-10},{36,
+          -24},{38,-24}},    color={255,127,0}));
+  connect(booToInt3.y, maxInt1.u2) annotation (Line(points={{32,-50},{36,-50},{36,
+          -36},{38,-36}},    color={255,127,0}));
   connect(hys3.y, tim2.u)
-    annotation (Line(points={{-58,-20},{-52,-20}}, color={255,0,255}));
+    annotation (Line(points={{-58,-10},{-52,-10}}, color={255,0,255}));
   connect(hys4.y,tim3. u)
-    annotation (Line(points={{-58,-60},{-52,-60}}, color={255,0,255}));
-  connect(tim2.passed, booToInt2.u) annotation (Line(points={{-28,-28},{-10,-28},
-          {-10,-20},{8,-20}}, color={255,0,255}));
-  connect(tim3.passed, booToInt3.u) annotation (Line(points={{-28,-68},{-10,-68},
-          {-10,-60},{8,-60}}, color={255,0,255}));
-  connect(uValPos, hys3.u) annotation (Line(points={{-120,0},{-90,0},{-90,-20},
-          {-82,-20}}, color={0,0,127}));
-  connect(uValPos, hys4.u) annotation (Line(points={{-120,0},{-90,0},{-90,-60},
-          {-82,-60}}, color={0,0,127}));
+    annotation (Line(points={{-58,-50},{-52,-50}}, color={255,0,255}));
+  connect(tim2.passed, booToInt2.u) annotation (Line(points={{-28,-18},{-10,-18},
+          {-10,-10},{8,-10}}, color={255,0,255}));
+  connect(tim3.passed, booToInt3.u) annotation (Line(points={{-28,-58},{-10,-58},
+          {-10,-50},{8,-50}}, color={255,0,255}));
+  connect(uValPos, hys3.u) annotation (Line(points={{-120,40},{-90,40},{-90,-10},
+          {-82,-10}}, color={0,0,127}));
+  connect(uValPos, hys4.u) annotation (Line(points={{-120,40},{-90,40},{-90,-50},
+          {-82,-50}}, color={0,0,127}));
+  connect(intSwi.y, TChiWatReq)
+    annotation (Line(points={{92,-60},{120,-60}}, color={255,127,0}));
+  connect(maxInt1.y, intSwi.u1) annotation (Line(points={{62,-30},{64,-30},{64,-52},
+          {68,-52}}, color={255,127,0}));
+  connect(conInt.y, intSwi.u3) annotation (Line(points={{42,-80},{60,-80},{60,-68},
+          {68,-68}}, color={255,127,0}));
+  connect(uConSen, not1.u)
+    annotation (Line(points={{-120,-80},{-92,-80}}, color={255,0,255}));
+  connect(not1.y, intSwi.u2) annotation (Line(points={{-68,-80},{-60,-80},{-60,-64},
+          {60,-64},{60,-60},{68,-60}}, color={255,0,255}));
   connect(maxInt.y, yChiWatSupReq)
     annotation (Line(points={{62,60},{120,60}}, color={255,127,0}));
-  connect(maxInt1.y, TChiWatSupReq)
-    annotation (Line(points={{62,-40},{120,-40}}, color={255,127,0}));
-annotation(defaultComponentName="chiWatStaPreSetRes",
+annotation(defaultComponentName="chiWatSupRes",
   Icon(coordinateSystem(preserveAspectRatio=false),
           graphics={
             Text(
@@ -225,7 +250,7 @@ annotation(defaultComponentName="chiWatStaPreSetRes",
               lineColor={28,108,200},
               fillColor={255,255,255},
               fillPattern=FillPattern.None,
-      textString="chiWatStaPreSetRes")}),
+      textString="chiWatSupRes")}),
   Diagram(coordinateSystem(preserveAspectRatio=false)),
   Documentation(info="<html>
 <p>
@@ -250,23 +275,6 @@ for <code>thrTimHig</code> continuously.
 no requests are generated otherwise.
 </li>
 </ul>
-</p>
-<p>
-The trim-and-respond parameters are as follows:
-<br>
-<table summary=\"summary\" border=\"1\">
-  <tr><th> Variable </th> <th> Value </th> <th> Definition </th> </tr>
-  <tr><td>Device</td><td>Any chilled water pump</td> <td>Associated device</td></tr>
-  <tr><td>iniSet</td><td><code>chiWatStaPreMax</code></td><td>Initial setpoint</td></tr>
-  <tr><td>minSet</td><td><code>chiWatStaPreMin</code></td><td>Minimum setpoint</td></tr>
-  <tr><td>maxSet</td><td><code>chiWatStaPreMax</code></td><td>Maximum setpoint</td></tr>
-  <tr><td>delTim</td><td><code>delTimVal</code></td><td>Delay timer</td></tr>
-  <tr><td>samplePeriod</td><td><code>samPerVal</code></td><td>Time step</td></tr>
-  <tr><td>numIgnReq</td><td><code>0</code></td><td>Number of ignored requests</td></tr>
-  <tr><td>triAmo</td><td><code>triAmoVal</code></td><td>Trim amount</td></tr>
-  <tr><td>resAmo</td><td><code>resAmoVal</code></td><td>Respond amount</td></tr>
-  <tr><td>maxRes</td><td><code>maxResVal</code></td><td>Maximum response per time interval</td></tr>
-</table>
 </p>
 </html>",
 revisions="<html>

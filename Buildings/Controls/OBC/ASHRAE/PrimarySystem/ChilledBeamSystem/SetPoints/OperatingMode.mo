@@ -2,9 +2,6 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints;
 block OperatingMode
   "Block with sequences for picking system operating mode"
 
-  parameter Integer nZon = 4
-    "Number of zones serviced by chilled beam system";
-
   parameter Integer nSchRow = 4
     "Number of rows in schedule table";
 
@@ -169,7 +166,8 @@ equation
     annotation (Line(points={{-48,40},{-22,40}}, color={255,0,255}));
   connect(uDetOcc, intSwi.u2)
     annotation (Line(points={{-160,90},{18,90}}, color={255,0,255}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
+  annotation (defaultComponentName="opeMod",
+    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}}), graphics={
             Text(
               extent={{-100,150},{100,110}},

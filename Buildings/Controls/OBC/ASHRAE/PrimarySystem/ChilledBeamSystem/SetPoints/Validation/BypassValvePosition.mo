@@ -25,8 +25,7 @@ protected
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul[2](
     final period=fill(4000,2),
-    final shift=fill(10, 2))
-    "Boolean pulse source"
+    final shift=fill(10, 2)) "Boolean pulse source"
     annotation (Placement(transformation(extent={{-80,30},{-60,50}})));
 
 equation

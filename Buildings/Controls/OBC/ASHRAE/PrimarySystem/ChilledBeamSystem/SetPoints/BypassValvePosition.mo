@@ -60,6 +60,9 @@ block BypassValvePosition
     annotation (Placement(transformation(extent={{100,-20},{140,20}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
+  parameter Real Td=0.1 "Time constant of derivative block";
+  parameter CDL.Types.SimpleController controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "Type of controller";
 protected
   Buildings.Controls.OBC.CDL.Logical.Switch swi
     "Real switch"
@@ -94,9 +97,10 @@ protected
     annotation (Placement(transformation(extent={{-20,20},{0,40}})));
 
   Buildings.Controls.OBC.CDL.Continuous.PID conPID(
-    final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
+    final controllerType=controllerType,
     final k=k,
     final Ti=Ti,
+    Td=Td,
     final reverseActing=false)
     "PID controller"
     annotation (Placement(transformation(extent={{20,-60},{40,-40}})));

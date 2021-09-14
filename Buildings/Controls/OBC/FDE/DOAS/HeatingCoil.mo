@@ -28,9 +28,10 @@ block HeatingCoil
     annotation (Placement(transformation(extent={{102,-20},{142,20}}),
       iconTransformation(extent={{102,-20},{142,20}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.LimPID conPID(
+  Buildings.Controls.OBC.CDL.Continuous.PID conPID(
     final k=SArhcPIk,
-    final Ti=SArhcPITi)
+    final Ti=SArhcPITi,
+    reverseActing=false)
     "PI calculation of supply air temperature and supply air heating set point"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
   Buildings.Controls.OBC.CDL.Logical.Switch swi

@@ -110,7 +110,7 @@ block ChilledWaterStaticPressureSetpointReset
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yStaPreSetPoi(
     final unit="Pa",
     displayUnit="Pa",
-    final quantity="Pressure")
+    final quantity="PressureDifference")
     "Static pressure setpoint for pumps"
     annotation (Placement(transformation(extent={{100,-20},{140,20}}),
       iconTransformation(extent={{100,-20},{140,20}})));

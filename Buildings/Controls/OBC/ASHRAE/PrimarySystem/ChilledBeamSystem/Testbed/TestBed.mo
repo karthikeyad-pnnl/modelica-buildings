@@ -128,7 +128,8 @@ block TestBed
     annotation (Placement(transformation(extent={{230,130},{250,150}})));
 
   BoundaryConditions.WeatherData.ReaderTMY3 weaDat(filNam=
-        Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"))
+        ModelicaServices.ExternalReferences.loadResource(
+        "modelica://Buildings/Resources/weatherdata/USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.mos"))
     annotation (Placement(transformation(extent={{-310,-20},{-290,0}})));
 
   BoundaryConditions.WeatherData.Bus weaBus
@@ -401,6 +402,28 @@ block TestBed
   Modelica.Blocks.Routing.DeMultiplex demux2(n=2)
     annotation (Placement(transformation(extent={{-280,60},{-260,80}})));
 
+  CDL.Interfaces.RealOutput VDisAir[2]
+    "Measured discharge air volume flow rate"
+    annotation (Placement(transformation(extent={{340,20},{380,60}})));
+  Fluid.Sensors.VolumeFlowRate senVolFlo(redeclare package Medium = MediumA)
+    annotation (Placement(transformation(extent={{164,120},{184,140}})));
+  Modelica.Blocks.Routing.Multiplex mux2(n=2)
+    annotation (Placement(transformation(extent={{312,30},{332,50}})));
+  Fluid.Sensors.VolumeFlowRate senVolFlo1(redeclare package Medium = MediumA)
+    annotation (Placement(transformation(extent={{124,20},{144,40}})));
+  Modelica.Blocks.Routing.Multiplex mux3(n=2)
+    annotation (Placement(transformation(extent={{312,0},{332,20}})));
+  CDL.Interfaces.RealOutput yDamPos[2] "Measured CAV damper position"
+    annotation (Placement(transformation(extent={{340,-10},{380,30}})));
+  Fluid.Sensors.RelativeHumidityTwoPort senRelHum(redeclare package Medium =
+        MediumA)
+    "Relative humidity sensor"
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=180,
+        origin={-90,160})));
+
+  CDL.Interfaces.RealOutput relHumDOASRet
+    "Measured DOAS return air relative humidity"
+    annotation (Placement(transformation(extent={{340,-200},{380,-160}})));
 equation
   connect(rad2.heatPortCon, roo2.heaPorRad) annotation (Line(points={{238,57.2},
           {238,66},{240,66},{240,92.2},{239,92.2}},
@@ -502,24 +525,14 @@ equation
     annotation (Line(points={{40,0},{60,0},{60,34},{110,34},{110,80}},
                                              color={0,127,255}));
 
-  connect(cor.port_b, roo2.ports[1]) annotation (Line(points={{110,120},{110,
-          134},{190,134},{190,84},{225,84}},
-                                 color={0,127,255}));
-
   connect(jun4.port_3, cor1.port_a) annotation (Line(points={{30,-10},{30,-30},{
           110,-30},{110,-20}},     color={0,127,255}));
 
-  connect(cor1.port_b, roo1.ports[1]) annotation (Line(points={{110,20},{110,30},
-          {150,30},{150,-6},{225,-6}},  color={0,127,255}));
+  connect(jun5.port_2, roo2.ports[1]) annotation (Line(points={{170,160},{200,160},
+          {200,84},{225,84}},      color={0,127,255}));
 
-  connect(jun5.port_2, roo2.ports[2]) annotation (Line(points={{170,160},{200,
-          160},{200,88},{225,88}}, color={0,127,255}));
-
-  connect(jun5.port_3, roo1.ports[2])
-    annotation (Line(points={{160,150},{160,-2},{225,-2}}, color={0,127,255}));
-
-  connect(jun5.port_1, amb.ports[2]) annotation (Line(points={{150,160},{-210,
-          160},{-210,-9},{-228,-9}},     color={0,127,255}));
+  connect(jun5.port_3, roo1.ports[1])
+    annotation (Line(points={{160,150},{160,-6},{225,-6}}, color={0,127,255}));
 
   connect(souCoo1.ports[1], pum.port_a)
     annotation (Line(points={{180,-160},{180,-140}}, color={0,127,255}));
@@ -551,8 +564,8 @@ equation
   connect(fan.port_b, senRelPre1.port_a)
     annotation (Line(points={{-60,0},{-50,0},{-50,20}}, color={0,127,255}));
 
-  connect(senRelPre1.port_b, amb.ports[3]) annotation (Line(points={{-50,40},{
-          -50,60},{-212,60},{-212,-2},{-216,-2},{-216,-11.9333},{-228,-11.9333}},
+  connect(senRelPre1.port_b, amb.ports[2]) annotation (Line(points={{-50,40},{
+          -50,60},{-212,60},{-212,-2},{-216,-2},{-216,-9},{-228,-9}},
         color={0,127,255}));
 
   connect(roo2.heaPorAir, temperatureSensor.port)
@@ -673,6 +686,50 @@ equation
   connect(demux2.y[2], cor1.yVal) annotation (Line(points={{-260,66.5},{80,66.5},
           {80,-8},{96,-8}}, color={0,0,127}));
 
+  connect(cor.port_b, senVolFlo.port_a) annotation (Line(points={{110,120},{110,
+          130},{164,130}}, color={0,127,255}));
+  connect(senVolFlo.port_b, roo2.ports[2]) annotation (Line(points={{184,130},{190,
+          130},{190,88},{225,88}}, color={0,127,255}));
+  connect(mux2.y, VDisAir)
+    annotation (Line(points={{333,40},{360,40}}, color={0,0,127}));
+  connect(senVolFlo.V_flow, mux2.u[1]) annotation (Line(points={{174,141},{174,154},
+          {220,154},{220,132},{306,132},{306,43.5},{312,43.5}}, color={0,0,127}));
+  connect(cor1.port_b, senVolFlo1.port_a)
+    annotation (Line(points={{110,20},{110,30},{124,30}}, color={0,127,255}));
+  connect(senVolFlo1.port_b, roo1.ports[2]) annotation (Line(points={{144,30},{150,
+          30},{150,-2},{225,-2}}, color={0,127,255}));
+  connect(senVolFlo1.V_flow, mux2.u[2]) annotation (Line(points={{134,41},{134,48},
+          {168,48},{168,32},{254,32},{254,36.5},{312,36.5}}, color={0,0,127}));
+  connect(mux3.y, yDamPos)
+    annotation (Line(points={{333,10},{360,10}}, color={0,0,127}));
+  connect(cor.y_actual, mux3.u[1]) annotation (Line(points={{142,116},{174,116},
+          {174,-100},{296,-100},{296,13.5},{312,13.5}}, color={0,0,127}));
+  connect(cor1.y_actual, mux3.u[2]) annotation (Line(points={{142,16},{194,16},{
+          194,-98},{300,-98},{300,6.5},{312,6.5}}, color={0,0,127}));
+  connect(senRelHum.port_a, jun5.port_1)
+    annotation (Line(points={{-80,160},{150,160}}, color={0,127,255}));
+  connect(senRelHum.port_b, amb.ports[3]) annotation (Line(points={{-100,160},{
+          -220,160},{-220,-11.9333},{-228,-11.9333}}, color={0,127,255}));
+  connect(senRelHum.phi, relHumDOASRet) annotation (Line(points={{-90.1,149},{
+          -90.1,-190},{320,-190},{320,-180},{360,-180}}, color={0,0,127}));
+  connect(weaBus, roo2.weaBus) annotation (Line(
+      points={{-270,-10},{-270,-30},{10,-30},{10,148},{210,148},{210,120},{
+          257.9,120},{257.9,113.9}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-3,6},{-3,6}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(weaBus, roo1.weaBus) annotation (Line(
+      points={{-270,-10},{-270,-30},{10,-30},{10,148},{210,148},{210,120},{264,
+          120},{264,23.9},{257.9,23.9}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-340,-200},
             {340,200}})),                                        Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-340,-200},{340,200}})));

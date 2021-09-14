@@ -2,11 +2,10 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.V
 model OperatingMode "Validate system operating mode setpoint controller"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.OperatingMode
-    operatingMode(nZon=2, schTab=[0,0; 1,1; 2,0; 24,0])
+    operatingMode(        schTab=[0,0; 1,1; 2,0; 24,0])
     annotation (Placement(transformation(extent={{10,-10},{30,10}})));
 protected
-  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul[2](
-    final period=fill(4000, 2))
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul(final period=4000)
     "Boolean pulse source"
     annotation (Placement(transformation(extent={{-30,-10},{-10,10}})));
 
