@@ -280,6 +280,25 @@ block SystemController "Main chilled beam system controller"
     "Bypass valve position signal"
     annotation (Placement(transformation(extent={{100,-60},{140,-20}})));
 
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ChilledWaterStaticPressureSetpointReset chiWatStaPreSetRes(
+    final nVal=nVal,
+    final nPum=nPum,
+    final valPosLowClo=valPosLowClo,
+    final valPosLowOpe=valPosLowOpe,
+    final valPosHigClo=valPosHigClo,
+    final valPosHigOpe=valPosHigOpe,
+    final chiWatStaPreMax=chiWatStaPreMax,
+    final chiWatStaPreMin=chiWatStaPreMin,
+    final triAmoVal=triAmoVal,
+    final resAmoVal=resAmoVal,
+    final maxResVal=maxResVal,
+    final samPerVal=samPerVal,
+    final delTimVal=delTimVal,
+    final thrTimLow=thrTimLow,
+    final thrTimHig=thrTimHig)
+    "Chilled water static pressure setpoint reset"
+    annotation (Placement(transformation(extent={{-40,-70},{-20,-50}})));
+
 protected
   parameter Integer pumStaOrd[nPum]={i for i in 1:nPum}
     "Chilled water pump staging order";
@@ -301,25 +320,6 @@ protected
     final Td=TdPumSpe)
     "Secondary pump controller"
     annotation (Placement(transformation(extent={{0,20},{20,40}})));
-
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ChilledWaterStaticPressureSetpointReset chiWatStaPreSetRes(
-    final nVal=nVal,
-    final nPum=nPum,
-    final valPosLowClo=valPosLowClo,
-    final valPosLowOpe=valPosLowOpe,
-    final valPosHigClo=valPosHigClo,
-    final valPosHigOpe=valPosHigOpe,
-    final chiWatStaPreMax=chiWatStaPreMax,
-    final chiWatStaPreMin=chiWatStaPreMin,
-    final triAmoVal=triAmoVal,
-    final resAmoVal=resAmoVal,
-    final maxResVal=maxResVal,
-    final samPerVal=samPerVal,
-    final delTimVal=delTimVal,
-    final thrTimLow=thrTimLow,
-    final thrTimHig=thrTimHig)
-    "Chilled water static pressure setpoint reset"
-    annotation (Placement(transformation(extent={{-40,-70},{-20,-50}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.BypassValvePosition bypValPos(
     final nPum=nPum,
@@ -379,5 +379,44 @@ equation
         lineColor={0,0,127},
         fillColor={255,255,255},
         fillPattern=FillPattern.Solid)}),              Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false)),
+  Documentation(info="<html>
+<p>
+Sequences for operating the main chilled beam system.
+</p>
+<p>
+This block generates signals for enabling the secondary chilled water pump
+<code>yChiWatPum</code>, pump speed <code>yPumSpe</code> and bypass valve 
+position signal <code>yBypValPos</code>. It consists of the following components:
+<ol>
+<li>
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SecondaryPumps.Controller\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SecondaryPumps.Controller</a>:
+This block generates <code>yChiWatPum</code> and <code>yPumSpe</code> based on 
+the chilled beam manifold control valve position <code>uValPos</code> and the 
+measured chilled water loop differential pressure <code>dPChiWatLoo</code>.
+</li>
+<li>
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ChilledWaterStaticPressureSetpointReset\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ChilledWaterStaticPressureSetpointReset</a>:
+This block generates the chilled water loop differential pressure setpoint based 
+on <code>uValPos</code> and the pump proven on status <code>uPumSta</code>.
+</li>
+<li>
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.BypassValvePosition\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.BypassValvePosition</a>:
+This block generates <code>yBypValPos</code> based on <code>yChiWatPum</code>, 
+<code>yPumSpe</code> and <code>dPChiWatLoo</code>.
+</li>
+</ol>
+</p>
+</html>",
+revisions="<html>
+<ul>
+<li>
+September 13, 2021, by Karthik Devaprasad:<br/>
+First implementation.
+</li>
+</ul>
+</html>"));
 end SystemController;

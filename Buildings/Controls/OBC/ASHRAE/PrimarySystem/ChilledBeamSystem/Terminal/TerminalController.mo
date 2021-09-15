@@ -1,5 +1,6 @@
 within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Terminal;
-block TerminalController "Terminal controller"
+block TerminalController
+  "Controller for zone CAV terminal and chilled beam manifold control valve"
 
   parameter Integer nSchRow=4
     "Number of rows in schedule table";
@@ -274,13 +275,6 @@ block TerminalController "Terminal controller"
     "Chilled beam manifold control valve position signal"
     annotation (Placement(transformation(extent={{100,20},{140,60}})));
 
-protected
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.OperatingMode opeMod(
-    final nSchRow=nSchRow,
-    final schTab=schTab)
-    "Determine operating mode for zone"
-    annotation (Placement(transformation(extent={{-80,70},{-60,90}})));
-
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ZoneRegulation zonRegCon(
     final conSenOnThr=conSenOnThr,
     final controllerTypeCoo=controllerTypeCoo,
@@ -304,6 +298,13 @@ protected
     final zonUnoccCooSet=zonUnoccCooSet)
     "Zone temperature regulation controller"
     annotation (Placement(transformation(extent={{-10,20},{10,40}})));
+
+protected
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.OperatingMode opeMod(
+    final nSchRow=nSchRow,
+    final schTab=schTab)
+    "Determine operating mode for zone"
+    annotation (Placement(transformation(extent={{-80,70},{-60,90}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ChilledWaterSupplyReset chiWatSupRes(
     final valPosLowCloReq=valPosLowCloReq,
@@ -358,5 +359,48 @@ equation
         lineColor={0,0,127},
         fillColor={255,255,255},
         fillPattern=FillPattern.Solid)}),              Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false)),
+  Documentation(info="<html>
+<p>
+Sequences for operating the zone CAV terminal box and the zone chilled beam manifold 
+control valve.
+</p>
+<p>
+This block generates signals for chilled water beam manifold control valve 
+<code>yChiVal</code>, CAV terminal reheat signal <code>yReh</code> and CAV 
+damper position signal <code>yDam</code>. It also generates the requests for 
+chilled water supply <code>yChiWatSupReq</code> and chilled water supply temperature 
+reset <code>TChiWatReq</code>. It consists of the following components:
+<ol>
+<li>
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.OperatingMode\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.OperatingMode</a>:
+This block generates an operating mode type signal based on the detected zone 
+occupancy <code>uDetOcc</code> and the zone occupancy schedule <code>schTab</code>.
+</li>
+<li>
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ZoneRegulation\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ZoneRegulation</a>:
+This block generates the output signals <code>yChiVal</code>, <code>yReh</code>
+and <code>yDam</code> to regulate the zone temperature within the heating and
+cooling temperature setpoints.
+</li>
+<li>
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ChilledWaterSupplyReset\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ChilledWaterSupplyReset</a>:
+This block generates the output signals <code>yChiWatSupReq</code>
+and <code>TChiWatReq</code> which are provided to the chiller plant system 
+supplying chilled water.
+</li>
+</ol>
+</p>
+</html>",
+revisions="<html>
+<ul>
+<li>
+June 16, 2021, by Karthik Devaprasad:<br/>
+First implementation.
+</li>
+</ul>
+</html>"));
 end TerminalController;
