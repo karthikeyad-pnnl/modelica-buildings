@@ -412,7 +412,7 @@ block TestBed
 
   Modelica.Blocks.Routing.Multiplex mux3(n=5)
     annotation (Placement(transformation(extent={{460,-20},{480,0}})));
-  CDL.Interfaces.RealOutput yDamPos[5] "Measured CAV damper position"
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yDamPos[5] "Measured CAV damper position"
     annotation (Placement(transformation(extent={{580,-10},{620,30}})));
   Fluid.Sensors.RelativeHumidityTwoPort senRelHum(redeclare package Medium =
         MediumA, m_flow_nominal=mAirTot_flow_nominal)
@@ -420,7 +420,7 @@ block TestBed
     annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=180,
         origin={-90,160})));
 
-  CDL.Interfaces.RealOutput relHumDOASRet
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput relHumDOASRet
     "Measured DOAS return air relative humidity"
     annotation (Placement(transformation(extent={{580,-200},{620,-160}})));
   ZoneModel_simplified nor(
@@ -481,13 +481,13 @@ block TestBed
   BoundaryConditions.WeatherData.Bus zonMeaBus "Zone measurements bus"
     annotation (Placement(transformation(extent={{204,262},{224,282}}),
         iconTransformation(extent={{38,218},{58,238}})));
-  CDL.Interfaces.RealOutput                        TZon[5]
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput                        TZon[5]
     "Measured zone temperature"
     annotation (Placement(transformation(extent={{580,240},{620,280}})));
-  CDL.Interfaces.RealOutput yRelHumZon[5] "Measured zone relative humidity"
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yRelHumZon[5] "Measured zone relative humidity"
     annotation (Placement(transformation(extent={{580,280},{620,320}}),
         iconTransformation(extent={{580,280},{620,320}})));
-  CDL.Interfaces.RealOutput VDisAir_flow[5]
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput VDisAir_flow[5]
     "Measured zone discharge air volume flow rate"
     annotation (Placement(transformation(extent={{580,200},{620,240}})));
   Modelica.Blocks.Routing.Multiplex5 multiplex5_1
@@ -663,7 +663,7 @@ block TestBed
     annotation (Placement(transformation(extent={{390,110},{430,150}})));
   Modelica.Blocks.Routing.DeMultiplex demux3(n=5)
     annotation (Placement(transformation(extent={{80,280},{100,300}})));
-  CDL.Interfaces.RealInput QFlo[5] "Heate flow rate into the zone"
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput QFlo[5] "Heate flow rate into the zone"
     annotation (Placement(transformation(extent={{-380,270},{-340,310}})));
 equation
 

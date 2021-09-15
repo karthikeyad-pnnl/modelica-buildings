@@ -18,21 +18,36 @@ model ChilledWaterSupplyReset
     annotation (Placement(transformation(extent={{-40,-60},{-20,-40}})));
 
 protected
-  CDL.Continuous.Sources.Constant con(k=0.15)
-                                             "Low valve openign signal"
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(
+    final k=0.15)
+    "Low valve openign signal"
     annotation (Placement(transformation(extent={{-90,60},{-70,80}})));
-  CDL.Continuous.Sources.Constant con1(k=0.55)
-                                              "Medium valve opening signal"
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con1(
+    final k=0.55)
+    "Medium valve opening signal"
     annotation (Placement(transformation(extent={{10,60},{30,80}})));
-  CDL.Continuous.Sources.Constant con2(k=1) "High valve opening signal"
+
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con2(
+    final k=1)
+    "High valve opening signal"
     annotation (Placement(transformation(extent={{-90,-40},{-70,-20}})));
-  CDL.Logical.Sources.Pulse booPul(period=3600, shift=1800)
+
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul(
+    final period=3600,
+    final shift=1800)
     "Condensation sensor signal"
     annotation (Placement(transformation(extent={{-90,20},{-70,40}})));
-  CDL.Logical.Sources.Pulse booPul1(period=3600, shift=1800)
+
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul1(
+    final period=3600,
+    final shift=1800)
     "Condensation sensor signal"
     annotation (Placement(transformation(extent={{10,20},{30,40}})));
-  CDL.Logical.Sources.Pulse booPul2(period=3600, shift=1800)
+
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul2(
+    final period=3600,
+    final shift=1800)
     "Condensation sensor signal"
     annotation (Placement(transformation(extent={{-90,-80},{-70,-60}})));
 
@@ -61,8 +76,8 @@ annotation (
   Documentation(info="<html>
 <p>
 This example validates
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.BypassValvePosition\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.BypassValvePosition</a>.
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ChilledWaterSupplyReset\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ChilledWaterSupplyReset</a>.
 </p>
 </html>", revisions="<html>
 <ul>

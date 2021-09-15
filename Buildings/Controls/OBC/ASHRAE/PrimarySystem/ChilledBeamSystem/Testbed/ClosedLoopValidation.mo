@@ -19,33 +19,33 @@ block ClosedLoopValidation
     annotation (Placement(transformation(extent={{10,-70},{30,-50}})));
   FDE.DOAS.DOAScontroller_modified DOAScon
     annotation (Placement(transformation(extent={{-4,-18},{16,18}})));
-  CDL.Continuous.MultiMax mulMax(nin=5)
+  Buildings.Controls.OBC.CDL.Continuous.MultiMax mulMax(nin=5)
     annotation (Placement(transformation(extent={{-40,50},{-20,70}})));
-  CDL.Continuous.MultiMax mulMax1(nin=5)
+  Buildings.Controls.OBC.CDL.Continuous.MultiMax mulMax1(nin=5)
     annotation (Placement(transformation(extent={{-40,20},{-20,40}})));
-  CDL.Continuous.Sources.TimeTable                        enaSch(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable                        enaSch(
     final table=schTab,
     final smoothness=Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments,
     final timeScale=3600) "Table defining when occupancy is expected"
     annotation (Placement(transformation(extent={{-150,70},{-130,90}})));
 
-  CDL.Continuous.Hysteresis hys(uLow=0.45, uHigh=0.5)
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(uLow=0.45, uHigh=0.5)
     annotation (Placement(transformation(extent={{-120,70},{-100,90}})));
-  CDL.Routing.BooleanReplicator booRep(nout=5)
+  Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(nout=5)
     annotation (Placement(transformation(extent={{-90,70},{-70,90}})));
-  CDL.Logical.Sources.Constant con[5](k=fill(false, 5))
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con[5](k=fill(false, 5))
     "Constant Boolean source"
     annotation (Placement(transformation(extent={{-90,30},{-70,50}})));
-  CDL.Continuous.Sources.Constant con1(k=273.15 + 7.22)
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con1(k=273.15 + 7.22)
     "Chilled water supply temperature"
     annotation (Placement(transformation(extent={{-90,-30},{-70,-10}})));
-  CDL.Continuous.Sources.TimeTable loads(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable loads(
     final table=schTab,
     final smoothness=Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments,
     final timeScale=3600) "Table defining when occupancy is expected"
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
 
-  CDL.Continuous.Sources.Constant con2[5](k=fill(0, 5))    "Zone thermal load"
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con2[5](k=fill(0, 5))    "Zone thermal load"
     annotation (Placement(transformation(extent={{-60,-60},{-40,-40}})));
 equation
   connect(terCon.yReh, testBed.uCAVReh)

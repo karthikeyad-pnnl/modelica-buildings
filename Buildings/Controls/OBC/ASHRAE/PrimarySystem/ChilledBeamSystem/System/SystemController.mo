@@ -5,9 +5,6 @@ block SystemController "Main chilled beam system controller"
     "Number of chilled water pumps"
     annotation (Dialog(group="System parameters"));
 
-  parameter Integer pumStaOrd[nPum]={i for i in 1:nPum}
-    "Chilled water pump staging order";
-
   parameter Integer nVal = 3
     "Total number of chilled water control valves on chilled beams"
     annotation (Dialog(group="System parameters"));
@@ -160,7 +157,9 @@ block SystemController "Main chilled beam system controller"
     annotation (Dialog(tab="Bypass valve parameters",
       group="PID parameters"));
 
-  parameter Real dPumSpe=0.01
+  parameter Real dPumSpe(
+    final unit="1",
+    displayUnit="1")=0.01
     "Value added to minimum pump speed to get upper hysteresis limit"
     annotation (Dialog(tab="Pump control parameters",
       group="Advanced"));
@@ -257,68 +256,85 @@ block SystemController "Main chilled beam system controller"
     annotation (Dialog(tab="Bypass valve parameters",
       group="PID parameters"));
 
-  CDL.Interfaces.BooleanInput uPumSta[nPum] "Pump status from plant"
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uPumSta[nPum]
+    "Pump status from plant"
     annotation (Placement(transformation(extent={{-140,20},{-100,60}})));
 
-  CDL.Interfaces.RealInput dPChiWatLoo
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput dPChiWatLoo
     "Measured chilled water loop differential pressure"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
-  CDL.Interfaces.RealInput uValPos[nVal]
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uValPos[nVal]
     "Measured chilled beam manifold control valve position"
     annotation (Placement(transformation(extent={{-140,-60},{-100,-20}})));
 
-  CDL.Interfaces.BooleanOutput yChiWatPum[nPum]
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yChiWatPum[nPum]
     "Chilled water pump enable signal"
     annotation (Placement(transformation(extent={{100,20},{140,60}})));
-  CDL.Interfaces.RealOutput yPumSpe "Chilled water pump speed signal"
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yPumSpe
+    "Chilled water pump speed signal"
     annotation (Placement(transformation(extent={{100,-20},{140,20}})));
-  CDL.Interfaces.RealOutput yBypValPos "Bypass valve position signal"
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yBypValPos
+    "Bypass valve position signal"
     annotation (Placement(transformation(extent={{100,-60},{140,-20}})));
 
-  SecondaryPumps.Controller secPumCon(
-    nPum=nPum,
-    nVal=nVal,                        nSen=1,
-    minPumSpe=minPumSpe,
-    maxPumSpe=maxPumSpe,
-    speLim=speLim,
-    speLim1=speLim1,
-    speLim2=speLim2,
-    timPer1=timPer1,
-    timPer2=timPer2,
-    timPer3=timPer3,
-    k=kPumSpe,
-    Ti=TiPumSpe,
-    Td=TdPumSpe)
+protected
+  parameter Integer pumStaOrd[nPum]={i for i in 1:nPum}
+    "Chilled water pump staging order";
+
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SecondaryPumps.Controller secPumCon(
+    final nPum=nPum,
+    final nVal=nVal,
+    final nSen=1,
+    final minPumSpe=minPumSpe,
+    final maxPumSpe=maxPumSpe,
+    final speLim=speLim,
+    final speLim1=speLim1,
+    final speLim2=speLim2,
+    final timPer1=timPer1,
+    final timPer2=timPer2,
+    final timPer3=timPer3,
+    final k=kPumSpe,
+    final Ti=TiPumSpe,
+    final Td=TdPumSpe)
+    "Secondary pump controller"
     annotation (Placement(transformation(extent={{0,20},{20,40}})));
-  SetPoints.ChilledWaterStaticPressureSetpointReset chiWatStaPreSetRes(
-    nVal=nVal,
-    nPum=nPum,
-    valPosLowClo=valPosLowClo,
-    valPosLowOpe=valPosLowOpe,
-    valPosHigClo=valPosHigClo,
-    valPosHigOpe=valPosHigOpe,
-    chiWatStaPreMax=chiWatStaPreMax,
-    chiWatStaPreMin=chiWatStaPreMin,
-    triAmoVal=triAmoVal,
-    resAmoVal=resAmoVal,
-    maxResVal=maxResVal,
-    samPerVal=samPerVal,
-    delTimVal=delTimVal,
-    thrTimLow=thrTimLow,
-    thrTimHig=thrTimHig)
+
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ChilledWaterStaticPressureSetpointReset chiWatStaPreSetRes(
+    final nVal=nVal,
+    final nPum=nPum,
+    final valPosLowClo=valPosLowClo,
+    final valPosLowOpe=valPosLowOpe,
+    final valPosHigClo=valPosHigClo,
+    final valPosHigOpe=valPosHigOpe,
+    final chiWatStaPreMax=chiWatStaPreMax,
+    final chiWatStaPreMin=chiWatStaPreMin,
+    final triAmoVal=triAmoVal,
+    final resAmoVal=resAmoVal,
+    final maxResVal=maxResVal,
+    final samPerVal=samPerVal,
+    final delTimVal=delTimVal,
+    final thrTimLow=thrTimLow,
+    final thrTimHig=thrTimHig)
+    "Chilled water static pressure setpoint reset"
     annotation (Placement(transformation(extent={{-40,-70},{-20,-50}})));
-  SetPoints.BypassValvePosition bypValPos(
-    nPum=nPum,
-    minPumSpe=minPumSpe,
-    dPumSpe=dPumSpe,
-    dPChiWatMax=dPChiWatMax,
-    k=kBypVal,
-    Ti=TiBypVal,
-    Td=TdBypVal,
-    controllerType=controllerTypeBypVal)
+
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.BypassValvePosition bypValPos(
+    final nPum=nPum,
+    final minPumSpe=minPumSpe,
+    final dPumSpe=dPumSpe,
+    final dPChiWatMax=dPChiWatMax,
+    final k=kBypVal,
+    final Ti=TiBypVal,
+    final Td=TdBypVal,
+    final controllerType=controllerTypeBypVal)
+    "Bypass valve position controller"
     annotation (Placement(transformation(extent={{40,-40},{60,-20}})));
 
-  CDL.Integers.Sources.Constant conInt[nPum](k=pumStaOrd)
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt[nPum](
+    final k=pumStaOrd)
     "Constant integer source"
     annotation (Placement(transformation(extent={{-80,50},{-60,70}})));
 

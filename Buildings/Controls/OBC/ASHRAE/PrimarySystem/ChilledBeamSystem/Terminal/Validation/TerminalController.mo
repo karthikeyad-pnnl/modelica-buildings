@@ -4,14 +4,18 @@ model TerminalController
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Terminal.TerminalController
     terCon(
-    VDes_occ=0.5,
-    VDes_unoccSch=0.1,
-    VDes_unoccUnsch=0.2)
+    final VDes_occ=0.5,
+    final VDes_unoccSch=0.1,
+    final VDes_unoccUnsch=0.2)
+    "Zone terminal controller"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
 
-  CDL.Discrete.UnitDelay uniDel(samplePeriod=1)
-    annotation (Placement(transformation(extent={{60,-10},{80,10}})));
 protected
+  Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel(
+    final samplePeriod=1)
+    "Unit delay"
+    annotation (Placement(transformation(extent={{60,-10},{80,10}})));
+
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin(
     final amplitude=0.5,
     final freqHz=1/360,
@@ -19,7 +23,8 @@ protected
     "Continuous sine signal"
     annotation (Placement(transformation(extent={{-80,-50},{-60,-30}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul(final width=0.9,
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul(
+    final width=0.9,
     final period=1200)
     "Boolean step signal"
     annotation (Placement(transformation(extent={{-80,30},{-60,50}})));
@@ -35,11 +40,12 @@ protected
     "Continuous sine signal"
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
 
-protected
-  CDL.Logical.Sources.Pulse booPul1(final period=4000) "Boolean pulse source"
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul1(
+    final period=4000)
+    "Boolean pulse source"
     annotation (Placement(transformation(extent={{-80,70},{-60,90}})));
-equation
 
+equation
   connect(booPul.y, not1.u)
     annotation (Line(points={{-58,40},{-42,40}}, color={255,0,255}));
 

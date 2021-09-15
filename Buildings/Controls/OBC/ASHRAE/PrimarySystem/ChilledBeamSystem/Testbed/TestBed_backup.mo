@@ -401,7 +401,7 @@ block TestBed_backup
   Modelica.Blocks.Routing.DeMultiplex demux2(n=2)
     annotation (Placement(transformation(extent={{-280,60},{-260,80}})));
 
-  CDL.Interfaces.RealOutput VDisAir[2]
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput VDisAir[2]
     "Measured discharge air volume flow rate"
     annotation (Placement(transformation(extent={{340,20},{380,60}})));
   Fluid.Sensors.VolumeFlowRate senVolFlo(redeclare package Medium = MediumA)
@@ -412,7 +412,7 @@ block TestBed_backup
     annotation (Placement(transformation(extent={{124,20},{144,40}})));
   Modelica.Blocks.Routing.Multiplex mux3(n=2)
     annotation (Placement(transformation(extent={{312,0},{332,20}})));
-  CDL.Interfaces.RealOutput yDamPos[2] "Measured CAV damper position"
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yDamPos[2] "Measured CAV damper position"
     annotation (Placement(transformation(extent={{340,-10},{380,30}})));
   Fluid.Sensors.RelativeHumidityTwoPort senRelHum(redeclare package Medium =
         MediumA)
@@ -420,7 +420,7 @@ block TestBed_backup
     annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=180,
         origin={-90,160})));
 
-  CDL.Interfaces.RealOutput relHumDOASRet
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput relHumDOASRet
     "Measured DOAS return air relative humidity"
     annotation (Placement(transformation(extent={{340,-200},{380,-160}})));
 equation

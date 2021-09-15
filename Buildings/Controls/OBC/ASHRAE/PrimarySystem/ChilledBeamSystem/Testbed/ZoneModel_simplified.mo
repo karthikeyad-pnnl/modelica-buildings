@@ -19,10 +19,10 @@ block ZoneModel_simplified "Zone model"
     annotation (Placement(transformation(extent={{200,-20},{240,20}}),
         iconTransformation(extent={{100,20},{140,60}})));
 
-  CDL.Interfaces.RealOutput yRelHumZon "Zone relative humidity"
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yRelHumZon "Zone relative humidity"
     annotation (Placement(transformation(extent={{200,70},{240,110}}),
         iconTransformation(extent={{100,60},{140,100}})));
-  CDL.Interfaces.RealOutput VDisAir_flow "Discharge air volume flow rate"
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput VDisAir_flow "Discharge air volume flow rate"
     annotation (Placement(transformation(extent={{200,-100},{240,-60}}),
         iconTransformation(extent={{100,-20},{140,20}})));
   Buildings.Fluid.HeatExchangers.Radiators.RadiatorEN442_2 rad(
