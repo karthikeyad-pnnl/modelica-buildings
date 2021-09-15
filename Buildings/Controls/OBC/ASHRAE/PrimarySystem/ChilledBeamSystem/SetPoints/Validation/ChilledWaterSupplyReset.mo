@@ -3,13 +3,18 @@ model ChilledWaterSupplyReset
   "Validate chilled water request generation sequence"
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ChilledWaterSupplyReset
-    chiWatSupRes "Testing low valve opening"
+    chiWatSupRes
+    "Testing low valve opening"
     annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
+
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ChilledWaterSupplyReset
-    chiWatSupRes1 "Testing medium valve opening"
+    chiWatSupRes1
+    "Testing medium valve opening"
     annotation (Placement(transformation(extent={{60,40},{80,60}})));
+
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ChilledWaterSupplyReset
     chiWatSupRes2
+    "Testing large valve opening"
     annotation (Placement(transformation(extent={{-40,-60},{-20,-40}})));
 
 protected
@@ -30,6 +35,7 @@ protected
   CDL.Logical.Sources.Pulse booPul2(period=3600, shift=1800)
     "Condensation sensor signal"
     annotation (Placement(transformation(extent={{-90,-80},{-70,-60}})));
+
 equation
 
   connect(con.y, chiWatSupRes.uValPos) annotation (Line(points={{-68,70},{-60,70},

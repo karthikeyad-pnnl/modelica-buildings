@@ -1,8 +1,8 @@
-within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Validation;
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Terminal.Validation;
 model TerminalController
   "Validate zone temperature setpoint controller"
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.TerminalController
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Terminal.TerminalController
     terCon(
     VDes_occ=0.5,
     VDes_unoccSch=0.1,
@@ -61,13 +61,13 @@ annotation (
       Interval=1,
       Tolerance=1e-06,
       __Dymola_Algorithm="Cvode"),
-  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/ChilledBeamSystem/Validation/TerminalController.mos"
+  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/ChilledBeamSystem/Terminal/Validation/TerminalController.mos"
     "Simulate and plot"),
   Documentation(info="<html>
 <p>
 This example validates
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.ZoneRegulation.Controller\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.ZoneRegulation.Controller</a>.
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Terminal.TerminalController\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Terminal.TerminalController</a>.
 </p>
 </html>", revisions="<html>
 <ul>

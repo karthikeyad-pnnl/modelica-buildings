@@ -2,7 +2,5 @@ SecondaryPumps
 SetPoints
 Testbed
 Types
-ZoneRegulation
-SystemController
-TerminalController
-Validation
+Terminal
+System

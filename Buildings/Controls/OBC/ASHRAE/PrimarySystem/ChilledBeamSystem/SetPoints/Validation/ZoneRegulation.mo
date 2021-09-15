@@ -1,13 +1,11 @@
-within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.ZoneRegulation.Validation;
-model Controller
-  "Validate zone temperature setpoint controller"
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.Validation;
+model ZoneRegulation "Validate zone regulation controller"
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.ZoneRegulation.Controller
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ZoneRegulation
     zonRegCon(
     final VDes_occ=0.5,
     final VDes_unoccSch=0.1,
-    final VDes_unoccUnsch=0.2)
-    "Zone temperature regulator"
+    final VDes_unoccUnsch=0.2) "Zone temperature regulator"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
 
 protected
@@ -71,13 +69,13 @@ annotation (
       Interval=1,
       Tolerance=1e-06,
       __Dymola_Algorithm="Cvode"),
-  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/ChilledBeamSystem/ZoneRegulation/Validation/Controller.mos"
+  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/ChilledBeamSystem/SetPoints/Validation/ZoneRegulation.mos"
     "Simulate and plot"),
   Documentation(info="<html>
 <p>
 This example validates
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.ZoneRegulation.Controller\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.ZoneRegulation.Controller</a>.
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ZoneRegulation\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.ZoneRegulation</a>.
 </p>
 </html>", revisions="<html>
 <ul>
@@ -99,4 +97,4 @@ First implementation.
                 fillPattern = FillPattern.Solid,
                 points = {{-36,60},{64,0},{-36,-60},{-36,60}})}), Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})));
-end Controller;
+end ZoneRegulation;

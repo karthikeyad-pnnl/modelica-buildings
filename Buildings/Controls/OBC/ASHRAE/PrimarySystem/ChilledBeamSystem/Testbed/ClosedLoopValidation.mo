@@ -10,12 +10,12 @@ block ClosedLoopValidation
     mChiWatWes_flow_nominal=20,
     mChiWatCor_flow_nominal=20)
     annotation (Placement(transformation(extent={{60,-20},{128,20}})));
-  TerminalController terCon[5](
+  Terminal.TerminalController terCon[5](
     VDes_occ=0.5,
     VDes_unoccSch=0.1,
     VDes_unoccUnsch=0.2) "Terminal controllers"
     annotation (Placement(transformation(extent={{10,40},{30,60}})));
-  SystemController sysCon(nPum=1, nVal=5)
+  System.SystemController sysCon(nPum=1, nVal=5)
     annotation (Placement(transformation(extent={{10,-70},{30,-50}})));
   FDE.DOAS.DOAScontroller_modified DOAScon
     annotation (Placement(transformation(extent={{-4,-18},{16,18}})));
@@ -42,10 +42,10 @@ block ClosedLoopValidation
   CDL.Continuous.Sources.TimeTable loads(
     final table=schTab,
     final smoothness=Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments,
-
     final timeScale=3600) "Table defining when occupancy is expected"
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
-  CDL.Continuous.Sources.Constant con2[5](k=fill(1000, 5)) "Zone thermal load"
+
+  CDL.Continuous.Sources.Constant con2[5](k=fill(0, 5))    "Zone thermal load"
     annotation (Placement(transformation(extent={{-60,-60},{-40,-40}})));
 equation
   connect(terCon.yReh, testBed.uCAVReh)
@@ -123,8 +123,8 @@ equation
                                    color={0,0,127}));
   connect(testBed.TZon, terCon.TZon) annotation (Line(points={{129.478,14.2857},
           {132,14.2857},{132,72},{4,72},{4,50},{8,50}}, color={0,0,127}));
-  connect(testBed.VDisAir_flow, terCon.VDis_flow) annotation (Line(points={{
-          129.478,11.4286},{136,11.4286},{136,76},{2,76},{2,46},{8,46}}, color=
+  connect(testBed.VDisAir_flow, terCon.VDis_flow) annotation (Line(points={{129.478,
+          11.4286},{136,11.4286},{136,76},{2,76},{2,46},{8,46}},         color=
           {0,0,127}));
   connect(testBed.TZon, mulMax.u[1:5]) annotation (Line(points={{129.478,
           14.2857},{132,14.2857},{132,72},{-44,72},{-44,58.4},{-42,58.4}},

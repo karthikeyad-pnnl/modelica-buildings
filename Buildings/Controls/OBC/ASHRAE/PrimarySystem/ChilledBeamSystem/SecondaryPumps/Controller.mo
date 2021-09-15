@@ -131,6 +131,12 @@ block Controller
     annotation (Dialog(tab="Pump control parameters",
       group="PID parameters"));
 
+  parameter Real sigDif(
+    final unit="1",
+    displayUnit="1")=0.01
+    "Constant value used in hysteresis for checking pump speed"
+    annotation (Dialog(tab="Advanced"));
+
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uChiWatPum[nPum]
     "Pumps operating status"
     annotation (Placement(transformation(extent={{-320,110},{-280,150}}),
@@ -183,7 +189,8 @@ block Controller
     final speLim2=speLim2,
     final timPer=timPer1,
     final timPer1=timPer2,
-    final timPer2=timPer3)
+    final timPer2=timPer3,
+    sigDif=sigDif)
     "Enable and disable lag pumps using pump speed"
     annotation (Placement(transformation(extent={{-120,28},{-100,48}})));
 

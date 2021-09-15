@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem;
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Terminal;
 package Validation "Collection of validation models"
 
 annotation (preferredView="info", Documentation(info="<html>

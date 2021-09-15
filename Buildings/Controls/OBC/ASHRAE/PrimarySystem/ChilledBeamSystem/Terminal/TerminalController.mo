@@ -1,6 +1,5 @@
-within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem;
-block TerminalController
-  "Terminal controller"
+within Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.Terminal;
+block TerminalController "Terminal controller"
 
   parameter Integer nSchRow=4
     "Number of rows in schedule table";
@@ -229,7 +228,7 @@ block TerminalController
     "Determine operating mode for zone"
     annotation (Placement(transformation(extent={{-80,70},{-60,90}})));
 
-  ZoneRegulation.Controller zonRegCon(
+  SetPoints.ZoneRegulation zonRegCon(
     conSenOnThr=conSenOnThr,
     controllerTypeCoo=controllerTypeCoo,
     kCoo=kCoo,
@@ -252,7 +251,6 @@ block TerminalController
     zonUnoccCooSet=zonUnoccCooSet)
     annotation (Placement(transformation(extent={{-10,20},{10,40}})));
 
-
   SetPoints.ChilledWaterSupplyReset chiWatSupRes(
     valPosLowCloReq=valPosLowCloReq,
     valPosLowOpeReq=valPosLowOpeReq,
@@ -267,9 +265,6 @@ block TerminalController
     thrTimLowTemRes=thrTimLowTemRes,
     thrTimHigTemRes=thrTimHigTemRes)
     annotation (Placement(transformation(extent={{-10,-70},{10,-50}})));
-
-
-
 
 equation
   connect(uDetOcc, opeMod.uDetOcc)

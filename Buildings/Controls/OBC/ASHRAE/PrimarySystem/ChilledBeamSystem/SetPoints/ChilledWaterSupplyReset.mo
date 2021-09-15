@@ -254,27 +254,47 @@ annotation(defaultComponentName="chiWatSupRes",
   Diagram(coordinateSystem(preserveAspectRatio=false)),
   Documentation(info="<html>
 <p>
-Sequences for calculating chilled water static pressure setpoint in chilled beam 
-systems.
+Sequences for generating requests for chilled water supply and chilled water
+supply temperature setpoint reset.
 </p>
 <p>
-The trim-and-respond logic is activated if any of the chilled water control valves 
-<code>uValPos</code> are open greater than <code>valPosOpe</code> and deactivated
-if less than <code>valPosClo</code>. The requests for static pressure reset are
-generated as follows:
+This block generates requests for chilled water supply <code>yChiWatSupReq</code>
+and chilled water supply temperature setpoint reset <code>TChiWatReq</code>. The
+requests are generated as follows:
+<ol>
+<li>
+Chilled water supply
 <ul>
 <li>
-one request is generated if a control valve is open greater than <code>valPosLowOpe</code>
-for <code>thrTimLow</code> continuously.
+one request is generated if a control valve is open greater than <code>valPosLowOpeReq</code>
+for <code>thrTimLowReq</code> continuously.
 </li>
 <li>
-two requests are generated if a control valve is open greater than <code>valPosHigOpe</code>
-for <code>thrTimHig</code> continuously.
+two requests are generated if a control valve is open greater than <code>valPosHigOpeReq</code>
+for <code>thrTimHigReq</code> continuously.
 </li>
 <li>
 no requests are generated otherwise.
 </li>
 </ul>
+</li>
+<li>
+Chilled water supply temperature setpoint reset
+<ul>
+<li>
+one request is generated if a control valve is open greater than <code>valPosLowOpeTemRes</code>
+for <code>thrTimLowTemRes</code> continuously.
+</li>
+<li>
+two requests are generated if a control valve is open greater than <code>valPosHigOpeTemRes</code>
+for <code>thrTimHigTemRes</code> continuously.
+</li>
+<li>
+no requests are generated otherwise.
+</li>
+</ul>
+</li>
+</ol>
 </p>
 </html>",
 revisions="<html>
