@@ -4,10 +4,10 @@ model RadiatorEN442_2 "Test model for radiator"
  package Medium = Buildings.Media.Water "Medium model";
  parameter Modelica.SIunits.Temperature TRoo = 20+273.15 "Room temperature"
     annotation (Evaluate=false);
- parameter Modelica.SIunits.Power Q_flow_nominal = 500 "Nominal power";
-  parameter Modelica.SIunits.Temperature T_a_nominal=313.15
+ parameter Modelica.SIunits.Power Q_flow_nominal = -500 "Nominal power";
+  parameter Modelica.SIunits.Temperature T_a_nominal= 288.15
     "Radiator inlet temperature at nominal condition";
- parameter Modelica.SIunits.Temperature T_b_nominal = 303.15
+ parameter Modelica.SIunits.Temperature T_b_nominal = 289.15
     "Radiator outlet temperature at nominal condition";
  parameter Modelica.SIunits.MassFlowRate m_flow_nominal=
     Q_flow_nominal/(T_a_nominal-T_b_nominal)/Medium.cp_const

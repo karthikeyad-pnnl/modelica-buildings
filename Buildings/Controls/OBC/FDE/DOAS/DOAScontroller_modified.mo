@@ -31,7 +31,7 @@ block DOAScontroller_modified "DOAS controller built from DOAS blocks."
   parameter Real dehumSet(
     final min=0,
     final max=100,
-    final displayUnit="rh")=60
+    displayUnit="rh")=60
    "Dehumidification set point."
     annotation (Dialog(tab="Dehumidification", group="Set Point"));
 
@@ -49,21 +49,21 @@ block DOAScontroller_modified "DOAS controller built from DOAS blocks."
 
   parameter Real econCooAdj(
     final unit="K",
-    final displayUnit="degC",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature")=2
     "Value subtracted from supply air temperature cooling set point."
      annotation (Dialog(tab="Economizer", group="Set Point"));
 
  parameter Real erwDPadj(
     final unit="K",
-    final displayUnit="degC",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature")=5
     "Value subtracted from ERW supply air dewpoint."
     annotation (Dialog(tab="Energy Recovery Wheel", group="Set Point"));
 
  parameter Real recSet(
     final unit="K",
-    final displayUnit="degC",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature")=7
     "Energy recovery set point."
     annotation (Dialog(tab="Energy Recovery Wheel", group="Set Point"));
@@ -121,42 +121,42 @@ block DOAScontroller_modified "DOAS controller built from DOAS blocks."
 
  parameter Real loPriT(
    final unit="K",
-   final displayUnit="degC",
+   displayUnit="degC",
    final quantity="ThermodynamicTemperature")=273.15+20
    "Minimum primary supply air temperature reset value"
    annotation (Dialog(tab="Temperature", group="Set Point"));
 
  parameter Real hiPriT(
    final unit="K",
-   final displayUnit="degC",
+   displayUnit="degC",
    final quantity="ThermodynamicTemperature")=273.15+24
    "Maximum primary supply air temperature reset value"
    annotation (Dialog(tab="Temperature", group="Set Point"));
 
  parameter Real hiZonT(
    final unit="K",
-   final displayUnit="degC",
+   displayUnit="degC",
    final quantity="ThermodynamicTemperature")=273.15+25
    "Maximum zone temperature reset value"
    annotation (Dialog(tab="Temperature", group="Set Point"));
 
  parameter Real loZonT(
    final unit="K",
-   final displayUnit="degC",
+   displayUnit="degC",
    final quantity="ThermodynamicTemperature")=273.15+21
    "Minimum zone temperature reset value"
    annotation (Dialog(tab="Temperature", group="Set Point"));
 
  parameter Real coAdj(
    final unit="K",
-   final displayUnit="degC",
+   displayUnit="degC",
    final quantity="ThermodynamicTemperature")=2
    "Supply air temperature cooling set point offset."
    annotation (Dialog(tab="Temperature", group="Set Point"));
 
  parameter Real heAdj(
    final unit="K",
-   final displayUnit="degC",
+   displayUnit="degC",
    final quantity="ThermodynamicTemperature")=2
    "Supply air temperature heating set point offset."
    annotation (Dialog(tab="Temperature", group="Set Point"));
@@ -183,20 +183,20 @@ block DOAScontroller_modified "DOAS controller built from DOAS blocks."
   Buildings.Controls.OBC.CDL.Interfaces.RealInput retHum(
       final min=0,
     final max=100,
-    final displayUnit="rh")
+    displayUnit="rh")
     "Return air relative humidity sensor."
     annotation (Placement(transformation(extent={{-140,-80},{-100,-40}}),
         iconTransformation(extent={{-140,-20},{-100,20}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput saT(
    final unit="K",
-   final displayUnit="degC",
+   displayUnit="degC",
    final quantity="ThermodynamicTemperature")
     "Supply air temperature sensor."
     annotation (Placement(transformation(extent={{-140,-106},{-100,-66}}),
         iconTransformation(extent={{-140,-72},{-100,-32}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput highSpaceT(
    final unit="K",
-   final displayUnit="degC",
+   displayUnit="degC",
    final quantity="ThermodynamicTemperature")
     "Highest space temperature reported from all terminal units."
     annotation (Placement(transformation(extent={{-140,-50},{-100,-10}}),
@@ -220,7 +220,10 @@ block DOAScontroller_modified "DOAS controller built from DOAS blocks."
     annotation (Placement(transformation(extent={{102,-24},{142,16}}),
       iconTransformation(extent={{102,-60},{142,-20}})));
 
-  Buildings.Controls.OBC.FDE.DOAS.SupplyFanController SFcon
+  Buildings.Controls.OBC.FDE.DOAS.SupplyFanController SFcon(
+    minDDSPset=400,
+    maxDDSPset=500,
+    cvDDSPset=450)
     "This block manages start, stop, status, and speed of the supply fan."
     annotation (Placement(transformation(extent={{-84,58},{-64,78}})));
   Buildings.Controls.OBC.FDE.DOAS.CoolingCoil Cooling
@@ -229,7 +232,13 @@ block DOAScontroller_modified "DOAS controller built from DOAS blocks."
   Buildings.Controls.OBC.FDE.DOAS.HeatingCoil Heating
     "This block commands the heating coil."
     annotation (Placement(transformation(extent={{58,-18},{78,2}})));
-  Buildings.Controls.OBC.FDE.DOAS.TSupSet TSupSetpt
+  Buildings.Controls.OBC.FDE.DOAS.TSupSet TSupSetpt(
+    loPriT=291.15,
+    hiPriT=294.15,
+    hiZonT(displayUnit="degC") = 295.15,
+    loZonT(displayUnit="degC") = 294.15,
+    coAdj(displayUnit="K") = 0,
+    heAdj(displayUnit="K") = +1)
     "This block caclulates the DOAS supply air temperature set point."
     annotation (Placement(transformation(extent={{-8,-6},{12,14}})));
   Buildings.Controls.OBC.FDE.DOAS.DehumMode DehumMod

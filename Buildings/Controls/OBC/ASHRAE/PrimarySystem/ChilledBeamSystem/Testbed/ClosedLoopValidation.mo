@@ -3,12 +3,27 @@ block ClosedLoopValidation
   parameter Real schTab[5,2]=[0,0; 8,1; 18,1; 21,0; 24,0]
     "Table defining schedule for enabling plant";
 
-  TestBed testBed(
-    mChiWatSou_flow_nominal=20,
-    mChiWatEas_flow_nominal=20,
-    mChiWatNor_flow_nominal=20,
-    mChiWatWes_flow_nominal=20,
-    mChiWatCor_flow_nominal=20)
+  TestBed_v2 testBed(
+    TChiWatRet_nominal=273.15 + 25,
+    mChiWatTot_flow_nominal=1.514,
+    mAirTot_flow_nominal=0.676*1.225,
+    mHotWatCoi_nominal=0.078,
+    mChiWatCoi_nominal=0.645,
+    mChiWatSou_flow_nominal=0.387,
+    mAirSou_flow_nominal=0.143*1.225,
+    mAChiBeaSou_flow_nominal=0.143*1.225,
+    mChiWatEas_flow_nominal=0.342,
+    mAirEas_flow_nominal=0.065*1.225,
+    mAChiBeaEas_flow_nominal=0.065*1.225,
+    mChiWatNor_flow_nominal=0.253,
+    mAirNor_flow_nominal=0.143*1.225,
+    mAChiBeaNor_flow_nominal=0.143*1.225,
+    mChiWatWes_flow_nominal=0.262,
+    mAirWes_flow_nominal=0.065*1.225,
+    mAChiBeaWes_flow_nominal=0.065*1.225,
+    mChiWatCor_flow_nominal=0.27,
+    mAirCor_flow_nominal=0.26*1.225,
+    mAChiBeaCor_flow_nominal=0.26*1.225)
     annotation (Placement(transformation(extent={{60,-20},{128,20}})));
   Terminal.TerminalController terCon[5](
     VDes_occ=0.5,
@@ -17,7 +32,10 @@ block ClosedLoopValidation
     annotation (Placement(transformation(extent={{10,40},{30,60}})));
   System.SystemController sysCon(nPum=1, nVal=5)
     annotation (Placement(transformation(extent={{10,-70},{30,-50}})));
-  FDE.DOAS.DOAScontroller_modified DOAScon
+  FDE.DOAS.DOAScontroller_modified DOAScon(
+    minDDSPset=400,
+    maxDDSPset=500,
+    cvDDSPset=450)
     annotation (Placement(transformation(extent={{-4,-18},{16,18}})));
   Buildings.Controls.OBC.CDL.Continuous.MultiMax mulMax(nin=5)
     annotation (Placement(transformation(extent={{-40,50},{-20,70}})));
@@ -39,14 +57,15 @@ block ClosedLoopValidation
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con1(k=273.15 + 7.22)
     "Chilled water supply temperature"
     annotation (Placement(transformation(extent={{-90,-30},{-70,-10}})));
-  Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable loads(
-    final table=schTab,
-    final smoothness=Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments,
-    final timeScale=3600) "Table defining when occupancy is expected"
-    annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con2[5](k=fill(0, 5))    "Zone thermal load"
+  Modelica.Blocks.Sources.CombiTimeTable loads(
+    tableOnFile=true,
+    tableName="tab1",
+    fileName=
+        "C:/buildings_library/buildings_library_pnnl/VM_script/inputTable.txt",
+    columns={2,3,4,5,6},
+    timeScale=60) "Table defining thermal loads for zone"
     annotation (Placement(transformation(extent={{-60,-60},{-40,-40}})));
+
 equation
   connect(terCon.yReh, testBed.uCAVReh)
     annotation (Line(points={{32,58},{50,58},{50,2.85714},{58.5217,2.85714}},
@@ -132,14 +151,16 @@ equation
   connect(testBed.yDamPos, mulMax1.u[1:5]) annotation (Line(points={{129.478,
           -3.57143},{148,-3.57143},{148,86},{-50,86},{-50,28.4},{-42,28.4}},
         color={0,0,127}));
-  connect(con2.y, testBed.QFlo) annotation (Line(points={{-38,-50},{0,-50},{0,
-          -26},{46,-26},{46,16.4286},{58.5217,16.4286}}, color={0,0,127}));
+  connect(loads.y, testBed.QFlo) annotation (Line(points={{-39,-50},{-30,-50},{
+          -30,14},{-16,14},{-16,28},{46,28},{46,16.4286},{58.5217,16.4286}},
+        color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,-100},
             {160,100}})),                                        Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-160,-100},{160,100}})),
     experiment(
-      StopTime=86400,
-      Interval=60,
+      StartTime=6393600,
+      StopTime=6566400,
+      Interval=600,
       Tolerance=1e-06,
       __Dymola_Algorithm="Cvode"));
 end ClosedLoopValidation;

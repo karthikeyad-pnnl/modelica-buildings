@@ -4,44 +4,44 @@ block TSupSet
 
   parameter Real loPriT(
    final unit="K",
-   final displayUnit="degC",
+   displayUnit="degC",
    final quantity="ThermodynamicTemperature")=273.15+20
    "Minimum primary supply air temperature reset value";
 
   parameter Real hiPriT(
    final unit="K",
-   final displayUnit="degC",
+   displayUnit="degC",
    final quantity="ThermodynamicTemperature")=273.15+24
    "Maximum primary supply air temperature reset value";
 
   parameter Real hiZonT(
    final unit="K",
-   final displayUnit="degC",
+   displayUnit="degC",
    final quantity="ThermodynamicTemperature")=273.15+25
    "Maximum zone temperature reset value";
 
   parameter Real loZonT(
    final unit="K",
-   final displayUnit="degC",
+   displayUnit="degC",
    final quantity="ThermodynamicTemperature")=273.15+21
    "Minimum zone temperature reset value";
 
   parameter Real coAdj(
    final unit="K",
-   final displayUnit="degC",
-   final quantity="ThermodynamicTemperature")=2
+   displayUnit="degC",
+   final quantity="TemperatureDifference")=2
    "Supply air temperature cooling set point offset.";
 
   parameter Real heAdj(
    final unit="K",
-   final displayUnit="degC",
-   final quantity="ThermodynamicTemperature")=2
+   displayUnit="degC",
+   final quantity="TemperatureDifference")=2
    "Supply air temperature heating set point offset.";
 
   // ---inputs---
   Buildings.Controls.OBC.CDL.Interfaces.RealInput highSpaceT(
    final unit="K",
-   final displayUnit="degC",
+   displayUnit="degC",
    final quantity="ThermodynamicTemperature")
     "Highest space temperature reported from all terminal units."
       annotation (Placement(transformation(extent={{-142,-18},{-102,22}}),
@@ -53,20 +53,26 @@ block TSupSet
         iconTransformation(extent={{-140,30},{-100,70}})));
 
   // ---outputs---
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput supCooSP
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput supCooSP(
+   final unit="K",
+   displayUnit="degC",
+   final quantity="ThermodynamicTemperature")
     "Supply air temperature cooling set point."
-      annotation (Placement(transformation(extent={{102,16},{142,56}}),
+      annotation (Placement(transformation(extent={{100,10},{140,50}}),
         iconTransformation(extent={{102,20},{142,60}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput supHeaSP
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput supHeaSP(
+   final unit="K",
+   displayUnit="degC",
+   final quantity="ThermodynamicTemperature")
     "Supply air temperature heating set point"
-      annotation (Placement(transformation(extent={{102,-52},{142,-12}}),
+      annotation (Placement(transformation(extent={{100,-50},{140,-10}}),
         iconTransformation(extent={{102,-60},{142,-20}})));
 
 
   Buildings.Controls.OBC.CDL.Continuous.Line lin
     "Linear converter resets primary supply set point."
-    annotation (Placement(transformation(extent={{-42,-8},{-22,12}})));
+    annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant lowPriT(
     final k=loPriT)
       "Low primary supply temperature set point reset value."
@@ -85,66 +91,67 @@ block TSupSet
         annotation (Placement(transformation(extent={{-90,42},{-70,62}})));
   Buildings.Controls.OBC.CDL.Continuous.Add add2
     "Adds the cooling set point adjustment to the primary set point."
-    annotation (Placement(transformation(extent={{22,26},{42,46}})));
+    annotation (Placement(transformation(extent={{60,20},{80,40}})));
   Buildings.Controls.OBC.CDL.Continuous.Add add1(
     final k2=-1)
     "Subtracts the heating set point adjustment from the primary set point."
-      annotation (Placement(transformation(extent={{22,-50},{42,-30}})));
+      annotation (Placement(transformation(extent={{60,-40},{80,-20}})));
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant coolAdj(
     final k=coAdj)
       "Supply air temperature cooling set point offset."
-        annotation (Placement(transformation(extent={{-14,44},{6,64}})));
+        annotation (Placement(transformation(extent={{20,40},{40,60}})));
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant heatAdj(
     final k=heAdj)
       "Supply air temperature heating set point offset."
-      annotation (Placement(transformation(extent={{-14,-66},{6,-46}})));
+      annotation (Placement(transformation(extent={{20,-60},{40,-40}})));
   Buildings.Controls.OBC.CDL.Logical.Switch dehumSwi
     "Logical switch changes heating set point based on dehumidification mode."
-    annotation (Placement(transformation(extent={{66,-42},{86,-22}})));
+    annotation (Placement(transformation(extent={{0,-30},{20,-10}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput supPrimSP
     "Supply air primary temperature set point."
-      annotation (Placement(transformation(extent={{102,-18},{142,22}}),
-          iconTransformation(extent={{102,-20},{142,20}})));
+      annotation (Placement(transformation(extent={{100,-20},{140,20}}),
+          iconTransformation(extent={{100,-20},{140,20}})));
+  CDL.Continuous.Sources.Constant con(k=273.15 + 12.78)
+    annotation (Placement(transformation(extent={{-40,20},{-20,40}})));
 equation
   connect(lin.u, highSpaceT)
-    annotation (Line(points={{-44,2},{-122,2}}, color={0,0,127}));
+    annotation (Line(points={{-42,0},{-84,0},{-84,2},{-122,2}},
+                                                color={0,0,127}));
   connect(heatAdj.y, add1.u2)
-    annotation (Line(points={{8,-56},{14,-56},{14,-46},{20,-46}},
+    annotation (Line(points={{42,-50},{52,-50},{52,-36},{58,-36}},
       color={0,0,127}));
   connect(coolAdj.y, add2.u1)
-    annotation (Line(points={{8,54},{14,54},{14,42},{20,42}},
-      color={0,0,127}));
-  connect(lin.y, add2.u2)
-    annotation (Line(points={{-20,2},{2,2},{2,30},{20,30}}, color={0,0,127}));
-  connect(lin.y, add1.u1)
-    annotation (Line(points={{-20,2},{2,2},{2,-34},{20,-34}},
-        color={0,0,127}));
-  connect(add1.y, dehumSwi.u3)
-    annotation (Line(points={{44,-40},{64,-40}}, color={0,0,127}));
-  connect(add2.y, supCooSP)
-    annotation (Line(points={{44,36},{122,36}}, color={0,0,127}));
-  connect(dehumSwi.y, supHeaSP)
-    annotation (Line(points={{88,-32},{122,-32}}, color={0,0,127}));
-  connect(add2.y, dehumSwi.u1)
-    annotation (Line(points={{44,36},{54,36},{54,-24},{64,-24}},
+    annotation (Line(points={{42,50},{50,50},{50,36},{58,36}},
       color={0,0,127}));
   connect(dehumSwi.u2, dehumMode)
-    annotation (Line(points={{64,-32},{54,-32},{54,-82},{-122,-82}},
+    annotation (Line(points={{-2,-20},{-40,-20},{-40,-82},{-122,-82}},
       color={255,0,255}));
   connect(highZoneT.y, lin.x2)
-    annotation (Line(points={{-68,-18},{-58,-18},{-58,-2},{-44,-2}},
+    annotation (Line(points={{-68,-18},{-58,-18},{-58,-4},{-42,-4}},
       color={0,0,127}));
   connect(lowZoneT.y, lin.x1)
-    annotation (Line(points={{-68,52},{-52,52},{-52,10},{-44,10}},
+    annotation (Line(points={{-68,52},{-52,52},{-52,8},{-42,8}},
       color={0,0,127}));
   connect(highPriT.y, lin.f1)
-    annotation (Line(points={{-68,20},{-56,20},{-56,6},{-44,6}},
+    annotation (Line(points={{-68,20},{-56,20},{-56,4},{-42,4}},
       color={0,0,127}));
   connect(lowPriT.y, lin.f2)
-    annotation (Line(points={{-68,-50},{-52,-50},{-52,-6},{-44,-6}},
+    annotation (Line(points={{-68,-50},{-52,-50},{-52,-8},{-42,-8}},
       color={0,0,127}));
+  connect(add1.y, supHeaSP)
+    annotation (Line(points={{82,-30},{120,-30}}, color={0,0,127}));
+  connect(dehumSwi.y, add1.u1) annotation (Line(points={{22,-20},{50,-20},{50,
+          -24},{58,-24}}, color={0,0,127}));
+  connect(lin.y, dehumSwi.u3) annotation (Line(points={{-18,0},{-10,0},{-10,-28},
+          {-2,-28}}, color={0,0,127}));
   connect(lin.y, supPrimSP)
-    annotation (Line(points={{-20,2},{122,2}}, color={0,0,127}));
+    annotation (Line(points={{-18,0},{120,0}}, color={0,0,127}));
+  connect(dehumSwi.y, add2.u2) annotation (Line(points={{22,-20},{50,-20},{50,
+          24},{58,24}}, color={0,0,127}));
+  connect(add2.y, supCooSP)
+    annotation (Line(points={{82,30},{120,30}}, color={0,0,127}));
+  connect(con.y, dehumSwi.u1) annotation (Line(points={{-18,30},{-6,30},{-6,-12},
+          {-2,-12}}, color={0,0,127}));
   annotation (defaultComponentName="TSupSetpt",
     Icon(coordinateSystem(preserveAspectRatio=false), graphics={
            Text(

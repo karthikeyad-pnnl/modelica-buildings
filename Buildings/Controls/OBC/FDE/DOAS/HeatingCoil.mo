@@ -31,7 +31,7 @@ block HeatingCoil
   Buildings.Controls.OBC.CDL.Continuous.PID conPID(
     final k=SArhcPIk,
     final Ti=SArhcPITi,
-    reverseActing=false)
+    reverseActing=true)
     "PI calculation of supply air temperature and supply air heating set point"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
   Buildings.Controls.OBC.CDL.Logical.Switch swi

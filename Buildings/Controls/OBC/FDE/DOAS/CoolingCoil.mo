@@ -16,24 +16,24 @@ block CoolingCoil
 
   parameter Real erwDPadj(
    final unit="K",
-   final displayUnit="degC",
+   displayUnit="degC",
    final quantity="ThermodynamicTemperature")=5
    "Value subtracted from ERW supply air dewpoint.";
 
     // ---inputs---
   Buildings.Controls.OBC.CDL.Interfaces.RealInput saT(
    final unit="K",
-   final displayUnit="degC",
+   displayUnit="degC",
    final quantity="ThermodynamicTemperature") "Supply air temperature sensor."
-      annotation (Placement(transformation(extent={{-142,-60},{-102,-20}}),
+      annotation (Placement(transformation(extent={{-140,-90},{-100,-50}}),
         iconTransformation(extent={{-142,36},{-102,76}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput supCooSP(
    final unit="K",
-   final displayUnit="degC",
+   displayUnit="degC",
    final quantity="ThermodynamicTemperature")
     "Supply air temperature cooling set point."
-      annotation (Placement(transformation(extent={{-140,-90},{-100,-50}}),
+      annotation (Placement(transformation(extent={{-140,-60},{-100,-20}}),
         iconTransformation(extent={{-142,8},{-102,48}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput supFanProof
@@ -50,7 +50,8 @@ block CoolingCoil
 
   Buildings.Controls.OBC.CDL.Continuous.PID conPID(
     k=SAccPIk,
-    Ti=SAccPITi)
+    Ti=SAccPITi,
+    reverseActing=false)
     "PI calculation of supply air temperature and supply air cooling set point"
     annotation (Placement(transformation(extent={{-70,-50},{-50,-30}})));
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con0(
@@ -65,11 +66,6 @@ equation
   connect(conPID.y, swi.u1)
     annotation (Line(points={{-48,-40},{-22,-40},{-22,-36},{12,-36}},
                                                   color={0,0,127}));
-  connect(conPID.u_s, saT)
-    annotation (Line(points={{-72,-40},{-122,-40}}, color={0,0,127}));
-  connect(conPID.u_m, supCooSP)
-    annotation (Line(points={{-60,-52},{-60,-70},{-120,-70}},
-      color={0,0,127}));
   connect(con0.y, swi.u3)
     annotation (Line(points={{2,-52},{12,-52}}, color={0,0,127}));
   connect(swi.u2, supFanProof)
@@ -77,6 +73,10 @@ equation
       color={255,0,255}));
   connect(swi.y, yCC) annotation (Line(points={{36,-44},{60,-44},{60,80},{120,
           80}}, color={0,0,127}));
+  connect(saT, conPID.u_m) annotation (Line(points={{-120,-70},{-60,-70},{-60,
+          -52}}, color={0,0,127}));
+  connect(supCooSP, conPID.u_s)
+    annotation (Line(points={{-120,-40},{-72,-40}}, color={0,0,127}));
   annotation (defaultComponentName="Cooling",
     Icon(coordinateSystem(preserveAspectRatio=false), graphics={
             Rectangle(extent={{-100,100},{100,-100}},

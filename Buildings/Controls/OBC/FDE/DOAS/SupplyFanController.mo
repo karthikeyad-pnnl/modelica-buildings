@@ -73,7 +73,9 @@ block SupplyFanController
     k=0.0000001,
     Ti=0.00025,
     yMax=maxDDSPset,
-    yMin=minDDSPset) if    vvUnit
+    yMin=minDDSPset,
+    reverseActing=false) if
+                           vvUnit
     "Calculates DDSP reset value for VV units."
       annotation (Placement(transformation(extent={{-72,4},{-52,24}})));
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant dampSet(
@@ -81,7 +83,7 @@ block SupplyFanController
     "Most open damper position set point."
       annotation (Placement(transformation(extent={{-98,4},{-78,24}})));
   Buildings.Controls.OBC.CDL.Continuous.PID conPID(k=0.0000001, Ti=0.00025,
-    reverseActing=false)
+    reverseActing=true)
     "PI calculation for fan speed."
       annotation (Placement(transformation(extent={{48,-40},{68,-20}})));
   Buildings.Controls.OBC.CDL.Logical.Sources.Constant conVVunit(
