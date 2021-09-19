@@ -26,6 +26,9 @@ block ClosedLoopValidation
     mAChiBeaCor_flow_nominal=0.26*1.225)
     annotation (Placement(transformation(extent={{60,-20},{128,20}})));
   Terminal.TerminalController terCon[5](
+    controllerTypeCoo=Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
+    TiCoo={900,50,900,900,900},
+    TdCoo={0.1,100,0.1,0.1,0.1},
     VDes_occ=0.5,
     VDes_unoccSch=0.1,
     VDes_unoccUnsch=0.2) "Terminal controllers"
