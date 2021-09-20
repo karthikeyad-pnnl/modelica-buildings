@@ -41,9 +41,9 @@ block ClosedLoopValidation
     maxDDSPset=500,
     cvDDSPset=450)
     annotation (Placement(transformation(extent={{-4,-18},{16,18}})));
-  Buildings.Controls.OBC.CDL.Continuous.MultiMax mulMax(nin=5)
+  Buildings.Controls.OBC.CDL.Continuous.MultiMax TZonMax(nin=5)
     annotation (Placement(transformation(extent={{-40,50},{-20,70}})));
-  Buildings.Controls.OBC.CDL.Continuous.MultiMax mulMax1(nin=5)
+  Buildings.Controls.OBC.CDL.Continuous.MultiMax yDamPosMax(nin=5)
     annotation (Placement(transformation(extent={{-40,20},{-20,40}})));
   Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable                        enaSch(
     final table=schTab,
@@ -55,11 +55,11 @@ block ClosedLoopValidation
     annotation (Placement(transformation(extent={{-120,70},{-100,90}})));
   Buildings.Controls.OBC.CDL.Routing.BooleanReplicator booRep(nout=5)
     annotation (Placement(transformation(extent={{-90,70},{-70,90}})));
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con[5](k=fill(false, 5))
-    "Constant Boolean source"
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant uConSig[5](k=fill(false,
+        5)) "Constant Boolean source"
     annotation (Placement(transformation(extent={{-90,30},{-70,50}})));
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con1(k=273.15 + 7.22)
-    "Chilled water supply temperature"
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant chiWatSupTem(k=273.15
+         + 7.22) "Chilled water supply temperature"
     annotation (Placement(transformation(extent={{-90,-30},{-70,-10}})));
   Modelica.Blocks.Sources.CombiTimeTable loads(
     tableOnFile=true,
@@ -119,12 +119,10 @@ equation
   connect(testBed.TDOASDis, DOAScon.saT) annotation (Line(points={{129.478,-15},
           {132,-15},{132,-30},{-10,-30},{-10,1.90588},{-6,1.90588}},
                                                            color={0,0,127}));
-  connect(mulMax.y, DOAScon.highSpaceT) annotation (Line(points={{-18,60},{-10,
-          60},{-10,4.65882},{-6,4.65882}},
-                                        color={0,0,127}));
-  connect(mulMax1.y, DOAScon.mostOpenDam) annotation (Line(points={{-18,30},{
-          -14,30},{-14,15.0353},{-6,15.0353}},
-                                            color={0,0,127}));
+  connect(TZonMax.y, DOAScon.highSpaceT) annotation (Line(points={{-18,60},{-10,
+          60},{-10,4.65882},{-6,4.65882}}, color={0,0,127}));
+  connect(yDamPosMax.y, DOAScon.mostOpenDam) annotation (Line(points={{-18,30},
+          {-14,30},{-14,15.0353},{-6,15.0353}}, color={0,0,127}));
   connect(testBed.yFanSta, DOAScon.supFanStatus) annotation (Line(points={{129.478,
           -7.85714},{134,-7.85714},{134,38},{-12,38},{-12,12.4941},{-6,12.4941}},
                                                                  color={255,0,255}));
@@ -137,22 +135,21 @@ equation
     annotation (Line(points={{-98,80},{-92,80}}, color={255,0,255}));
   connect(booRep.y, terCon.uDetOcc) annotation (Line(points={{-68,80},{-4,80},{
           -4,58},{8,58}}, color={255,0,255}));
-  connect(con.y, terCon.uConSen) annotation (Line(points={{-68,40},{-60,40},{
-          -60,48},{-4,48},{-4,54},{8,54}}, color={255,0,255}));
+  connect(uConSig.y, terCon.uConSen) annotation (Line(points={{-68,40},{-60,40},
+          {-60,48},{-4,48},{-4,54},{8,54}}, color={255,0,255}));
   connect(hys.y, DOAScon.occ) annotation (Line(points={{-98,80},{-96,80},{-96,
           17.5765},{-6,17.5765}}, color={255,0,255}));
-  connect(con1.y, testBed.TChiWatSup) annotation (Line(points={{-68,-20},{40,
-          -20},{40,-17.1429},{58.5217,-17.1429}},
-                                   color={0,0,127}));
+  connect(chiWatSupTem.y, testBed.TChiWatSup) annotation (Line(points={{-68,-20},
+          {40,-20},{40,-17.1429},{58.5217,-17.1429}}, color={0,0,127}));
   connect(testBed.TZon, terCon.TZon) annotation (Line(points={{129.478,14.2857},
           {132,14.2857},{132,72},{4,72},{4,50},{8,50}}, color={0,0,127}));
   connect(testBed.VDisAir_flow, terCon.VDis_flow) annotation (Line(points={{129.478,
           11.4286},{136,11.4286},{136,76},{2,76},{2,46},{8,46}},         color=
           {0,0,127}));
-  connect(testBed.TZon, mulMax.u[1:5]) annotation (Line(points={{129.478,
+  connect(testBed.TZon, TZonMax.u[1:5]) annotation (Line(points={{129.478,
           14.2857},{132,14.2857},{132,72},{-44,72},{-44,58.4},{-42,58.4}},
         color={0,0,127}));
-  connect(testBed.yDamPos, mulMax1.u[1:5]) annotation (Line(points={{129.478,
+  connect(testBed.yDamPos, yDamPosMax.u[1:5]) annotation (Line(points={{129.478,
           -3.57143},{148,-3.57143},{148,86},{-50,86},{-50,28.4},{-42,28.4}},
         color={0,0,127}));
   connect(loads.y, testBed.QFlo) annotation (Line(points={{-39,-50},{-30,-50},{
