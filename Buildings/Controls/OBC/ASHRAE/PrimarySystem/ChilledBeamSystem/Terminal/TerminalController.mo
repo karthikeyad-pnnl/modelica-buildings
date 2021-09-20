@@ -297,7 +297,7 @@ block TerminalController
     final zonOccCooSet=zonOccCooSet,
     final zonUnoccCooSet=zonUnoccCooSet)
     "Zone temperature regulation controller"
-    annotation (Placement(transformation(extent={{-10,20},{10,40}})));
+    annotation (Placement(transformation(extent={{-10,50},{10,70}})));
 
 protected
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChilledBeamSystem.SetPoints.OperatingMode opeMod(
@@ -320,34 +320,36 @@ protected
     final thrTimLowTemRes=thrTimLowTemRes,
     final thrTimHigTemRes=thrTimHigTemRes)
     "Chilled water supply and temperature reset request generation"
-    annotation (Placement(transformation(extent={{-10,-70},{10,-50}})));
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
 
 equation
   connect(uDetOcc, opeMod.uDetOcc)
     annotation (Line(points={{-120,80},{-82,80}}, color={255,0,255}));
-  connect(opeMod.yOpeMod, zonRegCon.uOpeMod) annotation (Line(points={{-58,80},{
-          -50,80},{-50,24},{-12,24}}, color={255,127,0}));
-  connect(uConSen, zonRegCon.uConSen) annotation (Line(points={{-120,40},{-60,40},
-          {-60,32},{-12,32}},   color={255,0,255}));
-  connect(TZon, zonRegCon.TZon) annotation (Line(points={{-120,0},{-40,0},{-40,36},
-          {-12,36}},       color={0,0,127}));
-  connect(VDis_flow, zonRegCon.VDis_flow) annotation (Line(points={{-120,-40},{-30,
-          -40},{-30,28},{-12,28}},     color={0,0,127}));
-  connect(zonRegCon.yReh, yReh) annotation (Line(points={{12,34},{60,34},{60,80},
+  connect(opeMod.yOpeMod, zonRegCon.uOpeMod) annotation (Line(points={{-58,80},
+          {-50,80},{-50,54},{-12,54}},color={255,127,0}));
+  connect(uConSen, zonRegCon.uConSen) annotation (Line(points={{-120,40},{-60,
+          40},{-60,62},{-12,62}},
+                                color={255,0,255}));
+  connect(TZon, zonRegCon.TZon) annotation (Line(points={{-120,0},{-40,0},{-40,
+          66},{-12,66}},   color={0,0,127}));
+  connect(VDis_flow, zonRegCon.VDis_flow) annotation (Line(points={{-120,-40},{
+          -30,-40},{-30,58},{-12,58}}, color={0,0,127}));
+  connect(zonRegCon.yReh, yReh) annotation (Line(points={{12,64},{60,64},{60,80},
           {120,80}}, color={0,0,127}));
   connect(zonRegCon.yChiVal, yChiVal)
-    annotation (Line(points={{12,30},{66,30},{66,40},{120,40}},
+    annotation (Line(points={{12,60},{66,60},{66,40},{120,40}},
                                               color={0,0,127}));
-  connect(zonRegCon.yDam, yDam) annotation (Line(points={{12,26},{60,26},{60,0},
+  connect(zonRegCon.yDam, yDam) annotation (Line(points={{12,56},{60,56},{60,0},
           {120,0}},        color={0,0,127}));
-  connect(uChiVal, chiWatSupRes.uValPos) annotation (Line(points={{-120,-80},{-20,
-          -80},{-20,-56},{-12,-56}}, color={0,0,127}));
-  connect(uConSen, chiWatSupRes.uConSen) annotation (Line(points={{-120,40},{-60,
-          40},{-60,-64},{-12,-64}}, color={255,0,255}));
-  connect(chiWatSupRes.yChiWatSupReq, yChiWatSupReq) annotation (Line(points={{12,
-          -54},{80,-54},{80,-40},{120,-40}}, color={255,127,0}));
-  connect(chiWatSupRes.TChiWatReq, TChiWatReq) annotation (Line(points={{12,-66},
-          {80,-66},{80,-80},{120,-80}}, color={255,127,0}));
+  connect(uChiVal, chiWatSupRes.uValPos) annotation (Line(points={{-120,-80},{
+          -20,-80},{-20,4},{-12,4}}, color={0,0,127}));
+  connect(uConSen, chiWatSupRes.uConSen) annotation (Line(points={{-120,40},{
+          -60,40},{-60,-4},{-12,-4}},
+                                    color={255,0,255}));
+  connect(chiWatSupRes.yChiWatSupReq, yChiWatSupReq) annotation (Line(points={{12,6},{
+          80,6},{80,-40},{120,-40}},         color={255,127,0}));
+  connect(chiWatSupRes.TChiWatReq, TChiWatReq) annotation (Line(points={{12,-6},
+          {80,-6},{80,-80},{120,-80}},  color={255,127,0}));
   annotation (defaultComponentName="terCon",
     Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Text(

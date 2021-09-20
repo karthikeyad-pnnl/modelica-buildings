@@ -29,9 +29,10 @@ block ClosedLoopValidation
     controllerTypeCoo=Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
     TiCoo={900,50,900,900,900},
     TdCoo={0.1,100,0.1,0.1,0.1},
-    VDes_occ=0.5,
-    VDes_unoccSch=0.1,
-    VDes_unoccUnsch=0.2) "Terminal controllers"
+    VDes_occ={0.143,0.065,0.143,0.065,0.26},
+    VDes_unoccSch={0.028,0.012,0.028,0.012,0.052},
+    VDes_unoccUnsch={0.056,0.024,0.056,0.024,0.104})
+                         "Terminal controllers"
     annotation (Placement(transformation(extent={{10,40},{30,60}})));
   System.SystemController sysCon(nPum=1, nVal=5)
     annotation (Placement(transformation(extent={{10,-70},{30,-50}})));
