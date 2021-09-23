@@ -124,13 +124,12 @@ block ZoneModel_simplified_v2 "Zone model"
     redeclare Fluid.Movers.Data.Generic per,
     addPowerToMedium=false,
     dp_nominal=5000)
-    annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=180,
-        origin={-70,-160})));
+    annotation (Placement(transformation(extent={{-20,-110},{0,-90}})));
   CDL.Interfaces.RealInput uVal "Chilled water valve signal" annotation (
-      Placement(transformation(extent={{-240,-140},{-200,-100}}),
+      Placement(transformation(extent={{-240,-100},{-200,-60}}),
         iconTransformation(extent={{-140,-20},{-100,20}})));
   CDL.Continuous.Gain gai(k=mA_flow_nominal) "Gain"
-    annotation (Placement(transformation(extent={{-180,-130},{-160,-110}})));
+    annotation (Placement(transformation(extent={{-180,-90},{-160,-70}})));
   ThermalZones.Detailed.Constructions.Construction conBou[nConBou](
     A=datConBou.A,
     til=datConBou.til,
@@ -172,8 +171,9 @@ equation
                           color={0,127,255}));
   connect(senRelHum.phi, yRelHumZon) annotation (Line(points={{101,90},{220,90}},
                               color={0,0,127}));
-  connect(senVolFlo.V_flow, VDisAir_flow) annotation (Line(points={{-130,-39},{-130,
-          -20},{-40,-20},{-40,-80},{220,-80}}, color={0,0,127}));
+  connect(senVolFlo.V_flow, VDisAir_flow) annotation (Line(points={{-130,-39},{
+          -130,-20},{-6,-20},{-6,-80},{220,-80}},
+                                               color={0,0,127}));
   connect(portChiWat_a, senTem.port_a)
     annotation (Line(points={{-40,-200},{-40,-150}}, color={0,127,255}));
   connect(senTem1.port_b, portChiWat_b)
@@ -183,17 +183,16 @@ equation
   connect(actBea.watCoo_b, senTem1.port_a)
     annotation (Line(points={{14,-150},{20,-150}}, color={0,127,255}));
   connect(uVal, gai.u)
-    annotation (Line(points={{-220,-120},{-182,-120}}, color={0,0,127}));
-  connect(gai.y, fan.m_flow_in) annotation (Line(points={{-158,-120},{-100,-120},
-          {-100,-180},{-70,-180},{-70,-172}},
-                       color={0,0,127}));
+    annotation (Line(points={{-220,-80},{-182,-80}},   color={0,0,127}));
+  connect(gai.y, fan.m_flow_in) annotation (Line(points={{-158,-80},{-10,-80},{
+          -10,-88}},   color={0,0,127}));
   connect(actBea.air_a, vol.ports[5]) annotation (Line(points={{14,-162},{60,-162},
           {60,-40},{18,-40},{18,-16}},     color={0,127,255}));
-  connect(fan.port_a, actBea.air_b) annotation (Line(points={{-60,-160},{-38,-160},
-          {-38,-162},{-14,-162}}, color={0,127,255}));
-  connect(fan.port_b, vol.ports[6]) annotation (Line(points={{-80,-160},{-90,
-          -160},{-90,-100},{19.3333,-100},{19.3333,-16}},
-                                                    color={0,127,255}));
+  connect(fan.port_a, actBea.air_b) annotation (Line(points={{-20,-100},{-36,
+          -100},{-36,-162},{-14,-162}},
+                                  color={0,127,255}));
+  connect(fan.port_b, vol.ports[6]) annotation (Line(points={{0,-100},{19.3333,
+          -100},{19.3333,-16}},                     color={0,127,255}));
   connect(actBea.heaPor, vol.heatPort) annotation (Line(points={{0,-168},{0,-180},
           {80,-180},{80,-30},{0,-30},{0,-6},{6,-6}}, color={191,0,0}));
   connect(vol.heatPort, conBou[1].opa_a) annotation (Line(points={{6,-6},{-10,

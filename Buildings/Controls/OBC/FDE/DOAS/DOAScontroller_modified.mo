@@ -301,8 +301,8 @@ equation
     annotation (Line(points={{-10,-1},{-88,-1},{-88,-30},{-120,-30}},
       color={0,0,127}));
   annotation (defaultComponentName="DOAScon",
-  Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-240},
-            {100,100}}),                                        graphics={
+  Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-240},{100,100}}),
+                                                                graphics={
            Text(
             extent={{-90,180},{90,76}},
             lineColor={28,108,200},
@@ -392,7 +392,7 @@ equation
           lineColor={0,0,0},
           fillColor={162,29,33},
           fillPattern=FillPattern.Solid)}), Diagram(coordinateSystem(
-          preserveAspectRatio=false, extent={{-100,-240},{100,100}})),
+          preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
     Documentation(revisions="<html>
 <ul>
 <li>

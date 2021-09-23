@@ -5,36 +5,45 @@ block ClosedLoopValidation
 
   TestBed_v2 testBed(
     TChiWatRet_nominal=273.15 + 25,
-    mChiWatTot_flow_nominal=1.514,
-    mAirTot_flow_nominal=0.676*1.225,
+    mChiWatTot_flow_nominal=2.114,
+    mAirTot_flow_nominal=1*0.676*1.225,
     mHotWatCoi_nominal=0.078,
     mChiWatCoi_nominal=0.645,
+    VRooSou=239.25,
     mChiWatSou_flow_nominal=0.387,
-    mAirSou_flow_nominal=0.143*1.225,
+    mAirSou_flow_nominal=1*0.143*1.225,
     mAChiBeaSou_flow_nominal=0.143*1.225,
-    mChiWatEas_flow_nominal=0.342,
-    mAirEas_flow_nominal=0.065*1.225,
-    mAChiBeaEas_flow_nominal=0.065*1.225,
+    VRooEas=103.31,
+    mChiWatEas_flow_nominal=0.9,
+    mAirEas_flow_nominal=1*0.065*1.225,
+    mAChiBeaEas_flow_nominal=1*0.065*1.225,
+    VRooNor=239.25,
     mChiWatNor_flow_nominal=0.253,
-    mAirNor_flow_nominal=0.143*1.225,
+    mAirNor_flow_nominal=1*0.143*1.225,
     mAChiBeaNor_flow_nominal=0.143*1.225,
+    VRooWes=103.31,
     mChiWatWes_flow_nominal=0.262,
-    mAirWes_flow_nominal=0.065*1.225,
+    mAirWes_flow_nominal=1*0.065*1.225,
     mAChiBeaWes_flow_nominal=0.065*1.225,
+    VRooCor=447.68,
     mChiWatCor_flow_nominal=0.27,
-    mAirCor_flow_nominal=0.26*1.225,
+    mAirCor_flow_nominal=1*0.26*1.225,
     mAChiBeaCor_flow_nominal=0.26*1.225)
     annotation (Placement(transformation(extent={{60,-20},{128,20}})));
   Terminal.TerminalController terCon[5](
     controllerTypeCoo=Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
-    TiCoo={900,50,900,900,900},
+    TiCoo=fill(50, 5),
     TdCoo={0.1,100,0.1,0.1,0.1},
     VDes_occ={0.143,0.065,0.143,0.065,0.26},
     VDes_unoccSch={0.028,0.012,0.028,0.012,0.052},
     VDes_unoccUnsch={0.056,0.024,0.056,0.024,0.104})
                          "Terminal controllers"
     annotation (Placement(transformation(extent={{10,40},{30,60}})));
-  System.SystemController sysCon(nPum=1, nVal=5)
+  System.SystemController sysCon(nPum=1, nVal=5,
+    minPumSpe=0.7,
+    TiPumSpe=50,
+    kBypVal=10e-3,
+    TiBypVal=900)
     annotation (Placement(transformation(extent={{10,-70},{30,-50}})));
   FDE.DOAS.DOAScontroller_modified DOAScon(
     minDDSPset=400,
@@ -65,7 +74,7 @@ block ClosedLoopValidation
     tableOnFile=true,
     tableName="tab1",
     fileName=
-        "C:/buildings_library/buildings_library_pnnl/VM_script/inputTable.txt",
+        "C:/buildings_library/buildings_library_pnnl/VM_script/inputTable_constantSetpoint.txt",
     columns={2,3,4,5,6},
     timeScale=60) "Table defining thermal loads for zone"
     annotation (Placement(transformation(extent={{-60,-60},{-40,-40}})));
@@ -159,8 +168,8 @@ equation
             {160,100}})),                                        Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-160,-100},{160,100}})),
     experiment(
-      StartTime=6393600,
-      StopTime=6566400,
+      StartTime=16848000,
+      StopTime=16934400,
       Interval=600,
       Tolerance=1e-06,
       __Dymola_Algorithm="Cvode"));

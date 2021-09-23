@@ -4,7 +4,7 @@ record chilledBeamPumpCurve "Pump data for chilled beam model"
     speed_rpm_nominal=2900,
     use_powerCharacteristic=true,
     power(V_flow={0,0.001514,0.003028}, P={0,200,400}),
-    pressure(V_flow={0,0.001514,0.003028}, dp={32000,16000,0}),
+    pressure(V_flow={0,0.001514,0.003028}, dp={60000,30000,0}),
     motorCooledByFluid=true);
   annotation (
 defaultComponentPrefixes="parameter",

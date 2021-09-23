@@ -299,7 +299,7 @@ block SystemController "Main chilled beam system controller"
     "Chilled water static pressure setpoint reset"
     annotation (Placement(transformation(extent={{-40,-70},{-20,-50}})));
 
-protected
+// protected
   parameter Integer pumStaOrd[nPum]={i for i in 1:nPum}
     "Chilled water pump staging order";
 
