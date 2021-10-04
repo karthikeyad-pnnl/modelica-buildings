@@ -1,5 +1,6 @@
-within Buildings.Examples.BoilerPlant.BoilerLoadSimulation.Buffalo;
-block ClosedLoopTest "Model to test step response of zone model"
+within Buildings.Examples.BoilerPlant.BoilerLoadSimulation.Atlanta;
+block ClosedLoopTest_baseline_singlePump
+  "Model to test step response of zone model"
   replaceable package MediumA =
       Buildings.Media.Air;
 
@@ -7,19 +8,19 @@ block ClosedLoopTest "Model to test step response of zone model"
       Buildings.Media.Water
     "Medium model";
 
-  parameter Modelica.SIunits.MassFlowRate mRad_flow_nominal=96.323
+  parameter Modelica.SIunits.MassFlowRate mRad_flow_nominal=95.784
     "Radiator nominal mass flow rate"
     annotation(dialog(group="Radiator parameters"));
 
-  parameter Real boiDesCap = 4359751.36;
+  parameter Real boiDesCap = 4335340.24;
 
   parameter Real boiCapRat = 2/4.3;
 
   PlantModel.ZoneModel_simplified zoneModel_simplified(
-    Q_flow_nominal=4359751.36,
+    Q_flow_nominal=boiDesCap,
     TRadSup_nominal=333.15,
     TRadRet_nominal=323.15,
-    mRad_flow_nominal=96.323,
+    mRad_flow_nominal=mRad_flow_nominal,
     V=126016.35,
     zonTheCap=6987976290,
     vol(T_start=283.15),
@@ -29,16 +30,15 @@ block ClosedLoopTest "Model to test step response of zone model"
   Modelica.Blocks.Sources.CombiTimeTable combiTimeTable(
     tableOnFile=true,
     tableName="tab1",
-    fileName=
-        "C:/buildings_library/buildings_library_pnnl/VM_script/inputTableTxt.txt",
+    fileName="C:/buildings_library/buildings_library_pnnl/VM_script/inputTableTxt.txt",
     verboseRead=true,
-    columns={2,5},
+    columns={4,5},
     timeScale=60) "Boiler thermal load from EnergyPlus simulation"
     annotation (Placement(transformation(extent={{-140,100},{-120,120}})));
 
   Controls.OBC.CDL.Continuous.Gain gai(k=-1)
     annotation (Placement(transformation(extent={{-100,100},{-80,120}})));
-  Buildings.Examples.BoilerPlant.PlantModel.BoilerPlant_Buffalo_NonAdiabaticPipe_dPMover boiPla(
+  Buildings.Examples.BoilerPlant.PlantModel.BoilerPlant_Atlanta_NonAdiabaticPipe_singlePump boiPla(
     boiCap1=(1 - boiCapRat)*boiDesCap,
     boiCap2=(boiCapRat)*boiDesCap,
     mRad_flow_nominal=mRad_flow_nominal,
@@ -48,25 +48,26 @@ block ClosedLoopTest "Model to test step response of zone model"
       controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
       k=fill(10e-3, 2),
       Ti=fill(90, 2)),
-    dpValve_nominal_value(displayUnit="bar") = 20000,
-    dpFixed_nominal_value(displayUnit="bar") = 1000)
+    dpValve_nominal_value(displayUnit="Pa") = 20000,
+    dpFixed_nominal_value(displayUnit="Pa") = 1000,
+    tim1(t=120))
     annotation (Placement(transformation(extent={{-60,-20},{-40,0}})));
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Controller           controller(
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Controller_baseline           controller(
     final have_priOnl=true,
     final have_varPriPum=true,
     final have_varSecPum=false,
     final nSenPri=1,
-    final nPumPri_nominal=2,
+    final nPumPri_nominal=1,
     final nPumSec=0,
     final nSenSec=0,
     final nPumSec_nominal=0,
-    TPlaHotWatSetMax=273.15 + 70,
-    triAmoVal=-1.111,
-    resAmoVal=1.667,
-    maxResVal=3.889,
+    TPlaHotWatSetMax=273.15 + 60,
+    triAmoVal=-10e-6,
+    resAmoVal=10e-6,
+    maxResVal=10e-6,
     final VHotWatPri_flow_nominal=0.02,
-    final maxLocDpPri=4000,
-    final minLocDpPri=4000,
+    final maxLocDpPri=50000,
+    final minLocDpPri=50000,
     final VHotWatSec_flow_nominal=1e-6,
     final nBoi=2,
     final boiTyp={Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler,
@@ -80,15 +81,15 @@ block ClosedLoopTest "Model to test step response of zone model"
     final maxFloSet={boiCapRat*mRad_flow_nominal/2000,(1 - boiCapRat)*
         mRad_flow_nominal/2000},
     final bypSetRat=0.000005,
-    final nPumPri=2,
+    final nPumPri=1,
     final TMinSupNonConBoi=333.2,
     final k_bypVal=1,
     final Ti_bypVal=90,
     final Td_bypVal=10e-9,
     final boiDesFlo=controller.maxFloSet,
-    final k_priPum=1,
+    final k_priPum=0.1,
     final Ti_priPum=75,
-    final Td_priPum=3,
+    final Td_priPum=10e-9,
     final minPriPumSpeSta={0,0,0},
     final speConTypPri=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP)
     "Boiler plant controller"
@@ -102,12 +103,9 @@ block ClosedLoopTest "Model to test step response of zone model"
     use_inputFilter=true,
     y_start=0,
     dpFixed_nominal=1000,
-    l=10e-10)
+    l=0.0001)
     "Isolation valve for radiator"
     annotation (Placement(transformation(extent={{-70,30},{-50,50}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant           con(final k=21.11)
-    "Zone temperature setpoint"
-    annotation (Placement(transformation(extent={{-140,130},{-120,150}})));
   Controls.OBC.CDL.Continuous.Hysteresis hys(uLow=0.05, uHigh=0.1)
     "Check if radiator control valve opening is above threshold for enabling boiler plant"
     annotation (Placement(transformation(extent={{10,130},{30,150}})));
@@ -126,8 +124,6 @@ block ClosedLoopTest "Model to test step response of zone model"
     annotation (Placement(transformation(extent={{-20,80},{0,100}})));
   Controls.OBC.CDL.Discrete.UnitDelay uniDel(samplePeriod=60)
     annotation (Placement(transformation(extent={{-80,-48},{-60,-28}})));
-  Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(nout=2)
-    annotation (Placement(transformation(extent={{-40,-48},{-20,-28}})));
   Controls.OBC.CDL.Logical.Sources.Constant           con3[2](final k=fill(true,
         2))
     "Constant boiler availability status"
@@ -143,9 +139,6 @@ block ClosedLoopTest "Model to test step response of zone model"
   Controls.OBC.CDL.Continuous.AddParameter addPar(p=273.15, k=1)
     annotation (Placement(transformation(extent={{-60,130},{-40,150}})));
 equation
-  connect(gai.y, zoneModel_simplified.u)
-    annotation (Line(points={{-78,110},{-56,110},{-56,60},{-42,60}},
-                                                 color={0,0,127}));
   connect(controller.yBoi, boiPla.uBoiSta) annotation (Line(points={{-88,0},{
           -80,0},{-80,-1},{-62,-1}},
                                  color={255,0,255}));
@@ -157,8 +150,6 @@ equation
           {-72,-16},{-72,-7},{-62,-7}}, color={255,0,255}));
   connect(controller.yPriPumSpe, boiPla.uPumSpe) annotation (Line(points={{-88,-20},
           {-66,-20},{-66,-10},{-62,-10}}, color={0,0,127}));
-  connect(controller.yBypValPos, boiPla.uBypValSig) annotation (Line(points={{-88,-12},
-          {-68,-12},{-68,-13},{-62,-13}},      color={0,0,127}));
   connect(boiPla.port_b, val3.port_a) annotation (Line(points={{-56,0},{-56,8},{
           -80,8},{-80,40},{-70,40}}, color={0,127,255}));
   connect(val3.port_b, zoneModel_simplified.port_a) annotation (Line(points={{-50,
@@ -198,10 +189,6 @@ equation
           2},{20,2},{20,-68},{-114,-68},{-114,-43},{-112,-43}}, color={0,0,127}));
   connect(controller.yPriPumSpe, uniDel.u) annotation (Line(points={{-88,-20},{-86,
           -20},{-86,-38},{-82,-38}}, color={0,0,127}));
-  connect(uniDel.y, reaRep.u)
-    annotation (Line(points={{-58,-38},{-42,-38}}, color={0,0,127}));
-  connect(reaRep.y, controller.uPriPumSpe) annotation (Line(points={{-18,-38},{-8,
-          -38},{-8,-76},{-112,-76},{-112,-46}},  color={0,0,127}));
   connect(conPID.y, val3.y) annotation (Line(points={{2,90},{6,90},{6,116},{-60,
           116},{-60,52}}, color={0,0,127}));
   connect(con3.y, controller.uBoiAva) annotation (Line(points={{-118,-130},{
@@ -235,12 +222,18 @@ equation
     annotation (Line(points={{42,60},{78,60}}, color={255,0,255}));
   connect(combiTimeTable.y[2], addPar.u) annotation (Line(points={{-119,110},{
           -110,110},{-110,140},{-62,140}}, color={0,0,127}));
+  connect(gai.y, zoneModel_simplified.u) annotation (Line(points={{-78,110},{
+          -52,110},{-52,60},{-42,60}}, color={0,0,127}));
+  connect(controller.yBypValPos, boiPla.uBypValSig) annotation (Line(points={{
+          -88,-12},{-84,-12},{-84,-13},{-62,-13}}, color={0,0,127}));
+  connect(uniDel.y, controller.uPriPumSpe[1]) annotation (Line(points={{-58,-38},
+          {-40,-38},{-40,-88},{-112,-88},{-112,-46}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,160}})),
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,
             160}})),
     experiment(
       StopTime=2764800,
-      Interval=1,
+      Interval=900,
       __Dymola_Algorithm="Cvode"));
-end ClosedLoopTest;
+end ClosedLoopTest_baseline_singlePump;

@@ -1128,6 +1128,19 @@ model Controller
     "Minimum flow setpoint for the primary loop"
     annotation (Placement(transformation(extent={{250,310},{270,330}})));
 
+  CDL.Continuous.Max max
+    annotation (Placement(transformation(extent={{300,-50},{320,-30}})));
+  CDL.Logical.Switch swi1
+    annotation (Placement(transformation(extent={{340,-40},{360,-20}})));
+  CDL.Integers.GreaterThreshold intGreThr
+    annotation (Placement(transformation(extent={{-140,340},{-120,360}})));
+  CDL.Continuous.PID conPID(
+    controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
+    k=k_priPum,
+    Ti=Ti_priPum,
+    Td=Td_priPum,
+    reverseActing=false)
+    annotation (Placement(transformation(extent={{240,-66},{260,-46}})));
 protected
   parameter Boolean have_remDPRegPri = (speConTypPri == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP)
     "Boolean flag for primary pump speed control with remote differential pressure";
@@ -1204,7 +1217,7 @@ protected
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Controller priPumCon(
     final have_heaPriPum=have_heaPriPum,
     final have_priOnl=have_priOnl,
-    final have_varPriPum=have_varPriPum,
+    final have_varPriPum=true,
     final have_secFloSen=have_secFloSen,
     final have_priSecTemSen=have_priSecTemSen,
     final nPum=nPumPri,
@@ -1304,7 +1317,7 @@ protected
     final minFloSet=fill(minFloSet, nSta),
     final maxFloSet=fill(maxFloSet, nSta),
     final bypSetRat=fill(bypSetRat, nSta),
-    final delSamPer=fill(1, nSta))
+    final delSamPer=fill(60, nSta))
     "Calculate vector of minimum flow setpoints for all stages"
     annotation (Placement(transformation(extent={{-340,0},{-320,20}})));
 
@@ -1386,13 +1399,11 @@ protected
     "Logical pre block"
     annotation (Placement(transformation(extent={{300,-20},{320,0}})));
 
-  Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel(
-    final samplePeriod=1)
+  Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel(final samplePeriod=60)
     "Unit delay"
     annotation (Placement(transformation(extent={{-210,360},{-190,380}})));
 
-  Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel1(
-    final samplePeriod=1)
+  Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel1(final samplePeriod=60)
     "Unit delay"
     annotation (Placement(transformation(extent={{90,370},{110,390}})));
 
@@ -1572,8 +1583,6 @@ equation
   connect(priPumCon.yPumSpe, yPriPumSpe) annotation (Line(points={{142,-181.867},
           {264,-181.867},{264,-170},{420,-170}},
                                             color={0,0,127}));
-  connect(bypValPos.yBypValPos, yBypValPos) annotation (Line(points={{142,-40},{
-          148,-40},{148,-30},{420,-30}}, color={0,0,127}));
 
   connect(staSetCon.ySta, intToRea1.u) annotation (Line(points={{-188,6},{20,6},
           {20,300},{-250,300},{-250,370},{-242,370}},
@@ -1869,6 +1878,25 @@ equation
           260,-370},{260,-390},{420,-390}}, color={0,0,127}));
   connect(hotWatSupTemRes.TBoiHotWatSupSet, TBoiHotWatSupSet) annotation (Line(
         points={{-118,176},{360,176},{360,170},{420,170}}, color={0,0,127}));
+  connect(bypValPos.yBypValPos, max.u1) annotation (Line(points={{142,-40},{260,
+          -40},{260,-34},{298,-34}}, color={0,0,127}));
+  connect(swi1.y, yBypValPos) annotation (Line(points={{362,-30},{384,-30},{384,
+          -30},{420,-30}}, color={0,0,127}));
+  connect(supResReq, intGreThr.u)
+    annotation (Line(points={{-420,350},{-142,350}}, color={255,127,0}));
+  connect(intGreThr.y, swi1.u2) annotation (Line(points={{-118,350},{-80,350},{
+          -80,154},{330,154},{330,-30},{338,-30}}, color={255,0,255}));
+  connect(max.y, swi1.u3) annotation (Line(points={{322,-40},{330,-40},{330,-38},
+          {338,-38}}, color={0,0,127}));
+  connect(bypValPos.yBypValPos, swi1.u1) annotation (Line(points={{142,-40},{
+          260,-40},{260,-22},{338,-22}}, color={0,0,127}));
+  connect(conPID.y, max.u2) annotation (Line(points={{262,-56},{294,-56},{294,
+          -46},{298,-46}}, color={0,0,127}));
+  connect(dpHotWatSet.y, conPID.u_s) annotation (Line(points={{82,-170},{84,
+          -170},{84,-72},{222,-72},{222,-56},{238,-56}}, color={0,0,127}));
+  connect(dpHotWatPri_rem[1], conPID.u_m) annotation (Line(points={{-420,110},{
+          -280,110},{-280,-144},{20,-144},{20,-84},{250,-84},{250,-68}}, color=
+          {0,0,127}));
   annotation (defaultComponentName="boiPlaCon",
     Icon(coordinateSystem(extent={{-100,-340},{100,340}}),
        graphics={

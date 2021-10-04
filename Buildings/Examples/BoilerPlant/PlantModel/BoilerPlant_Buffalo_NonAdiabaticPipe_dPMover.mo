@@ -184,7 +184,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_dPMover
     redeclare package Medium = MediumW,
     final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
     final m_flow_nominal={mBoi_flow_nominal2,-mRad_flow_nominal,mBoi_flow_nominal1},
-    final dp_nominal={0,0,-200})
+    final dp_nominal={0,0,0})
     "Splitter"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,
@@ -208,7 +208,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_dPMover
     final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
     final m_flow_nominal={mRad_flow_nominal,-mRad_flow_nominal/2,-
         mRad_flow_nominal/2},
-    final dp_nominal={0,0,-200})
+    final dp_nominal={0,0,0})
     "Splitter"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,
@@ -219,7 +219,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_dPMover
     final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
     final m_flow_nominal={mRad_flow_nominal/2,-mRad_flow_nominal,
         mRad_flow_nominal/2},
-    final dp_nominal={0,0,-200})
+    final dp_nominal={0,0,0})
     "Splitter"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,
@@ -229,7 +229,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_dPMover
     redeclare package Medium = MediumW,
     final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
     final m_flow_nominal={mRad_flow_nominal,-mRad_flow_nominal,-mRad_flow_nominal},
-    final dp_nominal={0,0,-200})
+    final dp_nominal={0,0,0})
     "Splitter"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,
@@ -247,7 +247,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_dPMover
     redeclare package Medium = MediumW,
     final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
     final m_flow_nominal={mRad_flow_nominal,mRad_flow_nominal,-mRad_flow_nominal},
-    final dp_nominal={0,0,-200})
+    final dp_nominal={0,0,0})
     "Splitter"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=270,
@@ -410,7 +410,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_dPMover
     final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
     final m_flow_nominal={-mBoi_flow_nominal1,mRad_flow_nominal,-
         mBoi_flow_nominal2},
-    final dp_nominal={0,0,-200})
+    final dp_nominal={0,0,0})
     "Splitter"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=0,

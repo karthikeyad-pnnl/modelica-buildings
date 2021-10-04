@@ -6,13 +6,13 @@ model System
       Buildings.ThermalZones.EnergyPlus.Examples.SmallOffice.BaseClasses.Floor
       flo constrainedby
       Buildings.ThermalZones.EnergyPlus.Examples.SmallOffice.BaseClasses.Floor,
-
     ACHCor=4,
     ACHSou=4,
     ACHEas=6,
     ACHNor=4,
     ACHWes=6,
     conVAVCor(have_heaWatCoi=true, have_heaPla=true));
+
   annotation (
     __Dymola_Commands(
       file="modelica://Buildings/Resources/Scripts/Dymola/ThermalZones/EnergyPlus/Examples/SmallOffice/Guideline36Winter.mos" "Simulate and plot"),

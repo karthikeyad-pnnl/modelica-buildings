@@ -80,7 +80,8 @@ protected
     final Ti=fill(Ti, nSen),
     final Td=fill(Td, nSen),
     final yMax=fill(1,nSen),
-    final yMin=fill(0,nSen))
+    final yMin=fill(0,nSen),
+    y_reset=0.11)
     "PID controller for regulating remote differential pressure"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
 
@@ -136,6 +137,9 @@ protected
     "Logical switch"
     annotation (Placement(transformation(extent={{80,90},{100,110}})));
 
+  CDL.Continuous.Sources.Constant                        zer1(final k=0.5)
+    "Constant zero"
+    annotation (Placement(transformation(extent={{20,82},{40,102}})));
 equation
   connect(dpHotWatSet, reaRep.u)
     annotation (Line(points={{-140,-100},{-102,-100}}, color={0,0,127}));
@@ -191,8 +195,8 @@ equation
     annotation (Line(points={{2,-80},{30,-80},{30,-12}}, color={0,0,127}));
   connect(conPID.y, maxLoo.u[1:nSen])
     annotation (Line(points={{42,0},{50,0},{50,0},{58,0}},   color={0,0,127}));
-  connect(pumSpe_max.y, swi.u3) annotation (Line(points={{2,40},{10,40},{10,92},
-          {78,92}}, color={0,0,127}));
+  connect(zer1.y, swi.u3)
+    annotation (Line(points={{42,92},{78,92}}, color={0,0,127}));
 annotation (
   defaultComponentName="hotPumSpe",
   Icon(coordinateSystem(extent={{-100,-100},{100,100}}),

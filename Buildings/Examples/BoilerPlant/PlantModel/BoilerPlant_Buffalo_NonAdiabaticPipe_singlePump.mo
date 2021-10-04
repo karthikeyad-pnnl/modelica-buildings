@@ -167,15 +167,13 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
     final UA=boiCap2/39.81) "Boiler-1"
     annotation (Placement(transformation(extent={{110,-220},{90,-200}})));
 
-  Buildings.Fluid.Movers.FlowControlled_m_flow pum(
+  Buildings.Fluid.Movers.SpeedControlled_y pum(
     redeclare package Medium = Media.Water,
     final allowFlowReversal=true,
-    m_flow_nominal=mRad_flow_nominal,
-    redeclare Fluid.Movers.Data.Generic per,
+    redeclare Fluid.Movers.Data.Pumps.Wilo.customPumpCurves_Buffalo per,
     final inputType=Buildings.Fluid.Types.InputType.Continuous,
     final addPowerToMedium=false,
-    final riseTime=60,
-    dp_nominal=75000)
+    riseTime=15)
     "Hot water primary pump-1"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,
@@ -205,6 +203,7 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
     redeclare package Medium = Media.Water,
     final m_flow_nominal=mRad_flow_nominal,
     final dpValve_nominal=dpValve_nominal_value,
+    riseTime=30,
     dpFixed_nominal=dpFixed_nominal_value)
     "Minimum flow bypass valve"
     annotation (Placement(transformation(extent={{80,30},{100,50}})));
@@ -443,12 +442,6 @@ model BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump
   Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep1(nout=1)
     "Boolean replicator"
     annotation (Placement(transformation(extent={{280,-120},{300,-100}})));
-  Controls.OBC.CDL.Continuous.Gain gai(k=mRad_flow_nominal)
-    "Convert normalized pump speed to mass flow rate"
-    annotation (Placement(transformation(extent={{-114,-20},{-94,0}})));
-  Controls.OBC.CDL.Continuous.Gain gai1(k=1/mRad_flow_nominal)
-    "Convert mass flow rate back to normalized speed"
-    annotation (Placement(transformation(extent={{20,-20},{40,0}})));
   Controls.OBC.CDL.Continuous.GreaterThreshold greThr3[2](t=0.02)
     annotation (Placement(transformation(extent={{180,-200},{200,-180}})));
   Controls.OBC.CDL.Logical.Pre pre3
@@ -638,14 +631,6 @@ equation
           160},{-40,160},{-40,240}}, color={0,127,255}));
   connect(preSou.ports[1], pum.port_a) annotation (Line(points={{-2,-68},{-12,-68},
           {-12,-80},{-30,-80}}, color={0,127,255}));
-  connect(pro.y, gai.u)
-    annotation (Line(points={{-188,-10},{-116,-10}}, color={0,0,127}));
-  connect(gai.y, pum.m_flow_in) annotation (Line(points={{-92,-10},{-88,-10},{
-          -88,-70},{-42,-70}}, color={0,0,127}));
-  connect(pum.m_flow_actual, gai1.u) annotation (Line(points={{-35,-59},{-35,
-          -28},{0,-28},{0,-10},{18,-10}}, color={0,0,127}));
-  connect(gai1.y, hys2.u)
-    annotation (Line(points={{42,-10},{98,-10}}, color={0,0,127}));
   connect(swi.y, greThr3.u) annotation (Line(points={{-68,-160},{-60,-160},{-60,
           -120},{120,-120},{120,-190},{178,-190}}, color={0,0,127}));
   connect(greThr3.y, pre3.u)
@@ -662,6 +647,10 @@ equation
           -160},{-236,-163.5},{-232,-163.5}}, color={255,0,255}));
   connect(greThr2.y, mulOr.u[1:2]) annotation (Line(points={{-208,-204},{-206,
           -204},{-206,-207.5},{-202,-207.5}}, color={255,0,255}));
+  connect(pro.y, pum.y) annotation (Line(points={{-188,-10},{-100,-10},{-100,-70},
+          {-42,-70}}, color={0,0,127}));
+  connect(pum.y_actual, hys2.u) annotation (Line(points={{-37,-59},{-37,-32},{40,
+          -32},{40,-10},{98,-10}}, color={0,0,127}));
   annotation (defaultComponentName="boiPla",
     Documentation(info="<html>
       <p>

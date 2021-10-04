@@ -753,6 +753,8 @@ block Controller
     annotation (Placement(transformation(extent={{-94,10},{-74,30}})));
   CDL.Logical.Sources.Constant con3(k=true) if nPum == 1
     annotation (Placement(transformation(extent={{-94,-32},{-74,-12}})));
+  CDL.Routing.BooleanScalarReplicator booScaRep(nout=nPum)
+    annotation (Placement(transformation(extent={{-156,-518},{-136,-498}})));
 equation
   connect(enaDedLeaPum.uPlaEna, uPlaEna) annotation (Line(points={{-202,115},{-240,
           115},{-240,110},{-300,110}}, color={255,0,255}));
@@ -1063,8 +1065,6 @@ equation
           {-264,-350},{-264,96},{28,96},{28,102},{56,102}}, color={255,127,0}));
   connect(uHotWatPum, pumSpeLocDp.uHotWatPum) annotation (Line(points={{-300,140},
           {-260,140},{-260,-476},{-62,-476}}, color={255,0,255}));
-  connect(uHotWatPum, pumSpeRemDp.uHotWatPum) annotation (Line(points={{-300,140},
-          {-260,140},{-260,-512},{-62,-512}}, color={255,0,255}));
   connect(uHotWatPum, pumSpeFlo.uHotWatPum) annotation (Line(points={{-300,140},
           {-260,140},{-260,-559},{-62,-559}}, color={255,0,255}));
   connect(uHotWatPum, pumSpeTem.uHotWatPum) annotation (Line(points={{-300,140},
@@ -1110,6 +1110,10 @@ equation
           68,24}}, color={255,0,255}));
   connect(con3.y, or4.u2) annotation (Line(points={{-72,-22},{2,-22},{2,-28},{
           66,-28},{66,-18},{70,-18}}, color={255,0,255}));
+  connect(uPlaEna, booScaRep.u) annotation (Line(points={{-300,110},{-272,110},
+          {-272,-508},{-158,-508}}, color={255,0,255}));
+  connect(booScaRep.y, pumSpeRemDp.uHotWatPum) annotation (Line(points={{-134,
+          -508},{-78,-508},{-78,-512},{-62,-512}}, color={255,0,255}));
 annotation (defaultComponentName="priPumCon",
   Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-280,-720},{280,260}}),
   graphics={

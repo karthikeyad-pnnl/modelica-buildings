@@ -209,8 +209,8 @@ partial model PartialOpenLoop
     m_flow_nominal=m_flow_nominal,
     allowFlowReversal=allowFlowReversal)
     annotation (Placement(transformation(extent={{330,-50},{350,-30}})));
-  Buildings.Fluid.Sensors.RelativePressure dpDisSupFan(redeclare package Medium
-      = MediumA) "Supply fan static discharge pressure" annotation (Placement(
+  Buildings.Fluid.Sensors.RelativePressure dpDisSupFan(redeclare package Medium =
+        MediumA) "Supply fan static discharge pressure" annotation (Placement(
         transformation(
         extent={{-10,10},{10,-10}},
         rotation=90,
@@ -554,30 +554,30 @@ partial model PartialOpenLoop
         rotation=90,
         origin={140,-120})));
 
-  Modelica.Fluid.Interfaces.FluidPort_a portHeaCoiSup(redeclare package Medium
-      = MediumW) "Heating coil loop supply"
+  Modelica.Fluid.Interfaces.FluidPort_a portHeaCoiSup(redeclare package Medium =
+        MediumW) "Heating coil loop supply"
     annotation (Placement(transformation(extent={{130,-410},{150,-390}}),
         iconTransformation(extent={{92,-412},{112,-392}})));
-  Modelica.Fluid.Interfaces.FluidPort_b portHeaCoiRet(redeclare package Medium
-      = MediumW) "Heating coil loop return" annotation (Placement(
+  Modelica.Fluid.Interfaces.FluidPort_b portHeaCoiRet(redeclare package Medium =
+        MediumW) "Heating coil loop return" annotation (Placement(
         transformation(extent={{50,-410},{70,-390}}), iconTransformation(extent={{12,-412},
             {32,-392}})));
-  Modelica.Fluid.Interfaces.FluidPort_a portHeaTerSup(redeclare package Medium
-      = MediumW) "Terminal heat loop supply"
+  Modelica.Fluid.Interfaces.FluidPort_a portHeaTerSup(redeclare package Medium =
+        MediumW) "Terminal heat loop supply"
     annotation (Placement(transformation(extent={{450,-410},{470,-390}}),
         iconTransformation(extent={{410,-410},{430,-390}})));
-  Modelica.Fluid.Interfaces.FluidPort_b portHeaTerRet(redeclare package Medium
-      = MediumW) "Terminal heat loop return" annotation (Placement(
+  Modelica.Fluid.Interfaces.FluidPort_b portHeaTerRet(redeclare package Medium =
+        MediumW) "Terminal heat loop return" annotation (Placement(
         transformation(extent={{370,-410},{390,-390}}),
                                                       iconTransformation(extent={{332,
             -412},{352,-392}})));
 
-  Modelica.Fluid.Interfaces.FluidPort_a portCooCoiSup(redeclare package Medium
-      = MediumW) "Cooling coil loop supply"
+  Modelica.Fluid.Interfaces.FluidPort_a portCooCoiSup(redeclare package Medium =
+        MediumW) "Cooling coil loop supply"
     annotation (Placement(transformation(extent={{250,-410},{270,-390}}),
         iconTransformation(extent={{230,-410},{250,-390}})));
-  Modelica.Fluid.Interfaces.FluidPort_b portCooCoiRet(redeclare package Medium
-      = MediumW)
+  Modelica.Fluid.Interfaces.FluidPort_b portCooCoiRet(redeclare package Medium =
+        MediumW)
     "Coolin coil loop return"
     annotation (Placement(transformation(extent={{170,-410},{190,-390}})));
 

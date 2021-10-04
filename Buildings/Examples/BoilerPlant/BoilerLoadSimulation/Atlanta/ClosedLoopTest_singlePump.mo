@@ -17,10 +17,10 @@ block ClosedLoopTest_singlePump
   parameter Real boiCapRat = 2/4.3;
 
   PlantModel.ZoneModel_simplified zoneModel_simplified(
-    Q_flow_nominal=4335340.24,
+    Q_flow_nominal=boiDesCap,
     TRadSup_nominal=333.15,
     TRadRet_nominal=323.15,
-    mRad_flow_nominal=95.784,
+    mRad_flow_nominal=mRad_flow_nominal,
     V=126016.35,
     zonTheCap=6987976290,
     vol(T_start=283.15),
@@ -30,7 +30,8 @@ block ClosedLoopTest_singlePump
   Modelica.Blocks.Sources.CombiTimeTable combiTimeTable(
     tableOnFile=true,
     tableName="tab1",
-    fileName="C:/Users/deva713/OneDrive - PNNL/Documents/Git_repos/modelica-buildings/VM_script/inputTableTxt.txt",
+    fileName=
+        "C:/buildings_library/buildings_library_pnnl/VM_script/inputTableTxt.txt",
     verboseRead=true,
     columns={4,5},
     timeScale=60) "Boiler thermal load from EnergyPlus simulation"
@@ -61,7 +62,7 @@ block ClosedLoopTest_singlePump
     final nPumSec=0,
     final nSenSec=0,
     final nPumSec_nominal=0,
-    TPlaHotWatSetMax=273.15 + 70,
+    TPlaHotWatSetMax=273.15 + 60,
     triAmoVal=-1.111,
     resAmoVal=1.667,
     maxResVal=3.889,
@@ -111,7 +112,7 @@ block ClosedLoopTest_singlePump
     annotation (Placement(transformation(extent={{10,130},{30,150}})));
   Controls.OBC.CDL.Conversions.BooleanToInteger booToInt
     annotation (Placement(transformation(extent={{100,130},{120,150}})));
-  Controls.OBC.CDL.Continuous.Hysteresis hys1(uLow=0.5, uHigh=0.55)
+  Controls.OBC.CDL.Continuous.Hysteresis hys1(uLow=0.85, uHigh=0.9)
     "Check if radiator control valve opening is above threshold for rasing HHW supply temperature"
     annotation (Placement(transformation(extent={{20,50},{40,70}})));
   Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1(integerTrue=3)
@@ -122,7 +123,7 @@ block ClosedLoopTest_singlePump
     Ti=300)
     "Radiator isolation valve controller"
     annotation (Placement(transformation(extent={{-20,80},{0,100}})));
-  Controls.OBC.CDL.Discrete.UnitDelay uniDel(samplePeriod=1)
+  Controls.OBC.CDL.Discrete.UnitDelay uniDel(samplePeriod=60)
     annotation (Placement(transformation(extent={{-80,-48},{-60,-28}})));
   Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(nout=2)
     annotation (Placement(transformation(extent={{-40,-48},{-20,-28}})));
@@ -241,7 +242,7 @@ equation
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,
             160}})),
     experiment(
-      StopTime=8640000,
+      StopTime=2764800,
       Interval=900,
       __Dymola_Algorithm="Cvode"));
 end ClosedLoopTest_singlePump;

@@ -13,45 +13,58 @@ import shutil
 # simulation_results_folder = '/home/developer/models/Buildings'
 # processed_results_folder = '/home/developer/models/extracted_simulation_data'
 # simulation_results_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\Git_repos\\modelica-buildings\\raw_mat_files\\Buffalo-post060921'
-simulation_results_folder = "C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\OpenBuildingControl\\boiler_plant_case_study\\modelica_simulation_results"
+simulation_results_folder = "C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\OpenBuildingControl\\boiler_plant_case_study\\ASHRAE_BPAC21\\Datasets\\60degCSupply\\Full_datasets"
+auto_result_name = True
 # filter_list = ['ClosedLoopTest_singlePump', 'Atlanta', '100days', '.mat']
 filter_list = ['.mat']
 list_of_files = utilities.find_relevant_files(filter_list, simulation_results_folder)
 print(list_of_files)
 separator = '_'
 # processed_results_folder_name = separator.join(filter_list)
-processed_results_folder_name = 'a'
+processed_results_folder_name = 'Results'
 # processed_results_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\Git_repos\\modelica-buildings\\raw_mat_files\\Buffalo-post060921\\processed_results_Jan'
 processed_results_folder = os.path.join(simulation_results_folder, processed_results_folder_name)
 # simulation_results_folder = 'C:\Buildings_library\modelica-buildings\raw_mat_files'
 # processed_results_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\Git_repos\\modelica-buildings\\raw_mat_files\\processed_results_051121'
 
 datapoints = {
-        'boiPla.boi1.m_flow': 'boiler1_massflowrate', 
-        'boiPla.senTem3.T': 'boiler1_supply_temp', 
-        'boiPla.senTem1.T': 'radiator_return_temp', 
-        'boiPla.boi.m_flow': 'boiler2_massflowrate', 
-        'boiPla.senTem2.T': 'boiler2_supply_temp', 
-        'boiPla.pum.P': 'pump1_power',
-        # 'boiPla.pum1.P': 'pump2_power',
-        'zoneModel_simplified.y': 'zone_temp',
-        'boiPla.TOut': 'outdoor_air_temp',
-        'boiPla.ySupTem': 'radiator_supply_temp',
-        'boiPla.senVolFlo.V_flow': 'radiator_flowrate',
-        'boiPla.boi1.T': 'boiler1_temp',
-        'boiPla.boi.T': 'boiler2_temp',
-        'boiPla.val1.y_actual': 'boiler1_isoVal_position',
-        'boiPla.val2.y_actual': 'boiler2_isoVal_position',
-        'boiPla.boi1.y': 'boiler1_actuatorSignal',
-        'boiPla.boi.y': 'boiler2_actuatorSignal',
-        'boiPla.boi1.QFue_flow': 'boiler1_fuelUse',
-        'boiPla.boi.QFue_flow': 'boiler2_fuelUse',
-        'boiPla.TBoiHotWatSupSet[1]': 'boiler1_supSet',
-        'boiPla.TBoiHotWatSupSet[2]': 'boiler2_supSet',
-        'boiPla.senRelPre1.p_rel': 'pumps_dP',
-        'boiPla.boi1.y': 'boiler1_partloadratio',
-        'boiPla.boi.y': 'boiler2_partloadratio',
-        'controller.plaEna.yPla': 'plant_enable_signal'}
+    'boiPla.boi1.m_flow': 'boiler1_massflowrate', 
+    'boiPla.senTem3.T': 'boiler1_supply_temp', 
+    'boiPla.senTem1.T': 'radiator_return_temp', 
+    'boiPla.boi.m_flow': 'boiler2_massflowrate', 
+    'boiPla.senTem2.T': 'boiler2_supply_temp', 
+    'boiPla.pum.P': 'pump1_power',
+    # 'boiPla.pum1.P': 'pump2_power',
+    'zoneModel_simplified.y': 'zone_temp',
+    'controller.TOut': 'outdoor_air_temp',
+    'boiPla.ySupTem': 'radiator_supply_temp',
+    'boiPla.senVolFlo.V_flow': 'radiator_flowrate',
+    'boiPla.boi1.T': 'boiler1_temp',
+    'boiPla.boi.T': 'boiler2_temp',
+    'boiPla.val1.y_actual': 'boiler1_isoVal_position',
+    'boiPla.val2.y_actual': 'boiler2_isoVal_position',
+    'boiPla.boi1.y': 'boiler1_actuatorSignal',
+    'boiPla.boi.y': 'boiler2_actuatorSignal',
+    'boiPla.boi1.QFue_flow': 'boiler1_fuelUse',
+    'boiPla.boi.QFue_flow': 'boiler2_fuelUse',
+    'boiPla.TBoiHotWatSupSet[1]': 'boiler1_supSet',
+    'boiPla.TBoiHotWatSupSet[2]': 'boiler2_supSet',
+    'boiPla.senRelPre1.p_rel': 'pumps_dP',
+    'boiPla.boi1.y': 'boiler1_partloadratio',
+    'boiPla.boi.y': 'boiler2_partloadratio',
+    'controller.plaEna.yPla': 'plant_enable_signal',
+    'val3.y': 'radiator_control_valve_position',
+    'addPar.y': 'zone_temp_setpoint',
+    'boiPla.yHotWatDp[1]': 'loop_diff_pres'}
+
+month_start_end = {
+    'January': [0, 2764800],
+    'February': [2764800, 5184000],
+    'March': [5184000, 7862400],
+    'October': [23673600, 26352000],
+    'November': [26352000, 28944000],
+    'December': [28944000, 31622400]
+}
 
 line_plot_datapoints = {
     'Boiler power consumed': 'total_boiler_consumption',
@@ -65,9 +78,9 @@ line_plot_datapoints = {
 }
 
 bar_plot_datapoints = {
-        'Boiler power consumed': 'total_boiler_consumption',
-        'Pumps power consumed': 'pumps_power_consumption',
-        'Total plant energy consumed': 'total_plant_consumption'
+    'Boiler power consumed': 'total_boiler_consumption',
+    'Pumps power consumed': 'pumps_power_consumption',
+    'Total plant energy consumed': 'total_plant_consumption'
     }
 
 weather_file_location = os.path.join('C:\\WeatherData')
@@ -92,30 +105,27 @@ weather_file_dictionary = {
     'Tampa': 'USA_FL_Tampa.Intl.AP.722110_TMY3', 
     'Tucson': 'USA_AZ_Tucson.Intl.AP.722740_TMY3'}
 
-idd_path = os.path.join('C:\EnergyPlusV9-0-1', 'Energy+.idd')
-IDF.setiddname(idd_path)
+# idd_path = os.path.join('C:\EnergyPlusV9-0-1', 'Energy+.idd')
+# IDF.setiddname(idd_path)
 
-def main(filter_list):
+def main(filter_list, auto_result_name = False):
     mat_file_list = utilities.find_relevant_files(filter_list, simulation_results_folder)
     print('Found .mat files: ', mat_file_list)
     for mat_file in mat_file_list:
         print('Generating csv for ', mat_file)
-        generate_csv(mat_file)
+        generate_csv(mat_file, auto_result_name)
     generate_plots()
 
-def generate_csv(data_file_name):
+def generate_csv(data_file_name, auto_result_name = False):
     # data_file_name = "simulation_results_trial_4.mat"
     global simulation_results_folder
     global processed_results_folder
     global datapoints
 
-    result_file_name = data_file_name.rstrip('.mat')
+    # result_file_name = data_file_name.replace('.mat', '')
     data_file = os.path.join(simulation_results_folder, data_file_name)
-    print(data_file)
     simulation_data_raw = Reader(data_file, 'dymola')
-    # simulation_data_raw = sio.loadmat(data_file)
     var_names = simulation_data_raw.varNames()
-    # print(var_names)
 
     simulation_data = pd.DataFrame()
 
@@ -142,146 +152,43 @@ def generate_csv(data_file_name):
     simulation_data['total_plant_consumption'] = simulation_data['total_boiler_consumption'] + simulation_data['pumps_power_consumption']
     simulation_data['zone_temperature_deviation'] = simulation_data['zone_temp'] - (273.15 + 21.11)
 
-    print('Saving csv for ', data_file_name)
-    if not os.path.isdir(processed_results_folder):
-        os.mkdir(processed_results_folder)
-    simulation_data.to_csv(os.path.join(processed_results_folder, (result_file_name + '.csv')))
-    print('csv saved.')
+    available_months = get_months_available(simulation_data)
 
+    if 'baseline' in data_file_name:
+        controller_type = 'baseline'
+    else:
+        controller_type = 'RP-1711'
 
+    if auto_result_name:
+        for month in available_months:
+            filtered_data = simulation_data[(simulation_data['t'] >= month_start_end[month][0]) & (simulation_data['t'] <= month_start_end[month][1])]
+            result_file_name = controller_type + '_' + month
+            print('Saving csv for ', controller_type, ' for ', month)
+            if not os.path.isdir(processed_results_folder):
+                os.mkdir(processed_results_folder)
+            filtered_data.to_csv(os.path.join(processed_results_folder, (result_file_name + '.csv')))
+            print('csv saved.')
+    else:
+        result_file_name = data_file_name.replace('.mat', '')
+        print('Saving csv for ', data_file_name)
+        if not os.path.isdir(processed_results_folder):
+            os.mkdir(processed_results_folder)
+        simulation_data.to_csv(os.path.join(processed_results_folder, (result_file_name + '.csv')))
+        print('csv saved.')
 
-# # Plots
+def get_months_available(simulation_data):
+    global month_start_end
 
-# ## Configure plots
+    available_months = []
+    for month in list(month_start_end):
+        month_start = month_start_end[month][0]
+        month_end = month_start_end[month][1]
 
-plt.rcParams['axes.facecolor']='whitesmoke'
-plt.rcParams['font.size'] = 6
-plt.rcParams['text.usetex'] = False
-plt.rcParams['legend.facecolor'] = 'white'
-plt.rcParams['legend.framealpha'] = 0.75
-plt.rcParams['legend.edgecolor'] = 'none'
-plt.rcParams['savefig.dpi'] = 300
+        filtered_data = simulation_data[(simulation_data['t'] >= month_start) & (simulation_data['t'] <= month_end)]
+        if len(filtered_data['t']) > 1:
+            available_months.append(month)
 
-def save_plot(figure, file_name):
-    """ Save the figure to a pdf and png file in the directory `img`
-    """
-    import os
-    import matplotlib.pyplot as plt
-    
-    out_dir = "img"
-    if not os.path.exists(out_dir):
-        os.makedirs(out_dir)
-    figure.savefig(os.path.join(out_dir, '{}.pdf'.format(file_name)))
-    figure.savefig(os.path.join(out_dir, '{}.png'.format(file_name)))
-    plt.clf()
-    
-
-def configure_axes(axes):
-    """ Configure the axis style
-    """
-    axes.spines['right'].set_visible(False)
-    axes.spines['top'].set_visible(False)
-    axes.spines['left'].set_visible(False)
-    axes.spines['bottom'].set_visible(False)
-    axes.grid(color='lightgrey', linewidth=0.25)
-    return
-
-# ---------------------------------------------------------------------------
-# helper functions and scripts
-
-def set_cases_and_initiate_plot():
-    from matplotlib.gridspec import GridSpec
-    cases = ['test_base', 'test_1711']
-    seasons = ['']
-    num_cases = len(cases)
-    num_seasons = len(seasons)
-    
-    fig = plt.figure(figsize=(6.5,8.))
-    gs1 = GridSpec(80, 1)
-    gs1.update(left=0.1, right=0.9, hspace=0.05)
-    
-    ax = list()
-    ax.insert(0, fig.add_subplot(gs1[0:11,:]))
-    ax.insert(1, fig.add_subplot(gs1[12:23,:]))
-    ax.insert(2, fig.add_subplot(gs1[28:39,:]))
-    ax.insert(3, fig.add_subplot(gs1[40:51,:]))
-    ax.insert(4, fig.add_subplot(gs1[56:67,:]))
-    ax.insert(5, fig.add_subplot(gs1[68:79,:]))
-    
-    # fig, ax = plt.subplots(nrows=num_cases*num_seasons, ncols=1, figsize = (6.5,8.))
-    # fig, ax = plt.subplots(nrows=20, ncols=1, figsize = (6.5,8.))
-    
-    return cases, seasons, num_cases, num_seasons, fig, ax
-
-def set_title(ax, title):
-    left, width = .01, .97
-    bottom, height = .01, .88
-    right = left + width
-    top = bottom + height
-    
-    title_str = r"$\it{" + title + "}$"
-    ax.text(left, top,
-            title_str,
-            verticalalignment = 'center',
-            horizontalalignment = 'left', 
-            transform=ax.transAxes,
-            fontsize = 6, color = 'k',
-            bbox=dict(facecolor='white', alpha=0.75, edgecolor='none'))
-    
-    
-def set_up_labels(i, ax, cases, seasons, num_cases, num_seasons, x_axis_label, y_axis_label):
-    # Hide xtick labels and ticks on the upper case subplot (each basecase)
-    if i % 2 == 0:
-        hide_tick_labels(ax)
-
-    # Print x axis title only below the lowest subplot
-    if i  == num_cases*num_seasons - 1:
-        ax.set_xlabel(x_axis_label)
-    ax.set_ylabel(y_axis_label)
-    #ax.xaxis.set_ticks(np.arange(min(t)+0, 365, 1))
-     
-    # Annotate case
-    set_title(ax, cases[i % 2])
-    # Annotate case
-    # if i % 2 == 0:
-    #     title_str = r"$\bf{" + seasons[i/2] + "}$" + ' (upper: ' + r"$\it{" + cases[i % 2] + "}$" + ', lower: ' + r"$\it{"  + cases[(i-1) % 2] + "}$" + ')'
-    #     ax.set_title(title_str, # mg assign appropriate season/case
-    #                  verticalalignment = 'top',
-    #                  horizontalalignment = 'center', 
-    #                  fontsize = 6, color = 'k')
-        
-    # Print legend only at the lower plot (g36 case)
-    if i % 1 == 0:
-        ax.legend(loc='center right', ncol=1)
-    configure_axes(ax)
-        
-    #plt.tight_layout(h_pad=0)
-    plt.tight_layout()
-    #plt.subplots_adjust(hspace = .2)
-        
-def tem_conv_CtoF(T_in_degC):
-    '''Converts temperature provided in degC to degF
-    '''
-    T_in_degF = (T_in_degC)*9./5. + 32.
-    
-    return T_in_degF
-        
-def add_secondary_yaxis_for_degF(ax, time, temp_in_K):
-        # Add a secondary axis with temperatures represented in F
-        ax_F = ax.twinx()
-        # Get limits to match with the left axis
-        ax_F.set_ylim([tem_conv_CtoF(ax.get_ylim()[0]),tem_conv_CtoF(ax.get_ylim()[1])])
-        # plot a "scaler" variable and make it invisible
-        ax_F.plot(time, tem_conv_CtoF(temp_in_K-273.15), linewidth=0.0)
-        ax_F.set_ylabel('temperature [$^\circ$F]')
-        configure_axes(ax_F)
-        #ax.grid(False)
-        #ax.xaxis.grid()
-        
-def hide_tick_labels(ax):
-    '''Removes labels and ticks. Kwargs: bottom controls the ticks, labelbottom the tick labels
-    '''
-    ax.tick_params(axis = 'x',labelbottom='off',bottom='off')
+    return available_months
 
 def generate_plots():
     global processed_results_folder
@@ -503,6 +410,6 @@ def calculate_envelope_heat_transfer(output_csv_file):
     column_total.to_csv(os.path.join(os.path.dirname(csv_file_path), 'window_infiltration_energyTransfer.csv'))
 
 # calculate_envelope_heat_transfer('C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\OpenBuildingControl\\boiler_plant_case_study\\simulation_runs\\step_test\\step_test_loads_and_equipment_off_windowsAndInfiltration.csv')
-main(filter_list)
+main(filter_list, auto_result_name)
 list_of_results = utilities.find_relevant_files(['case', '.csv'], processed_results_folder)
 # plot_histogram_2(processed_results_folder, list_of_results)

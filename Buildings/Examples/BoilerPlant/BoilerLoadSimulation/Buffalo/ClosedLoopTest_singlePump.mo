@@ -8,19 +8,19 @@ block ClosedLoopTest_singlePump
       Buildings.Media.Water
     "Medium model";
 
-  parameter Modelica.SIunits.MassFlowRate mRad_flow_nominal=96.323
+  parameter Modelica.SIunits.MassFlowRate mRad_flow_nominal=113.45
     "Radiator nominal mass flow rate"
     annotation(dialog(group="Radiator parameters"));
 
-  parameter Real boiDesCap = 4359751.36;
+  parameter Real boiDesCap = 5134933.83;
 
   parameter Real boiCapRat = 2/4.3;
 
   PlantModel.ZoneModel_simplified zoneModel_simplified(
-    Q_flow_nominal=4359751.36,
+    Q_flow_nominal=boiDesCap,
     TRadSup_nominal=333.15,
     TRadRet_nominal=323.15,
-    mRad_flow_nominal=96.323,
+    mRad_flow_nominal=mRad_flow_nominal,
     V=126016.35,
     zonTheCap=6987976290,
     vol(T_start=283.15),
@@ -67,8 +67,8 @@ block ClosedLoopTest_singlePump
     resAmoVal=1.667,
     maxResVal=3.889,
     final VHotWatPri_flow_nominal=0.02,
-    final maxLocDpPri=50000,
-    final minLocDpPri=50000,
+    final maxLocDpPri=5000,
+    final minLocDpPri=5000,
     final VHotWatSec_flow_nominal=1e-6,
     final nBoi=2,
     final boiTyp={Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler,
@@ -76,8 +76,8 @@ block ClosedLoopTest_singlePump
     final nSta=3,
     final staMat=[1,0; 0,1; 1,1],
     final boiDesCap={boiCapRat*boiDesCap,(1 - boiCapRat)*boiDesCap},
-    final boiFirMin={0.2,0.3},
-    final minFloSet={0.2*boiCapRat*mRad_flow_nominal/2000,0.3*(1 - boiCapRat)*
+    final boiFirMin={0.3,0.3},
+    final minFloSet={0.3*boiCapRat*mRad_flow_nominal/2000,0.3*(1 - boiCapRat)*
         mRad_flow_nominal/2000},
     final maxFloSet={boiCapRat*mRad_flow_nominal/2000,(1 - boiCapRat)*
         mRad_flow_nominal/2000},
@@ -92,7 +92,8 @@ block ClosedLoopTest_singlePump
     final Ti_priPum=75,
     final Td_priPum=10e-9,
     final minPriPumSpeSta={0,0,0},
-    final speConTypPri=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP)
+    final speConTypPri=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP,
+    conPID(controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI))
     "Boiler plant controller"
     annotation (Placement(transformation(extent={{-110,-48},{-90,20}})));
 
@@ -112,7 +113,7 @@ block ClosedLoopTest_singlePump
     annotation (Placement(transformation(extent={{10,130},{30,150}})));
   Controls.OBC.CDL.Conversions.BooleanToInteger booToInt
     annotation (Placement(transformation(extent={{100,130},{120,150}})));
-  Controls.OBC.CDL.Continuous.Hysteresis hys1(uLow=0.5, uHigh=0.55)
+  Controls.OBC.CDL.Continuous.Hysteresis hys1(uLow=0.85, uHigh=0.9)
     "Check if radiator control valve opening is above threshold for rasing HHW supply temperature"
     annotation (Placement(transformation(extent={{20,50},{40,70}})));
   Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1(integerTrue=3)
@@ -123,10 +124,6 @@ block ClosedLoopTest_singlePump
     Ti=300)
     "Radiator isolation valve controller"
     annotation (Placement(transformation(extent={{-20,80},{0,100}})));
-  Controls.OBC.CDL.Discrete.UnitDelay uniDel(samplePeriod=1)
-    annotation (Placement(transformation(extent={{-80,-48},{-60,-28}})));
-  Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(nout=2)
-    annotation (Placement(transformation(extent={{-40,-48},{-20,-28}})));
   Controls.OBC.CDL.Logical.Sources.Constant           con3[2](final k=fill(true,
         2))
     "Constant boiler availability status"
@@ -141,8 +138,6 @@ block ClosedLoopTest_singlePump
         iconTransformation(extent={{-56,104},{-36,124}})));
   Controls.OBC.CDL.Continuous.AddParameter addPar(p=273.15, k=1)
     annotation (Placement(transformation(extent={{-60,130},{-40,150}})));
-  Controls.OBC.CDL.Continuous.Limiter lim(uMax=1, uMin=0.5)
-    annotation (Placement(transformation(extent={{-80,-120},{-60,-100}})));
 equation
   connect(controller.yBoi, boiPla.uBoiSta) annotation (Line(points={{-88,0},{
           -80,0},{-80,-1},{-62,-1}},
@@ -192,12 +187,6 @@ equation
           -40},{-112,-40}}, color={0,0,127}));
   connect(boiPla.yBypValPos, controller.uBypValPos) annotation (Line(points={{-38,
           2},{20,2},{20,-68},{-114,-68},{-114,-43},{-112,-43}}, color={0,0,127}));
-  connect(controller.yPriPumSpe, uniDel.u) annotation (Line(points={{-88,-20},{-86,
-          -20},{-86,-38},{-82,-38}}, color={0,0,127}));
-  connect(uniDel.y, reaRep.u)
-    annotation (Line(points={{-58,-38},{-42,-38}}, color={0,0,127}));
-  connect(reaRep.y, controller.uPriPumSpe) annotation (Line(points={{-18,-38},{-8,
-          -38},{-8,-76},{-112,-76},{-112,-46}},  color={0,0,127}));
   connect(conPID.y, val3.y) annotation (Line(points={{2,90},{6,90},{6,116},{-60,
           116},{-60,52}}, color={0,0,127}));
   connect(con3.y, controller.uBoiAva) annotation (Line(points={{-118,-130},{
@@ -233,8 +222,6 @@ equation
           -110,110},{-110,140},{-62,140}}, color={0,0,127}));
   connect(gai.y, zoneModel_simplified.u) annotation (Line(points={{-78,110},{
           -52,110},{-52,60},{-42,60}}, color={0,0,127}));
-  connect(controller.yBypValPos, lim.u) annotation (Line(points={{-88,-12},{-84,
-          -12},{-84,-110},{-82,-110}}, color={0,0,127}));
   connect(controller.yBypValPos, boiPla.uBypValSig) annotation (Line(points={{
           -88,-12},{-84,-12},{-84,-13},{-62,-13}}, color={0,0,127}));
   annotation (
@@ -242,7 +229,8 @@ equation
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,
             160}})),
     experiment(
-      StopTime=8640000,
-      Interval=900,
+      StartTime=23673600,
+      StopTime=31622400,
+      Interval=600,
       __Dymola_Algorithm="Cvode"));
 end ClosedLoopTest_singlePump;
