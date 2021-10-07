@@ -31,6 +31,13 @@ block HotWaterSupplyTemperatureReset
     "The maximum allowed hot-water setpoint temperature for the plant"
     annotation(Dialog(group="Trim-and-Respond Logic parameters"));
 
+  parameter Real TPlaHotWatSetIni(
+    final unit="K",
+    displayUnit="K",
+    final quantity="ThermodynamicTemperature") = TPlaHotWatSetMax
+    "The Initial hot-water setpoint temperature for the plant when it is turned on"
+    annotation(Dialog(group="Trim-and-Respond Logic parameters"));
+
   parameter Real TConBoiHotWatSetMax(
     final unit="K",
     displayUnit="K",
@@ -162,7 +169,7 @@ protected
     annotation (Placement(transformation(extent={{-40,-80},{-20,-60}})));
 
   Buildings.Controls.OBC.ASHRAE.G36_PR1.Generic.SetPoints.TrimAndRespond triRes(
-    final iniSet=TPlaHotWatSetMax,
+    final iniSet=TPlaHotWatSetIni,
     final minSet=THotWatSetMinNonConBoi,
     final maxSet=TPlaHotWatSetMax,
     final delTim=delTimVal,
@@ -196,7 +203,7 @@ protected
     annotation (Placement(transformation(extent={{-120,80},{-100,100}})));
 
   Buildings.Controls.OBC.ASHRAE.G36_PR1.Generic.SetPoints.TrimAndRespond triRes1(
-    final iniSet=TPlaHotWatSetMax,
+    final iniSet=TPlaHotWatSetIni,
     final minSet=THotWatSetMinConBoi,
     final maxSet=TPlaHotWatSetMax,
     final delTim=delTimVal,
@@ -392,7 +399,7 @@ equation
       <table summary=\"summary\" border=\"1\">
       <tr><th> Variable </th> <th> Value </th> <th> Definition </th> </tr>
       <tr><td>Device</td><td>Any hot water pump</td> <td>Associated device</td></tr>
-      <tr><td>iniSet</td><td><code>TPlaHotWatSetMax</code></td><td>Initial setpoint</td></tr>
+      <tr><td>iniSet</td><td><code>TPlaHotWatSetIni</code></td><td>Initial setpoint</td></tr>
       <tr><td>minSet</td><td><code>THotWatSetMinConBoi</code> for condensing boilers;<br><code>THotWatSetMinNonConBoi</code> for non-condensing boilers</td><td>Minimum setpoint</td></tr>
       <tr><td>maxSet</td><td><code>TPlaHotWatSetMax</code></td><td>Maximum setpoint</td></tr>
       <tr><td>delTim</td><td><code>delTimVal</code></td><td>Delay timer</td></tr>
