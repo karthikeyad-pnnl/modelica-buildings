@@ -33,7 +33,8 @@ block ClosedLoopTest_singlePump
     fileName=
         "C:/buildings_library/buildings_library_pnnl/VM_script/inputTableTxt.txt",
     verboseRead=true,
-    columns={2,5},
+    columns={6,5},
+    extrapolation=Modelica.Blocks.Types.Extrapolation.HoldLastPoint,
     timeScale=60) "Boiler thermal load from EnergyPlus simulation"
     annotation (Placement(transformation(extent={{-140,100},{-120,120}})));
 
@@ -62,7 +63,7 @@ block ClosedLoopTest_singlePump
     final nPumSec=0,
     final nSenSec=0,
     final nPumSec_nominal=0,
-    TPlaHotWatSetMax=273.15 + 70,
+    TPlaHotWatSetMax=273.15 + 60,
     triAmoVal=-1.111,
     resAmoVal=1.667,
     maxResVal=3.889,
@@ -229,8 +230,8 @@ equation
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,
             160}})),
     experiment(
-      StartTime=23673600,
-      StopTime=31622400,
-      Interval=600,
+      StartTime=400000,
+      StopTime=550000,
+      Interval=1,
       __Dymola_Algorithm="Cvode"));
 end ClosedLoopTest_singlePump;

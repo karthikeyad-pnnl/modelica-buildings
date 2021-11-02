@@ -13,7 +13,7 @@ import shutil
 # simulation_results_folder = '/home/developer/models/Buildings'
 # processed_results_folder = '/home/developer/models/extracted_simulation_data'
 # simulation_results_folder = 'C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\Git_repos\\modelica-buildings\\raw_mat_files\\Buffalo-post060921'
-simulation_results_folder = "C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\OpenBuildingControl\\boiler_plant_case_study\\ASHRAE_BPAC21\\Datasets\\60degCSupply\\Full_datasets"
+simulation_results_folder = "C:\\Users\\deva713\\OneDrive - PNNL\\Documents\\OpenBuildingControl\\boiler_plant_case_study\\ASHRAE_BPAC21\\Datasets\\newLoadProfile_60degC"
 auto_result_name = True
 # filter_list = ['ClosedLoopTest_singlePump', 'Atlanta', '100days', '.mat']
 filter_list = ['.mat']
@@ -166,7 +166,9 @@ def generate_csv(data_file_name, auto_result_name = False):
             print('Saving csv for ', controller_type, ' for ', month)
             if not os.path.isdir(processed_results_folder):
                 os.mkdir(processed_results_folder)
-            filtered_data.to_csv(os.path.join(processed_results_folder, (result_file_name + '.csv')))
+            save_file_path = os.path.join(processed_results_folder, (result_file_name + '.csv'))
+            if not os.path.exists(save_file_path):
+                filtered_data.to_csv(os.path.join(processed_results_folder, (result_file_name + '.csv')))
             print('csv saved.')
     else:
         result_file_name = data_file_name.replace('.mat', '')
