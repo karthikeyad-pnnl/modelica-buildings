@@ -384,127 +384,134 @@ block TestBed
     "Cooling coil"
     annotation (Placement(transformation(extent={{-110,4},{-130,-16}})));
 
-  Buildings.Fluid.Sources.Boundary_pT           sinHea(
+  Buildings.Fluid.Sources.Boundary_pT sinHea(
     redeclare package Medium = MediumW,
     p=100000,
     T=318.15,
     nPorts=1)
-    "Sink for heating coil" annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=90,
-        origin={-210,-70})));
+    "Sink for heating coil"
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+      rotation=90,
+      origin={-210,-70})));
 
-  Buildings.Fluid.Sources.Boundary_pT           sinCoo(
+  Buildings.Fluid.Sources.Boundary_pT sinCoo(
     redeclare package Medium = MediumW,
-    p=100000,
-    T=285.15,
-    nPorts=1)
-    "Sink for cooling coil" annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=90,
-        origin={-140,-70})));
+    final p=100000,
+    final T=285.15,
+    final nPorts=1)
+    "Sink for cooling coil"
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+      rotation=90,
+      origin={-140,-70})));
 
-  Buildings.Fluid.Sources.MassFlowSource_T           souCoo(
+  Buildings.Fluid.Sources.MassFlowSource_T souCoo(
     redeclare package Medium = MediumW,
-    T=280.372,
-    nPorts=1,
-    use_m_flow_in=true)
-    "Source for cooling coil" annotation (Placement(
-        transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=90,
-        origin={-100,-70})));
+    final T=280.372,
+    final nPorts=1,
+    final use_m_flow_in=true)
+    "Source for cooling coil"
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+      rotation=90,
+      origin={-100,-70})));
 
-  Buildings.Fluid.Sources.MassFlowSource_T           souHea(
+  Buildings.Fluid.Sources.MassFlowSource_T souHea(
     redeclare package Medium = MediumW,
-    T=318.15,
-    use_m_flow_in=true,
-    nPorts=1)           "Source for heating coil" annotation (Placement(
-        transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=90,
-        origin={-170,-70})));
+    final T=318.15,
+    final use_m_flow_in=true,
+    final nPorts=1)
+    "Source for heating coil"
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+      rotation=90,
+      origin={-170,-70})));
 
-  Buildings.Fluid.HeatExchangers.DryCoilEffectivenessNTU           heaCoi(
-    show_T=true,
+  Buildings.Fluid.HeatExchangers.DryCoilEffectivenessNTU heaCoi(
+    final show_T=true,
     redeclare package Medium1 = MediumW,
     redeclare package Medium2 = MediumA,
-    m1_flow_nominal=mAirTot_flow_nominal*1000*(10 - (-20))/4200/10,
-    m2_flow_nominal=mAirTot_flow_nominal,
-    configuration=Buildings.Fluid.Types.HeatExchangerConfiguration.CounterFlow,
-    Q_flow_nominal=mAirTot_flow_nominal*1006*(16.7 - 8.5),
-    dp1_nominal=0,
-    dp2_nominal=200 + 200 + 100 + 40,
-    allowFlowReversal1=false,
-    allowFlowReversal2=false,
-    T_a1_nominal=318.15,
-    T_a2_nominal=281.65)
+    final m1_flow_nominal=mAirTot_flow_nominal*1000*(10 - (-20))/4200/10,
+    final m2_flow_nominal=mAirTot_flow_nominal,
+    final configuration=Buildings.Fluid.Types.HeatExchangerConfiguration.CounterFlow,
+    final Q_flow_nominal=mAirTot_flow_nominal*1006*(16.7 - 8.5),
+    final dp1_nominal=0,
+    final dp2_nominal=200 + 200 + 100 + 40,
+    final allowFlowReversal1=false,
+    final allowFlowReversal2=false,
+    final T_a1_nominal=318.15,
+    final T_a2_nominal=281.65)
     "Heating coil"
     annotation (Placement(transformation(extent={{-180,4},{-200,-16}})));
 
   Buildings.Examples.VAVReheat.BaseClasses.VAVReheatBox souCAVTer(
     redeclare package MediumA = MediumA,
     redeclare package MediumW = MediumW,
-    m_flow_nominal=mAirSou_flow_nominal,
-    VRoo=VRooSou,
-    allowFlowReversal=false) "CAV terminal for south zone"
+    final m_flow_nominal=mAirSou_flow_nominal,
+    final VRoo=VRooSou,
+    final allowFlowReversal=false)
+    "CAV terminal for south zone"
     annotation (Placement(transformation(extent={{390,-130},{430,-90}})));
 
   Buildings.Fluid.FixedResistances.Junction jun5(
     redeclare package Medium = MediumA,
-    m_flow_nominal={mAirTot_flow_nominal,-mAirTot_flow_nominal,
+    final m_flow_nominal={mAirTot_flow_nominal,-mAirTot_flow_nominal,
         mAirTot_flow_nominal},
-    dp_nominal={0,0,0}) "Return air mixer"
+    final dp_nominal={0,0,0})
+    "Return air mixer"
     annotation (Placement(transformation(extent={{-40,150},{-20,170}})));
 
-  Buildings.Fluid.Sources.Boundary_pT           sinCoo1(
+  Buildings.Fluid.Sources.Boundary_pT sinCoo1(
     redeclare package Medium = MediumW,
-    p=100000,
-    T=297.04,
-    nPorts=2)
-    "Sink for chillede water"         annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=90,
-        origin={250,-176})));
+    final p=100000,
+    final T=297.04,
+    final nPorts=2)
+    "Sink for chillede water"
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+      rotation=90,
+      origin={250,-176})));
 
-  Buildings.Fluid.Sources.Boundary_pT           souCoo1(
+  Buildings.Fluid.Sources.Boundary_pT souCoo1(
     redeclare package Medium = MediumW,
-    p=100000,
-    use_T_in=true,
-    T=285.15,
-    nPorts=1)
+    final p=100000,
+    final use_T_in=true,
+    final T=285.15,
+    final nPorts=1)
     "Source for chilled water to chilled beam manifolds"
-                                      annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=90,
-        origin={100,-174})));
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+      rotation=90,
+      origin={100,-174})));
 
-  Buildings.Fluid.Sensors.TemperatureTwoPort senTem(redeclare package Medium = MediumA,
-      m_flow_nominal=mAirTot_flow_nominal)
+  Buildings.Fluid.Sensors.TemperatureTwoPort senTem(
+    redeclare package Medium = MediumA,
+    final m_flow_nominal=mAirTot_flow_nominal)
     "AHU discharge air temperature sensor"
     annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
 
-  Buildings.Fluid.Movers.SpeedControlled_y fan(redeclare package Medium = MediumA,
+  Buildings.Fluid.Movers.SpeedControlled_y fan(
+    redeclare package Medium = MediumA,
     redeclare Fluid.Movers.Data.Pumps.Wilo.chilledBeamFanCurve per,
-      addPowerToMedium=false)
-    "DOAS fan" annotation (Placement(
-        transformation(
-        extent={{-80,-10},{-60,10}})));
+    final addPowerToMedium=false)
+    "DOAS fan"
+    annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
 
-  Buildings.Fluid.Sensors.RelativePressure senRelPre(redeclare package Medium = MediumW)
+  Buildings.Fluid.Sensors.RelativePressure senRelPre(
+    redeclare package Medium = MediumW)
     "Differential pressure sensor between chilled water supply and return"
     annotation (Placement(transformation(extent={{150,-80},{170,-60}})));
 
-  Buildings.Fluid.Sensors.RelativePressure senRelPre1(redeclare package Medium = MediumA)
+  Buildings.Fluid.Sensors.RelativePressure senRelPre1(
+    redeclare package Medium = MediumA)
     "Differential pressure sensor between AHU discharge and outdoor air"
-    annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=90,
-        origin={-50,30})));
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+      rotation=90,
+      origin={-50,30})));
 
-  Modelica.Blocks.Routing.DeMultiplex demux(n=5)
+  Modelica.Blocks.Routing.DeMultiplex demux(
+    final n=5)
     "Demultiplexer for chilled water valve signals"
     annotation (Placement(transformation(extent={{40,-30},{60,-10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(uLow=0.04, uHigh=0.05)
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(
+    final uLow=0.04,
+    final uHigh=0.05)
     "Block for generating pump proven on signal"
     annotation (Placement(transformation(extent={{140,-120},{160,-100}})));
 
@@ -516,11 +523,13 @@ block TestBed
     "Find pump flow signal by multiplying enable signal with speed signal"
     annotation (Placement(transformation(extent={{-280,-140},{-260,-120}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Gain gai(k=mHotWatCoi_nominal)
+  Buildings.Controls.OBC.CDL.Continuous.Gain gai(
+    final k=mHotWatCoi_nominal)
     "Multiply control signal by nominal flowrate"
     annotation (Placement(transformation(extent={{-320,-60},{-300,-40}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Gain gai1(k=mChiWatCoi_nominal)
+  Buildings.Controls.OBC.CDL.Continuous.Gain gai1(
+    final k=mChiWatCoi_nominal)
     "Multiply control signal by nominal flowrate"
     annotation (Placement(transformation(extent={{-320,-90},{-300,-70}})));
 
@@ -532,11 +541,13 @@ block TestBed
     "Find fan flow signal by multiplying enable signal with speed signal"
     annotation (Placement(transformation(extent={{-280,10},{-260,30}})));
 
-  Modelica.Blocks.Routing.Multiplex mux1(n=5)
+  Modelica.Blocks.Routing.Multiplex mux1(
+    final n=5)
     "Multiplexer for chilled water valve position measurements"
     annotation (Placement(transformation(extent={{160,70},{180,90}})));
 
-  Modelica.Blocks.Routing.DeMultiplex demux1(n=5)
+  Modelica.Blocks.Routing.DeMultiplex demux1(
+    final n=5)
     "Demultiplexer for CAV terminal damper signals"
     annotation (Placement(transformation(extent={{300,-260},{320,-240}})));
 
