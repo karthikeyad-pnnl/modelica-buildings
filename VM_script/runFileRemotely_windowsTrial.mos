@@ -1,0 +1,2 @@
+﻿openModel("C:\Buildings_library\modelica-buildings\Buildings\package.mo");
+simulateModel("Buildings.Examples.BoilerPlant.ClosedLoopTest_baseline", startTime=0,tolerance=1e-6, stopTime=7200, method="dassl", resultFile="baseline_case");

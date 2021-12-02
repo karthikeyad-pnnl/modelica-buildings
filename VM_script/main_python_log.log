@@ -1,0 +1,4 @@
+2021-10-01 17:31:52,622 - main_python_log - INFO - 600-Receiving inputs and objects from Modelica
+2021-10-01 17:31:52,623 - main_python_log - INFO - 600-New instance of OptimalStart created
+2021-10-01 17:31:52,623 - main_python_log - INFO - 600-Assigning received values to variables
+2021-10-01 17:31:52,624 - main_python_log - INFO - 600-Signals received from SBS algorithm

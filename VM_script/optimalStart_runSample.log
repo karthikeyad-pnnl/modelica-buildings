@@ -1,0 +1,25 @@
+2021-10-01 17:31:52,623 - optimalStart_runSample - INFO - 600-Updating room dynamics coefficients for zone 0
+2021-10-01 17:31:52,623 - optimalStart_runSample - INFO - 600-Updated room dynamics coefficients for zone 0
+2021-10-01 17:31:52,623 - optimalStart_runSample - INFO - 600-Starting SBS algorithm for zone 0
+2021-10-01 17:31:52,623 - optimalStart_runSample - INFO - 600-SBS algorithm completed for zone 0
+2021-10-01 17:31:52,623 - optimalStart_runSample - INFO - 600-Switching zone 0 on
+2021-10-01 17:31:52,623 - optimalStart_runSample - INFO - 600-Updating room dynamics coefficients for zone 1
+2021-10-01 17:31:52,623 - optimalStart_runSample - INFO - 600-Updated room dynamics coefficients for zone 1
+2021-10-01 17:31:52,623 - optimalStart_runSample - INFO - 600-Starting SBS algorithm for zone 1
+2021-10-01 17:31:52,623 - optimalStart_runSample - INFO - 600-SBS algorithm completed for zone 1
+2021-10-01 17:31:52,623 - optimalStart_runSample - INFO - 600-Switching zone 1 on
+2021-10-01 17:31:52,623 - optimalStart_runSample - INFO - 600-Updating room dynamics coefficients for zone 2
+2021-10-01 17:31:52,623 - optimalStart_runSample - INFO - 600-Updated room dynamics coefficients for zone 2
+2021-10-01 17:31:52,623 - optimalStart_runSample - INFO - 600-Starting SBS algorithm for zone 2
+2021-10-01 17:31:52,624 - optimalStart_runSample - INFO - 600-SBS algorithm completed for zone 2
+2021-10-01 17:31:52,624 - optimalStart_runSample - INFO - 600-Switching zone 2 on
+2021-10-01 17:31:52,624 - optimalStart_runSample - INFO - 600-Updating room dynamics coefficients for zone 3
+2021-10-01 17:31:52,624 - optimalStart_runSample - INFO - 600-Updated room dynamics coefficients for zone 3
+2021-10-01 17:31:52,624 - optimalStart_runSample - INFO - 600-Starting SBS algorithm for zone 3
+2021-10-01 17:31:52,624 - optimalStart_runSample - INFO - 600-SBS algorithm completed for zone 3
+2021-10-01 17:31:52,624 - optimalStart_runSample - INFO - 600-Switching zone 3 on
+2021-10-01 17:31:52,624 - optimalStart_runSample - INFO - 600-Updating room dynamics coefficients for zone 4
+2021-10-01 17:31:52,624 - optimalStart_runSample - INFO - 600-Updated room dynamics coefficients for zone 4
+2021-10-01 17:31:52,624 - optimalStart_runSample - INFO - 600-Starting SBS algorithm for zone 4
+2021-10-01 17:31:52,624 - optimalStart_runSample - INFO - 600-SBS algorithm completed for zone 4
+2021-10-01 17:31:52,624 - optimalStart_runSample - INFO - 600-Switching zone 4 on
