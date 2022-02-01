@@ -2,7 +2,7 @@ showMessageWindow();
 
 trace();
 
-openModel("/home/developer/models/Buildings/package.mo",changeDirectory=false);
+openModel("/home/developer/models/Buildings/package.mo");
 simulateModel("Buildings.ThermalZones.EnergyPlus.Examples.LargeOffice.OpenLoop.LargeOfficeOpenLoop_multipleZones", stopTime=86400, method="Cvode", tolerance=1e-06, resultFile="LargeOfficeOpenLoop");
 
 savelog("/home/developer/models/Buildings/log.txt");
