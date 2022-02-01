@@ -1,4 +1,12 @@
+showMessageWindow();
+
+trace();
+
 openModel("/home/developer/models/Buildings/package.mo",changeDirectory=false);
 simulateModel("Buildings.ThermalZones.EnergyPlus.Examples.LargeOffice.OpenLoop.LargeOfficeOpenLoop_multipleZones", stopTime=86400, method="Cvode", tolerance=1e-06, resultFile="LargeOfficeOpenLoop");
-createPlot(id=1, position={95, 90, 1092, 1001}, y={"fmuZonCor[1].T"}, range={0.0, 3600.0, 270.0, 295.0}, grid=true, colors={{28,108,200}});
-createPlot(id=1, position={95, 90, 1092, 498}, y={"fmuZonCor[1].QCon_flow"}, range={0.0, 3600.0, -16000.0, 6000.0}, grid=true, subPlot=2, colors={{28,108,200}});
+
+savelog("/home/developer/models/Buildings/log.txt");
+
+getLastError();
+
+exit();
