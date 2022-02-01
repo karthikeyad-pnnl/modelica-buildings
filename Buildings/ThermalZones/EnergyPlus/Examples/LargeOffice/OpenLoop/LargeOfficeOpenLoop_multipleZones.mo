@@ -27,17 +27,22 @@ model LargeOfficeOpenLoop_multipleZones
     showWeatherData=false)
     "Building model"
     annotation (Placement(transformation(extent={{-80,70},{-60,90}})));
-  Buildings.ThermalZones.EnergyPlus.BaseClasses.ThermalZoneAdapter fmuZonCor[15](
+  Buildings.ThermalZones.EnergyPlus.BaseClasses.FMUZoneAdapter fmuZonCor[15](
+    spawnLinuxExecutable=spawnLinuxExecutable,
     modelicaNameBuilding=fill(modelicaNameBuilding, 15),
     final idfName=fill(idfName, 15),
     final weaName=fill(weaName, 15),
-    relativeSurfaceTolerance=fill(building.relativeSurfaceTolerance, 15),
     final zoneName={"Core_bottom","Core_mid","Core_top","Perimeter_bot_ZN_1","Perimeter_bot_ZN_2",
         "Perimeter_bot_ZN_3","Perimeter_bot_ZN_4","Perimeter_mid_ZN_1","Perimeter_mid_ZN_2",
         "Perimeter_mid_ZN_3","Perimeter_mid_ZN_4","Perimeter_top_ZN_1","Perimeter_top_ZN_2",
         "Perimeter_top_ZN_3","Perimeter_top_ZN_4"},
     final nFluPor=fill(2, 15)) "Adapter to EnergyPlus"
     annotation (Placement(transformation(extent={{20,20},{40,40}})));
+
+  parameter String spawnLinuxExecutable=building.linux64Binaries.spawnLinuxExecutable
+    "Path to the spawn executable"
+    annotation(HideResult=true);
+
 //     fmuName=Modelica.Utilities.Files.loadResource(
 //       "modelica://Buildings/Resources/src/ThermalZones/EnergyPlus/FMUs/Zones1.fmu"),
   Modelica.Blocks.Sources.RealExpression X_w[15](y=fill(0.01, 15))
@@ -80,8 +85,6 @@ equation
     annotation (Line(points={{-19,30},{18,30}}, color={0,0,127}));
   connect(fmuZonCor.QCon_flow, TZonCor.u) annotation (Line(points={{41,32},{50,32},
           {50,30},{58,30}}, color={0,0,127}));
-  connect(TZonCor.y, fmuZonCor.T) annotation (Line(points={{81,30},{90,30},{90,66},
-          {8,66},{8,38},{18,38}}, color={0,0,127}));
   connect(X_w.y, fmuZonCor.X_w) annotation (Line(points={{-69,50},{0,50},{0,34},
           {18,34}}, color={0,0,127}));
   connect(QGaiRad_flow.y, fmuZonCor.QGaiRad_flow) annotation (Line(points={{-69,
