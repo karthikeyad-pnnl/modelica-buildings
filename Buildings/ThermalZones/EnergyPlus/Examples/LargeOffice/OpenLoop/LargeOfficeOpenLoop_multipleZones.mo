@@ -93,6 +93,8 @@ equation
           {0,26},{18,26}}, color={0,0,127}));
   connect(TOutlet.y, fmuZonCor.TInlet[2]) annotation (Line(points={{-69,-60},{0,
           -60},{0,26},{18,26}}, color={0,0,127}));
+  connect(TZonCor.y, fmuZonCor.T) annotation (Line(points={{81,30},{90,30},{90,
+          60},{8,60},{8,38},{18,38}}, color={0,0,127}));
   annotation (
     Documentation(
       info="<html>
@@ -113,7 +115,7 @@ First implementation.
 </ul>
 </html>"),
     __Dymola_Commands(
-      file="modelica://Buildings/Resources/Scripts/Dymola/ThermalZones/EnergyPlus/BaseClasses/Validation/FMUZoneAdapterZones1.mos" "Simulate and plot"),
+      file="modelica://Buildings/Resources/Scripts/Dymola/ThermalZones/EnergyPlus/Examples/LargeOffice/OpenLoop/LargeOfficeOpenLoop.mos" "Simulate and plot"),
     experiment(
       StartTime=35.7,
       StopTime=86400,
