@@ -366,7 +366,7 @@ block Controller "Controller for room VAV box"
     reverseActing=false) "Cooling loop signal"
     annotation (Placement(transformation(extent={{-110,110},{-90,130}})));
 
-protected
+// protected
   Buildings.Controls.OBC.CDL.Integers.Equal isUnOcc
     "Output true if unoccupied"
     annotation (Placement(transformation(extent={{-18,-160},{2,-140}})));

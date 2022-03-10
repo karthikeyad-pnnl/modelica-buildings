@@ -243,7 +243,7 @@ block DamperValves
   Buildings.Controls.OBC.CDL.Continuous.Switch swi5 "Output active cooling airflow "
     annotation (Placement(transformation(extent={{60,200},{80,220}})));
 
-protected
+// protected
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant conZer(
     final k=0) "Constant zero"
     annotation (Placement(transformation(extent={{-280,300},{-260,320}})));
@@ -356,8 +356,8 @@ protected
     annotation (Placement(transformation(extent={{200,250},{220,270}})));
   Buildings.Controls.OBC.CDL.Continuous.Add add4 "Active airflow set point"
     annotation (Placement(transformation(extent={{180,40},{200,60}})));
-  Buildings.Controls.OBC.CDL.Continuous.Division VDis_flowNor
-    if not have_pressureIndependentDamper
+  Buildings.Controls.OBC.CDL.Continuous.Division VDis_flowNor if
+       not have_pressureIndependentDamper
     "Normalized discharge volume flow rate"
     annotation (Placement(transformation(extent={{240,150},{260,170}})));
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant nomFlow(

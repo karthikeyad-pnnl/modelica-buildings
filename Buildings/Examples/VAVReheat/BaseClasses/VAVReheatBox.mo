@@ -130,7 +130,7 @@ model VAVReheatBox "Supply box of a VAV system with a hot water reheat coil"
       Placement(transformation(extent={{-140,20},{-100,60}}),
         iconTransformation(extent={{-140,10},{-100,50}})));
   Real ACH(unit="1/h") = VSup_flow/VRoo*3600 "Air changes per hour";
-protected
+// protected
   constant Modelica.Units.SI.SpecificHeatCapacity cpAir=Buildings.Utilities.Psychrometrics.Constants.cpAir
     "Air specific heat capacity";
   constant Modelica.Units.SI.SpecificHeatCapacity cpWatLiq=Buildings.Utilities.Psychrometrics.Constants.cpWatLiq
