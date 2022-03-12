@@ -675,19 +675,19 @@ package Trial
   equation
     connect(port_a, TAirSup.port_a)
       annotation (Line(points={{-100,0},{-70,0}}, color={0,127,255}));
-    connect(TAirRet.port_b, port_b)
+    connect(TAirCon.port_b, port_b)
       annotation (Line(points={{60,0},{100,0}}, color={0,127,255}));
     connect(TAirSup.port_b, VAir_flow.port_a)
       annotation (Line(points={{-50,0},{-40,0}}, color={0,127,255}));
     connect(VAir_flow.V_flow, POut.V_flow)
       annotation (Line(points={{-30,11},{-30,56},{18,56}}, color={0,0,127}));
-    connect(TAirRet.T, POut.TOut) annotation (Line(points={{50,11},{50,40},{8,40},
+    connect(TAirCon.T, POut.TOut) annotation (Line(points={{50,11},{50,40},{8,40},
             {8,60},{18,60}}, color={0,0,127}));
     connect(TAirSup.T, POut.TIn)
       annotation (Line(points={{-60,11},{-60,64},{18,64}}, color={0,0,127}));
     connect(VAir_flow.port_b, hea.port_a)
       annotation (Line(points={{-20,0},{-10,0}}, color={0,127,255}));
-    connect(hea.port_b, TAirRet.port_a)
+    connect(hea.port_b,TAirCon.port_a)
       annotation (Line(points={{10,0},{40,0}}, color={0,127,255}));
     connect(uHea, partialTwoPortInterface.u) annotation (Line(points={{0,120},{
             0,80},{-14,80},{-14,6},{-12,6}}, color={0,0,127}));
@@ -722,7 +722,7 @@ package Trial
 
     replaceable Fluid.Sensors.TemperatureTwoPort TAirSup
       annotation (Placement(transformation(extent={{-70,-10},{-50,10}})));
-    replaceable Fluid.Sensors.TemperatureTwoPort TAirRet
+    replaceable Fluid.Sensors.TemperatureTwoPort TAirCon
       annotation (Placement(transformation(extent={{40,-10},{60,10}})));
     replaceable Fluid.Sensors.VolumeFlowRate VAir_flow
       annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
@@ -737,21 +737,21 @@ package Trial
   equation
     connect(port_a, TAirSup.port_a)
       annotation (Line(points={{-100,0},{-70,0}}, color={0,127,255}));
-    connect(TAirRet.port_b, port_b)
+    connect(TAirCon.port_b, port_b)
       annotation (Line(points={{60,0},{100,0}}, color={0,127,255}));
     connect(TAirSup.port_b, VAir_flow.port_a)
       annotation (Line(points={{-50,0},{-40,0}}, color={0,127,255}));
     connect(VAir_flow.V_flow, POut.V_flow)
       annotation (Line(points={{-30,11},{-30,56},{18,56}}, color={0,0,127}));
-    connect(TAirRet.T, POut.TOut) annotation (Line(points={{50,11},{50,40},{8,40},
+    connect(TAirCon.T, POut.TOut) annotation (Line(points={{50,11},{50,40},{8,40},
             {8,60},{18,60}}, color={0,0,127}));
     connect(TAirSup.T, POut.TIn)
       annotation (Line(points={{-60,11},{-60,64},{18,64}}, color={0,0,127}));
     connect(VAir_flow.port_b, partialTwoPortInterface.port_a)
       annotation (Line(points={{-20,0},{-10,0}}, color={0,127,255}));
-    connect(partialTwoPortInterface.port_b, TAirRet.port_a)
+    connect(partialTwoPortInterface.port_b,TAirCon. port_a)
       annotation (Line(points={{10,0},{40,0}}, color={0,127,255}));
-    connect(TAirRet.T, TCon)
+    connect(TAirCon.T, TCon)
       annotation (Line(points={{50,11},{50,60},{120,60}}, color={0,0,127}));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
           coordinateSystem(preserveAspectRatio=false)));
@@ -1023,8 +1023,6 @@ package Trial
 
   partial model Baseclass_components
     extends Buildings.Trial.Baseclass_externalInterfaces;
-    replaceable Fluid.Interfaces.PartialTwoPortInterface heaCoi
-      annotation (Placement(transformation(extent={{-40,-50},{-20,-30}})));
     replaceable Fluid.Interfaces.PartialTwoPortInterface cooCoi
       annotation (Placement(transformation(extent={{20,-50},{40,-30}})));
     Fluid.Movers.SpeedControlled_y fan
@@ -1033,9 +1031,11 @@ package Trial
       annotation (Placement(transformation(extent={{120,-50},{140,-30}})));
     Fluid.Sensors.TemperatureTwoPort senTem
       annotation (Placement(transformation(extent={{160,-50},{180,-30}})));
+    replaceable Fluid.Interfaces.PartialTwoPortInterface eco
+      annotation (Placement(transformation(extent={{-120,-50},{-100,-30}})));
+    replaceable BaseClass_heatingCoil baseClass_heatingCoil
+      annotation (Placement(transformation(extent={{-60,-50},{-40,-30}})));
   equation
-    connect(heaCoi.port_b, cooCoi.port_a)
-      annotation (Line(points={{-20,-40},{20,-40}}, color={0,127,255}));
     connect(cooCoi.port_b, fan.port_a)
       annotation (Line(points={{40,-40},{80,-40}}, color={0,127,255}));
     connect(fan.port_b, senVolFlo.port_a)
@@ -1044,6 +1044,14 @@ package Trial
       annotation (Line(points={{140,-40},{160,-40}}, color={0,127,255}));
     connect(senTem.port_b, port_supply)
       annotation (Line(points={{180,-40},{220,-40}}, color={0,127,255}));
+    connect(port_return, eco.port_a) annotation (Line(points={{220,40},{-140,40},
+            {-140,-40},{-120,-40}}, color={0,127,255}));
+    connect(uFan, fan.y) annotation (Line(points={{0,280},{0,0},{90,0},{90,-28}},
+          color={0,0,127}));
+    connect(eco.port_b, baseClass_heatingCoil.port_a)
+      annotation (Line(points={{-100,-40},{-60,-40}}, color={0,127,255}));
+    connect(baseClass_heatingCoil.port_b, cooCoi.port_a)
+      annotation (Line(points={{-40,-40},{20,-40}}, color={0,127,255}));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
           coordinateSystem(preserveAspectRatio=false)));
   end Baseclass_components;
@@ -1058,4 +1066,45 @@ package Trial
     annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
           coordinateSystem(preserveAspectRatio=false)));
   end Usecase;
+
+  model FCU
+    extends Buildings.Trial.Baseclass_components(
+      redeclare Buildings.Trial.coolingCoil_CCW cooCoi);
+    annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
+          coordinateSystem(preserveAspectRatio=false)));
+  end FCU;
+
+  model BaseClass_heatingCoil
+    extends Buildings.Fluid.Interfaces.PartialTwoPortInterface;
+    replaceable heatingCoil_electric heatingCoil_electric1
+      annotation (Placement(transformation(extent={{-10,40},{10,60}})));
+    replaceable heatingCoil_HHW heatingCoil_HHW1
+      annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
+    Controls.OBC.CDL.Interfaces.RealInput uHea "Heating level signal"
+      annotation (Placement(transformation(
+          extent={{-20,-20},{20,20}},
+          rotation=-90,
+          origin={0,120})));
+    Fluid.FixedResistances.LosslessPipe pip
+      annotation (Placement(transformation(extent={{-10,-50},{10,-30}})));
+  equation
+    connect(uHea, heatingCoil_electric1.uHea)
+      annotation (Line(points={{0,120},{0,120},{0,62}}, color={0,0,127}));
+    connect(uHea, heatingCoil_HHW1.uHea) annotation (Line(points={{0,120},{0,80},{
+            -20,80},{-20,20},{0,20},{0,12}}, color={0,0,127}));
+    connect(port_a, heatingCoil_HHW1.port_a)
+      annotation (Line(points={{-100,0},{-10,0}}, color={0,127,255}));
+    connect(heatingCoil_HHW1.port_b, port_b)
+      annotation (Line(points={{10,0},{100,0}}, color={0,127,255}));
+    connect(port_a, heatingCoil_electric1.port_a) annotation (Line(points={{-100,0},
+            {-40,0},{-40,50},{-10,50}}, color={0,127,255}));
+    connect(heatingCoil_electric1.port_b, port_b) annotation (Line(points={{10,50},
+            {60,50},{60,0},{100,0}}, color={0,127,255}));
+    connect(port_a, pip.port_a) annotation (Line(points={{-100,0},{-40,0},{-40,-40},
+            {-10,-40}}, color={0,127,255}));
+    connect(pip.port_b, port_b) annotation (Line(points={{10,-40},{60,-40},{60,0},
+            {100,0}}, color={0,127,255}));
+    annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
+          coordinateSystem(preserveAspectRatio=false)));
+  end BaseClass_heatingCoil;
 end Trial;
