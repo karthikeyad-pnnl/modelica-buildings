@@ -98,8 +98,7 @@ model Case600FF
       hWin={2},
       fFra={0.001},
       til={Z_},
-      azi={S_}),
-    massDynamics=Modelica.Fluid.Types.Dynamics.SteadyState) "Room model"
+      azi={S_})) "Room model"
     annotation (Placement(transformation(extent={{36,-30},{66,0}})));
   Modelica.Blocks.Sources.Constant qConGai_flow(k=80/48) "Convective heat gain"
     annotation (Placement(transformation(extent={{-56,64},{-48,72}})));
@@ -207,10 +206,10 @@ model Case600FF
   Modelica.Blocks.Math.MultiSum multiSum(nu=1)
     "Multi sum for infiltration air flow rate"
     annotation (Placement(transformation(extent={{-78,-80},{-66,-68}})));
-  Controls.OBC.CDL.Continuous.MovingMean TRooHou(delta=3600)
+  Controls.OBC.CDL.Continuous.MovingAverage TRooHou(delta=3600)
     "Hourly averaged room air temperature"
     annotation (Placement(transformation(extent={{-68,-28},{-60,-20}})));
-  Controls.OBC.CDL.Continuous.MovingMean TRooAnn(delta=86400*365)
+  Controls.OBC.CDL.Continuous.MovingAverage TRooAnn(delta=86400*365)
     "Annual averaged room air temperature"
     annotation (Placement(transformation(extent={{-68,-40},{-60,-32}})));
 
