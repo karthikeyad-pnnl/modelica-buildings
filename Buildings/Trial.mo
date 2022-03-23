@@ -497,10 +497,12 @@ package Trial
       connect(triCom.PFan, thermostat.PFan) annotation (Line(points={{-38,
               -1.69231},{-30,-1.69231},{-30,-2},{-20,-2},{-20,16},{38,16},{38,-8},
               {40,-8}}, color={0,0,127}));
-      connect(thermostat.yCoo, triCom.uCoo) annotation (Line(points={{64,4},{72,4},
-              {72,18},{-92,18},{-92,-10.1538},{-86,-10.1538}}, color={0,0,127}));
-      connect(thermostat.yHea, triCom.uHea) annotation (Line(points={{64,0},{72,0},
-              {72,-58},{-92,-58},{-92,-13.5385},{-86,-13.5385}}, color={0,0,127}));
+      connect(thermostat.yCoo, triCom.uCoo) annotation (Line(points={{64,4},{72,
+              4},{72,18},{-92,18},{-92,-10.1538},{-86,-10.1538}},
+                                                               color={0,0,127}));
+      connect(thermostat.yHea, triCom.uHea) annotation (Line(points={{64,0},{72,
+              0},{72,-58},{-92,-58},{-92,-13.5385},{-86,-13.5385}},
+                                                                 color={0,0,127}));
       connect(thermostat.yFan, triCom.uFan) annotation (Line(points={{64,-4},{76,
               -4},{76,-62},{-96,-62},{-96,-6.76923},{-86,-6.76923}}, color={0,0,
               127}));
@@ -659,7 +661,12 @@ package Trial
       annotation (Line(points={{12,0},{38,0}}, color={0,0,127}));
     connect(abs.y, yP)
       annotation (Line(points={{62,0},{120,0}}, color={0,0,127}));
-    annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
+    annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+            Rectangle(
+            extent={{-100,100},{100,-100}},
+            lineColor={0,0,0},
+            fillColor={255,255,255},
+            fillPattern=FillPattern.Solid)}),                      Diagram(
           coordinateSystem(preserveAspectRatio=false)));
   end PowerCalculation;
 
@@ -753,7 +760,12 @@ package Trial
       annotation (Line(points={{10,0},{40,0}}, color={0,127,255}));
     connect(TAirCon.T, TCon)
       annotation (Line(points={{50,11},{50,60},{120,60}}, color={0,0,127}));
-    annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
+    annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+            Rectangle(
+            extent={{-100,100},{100,-100}},
+            lineColor={0,0,0},
+            fillColor={255,255,255},
+            fillPattern=FillPattern.Solid)}),                      Diagram(
           coordinateSystem(preserveAspectRatio=false)));
   end BaseConditioning_electric;
 
@@ -791,6 +803,10 @@ package Trial
       partialFourPortInterface
       annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=180,
           origin={6,-6})));
+    Controls.OBC.CDL.Interfaces.RealOutput TCon
+      "Measured conditioned air temperature"
+      annotation (Placement(transformation(extent={{100,40},{140,80}}),
+          iconTransformation(extent={{100,40},{140,80}})));
   equation
     connect(port_a, TAirSup.port_a)
       annotation (Line(points={{-100,0},{-90,0}}, color={0,127,255}));
@@ -826,7 +842,14 @@ package Trial
         Line(points={{20,-30},{20,-12},{16,-12}}, color={0,127,255}));
     connect(TWatRet.port_a, partialFourPortInterface.port_b1) annotation (Line(
           points={{-20,-50},{-20,-12},{-4,-12}}, color={0,127,255}));
-    annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
+    connect(TAirRet.T, TCon)
+      annotation (Line(points={{50,11},{50,60},{120,60}}, color={0,0,127}));
+    annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+            Rectangle(
+            extent={{-100,100},{100,-100}},
+            lineColor={0,0,0},
+            fillColor={255,255,255},
+            fillPattern=FillPattern.Solid)}),                      Diagram(
           coordinateSystem(preserveAspectRatio=false)));
   end BaseConditioning_Water;
 
@@ -946,7 +969,11 @@ package Trial
     Controls.OBC.CDL.Interfaces.RealOutput VSupAir_flow "Supply air flowrate"
       annotation (Placement(transformation(extent={{220,180},{260,220}})));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-220,
-              -260},{220,260}})),                                  Diagram(
+              -260},{220,260}}), graphics={Rectangle(
+            extent={{-220,260},{220,-260}},
+            lineColor={0,0,0},
+            fillColor={255,255,255},
+            fillPattern=FillPattern.Solid)}),                      Diagram(
           coordinateSystem(preserveAspectRatio=false, extent={{-220,-260},{220,
               260}})));
   end Baseclass_externalInterfaces;
@@ -1076,6 +1103,22 @@ package Trial
 
   model BaseClass_heatingCoil
     extends Buildings.Fluid.Interfaces.PartialTwoPortInterface;
+
+    parameter Boolean has_economizer
+      "Does the zone equipment have an economizer?";
+
+    parameter Boolean has_coolingCoil
+      "Does the zone equipment have a cooling coil?";
+
+    parameter Boolean has_coolingCoilCCW
+      "Does the zone equipment have a chilled water cooling coil?";
+
+    parameter Boolean has_heatingCoil
+      "Does the zone equipment have a heating coil?";
+
+    parameter Boolean has_heatingCoilHHW
+      "Does the zone equipment have a hot water heating coil?";
+
     replaceable heatingCoil_electric heatingCoil_electric1
       annotation (Placement(transformation(extent={{-10,40},{10,60}})));
     replaceable heatingCoil_HHW heatingCoil_HHW1
@@ -1087,6 +1130,10 @@ package Trial
           origin={0,120})));
     Fluid.FixedResistances.LosslessPipe pip
       annotation (Placement(transformation(extent={{-10,-50},{10,-30}})));
+    Modelica.Fluid.Interfaces.FluidPort_a port_a1
+      annotation (Placement(transformation(extent={{10,-110},{30,-90}})));
+    Modelica.Fluid.Interfaces.FluidPort_b port_b1
+      annotation (Placement(transformation(extent={{-30,-110},{-10,-90}})));
   equation
     connect(uHea, heatingCoil_electric1.uHea)
       annotation (Line(points={{0,120},{0,120},{0,62}}, color={0,0,127}));
@@ -1104,6 +1151,10 @@ package Trial
             {-10,-40}}, color={0,127,255}));
     connect(pip.port_b, port_b) annotation (Line(points={{10,-40},{60,-40},{60,0},
             {100,0}}, color={0,127,255}));
+    connect(port_a1, heatingCoil_HHW1.port_a1) annotation (Line(points={{20,-100},
+            {20,-20},{2,-20},{2,-10}}, color={0,127,255}));
+    connect(port_b1, heatingCoil_HHW1.port_b1) annotation (Line(points={{-20,-100},
+            {-20,-20},{-2,-20},{-2,-10}}, color={0,127,255}));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
           coordinateSystem(preserveAspectRatio=false)));
   end BaseClass_heatingCoil;
