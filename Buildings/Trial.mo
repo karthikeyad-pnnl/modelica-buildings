@@ -586,9 +586,16 @@ package Trial
     end Thermostat;
   end Old;
 
-  partial model heatingCoil_HHW
+  model heatingCoil_HHW
     extends Buildings.Trial.BaseConditioning_Water(
-      redeclare Buildings.Fluid.HeatExchangers.DryCoilCounterFlow partialFourPortInterface);
+      redeclare Buildings.Fluid.HeatExchangers.DryCoilCounterFlow partialFourPortInterface(
+        redeclare package Medium1 = MediumW,
+        redeclare package Medium2 = MediumA,
+        m1_flow_nominal=mWat_flow_nominal,
+        m2_flow_nominal=mAir_flow_nominal,
+        dp1_nominal=dpCoiWat_nominal,
+        dp2_nominal=dpCoiAir_nominal,
+        UA_nominal=UA_nominal));
 
 
     Controls.OBC.CDL.Interfaces.RealInput uHea "Heating level signal" annotation (
@@ -596,6 +603,12 @@ package Trial
           extent={{-20,-20},{20,20}},
           rotation=-90,
           origin={0,120})));
+    parameter Modelica.Units.SI.PressureDifference dpCoiWat_nominal
+      "Pressure difference";
+    parameter Modelica.Units.SI.PressureDifference dpCoiAir_nominal
+      "Pressure difference";
+    parameter Modelica.Units.SI.ThermalConductance UA_nominal
+      "Thermal conductance at nominal flow, used to compute heat capacity";
   equation
     connect(port_a, TAirSup.port_a)
       annotation (Line(points={{-100,0},{-90,0}}, color={0,127,255}));
@@ -670,15 +683,23 @@ package Trial
           coordinateSystem(preserveAspectRatio=false)));
   end PowerCalculation;
 
-  partial model heatingCoil_electric
+  model heatingCoil_electric
     extends Buildings.Trial.BaseConditioning_electric(
-       redeclare Buildings.Fluid.HeatExchangers.HeaterCooler_u partialTwoPortInterface);
+       redeclare Buildings.Fluid.HeatExchangers.HeaterCooler_u partialTwoPortInterface(
+        redeclare package Medium = MediumA,
+        m_flow_nominal=mAir_flow_nominal,
+        dp_nominal=dp_Coil_nominal,
+        Q_flow_nominal=QHeaCoi_flow_nominal));
 
     Controls.OBC.CDL.Interfaces.RealInput uHea "Heating level signal"
       annotation (Placement(transformation(
           extent={{-20,-20},{20,20}},
           rotation=-90,
           origin={0,120})));
+    parameter Modelica.Units.SI.PressureDifference dp_Coil_nominal
+      "Pressure difference";
+    parameter Modelica.Units.SI.HeatFlowRate QHeaCoi_flow_nominal
+      "Heat flow rate at u=1, positive for heating";
   equation
     connect(port_a, TAirSup.port_a)
       annotation (Line(points={{-100,0},{-70,0}}, color={0,127,255}));
@@ -702,9 +723,12 @@ package Trial
           coordinateSystem(preserveAspectRatio=false)));
   end heatingCoil_electric;
 
-  partial model coolingCoil_electric
+  model coolingCoil_electric
     extends Buildings.Trial.BaseConditioning_electric(
-      redeclare Buildings.Fluid.HeatExchangers.DXCoils.AirCooled.VariableSpeed partialTwoPortInterface);
+      redeclare Buildings.Fluid.HeatExchangers.DXCoils.AirCooled.VariableSpeed partialTwoPortInterface(
+        redeclare package Medium = MediumA,
+        dp_nominal=dpCooCoi_nominal,
+        minSpeRat=minSpeRat));
     Controls.OBC.CDL.Interfaces.RealInput uCoo "Cooling level signal"
       annotation (Placement(transformation(
           extent={{-20,-20},{20,20}},
@@ -715,6 +739,9 @@ package Trial
           extent={{-20,-20},{20,20}},
           rotation=-90,
           origin={-40,120})));
+    parameter Real minSpeRat "Minimum speed ratio";
+    parameter Modelica.Units.SI.PressureDifference dpCooCoi_nominal
+      "Pressure difference";
   equation
     connect(uCoo, partialTwoPortInterface.speRat) annotation (Line(points={{0,
             120},{0,76},{-14,76},{-14,8},{-11,8}}, color={0,0,127}));
@@ -725,13 +752,24 @@ package Trial
   end coolingCoil_electric;
 
   partial model BaseConditioning_electric
+
+    replaceable package MediumA = Buildings.Media.Air
+      constrainedby Modelica.Media.Interfaces.PartialCondensingGases
+      "Medium model for air";
+
     extends Buildings.Fluid.Interfaces.PartialTwoPortInterface;
 
-    replaceable Fluid.Sensors.TemperatureTwoPort TAirSup
+    parameter Modelica.Units.SI.MassFlowRate mAir_flow_nominal
+      "Nominal mass flow rate of air";
+
+    replaceable Fluid.Sensors.TemperatureTwoPort TAirSup(redeclare package Medium =
+          MediumA, m_flow_nominal=mAir_flow_nominal)
       annotation (Placement(transformation(extent={{-70,-10},{-50,10}})));
-    replaceable Fluid.Sensors.TemperatureTwoPort TAirCon
+    replaceable Fluid.Sensors.TemperatureTwoPort TAirCon(redeclare package Medium =
+          MediumA, m_flow_nominal=mAir_flow_nominal)
       annotation (Placement(transformation(extent={{40,-10},{60,10}})));
-    replaceable Fluid.Sensors.VolumeFlowRate VAir_flow
+    replaceable Fluid.Sensors.VolumeFlowRate VAir_flow(redeclare package Medium =
+          MediumA, m_flow_nominal=mAir_flow_nominal)
       annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
     PowerCalculation POut "Power output of heating coil"
       annotation (Placement(transformation(extent={{20,50},{40,70}})));
@@ -770,25 +808,45 @@ package Trial
   end BaseConditioning_electric;
 
   partial model BaseConditioning_Water
+
+    replaceable package MediumA = Buildings.Media.Air
+      constrainedby Modelica.Media.Interfaces.PartialCondensingGases
+      "Medium model for air";
+    replaceable package MediumW = Buildings.Media.Water
+      "Medium model for water";
+
     extends Buildings.Fluid.Interfaces.PartialTwoPortInterface;
 
-    replaceable Fluid.Sensors.TemperatureTwoPort TAirSup
+    parameter Modelica.Units.SI.MassFlowRate mAir_flow_nominal
+      "Nominal mass flow rate of air";
+
+    parameter Modelica.Units.SI.MassFlowRate mWat_flow_nominal
+      "Nominal mass flow rate of water";
+
+
+    replaceable Fluid.Sensors.TemperatureTwoPort TAirSup(redeclare package Medium =
+          MediumA, m_flow_nominal=mAir_flow_nominal)
       annotation (Placement(transformation(extent={{-90,-10},{-70,10}})));
-    replaceable Fluid.Sensors.TemperatureTwoPort TAirRet
+    replaceable Fluid.Sensors.TemperatureTwoPort TAirRet(redeclare package Medium =
+          MediumA, m_flow_nominal=mAir_flow_nominal)
       annotation (Placement(transformation(extent={{40,-10},{60,10}})));
-    replaceable Fluid.Sensors.VolumeFlowRate VAir_flow
+    replaceable Fluid.Sensors.VolumeFlowRate VAir_flow(redeclare package Medium =
+          MediumA, m_flow_nominal=mAir_flow_nominal)
       annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
     Modelica.Fluid.Interfaces.FluidPort_a port_a1
       annotation (Placement(transformation(extent={{10,-110},{30,-90}})));
     Modelica.Fluid.Interfaces.FluidPort_b port_b1
       annotation (Placement(transformation(extent={{-30,-110},{-10,-90}})));
-    replaceable Fluid.Sensors.TemperatureTwoPort TWatSup
+    replaceable Fluid.Sensors.TemperatureTwoPort TWatSup(redeclare package Medium =
+          MediumW, m_flow_nominal=mWat_flow_nominal)
       annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=90,
           origin={20,-70})));
-    replaceable Fluid.Sensors.VolumeFlowRate VWat_flow
+    replaceable Fluid.Sensors.VolumeFlowRate VWat_flow(redeclare package Medium =
+          MediumW, m_flow_nominal=mWat_flow_nominal)
       annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=90,
           origin={20,-40})));
-    replaceable Fluid.Sensors.TemperatureTwoPort TWatRet
+    replaceable Fluid.Sensors.TemperatureTwoPort TWatRet(redeclare package Medium =
+          MediumW, m_flow_nominal=mWat_flow_nominal)
       annotation (Placement(transformation(
           extent={{-10,-10},{10,10}},
           rotation=-90,
@@ -797,7 +855,10 @@ package Trial
       annotation (Placement(transformation(extent={{20,50},{40,70}})));
     PowerCalculation PConsumed "Power consumption of heating coil"
       annotation (Placement(transformation(extent={{60,-70},{80,-50}})));
-    replaceable Fluid.Actuators.Valves.TwoWayLinear val
+    replaceable Fluid.Actuators.Valves.TwoWayLinear val(redeclare package Medium =
+          MediumA,
+      m_flow_nominal=mAir_flow_nominal,
+      dpValve_nominal=50)
       annotation (Placement(transformation(extent={{-34,-10},{-14,10}})));
     replaceable Fluid.Interfaces.PartialFourPortInterface
       partialFourPortInterface
@@ -853,15 +914,31 @@ package Trial
           coordinateSystem(preserveAspectRatio=false)));
   end BaseConditioning_Water;
 
-  partial model coolingCoil_CCW
-    extends Buildings.Trial.BaseConditioning_Water(
-      redeclare Buildings.Fluid.HeatExchangers.WetCoilCounterFlow partialFourPortInterface);
+  model coolingCoil_CCW
+    parameter Modelica.Units.SI.PressureDifference dpCoiAir_nominal
+      "Pressure difference";
+    parameter Modelica.Units.SI.PressureDifference dpCoiWat_nominal
+      "Pressure difference";
+    parameter Modelica.Units.SI.ThermalConductance UA_nominal
+      "Thermal conductance at nominal flow, used to compute heat capacity";
 
-    Controls.OBC.CDL.Interfaces.RealInput uCoo "Cooling level signal" annotation (
+    extends Buildings.Trial.BaseConditioning_Water(
+      redeclare Buildings.Fluid.HeatExchangers.WetCoilCounterFlow partialFourPortInterface(
+        redeclare package Medium1 = MediumW,
+        redeclare package Medium2 = MediumA,
+        m1_flow_nominal=mWat_flow_nominal,
+        m2_flow_nominal=mAir_flow_nominal,
+        dp1_nominal=dpCoiWat_nominal,
+        dp2_nominal=dpCoiAir_nominal,
+        UA_nominal=UA_nominal));
+
+    Controls.OBC.CDL.Interfaces.RealInput uCoo
+      "Cooling level signal" annotation (
        Placement(transformation(
           extent={{-20,-20},{20,20}},
           rotation=-90,
           origin={0,120})));
+
   equation
     connect(port_a, TAirSup.port_a)
       annotation (Line(points={{-100,0},{-90,0}}, color={0,127,255}));
@@ -901,9 +978,6 @@ package Trial
       constrainedby Modelica.Media.Interfaces.PartialCondensingGases "Medium model for air";
     replaceable package MediumW = Buildings.Media.Water "Medium model for water";
 
-    parameter Boolean has_economizer
-      "Does the zone equipment have an economizer?";
-
     parameter Boolean has_coolingCoil
       "Does the zone equipment have a cooling coil?";
 
@@ -942,14 +1016,6 @@ package Trial
                  MediumW) if                                has_heatingCoil and has_heatingCoilHHW
       annotation (Placement(transformation(extent={{-50,-270},{-30,-250}})));
 
-    Modelica.Fluid.Interfaces.FluidPort_a port_OA_inlet(redeclare package Medium =
-                 MediumA) if                               has_economizer
-      annotation (Placement(transformation(extent={{-230,-50},{-210,-30}})));
-
-    Modelica.Fluid.Interfaces.FluidPort_b port_OA_exhaust(redeclare package
-        Medium = MediumA) if                                 has_economizer
-      annotation (Placement(transformation(extent={{-230,30},{-210,50}})));
-
     Controls.OBC.CDL.Interfaces.RealInput uHea if has_heatingCoil
       "Heating loop signal"
       annotation (Placement(transformation(extent={{-20,-20},{20,20}}, rotation=-90,
@@ -959,7 +1025,7 @@ package Trial
           extent={{-20,-20},{20,20}},
           rotation=-90,
           origin={120,280})));
-    Controls.OBC.CDL.Interfaces.RealInput uFan if has_heatingCoil "Fan signal"
+    Controls.OBC.CDL.Interfaces.RealInput uFan "Fan signal"
       annotation (Placement(transformation(
           extent={{-20,-20},{20,20}},
           rotation=-90,
@@ -1050,20 +1116,40 @@ package Trial
 
   partial model Baseclass_components
     extends Buildings.Trial.Baseclass_externalInterfaces;
-    replaceable Fluid.Interfaces.PartialTwoPortInterface cooCoi
+
+    parameter Boolean has_economizer;
+    replaceable Fluid.Interfaces.PartialTwoPortInterface comp3
       annotation (Placement(transformation(extent={{20,-50},{40,-30}})));
-    Fluid.Movers.SpeedControlled_y fan
+    Fluid.Movers.SpeedControlled_y fan(
+      redeclare package Medium = MediumA)
       annotation (Placement(transformation(extent={{80,-50},{100,-30}})));
-    Fluid.Sensors.VolumeFlowRate senVolFlo
+    Fluid.Sensors.VolumeFlowRate senVolFlo(
+      redeclare package Medium = MediumA,
+      m_flow_nominal=mAir_flow_nominal)
       annotation (Placement(transformation(extent={{120,-50},{140,-30}})));
-    Fluid.Sensors.TemperatureTwoPort senTem
+    Fluid.Sensors.TemperatureTwoPort senTem(redeclare package Medium = MediumA,
+        m_flow_nominal=mAir_flow_nominal)
       annotation (Placement(transformation(extent={{160,-50},{180,-30}})));
-    replaceable Fluid.Interfaces.PartialTwoPortInterface eco
+    replaceable Fluid.Interfaces.PartialTwoPortInterface comp1
       annotation (Placement(transformation(extent={{-120,-50},{-100,-30}})));
-    replaceable BaseClass_heatingCoil baseClass_heatingCoil
+    replaceable Fluid.Interfaces.PartialTwoPortInterface comp2
       annotation (Placement(transformation(extent={{-60,-50},{-40,-30}})));
+    Modelica.Fluid.Interfaces.FluidPort_a port_OA_inlet1(
+      redeclare package Medium=MediumA) if has_economizer
+      annotation (Placement(transformation(extent={{-230,-50},{-210,-30}})));
+    Modelica.Fluid.Interfaces.FluidPort_b port_OA_exhaust1(
+      redeclare package Medium = MediumA) if has_economizer
+      annotation (Placement(transformation(extent={{-230,30},{-210,50}})));
+    Controls.OBC.CDL.Interfaces.RealInput TAmb if has_coolingCoil and not has_coolingCoilCCW
+      "Ambient outdoor air temperature"
+      annotation (Placement(transformation(
+          extent={{-20,-20},{20,20}},
+          origin={-240,220})));
+
+    parameter Modelica.Units.SI.MassFlowRate mAir_flow_nominal
+      "Nominal mass flow rate, used for regularization near zero flow";
   equation
-    connect(cooCoi.port_b, fan.port_a)
+    connect(comp3.port_b, fan.port_a)
       annotation (Line(points={{40,-40},{80,-40}}, color={0,127,255}));
     connect(fan.port_b, senVolFlo.port_a)
       annotation (Line(points={{100,-40},{120,-40}}, color={0,127,255}));
@@ -1071,69 +1157,196 @@ package Trial
       annotation (Line(points={{140,-40},{160,-40}}, color={0,127,255}));
     connect(senTem.port_b, port_supply)
       annotation (Line(points={{180,-40},{220,-40}}, color={0,127,255}));
-    connect(port_return, eco.port_a) annotation (Line(points={{220,40},{-140,40},
+    connect(port_return, comp1.port_a) annotation (Line(points={{220,40},{-140,40},
             {-140,-40},{-120,-40}}, color={0,127,255}));
     connect(uFan, fan.y) annotation (Line(points={{0,280},{0,0},{90,0},{90,-28}},
           color={0,0,127}));
-    connect(eco.port_b, baseClass_heatingCoil.port_a)
+    connect(comp1.port_b, comp2.port_a)
       annotation (Line(points={{-100,-40},{-60,-40}}, color={0,127,255}));
-    connect(baseClass_heatingCoil.port_b, cooCoi.port_a)
+    connect(comp2.port_b, comp3.port_a)
       annotation (Line(points={{-40,-40},{20,-40}}, color={0,127,255}));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
           coordinateSystem(preserveAspectRatio=false)));
   end Baseclass_components;
 
   model Usecase
-    replaceable Baseclass_components baseclass_components(
-      has_economizer=true,
-      has_coolingCoil=false,
+    FCU fCU(
       has_heatingCoil=true,
-      has_heatingCoilHHW=false)
-      annotation (Placement(transformation(extent={{-22,-8},{22,44}})));
+      has_heatingCoilHHW=true,
+      has_coolingCoil=true,
+      has_coolingCoilCCW=true,
+      mAir_flow_nominal=1,
+      QHeaCoi_flow_nominal=1,
+      mHotWat_flow_nominal=1,
+      dpHeaCoiWat_nominal=100000,
+      dpHeaCoiAir_nominal=100000,
+      UAHeaCoi_nominal=1,
+      minSpeRatCooCoi=1,
+      dpCooCoiAir_nominal=100000,
+      mChiWat_flow_nominal=1,
+      UACooCoi_nominal=1,
+      dpCooCoiWat_nominal=100000)
+      annotation (Placement(transformation(extent={{-30,-28},{14,24}})));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
           coordinateSystem(preserveAspectRatio=false)));
   end Usecase;
 
   model FCU
-    extends Buildings.Trial.Baseclass_components(
-      redeclare Buildings.Trial.coolingCoil_CCW cooCoi);
-    annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
-          coordinateSystem(preserveAspectRatio=false)));
-  end FCU;
-
-  model BaseClass_heatingCoil
-    extends Buildings.Fluid.Interfaces.PartialTwoPortInterface;
-
-    parameter Boolean has_economizer
-      "Does the zone equipment have an economizer?";
-
-    parameter Boolean has_coolingCoil
-      "Does the zone equipment have a cooling coil?";
-
-    parameter Boolean has_coolingCoilCCW
-      "Does the zone equipment have a chilled water cooling coil?";
 
     parameter Boolean has_heatingCoil
       "Does the zone equipment have a heating coil?";
 
     parameter Boolean has_heatingCoilHHW
-      "Does the zone equipment have a hot water heating coil?";
+      "Does the zone equipment have a hot water heating coil?"
+      annotation(Dialog(enable = has_heatingCoil));
 
-    replaceable heatingCoil_electric heatingCoil_electric1
+    parameter Boolean has_coolingCoil
+      "Does the zone equipment have a heating coil?";
+
+    parameter Boolean has_coolingCoilCCW
+      "Does the zone equipment have a hot water heating coil?"
+      annotation(Dialog(enable = has_coolingCoil));
+
+    extends Buildings.Trial.Baseclass_components(
+      redeclare Buildings.Trial.coolingCoil comp3(
+        redeclare package Medium = MediumA,
+        m_flow_nominal=mAir_flow_nominal,
+        redeclare package MediumA = MediumA,
+        redeclare package MediumW = MediumW,
+        final has_coolingCoil=has_coolingCoil,
+        final has_coolingCoilCCW=has_coolingCoilCCW,
+        mAir_flow_nominal=mAir_flow_nominal,
+        minSpeRatCooCoi=minSpeRatCooCoi,
+        dpCooCoiAir_nominal=dpCooCoiAir_nominal,
+        dpCooCoiWat_nominal=dpCooCoiWat_nominal,
+        mChiWat_flow_nominal=mChiWat_flow_nominal,
+        UACooCoi_nominal=UACooCoi_nominal),
+      redeclare Buildings.Trial.heatingCoil comp2(
+        redeclare package Medium = MediumA,
+        m_flow_nominal=mAir_flow_nominal,
+        redeclare package MediumA = MediumA,
+        redeclare package MediumW = MediumW,
+        final has_heatingCoil=has_heatingCoil,
+        final has_heatingCoilHHW=has_heatingCoilHHW,
+        mAir_flow_nominal=mAir_flow_nominal,
+        QHeaCoi_flow_nominal=QHeaCoi_flow_nominal,
+        mHotWat_flow_nominal=mHotWat_flow_nominal,
+        dpHeaCoiWat_nominal=dpHeaCoiWat_nominal,
+        dpHeaCoiAir_nominal=dpHeaCoiAir_nominal,
+        UAHeaCoi_nominal=UAHeaCoi_nominal),
+      redeclare Fluid.FixedResistances.LosslessPipe comp1(redeclare package
+          Medium = MediumA, m_flow_nominal=mAir_flow_nominal),
+      final has_economizer=false);
+
+    parameter Modelica.Units.SI.HeatFlowRate QHeaCoi_flow_nominal
+      "Heat flow rate at u=1, positive for heating";
+    parameter Modelica.Units.SI.MassFlowRate mHotWat_flow_nominal
+      "Nominal mass flow rate of water";
+    parameter Modelica.Units.SI.PressureDifference dpHeaCoiWat_nominal
+      "Pressure difference";
+    parameter Modelica.Units.SI.PressureDifference dpHeaCoiAir_nominal
+      "Pressure difference";
+    parameter Modelica.Units.SI.ThermalConductance UAHeaCoi_nominal
+      "Thermal conductance at nominal flow, used to compute heat capacity";
+    parameter Real minSpeRatCooCoi "Minimum speed ratio";
+    parameter Modelica.Units.SI.PressureDifference dpCooCoiAir_nominal
+      "Pressure difference";
+    parameter Modelica.Units.SI.MassFlowRate mChiWat_flow_nominal
+      "Nominal mass flow rate of water";
+    parameter Modelica.Units.SI.ThermalConductance UACooCoi_nominal
+      "Thermal conductance at nominal flow, used to compute heat capacity";
+    parameter Modelica.Units.SI.PressureDifference dpCooCoiWat_nominal
+      "Pressure difference";
+  equation
+    connect(uHea, comp2.uHea) annotation (Line(points={{-120,280},{-120,120},{-50,
+            120},{-50,-28}}, color={0,0,127}));
+    connect(uCoo, comp3.uCoo) annotation (Line(points={{120,280},{120,82},{30,82},
+            {30,-28}}, color={0,0,127}));
+    connect(TAmb, comp3.TAmb)
+      annotation (Line(points={{-240,220},{26,220},{26,-28}}, color={0,0,127}));
+    connect(senTem.T, TSupAir) annotation (Line(points={{170,-29},{172,-29},{172,240},
+            {240,240}}, color={0,0,127}));
+    connect(senVolFlo.V_flow, VSupAir_flow)
+      annotation (Line(points={{130,-29},{130,200},{240,200}}, color={0,0,127}));
+    connect(port_CCW_inlet, comp3.port_a1) annotation (Line(points={{80,-260},{
+            80,-70},{32,-70},{32,-50}}, color={0,127,255}));
+    connect(port_CCW_outlet, comp3.port_b1) annotation (Line(points={{40,-260},
+            {40,-80},{28,-80},{28,-50}}, color={0,127,255}));
+    connect(port_HHW_inlet, comp2.port_a1) annotation (Line(points={{-40,-260},
+            {-40,-80},{-48,-80},{-48,-50}}, color={0,127,255}));
+    connect(port_HHW_outlet, comp2.port_b1) annotation (Line(points={{-80,-260},
+            {-80,-80},{-52,-80},{-52,-50}}, color={0,127,255}));
+    annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
+          coordinateSystem(preserveAspectRatio=false)));
+  end FCU;
+
+  model heatingCoil
+    extends Buildings.Fluid.Interfaces.PartialTwoPortInterface;
+
+    replaceable package MediumA = Buildings.Media.Air
+      constrainedby Modelica.Media.Interfaces.PartialCondensingGases
+      "Medium model for air";
+    replaceable package MediumW = Buildings.Media.Water
+      "Medium model for water";
+
+    parameter Boolean has_heatingCoil
+      "Does the zone equipment have a heating coil?";
+
+    parameter Boolean has_heatingCoilHHW
+      "Does the zone equipment have a hot water heating coil?"
+      annotation(Dialog(enable = has_heatingCoil));
+
+    replaceable heatingCoil_electric heatingCoil_electric1(
+      redeclare package MediumA = MediumA,
+      redeclare package Medium = MediumA,
+      m_flow_nominal=mAir_flow_nominal,
+      mAir_flow_nominal=mAir_flow_nominal,
+      dp_Coil_nominal=dPHeaCoiAir_nominal,
+      QHeaCoi_flow_nominal=QHeaCoi_flow_nominal) if has_heatingCoil and not has_heatingCoilHHW
       annotation (Placement(transformation(extent={{-10,40},{10,60}})));
-    replaceable heatingCoil_HHW heatingCoil_HHW1
+
+    replaceable heatingCoil_HHW heatingCoil_HHW1(
+      redeclare package MediumA = MediumA,
+      redeclare package MediumW = MediumW,
+      redeclare package Medium = MediumA,
+      m_flow_nominal=mAir_flow_nominal,
+      mAir_flow_nominal=mAir_flow_nominal,
+      mWat_flow_nominal=mHotWat_flow_nominal,
+      dpCoiWat_nominal=dpHeaCoiWat_nominal,
+      dpCoiAir_nominal=dpHeaCoiAir_nominal,
+      UA_nominal=UAHeaCoi_nominal) if            has_heatingCoil and has_heatingCoilHHW
       annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
-    Controls.OBC.CDL.Interfaces.RealInput uHea "Heating level signal"
+
+    Controls.OBC.CDL.Interfaces.RealInput uHea if has_heatingCoil
+      "Heating level signal"
       annotation (Placement(transformation(
           extent={{-20,-20},{20,20}},
           rotation=-90,
           origin={0,120})));
-    Fluid.FixedResistances.LosslessPipe pip
+
+    Fluid.FixedResistances.LosslessPipe pip(redeclare package Medium = MediumA,
+        m_flow_nominal=mAir_flow_nominal) if   not has_heatingCoil
       annotation (Placement(transformation(extent={{-10,-50},{10,-30}})));
-    Modelica.Fluid.Interfaces.FluidPort_a port_a1
+    Modelica.Fluid.Interfaces.FluidPort_a port_a1(redeclare package Medium =
+          MediumW) if                                has_heatingCoil and
+      has_heatingCoilHHW
       annotation (Placement(transformation(extent={{10,-110},{30,-90}})));
-    Modelica.Fluid.Interfaces.FluidPort_b port_b1
+    Modelica.Fluid.Interfaces.FluidPort_b port_b1(redeclare package Medium =
+          MediumW) if                                has_heatingCoil and
+      has_heatingCoilHHW
       annotation (Placement(transformation(extent={{-30,-110},{-10,-90}})));
+    parameter Modelica.Units.SI.MassFlowRate mAir_flow_nominal
+      "Nominal mass flow rate of air";
+    parameter Modelica.Units.SI.HeatFlowRate QHeaCoi_flow_nominal
+      "Heat flow rate at u=1, positive for heating";
+    parameter Modelica.Units.SI.MassFlowRate mHotWat_flow_nominal
+      "Nominal mass flow rate of water";
+    parameter Modelica.Units.SI.PressureDifference dpHeaCoiWat_nominal
+      "Pressure difference";
+    parameter Modelica.Units.SI.PressureDifference dpHeaCoiAir_nominal
+      "Pressure difference";
+    parameter Modelica.Units.SI.ThermalConductance UAHeaCoi_nominal
+      "Thermal conductance at nominal flow, used to compute heat capacity";
   equation
     connect(uHea, heatingCoil_electric1.uHea)
       annotation (Line(points={{0,120},{0,120},{0,62}}, color={0,0,127}));
@@ -1155,7 +1368,114 @@ package Trial
             {20,-20},{2,-20},{2,-10}}, color={0,127,255}));
     connect(port_b1, heatingCoil_HHW1.port_b1) annotation (Line(points={{-20,-100},
             {-20,-20},{-2,-20},{-2,-10}}, color={0,127,255}));
-    annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
+    annotation (defaultComponentName="heaCoi",
+      Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+            Rectangle(
+            extent={{-100,100},{100,-100}},
+            lineColor={0,0,0},
+            fillColor={255,255,255},
+            fillPattern=FillPattern.Solid)}),                      Diagram(
           coordinateSystem(preserveAspectRatio=false)));
-  end BaseClass_heatingCoil;
+  end heatingCoil;
+
+  model coolingCoil
+
+    extends Buildings.Fluid.Interfaces.PartialTwoPortInterface;
+
+    replaceable package MediumA = Buildings.Media.Air
+      constrainedby Modelica.Media.Interfaces.PartialCondensingGases
+      "Medium model for air";
+    replaceable package MediumW = Buildings.Media.Water
+      "Medium model for water";
+
+    parameter Modelica.Units.SI.MassFlowRate mAir_flow_nominal
+      "Nominal mass flow rate of air";
+    parameter Real minSpeRatCooCoi "Minimum speed ratio";
+    parameter Modelica.Units.SI.PressureDifference dpCooCoiAir_nominal
+      "Pressure difference";
+    parameter Modelica.Units.SI.PressureDifference dpCooCoiWat_nominal
+      "Pressure difference";
+    parameter Modelica.Units.SI.MassFlowRate mChiWat_flow_nominal
+      "Nominal mass flow rate of water";
+    parameter Modelica.Units.SI.ThermalConductance UACooCoi_nominal
+      "Thermal conductance at nominal flow, used to compute heat capacity";
+
+    parameter Boolean has_coolingCoil
+      "Does the zone equipment have a heating coil?";
+
+    parameter Boolean has_coolingCoilCCW
+      "Does the zone equipment have a hot water heating coil?"
+      annotation(Dialog(enable = has_coolingCoil));
+
+    replaceable Buildings.Trial.coolingCoil_electric coolingCoil_electric1(
+      redeclare package MediumA = MediumA,
+      redeclare package Medium = MediumA,
+      m_flow_nominal=mAir_flow_nominal,
+      mAir_flow_nominal=mAir_flow_nominal,
+      minSpeRat=minSpeRatCooCoi,
+      dpCooCoi_nominal=dpCooCoiAir_nominal) if has_coolingCoil and not has_coolingCoilCCW
+      annotation (Placement(transformation(extent={{-10,40},{10,60}})));
+    replaceable Buildings.Trial.coolingCoil_CCW coolingCoil_CCW1(
+      redeclare package MediumA = MediumA,
+      redeclare package MediumW = MediumW,
+      redeclare package Medium = MediumA,
+      m_flow_nominal=mAir_flow_nominal,
+      mAir_flow_nominal=mAir_flow_nominal,
+      mWat_flow_nominal=mChiWat_flow_nominal,
+      dpCoiAir_nominal=dPCooCoiAir_nominal,
+      dpCoiWat_nominal=dPCooCoiWat_nominal,
+      UA_nominal=UACooCoi_nominal) if has_coolingCoil and has_coolingCoilCCW
+      annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
+    Controls.OBC.CDL.Interfaces.RealInput uCoo if has_coolingCoil
+      "Cooling level signal"
+      annotation (Placement(transformation(
+          extent={{-20,-20},{20,20}},
+          rotation=-90,
+          origin={0,120})));
+    Fluid.FixedResistances.LosslessPipe pip(
+      redeclare package Medium = MediumA,
+      m_flow_nominal=mAir_flow_nominal) if not has_coolingCoil
+      annotation (Placement(transformation(extent={{-10,-50},{10,-30}})));
+    Modelica.Fluid.Interfaces.FluidPort_a port_a1 if has_coolingCoil and has_coolingCoilCCW
+      annotation (Placement(transformation(extent={{10,-110},{30,-90}})));
+    Modelica.Fluid.Interfaces.FluidPort_b port_b1 if has_coolingCoil and has_coolingCoilCCW
+      annotation (Placement(transformation(extent={{-30,-110},{-10,-90}})));
+    Controls.OBC.CDL.Interfaces.RealInput TAmb if has_coolingCoil
+       and not has_coolingCoilCCW "Ambient outdoor air temperature"
+      annotation (Placement(transformation(
+          extent={{-20,-20},{20,20}},
+          rotation=-90,
+          origin={-40,120})));
+  equation
+    connect(pip.port_b, port_b) annotation (Line(points={{10,-40},{60,-40},{60,0},
+            {100,0}}, color={0,127,255}));
+    connect(TAmb, coolingCoil_electric1.TAmb) annotation (Line(points={{-40,120},{
+            -40,72},{-4,72},{-4,62}}, color={0,0,127}));
+    connect(uCoo, coolingCoil_electric1.uCoo)
+      annotation (Line(points={{0,120},{0,62}}, color={0,0,127}));
+    connect(uCoo, coolingCoil_CCW1.uCoo) annotation (Line(points={{0,120},{0,80},{
+            -20,80},{-20,20},{0,20},{0,12}}, color={0,0,127}));
+    connect(port_a, coolingCoil_electric1.port_a) annotation (Line(points={{-100,0},
+            {-40,0},{-40,50},{-10,50}}, color={0,127,255}));
+    connect(port_a, coolingCoil_CCW1.port_a)
+      annotation (Line(points={{-100,0},{-10,0}}, color={0,127,255}));
+    connect(port_a, pip.port_a) annotation (Line(points={{-100,0},{-40,0},{-40,-40},
+            {-10,-40}}, color={0,127,255}));
+    connect(coolingCoil_electric1.port_b, port_b) annotation (Line(points={{10,50},
+            {60,50},{60,0},{100,0}}, color={0,127,255}));
+    connect(coolingCoil_CCW1.port_b, port_b)
+      annotation (Line(points={{10,0},{100,0}}, color={0,127,255}));
+    connect(port_a1, coolingCoil_CCW1.port_a1) annotation (Line(points={{20,-100},
+            {20,-20},{2,-20},{2,-10}}, color={0,127,255}));
+    connect(port_b1, coolingCoil_CCW1.port_b1) annotation (Line(points={{-20,-100},
+            {-20,-20},{-2,-20},{-2,-10}}, color={0,127,255}));
+    annotation (defaultComponentName="heaCoi",
+      Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+            Rectangle(
+            extent={{-100,100},{100,-100}},
+            lineColor={0,0,0},
+            fillColor={255,255,255},
+            fillPattern=FillPattern.Solid)}),                      Diagram(
+          coordinateSystem(preserveAspectRatio=false)));
+  end coolingCoil;
 end Trial;
