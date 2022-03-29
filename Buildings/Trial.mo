@@ -1186,7 +1186,7 @@ package Trial
       mChiWat_flow_nominal=1,
       UACooCoi_nominal=1,
       dpCooCoiWat_nominal=100000)
-      annotation (Placement(transformation(extent={{-30,-28},{14,24}})));
+      annotation (Placement(transformation(extent={{-22,-26},{22,26}})));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
           coordinateSystem(preserveAspectRatio=false)));
   end Usecase;
@@ -1206,6 +1206,26 @@ package Trial
     parameter Boolean has_coolingCoilCCW
       "Does the zone equipment have a hot water heating coil?"
       annotation(Dialog(enable = has_coolingCoil));
+
+    parameter Modelica.Units.SI.HeatFlowRate QHeaCoi_flow_nominal
+      "Heat flow rate at u=1, positive for heating";
+    parameter Modelica.Units.SI.MassFlowRate mHotWat_flow_nominal
+      "Nominal mass flow rate of water";
+    parameter Modelica.Units.SI.PressureDifference dpHeaCoiWat_nominal
+      "Pressure difference";
+    parameter Modelica.Units.SI.PressureDifference dpHeaCoiAir_nominal
+      "Pressure difference";
+    parameter Modelica.Units.SI.ThermalConductance UAHeaCoi_nominal
+      "Thermal conductance at nominal flow, used to compute heat capacity";
+    parameter Real minSpeRatCooCoi "Minimum speed ratio";
+    parameter Modelica.Units.SI.PressureDifference dpCooCoiAir_nominal
+      "Pressure difference";
+    parameter Modelica.Units.SI.MassFlowRate mChiWat_flow_nominal
+      "Nominal mass flow rate of water";
+    parameter Modelica.Units.SI.ThermalConductance UACooCoi_nominal
+      "Thermal conductance at nominal flow, used to compute heat capacity";
+    parameter Modelica.Units.SI.PressureDifference dpCooCoiWat_nominal
+      "Pressure difference";
 
     extends Buildings.Trial.Baseclass_components(
       redeclare Buildings.Trial.coolingCoil comp3(
@@ -1238,25 +1258,6 @@ package Trial
           Medium = MediumA, m_flow_nominal=mAir_flow_nominal),
       final has_economizer=false);
 
-    parameter Modelica.Units.SI.HeatFlowRate QHeaCoi_flow_nominal
-      "Heat flow rate at u=1, positive for heating";
-    parameter Modelica.Units.SI.MassFlowRate mHotWat_flow_nominal
-      "Nominal mass flow rate of water";
-    parameter Modelica.Units.SI.PressureDifference dpHeaCoiWat_nominal
-      "Pressure difference";
-    parameter Modelica.Units.SI.PressureDifference dpHeaCoiAir_nominal
-      "Pressure difference";
-    parameter Modelica.Units.SI.ThermalConductance UAHeaCoi_nominal
-      "Thermal conductance at nominal flow, used to compute heat capacity";
-    parameter Real minSpeRatCooCoi "Minimum speed ratio";
-    parameter Modelica.Units.SI.PressureDifference dpCooCoiAir_nominal
-      "Pressure difference";
-    parameter Modelica.Units.SI.MassFlowRate mChiWat_flow_nominal
-      "Nominal mass flow rate of water";
-    parameter Modelica.Units.SI.ThermalConductance UACooCoi_nominal
-      "Thermal conductance at nominal flow, used to compute heat capacity";
-    parameter Modelica.Units.SI.PressureDifference dpCooCoiWat_nominal
-      "Pressure difference";
   equation
     connect(uHea, comp2.uHea) annotation (Line(points={{-120,280},{-120,120},{-50,
             120},{-50,-28}}, color={0,0,127}));
