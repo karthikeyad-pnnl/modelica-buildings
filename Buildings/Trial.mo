@@ -391,128 +391,6 @@ package Trial
             coordinateSystem(preserveAspectRatio=false)));
     end trialComponent;
 
-    block use_case
-
-      replaceable package MediumA = Buildings.Media.Air
-        constrainedby Modelica.Media.Interfaces.PartialCondensingGases "Medium model for air";
-      replaceable package MediumW = Buildings.Media.Water "Medium model for water";
-
-      Old.trialComponent triCom(
-        has_economizer=false,
-        has_coolingCoil=true,
-        has_coolingCoilCCW=true,
-        has_heatingCoil=true,
-        has_heatingCoilHHW=true,
-        mAir_flow_nominal=1,
-        mHHW_flow_nominal=1,
-        mCCW_flow_nominal=1)
-        annotation (Placement(transformation(extent={{-84,-44},{-40,0}})));
-      Controls.OBC.CDL.Continuous.Sources.Constant con(k=0.5)
-        annotation (Placement(transformation(extent={{-140,10},{-120,30}})));
-      Fluid.Sources.Boundary_pT sinCoo(
-        redeclare package Medium = MediumW,
-        p=300000,
-        T=279.15,
-        nPorts=1) "Sink for cooling coil" annotation (Placement(transformation(
-            extent={{-10,-10},{10,10}},
-            rotation=90,
-            origin={-50,-80})));
-      Fluid.Sources.Boundary_pT souCoo(
-        redeclare package Medium = MediumW,
-        p(displayUnit="Pa") = 300000 + 6000,
-        T=279.15,
-        nPorts=1) "Source for cooling coil loop" annotation (Placement(
-            transformation(
-            extent={{-10,-10},{10,10}},
-            rotation=90,
-            origin={-20,-80})));
-      Fluid.Sources.Boundary_pT sinHea(
-        redeclare package Medium = MediumW,
-        p=300000,
-        T=318.15,
-        nPorts=1) "Sink for heating coil" annotation (Placement(transformation(
-            extent={{-10,-10},{10,10}},
-            rotation=90,
-            origin={-110,-80})));
-      Fluid.Sources.Boundary_pT souHea(
-        redeclare package Medium = MediumW,
-        p(displayUnit="Pa") = 300000 + 6000,
-        use_T_in=true,
-        T=318.15,
-        nPorts=1) "Source for heating coil" annotation (Placement(transformation(
-            extent={{-10,-10},{10,10}},
-            rotation=90,
-            origin={-80,-80})));
-      ThermalZones.EnergyPlus.ThermalZone           zon(
-        zoneName="LIVING ZONE",
-        redeclare package Medium = MediumA,
-        nPorts=2)
-        "Thermal zone"
-        annotation (Placement(transformation(extent={{-30,20},{10,60}})));
-      inner ThermalZones.EnergyPlus.Building           building(
-        idfName=Modelica.Utilities.Files.loadResource("./Buildings/Resources/Data/ThermalZones/EnergyPlus/Examples/SingleFamilyHouse_TwoSpeed_ZoneAirBalance/SingleFamilyHouse_TwoSpeed_ZoneAirBalance.idf"),
-        epwName=Modelica.Utilities.Files.loadResource("./Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw"),
-        weaName=Modelica.Utilities.Files.loadResource("./Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"),
-        usePrecompiledFMU=false,
-        computeWetBulbTemperature=false)
-        "Building model"
-        annotation (Placement(transformation(extent={{-140,-40},{-120,-20}})));
-
-      Controls.OBC.CDL.Routing.RealScalarReplicator reaScaRep(nout=3)
-        annotation (Placement(transformation(extent={{-100,30},{-80,50}})));
-      Thermostat thermostat
-        annotation (Placement(transformation(extent={{42,-10},{62,10}})));
-      Controls.OBC.CDL.Continuous.Sources.Constant con1(k=273.15 + 25)
-        annotation (Placement(transformation(extent={{10,-10},{30,10}})));
-      Controls.OBC.CDL.Continuous.Sources.Constant con2(k=273.15 + 23)
-        annotation (Placement(transformation(extent={{10,-50},{30,-30}})));
-    equation
-      connect(souCoo.ports[1], triCom.port_CCW_inlet) annotation (Line(points={{-20,-70},
-              {-20,-60},{-54,-60},{-54,-44}},
-                                         color={0,127,255}));
-      connect(sinCoo.ports[1], triCom.port_CCW_outlet) annotation (Line(points={{-50,-70},
-              {-50,-64},{-58,-64},{-58,-44}}, color={0,127,255}));
-      connect(souHea.ports[1], triCom.port_HHW_inlet) annotation (Line(points={{-80,-70},
-              {-80,-60},{-66,-60},{-66,-44}},    color={0,127,255}));
-      connect(sinHea.ports[1], triCom.port_HHW_outlet) annotation (Line(points={{-110,
-              -70},{-110,-54},{-70,-54},{-70,-44}},color={0,127,255}));
-      connect(triCom.port_return, zon.ports[1])
-        annotation (Line(points={{-40,-18.6154},{-12,-18.6154},{-12,20.9}},
-                                                           color={0,127,255}));
-      connect(triCom.port_supply, zon.ports[2])
-        annotation (Line(points={{-40,-25.3846},{-8,-25.3846},{-8,20.9}},
-                                                             color={0,127,255}));
-      connect(con.y, reaScaRep.u) annotation (Line(points={{-118,20},{-110,20},{
-              -110,40},{-102,40}},
-                         color={0,0,127}));
-      connect(reaScaRep.y, zon.qGai_flow) annotation (Line(points={{-78,40},{-50,
-              40},{-50,50},{-32,50}},
-                                color={0,0,127}));
-      connect(zon.TAir, thermostat.TZon) annotation (Line(points={{11,58},{32,58},
-              {32,8},{40,8}}, color={0,0,127}));
-      connect(con1.y, thermostat.TCooSet)
-        annotation (Line(points={{32,0},{34,0},{34,2},{40,2}}, color={0,0,127}));
-      connect(con2.y, thermostat.THeaSet) annotation (Line(points={{32,-40},{36,
-              -40},{36,-2},{40,-2}}, color={0,0,127}));
-      connect(triCom.PFan, thermostat.PFan) annotation (Line(points={{-38,
-              -1.69231},{-30,-1.69231},{-30,-2},{-20,-2},{-20,16},{38,16},{38,-8},
-              {40,-8}}, color={0,0,127}));
-      connect(thermostat.yCoo, triCom.uCoo) annotation (Line(points={{64,4},{72,
-              4},{72,18},{-92,18},{-92,-10.1538},{-86,-10.1538}},
-                                                               color={0,0,127}));
-      connect(thermostat.yHea, triCom.uHea) annotation (Line(points={{64,0},{72,
-              0},{72,-58},{-92,-58},{-92,-13.5385},{-86,-13.5385}},
-                                                                 color={0,0,127}));
-      connect(thermostat.yFan, triCom.uFan) annotation (Line(points={{64,-4},{76,
-              -4},{76,-62},{-96,-62},{-96,-6.76923},{-86,-6.76923}}, color={0,0,
-              127}));
-      annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,
-                -160},{160,160}})),                                  Diagram(
-            coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,
-                160}})),
-        experiment(StopTime=3600, __Dymola_Algorithm="Dassl"));
-    end use_case;
-
     block Thermostat
       Controls.OBC.CDL.Interfaces.RealInput TZon
         annotation (Placement(transformation(extent={{-140,60},{-100,100}})));
@@ -634,9 +512,8 @@ package Trial
             -56},{58,-56}}, color={0,0,127}));
     connect(TWatRet.T, PConsumed.TOut)
       annotation (Line(points={{-9,-60},{58,-60}}, color={0,0,127}));
-    connect(VAir_flow.port_b, val.port_a)
-      annotation (Line(points={{-40,0},{-34,0}}, color={0,127,255}));
-    connect(uHea, val.y) annotation (Line(points={{0,120},{0,80},{-24,80},{-24,12}},
+    connect(uHea, val.y) annotation (Line(points={{0,120},{0,80},{-32,80},{-32,
+            -30}},
           color={0,0,127}));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
           coordinateSystem(preserveAspectRatio=false)));
@@ -701,10 +578,6 @@ package Trial
     parameter Modelica.Units.SI.HeatFlowRate QHeaCoi_flow_nominal
       "Heat flow rate at u=1, positive for heating";
   equation
-    connect(port_a, TAirSup.port_a)
-      annotation (Line(points={{-100,0},{-70,0}}, color={0,127,255}));
-    connect(TAirCon.port_b, port_b)
-      annotation (Line(points={{60,0},{100,0}}, color={0,127,255}));
     connect(TAirSup.port_b, VAir_flow.port_a)
       annotation (Line(points={{-50,0},{-40,0}}, color={0,127,255}));
     connect(VAir_flow.V_flow, POut.V_flow)
@@ -713,10 +586,6 @@ package Trial
             {8,60},{18,60}}, color={0,0,127}));
     connect(TAirSup.T, POut.TIn)
       annotation (Line(points={{-60,11},{-60,64},{18,64}}, color={0,0,127}));
-    connect(VAir_flow.port_b, hea.port_a)
-      annotation (Line(points={{-20,0},{-10,0}}, color={0,127,255}));
-    connect(hea.port_b,TAirCon.port_a)
-      annotation (Line(points={{10,0},{40,0}}, color={0,127,255}));
     connect(uHea, partialTwoPortInterface.u) annotation (Line(points={{0,120},{
             0,80},{-14,80},{-14,6},{-12,6}}, color={0,0,127}));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
@@ -757,16 +626,19 @@ package Trial
       constrainedby Modelica.Media.Interfaces.PartialCondensingGases
       "Medium model for air";
 
-    extends Buildings.Fluid.Interfaces.PartialTwoPortInterface;
+    extends Buildings.Fluid.Interfaces.PartialTwoPortInterface(
+      redeclare package Medium = MediumA);
 
     parameter Modelica.Units.SI.MassFlowRate mAir_flow_nominal
       "Nominal mass flow rate of air";
 
-    replaceable Fluid.Sensors.TemperatureTwoPort TAirSup(redeclare package Medium =
-          MediumA, m_flow_nominal=mAir_flow_nominal)
+    replaceable Fluid.Sensors.TemperatureTwoPort TAirSup(
+      redeclare package Medium = MediumA,
+      m_flow_nominal=mAir_flow_nominal)
       annotation (Placement(transformation(extent={{-70,-10},{-50,10}})));
-    replaceable Fluid.Sensors.TemperatureTwoPort TAirCon(redeclare package Medium =
-          MediumA, m_flow_nominal=mAir_flow_nominal)
+    replaceable Fluid.Sensors.TemperatureTwoPort TAirCon(
+      redeclare package Medium = MediumA,
+      m_flow_nominal=mAir_flow_nominal)
       annotation (Placement(transformation(extent={{40,-10},{60,10}})));
     replaceable Fluid.Sensors.VolumeFlowRate VAir_flow(redeclare package Medium =
           MediumA, m_flow_nominal=mAir_flow_nominal)
@@ -774,14 +646,12 @@ package Trial
     PowerCalculation POut "Power output of heating coil"
       annotation (Placement(transformation(extent={{20,50},{40,70}})));
     replaceable Fluid.Interfaces.PartialTwoPortInterface
-      partialTwoPortInterface
+      partialTwoPortInterface(redeclare package Medium = MediumA)
       annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
     Controls.OBC.CDL.Interfaces.RealOutput TCon
       "Measured conditioned air temperature"
       annotation (Placement(transformation(extent={{100,40},{140,80}})));
   equation
-    connect(port_a, TAirSup.port_a)
-      annotation (Line(points={{-100,0},{-70,0}}, color={0,127,255}));
     connect(TAirCon.port_b, port_b)
       annotation (Line(points={{60,0},{100,0}}, color={0,127,255}));
     connect(TAirSup.port_b, VAir_flow.port_a)
@@ -798,6 +668,8 @@ package Trial
       annotation (Line(points={{10,0},{40,0}}, color={0,127,255}));
     connect(TAirCon.T, TCon)
       annotation (Line(points={{50,11},{50,60},{120,60}}, color={0,0,127}));
+    connect(port_a, TAirSup.port_a)
+      annotation (Line(points={{-100,0},{-70,0}}, color={0,127,255}));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
             Rectangle(
             extent={{-100,100},{100,-100}},
@@ -815,14 +687,14 @@ package Trial
     replaceable package MediumW = Buildings.Media.Water
       "Medium model for water";
 
-    extends Buildings.Fluid.Interfaces.PartialTwoPortInterface;
+    extends Buildings.Fluid.Interfaces.PartialTwoPortInterface(
+      redeclare package Medium = MediumA);
 
     parameter Modelica.Units.SI.MassFlowRate mAir_flow_nominal
       "Nominal mass flow rate of air";
 
     parameter Modelica.Units.SI.MassFlowRate mWat_flow_nominal
       "Nominal mass flow rate of water";
-
 
     replaceable Fluid.Sensors.TemperatureTwoPort TAirSup(redeclare package Medium =
           MediumA, m_flow_nominal=mAir_flow_nominal)
@@ -833,9 +705,11 @@ package Trial
     replaceable Fluid.Sensors.VolumeFlowRate VAir_flow(redeclare package Medium =
           MediumA, m_flow_nominal=mAir_flow_nominal)
       annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
-    Modelica.Fluid.Interfaces.FluidPort_a port_a1
+    Modelica.Fluid.Interfaces.FluidPort_a port_a1(redeclare package Medium =
+          MediumW)
       annotation (Placement(transformation(extent={{10,-110},{30,-90}})));
-    Modelica.Fluid.Interfaces.FluidPort_b port_b1
+    Modelica.Fluid.Interfaces.FluidPort_b port_b1(redeclare package Medium =
+          MediumW)
       annotation (Placement(transformation(extent={{-30,-110},{-10,-90}})));
     replaceable Fluid.Sensors.TemperatureTwoPort TWatSup(redeclare package Medium =
           MediumW, m_flow_nominal=mWat_flow_nominal)
@@ -855,13 +729,19 @@ package Trial
       annotation (Placement(transformation(extent={{20,50},{40,70}})));
     PowerCalculation PConsumed "Power consumption of heating coil"
       annotation (Placement(transformation(extent={{60,-70},{80,-50}})));
-    replaceable Fluid.Actuators.Valves.TwoWayLinear val(redeclare package Medium =
-          MediumA,
-      m_flow_nominal=mAir_flow_nominal,
+    replaceable Fluid.Actuators.Valves.TwoWayLinear val(
+      redeclare package Medium = MediumW,
+      m_flow_nominal=mWat_flow_nominal,
       dpValve_nominal=50)
-      annotation (Placement(transformation(extent={{-34,-10},{-14,10}})));
+      annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+        rotation=90,
+          origin={-20,-30})));
     replaceable Fluid.Interfaces.PartialFourPortInterface
-      partialFourPortInterface
+      partialFourPortInterface(
+      redeclare package Medium1 = MediumW,
+      redeclare package Medium2 = MediumA,
+      m1_flow_nominal=mWat_flow_nominal,
+      m2_flow_nominal=mAir_flow_nominal)
       annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=180,
           origin={6,-6})));
     Controls.OBC.CDL.Interfaces.RealOutput TCon
@@ -871,8 +751,6 @@ package Trial
   equation
     connect(port_a, TAirSup.port_a)
       annotation (Line(points={{-100,0},{-90,0}}, color={0,127,255}));
-    connect(TAirRet.port_b, port_b)
-      annotation (Line(points={{60,0},{100,0}}, color={0,127,255}));
     connect(TAirSup.port_b, VAir_flow.port_a)
       annotation (Line(points={{-70,0},{-60,0}}, color={0,127,255}));
     connect(port_a1, TWatSup.port_a)
@@ -893,18 +771,21 @@ package Trial
             -56},{58,-56}}, color={0,0,127}));
     connect(TWatRet.T, PConsumed.TOut)
       annotation (Line(points={{-9,-60},{58,-60}}, color={0,0,127}));
-    connect(VAir_flow.port_b, val.port_a)
-      annotation (Line(points={{-40,0},{-34,0}}, color={0,127,255}));
-    connect(val.port_b, partialFourPortInterface.port_a2)
-      annotation (Line(points={{-14,0},{-4,0}}, color={0,127,255}));
-    connect(partialFourPortInterface.port_b2, TAirRet.port_a)
-      annotation (Line(points={{16,0},{40,0}}, color={0,127,255}));
     connect(VWat_flow.port_b, partialFourPortInterface.port_a1) annotation (
         Line(points={{20,-30},{20,-12},{16,-12}}, color={0,127,255}));
-    connect(TWatRet.port_a, partialFourPortInterface.port_b1) annotation (Line(
-          points={{-20,-50},{-20,-12},{-4,-12}}, color={0,127,255}));
     connect(TAirRet.T, TCon)
       annotation (Line(points={{50,11},{50,60},{120,60}}, color={0,0,127}));
+    connect(TWatRet.port_a, val.port_a)
+      annotation (Line(points={{-20,-50},{-20,-40}}, color={0,127,255}));
+    connect(val.port_b, partialFourPortInterface.port_b1) annotation (Line(points=
+           {{-20,-20},{-20,-12},{-4,-12}}, color={0,127,255}));
+    connect(VAir_flow.port_b, partialFourPortInterface.port_a2)
+      annotation (Line(points={{-40,0},{-4,0}}, color={0,127,255}));
+    connect(TAirRet.port_b, port_b) annotation (Line(points={{60,0},{80,0},{80,0},
+            {100,0}}, color={0,127,255}));
+    connect(partialFourPortInterface.port_b2, TAirRet.port_a) annotation (Line(
+          points={{16,-1.77636e-15},{28,-1.77636e-15},{28,0},{40,0}}, color={0,127,
+            255}));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
             Rectangle(
             extent={{-100,100},{100,-100}},
@@ -930,7 +811,9 @@ package Trial
         m2_flow_nominal=mAir_flow_nominal,
         dp1_nominal=dpCoiWat_nominal,
         dp2_nominal=dpCoiAir_nominal,
-        UA_nominal=UA_nominal));
+        UA_nominal=UA_nominal),
+      port_a1(redeclare package Medium = MediumW),
+      port_b1(redeclare package Medium = MediumW));
 
     Controls.OBC.CDL.Interfaces.RealInput uCoo
       "Cooling level signal" annotation (
@@ -964,9 +847,8 @@ package Trial
             -56},{58,-56}}, color={0,0,127}));
     connect(TWatRet.T, PConsumed.TOut)
       annotation (Line(points={{-9,-60},{58,-60}}, color={0,0,127}));
-    connect(VAir_flow.port_b, val.port_a)
-      annotation (Line(points={{-40,0},{-34,0}}, color={0,127,255}));
-    connect(uCoo, val.y) annotation (Line(points={{0,120},{0,80},{-24,80},{-24,12}},
+    connect(uCoo, val.y) annotation (Line(points={{0,120},{0,80},{-32,80},{-32,
+            -30}},
           color={0,0,127}));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
           coordinateSystem(preserveAspectRatio=false)));
@@ -1019,7 +901,7 @@ package Trial
     Controls.OBC.CDL.Interfaces.RealInput uHea if has_heatingCoil
       "Heating loop signal"
       annotation (Placement(transformation(extent={{-20,-20},{20,20}}, rotation=-90,
-          origin={-120,280})));
+          origin={-40,280})));
     Controls.OBC.CDL.Interfaces.RealInput uCoo if has_coolingCoil
       "Cooling loop signal" annotation (Placement(transformation(
           extent={{-20,-20},{20,20}},
@@ -1029,11 +911,16 @@ package Trial
       annotation (Placement(transformation(
           extent={{-20,-20},{20,20}},
           rotation=-90,
-          origin={0,280})));
+          origin={40,280})));
     Controls.OBC.CDL.Interfaces.RealOutput TSupAir "Supply air temperature"
       annotation (Placement(transformation(extent={{220,220},{260,260}})));
     Controls.OBC.CDL.Interfaces.RealOutput VSupAir_flow "Supply air flowrate"
       annotation (Placement(transformation(extent={{220,180},{260,220}})));
+    Controls.OBC.CDL.Interfaces.RealInput uOA if  has_heatingCoil
+      "Outdoor air signal" annotation (Placement(transformation(
+          extent={{-20,-20},{20,20}},
+          rotation=-90,
+          origin={-120,280})));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-220,
               -260},{220,260}}), graphics={Rectangle(
             extent={{-220,260},{220,-260}},
@@ -1044,12 +931,24 @@ package Trial
               260}})));
   end Baseclass_externalInterfaces;
 
-  partial model economizer
-    extends Buildings.Fluid.Interfaces.PartialTwoPortInterface;
+  model economizer
+    extends Buildings.Fluid.Interfaces.PartialTwoPortInterface(
+      redeclare package Medium = MediumA);
 
-    Modelica.Fluid.Interfaces.FluidPort_a port_Out
+    replaceable package MediumA = Buildings.Media.Air
+      constrainedby Modelica.Media.Interfaces.PartialCondensingGases
+      "Medium model for air";
+
+    parameter Boolean has_economizer;
+
+    parameter Modelica.Units.SI.MassFlowRate mAir_flow_nominal
+      "Nominal mass flow rate of air";
+
+    Modelica.Fluid.Interfaces.FluidPort_a port_Out(redeclare package Medium =
+          MediumA)
       annotation (Placement(transformation(extent={{-110,30},{-90,50}})));
-    Modelica.Fluid.Interfaces.FluidPort_b port_Exh
+    Modelica.Fluid.Interfaces.FluidPort_b port_Exh(redeclare package Medium =
+          MediumA)
       annotation (Placement(transformation(extent={{-110,-50},{-90,-30}})));
     Fluid.Actuators.Dampers.MixingBox eco(
       redeclare package Medium = MediumA,
@@ -1065,17 +964,24 @@ package Trial
           extent={{-20,-20},{20,20}},
           rotation=-90,
           origin={0,120})));
-    Fluid.Sensors.VolumeFlowRate VAirOut_flow
+    Fluid.Sensors.VolumeFlowRate VAirOut_flow(redeclare package Medium =
+          MediumA, m_flow_nominal=mAir_flow_nominal)
       annotation (Placement(transformation(extent={{-90,30},{-70,50}})));
-    Fluid.Sensors.VolumeFlowRate VAirMix_flow "Mixed air flowrate"
+    Fluid.Sensors.VolumeFlowRate VAirMix_flow(redeclare package Medium =
+          MediumA, m_flow_nominal=mAir_flow_nominal)
+                                              "Mixed air flowrate"
       annotation (Placement(transformation(extent={{60,-10},{80,10}})));
-    Fluid.Sensors.VolumeFlowRate VAirRet_flow
+    Fluid.Sensors.VolumeFlowRate VAirRet_flow(redeclare package Medium =
+          MediumA, m_flow_nominal=mAir_flow_nominal)
       annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
-    Fluid.Sensors.TemperatureTwoPort TOutSen "Outdoor air temperature sensor"
+    Fluid.Sensors.TemperatureTwoPort TOutSen(redeclare package Medium = MediumA,
+        m_flow_nominal=mAir_flow_nominal)    "Outdoor air temperature sensor"
       annotation (Placement(transformation(extent={{-60,30},{-40,50}})));
-    Fluid.Sensors.TemperatureTwoPort TRetSen "Return air temperature sensor"
+    Fluid.Sensors.TemperatureTwoPort TRetSen(redeclare package Medium = MediumA,
+        m_flow_nominal=mAir_flow_nominal)    "Return air temperature sensor"
       annotation (Placement(transformation(extent={{-50,-10},{-30,10}})));
-    Fluid.Sensors.TemperatureTwoPort TMixSen "Mixed air temperature sensor"
+    Fluid.Sensors.TemperatureTwoPort TMixSen(redeclare package Medium = MediumA,
+        m_flow_nominal=mAir_flow_nominal)    "Mixed air temperature sensor"
       annotation (Placement(transformation(extent={{30,-10},{50,10}})));
     Controls.OBC.CDL.Interfaces.RealOutput TMix
       "Measured mixed air temperature"
@@ -1096,8 +1002,6 @@ package Trial
       annotation (Line(points={{-100,0},{-80,0}}, color={0,127,255}));
     connect(VAirOut_flow.port_b, TOutSen.port_a)
       annotation (Line(points={{-70,40},{-60,40}}, color={0,127,255}));
-    connect(TOutSen.port_b, eco.port_Out) annotation (Line(points={{-40,40},{
-            -20,40},{-20,8},{-10,8}}, color={0,127,255}));
     connect(VAirRet_flow.port_b, TRetSen.port_a)
       annotation (Line(points={{-60,0},{-50,0}}, color={0,127,255}));
     connect(TRetSen.port_b, eco.port_Ret) annotation (Line(points={{-30,0},{-20,
@@ -1110,6 +1014,8 @@ package Trial
       annotation (Line(points={{40,11},{40,40},{120,40}}, color={0,0,127}));
     connect(VAirOut_flow.V_flow, VOut_flow)
       annotation (Line(points={{-80,51},{-80,80},{120,80}}, color={0,0,127}));
+    connect(TOutSen.port_b, eco.port_Out) annotation (Line(points={{-40,40},{
+            -20,40},{-20,8},{-10,8}}, color={0,127,255}));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
           coordinateSystem(preserveAspectRatio=false)));
   end economizer;
@@ -1121,7 +1027,10 @@ package Trial
     replaceable Fluid.Interfaces.PartialTwoPortInterface comp3
       annotation (Placement(transformation(extent={{20,-50},{40,-30}})));
     Fluid.Movers.SpeedControlled_y fan(
-      redeclare package Medium = MediumA)
+      redeclare package Medium = MediumA,
+      redeclare Fluid.Movers.Data.Pumps.Wilo.CronolineIL80slash220dash4slash4
+        per,
+      addPowerToMedium=false)
       annotation (Placement(transformation(extent={{80,-50},{100,-30}})));
     Fluid.Sensors.VolumeFlowRate senVolFlo(
       redeclare package Medium = MediumA,
@@ -1159,7 +1068,8 @@ package Trial
       annotation (Line(points={{180,-40},{220,-40}}, color={0,127,255}));
     connect(port_return, comp1.port_a) annotation (Line(points={{220,40},{-140,40},
             {-140,-40},{-120,-40}}, color={0,127,255}));
-    connect(uFan, fan.y) annotation (Line(points={{0,280},{0,0},{90,0},{90,-28}},
+    connect(uFan, fan.y) annotation (Line(points={{40,280},{40,0},{90,0},{90,
+            -28}},
           color={0,0,127}));
     connect(comp1.port_b, comp2.port_a)
       annotation (Line(points={{-100,-40},{-60,-40}}, color={0,127,255}));
@@ -1171,10 +1081,7 @@ package Trial
 
   model Usecase
     FCU fCU(
-      has_heatingCoil=true,
       has_heatingCoilHHW=true,
-      has_coolingCoil=true,
-      has_coolingCoilCCW=true,
       mAir_flow_nominal=1,
       QHeaCoi_flow_nominal=1,
       mHotWat_flow_nominal=1,
@@ -1193,19 +1100,9 @@ package Trial
 
   model FCU
 
-    parameter Boolean has_heatingCoil
-      "Does the zone equipment have a heating coil?";
-
     parameter Boolean has_heatingCoilHHW
       "Does the zone equipment have a hot water heating coil?"
       annotation(Dialog(enable = has_heatingCoil));
-
-    parameter Boolean has_coolingCoil
-      "Does the zone equipment have a heating coil?";
-
-    parameter Boolean has_coolingCoilCCW
-      "Does the zone equipment have a hot water heating coil?"
-      annotation(Dialog(enable = has_coolingCoil));
 
     parameter Modelica.Units.SI.HeatFlowRate QHeaCoi_flow_nominal
       "Heat flow rate at u=1, positive for heating";
@@ -1254,12 +1151,32 @@ package Trial
         dpHeaCoiWat_nominal=dpHeaCoiWat_nominal,
         dpHeaCoiAir_nominal=dpHeaCoiAir_nominal,
         UAHeaCoi_nominal=UAHeaCoi_nominal),
-      redeclare Fluid.FixedResistances.LosslessPipe comp1(redeclare package
-          Medium = MediumA, m_flow_nominal=mAir_flow_nominal),
-      final has_economizer=false);
+      redeclare Buildings.Trial.economizer comp1(
+        redeclare package Medium = MediumA,
+        m_flow_nominal=mAir_flow_nominal,
+        redeclare package MediumA = MediumA,
+        has_economizer=has_economizer,
+        mAir_flow_nominal=mAir_flow_nominal),
+      final has_economizer=true,
+      final has_coolingCoil=true,
+      final has_coolingCoilCCW=true,
+      final has_heatingCoil=true,
+      has_heatingCoilHHW=has_heatingCoilHHW);
+
+  //  protected
+  //     parameter Boolean has_heatingCoil = true
+  //       "Does the zone equipment have a heating coil?";
+  //
+  //     parameter Boolean has_coolingCoil = true
+  //       "Does the zone equipment have a heating coil?";
+  //
+  //     parameter Boolean has_coolingCoilCCW = true
+  //       "Does the zone equipment have a hot water heating coil?"
+  //       annotation(Dialog(enable = has_coolingCoil));
+
 
   equation
-    connect(uHea, comp2.uHea) annotation (Line(points={{-120,280},{-120,120},{-50,
+    connect(uHea, comp2.uHea) annotation (Line(points={{-40,280},{-40,120},{-50,
             120},{-50,-28}}, color={0,0,127}));
     connect(uCoo, comp3.uCoo) annotation (Line(points={{120,280},{120,82},{30,82},
             {30,-28}}, color={0,0,127}));
@@ -1277,6 +1194,12 @@ package Trial
             {-40,-80},{-48,-80},{-48,-50}}, color={0,127,255}));
     connect(port_HHW_outlet, comp2.port_b1) annotation (Line(points={{-80,-260},
             {-80,-80},{-52,-80},{-52,-50}}, color={0,127,255}));
+    connect(port_OA_exhaust1, comp1.port_Exh) annotation (Line(points={{-220,40},{
+            -150,40},{-150,-44},{-120,-44}}, color={0,127,255}));
+    connect(port_OA_inlet1, comp1.port_Out) annotation (Line(points={{-220,-40},{-160,
+            -40},{-160,-36},{-120,-36}}, color={0,127,255}));
+    connect(uOA, comp1.uEco) annotation (Line(points={{-120,280},{-120,0},{-110,
+            0},{-110,-28}}, color={0,0,127}));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
           coordinateSystem(preserveAspectRatio=false)));
   end FCU;
@@ -1302,7 +1225,7 @@ package Trial
       redeclare package Medium = MediumA,
       m_flow_nominal=mAir_flow_nominal,
       mAir_flow_nominal=mAir_flow_nominal,
-      dp_Coil_nominal=dPHeaCoiAir_nominal,
+      dp_Coil_nominal=dpHeaCoiAir_nominal,
       QHeaCoi_flow_nominal=QHeaCoi_flow_nominal) if has_heatingCoil and not has_heatingCoilHHW
       annotation (Placement(transformation(extent={{-10,40},{10,60}})));
 
@@ -1423,8 +1346,8 @@ package Trial
       m_flow_nominal=mAir_flow_nominal,
       mAir_flow_nominal=mAir_flow_nominal,
       mWat_flow_nominal=mChiWat_flow_nominal,
-      dpCoiAir_nominal=dPCooCoiAir_nominal,
-      dpCoiWat_nominal=dPCooCoiWat_nominal,
+      dpCoiAir_nominal=dpCooCoiAir_nominal,
+      dpCoiWat_nominal=dpCooCoiWat_nominal,
       UA_nominal=UACooCoi_nominal) if has_coolingCoil and has_coolingCoilCCW
       annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
     Controls.OBC.CDL.Interfaces.RealInput uCoo if has_coolingCoil
@@ -1437,9 +1360,11 @@ package Trial
       redeclare package Medium = MediumA,
       m_flow_nominal=mAir_flow_nominal) if not has_coolingCoil
       annotation (Placement(transformation(extent={{-10,-50},{10,-30}})));
-    Modelica.Fluid.Interfaces.FluidPort_a port_a1 if has_coolingCoil and has_coolingCoilCCW
+    Modelica.Fluid.Interfaces.FluidPort_a port_a1(redeclare package Medium =
+          MediumW) if                                has_coolingCoil and has_coolingCoilCCW
       annotation (Placement(transformation(extent={{10,-110},{30,-90}})));
-    Modelica.Fluid.Interfaces.FluidPort_b port_b1 if has_coolingCoil and has_coolingCoilCCW
+    Modelica.Fluid.Interfaces.FluidPort_b port_b1(redeclare package Medium =
+          MediumW) if                                has_coolingCoil and has_coolingCoilCCW
       annotation (Placement(transformation(extent={{-30,-110},{-10,-90}})));
     Controls.OBC.CDL.Interfaces.RealInput TAmb if has_coolingCoil
        and not has_coolingCoilCCW "Ambient outdoor air temperature"
@@ -1479,4 +1404,141 @@ package Trial
             fillPattern=FillPattern.Solid)}),                      Diagram(
           coordinateSystem(preserveAspectRatio=false)));
   end coolingCoil;
+
+  block use_case
+
+    replaceable package MediumA = Buildings.Media.Air
+      constrainedby Modelica.Media.Interfaces.PartialCondensingGases "Medium model for air";
+    replaceable package MediumW = Buildings.Media.Water "Medium model for water";
+
+    Controls.OBC.CDL.Continuous.Sources.Constant con(k=0.5)
+      annotation (Placement(transformation(extent={{-140,30},{-120,50}})));
+    Fluid.Sources.Boundary_pT sinCoo(
+      redeclare package Medium = MediumW,
+      p=300000,
+      T=279.15,
+      nPorts=1) "Sink for cooling coil" annotation (Placement(transformation(
+          extent={{-10,-10},{10,10}},
+          rotation=90,
+          origin={-50,-110})));
+    Fluid.Sources.Boundary_pT souCoo(
+      redeclare package Medium = MediumW,
+      p(displayUnit="Pa") = 300000 + 6000,
+      T=279.15,
+      nPorts=1) "Source for cooling coil loop" annotation (Placement(
+          transformation(
+          extent={{-10,-10},{10,10}},
+          rotation=90,
+          origin={-20,-110})));
+    Fluid.Sources.Boundary_pT sinHea(
+      redeclare package Medium = MediumW,
+      p=300000,
+      T=318.15,
+      nPorts=1) "Sink for heating coil" annotation (Placement(transformation(
+          extent={{-10,-10},{10,10}},
+          rotation=90,
+          origin={-110,-110})));
+    Fluid.Sources.Boundary_pT souHea(
+      redeclare package Medium = MediumW,
+      p(displayUnit="Pa") = 300000 + 6000,
+      T=318.15,
+      nPorts=1) "Source for heating coil" annotation (Placement(transformation(
+          extent={{-10,-10},{10,10}},
+          rotation=90,
+          origin={-80,-110})));
+    ThermalZones.EnergyPlus.ThermalZone           zon(
+      zoneName="LIVING ZONE",
+      redeclare package Medium = MediumA,
+      nPorts=2)
+      "Thermal zone"
+      annotation (Placement(transformation(extent={{-30,20},{10,60}})));
+    inner ThermalZones.EnergyPlus.Building           building(
+      idfName=Modelica.Utilities.Files.loadResource("./Buildings/Resources/Data/ThermalZones/EnergyPlus/Examples/SingleFamilyHouse_TwoSpeed_ZoneAirBalance/SingleFamilyHouse_TwoSpeed_ZoneAirBalance.idf"),
+      epwName=Modelica.Utilities.Files.loadResource("./Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw"),
+      weaName=Modelica.Utilities.Files.loadResource("./Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"),
+      usePrecompiledFMU=false,
+      computeWetBulbTemperature=false)
+      "Building model"
+      annotation (Placement(transformation(extent={{-140,-40},{-120,-20}})));
+
+    Controls.OBC.CDL.Routing.RealScalarReplicator reaScaRep(nout=3)
+      annotation (Placement(transformation(extent={{-100,30},{-80,50}})));
+    Old.Thermostat thermostat
+      annotation (Placement(transformation(extent={{42,-10},{62,10}})));
+    Controls.OBC.CDL.Continuous.Sources.Constant con1(k=273.15 + 25)
+      annotation (Placement(transformation(extent={{10,-10},{30,10}})));
+    Controls.OBC.CDL.Continuous.Sources.Constant con2(k=273.15 + 23)
+      annotation (Placement(transformation(extent={{10,-50},{30,-30}})));
+    FCU fCU(
+      has_heatingCoilHHW=true,
+      redeclare package MediumA = MediumA,
+      redeclare package MediumW = MediumW,
+      mAir_flow_nominal=1,
+      QHeaCoi_flow_nominal=1,
+      mHotWat_flow_nominal=1,
+      dpHeaCoiWat_nominal=100,
+      dpHeaCoiAir_nominal=100,
+      UAHeaCoi_nominal=1,
+      minSpeRatCooCoi=1,
+      dpCooCoiAir_nominal=100,
+      mChiWat_flow_nominal=1,
+      UACooCoi_nominal=1,
+      dpCooCoiWat_nominal=100)
+      annotation (Placement(transformation(extent={{-86,-52},{-42,0}})));
+    Controls.OBC.CDL.Continuous.Sources.Constant con3(k=0.4)
+      annotation (Placement(transformation(extent={{-140,0},{-120,20}})));
+    Fluid.Sources.Outside out(redeclare package Medium = MediumA, nPorts=2)
+      annotation (Placement(transformation(extent={{-114,-40},{-94,-20}})));
+    Controls.OBC.CDL.Discrete.Sampler sam(samplePeriod=5)
+      annotation (Placement(transformation(extent={{100,-20},{120,0}})));
+  equation
+    connect(con.y, reaScaRep.u) annotation (Line(points={{-118,40},{-102,40}},
+                       color={0,0,127}));
+    connect(reaScaRep.y, zon.qGai_flow) annotation (Line(points={{-78,40},{-50,
+            40},{-50,50},{-32,50}},
+                              color={0,0,127}));
+    connect(zon.TAir, thermostat.TZon) annotation (Line(points={{11,58},{32,58},
+            {32,8},{40,8}}, color={0,0,127}));
+    connect(con1.y, thermostat.TCooSet)
+      annotation (Line(points={{32,0},{34,0},{34,2},{40,2}}, color={0,0,127}));
+    connect(con2.y, thermostat.THeaSet) annotation (Line(points={{32,-40},{36,
+            -40},{36,-2},{40,-2}}, color={0,0,127}));
+    connect(thermostat.yCoo, fCU.uCoo) annotation (Line(points={{64,4},{80,4},{
+            80,-60},{-20,-60},{-20,14},{-52,14},{-52,2}}, color={0,0,127}));
+    connect(thermostat.yHea, fCU.uHea) annotation (Line(points={{64,0},{72,0},{
+            72,-66},{-32,-66},{-32,8},{-68,8},{-68,2}}, color={0,0,127}));
+    connect(thermostat.yFan, fCU.uFan) annotation (Line(points={{64,-4},{88,-4},
+            {88,-72},{-38,-72},{-38,20},{-60,20},{-60,2}}, color={0,0,127}));
+    connect(souCoo.ports[1], fCU.port_CCW_inlet) annotation (Line(points={{-20,
+            -100},{-20,-80},{-56,-80},{-56,-52}}, color={0,127,255}));
+    connect(sinCoo.ports[1], fCU.port_CCW_outlet) annotation (Line(points={{-50,
+            -100},{-50,-84},{-60,-84},{-60,-52}}, color={0,127,255}));
+    connect(souHea.ports[1], fCU.port_HHW_inlet) annotation (Line(points={{-80,
+            -100},{-80,-80},{-68,-80},{-68,-52}}, color={0,127,255}));
+    connect(sinHea.ports[1], fCU.port_HHW_outlet) annotation (Line(points={{
+            -110,-100},{-110,-76},{-72,-76},{-72,-52}}, color={0,127,255}));
+    connect(fCU.port_return, zon.ports[1]) annotation (Line(points={{-42,-22},{
+            -12,-22},{-12,20.9}}, color={0,127,255}));
+    connect(fCU.port_supply, zon.ports[2]) annotation (Line(points={{-42,-30},{
+            -8,-30},{-8,20.9}}, color={0,127,255}));
+    connect(con3.y, fCU.uOA)
+      annotation (Line(points={{-118,10},{-76,10},{-76,2}}, color={0,0,127}));
+    connect(building.weaBus, out.weaBus) annotation (Line(
+        points={{-120,-30},{-118,-30},{-118,-29.8},{-114,-29.8}},
+        color={255,204,51},
+        thickness=0.5));
+    connect(out.ports[1], fCU.port_OA_exhaust1) annotation (Line(points={{-94,
+            -28},{-90,-28},{-90,-22},{-86,-22}}, color={0,127,255}));
+    connect(out.ports[2], fCU.port_OA_inlet1) annotation (Line(points={{-94,-32},
+            {-90,-32},{-90,-30},{-86,-30}}, color={0,127,255}));
+    connect(thermostat.yFan, sam.u) annotation (Line(points={{64,-4},{88,-4},{
+            88,-10},{98,-10}}, color={0,0,127}));
+    connect(sam.y, thermostat.PFan) annotation (Line(points={{122,-10},{140,-10},
+            {140,-40},{38,-40},{38,-8},{40,-8}}, color={0,0,127}));
+    annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,
+              -160},{160,160}})),                                  Diagram(
+          coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,
+              160}})),
+      experiment(StopTime=3600, __Dymola_Algorithm="Dassl"));
+  end use_case;
 end Trial;
