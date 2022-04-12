@@ -398,7 +398,10 @@ package Trial
         annotation (Placement(transformation(extent={{-140,0},{-100,40}})));
       Controls.OBC.CDL.Interfaces.RealInput THeaSet
         annotation (Placement(transformation(extent={{-140,-40},{-100,0}})));
-      Controls.OBC.CDL.Continuous.PID conPID(reverseActing=false)
+      Controls.OBC.CDL.Continuous.PID conPID(
+        controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
+        k=0.1,
+        Ti=1200,                             reverseActing=false)
         annotation (Placement(transformation(extent={{-80,50},{-60,70}})));
       Controls.OBC.CDL.Interfaces.RealOutput yCoo
         annotation (Placement(transformation(extent={{100,20},{140,60}})));
@@ -406,59 +409,90 @@ package Trial
         annotation (Placement(transformation(extent={{100,-20},{140,20}})));
       Controls.OBC.CDL.Interfaces.RealOutput yFan
         annotation (Placement(transformation(extent={{100,-60},{140,-20}})));
-      Controls.OBC.CDL.Continuous.PID conPID1
+      Controls.OBC.CDL.Continuous.PID conPID1(
+        controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
+        k=0.05,
+        Ti=1200)
         annotation (Placement(transformation(extent={{-80,-40},{-60,-20}})));
       Controls.OBC.CDL.Interfaces.RealInput PFan
         annotation (Placement(transformation(extent={{-140,-100},{-100,-60}})));
       Controls.OBC.CDL.Continuous.Hysteresis hys(uLow=0.02, uHigh=0.05)
         annotation (Placement(transformation(extent={{-80,-90},{-60,-70}})));
-      Controls.OBC.CDL.Conversions.BooleanToReal booToRea
-        annotation (Placement(transformation(extent={{-50,-90},{-30,-70}})));
+      Controls.OBC.CDL.Interfaces.RealInput TSup
+        annotation (Placement(transformation(extent={{-140,-70},{-100,-30}})));
+      Controls.OBC.ASHRAE.FanCoilUnit.Subsequences.SupplyAirTemperature TSupAir(
+          have_coolingCoil=true, have_heatingCoil=true,
+        controllerTypeCooCoi=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
+
+        kCooCoi=0.05,
+        TiCooCoi=1200,
+        controllerTypeHeaCoi=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
+
+        kHeaCoi=0.01,
+        TiHeaCoi=1200)
+        annotation (Placement(transformation(extent={{0,58},{20,82}})));
+      Controls.OBC.ASHRAE.FanCoilUnit.Subsequences.FanSpeed fanSpe(
+        have_coolingCoil=true,
+        have_heatingCoil=true,
+        deaSpe=0.1,
+        heaSpeMin=0.2,
+        heaSpeMax=1,
+        cooSpeMin=0.3)
+        annotation (Placement(transformation(extent={{0,-72},{20,-52}})));
+      Controls.OBC.CDL.Integers.Sources.Constant conInt(k=1)
+        annotation (Placement(transformation(extent={{-52,70},{-32,90}})));
       Controls.OBC.CDL.Continuous.Product pro
-        annotation (Placement(transformation(extent={{40,30},{60,50}})));
-      Controls.OBC.CDL.Continuous.Product pro1
-        annotation (Placement(transformation(extent={{40,-10},{60,10}})));
-      Controls.OBC.CDL.Continuous.Hysteresis hys1[2](uLow=0.08, uHigh=0.1)
-        annotation (Placement(transformation(extent={{10,-70},{30,-50}})));
-      Controls.OBC.CDL.Logical.MultiOr mulOr(nin=2)
-        annotation (Placement(transformation(extent={{42,-70},{62,-50}})));
-      Controls.OBC.CDL.Conversions.BooleanToReal booToRea1
-        annotation (Placement(transformation(extent={{70,-70},{90,-50}})));
+        annotation (Placement(transformation(extent={{60,-70},{80,-50}})));
+      Controls.OBC.CDL.Conversions.BooleanToReal booToRea
+        annotation (Placement(transformation(extent={{30,-50},{50,-30}})));
+      Controls.OBC.CDL.Logical.Pre pre
+        annotation (Placement(transformation(extent={{-40,-90},{-20,-70}})));
     equation
       connect(TZon, conPID.u_m) annotation (Line(points={{-120,80},{-90,80},{-90,
               40},{-70,40},{-70,48}}, color={0,0,127}));
-      connect(TZon, conPID1.u_m) annotation (Line(points={{-120,80},{-90,80},{-90,
-              -50},{-70,-50},{-70,-42}}, color={0,0,127}));
+      connect(TZon, conPID1.u_m) annotation (Line(points={{-120,80},{-90,80},{
+              -90,-46},{-70,-46},{-70,-42}},
+                                         color={0,0,127}));
       connect(TCooSet, conPID.u_s) annotation (Line(points={{-120,20},{-86,20},{
               -86,60},{-82,60}}, color={0,0,127}));
       connect(THeaSet, conPID1.u_s) annotation (Line(points={{-120,-20},{-86,-20},
               {-86,-30},{-82,-30}}, color={0,0,127}));
       connect(PFan, hys.u)
         annotation (Line(points={{-120,-80},{-82,-80}}, color={0,0,127}));
-      connect(hys.y, booToRea.u)
-        annotation (Line(points={{-58,-80},{-52,-80}}, color={255,0,255}));
-      connect(pro1.y, yHea)
-        annotation (Line(points={{62,0},{120,0}}, color={0,0,127}));
-      connect(pro.y, yCoo)
-        annotation (Line(points={{62,40},{120,40}}, color={0,0,127}));
-      connect(conPID.y, pro.u1) annotation (Line(points={{-58,60},{20,60},{20,46},
-              {38,46}}, color={0,0,127}));
-      connect(booToRea.y, pro.u2) annotation (Line(points={{-28,-80},{0,-80},{0,
-              34},{38,34}}, color={0,0,127}));
-      connect(conPID1.y, pro1.u2) annotation (Line(points={{-58,-30},{20,-30},{20,
-              -6},{38,-6}}, color={0,0,127}));
-      connect(booToRea.y, pro1.u1) annotation (Line(points={{-28,-80},{0,-80},{0,
-              6},{38,6}}, color={0,0,127}));
-      connect(conPID.y, hys1[1].u) annotation (Line(points={{-58,60},{-20,60},{
-              -20,-60},{8,-60}}, color={0,0,127}));
-      connect(conPID1.y, hys1[2].u) annotation (Line(points={{-58,-30},{-20,-30},
-              {-20,-60},{8,-60}}, color={0,0,127}));
-      connect(hys1.y, mulOr.u[1:2]) annotation (Line(points={{32,-60},{36,-60},{
-              36,-63.5},{40,-63.5}}, color={255,0,255}));
-      connect(mulOr.y, booToRea1.u)
-        annotation (Line(points={{64,-60},{68,-60}}, color={255,0,255}));
-      connect(booToRea1.y, yFan) annotation (Line(points={{92,-60},{98,-60},{98,
-              -40},{120,-40}}, color={0,0,127}));
+      connect(TSup, TSupAir.TAirSup) annotation (Line(points={{-120,-50},{-6,
+              -50},{-6,68},{-2,68}}, color={0,0,127}));
+      connect(conPID1.y, TSupAir.uHea) annotation (Line(points={{-58,-30},{-20,
+              -30},{-20,72},{-2,72}}, color={0,0,127}));
+      connect(conPID.y, TSupAir.uCoo) annotation (Line(points={{-58,60},{-14,60},
+              {-14,64},{-2,64}}, color={0,0,127}));
+      connect(TCooSet, TSupAir.TZonSetCoo) annotation (Line(points={{-120,20},{
+              -4,20},{-4,60},{-2,60}}, color={0,0,127}));
+      connect(THeaSet, TSupAir.TZonSetHea) annotation (Line(points={{-120,-20},
+              {-86,-20},{-86,0},{-24,0},{-24,76},{-2,76}}, color={0,0,127}));
+      connect(TSupAir.yCooCoi, yCoo) annotation (Line(points={{22,64},{40,64},{
+              40,40},{120,40}}, color={0,0,127}));
+      connect(TSupAir.yHeaCoi, yHea) annotation (Line(points={{22,76},{50,76},{
+              50,0},{120,0}}, color={0,0,127}));
+      connect(conPID1.y, fanSpe.uHea) annotation (Line(points={{-58,-30},{-20,
+              -30},{-20,-64},{-2,-64}}, color={0,0,127}));
+      connect(conPID.y, fanSpe.uCoo) annotation (Line(points={{-58,60},{-14,60},
+              {-14,-68},{-2,-68}}, color={0,0,127}));
+      connect(conInt.y, fanSpe.opeMod) annotation (Line(points={{-30,80},{-28,
+              80},{-28,-54},{-2,-54}}, color={255,127,0}));
+      connect(fanSpe.yFanSpe, pro.u2) annotation (Line(points={{22,-64},{40,-64},
+              {40,-66},{58,-66}}, color={0,0,127}));
+      connect(fanSpe.yFan, booToRea.u) annotation (Line(points={{22,-60},{26,
+              -60},{26,-40},{28,-40}}, color={255,0,255}));
+      connect(booToRea.y, pro.u1) annotation (Line(points={{52,-40},{54,-40},{
+              54,-54},{58,-54}}, color={0,0,127}));
+      connect(pro.y, yFan) annotation (Line(points={{82,-60},{90,-60},{90,-40},
+              {120,-40}}, color={0,0,127}));
+      connect(hys.y, pre.u)
+        annotation (Line(points={{-58,-80},{-42,-80}}, color={255,0,255}));
+      connect(pre.y, fanSpe.uFanPro) annotation (Line(points={{-18,-80},{-10,
+              -80},{-10,-58},{-2,-58}}, color={255,0,255}));
+      connect(pre.y, TSupAir.uFan) annotation (Line(points={{-18,-80},{-10,-80},
+              {-10,80},{-2,80}}, color={255,0,255}));
       annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
             coordinateSystem(preserveAspectRatio=false)));
     end Thermostat;
@@ -1016,7 +1050,12 @@ package Trial
       annotation (Line(points={{-80,51},{-80,80},{120,80}}, color={0,0,127}));
     connect(TOutSen.port_b, eco.port_Out) annotation (Line(points={{-40,40},{
             -20,40},{-20,8},{-10,8}}, color={0,127,255}));
-    annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
+    annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+            Rectangle(
+            extent={{-100,100},{100,-100}},
+            lineColor={0,0,0},
+            fillColor={255,255,255},
+            fillPattern=FillPattern.Solid)}),                      Diagram(
           coordinateSystem(preserveAspectRatio=false)));
   end economizer;
 
@@ -1027,10 +1066,7 @@ package Trial
     replaceable Fluid.Interfaces.PartialTwoPortInterface comp3
       annotation (Placement(transformation(extent={{20,-50},{40,-30}})));
     Fluid.Movers.SpeedControlled_y fan(
-      redeclare package Medium = MediumA,
-      redeclare Fluid.Movers.Data.Pumps.Wilo.CronolineIL80slash220dash4slash4
-        per,
-      addPowerToMedium=false)
+      redeclare package Medium = MediumA)
       annotation (Placement(transformation(extent={{80,-50},{100,-30}})));
     Fluid.Sensors.VolumeFlowRate senVolFlo(
       redeclare package Medium = MediumA,
@@ -1161,7 +1197,8 @@ package Trial
       final has_coolingCoil=true,
       final has_coolingCoilCCW=true,
       final has_heatingCoil=true,
-      has_heatingCoilHHW=has_heatingCoilHHW);
+      has_heatingCoilHHW=has_heatingCoilHHW,
+      fan(per=fanPer, addPowerToMedium=fanAddPowerToMedium));
 
   //  protected
   //     parameter Boolean has_heatingCoil = true
@@ -1175,6 +1212,14 @@ package Trial
   //       annotation(Dialog(enable = has_coolingCoil));
 
 
+    replaceable parameter Fluid.Movers.Data.Generic fanPer constrainedby
+      Buildings.Fluid.Movers.Data.Generic
+      "Record with performance data for supply fan"
+      annotation (choicesAllMatching=true,
+        Placement(transformation(extent={{52,60},{72,80}})));
+
+    parameter Boolean fanAddPowerToMedium=true
+      "Set to false to avoid any power (=heat and flow work) being added to medium (may give simpler equations)";
   equation
     connect(uHea, comp2.uHea) annotation (Line(points={{-40,280},{-40,120},{-50,
             120},{-50,-28}}, color={0,0,127}));
@@ -1441,7 +1486,7 @@ package Trial
     Fluid.Sources.Boundary_pT souHea(
       redeclare package Medium = MediumW,
       p(displayUnit="Pa") = 300000 + 6000,
-      T=318.15,
+      T=333.15,
       nPorts=1) "Source for heating coil" annotation (Placement(transformation(
           extent={{-10,-10},{10,10}},
           rotation=90,
@@ -1473,24 +1518,23 @@ package Trial
       has_heatingCoilHHW=true,
       redeclare package MediumA = MediumA,
       redeclare package MediumW = MediumW,
-      mAir_flow_nominal=1,
-      QHeaCoi_flow_nominal=1,
-      mHotWat_flow_nominal=1,
+      mAir_flow_nominal=10,
+      QHeaCoi_flow_nominal=13866,
+      mHotWat_flow_nominal=2*13866/(1000*10),
       dpHeaCoiWat_nominal=100,
       dpHeaCoiAir_nominal=100,
-      UAHeaCoi_nominal=1,
+      UAHeaCoi_nominal=1000,
       minSpeRatCooCoi=1,
       dpCooCoiAir_nominal=100,
       mChiWat_flow_nominal=1,
       UACooCoi_nominal=1,
-      dpCooCoiWat_nominal=100)
+      dpCooCoiWat_nominal=100,
+      redeclare Fluid.Movers.Data.Pumps.customFCUFan fanPer)
       annotation (Placement(transformation(extent={{-86,-52},{-42,0}})));
     Controls.OBC.CDL.Continuous.Sources.Constant con3(k=0.4)
       annotation (Placement(transformation(extent={{-140,0},{-120,20}})));
     Fluid.Sources.Outside out(redeclare package Medium = MediumA, nPorts=2)
       annotation (Placement(transformation(extent={{-114,-40},{-94,-20}})));
-    Controls.OBC.CDL.Discrete.Sampler sam(samplePeriod=5)
-      annotation (Placement(transformation(extent={{100,-20},{120,0}})));
   equation
     connect(con.y, reaScaRep.u) annotation (Line(points={{-118,40},{-102,40}},
                        color={0,0,127}));
@@ -1531,14 +1575,17 @@ package Trial
             -28},{-90,-28},{-90,-22},{-86,-22}}, color={0,127,255}));
     connect(out.ports[2], fCU.port_OA_inlet1) annotation (Line(points={{-94,-32},
             {-90,-32},{-90,-30},{-86,-30}}, color={0,127,255}));
-    connect(thermostat.yFan, sam.u) annotation (Line(points={{64,-4},{88,-4},{
-            88,-10},{98,-10}}, color={0,0,127}));
-    connect(sam.y, thermostat.PFan) annotation (Line(points={{122,-10},{140,-10},
-            {140,-40},{38,-40},{38,-8},{40,-8}}, color={0,0,127}));
+    connect(fCU.TSupAir, thermostat.TSup) annotation (Line(points={{-40,-2},{0,
+            -2},{0,-20},{34,-20},{34,-5},{40,-5}}, color={0,0,127}));
+    connect(thermostat.yFan, thermostat.PFan) annotation (Line(points={{64,-4},
+            {88,-4},{88,-72},{38,-72},{38,-8},{40,-8}}, color={0,0,127}));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,
               -160},{160,160}})),                                  Diagram(
           coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,
               160}})),
-      experiment(StopTime=3600, __Dymola_Algorithm="Dassl"));
+      experiment(
+        StopTime=864000,
+        Interval=60,
+        __Dymola_Algorithm="Dassl"));
   end use_case;
 end Trial;
