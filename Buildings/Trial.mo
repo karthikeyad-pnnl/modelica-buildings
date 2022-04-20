@@ -423,14 +423,13 @@ package Trial
       Controls.OBC.ASHRAE.FanCoilUnit.Subsequences.SupplyAirTemperature TSupAir(
           have_coolingCoil=true, have_heatingCoil=true,
         controllerTypeCooCoi=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
-
         kCooCoi=0.05,
         TiCooCoi=1200,
         controllerTypeHeaCoi=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
-
         kHeaCoi=0.01,
         TiHeaCoi=1200)
         annotation (Placement(transformation(extent={{0,58},{20,82}})));
+
       Controls.OBC.ASHRAE.FanCoilUnit.Subsequences.FanSpeed fanSpe(
         have_coolingCoil=true,
         have_heatingCoil=true,
@@ -894,16 +893,16 @@ package Trial
       constrainedby Modelica.Media.Interfaces.PartialCondensingGases "Medium model for air";
     replaceable package MediumW = Buildings.Media.Water "Medium model for water";
 
-    parameter Boolean has_coolingCoil
+    Boolean has_coolingCoil
       "Does the zone equipment have a cooling coil?";
 
-    parameter Boolean has_coolingCoilCCW
+    Boolean has_coolingCoilCCW
       "Does the zone equipment have a chilled water cooling coil?";
 
-    parameter Boolean has_heatingCoil
+    Boolean has_heatingCoil
       "Does the zone equipment have a heating coil?";
 
-    parameter Boolean has_heatingCoilHHW
+    Boolean has_heatingCoilHHW
       "Does the zone equipment have a hot water heating coil?";
 
     Modelica.Fluid.Interfaces.FluidPort_a port_return(redeclare package Medium =
@@ -1062,7 +1061,7 @@ package Trial
   partial model Baseclass_components
     extends Buildings.Trial.Baseclass_externalInterfaces;
 
-    parameter Boolean has_economizer;
+    Boolean has_economizer;
     replaceable Fluid.Interfaces.PartialTwoPortInterface comp3
       annotation (Placement(transformation(extent={{20,-50},{40,-30}})));
     Fluid.Movers.SpeedControlled_y fan(
@@ -1136,9 +1135,8 @@ package Trial
 
   model FCU
 
-    parameter Boolean has_heatingCoilHHW
-      "Does the zone equipment have a hot water heating coil?"
-      annotation(Dialog(enable = has_heatingCoil));
+    parameter Buildings.Trial.Types.heatingCoil heatingCoilType
+      "Type of heating coil used in the FCU";
 
     parameter Modelica.Units.SI.HeatFlowRate QHeaCoi_flow_nominal
       "Heat flow rate at u=1, positive for heating";
@@ -1200,7 +1198,6 @@ package Trial
       has_heatingCoilHHW=has_heatingCoilHHW,
       fan(per=fanPer, addPowerToMedium=fanAddPowerToMedium));
 
-  //  protected
   //     parameter Boolean has_heatingCoil = true
   //       "Does the zone equipment have a heating coil?";
   //
@@ -1210,6 +1207,11 @@ package Trial
   //     parameter Boolean has_coolingCoilCCW = true
   //       "Does the zone equipment have a hot water heating coil?"
   //       annotation(Dialog(enable = has_coolingCoil));
+
+  protected
+    Boolean has_heatingCoilHHW = heatingCoilType == Buildings.Trial.Types.heatingCoil.heatingHotWater
+      "Does the zone equipment have a hot water heating coil?"
+      annotation(Dialog(enable = has_heatingCoil));
 
 
     replaceable parameter Fluid.Movers.Data.Generic fanPer constrainedby
@@ -1515,7 +1517,7 @@ package Trial
     Controls.OBC.CDL.Continuous.Sources.Constant con2(k=273.15 + 23)
       annotation (Placement(transformation(extent={{10,-50},{30,-30}})));
     FCU fCU(
-      has_heatingCoilHHW=true,
+      heatingCoilType=Buildings.Trial.Types.heatingCoil.heatingHotWater,
       redeclare package MediumA = MediumA,
       redeclare package MediumW = MediumW,
       mAir_flow_nominal=10,
@@ -1588,4 +1590,79 @@ package Trial
         Interval=60,
         __Dymola_Algorithm="Dassl"));
   end use_case;
+
+  package Types "Package with type definitions"
+    extends Modelica.Icons.TypesPackage;
+
+    type heatingCoil = enumeration(
+        electric "Electric resistance heating coil",
+        heatingHotWater "Hot-water heating coil")
+        "Enumeration for the heating coil types" annotation (Documentation(info=
+                                 "<html>
+<p>
+Enumeration for the type of heating coil used in the zone equipment.
+The possible values are
+</p>
+<ol>
+<li>
+electric
+</li>
+<li>
+heatingHotWater
+</li>
+</ol>
+</html>",   revisions="<html>
+<ul>
+<li>
+April 20, 2022 by Karthik Devaprasad:<br/>
+First implementation.
+</li>
+</ul>
+</html>"));
+    type capacityControl = enumeration(
+        multispeedCyclingFanConstantWater "Multi-speed cycling fan with constant water flow rate",
+        constantSpeedContinuousFanVariableWater "Constant speed continuous fan with variable water flow rate",
+        variableSpeedFanConstantWater "Variable-speed fan with constant water flow rate",
+        variableSpeedFanVariableWater "Variable-speed fan with variable water flow rate",
+        multispeedFanCyclingSpeedConstantWater "Multi-speed fan with cycling between speeds and constant water flow",
+        ASHRAE_90_1 "Fan speed control based on ASHRAE 90.1")
+      "Enumeration for the capacity control types"
+    annotation (Documentation(info="<html>
+<p>
+Enumeration for the type of capacity control used in the zone equipment.
+The possible values are
+</p>
+<ol>
+<li>
+multispeedCyclingFanConstantWater
+</li>
+<li>
+constantSpeedContinuousFanVariableWater
+</li>
+<li>
+variableSpeedFanConstantWater
+</li>
+<li>
+variableSpeedFanVariableWater
+</li>
+<li>
+multispeedFanCyclingSpeedConstantWater
+</li>
+<li>
+ASHRAE_90_1
+</li>
+</ol>
+</html>",
+    revisions="<html>
+<ul>
+<li>
+April 20, 2022 by Karthik Devaprasad:<br/>
+First implementation.
+</li>
+</ul>
+</html>"));
+  annotation (Documentation(info="<html>
+This package contains type definitions.
+</html>"));
+  end Types;
 end Trial;
