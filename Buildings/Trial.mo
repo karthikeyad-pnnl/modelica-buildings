@@ -977,6 +977,9 @@ package Trial
     parameter Modelica.Units.SI.MassFlowRate mAir_flow_nominal
       "Nominal mass flow rate of air";
 
+    parameter Modelica.Units.SI.MassFlowRate mAirOut_flow_nominal
+      "Nominal mass flow rate of outdoor air";
+
     Modelica.Fluid.Interfaces.FluidPort_a port_Out(redeclare package Medium =
           MediumA)
       annotation (Placement(transformation(extent={{-110,30},{-90,50}})));
@@ -985,11 +988,11 @@ package Trial
       annotation (Placement(transformation(extent={{-110,-50},{-90,-30}})));
     Fluid.Actuators.Dampers.MixingBox eco(
       redeclare package Medium = MediumA,
-      mOut_flow_nominal=mAir_flow_nominal,
+      mOut_flow_nominal=mAirOut_flow_nominal,
       dpDamOut_nominal=50,
       mRec_flow_nominal=mAir_flow_nominal,
       dpDamRec_nominal=50,
-      mExh_flow_nominal=mAir_flow_nominal,
+      mExh_flow_nominal=mAirOut_flow_nominal,
       dpDamExh_nominal=50) if                has_economizer
       annotation (Placement(transformation(extent={{-10,-8},{10,12}})));
     Controls.OBC.CDL.Interfaces.RealInput uEco "Economizer control signal"
@@ -1114,29 +1117,13 @@ package Trial
           coordinateSystem(preserveAspectRatio=false)));
   end Baseclass_components;
 
-  model Usecase
-    FCU fCU(
-      has_heatingCoilHHW=true,
-      mAir_flow_nominal=1,
-      QHeaCoi_flow_nominal=1,
-      mHotWat_flow_nominal=1,
-      dpHeaCoiWat_nominal=100000,
-      dpHeaCoiAir_nominal=100000,
-      UAHeaCoi_nominal=1,
-      minSpeRatCooCoi=1,
-      dpCooCoiAir_nominal=100000,
-      mChiWat_flow_nominal=1,
-      UACooCoi_nominal=1,
-      dpCooCoiWat_nominal=100000)
-      annotation (Placement(transformation(extent={{-22,-26},{22,26}})));
-    annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
-          coordinateSystem(preserveAspectRatio=false)));
-  end Usecase;
-
   model FCU
 
     parameter Buildings.Trial.Types.heatingCoil heatingCoilType
       "Type of heating coil used in the FCU";
+
+    parameter Buildings.Trial.Types.capacityControl capacityControlMethod
+      "Type of capacity control method";
 
     parameter Modelica.Units.SI.HeatFlowRate QHeaCoi_flow_nominal
       "Heat flow rate at u=1, positive for heating";
@@ -1186,6 +1173,7 @@ package Trial
         dpHeaCoiAir_nominal=dpHeaCoiAir_nominal,
         UAHeaCoi_nominal=UAHeaCoi_nominal),
       redeclare Buildings.Trial.economizer comp1(
+        mAirOut_flow_nominal=mAirOut_flow_nominal,
         redeclare package Medium = MediumA,
         m_flow_nominal=mAir_flow_nominal,
         redeclare package MediumA = MediumA,
@@ -1208,6 +1196,8 @@ package Trial
   //       "Does the zone equipment have a hot water heating coil?"
   //       annotation(Dialog(enable = has_coolingCoil));
 
+    parameter Modelica.Units.SI.MassFlowRate mAirOut_flow_nominal
+      "Nominal mass flow rate of outdoor air";
   protected
     Boolean has_heatingCoilHHW = heatingCoilType == Buildings.Trial.Types.heatingCoil.heatingHotWater
       "Does the zone equipment have a hot water heating coil?"
@@ -1511,7 +1501,7 @@ package Trial
     Controls.OBC.CDL.Routing.RealScalarReplicator reaScaRep(nout=3)
       annotation (Placement(transformation(extent={{-100,30},{-80,50}})));
     Old.Thermostat thermostat
-      annotation (Placement(transformation(extent={{42,-10},{62,10}})));
+      annotation (Placement(transformation(extent={{40,-10},{60,10}})));
     Controls.OBC.CDL.Continuous.Sources.Constant con1(k=273.15 + 25)
       annotation (Placement(transformation(extent={{10,-10},{30,10}})));
     Controls.OBC.CDL.Continuous.Sources.Constant con2(k=273.15 + 23)
@@ -1544,16 +1534,16 @@ package Trial
             40},{-50,50},{-32,50}},
                               color={0,0,127}));
     connect(zon.TAir, thermostat.TZon) annotation (Line(points={{11,58},{32,58},
-            {32,8},{40,8}}, color={0,0,127}));
+            {32,8},{38,8}}, color={0,0,127}));
     connect(con1.y, thermostat.TCooSet)
-      annotation (Line(points={{32,0},{34,0},{34,2},{40,2}}, color={0,0,127}));
+      annotation (Line(points={{32,0},{34,0},{34,2},{38,2}}, color={0,0,127}));
     connect(con2.y, thermostat.THeaSet) annotation (Line(points={{32,-40},{36,
-            -40},{36,-2},{40,-2}}, color={0,0,127}));
-    connect(thermostat.yCoo, fCU.uCoo) annotation (Line(points={{64,4},{80,4},{
+            -40},{36,-2},{38,-2}}, color={0,0,127}));
+    connect(thermostat.yCoo, fCU.uCoo) annotation (Line(points={{62,4},{80,4},{
             80,-60},{-20,-60},{-20,14},{-52,14},{-52,2}}, color={0,0,127}));
-    connect(thermostat.yHea, fCU.uHea) annotation (Line(points={{64,0},{72,0},{
+    connect(thermostat.yHea, fCU.uHea) annotation (Line(points={{62,0},{72,0},{
             72,-66},{-32,-66},{-32,8},{-68,8},{-68,2}}, color={0,0,127}));
-    connect(thermostat.yFan, fCU.uFan) annotation (Line(points={{64,-4},{88,-4},
+    connect(thermostat.yFan, fCU.uFan) annotation (Line(points={{62,-4},{88,-4},
             {88,-72},{-38,-72},{-38,20},{-60,20},{-60,2}}, color={0,0,127}));
     connect(souCoo.ports[1], fCU.port_CCW_inlet) annotation (Line(points={{-20,
             -100},{-20,-80},{-56,-80},{-56,-52}}, color={0,127,255}));
@@ -1578,9 +1568,9 @@ package Trial
     connect(out.ports[2], fCU.port_OA_inlet1) annotation (Line(points={{-94,-32},
             {-90,-32},{-90,-30},{-86,-30}}, color={0,127,255}));
     connect(fCU.TSupAir, thermostat.TSup) annotation (Line(points={{-40,-2},{0,
-            -2},{0,-20},{34,-20},{34,-5},{40,-5}}, color={0,0,127}));
-    connect(thermostat.yFan, thermostat.PFan) annotation (Line(points={{64,-4},
-            {88,-4},{88,-72},{38,-72},{38,-8},{40,-8}}, color={0,0,127}));
+            -2},{0,-20},{34,-20},{34,-5},{38,-5}}, color={0,0,127}));
+    connect(thermostat.yFan, thermostat.PFan) annotation (Line(points={{62,-4},
+            {88,-4},{88,-72},{38,-72},{38,-8}},         color={0,0,127}));
     annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,
               -160},{160,160}})),                                  Diagram(
           coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,
