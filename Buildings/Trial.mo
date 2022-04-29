@@ -157,8 +157,8 @@ package Trial
         has_coolingCoilCCW
         annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=90,
             origin={80,-180})));
-      Buildings.Trial.PowerCalculation powerCalculation if
-                                           has_coolingCoil and has_coolingCoilCCW
+      Buildings.Trial.PowerCalculation powerCalculation if has_coolingCoil and
+        has_coolingCoilCCW
         annotation (Placement(transformation(extent={{160,-190},{180,-170}})));
       Fluid.Sensors.TemperatureTwoPort senTem3(redeclare package Medium = MediumW,
           m_flow_nominal=mCCW_flow_nominal) if has_coolingCoil and
@@ -180,9 +180,8 @@ package Trial
         has_coolingCoilCCW
         annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=270,
             origin={50,-200})));
-      Buildings.Trial.PowerCalculation powerCalculation1 if
-                                            has_heatingCoil and
-        has_heatingCoilHHW
+      Buildings.Trial.PowerCalculation powerCalculation1 if has_heatingCoil
+         and has_heatingCoilHHW
         annotation (Placement(transformation(extent={{0,-190},{20,-170}})));
     equation
       connect(senVolFlo1.port_b, eco.port_Ret) annotation (Line(points={{170,40},{-134,
@@ -1374,7 +1373,8 @@ package Trial
       m_flow_nominal=mAir_flow_nominal,
       mAir_flow_nominal=mAir_flow_nominal,
       minSpeRat=minSpeRatCooCoi,
-      dpCooCoi_nominal=dpCooCoiAir_nominal) if has_coolingCoil and not has_coolingCoilCCW
+      dpCooCoi_nominal=dpCooCoiAir_nominal) if has_coolingCoil and not
+      has_coolingCoilCCW
       annotation (Placement(transformation(extent={{-10,40},{10,60}})));
     replaceable Buildings.Trial.coolingCoil_CCW coolingCoil_CCW1(
       redeclare package MediumA = MediumA,
