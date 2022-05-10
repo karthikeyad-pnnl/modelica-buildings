@@ -16,14 +16,14 @@ partial model WaterloopInterfaces
   parameter Modelica.Units.SI.MassFlowRate mWat_flow_nominal
     "Nominal mass flow rate of water";
 
-  replaceable Fluid.Sensors.TemperatureTwoPort TAirSup(redeclare package Medium
-      = MediumA, m_flow_nominal=mAir_flow_nominal)
+  replaceable Fluid.Sensors.TemperatureTwoPort TAirSup(redeclare package Medium =
+        MediumA, m_flow_nominal=mAir_flow_nominal)
     annotation (Placement(transformation(extent={{-90,-10},{-70,10}})));
-  replaceable Fluid.Sensors.TemperatureTwoPort TAirRet(redeclare package Medium
-      = MediumA, m_flow_nominal=mAir_flow_nominal)
+  replaceable Fluid.Sensors.TemperatureTwoPort TAirRet(redeclare package Medium =
+        MediumA, m_flow_nominal=mAir_flow_nominal)
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
-  replaceable Fluid.Sensors.VolumeFlowRate VAir_flow(redeclare package Medium
-      = MediumA, m_flow_nominal=mAir_flow_nominal)
+  replaceable Fluid.Sensors.VolumeFlowRate VAir_flow(redeclare package Medium =
+        MediumA, m_flow_nominal=mAir_flow_nominal)
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
   Modelica.Fluid.Interfaces.FluidPort_a port_a1(redeclare package Medium =
         MediumW)
@@ -31,16 +31,16 @@ partial model WaterloopInterfaces
   Modelica.Fluid.Interfaces.FluidPort_b port_b1(redeclare package Medium =
         MediumW)
     annotation (Placement(transformation(extent={{-30,-110},{-10,-90}})));
-  replaceable Fluid.Sensors.TemperatureTwoPort TWatSup(redeclare package Medium
-      = MediumW, m_flow_nominal=mWat_flow_nominal)
+  replaceable Fluid.Sensors.TemperatureTwoPort TWatSup(redeclare package Medium =
+        MediumW, m_flow_nominal=mWat_flow_nominal)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=90,
         origin={20,-70})));
-  replaceable Fluid.Sensors.VolumeFlowRate VWat_flow(redeclare package Medium
-      = MediumW, m_flow_nominal=mWat_flow_nominal)
+  replaceable Fluid.Sensors.VolumeFlowRate VWat_flow(redeclare package Medium =
+        MediumW, m_flow_nominal=mWat_flow_nominal)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=90,
         origin={20,-40})));
-  replaceable Fluid.Sensors.TemperatureTwoPort TWatRet(redeclare package Medium
-      = MediumW, m_flow_nominal=mWat_flow_nominal)
+  replaceable Fluid.Sensors.TemperatureTwoPort TWatRet(redeclare package Medium =
+        MediumW, m_flow_nominal=mWat_flow_nominal)
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,

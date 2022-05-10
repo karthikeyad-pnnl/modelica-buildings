@@ -19,8 +19,8 @@ partial model AirloopInterfaces
     redeclare package Medium = MediumA,
     m_flow_nominal=mAir_flow_nominal)
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
-  replaceable Fluid.Sensors.VolumeFlowRate VAir_flow(redeclare package Medium
-      = MediumA, m_flow_nominal=mAir_flow_nominal)
+  replaceable Fluid.Sensors.VolumeFlowRate VAir_flow(redeclare package Medium =
+        MediumA, m_flow_nominal=mAir_flow_nominal)
     annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
   Controls.OBC.CDL.Interfaces.RealOutput TCon
     "Measured conditioned air temperature"
