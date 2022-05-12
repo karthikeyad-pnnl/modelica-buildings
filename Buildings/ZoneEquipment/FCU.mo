@@ -44,7 +44,7 @@ model FCU
     redeclare Buildings.ZoneEquipment.Components.heatingCoil coi1(
       m_flow_nominal=mAir_flow_nominal,
       final has_heatingCoil=has_heatingCoil,
-      final has_heatingCoilHHW=has_heatingCoilHHW,
+      final has_heatingCoilHHW=has_heatingCoilHHW_flag,
       mAir_flow_nominal=mAir_flow_nominal,
       QHeaCoi_flow_nominal=QHeaCoi_flow_nominal,
       mHotWat_flow_nominal=mHotWat_flow_nominal,
@@ -65,7 +65,7 @@ model FCU
     final has_coolingCoil=true,
     final has_coolingCoilCCW=true,
     final has_heatingCoil=true,
-    has_heatingCoilHHW=has_heatingCoilHHW,
+    has_heatingCoilHHW=has_heatingCoilHHW_flag,
     fan(per=fanPer, addPowerToMedium=fanAddPowerToMedium));
 
 //     parameter Boolean has_heatingCoil = true
@@ -81,7 +81,7 @@ model FCU
   parameter Modelica.Units.SI.MassFlowRate mAirOut_flow_nominal
     "Nominal mass flow rate of outdoor air";
 protected
-  Boolean has_heatingCoilHHW = heatingCoilType ==Buildings.ZoneEquipment.Types.heatingCoil.heatingHotWater
+  Boolean has_heatingCoilHHW_flag = heatingCoilType ==Buildings.ZoneEquipment.Types.heatingCoil.heatingHotWater
     "Does the zone equipment have a hot water heating coil?"
     annotation(Dialog(enable=has_heatingCoil));
 

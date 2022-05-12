@@ -5,18 +5,6 @@ partial model ExternalInterfaces
     constrainedby Modelica.Media.Interfaces.PartialCondensingGases "Medium model for air";
   replaceable package MediumW = Buildings.Media.Water "Medium model for water";
 
-  Boolean has_coolingCoil
-    "Does the zone equipment have a cooling coil?";
-
-  Boolean has_coolingCoilCCW
-    "Does the zone equipment have a chilled water cooling coil?";
-
-  Boolean has_heatingCoil
-    "Does the zone equipment have a heating coil?";
-
-  Boolean has_heatingCoilHHW
-    "Does the zone equipment have a hot water heating coil?";
-
   Modelica.Fluid.Interfaces.FluidPort_a port_return(redeclare package Medium =
         MediumA)
     "Return air port from zone"
@@ -66,6 +54,18 @@ partial model ExternalInterfaces
         extent={{-20,-20},{20,20}},
         rotation=-90,
         origin={-120,280})));
+protected
+  Boolean has_coolingCoil
+    "Does the zone equipment have a cooling coil?";
+
+  Boolean has_coolingCoilCCW
+    "Does the zone equipment have a chilled water cooling coil?";
+
+  Boolean has_heatingCoil
+    "Does the zone equipment have a heating coil?";
+
+  Boolean has_heatingCoilHHW
+    "Does the zone equipment have a hot water heating coil?";
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-220,
             -260},{220,260}}), graphics={Rectangle(
           extent={{-220,260},{220,-260}},

@@ -65,6 +65,7 @@ block use_case
     annotation (Placement(transformation(extent={{10,-50},{30,-30}})));
   FCU fCU(
     heatingCoilType=Buildings.ZoneEquipment.Types.heatingCoil.heatingHotWater,
+    capacityControlMethod=Buildings.ZoneEquipment.Types.capacityControl.constantSpeedContinuousFanVariableWater,
     redeclare package MediumA = MediumA,
     redeclare package MediumW = MediumW,
     mAir_flow_nominal=10,
