@@ -1655,4 +1655,53 @@ First implementation.
 This package contains type definitions.
 </html>"));
   end Types;
+
+  model DER_mockup
+    Controls.OBC.ASHRAE.G36_PR1.TerminalUnits.SetPoints.ZoneTemperatures
+      TZonSet annotation (Placement(transformation(extent={{20,-20},{40,8}})));
+    Controls.DemandResponse.Client client
+      annotation (Placement(transformation(extent={{-60,0},{-40,20}})));
+    Modelica.Blocks.Sources.CombiTimeTable combiTimeTable
+      annotation (Placement(transformation(extent={{-60,-50},{-40,-30}})));
+    DER_ReqdLink dER_ReqdLink
+      annotation (Placement(transformation(extent={{-20,-20},{0,0}})));
+  equation
+    connect(client.PPreNoShe[1], dER_ReqdLink.u1) annotation (Line(points={{-39,
+            15},{-30,15},{-30,-8},{-22,-8}}, color={0,0,127}));
+    connect(combiTimeTable.y[1], dER_ReqdLink.u) annotation (Line(points={{-39,
+            -40},{-30,-40},{-30,-12},{-22,-12}}, color={0,0,127}));
+    connect(dER_ReqdLink.y, TZonSet.uCooDemLimLev) annotation (Line(points={{2,
+            -10},{10,-10},{10,-12},{18,-12}}, color={255,127,0}));
+    connect(dER_ReqdLink.y1, TZonSet.uHeaDemLimLev)
+      annotation (Line(points={{2,-14},{18,-14}}, color={255,127,0}));
+    connect(dER_ReqdLink.y2, client.yShed) annotation (Line(points={{2,-6},{10,
+            -6},{10,30},{-70,30},{-70,5},{-61,5}}, color={0,0,127}));
+    annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
+          coordinateSystem(preserveAspectRatio=false)));
+  end DER_mockup;
+
+  model DER_ReqdLink
+    Controls.OBC.CDL.Interfaces.RealInput u annotation (Placement(
+          transformation(extent={{-140,20},{-100,60}}), iconTransformation(
+            extent={{-140,-40},{-100,0}})));
+    Controls.OBC.CDL.Interfaces.RealInput u1 annotation (Placement(
+          transformation(extent={{-140,-60},{-100,-20}}), iconTransformation(
+            extent={{-140,0},{-100,40}})));
+    Controls.OBC.CDL.Interfaces.IntegerOutput y annotation (Placement(
+          transformation(extent={{100,-60},{140,-20}}), iconTransformation(
+            extent={{100,-20},{140,20}})));
+    Controls.OBC.CDL.Interfaces.IntegerOutput y1 annotation (Placement(
+          transformation(extent={{100,-20},{140,20}}), iconTransformation(
+            extent={{100,-60},{140,-20}})));
+    Controls.OBC.CDL.Interfaces.RealOutput y2 annotation (Placement(
+          transformation(extent={{100,20},{140,60}}), iconTransformation(extent
+            ={{100,20},{140,60}})));
+    annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+            Rectangle(
+            extent={{-100,100},{100,-100}},
+            lineColor={0,0,0},
+            fillColor={255,255,255},
+            fillPattern=FillPattern.Solid)}), Diagram(coordinateSystem(
+            preserveAspectRatio=false)));
+  end DER_ReqdLink;
 end Trial;
