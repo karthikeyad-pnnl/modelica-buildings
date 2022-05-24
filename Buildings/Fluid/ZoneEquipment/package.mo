@@ -1,4 +1,4 @@
-within Buildings;
+within Buildings.Fluid;
 package ZoneEquipment
 
 
