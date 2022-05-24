@@ -4,52 +4,77 @@
 !-NOTE: All comments with '!-' are ignored by the IDFEditor and are generated automatically.
 !-      Use '!' comments if they need to be retained when using the IDFEditor.
 
-Output:Variable,*,Fan Electricity Rate,Timestep;
-Output:Variable,*,Zone Thermostat Heating Setpoint Temperature ,Timestep;
-Output:Variable,*,Zone Thermostat Cooling Setpoint Temperature ,Timestep;
+Output:Variable,Zone1FanCoilHWInletNode,System Node Temperature,Timestep;
+Output:Variable,Zone1FanCoilHWInletNode,System Node Mass Flow Rate ,Timestep;
+Output:Variable,Zone1FanCoilChWInletNode,System Node Temperature,Timestep;
+Output:Variable,Zone1FanCoilChWInletNode,System Node Mass Flow Rate ,Timestep;
+Output:Variable,*,Fan Coil Speed Ratio,Timestep;
+Output:Variable,*,Fan Coil Heating Rate ,Timestep;
+Output:Variable,*,Fan Coil Fan Electricity Rate,Timestep;
 
-Fan:OnOff,
+Fan:VariableVolume,
     Zone1Fan,                !- Name
     FANANDCOILAVAILSCHED,    !- Availability Schedule Name
     0.5,                     !- Fan Total Efficiency
     75,                      !- Pressure Rise {Pa}
     autosize,                !- Maximum Flow Rate {m3/s}
+    Fraction,                !- Fan Power Minimum Flow Rate Input Method
+    0.1,                     !- Fan Power Minimum Flow Fraction
+    ,                        !- Fan Power Minimum Air Flow Rate {m3/s}
     0.9,                     !- Motor Efficiency
     1,                       !- Motor In Airstream Fraction
+    0.07043,                 !- Fan Power Coefficient 1
+    0.38533,                 !- Fan Power Coefficient 2
+    -.46086,                 !- Fan Power Coefficient 3
+    1.0092,                  !- Fan Power Coefficient 4
+    0,                       !- Fan Power Coefficient 5
     Zone1FanCoilOAMixerOutletNode,  !- Air Inlet Node Name
     Zone1FanCoilFanOutletNode,  !- Air Outlet Node Name
-    ,                        !- Fan Power Ratio Function of Speed Ratio Curve Name
-    ,                        !- Fan Efficiency Ratio Function of Speed Ratio Curve Name
     General;                 !- End-Use Subcategory
 
-Fan:OnOff,
+Fan:VariableVolume,
     Zone2Fan,                !- Name
     FANANDCOILAVAILSCHED,    !- Availability Schedule Name
     0.5,                     !- Fan Total Efficiency
     75,                      !- Pressure Rise {Pa}
     autosize,                !- Maximum Flow Rate {m3/s}
+    Fraction,                !- Fan Power Minimum Flow Rate Input Method
+    0.1,                     !- Fan Power Minimum Flow Fraction
+    ,                        !- Fan Power Minimum Air Flow Rate {m3/s}
     0.9,                     !- Motor Efficiency
     1,                       !- Motor In Airstream Fraction
+    0.07043,                 !- Fan Power Coefficient 1
+    0.38533,                 !- Fan Power Coefficient 2
+    -.46086,                 !- Fan Power Coefficient 3
+    1.0092,                  !- Fan Power Coefficient 4
+    0,                       !- Fan Power Coefficient 5
     Zone2FanCoilOAMixerOutletNode,  !- Air Inlet Node Name
     Zone2FanCoilFanOutletNode,  !- Air Outlet Node Name
-    ,                        !- Fan Power Ratio Function of Speed Ratio Curve Name
-    ,                        !- Fan Efficiency Ratio Function of Speed Ratio Curve Name
     General;                 !- End-Use Subcategory
 
-Fan:OnOff,
+Fan:VariableVolume,
     Zone3Fan,                !- Name
     FANANDCOILAVAILSCHED,    !- Availability Schedule Name
     0.5,                     !- Fan Total Efficiency
     75,                      !- Pressure Rise {Pa}
     autosize,                !- Maximum Flow Rate {m3/s}
+    Fraction,                !- Fan Power Minimum Flow Rate Input Method
+    0.1,                     !- Fan Power Minimum Flow Fraction
+    ,                        !- Fan Power Minimum Air Flow Rate {m3/s}
     0.9,                     !- Motor Efficiency
     1,                       !- Motor In Airstream Fraction
+    0.07043,                 !- Fan Power Coefficient 1
+    0.38533,                 !- Fan Power Coefficient 2
+    -.46086,                 !- Fan Power Coefficient 3
+    1.0092,                  !- Fan Power Coefficient 4
+    0,                       !- Fan Power Coefficient 5
     Zone3FanCoilOAMixerOutletNode,  !- Air Inlet Node Name
     Zone3FanCoilFanOutletNode,  !- Air Outlet Node Name
-    ,                        !- Fan Power Ratio Function of Speed Ratio Curve Name
-    ,                        !- Fan Efficiency Ratio Function of Speed Ratio Curve Name
     General;                 !- End-Use Subcategory
 
+Output:Variable,*,Fan Electricity Rate,Timestep;
+Output:Variable,*,Zone Thermostat Heating Setpoint Temperature ,Timestep;
+Output:Variable,*,Zone Thermostat Cooling Setpoint Temperature ,Timestep;
 Output:Variable,*,Fan Coil Total Cooling Rate ,Timestep;
 Output:Variable,*,Pump Mass Flow Rate,Timestep;
 Output:Variable,*,Fan Air Mass Flow Rate,Timestep;
@@ -1840,7 +1865,7 @@ ZoneHVAC:FourPipeFanCoil,
     Zone1FanCoilAirOutletNode,  !- Air Outlet Node Name
     OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type
     Zone1FanCoilOAMixer,     !- Outdoor Air Mixer Name
-    Fan:OnOff,               !- Supply Air Fan Object Type
+    Fan:VariableVolume,      !- Supply Air Fan Object Type
     Zone1Fan,                !- Supply Air Fan Name
     Coil:Cooling:Water,      !- Cooling Coil Object Type
     Zone1FanCoilCoolingCoil, !- Cooling Coil Name
@@ -1933,7 +1958,7 @@ ZoneHVAC:FourPipeFanCoil,
     Zone2FanCoilAirOutletNode,  !- Air Outlet Node Name
     OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type
     Zone2FanCoilOAMixer,     !- Outdoor Air Mixer Name
-    Fan:OnOff,               !- Supply Air Fan Object Type
+    Fan:VariableVolume,      !- Supply Air Fan Object Type
     Zone2Fan,                !- Supply Air Fan Name
     Coil:Cooling:Water,      !- Cooling Coil Object Type
     Zone2FanCoilCoolingCoil, !- Cooling Coil Name
@@ -2026,7 +2051,7 @@ ZoneHVAC:FourPipeFanCoil,
     Zone3FanCoilAirOutletNode,  !- Air Outlet Node Name
     OutdoorAir:Mixer,        !- Outdoor Air Mixer Object Type
     Zone3FanCoilOAMixer,     !- Outdoor Air Mixer Name
-    Fan:OnOff,               !- Supply Air Fan Object Type
+    Fan:VariableVolume,      !- Supply Air Fan Object Type
     Zone3Fan,                !- Supply Air Fan Name
     Coil:Cooling:Water,      !- Cooling Coil Object Type
     Zone3FanCoilCoolingCoil, !- Cooling Coil Name
