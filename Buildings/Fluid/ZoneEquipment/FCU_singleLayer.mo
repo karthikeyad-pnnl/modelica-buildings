@@ -89,11 +89,12 @@ model FCU_singleLayer
   replaceable package MediumW = Buildings.Media.Water "Medium model for water";
   Modelica.Fluid.Interfaces.FluidPort_a port_return(redeclare package Medium =
         MediumA) "Return air port from zone" annotation (Placement(
-        transformation(extent={{350,-30},{370,-10}}),iconTransformation(extent={{90,-10},
+        transformation(extent={{350,30},{370,50}}),  iconTransformation(extent={{90,-10},
             {110,10}})));
   Modelica.Fluid.Interfaces.FluidPort_b port_supply(redeclare package Medium =
         MediumA) "Supply air port to the zone" annotation (Placement(
-        transformation(extent={{350,10},{370,30}}), iconTransformation(extent={{90,-50},
+        transformation(extent={{350,-50},{370,-30}}),
+                                                    iconTransformation(extent={{90,-50},
             {110,-30}})));
   Modelica.Fluid.Interfaces.FluidPort_b port_CCW_outlet(redeclare package
       Medium = MediumW)
@@ -161,23 +162,25 @@ model FCU_singleLayer
     annotation (Placement(
         transformation(extent={{-340,-40},{-300,0}}),   iconTransformation(
           extent={{-90,70},{-70,90}})));
-protected
+// protected
   replaceable Fluid.Sensors.VolumeFlowRate VAirOut_flow(redeclare package
       Medium =                                                                     MediumA,
-      m_flow_nominal=mAir_flow_nominal) "Outdoor air volume flowrate"
+      m_flow_nominal=mAirOut_flow_nominal)
+                                        "Outdoor air volume flowrate"
     annotation (Placement(transformation(extent={{-240,-10},{-220,10}})));
   replaceable Fluid.Sensors.TemperatureTwoPort TOutSen(redeclare package Medium = MediumA,
-      m_flow_nominal=mAir_flow_nominal)    "Outdoor air temperature sensor"
+      m_flow_nominal=mAirOut_flow_nominal) "Outdoor air temperature sensor"
     annotation (Placement(transformation(extent={{-210,-10},{-190,10}})));
-  replaceable Fluid.Sensors.TemperatureTwoPort TRetSen(redeclare package Medium = MediumA,
-      m_flow_nominal=mAir_flow_nominal)    "Return air temperature sensor"
+  replaceable Fluid.Sensors.TemperatureTwoPort TExhSen(redeclare package Medium = MediumA,
+      m_flow_nominal=mAirOut_flow_nominal) "Return air temperature sensor"
     annotation (Placement(transformation(extent={{-210,-50},{-190,-30}})));
-  replaceable Fluid.Sensors.VolumeFlowRate VAirRet_flow(redeclare package
+  replaceable Fluid.Sensors.VolumeFlowRate VAirExh_flow(redeclare package
       Medium =                                                                     MediumA,
-      m_flow_nominal=mAir_flow_nominal) "Return air volume flow rate"
+      m_flow_nominal=mAirOut_flow_nominal)
+                                        "Return air volume flow rate"
     annotation (Placement(transformation(extent={{-240,-50},{-220,-30}})));
   replaceable Fluid.Sensors.TemperatureTwoPort TMixSen(redeclare package Medium = MediumA,
-      m_flow_nominal=mAir_flow_nominal)    "Mixed air temperature sensor"
+      m_flow_nominal=mAir_flow_nominal) "Mixed air temperature sensor"
     annotation (Placement(transformation(extent={{-140,-20},{-120,0}})));
   replaceable Fluid.Sensors.VolumeFlowRate VAirMix_flow(redeclare package
       Medium =                                                                     MediumA,
@@ -205,19 +208,24 @@ protected
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,
         origin={-36,-74})));
-  replaceable Fluid.Sensors.VolumeFlowRate VWat_flow(redeclare package Medium =
-        MediumW, m_flow_nominal=mHotWat_flow_nominal)
-    annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=90,
+  replaceable Fluid.Sensors.VolumeFlowRate VHotWat_flow(redeclare package
+      Medium = MediumW, m_flow_nominal=mHotWat_flow_nominal) annotation (
+      Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=90,
         origin={4,-84})));
-  replaceable Fluid.Sensors.TemperatureTwoPort TWatRet(redeclare package Medium =
-        MediumW, m_flow_nominal=mHotWat_flow_nominal) if has_heatingCoilHHW
+  replaceable Fluid.Sensors.TemperatureTwoPort THotWatRet(redeclare package
+      Medium = MediumW, m_flow_nominal=mHotWat_flow_nominal) if
+                                                         has_heatingCoilHHW
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={-36,-104})));
-  replaceable Fluid.Sensors.TemperatureTwoPort TWatSup(redeclare package Medium =
-        MediumW, m_flow_nominal=mHotWat_flow_nominal)
-    annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=90,
+  replaceable Fluid.Sensors.TemperatureTwoPort THotWatSup(redeclare package
+      Medium = MediumW, m_flow_nominal=mHotWat_flow_nominal) annotation (
+      Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=90,
         origin={4,-114})));
   Fluid.HeatExchangers.WetCoilCounterFlow cooCoiCHW(
     redeclare package Medium1 = MediumW,
@@ -238,19 +246,23 @@ protected
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,
         origin={104,-34})));
-  replaceable Fluid.Sensors.TemperatureTwoPort TWatRet1(redeclare package
-      Medium = MediumW, m_flow_nominal=mChiWat_flow_nominal)
-    annotation (Placement(transformation(
+  replaceable Fluid.Sensors.TemperatureTwoPort TChiWatRet(redeclare package
+      Medium = MediumW, m_flow_nominal=mChiWat_flow_nominal) annotation (
+      Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={104,-64})));
-  replaceable Fluid.Sensors.VolumeFlowRate VWat_flow1(redeclare package Medium =
-        MediumW, m_flow_nominal=mChiWat_flow_nominal)
-    annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=90,
+  replaceable Fluid.Sensors.VolumeFlowRate VChiWat_flow(redeclare package
+      Medium = MediumW, m_flow_nominal=mChiWat_flow_nominal) annotation (
+      Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=90,
         origin={144,-44})));
-  replaceable Fluid.Sensors.TemperatureTwoPort TWatSup1(redeclare package
-      Medium = MediumW, m_flow_nominal=mChiWat_flow_nominal)
-    annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=90,
+  replaceable Fluid.Sensors.TemperatureTwoPort TChiWatSup(redeclare package
+      Medium = MediumW, m_flow_nominal=mChiWat_flow_nominal) annotation (
+      Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=90,
         origin={144,-74})));
   replaceable Fluid.Sensors.TemperatureTwoPort TAirSup(redeclare package Medium =
         MediumA, m_flow_nominal=mAir_flow_nominal)
@@ -285,6 +297,13 @@ protected
 
   parameter Boolean fanAddPowerToMedium=true
     "Set to false to avoid any power (=heat and flow work) being added to medium (may give simpler equations)";
+  replaceable Sensors.TemperatureTwoPort TRetSen(redeclare package Medium =
+        MediumA, m_flow_nominal=mAir_flow_nominal)
+    "Mixed air temperature sensor"
+    annotation (Placement(transformation(extent={{-150,30},{-130,50}})));
+  replaceable Sensors.VolumeFlowRate VAirRet_flow(redeclare package Medium =
+        MediumA, m_flow_nominal=mAir_flow_nominal) "Mixed air volume flow rate"
+    annotation (Placement(transformation(extent={{-120,30},{-100,50}})));
 equation
   connect(uOA, eco.y) annotation (Line(points={{-380,120},{-170,120},{-170,2}},
                       color={0,0,127}));
@@ -302,12 +321,12 @@ equation
           0},{-180,-4}},            color={0,127,255}));
   connect(out.ports[1], VAirOut_flow.port_a) annotation (Line(points={{-260,-18},
           {-252,-18},{-252,0},{-240,0}}, color={0,127,255}));
-  connect(VAirRet_flow.port_b,TRetSen. port_a)
+  connect(VAirExh_flow.port_b,TExhSen. port_a)
     annotation (Line(points={{-220,-40},{-210,-40}},
                                                color={0,127,255}));
-  connect(TRetSen.port_b, eco.port_Exh) annotation (Line(points={{-190,-40},{-180,
+  connect(TExhSen.port_b, eco.port_Exh) annotation (Line(points={{-190,-40},{-180,
           -40},{-180,-16}}, color={0,127,255}));
-  connect(VAirRet_flow.port_a, out.ports[2]) annotation (Line(points={{-240,-40},
+  connect(VAirExh_flow.port_a, out.ports[2]) annotation (Line(points={{-240,-40},
           {-252,-40},{-252,-22},{-260,-22}}, color={0,127,255}));
   connect(TMixSen.port_b,VAirMix_flow. port_a)
     annotation (Line(points={{-120,-10},{-110,-10}},
@@ -316,12 +335,12 @@ equation
           -4},{-140,-10}}, color={0,127,255}));
   connect(val.port_b, heaCoiHHW.port_b1) annotation (Line(points={{-36,-64},{-36,
           -56},{-20,-56}}, color={0,127,255}));
-  connect(VWat_flow.port_b, heaCoiHHW.port_a1)
+  connect(VHotWat_flow.port_b, heaCoiHHW.port_a1)
     annotation (Line(points={{4,-74},{4,-56},{0,-56}}, color={0,127,255}));
-  connect(TWatRet.port_a,val. port_a)
+  connect(THotWatRet.port_a, val.port_a)
     annotation (Line(points={{-36,-94},{-36,-84}}, color={0,127,255}));
-  connect(TWatSup.port_b,VWat_flow. port_a)
-    annotation (Line(points={{4,-104},{4,-94}},  color={0,127,255}));
+  connect(THotWatSup.port_b, VHotWat_flow.port_a)
+    annotation (Line(points={{4,-104},{4,-94}}, color={0,127,255}));
   connect(VAirMix_flow.port_b, heaCoiHHW.port_a2) annotation (Line(points={{-90,
           -10},{-40,-10},{-40,-44},{-20,-44}}, color={0,127,255}));
   connect(heaCoiHHW.port_b2, TAirHea.port_a) annotation (Line(points={{0,-44},{20,
@@ -329,26 +348,24 @@ equation
   connect(uHea, val.y)
     annotation (Line(points={{-380,-140},{-60,-140},{-60,-74},{-48,-74}},
                                                              color={0,0,127}));
-  connect(port_HHW_inlet, TWatSup.port_a) annotation (Line(points={{4,-180},{4,-124}},
-                                         color={0,127,255}));
-  connect(port_HHW_outlet, TWatRet.port_b) annotation (Line(points={{-36,-180},{
-          -36,-114}},                         color={0,127,255}));
-  connect(TWatRet1.port_a, val1.port_a)
+  connect(port_HHW_inlet, THotWatSup.port_a)
+    annotation (Line(points={{4,-180},{4,-124}}, color={0,127,255}));
+  connect(port_HHW_outlet, THotWatRet.port_b)
+    annotation (Line(points={{-36,-180},{-36,-114}}, color={0,127,255}));
+  connect(TChiWatRet.port_a, val1.port_a)
     annotation (Line(points={{104,-54},{104,-44}}, color={0,127,255}));
   connect(val1.port_b, cooCoiCHW.port_b1) annotation (Line(points={{104,-24},{104,
           -16},{120,-16}}, color={0,127,255}));
-  connect(VWat_flow1.port_b, cooCoiCHW.port_a1) annotation (Line(points={{144,-34},
-          {144,-16},{140,-16}}, color={0,127,255}));
-  connect(TWatSup1.port_b, VWat_flow1.port_a)
+  connect(VChiWat_flow.port_b, cooCoiCHW.port_a1) annotation (Line(points={{144,
+          -34},{144,-16},{140,-16}}, color={0,127,255}));
+  connect(TChiWatSup.port_b, VChiWat_flow.port_a)
     annotation (Line(points={{144,-64},{144,-54}}, color={0,127,255}));
   connect(TAirHea.port_b, cooCoiCHW.port_a2) annotation (Line(points={{50,-10},{
           80,-10},{80,-4},{120,-4}}, color={0,127,255}));
-  connect(port_CCW_outlet, TWatRet1.port_b) annotation (Line(points={{104,-180},
-          {104,-74}},                     color={0,127,255}));
-  connect(TWatSup1.port_a, port_CCW_inlet) annotation (Line(points={{144,-84},{144,
-          -180}},                       color={0,127,255}));
-  connect(eco.port_Ret, port_return) annotation (Line(points={{-160,-16},{-150,-16},
-          {-150,-160},{320,-160},{320,-20},{360,-20}}, color={0,127,255}));
+  connect(port_CCW_outlet, TChiWatRet.port_b)
+    annotation (Line(points={{104,-180},{104,-74}}, color={0,127,255}));
+  connect(TChiWatSup.port_a, port_CCW_inlet)
+    annotation (Line(points={{144,-84},{144,-180}}, color={0,127,255}));
   connect(fan.port_b, TAirSup.port_a)
     annotation (Line(points={{220,-10},{240,-10}}, color={0,127,255}));
   connect(uCoo, val1.y) annotation (Line(points={{-380,-80},{-80,-80},{-80,-34},
@@ -357,8 +374,9 @@ equation
     annotation (Line(points={{250,1},{250,120},{380,120}}, color={0,0,127}));
   connect(TAirSup.port_b, VAirSup_flow.port_a)
     annotation (Line(points={{260,-10},{280,-10}}, color={0,127,255}));
-  connect(VAirSup_flow.port_b, port_supply) annotation (Line(points={{300,-10},{
-          320,-10},{320,20},{360,20}}, color={0,127,255}));
+  connect(VAirSup_flow.port_b, port_supply) annotation (Line(points={{300,-10},
+          {320,-10},{320,-40},{360,-40}},
+                                       color={0,127,255}));
   connect(VAirSup_flow.V_flow, VSupAir_flow)
     annotation (Line(points={{290,1},{290,80},{380,80}},   color={0,0,127}));
   connect(uFan, fan.y) annotation (Line(points={{-380,80},{210,80},{210,2}},
@@ -367,6 +385,12 @@ equation
     annotation (Line(points={{140,-4},{156,-4}}, color={0,127,255}));
   connect(totalRes.port_b, fan.port_a) annotation (Line(points={{176,-4},{180,-4},
           {180,-10},{200,-10}}, color={0,127,255}));
+  connect(TRetSen.port_b, VAirRet_flow.port_a)
+    annotation (Line(points={{-130,40},{-120,40}}, color={0,127,255}));
+  connect(VAirRet_flow.port_b, eco.port_Ret) annotation (Line(points={{-100,40},
+          {-88,40},{-88,14},{-150,14},{-150,-16},{-160,-16}}, color={0,127,255}));
+  connect(TRetSen.port_a, port_return) annotation (Line(points={{-150,40},{-160,
+          40},{-160,60},{-60,60},{-60,40},{360,40}}, color={0,127,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}), graphics={Rectangle(
           extent={{-100,100},{100,-100}},

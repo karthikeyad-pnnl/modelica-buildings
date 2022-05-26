@@ -44,17 +44,17 @@ block useCase_singleLayer
 
   Sources.Boundary_pT       souCoo(
     redeclare package Medium = MediumW,
-    p(displayUnit="Pa") = 300000 + 6000,
+    p(displayUnit="Pa") = 300000 + 500,
     use_T_in=true,
     T=279.15,
     nPorts=1) "Source for cooling coil loop" annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
-        origin={80,-80})));
+        origin={70,-80})));
   Sources.Boundary_pT       souHea(
     redeclare package Medium = MediumW,
-    p(displayUnit="Pa") = 300000 + 6000,
+    p(displayUnit="Pa") = 300000 + 500,
     use_T_in=true,
     T=333.15,
     nPorts=1) "Source for heating coil" annotation (Placement(transformation(
@@ -66,7 +66,7 @@ block useCase_singleLayer
   Modelica.Blocks.Sources.CombiTimeTable datRea(
     tableOnFile=true,
     fileName=ModelicaServices.ExternalReferences.loadResource(
-        "modelica://Buildings/Resources/Data/Fluid/ZoneEquipment/FanCoil.dat"),
+        "./Buildings/Resources/Data/Fluid/ZoneEquipment/FanCoil.dat"),
     columns=2:11,
     tableName="EnergyPlus",
     smoothness=Modelica.Blocks.Types.Smoothness.ConstantSegments)
@@ -75,7 +75,8 @@ block useCase_singleLayer
 
   Sources.Boundary_pT souAir(
     redeclare package Medium = MediumA,
-    p(displayUnit="Pa") = 300000 + 6000,
+    use_Xi_in=false,
+    p(displayUnit="Pa") = 100000,
     use_T_in=true,
     T=279.15,
     nPorts=1) "Source for air"
@@ -83,12 +84,12 @@ block useCase_singleLayer
 
   Sources.Boundary_pT sinAir(
     redeclare package Medium = MediumA,
-    p(displayUnit="Pa") = 300000 + 6000,
+    p(displayUnit="Pa") = 100000,
     use_T_in=false,
     T=279.15,
     nPorts=1) "Sink for air"
     annotation (Placement(transformation(extent={{20,-40},{40,-20}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant con(k=1)
+  Controls.OBC.CDL.Continuous.Sources.Constant con(k=0)
     annotation (Placement(transformation(extent={{-80,20},{-60,40}})));
   Controls.OBC.CDL.Continuous.Gain gai(k=1/fCUSizing.mAir_flow_nominal)
     annotation (Placement(transformation(extent={{-100,-10},{-80,10}})));
@@ -101,7 +102,7 @@ block useCase_singleLayer
     annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
   BoundaryConditions.WeatherData.ReaderTMY3 weaDat(filNam=
         ModelicaServices.ExternalReferences.loadResource(
-        "modelica://Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"))
+        "./Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"))
     annotation (Placement(transformation(extent={{-80,100},{-60,120}})));
 equation
 
@@ -110,7 +111,7 @@ equation
   connect(fCU_singleLayer.port_HHW_outlet, sinHea.ports[1]) annotation (Line(
         points={{-6,-10},{-6,-60},{-40,-60},{-40,-70}},      color={0,127,255}));
   connect(souCoo.ports[1], fCU_singleLayer.port_CCW_inlet) annotation (Line(
-        points={{80,-70},{80,-60},{6,-60},{6,-10}}, color={0,127,255}));
+        points={{70,-70},{70,-60},{6,-60},{6,-10}}, color={0,127,255}));
   connect(souHea.ports[1], fCU_singleLayer.port_HHW_inlet)
     annotation (Line(points={{8.88178e-16,-76},{8.88178e-16,-54},{-2,-54},{-2,
           -10}},                                           color={0,127,255}));
@@ -143,7 +144,7 @@ equation
   connect(datRea.y[7], addPar[3].u) annotation (Line(points={{-119,0},{-110,0},
           {-110,70},{-82,70}}, color={0,0,127}));
   connect(addPar[3].y, souCoo.T_in) annotation (Line(points={{-58,70},{-16,70},
-          {-16,-102},{76,-102},{76,-92}}, color={0,0,127}));
+          {-16,-102},{66,-102},{66,-92}}, color={0,0,127}));
   connect(weaDat.weaBus, fCU_singleLayer.weaBus) annotation (Line(
       points={{-60,110},{-8,110},{-8,8}},
       color={255,204,51},
@@ -153,7 +154,7 @@ equation
         coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,
             160}})),
     experiment(
-      StopTime=864000,
+      StopTime=86400,
       Interval=60,
       __Dymola_Algorithm="Dassl"));
 end useCase_singleLayer;

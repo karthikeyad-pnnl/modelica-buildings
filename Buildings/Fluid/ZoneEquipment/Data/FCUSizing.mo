@@ -46,15 +46,15 @@ record FCUSizing
     "Inlet air humidity ratio"
     annotation (Dialog(group="Cooling coil parameters"));
 
-  parameter Modelica.Units.SI.ThermodynamicTemperature TCooCoiAirOut_nominal = 273.15 + 24.46
+  parameter Modelica.Units.SI.ThermodynamicTemperature TCooCoiAirOut_nominal = 273.15 + 7.22
     "Nominal cooling coil inlet air temperature"
     annotation (Dialog(group="Cooling coil parameters"));
 
-  parameter Real humRatAirOut_nominal = 0.009379
+  parameter Real humRatAirOut_nominal = 0.009
     "Inlet air humidity ratio"
     annotation (Dialog(group="Cooling coil parameters"));
 
-protected
+// protected
   parameter Modelica.Units.SI.SpecificEnthalpy hAirIn_nominal[1] = Modelica.Media.Air.MoistAir.h_pTX(pAir, TCooCoiAirIn_nominal, [humRatAirIn_nominal])
     "Specific enthalpy of inlet air";
 
