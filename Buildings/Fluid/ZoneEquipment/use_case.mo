@@ -85,6 +85,16 @@ block use_case
     annotation (Placement(transformation(extent={{-140,0},{-120,20}})));
   Fluid.Sources.Outside out(redeclare package Medium = MediumA, nPorts=2)
     annotation (Placement(transformation(extent={{-114,-40},{-94,-20}})));
+  Modelica.Blocks.Sources.CombiTimeTable datRea(
+    tableOnFile=true,
+    fileName=ModelicaServices.ExternalReferences.loadResource(
+        "./Buildings/Resources/Data/Fluid/Chillers/Validation/IndirectAbsorptionChiller/IndirectAbsorptionChiller.dat"),
+    columns=2:11,
+    tableName="EnergyPlus",
+    smoothness=Modelica.Blocks.Types.Smoothness.ConstantSegments)
+    "Reader for \"IndirectAbsorptionChiller.idf\" EnergyPlus example results"
+      annotation (Placement(transformation(extent={{-140,70},{-120,90}})));
+
 equation
   connect(con.y, reaScaRep.u) annotation (Line(points={{-118,40},{-102,40}},
                      color={0,0,127}));

@@ -19,16 +19,16 @@ partial model ExternalInterfaces
       Medium = MediumW) if                                 has_coolingCoil and has_coolingCoilCCW
     annotation (Placement(transformation(extent={{30,-270},{50,-250}})));
 
-  Modelica.Fluid.Interfaces.FluidPort_a port_CCW_inlet(redeclare package Medium
-      =        MediumW) if                                has_coolingCoil and has_coolingCoilCCW
+  Modelica.Fluid.Interfaces.FluidPort_a port_CCW_inlet(redeclare package Medium =
+               MediumW) if                                has_coolingCoil and has_coolingCoilCCW
     annotation (Placement(transformation(extent={{70,-270},{90,-250}})));
 
   Modelica.Fluid.Interfaces.FluidPort_b port_HHW_outlet(redeclare package
       Medium = MediumW) if                                 has_heatingCoil and has_heatingCoilHHW
     annotation (Placement(transformation(extent={{-90,-270},{-70,-250}})));
 
-  Modelica.Fluid.Interfaces.FluidPort_a port_HHW_inlet(redeclare package Medium
-      =        MediumW) if                                has_heatingCoil and has_heatingCoilHHW
+  Modelica.Fluid.Interfaces.FluidPort_a port_HHW_inlet(redeclare package Medium =
+               MediumW) if                                has_heatingCoil and has_heatingCoilHHW
     annotation (Placement(transformation(extent={{-50,-270},{-30,-250}})));
 
   Controls.OBC.CDL.Interfaces.RealInput uHea if has_heatingCoil

@@ -21,6 +21,7 @@ package AbsorptionIndirectSteam
     parameter Modelica.Units.SI.MassFlowRate mCon_flow_nominal
       "Nominal mass flow rate at condenser"
       annotation (Dialog(group="Nominal condition"));
+
     parameter Modelica.Units.SI.MassFlowRate mEva_flow_nominal
       "Nominal mass flow rate at evaporator"
       annotation (Dialog(group="Nominal condition"));

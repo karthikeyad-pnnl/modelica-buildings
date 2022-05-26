@@ -99,16 +99,16 @@ model FCU_singleLayer
       Medium = MediumW)
     annotation (Placement(transformation(extent={{94,-190},{114,-170}}),
         iconTransformation(extent={{10,-110},{30,-90}})));
-  Modelica.Fluid.Interfaces.FluidPort_a port_CCW_inlet(redeclare package Medium
-      = MediumW)
+  Modelica.Fluid.Interfaces.FluidPort_a port_CCW_inlet(redeclare package Medium =
+        MediumW)
     annotation (Placement(transformation(extent={{134,-190},{154,-170}}),
         iconTransformation(extent={{50,-110},{70,-90}})));
   Modelica.Fluid.Interfaces.FluidPort_b port_HHW_outlet(redeclare package
       Medium = MediumW)
     annotation (Placement(transformation(extent={{-46,-190},{-26,-170}}),
         iconTransformation(extent={{-70,-110},{-50,-90}})));
-  Modelica.Fluid.Interfaces.FluidPort_a port_HHW_inlet(redeclare package Medium
-      = MediumW)
+  Modelica.Fluid.Interfaces.FluidPort_a port_HHW_inlet(redeclare package Medium =
+        MediumW)
     annotation (Placement(transformation(extent={{-6,-190},{14,-170}}),
         iconTransformation(extent={{-30,-110},{-10,-90}})));
   Controls.OBC.CDL.Interfaces.RealInput uHea
@@ -166,28 +166,25 @@ protected
       Medium =                                                                     MediumA,
       m_flow_nominal=mAir_flow_nominal) "Outdoor air volume flowrate"
     annotation (Placement(transformation(extent={{-240,-10},{-220,10}})));
-  replaceable Fluid.Sensors.TemperatureTwoPort TOutSen(redeclare package Medium
-      =                                                                           MediumA,
+  replaceable Fluid.Sensors.TemperatureTwoPort TOutSen(redeclare package Medium = MediumA,
       m_flow_nominal=mAir_flow_nominal)    "Outdoor air temperature sensor"
     annotation (Placement(transformation(extent={{-210,-10},{-190,10}})));
-  replaceable Fluid.Sensors.TemperatureTwoPort TRetSen(redeclare package Medium
-      =                                                                           MediumA,
+  replaceable Fluid.Sensors.TemperatureTwoPort TRetSen(redeclare package Medium = MediumA,
       m_flow_nominal=mAir_flow_nominal)    "Return air temperature sensor"
     annotation (Placement(transformation(extent={{-210,-50},{-190,-30}})));
   replaceable Fluid.Sensors.VolumeFlowRate VAirRet_flow(redeclare package
       Medium =                                                                     MediumA,
       m_flow_nominal=mAir_flow_nominal) "Return air volume flow rate"
     annotation (Placement(transformation(extent={{-240,-50},{-220,-30}})));
-  replaceable Fluid.Sensors.TemperatureTwoPort TMixSen(redeclare package Medium
-      =                                                                           MediumA,
+  replaceable Fluid.Sensors.TemperatureTwoPort TMixSen(redeclare package Medium = MediumA,
       m_flow_nominal=mAir_flow_nominal)    "Mixed air temperature sensor"
     annotation (Placement(transformation(extent={{-140,-20},{-120,0}})));
   replaceable Fluid.Sensors.VolumeFlowRate VAirMix_flow(redeclare package
       Medium =                                                                     MediumA,
       m_flow_nominal=mAir_flow_nominal) "Mixed air volume flow rate"
     annotation (Placement(transformation(extent={{-110,-20},{-90,0}})));
-  replaceable Fluid.Sensors.TemperatureTwoPort TAirHea(redeclare package Medium
-      = MediumA, m_flow_nominal=mAir_flow_nominal)
+  replaceable Fluid.Sensors.TemperatureTwoPort TAirHea(redeclare package Medium =
+        MediumA, m_flow_nominal=mAir_flow_nominal)
     annotation (Placement(transformation(extent={{30,-20},{50,0}})));
   Fluid.HeatExchangers.DryCoilCounterFlow heaCoiHHW(
     redeclare package Medium1 = MediumW,
@@ -208,18 +205,18 @@ protected
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,
         origin={-36,-74})));
-  replaceable Fluid.Sensors.VolumeFlowRate VWat_flow(redeclare package Medium
-      = MediumW, m_flow_nominal=mHotWat_flow_nominal)
+  replaceable Fluid.Sensors.VolumeFlowRate VWat_flow(redeclare package Medium =
+        MediumW, m_flow_nominal=mHotWat_flow_nominal)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=90,
         origin={4,-84})));
-  replaceable Fluid.Sensors.TemperatureTwoPort TWatRet(redeclare package Medium
-      = MediumW, m_flow_nominal=mHotWat_flow_nominal) if has_heatingCoilHHW
+  replaceable Fluid.Sensors.TemperatureTwoPort TWatRet(redeclare package Medium =
+        MediumW, m_flow_nominal=mHotWat_flow_nominal) if has_heatingCoilHHW
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={-36,-104})));
-  replaceable Fluid.Sensors.TemperatureTwoPort TWatSup(redeclare package Medium
-      = MediumW, m_flow_nominal=mHotWat_flow_nominal)
+  replaceable Fluid.Sensors.TemperatureTwoPort TWatSup(redeclare package Medium =
+        MediumW, m_flow_nominal=mHotWat_flow_nominal)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=90,
         origin={4,-114})));
   Fluid.HeatExchangers.WetCoilCounterFlow cooCoiCHW(
@@ -247,16 +244,16 @@ protected
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={104,-64})));
-  replaceable Fluid.Sensors.VolumeFlowRate VWat_flow1(redeclare package Medium
-      = MediumW, m_flow_nominal=mChiWat_flow_nominal)
+  replaceable Fluid.Sensors.VolumeFlowRate VWat_flow1(redeclare package Medium =
+        MediumW, m_flow_nominal=mChiWat_flow_nominal)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=90,
         origin={144,-44})));
   replaceable Fluid.Sensors.TemperatureTwoPort TWatSup1(redeclare package
       Medium = MediumW, m_flow_nominal=mChiWat_flow_nominal)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=90,
         origin={144,-74})));
-  replaceable Fluid.Sensors.TemperatureTwoPort TAirSup(redeclare package Medium
-      = MediumA, m_flow_nominal=mAir_flow_nominal)
+  replaceable Fluid.Sensors.TemperatureTwoPort TAirSup(redeclare package Medium =
+        MediumA, m_flow_nominal=mAir_flow_nominal)
     annotation (Placement(transformation(extent={{240,-20},{260,0}})));
   Fluid.Movers.SpeedControlled_y fan(redeclare package Medium = MediumA,
       redeclare Fluid.Movers.Data.Pumps.customFCUFan per)
