@@ -1,7 +1,7 @@
 within Buildings.Fluid.ZoneEquipment.Validation;
 block Controller_MultiSpeedCyclingFan_ConstantWaterFlowrate
   extends Modelica.Icons.Example;
-  Buildings.Fluid.ZoneEquipment.Controller_MultiSpeedCyclingFan_ConstantWaterFlowrate
+  Buildings.Fluid.ZoneEquipment.FCUControls.Controller_MultiSpeedCyclingFan_ConstantWaterFlowrate
     controller_MultiSpeedCyclingFan_ConstantWaterFlowrate
     annotation (Placement(transformation(extent={{-8,-10},{12,10}})));
   Controls.OBC.CDL.Continuous.Sources.Constant con(k=25)

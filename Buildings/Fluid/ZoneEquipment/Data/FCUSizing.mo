@@ -77,7 +77,6 @@ record FCUSizing
 
   parameter Modelica.Units.SI.ThermalConductance UACooCoiExt_nominal = cp_air * qCooCoi_nominal/delH_lmd;
 
-
   parameter Modelica.Units.SI.ThermalConductance UACooCoiTot_nominal = 1/(1/UACooCoiExt_nominal + 1/(3.3*UACooCoiExt_nominal));
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(

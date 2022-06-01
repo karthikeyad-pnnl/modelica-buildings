@@ -1,4 +1,4 @@
-within Buildings.Fluid.ZoneEquipment;
+within Buildings.Fluid.ZoneEquipment.FCUControls;
 block Controller_MultiSpeedCyclingFan_ConstantWaterFlowrate
   Controls.OBC.CDL.Interfaces.RealInput TZon "Measured zone temperature"
     annotation (Placement(transformation(extent={{-140,40},{-100,80}}),
@@ -36,13 +36,13 @@ block Controller_MultiSpeedCyclingFan_ConstantWaterFlowrate
   Controls.OBC.CDL.Logical.Or or2
     annotation (Placement(transformation(extent={{60,-70},{80,-50}})));
   Controls.OBC.CDL.Continuous.PID conPID(reverseActing=false)
-    annotation (Placement(transformation(extent={{20,-20},{40,0}})));
+    annotation (Placement(transformation(extent={{0,-20},{20,0}})));
   Controls.OBC.CDL.Continuous.PID conPID1(reverseActing=false)
-    annotation (Placement(transformation(extent={{20,-50},{40,-30}})));
+    annotation (Placement(transformation(extent={{0,-50},{20,-30}})));
   Controls.OBC.CDL.Continuous.Sources.Constant con(k=0)
     annotation (Placement(transformation(extent={{-80,-90},{-60,-70}})));
   Controls.OBC.CDL.Continuous.Add add3
-    annotation (Placement(transformation(extent={{60,-30},{80,-10}})));
+    annotation (Placement(transformation(extent={{30,-30},{50,-10}})));
 equation
   connect(TZon, add2.u1) annotation (Line(points={{-120,60},{-94,60},{-94,76},{
           -82,76}}, color={0,0,127}));
@@ -71,19 +71,19 @@ equation
   connect(or2.y, yFan)
     annotation (Line(points={{82,-60},{120,-60}}, color={255,0,255}));
   connect(add2.y, conPID.u_m) annotation (Line(points={{-58,70},{-50,70},{-50,
-          -26},{30,-26},{30,-22}}, color={0,0,127}));
+          -26},{10,-26},{10,-22}}, color={0,0,127}));
   connect(add1.y, conPID1.u_m) annotation (Line(points={{-58,20},{-54,20},{-54,
-          -56},{30,-56},{30,-52}}, color={0,0,127}));
+          -56},{10,-56},{10,-52}}, color={0,0,127}));
   connect(con.y, conPID.u_s) annotation (Line(points={{-58,-80},{-20,-80},{-20,
-          -10},{18,-10}}, color={0,0,127}));
+          -10},{-2,-10}}, color={0,0,127}));
   connect(con.y, conPID1.u_s) annotation (Line(points={{-58,-80},{-20,-80},{-20,
-          -40},{18,-40}}, color={0,0,127}));
+          -40},{-2,-40}}, color={0,0,127}));
   connect(add3.y, yFanSpe)
-    annotation (Line(points={{82,-20},{120,-20}}, color={0,0,127}));
-  connect(conPID.y, add3.u1) annotation (Line(points={{42,-10},{52,-10},{52,-14},
-          {58,-14}}, color={0,0,127}));
-  connect(conPID1.y, add3.u2) annotation (Line(points={{42,-40},{52,-40},{52,
-          -26},{58,-26}}, color={0,0,127}));
+    annotation (Line(points={{52,-20},{120,-20}}, color={0,0,127}));
+  connect(conPID.y, add3.u1) annotation (Line(points={{22,-10},{26,-10},{26,-14},
+          {28,-14}}, color={0,0,127}));
+  connect(conPID1.y, add3.u2) annotation (Line(points={{22,-40},{26,-40},{26,
+          -26},{28,-26}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
           Rectangle(
           extent={{-100,100},{100,-100}},

@@ -115,10 +115,10 @@ equation
   connect(souHea.ports[1], fCU_singleLayer.port_HHW_inlet)
     annotation (Line(points={{8.88178e-16,-76},{8.88178e-16,-54},{-2,-54},{-2,
           -10}},                                           color={0,127,255}));
-  connect(souAir.ports[1], fCU_singleLayer.port_return) annotation (Line(points
-        ={{20,30},{50,30},{50,0},{10,0}}, color={0,127,255}));
-  connect(sinAir.ports[1], fCU_singleLayer.port_supply) annotation (Line(points
-        ={{40,-30},{50,-30},{50,-4},{10,-4}}, color={0,127,255}));
+  connect(souAir.ports[1], fCU_singleLayer.port_return) annotation (Line(points=
+         {{20,30},{50,30},{50,0},{10,0}}, color={0,127,255}));
+  connect(sinAir.ports[1], fCU_singleLayer.port_supply) annotation (Line(points=
+         {{40,-30},{50,-30},{50,-4},{10,-4}}, color={0,127,255}));
   connect(con.y, fCU_singleLayer.uOA) annotation (Line(points={{-58,30},{-20,30},
           {-20,6},{-12,6}}, color={0,0,127}));
   connect(datRea.y[6], gai.u)
