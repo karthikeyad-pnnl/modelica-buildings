@@ -799,10 +799,10 @@ equation
           78,-196}},
                   color={0,0,127}));
   connect(edg.y, cooSetFre.trigger)
-    annotation (Line(points={{-198,0},{-180,0},{-180,134},{-150,134},{-150,138.2}},
+    annotation (Line(points={{-198,0},{-180,0},{-180,134},{-150,134},{-150,138}},
       color={255,0,255}));
   connect(edg.y, heaSetFre.trigger)
-    annotation (Line(points={{-198,0},{-180,0},{-180,-86},{-150,-86},{-150,-81.8}},
+    annotation (Line(points={{-198,0},{-180,0},{-180,-86},{-150,-86},{-150,-82}},
       color={255,0,255}));
   connect(or5.y, swi10.u2)
     annotation (Line(points={{182,-10},{200,-10},{200,90},{218,90}},
@@ -836,10 +836,10 @@ equation
   connect(truHol.y, edg1.u)
     annotation (Line(points={{-78,-270},{-42,-270}}, color={255,0,255}));
   connect(edg1.y, cooSetSam.trigger)
-    annotation (Line(points={{-18,-270},{0,-270},{0,-288},{50,-288},{50,-281.8}},
+    annotation (Line(points={{-18,-270},{0,-270},{0,-288},{50,-288},{50,-282}},
       color={255,0,255}));
   connect(edg1.y, heaSetSam.trigger)
-    annotation (Line(points={{-18,-270},{0,-270},{0,-330},{50,-330},{50,-321.8}},
+    annotation (Line(points={{-18,-270},{0,-270},{0,-330},{50,-330},{50,-322}},
       color={255,0,255}));
   connect(cooSetSam.y, cooSetInc.u)
     annotation (Line(points={{62,-270},{98,-270}}, color={0,0,127}));

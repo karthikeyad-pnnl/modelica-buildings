@@ -22,6 +22,8 @@ model Guideline36_DRDemonstration
     "Design air change per hour north";
   parameter Real ACHWes(final unit="1/h")=7
     "Design air change per hour west";
+  Controls.DemandResponse.Client client
+    annotation (Placement(transformation(extent={{-100,-20},{-80,0}})));
   annotation (
     Documentation(info="<html>
 <p>
@@ -182,5 +184,6 @@ This is for
           "modelica://Buildings/Resources/Scripts/Dymola/Examples/VAVReheat/Guideline36.mos"
         "Simulate and plot"),
     experiment(StopTime=172800, Tolerance=1e-06),
-    Icon(coordinateSystem(extent={{-100,-100},{100,100}})));
+    Icon(coordinateSystem(extent={{-100,-100},{100,100}})),
+    Diagram(coordinateSystem(extent={{-140,-140},{140,140}})));
 end Guideline36_DRDemonstration;
