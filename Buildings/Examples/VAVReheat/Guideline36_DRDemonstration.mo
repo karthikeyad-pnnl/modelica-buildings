@@ -22,8 +22,92 @@ model Guideline36_DRDemonstration
     "Design air change per hour north";
   parameter Real ACHWes(final unit="1/h")=7
     "Design air change per hour west";
-  Controls.DemandResponse.Client client
-    annotation (Placement(transformation(extent={{-100,-20},{-80,0}})));
+  Controls.DemandResponse.Client client(nSam=48,
+    nHis=10,                                     predictionModel=Buildings.Controls.Predictors.Types.PredictionModel.WeatherRegression)
+    annotation (Placement(transformation(extent={{-70,0},{-50,20}})));
+  BaseClasses.PowerCalculation PTot(
+    PCooExp=hvac.cooCoi.Q1_flow,
+    PHeaExp=hvac.heaCoi.Q2_flow,
+    PFanExp=hvac.fanSup.P,
+    PRehExp=sum(hvac.VAVBox.terHea.Q2_flow))
+    annotation (Placement(transformation(extent={{-204,-10},{-184,10}})));
+  BoundaryConditions.WeatherData.Bus weaBus annotation (Placement(
+        transformation(extent={{-120,20},{-100,40}}), iconTransformation(extent=
+           {{-164,36},{-144,56}})));
+  Controls.Sources.DayType dayType
+    annotation (Placement(transformation(extent={{-120,-40},{-100,-20}})));
+  Modelica.Blocks.Sources.CombiTimeTable bui90(
+    tableOnFile=true,
+    tableName="b90",
+    smoothness=Modelica.Blocks.Types.Smoothness.ConstantSegments,
+    extrapolation=Modelica.Blocks.Types.Extrapolation.Periodic,
+    fileName=Modelica.Utilities.Files.loadResource("./Buildings/Resources/Data/Controls/DemandResponse/Examples/B90_DR_Data.mos"),
+    columns={2,3,4,5})
+                     "LBNL building 90 data"
+    annotation (Placement(transformation(extent={{-120,110},{-100,130}})));
+
+  Controls.OBC.CDL.Logical.Sources.Constant con(k=true)
+    annotation (Placement(transformation(extent={{-120,80},{-100,100}})));
+  Controls.OBC.CDL.Logical.Sources.Constant con1(k=true)
+    annotation (Placement(transformation(extent={{-120,-70},{-100,-50}})));
+  Controls.OBC.CDL.Integers.Sources.Constant conInt(k=0)
+    annotation (Placement(transformation(extent={{-120,-130},{-100,-110}})));
+  BaseClasses.ShedFactor sheFac
+    annotation (Placement(transformation(extent={{-60,-100},{-40,-80}})));
+  Controls.OBC.CDL.Continuous.MultiplyByParameter gai(k=1/10)
+    annotation (Placement(transformation(extent={{-80,110},{-60,130}})));
+  Modelica.Blocks.Continuous.Integrator ene(u(unit="W"))
+    "Integrator to compute energy from power"
+    annotation (Placement(transformation(extent={{-120,-10},{-100,10}})));
+  Controls.OBC.CDL.Continuous.AddParameter addPar(p=5000)
+    annotation (Placement(transformation(extent={{-168,-10},{-148,10}})));
+equation
+  connect(weaDat.weaBus, hvac.weaBus) annotation (Line(
+      points={{-40,40},{-26,40},{-26,41.4444},{-10.225,41.4444}},
+      color={255,204,51},
+      thickness=0.5));
+  connect(weaDat.weaBus, weaBus) annotation (Line(
+      points={{-40,40},{-36,40},{-36,60},{-110,60},{-110,30}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(weaBus.TDryBul, client.TOut) annotation (Line(
+      points={{-110,30},{-94,30},{-94,3},{-71,3}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(dayType.y, client.typeOfDay) annotation (Line(points={{-99,-30},{-76,-30},
+          {-76,18},{-71,18}}, color={0,127,0}));
+  connect(con.y, client.isEventDay) annotation (Line(points={{-98,90},{-78,90},{
+          -78,14},{-71,14}}, color={255,0,255}));
+  connect(con1.y, client.shed) annotation (Line(points={{-98,-60},{-84,-60},{-84,
+          7},{-71,7}}, color={255,0,255}));
+  connect(conInt.y, hvac.uCooDemLimLev) annotation (Line(points={{-98,-120},{
+          -28,-120},{-28,35.3333},{-21.5,35.3333}},
+                                                color={255,127,0}));
+  connect(conInt.y, hvac.uHeaDemLimLev) annotation (Line(points={{-98,-120},{
+          -28,-120},{-28,24.2222},{-21.5,24.2222}},
+                                                color={255,127,0}));
+  connect(client.PPreNoShe[1], sheFac.PConPre) annotation (Line(points={{-49,15},
+          {-40,15},{-40,-6},{-70,-6},{-70,-94},{-62,-94}}, color={0,0,127}));
+  connect(sheFac.yShe, client.yShed) annotation (Line(points={{-38,-90},{-34,
+          -90},{-34,-66},{-74,-66},{-74,5},{-71,5}}, color={0,0,127}));
+  connect(bui90.y[4], gai.u)
+    annotation (Line(points={{-99,120},{-82,120}}, color={0,0,127}));
+  connect(gai.y, sheFac.PGenPre) annotation (Line(points={{-58,120},{-50,120},{
+          -50,80},{-80,80},{-80,-86},{-62,-86}}, color={0,0,127}));
+  connect(ene.y, client.ECon) annotation (Line(points={{-99,0},{-90,0},{-90,10},
+          {-71,10}}, color={0,0,127}));
+  connect(PTot.PTot, addPar.u)
+    annotation (Line(points={{-182,0},{-170,0}}, color={0,0,127}));
+  connect(addPar.y, ene.u)
+    annotation (Line(points={{-146,0},{-122,0}}, color={0,0,127}));
   annotation (
     Documentation(info="<html>
 <p>
@@ -181,7 +265,7 @@ This is for
 </ul>
 </html>"),
     __Dymola_Commands(file=
-          "modelica://Buildings/Resources/Scripts/Dymola/Examples/VAVReheat/Guideline36.mos"
+          "modelica://Buildings/Resources/Scripts/Dymola/Examples/VAVReheat/Guideline36_DRDemonstration.mos"
         "Simulate and plot"),
     experiment(StopTime=172800, Tolerance=1e-06),
     Icon(coordinateSystem(extent={{-100,-100},{100,100}})),

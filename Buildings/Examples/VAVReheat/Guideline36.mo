@@ -22,6 +22,12 @@ model Guideline36
     "Design air change per hour north";
   parameter Real ACHWes(final unit="1/h")=7
     "Design air change per hour west";
+  BaseClasses.PowerCalculation PTot(
+    PCooExp=hvac.cooCoi.Q1_flow,
+    PHeaExp=hvac.heaCoi.Q2_flow,
+    PFanExp=hvac.fanSup.P,
+    PRehExp=sum(hvac.VAVBox.terHea.Q2_flow))
+    annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
   annotation (
     Documentation(info="<html>
 <p>
