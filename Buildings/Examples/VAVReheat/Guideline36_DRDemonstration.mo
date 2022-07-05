@@ -35,7 +35,10 @@ model Guideline36_DRDemonstration
   BoundaryConditions.WeatherData.Bus weaBus annotation (Placement(
         transformation(extent={{-120,20},{-100,40}}), iconTransformation(extent=
            {{-164,36},{-144,56}})));
-  Controls.Sources.DayType dayType
+  Controls.Sources.DayType dayType(days={Buildings.Controls.Types.Day.WorkingDay,
+        Buildings.Controls.Types.Day.WorkingDay,Buildings.Controls.Types.Day.WorkingDay,
+        Buildings.Controls.Types.Day.WorkingDay,Buildings.Controls.Types.Day.WorkingDay,
+        Buildings.Controls.Types.Day.WorkingDay,Buildings.Controls.Types.Day.WorkingDay})
     annotation (Placement(transformation(extent={{-120,-40},{-100,-20}})));
   Modelica.Blocks.Sources.CombiTimeTable bui90(
     tableOnFile=true,
@@ -116,10 +119,10 @@ equation
   connect(sheFac.yShe, demLimLevGen.uShe) annotation (Line(points={{-38,-90},{
           -32,-90},{-32,-110},{50,-110},{50,-90},{58,-90}}, color={0,0,127}));
   connect(demLimLevGen.yDemLimLev, hvac.uCooDemLimLev) annotation (Line(points={{82,-90},
-          {90,-90},{90,-64},{-60,-64},{-60,-20},{-28,-20},{-28,35.3333},{-21.5,
+          {90,-90},{90,-64},{-60,-64},{-60,-20},{-30,-20},{-30,35.3333},{-21.5,
           35.3333}},                 color={255,127,0}));
   connect(demLimLevGen.yDemLimLev, hvac.uHeaDemLimLev) annotation (Line(points={{82,-90},
-          {90,-90},{90,-64},{-60,-64},{-60,-20},{-28,-20},{-28,24.2222},{-21.5,
+          {90,-90},{90,-64},{-60,-64},{-60,-20},{-30,-20},{-30,24.2222},{-21.5,
           24.2222}},                 color={255,127,0}));
   annotation (
     Documentation(info="<html>
