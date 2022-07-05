@@ -46,7 +46,7 @@ model Guideline36_DRDemonstration
                      "LBNL building 90 data"
     annotation (Placement(transformation(extent={{-120,110},{-100,130}})));
 
-  Controls.OBC.CDL.Logical.Sources.Constant con(k=true)
+  Controls.OBC.CDL.Logical.Sources.Constant con(k=false)
     annotation (Placement(transformation(extent={{-120,80},{-100,100}})));
   Controls.OBC.CDL.Logical.Sources.Constant con1(k=true)
     annotation (Placement(transformation(extent={{-120,-70},{-100,-50}})));
@@ -61,6 +61,12 @@ model Guideline36_DRDemonstration
     annotation (Placement(transformation(extent={{-120,-10},{-100,10}})));
   Controls.OBC.CDL.Continuous.AddParameter addPar(p=5000)
     annotation (Placement(transformation(extent={{-168,-10},{-148,10}})));
+  Controls.OBC.CDL.Continuous.AddParameter addPar1(p=1)
+    annotation (Placement(transformation(extent={{10,-100},{30,-80}})));
+  Controls.OBC.CDL.Continuous.MultiplyByParameter gai1(k=-1)
+    annotation (Placement(transformation(extent={{-20,-100},{0,-80}})));
+  BaseClasses.DemandLimitLevelGeneration demLimLevGen
+    annotation (Placement(transformation(extent={{60,-100},{80,-80}})));
 equation
   connect(weaDat.weaBus, hvac.weaBus) annotation (Line(
       points={{-40,40},{-26,40},{-26,41.4444},{-10.225,41.4444}},
@@ -88,16 +94,8 @@ equation
           -78,14},{-71,14}}, color={255,0,255}));
   connect(con1.y, client.shed) annotation (Line(points={{-98,-60},{-84,-60},{-84,
           7},{-71,7}}, color={255,0,255}));
-  connect(conInt.y, hvac.uCooDemLimLev) annotation (Line(points={{-98,-120},{
-          -28,-120},{-28,35.3333},{-21.5,35.3333}},
-                                                color={255,127,0}));
-  connect(conInt.y, hvac.uHeaDemLimLev) annotation (Line(points={{-98,-120},{
-          -28,-120},{-28,24.2222},{-21.5,24.2222}},
-                                                color={255,127,0}));
   connect(client.PPreNoShe[1], sheFac.PConPre) annotation (Line(points={{-49,15},
           {-40,15},{-40,-6},{-70,-6},{-70,-94},{-62,-94}}, color={0,0,127}));
-  connect(sheFac.yShe, client.yShed) annotation (Line(points={{-38,-90},{-34,
-          -90},{-34,-66},{-74,-66},{-74,5},{-71,5}}, color={0,0,127}));
   connect(bui90.y[4], gai.u)
     annotation (Line(points={{-99,120},{-82,120}}, color={0,0,127}));
   connect(gai.y, sheFac.PGenPre) annotation (Line(points={{-58,120},{-50,120},{
@@ -108,6 +106,20 @@ equation
     annotation (Line(points={{-182,0},{-170,0}}, color={0,0,127}));
   connect(addPar.y, ene.u)
     annotation (Line(points={{-146,0},{-122,0}}, color={0,0,127}));
+  connect(addPar1.u, gai1.y)
+    annotation (Line(points={{8,-90},{2,-90}}, color={0,0,127}));
+  connect(sheFac.yShe, gai1.u)
+    annotation (Line(points={{-38,-90},{-22,-90}}, color={0,0,127}));
+  connect(addPar1.y, client.yShed) annotation (Line(points={{32,-90},{40,-90},{
+          40,-72},{-74,-72},{-74,5},{-71,5}}, color={0,0,127}));
+  connect(sheFac.yShe, demLimLevGen.uShe) annotation (Line(points={{-38,-90},{
+          -32,-90},{-32,-110},{50,-110},{50,-90},{58,-90}}, color={0,0,127}));
+  connect(demLimLevGen.yDemLimLev, hvac.uCooDemLimLev) annotation (Line(points=
+          {{82,-90},{90,-90},{90,-64},{-60,-64},{-60,-20},{-28,-20},{-28,
+          35.3333},{-21.5,35.3333}}, color={255,127,0}));
+  connect(demLimLevGen.yDemLimLev, hvac.uHeaDemLimLev) annotation (Line(points=
+          {{82,-90},{90,-90},{90,-64},{-60,-64},{-60,-20},{-28,-20},{-28,
+          24.2222},{-21.5,24.2222}}, color={255,127,0}));
   annotation (
     Documentation(info="<html>
 <p>

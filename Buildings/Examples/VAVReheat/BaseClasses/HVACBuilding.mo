@@ -62,7 +62,7 @@ partial model HVACBuilding
 
   Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaDat(
    filNam=Modelica.Utilities.Files.loadResource(
-        "modelica://Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"),
+        "./Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"),
       computeWetBulbTemperature=false) "Weather data reader"
     annotation (Placement(transformation(extent={{-60,30},{-40,50}})));
   Fluid.Sources.Boundary_pT sinHea(
