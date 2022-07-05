@@ -1,14 +1,20 @@
 simulateModel("Buildings.Examples.VAVReheat.Guideline36_DRDemonstration", stopTime=864000, method="cvode", tolerance=1e-06, resultFile="Guideline36DR");
 
-createPlot(id=1, position={0, 0, 855, 842}, y={"hvac.conVAV[1].TZonCooSet", "hvac.conVAV[1].TZonHeaSet", "hvac.conVAV[1].TZon",
+createPlot(id=1, position={756, 0, 739, 939}, y={"hvac.conVAV[1].TZonCooSet", "hvac.conVAV[1].TZonHeaSet", "hvac.conVAV[1].TZon",
  "hvac.conVAV[2].TZon", "hvac.conVAV[3].TZon", "hvac.conVAV[4].TZon", 
-"hvac.conVAV[5].TZon"}, range={0.0, 900000.0, 10.0, 40.0}, grid=true, colors={{28,108,200}, {238,46,47}, {0,140,72}, {217,67,180}, {0,0,0}, {162,29,33}, 
+"hvac.conVAV[5].TZon"}, range={0.0, 260000.0, 10.0, 35.0}, grid=true, colors={{28,108,200}, {238,46,47}, {0,140,72}, {217,67,180}, {0,0,0}, {162,29,33}, 
 {244,125,35}}, displayUnits={"degC", "degC", "degC", "degC", "degC", "degC", "degC"});
-createPlot(id=1, position={0, 0, 855, 165}, y={"PTot.PTot"}, range={0.0, 900000.0, -20000.0, 60000.0}, grid=true, subPlot=2, colors={{28,108,200}});
-createPlot(id=1, position={0, 0, 855, 164}, y={"sheFac.PConPre", "sheFac.PGenPre", "PTot.PTot"}, range={0.0, 900000.0, -50000.0, 100000.0}, grid=true, subPlot=3, colors={{28,108,200}, {238,46,47}, {0,140,72}});
-createPlot(id=1, position={0, 0, 855, 165}, y={"sheFac.yShe"}, range={0.0, 900000.0, -0.5, 1.0}, grid=true, subPlot=4, colors={{28,108,200}});
-createPlot(id=1, position={0, 0, 855, 164}, y={"client.PPre", "sheFac.PGenPre"}, range={0.0, 900000.0, -10000.0, 30000.0}, grid=true, subPlot=5, colors={{28,108,200}, {238,46,47}});
+createPlot(id=1, position={756, 0, 739, 184}, y={"PTot.PTot"}, range={0.0, 260000.0, -10000.0, 40000.0}, grid=true, subPlot=2, colors={{28,108,200}});
+createPlot(id=1, position={756, 0, 739, 183}, y={"sheFac.PConPre", "sheFac.PGenPre", "PTot.PTot"}, range={0.0, 260000.0, -10000.0, 40000.0}, grid=true, subPlot=3, colors={{28,108,200}, {238,46,47}, {0,140,72}});
+createPlot(id=1, position={756, 0, 739, 184}, y={"sheFac.yShe"}, range={0.0, 260000.0, -0.2, 0.8}, grid=true, subPlot=4, colors={{28,108,200}});
+createPlot(id=1, position={756, 0, 739, 184}, y={"client.PPre", "sheFac.PGenPre"}, range={0.0, 260000.0, -10000.0, 30000.0}, grid=true, subPlot=5, colors={{28,108,200}, {238,46,47}});
 
-createPlot(id=2, position={0, 0, 869, 856}, y={"demLimLevGen.uShe"}, range={0.0, 14500.0, -0.2, 1.0000000000000002}, grid=true, colors={{28,108,200}}, timeUnit="min");
-createPlot(id=2, position={0, 0, 869, 282}, y={"demLimLevGen.yDemLimLev"}, range={0.0, 14500.0, -0.5, 3.5}, grid=true, subPlot=2, colors={{28,108,200}}, timeUnit="min");
-createPlot(id=2, position={0, 0, 869, 282}, y={"hvac.conVAV[1].TZonHeaSet", "hvac.conVAV[1].TZonCooSet"}, range={0.0, 14500.0, 10.0, 35.0}, grid=true, subPlot=3, colors={{28,108,200}, {238,46,47}}, timeUnit="min", displayUnits={"degC", "degC"});
+createPlot(id=2, position={0, 0, 740, 939}, y={"demLimLevGen.uShe"}, range={0.0, 4400.0, -0.1, 0.8}, grid=true, colors={{28,108,200}}, timeUnit="min");
+createPlot(id=2, position={0, 0, 740, 309}, y={"demLimLevGen.yDemLimLev"}, range={0.0, 4400.0, -0.5, 3.5}, grid=true, subPlot=2, colors={{28,108,200}}, timeUnit="min");
+createPlot(id=2, position={0, 0, 740, 310}, y={"hvac.conVAV[1].TZonHeaSet", "hvac.conVAV[1].TZonCooSet"}, range={0.0, 4400.0, 10.0, 35.0}, grid=true, subPlot=3, colors={{28,108,200}, {238,46,47}}, timeUnit="min", displayUnits={"degC", "degC"});
+
+createPlot(id=3, position={0, 0, 1511, 978}, y={"sheFac.PConPre", "sheFac.PGenPre"}, range={0.0, 260000.0, -10000.0, 40000.0}, grid=true, colors={{28,108,200}, {238,46,47}});
+createPlot(id=3, position={0, 0, 1511, 241}, y={"sheFac.yShe"}, range={0.0, 260000.0, -0.2, 0.8}, grid=true, subPlot=2, colors={{28,108,200}});
+createPlot(id=3, position={0, 0, 1511, 240}, y={"demLimLevGen.yDemLimLev"}, range={0.0, 260000.0, -1.0, 4.0}, grid=true, subPlot=3, colors={{28,108,200}});
+createPlot(id=3, position={0, 0, 1511, 241}, y={"PTot.PTot"}, range={0.0, 260000.0, -10000.0, 40000.0}, grid=true, subPlot=4, colors={{0,140,72}});
+plotExpression(apply(Guideline36DR[end].bui90.y[2]/10), false, "Guideline36DR[end].bui90.y[2]/10", 3);

@@ -8,7 +8,8 @@ model Guideline36_DRDemonstration
     mEas_flow_nominal=ACHEas*VRooEas*conv,
     mNor_flow_nominal=ACHNor*VRooNor*conv,
     mWes_flow_nominal=ACHWes*VRooWes*conv,
-    redeclare Buildings.Examples.VAVReheat.BaseClasses.Guideline36_DRInput hvac,
+    redeclare Buildings.Examples.VAVReheat.BaseClasses.Guideline36_DRInput hvac(TZonSet(
+          ignDemLim=false)),
     redeclare Buildings.Examples.VAVReheat.BaseClasses.Floor flo(
       sampleModel=true));
 
@@ -114,12 +115,12 @@ equation
           40,-72},{-74,-72},{-74,5},{-71,5}}, color={0,0,127}));
   connect(sheFac.yShe, demLimLevGen.uShe) annotation (Line(points={{-38,-90},{
           -32,-90},{-32,-110},{50,-110},{50,-90},{58,-90}}, color={0,0,127}));
-  connect(demLimLevGen.yDemLimLev, hvac.uCooDemLimLev) annotation (Line(points=
-          {{82,-90},{90,-90},{90,-64},{-60,-64},{-60,-20},{-28,-20},{-28,
-          35.3333},{-21.5,35.3333}}, color={255,127,0}));
-  connect(demLimLevGen.yDemLimLev, hvac.uHeaDemLimLev) annotation (Line(points=
-          {{82,-90},{90,-90},{90,-64},{-60,-64},{-60,-20},{-28,-20},{-28,
-          24.2222},{-21.5,24.2222}}, color={255,127,0}));
+  connect(demLimLevGen.yDemLimLev, hvac.uCooDemLimLev) annotation (Line(points={{82,-90},
+          {90,-90},{90,-64},{-60,-64},{-60,-20},{-28,-20},{-28,35.3333},{-21.5,
+          35.3333}},                 color={255,127,0}));
+  connect(demLimLevGen.yDemLimLev, hvac.uHeaDemLimLev) annotation (Line(points={{82,-90},
+          {90,-90},{90,-64},{-60,-64},{-60,-20},{-28,-20},{-28,24.2222},{-21.5,
+          24.2222}},                 color={255,127,0}));
   annotation (
     Documentation(info="<html>
 <p>
