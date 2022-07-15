@@ -1,5 +1,4 @@
 within Buildings.Extra.PackageTerminalHeatPump.Experiments;
-
 model ControllerCopy
   "Controller for single zone VAV system"
   extends .Modelica.Blocks.Icons.Block;

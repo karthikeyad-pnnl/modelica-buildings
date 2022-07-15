@@ -1,23 +1,91 @@
 within Buildings.Extra.PackageTerminalHeatPump.Experiments;
 model IdeEco
-    .Buildings.Controls.OBC.CDL.Interfaces.RealInput y annotation(Placement(transformation(extent = {{-139.61473215348843,-15.095707264001039},{-99.61473215348842,24.90429273599896}},origin = {0.0,0.0},rotation = 0.0)));
-    .Buildings.Controls.OBC.CDL.Continuous.Sources.Constant one(k = 1) annotation(Placement(transformation(extent = {{-76.21637435824753,19.853898510393773},{-56.216374358247535,39.853898510393776}},origin = {0.0,0.0},rotation = 0.0)));
-    .Buildings.Controls.OBC.CDL.Continuous.Product pro annotation(Placement(transformation(extent = {{-7.8292718154018885,13.695087336510277},{12.170728184598111,33.69508733651028}},origin = {0.0,0.0},rotation = 0.0)));
-    .Buildings.Fluid.Sensors.MassFlowRate senMasFlo(redeclare replaceable package Medium = MediumA) annotation(Placement(transformation(extent = {{-10.0,10.0},{10.0,-10.0}},origin = {19.295728789983762,-14.352190485818053},rotation = -90.0)));
-    .Modelica.Fluid.Interfaces.FluidPort_a port_3(redeclare replaceable package Medium = MediumA) annotation(Placement(transformation(extent = {{90.69328064420317,-4.898340802177252},{110.6932806442032,15.101659197822748}},origin = {0.0,0.0},rotation = 0.0)));
-    .Buildings.Fluid.Movers.BaseClasses.IdealSource preMasFlo(redeclare replaceable package Medium = MediumA,control_dp(fixed = true)) annotation(Placement(transformation(extent = {{60.0,-4.0},{40.0,16.0}},origin = {0.0,0.0},rotation = 0.0)));
-    .Buildings.Controls.OBC.CDL.Continuous.Feedback feedback annotation(Placement(transformation(extent = {{-42.861015703378364,19.73383283960159},{-22.861015703378364,39.73383283960159}},origin = {0.0,0.0},rotation = 0.0)));
-    .Modelica.Fluid.Interfaces.FluidPort_b port_2(redeclare replaceable package Medium = MediumA) annotation(Placement(transformation(extent = {{39.999999999999986,-110.0},{60.000000000000014,-90.0}},origin = {0.0,0.0},rotation = 0.0)));
-    .Modelica.Fluid.Interfaces.FluidPort_a port_1(redeclare replaceable package Medium = MediumA) annotation(Placement(transformation(extent = {{36.0,90.0},{56.0,110.0}},origin = {0.0,0.0},rotation = 0.0)));
+  extends Modelica.Blocks.Icons.Block;
+  replaceable package Medium = Modelica.Media.Interfaces.PartialMedium
+  "Medium in the component"
+  annotation (choicesAllMatching = true);
+  parameter Modelica.Units.SI.MassFlowRate m_flow_nominal
+    "Design chilled water supply flow";
+  Modelica.Fluid.Interfaces.FluidPort_a port_1(
+    redeclare package Medium = Medium) annotation (Placement(transformation(extent={{50,88},
+            {70,108}}), iconTransformation(extent={{50,88},{70,108}})));
+  Modelica.Fluid.Interfaces.FluidPort_b port_2(
+    redeclare package Medium = Medium) annotation (Placement(transformation(extent={{50,-108},
+            {70,-88}}), iconTransformation(extent={{50,-108},{70,-88}})));
+  Modelica.Fluid.Interfaces.FluidPort_a port_3(
+    redeclare package Medium = Medium) annotation (Placement(transformation(extent={{90,-10},
+            {110,10}}), iconTransformation(extent={{90,-10},{110,10}})));
+  Modelica.Blocks.Interfaces.RealInput y(min=0, max=1) annotation (Placement(
+        transformation(extent={{-120,-10},{-100,10}}),
+        iconTransformation(extent={{-120,-10},{-100,10}})));
+  Fluid.Sensors.MassFlowRate senMasFlo(
+    redeclare package Medium = Medium,
+    allowFlowReversal=false)
+    "Mass flow rate sensor" annotation (Placement(transformation(
+        extent={{10,-10},{-10,10}},
+        rotation=90,
+        origin={0,-40})));
+  Fluid.Movers.BaseClasses.IdealSource preMasFlo(
+    redeclare package Medium = Medium,
+    control_m_flow=true,
+    control_dp=false,
+    m_flow_small=m_flow_nominal*1E-5,
+    show_V_flow=false,
+    allowFlowReversal=false)
+    "Prescribed mass flow rate for the bypass" annotation (
+      Placement(transformation(
+        extent={{-10,10},{10,-10}},
+        rotation=180,
+        origin={50,0})));
+  Modelica.Blocks.Math.Product pro "Product for mass flow rate computation"
+    annotation (Placement(transformation(extent={{-28,6},{-8,26}})));
+  Modelica.Blocks.Sources.Constant one(final k=1) "Outputs one"
+    annotation (Placement(transformation(extent={{-90,12},{-70,32}})));
+  Modelica.Blocks.Math.Feedback feedback
+    annotation (Placement(transformation(extent={{-60,12},{-40,32}})));
 equation
-    connect(feedback.y,pro.u1) annotation(Line(points = {{-20.861015703378364,29.73383283960159},{-15.345143759390126,29.73383283960159},{-15.345143759390126,29.695087336510277},{-9.829271815401889,29.695087336510277}},color = {0,0,127}));
-    connect(senMasFlo.m_flow,pro.u2) annotation(Line(points = {{8.295728789983762,-14.352190485818054},{-15.829271815401889,-14.352190485818054},{-15.829271815401889,17.695087336510277},{-9.829271815401889,17.695087336510277}},color = {0,0,127}));
-    connect(senMasFlo.port_a,port_1) annotation(Line(points = {{19.29572878998376,-4.352190485818053},{19.29572878998376,47.82390475709097},{46,47.82390475709097},{46,100}},color = {0,127,255}));
-    connect(senMasFlo.port_b,port_2) annotation(Line(points = {{19.295728789983766,-24.352190485818053},{19.295728789983766,-62.17609524290903},{50,-62.17609524290903},{50,-100}},color = {0,127,255}));
-    connect(preMasFlo.port_b,senMasFlo.port_a) annotation(Line(points = {{40,6},{19.29572878998376,6},{19.29572878998376,-4.352190485818053}},color = {0,127,255}));
-    connect(pro.y,preMasFlo.dp_in) annotation(Line(points = {{14.170728184598111,23.695087336510277},{44,23.695087336510277},{44,14}},color = {0,0,127}));
-    connect(preMasFlo.port_a,port_3) annotation(Line(points = {{60,6},{80.28729788075316,6},{80.28729788075316,5.101659197822748},{100.69328064420318,5.101659197822748}},color = {0,127,255}));
-    connect(y,feedback.u2) annotation(Line(points = {{-119.61473215348843,4.904292735998961},{-32.861015703378364,4.904292735998961},{-32.861015703378364,17.73383283960159}},color = {0,0,127}));
-    connect(one.y,feedback.u1) annotation(Line(points = {{-54.216374358247535,29.853898510393776},{-49.538695030812946,29.853898510393776},{-49.538695030812946,29.73383283960159},{-44.861015703378364,29.73383283960159}},color = {0,0,127}));
-    annotation(Icon(coordinateSystem(preserveAspectRatio = false,extent = {{-100.0,-100.0},{100.0,100.0}}),graphics = {Rectangle(fillColor={255,255,255},fillPattern=FillPattern.Solid,extent={{-100.0,-100.0},{100.0,100.0}}),Text(lineColor={0,0,255},extent={{-150,150},{150,110}},textString="%name")}));
+  connect(senMasFlo.m_flow, pro.u2) annotation (Line(points={{-11,-40},{-40,
+          -40},{-40,10},{-30,10}},      color={0,0,127}));
+  connect(feedback.u1, one.y)     annotation (Line(points={{-58,22},{-69,22}},
+                                               color={0,0,127}));
+  connect(y, feedback.u2)    annotation (Line(points={{-110,0},{-50,0},{-50,14}},color={0,0,127}));
+  connect(preMasFlo.port_a, port_3)     annotation (Line(points={{60,-1.33227e-15},{80,-1.33227e-15},{80,0},{100,
+          0}},                                   color={0,127,255}));
+  connect(feedback.y, pro.u1)     annotation (Line(points={{-41,22},{-30,22}},
+                                               color={0,0,127}));
+  connect(pro.y, preMasFlo.m_flow_in)     annotation (Line(points={{-7,16},{56,16},{56,8}},    color={0,0,127}));
+  connect(port_1, senMasFlo.port_a)      annotation (Line(points={{60,98},{60,60},{4.44089e-16,60},{4.44089e-16,
+          -30}},                                  color={0,127,255}));
+  connect(senMasFlo.port_b, port_2)     annotation (Line(points={{-4.44089e-16,-50},{0,-50},{0,-72},{60,-72},{60,
+          -92},{60,-92},{60,-98},{60,-98}},      color={0,127,255}));
+  connect(preMasFlo.port_b, senMasFlo.port_a) annotation (Line(points={{40,
+          1.33227e-15},{4.44089e-16,1.33227e-15},{4.44089e-16,-30}},
+                                  color={0,127,255}));
+  annotation (
+    Icon(
+      graphics={
+        Polygon(
+          points={{60,0},{68,14},{52,14},{60,0}},
+          lineColor={0,0,0},
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid),
+        Line(points={{60,100},{60,-100}}, color={28,108,200}),
+        Line(points={{102,0},{62,0}}, color={28,108,200}),
+        Polygon(
+          points={{60,0},{68,-14},{52,-14},{60,0}},
+          lineColor={0,0,0},
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid),
+        Line(points={{62,0},{-98,0}}, color={0,0,0}),
+        Rectangle(
+          visible=use_inputFilter,
+          extent={{28,-10},{46,10}},
+          lineColor={0,0,0},
+          fillColor={135,135,135},
+          fillPattern=FillPattern.Solid),
+        Polygon(
+          points={{72,-8},{72,8},{60,0},{72,-8}},
+          lineColor={0,0,0},
+          fillColor={0,0,0},
+          fillPattern=FillPattern.Solid)}));
 end IdeEco;
