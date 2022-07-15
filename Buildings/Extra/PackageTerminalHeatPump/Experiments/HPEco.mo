@@ -35,5 +35,7 @@ equation
     connect(weaBus,out.weaBus) annotation(Line(points = {{-120,40},{-110,40},{-110,38.2},{-102,38.2}},color = {255,204,51}));
     connect(heaPum.port_b1,port_a) annotation(Line(points = {{58,-66},{62,-66},{62,0},{112,0}},color = {0,127,255}));
     connect(port_b,out.ports[2]) annotation(Line(points = {{112,-28},{-78,-28},{-78,38},{-82,38}},color = {0,127,255}));
-    annotation(Icon(coordinateSystem(preserveAspectRatio = false,extent = {{-100.0,-100.0},{100.0,100.0}}),graphics = {Rectangle(lineColor={0,0,0},fillColor={230,230,230},fillPattern=FillPattern.Solid,extent={{-100.0,-100.0},{100.0,100.0}}),Text(lineColor={0,0,255},extent={{-150,150},{150,110}},textString="%name")}));
+    annotation(Icon(coordinateSystem(preserveAspectRatio = false,extent = {{-100.0,-100.0},{100.0,100.0}}),graphics={  Rectangle(lineColor={0,0,0},fillColor={230,230,230},
+            fillPattern =                                                                                                                                                              FillPattern.Solid,extent={{-100.0,-100.0},{100.0,100.0}}),Text(lineColor={0,0,255},extent={{-150,150},{150,110}},textString
+            =                                                                                                                                                                                                        "%name")}));
 end HPEco;
