@@ -19,9 +19,9 @@ model HPSystem "HVAC system model with a dry cooling coil, air-cooled chiller, e
   .Modelica.Blocks.Interfaces.RealInput uFan(final unit = "1") "Fan control signal" annotation (
     Placement(transformation(extent = {{-240, 140}, {-200, 180}}), iconTransformation(extent = {{-240, 140}, {-200, 180}})));
   .Modelica.Blocks.Interfaces.RealInput TSetHP(final unit = "K", displayUnit = "degC", final quantity = "ThermodynamicTemperature") "Set point for leaving heat pump air supply temperature" annotation (
-    Placement(transformation(extent = {{-240, -220}, {-200, -180}}), iconTransformation(extent = {{-240, -220}, {-200, -180}})));
+    Placement(transformation(extent={{-240,-60},{-200,-20}}),        iconTransformation(extent = {{-240, -220}, {-200, -180}})));
   .Modelica.Blocks.Interfaces.RealInput uEco "Control signal for economizer" annotation (
-    Placement(transformation(extent = {{-240, -60}, {-200, -20}}), iconTransformation(extent = {{-240, -60}, {-200, -20}})));
+    Placement(transformation(extent={{-240,80},{-200,120}}),       iconTransformation(extent = {{-240, -60}, {-200, -20}})));
   .Modelica.Fluid.Interfaces.FluidPort_a supplyAir(redeclare replaceable
       package                                                                    Medium = MediumA) "Supply air" annotation (
     Placement(transformation(extent = {{192, 50}, {212, 70}}), iconTransformation(extent = {{192, 50}, {212, 70}})));
@@ -59,16 +59,19 @@ model HPSystem "HVAC system model with a dry cooling coil, air-cooled chiller, e
       replaceable package                                                               Medium1 = MediumA, redeclare
       replaceable package                                                                                                                Medium2 = MediumA,
     per=perHP)                                                                                                                                                                                                         annotation (
-    Placement(transformation(extent = {{94.88708110681092, -177.88257798819242}, {114.88708110681092, -157.88257798819242}}, origin={-18,90},     rotation = 0.0)));
+    Placement(transformation(extent = {{94.88708110681092, -177.88257798819242}, {114.88708110681092, -157.88257798819242}}, origin={-14,202},    rotation = 0.0)));
   Buildings.Fluid.Sources.MassFlowSource_WeatherData souOutAir(
     redeclare replaceable package Medium = MediumA,
     final nPorts = 1,
     final m_flow = mChiCon_flow_nominal)
     "Mass flow source for chiller"
-    annotation (Placement(transformation(extent = {{10, -10}, {-10, 10}}, origin = {138, -174})));
+    annotation (Placement(transformation(extent = {{10, -10}, {-10, 10}}, origin={130,10})));
 
   .Buildings.Controls.OBC.CDL.Interfaces.IntegerInput u annotation (
-    Placement(transformation(extent = {{-239.6525632601465, -154.98443774334876}, {-199.6525632601465, -114.98443774334876}}, origin = {0.0, 0.0}, rotation = 0.0)));
+    Placement(transformation(extent={{-239.655,-154.984},{-199.655,-114.984}},                                                origin={
+            -0.345072,134.984},                                                                                                                    rotation = 0.0),
+        iconTransformation(extent={{-239.653,-154.984},{-199.653,-114.984}},
+          origin={0,0})));
 equation
   connect(fanSup.port_b, totalRes.port_a) annotation (
     Line(points = {{-10, 40}, {10, 40}}, color = {0, 127, 255}));
@@ -87,27 +90,26 @@ equation
   connect(senTMixAir.T, TMix) annotation (
     Line(points = {{-50, 51}, {-50, 70}, {188, 70}, {188, -60}, {212, -60}}, color = {0, 0, 127}));
   connect(uEco, ideEco.y) annotation (
-    Line(points={{-220,-40},{-148,-40},{-148,70},{-90,70},{-90,61}},            color = {0, 0, 127}));
+    Line(points={{-220,100},{-148,100},{-148,70},{-90,70},{-90,61}},            color = {0, 0, 127}));
   connect(totalRes.port_b, heaPum.port_a1) annotation (
-    Line(points={{30,40},{62.4435,40},{62.4435,-71.8826},{76.8871,-71.8826}},                                                              color = {0, 127, 255}));
+    Line(points={{30,40},{62.4435,40},{62.4435,40.1174},{80.8871,40.1174}},                                                                color = {0, 127, 255}));
   connect(heaPum.TSet, TSetHP) annotation (
-    Line(points={{75.4871,-68.8826},{40,-68.8826},{40,-120},{-190.242,-120},{
-          -190.242,-200},{-220,-200}},                                                                                                                                                                                               color = {0, 0, 127}));
+    Line(points={{79.4871,43.1174},{40,43.1174},{40,-40},{-220,-40}},                                                                                                                                                                color = {0, 0, 127}));
   connect(heaPum.P, PHP) annotation (
-    Line(points={{97.8871,-78.0826},{125.075,-78.0826},{125.075,-155.361},{
-          161.976,-155.361},{161.976,120},{212,120}},                                                                                                                                                                            color = {0, 0, 127}));
+    Line(points={{101.887,33.9174},{125.075,33.9174},{125.075,34},{150,34},{150,
+          120},{212,120}},                                                                                                                                                                                                       color = {0, 0, 127}));
   connect(heaPum.uMod, u) annotation (
-    Line(points={{75.8871,-77.8826},{-62.8827,-77.8826},{-62.8827,-134.984},{
-          -219.653,-134.984}},                                                                                                                                                                 color = {255, 127, 0}));
+    Line(points={{79.8871,34.1174},{70,34.1174},{70,0},{-76,0},{-76,7.10543e-15},
+          {-220,7.10543e-15}},                                                                                                                                                                 color = {255, 127, 0}));
   connect(heaPum.port_b1, supplyAir) annotation (
-    Line(points={{96.8871,-71.8826},{158.444,-71.8826},{158.444,60},{202,60}},                                                                 color = {0, 127, 255}));
+    Line(points={{100.887,40.1174},{158.444,40.1174},{158.444,60},{202,60}},                                                                   color = {0, 127, 255}));
   connect(heaPum.port_b2, out.ports[1]) annotation (
-    Line(points={{76.8871,-83.8826},{-111.992,-83.8826},{-111.992,41.6085},{
-          -118.59,41.6085}},                                                                                                                     color = {0, 127, 255}));
+    Line(points={{80.8871,28.1174},{60,28.1174},{60,10},{-112,10},{-112,41.6085},
+          {-118.59,41.6085}},                                                                                                                    color = {0, 127, 255}));
   connect(souOutAir.ports[1], heaPum.port_a2) annotation (
-    Line(points={{128,-174},{96.8871,-174},{96.8871,-83.8826}},                                         color = {0, 127, 255}));
+    Line(points={{120,10},{100.887,10},{100.887,28.1174}},                                              color = {0, 127, 255}));
   connect(weaBus, souOutAir.weaBus) annotation (
-    Line(points = {{-180, 42}, {-180, -208}, {154, -208}, {154, -173.8}, {148, -173.8}}, color = {255, 204, 51}));
+    Line(points={{-180,42},{-180,-60},{160,-60},{160,10.2},{140,10.2}},                  color = {255, 204, 51}));
   connect(ideEco.port_3, returnAir) annotation (Line(points={{-90,40},{-90,-20},
           {202,-20}}, color={0,127,255}));
   connect(ideEco.port_2, senTMixAir.port_a) annotation (Line(points={{-80.2,44},
@@ -116,7 +118,8 @@ equation
           -108,44},{-108,37.6085},{-118.59,37.6085}}, color={0,127,255}));
   annotation (
     defaultComponentName = "chiDXHeaEco",
-    Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-200, -220}, {200, 180}}), graphics={  Rectangle(extent = {{-200, 180}, {202, -220}}, lineColor = {0, 0, 0}, fillColor = {255, 255, 255},
+    Icon(coordinateSystem(preserveAspectRatio = false, extent={{-200,-120},{200,
+            180}}),                                                                          graphics={  Rectangle(extent = {{-200, 180}, {202, -220}}, lineColor = {0, 0, 0}, fillColor = {255, 255, 255},
             fillPattern =                                                                                                                                                                                                 FillPattern.Solid), Rectangle(extent = {{182, 60}, {-158, 20}}, lineColor = {175, 175, 175}, fillColor = {175, 175, 175},
             fillPattern =                                                                                                                                                                                                        FillPattern.Solid), Rectangle(extent = {{-30, 56}, {-2, 42}}, lineColor = {0, 0, 0}, fillColor = {255, 255, 255},
             fillPattern =                                                                                                                                                                                                        FillPattern.Solid), Rectangle(extent = {{182, -52}, {-158, -92}}, lineColor = {175, 175, 175}, fillColor = {175, 175, 175},
@@ -140,7 +143,8 @@ equation
             fillPattern =                                                                                                                                                                                                        FillPattern.Solid), Ellipse(extent = {{110, -28}, {122, -38}}, lineColor = {0, 0, 0}, fillColor = {255, 255, 255},
             fillPattern =                                                                                                                                                                                                        FillPattern.Solid), Polygon(points = {{116, -28}, {112, -36}, {120, -36}, {116, -28}}, lineColor = {0, 0, 0}, fillColor = {0, 0, 0},
             fillPattern =                                                                                                                                                                                                        FillPattern.Solid), Line(points = {{202, 100}, {134, 100}, {134, 66}}, color = {0, 0, 127}), Line(points = {{126, -34}, {134, -34}, {134, 16}}, color = {0, 0, 127}), Line(points = {{94, -116}, {88, -116}, {88, 16}}, color = {0, 0, 127}), Text(extent = {{-154, 260}, {164, 196}}, textString = "%name", lineColor = {0, 0, 255})}),
-    Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-200, -220}, {200, 180}})),
+    Diagram(coordinateSystem(preserveAspectRatio = false, extent={{-200,-120},{
+            200,180}})),
     Documentation(info = "<html>
 <p>
 This is a conventional single zone VAV HVAC system model. The system contains
