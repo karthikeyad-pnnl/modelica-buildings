@@ -6,8 +6,8 @@ model HPSystem "HVAC system model with a dry cooling coil, air-cooled chiller, e
 
   parameter Buildings.Fluid.HeatPumps.Data.EquationFitReversible.Generic perHP
    "Performance data"
-    annotation (choicesAllMatching=true, Placement(transformation(extent={{50,72},
-            {70,92}})));
+    annotation (choicesAllMatching=true, Placement(transformation(extent={{-160,
+            130},{-140,150}})));
 
   parameter .Modelica.Units.SI.DimensionlessRatio COP_nominal = 5.5 "Nominal COP of the chiller";
   parameter .Modelica.Units.SI.MassFlowRate mAir_flow_nominal = 1 "Design airflow rate of system" annotation (
@@ -24,16 +24,21 @@ model HPSystem "HVAC system model with a dry cooling coil, air-cooled chiller, e
     Placement(transformation(extent={{-240,80},{-200,120}}),       iconTransformation(extent = {{-240, -60}, {-200, -20}})));
   .Modelica.Fluid.Interfaces.FluidPort_a supplyAir(redeclare replaceable
       package                                                                    Medium = MediumA) "Supply air" annotation (
-    Placement(transformation(extent = {{192, 50}, {212, 70}}), iconTransformation(extent = {{192, 50}, {212, 70}})));
+    Placement(transformation(extent={{190,50},{210,70}}),      iconTransformation(extent={{192,0},
+            {212,20}})));
   .Modelica.Fluid.Interfaces.FluidPort_b returnAir(redeclare replaceable
       package                                                                    Medium = MediumA) "Return air" annotation (
-    Placement(transformation(extent = {{192.0, -30.0}, {212.0, -10.0}}, rotation = 0.0, origin = {0.0, 0.0}), iconTransformation(extent = {{192, -30}, {212, -10}})));
+    Placement(transformation(extent = {{192.0, -30.0}, {212.0, -10.0}}, rotation = 0.0, origin = {0.0, 0.0}), iconTransformation(extent={{192,-70},
+            {212,-50}})));
   .Modelica.Blocks.Interfaces.RealOutput PFan(final unit = "W") "Electrical power consumed by the supply fan" annotation (
-    Placement(transformation(extent = {{202, 150}, {222, 170}}), iconTransformation(extent = {{202, 150}, {222, 170}})));
+    Placement(transformation(extent={{200,150},{220,170}}),      iconTransformation(extent = {{202, 150}, {222, 170}})));
   .Modelica.Blocks.Interfaces.RealOutput PHP(final unit = "W") "Electrical power consumed by the heat pump" annotation (
-    Placement(transformation(extent = {{202, 110}, {222, 130}}), iconTransformation(extent = {{202, 110}, {222, 130}})));
-  .Modelica.Blocks.Interfaces.RealOutput TMix(final unit = "K", displayUnit = "degC", final quantity = "ThermodynamicTemperature") "Mixed air temperature" annotation (
-    Placement(transformation(extent = {{202, -70}, {222, -50}}), iconTransformation(extent = {{202, -70}, {222, -50}})));
+    Placement(transformation(extent={{200,30},{220,50}}),        iconTransformation(extent={{202,-30},
+            {222,-10}})));
+  .Modelica.Blocks.Interfaces.RealOutput TMix(final unit = "K", displayUnit = "degC", final quantity = "ThermodynamicTemperature")
+    "Mixed air temperature"                                                                                                                                annotation (
+    Placement(transformation(extent={{200,130},{220,150}}),      iconTransformation(extent={{202,110},
+            {222,130}})));
   .Buildings.BoundaryConditions.WeatherData.Bus weaBus "Weather bus" annotation (
     Placement(transformation(extent = {{-200.0, 22.0}, {-160.0, 62.0}}, rotation = 0.0, origin = {0.0, 0.0}), iconTransformation(extent = {{-168, 148}, {-148, 168}})));
   .Buildings.Fluid.Movers.FlowControlled_m_flow fanSup(final m_flow_nominal = mAir_flow_nominal,
@@ -48,10 +53,11 @@ model HPSystem "HVAC system model with a dry cooling coil, air-cooled chiller, e
       package                                                                          Medium = MediumA) "Boundary conditions for outside air" annotation (
     Placement(transformation(extent = {{-138.59042894472765, 29.60845248464657}, {-118.59042894472765, 49.60845248464657}}, rotation = 0.0, origin = {0.0, 0.0})));
   .Buildings.Fluid.Sensors.TemperatureTwoPort senTMixAir(final m_flow_nominal = mAir_flow_nominal,                                  final tau = 0, redeclare
-      replaceable package                                                                                                                                                        Medium = MediumA) "Mixed air temperature sensor" annotation (
+      replaceable package                                                                                                                                                        Medium = MediumA)
+    "Mixed air temperature sensor"                                                                                                                                                                                                annotation (
     Placement(transformation(extent = {{-60, 30}, {-40, 50}})));
   .Modelica.Blocks.Math.Gain gaiFan(k = mAir_flow_nominal) "Gain for fan mass flow rate" annotation (
-    Placement(transformation(extent = {{-80, 130}, {-60, 150}})));
+    Placement(transformation(extent={{-80,150},{-60,170}})));
   Buildings.Extra.PackageTerminalHeatPump.Experiments.IdeEco ideEco(redeclare
       package Medium = MediumA, m_flow_nominal=mAir_flow_nominal)                                                                                 "Ideal economizer" annotation (
     Placement(transformation(rotation = 90, extent = {{10, -10}, {-10, 10}}, origin={-90,50})));
@@ -72,11 +78,33 @@ model HPSystem "HVAC system model with a dry cooling coil, air-cooled chiller, e
             -0.345072,134.984},                                                                                                                    rotation = 0.0),
         iconTransformation(extent={{-239.653,-154.984},{-199.653,-114.984}},
           origin={0,0})));
+  Fluid.Sensors.TemperatureTwoPort senTSupAir(
+    final m_flow_nominal=mAir_flow_nominal,
+    final tau=0,
+    redeclare replaceable package Medium = MediumA)
+    "Mixed air temperature sensor"
+    annotation (Placement(transformation(extent={{120,50},{140,70}})));
+  Modelica.Blocks.Interfaces.RealOutput TSup(
+    final unit="K",
+    displayUnit="degC",
+    final quantity="ThermodynamicTemperature") "Supply air temperature"
+    annotation (Placement(transformation(extent={{200,110},{220,130}}),
+        iconTransformation(extent={{202,70},{222,90}})));
+  Fluid.Sensors.VolumeFlowRate senVolFlo(redeclare package Medium = MediumA,
+      m_flow_nominal=mAir_flow_nominal)
+    annotation (Placement(transformation(extent={{160,50},{180,70}})));
+  Modelica.Blocks.Interfaces.RealOutput VSupAir_flow(
+    final quantity="VolumeFlowRate",
+    final unit="m3/s")
+    "Supply air volume flowrate"
+    annotation (Placement(transformation(extent={{200,90},{220,110}}),
+        iconTransformation(extent={{202,30},{222,50}})));
+
 equation
   connect(fanSup.port_b, totalRes.port_a) annotation (
     Line(points = {{-10, 40}, {10, 40}}, color = {0, 127, 255}));
   connect(fanSup.P, PFan) annotation (
-    Line(points = {{-9, 49}, {-6, 49}, {-6, 160}, {212, 160}}, color = {0, 0, 127}));
+    Line(points={{-9,49},{-8,49},{-8,160},{210,160}},          color = {0, 0, 127}));
   connect(weaBus, out.weaBus) annotation (
     Line(points={{-180,42},{-138.59,42},{-138.59,39.8085}},
                                                           color = {255, 204, 51}, thickness = 0.5),
@@ -84,11 +112,11 @@ equation
   connect(senTMixAir.port_b, fanSup.port_a) annotation (
     Line(points = {{-40, 40}, {-30, 40}}, color = {0, 127, 255}));
   connect(gaiFan.y, fanSup.m_flow_in) annotation (
-    Line(points = {{-59, 140}, {-20, 140}, {-20, 52}}, color = {0, 0, 127}));
+    Line(points={{-59,160},{-20,160},{-20,52}},        color = {0, 0, 127}));
   connect(gaiFan.u, uFan) annotation (
-    Line(points = {{-82, 140}, {-152, 140}, {-152, 160}, {-220, 160}}, color = {0, 0, 127}));
+    Line(points={{-82,160},{-220,160}},                                color = {0, 0, 127}));
   connect(senTMixAir.T, TMix) annotation (
-    Line(points = {{-50, 51}, {-50, 70}, {188, 70}, {188, -60}, {212, -60}}, color = {0, 0, 127}));
+    Line(points={{-50,51},{-50,140},{210,140}},                              color = {0, 0, 127}));
   connect(uEco, ideEco.y) annotation (
     Line(points={{-220,100},{-148,100},{-148,70},{-90,70},{-90,61}},            color = {0, 0, 127}));
   connect(totalRes.port_b, heaPum.port_a1) annotation (
@@ -96,18 +124,16 @@ equation
   connect(heaPum.TSet, TSetHP) annotation (
     Line(points={{79.4871,43.1174},{40,43.1174},{40,-40},{-220,-40}},                                                                                                                                                                color = {0, 0, 127}));
   connect(heaPum.P, PHP) annotation (
-    Line(points={{101.887,33.9174},{125.075,33.9174},{125.075,34},{150,34},{150,
-          120},{212,120}},                                                                                                                                                                                                       color = {0, 0, 127}));
+    Line(points={{101.887,33.9174},{123.075,33.9174},{123.075,34},{148,34},{148,
+          40},{210,40}},                                                                                                                                                                                                        color = {0, 0, 127}));
   connect(heaPum.uMod, u) annotation (
     Line(points={{79.8871,34.1174},{70,34.1174},{70,0},{-76,0},{-76,7.10543e-15},
           {-220,7.10543e-15}},                                                                                                                                                                 color = {255, 127, 0}));
-  connect(heaPum.port_b1, supplyAir) annotation (
-    Line(points={{100.887,40.1174},{158.444,40.1174},{158.444,60},{202,60}},                                                                   color = {0, 127, 255}));
   connect(heaPum.port_b2, out.ports[1]) annotation (
     Line(points={{80.8871,28.1174},{60,28.1174},{60,10},{-112,10},{-112,41.6085},
           {-118.59,41.6085}},                                                                                                                    color = {0, 127, 255}));
   connect(souOutAir.ports[1], heaPum.port_a2) annotation (
-    Line(points={{120,10},{100.887,10},{100.887,28.1174}},                                              color = {0, 127, 255}));
+    Line(points={{120,10},{110,10},{110,28},{100.887,28},{100.887,28.1174}},                            color = {0, 127, 255}));
   connect(weaBus, souOutAir.weaBus) annotation (
     Line(points={{-180,42},{-180,-60},{160,-60},{160,10.2},{140,10.2}},                  color = {255, 204, 51}));
   connect(ideEco.port_3, returnAir) annotation (Line(points={{-90,40},{-90,-20},
@@ -116,6 +142,17 @@ equation
           {-70,44},{-70,40},{-60,40}}, color={0,127,255}));
   connect(ideEco.port_1, out.ports[2]) annotation (Line(points={{-99.8,44},{
           -108,44},{-108,37.6085},{-118.59,37.6085}}, color={0,127,255}));
+  connect(heaPum.port_b1, senTSupAir.port_a) annotation (Line(points={{100.887,
+          40.1174},{110.444,40.1174},{110.444,60},{120,60}},
+                                                    color={0,127,255}));
+  connect(senTSupAir.T, TSup)
+    annotation (Line(points={{130,71},{130,120},{210,120}}, color={0,0,127}));
+  connect(senTSupAir.port_b, senVolFlo.port_a)
+    annotation (Line(points={{140,60},{160,60}}, color={0,127,255}));
+  connect(senVolFlo.port_b, supplyAir)
+    annotation (Line(points={{180,60},{200,60}}, color={0,127,255}));
+  connect(senVolFlo.V_flow, VSupAir_flow)
+    annotation (Line(points={{170,71},{170,100},{210,100}}, color={0,0,127}));
   annotation (
     defaultComponentName = "chiDXHeaEco",
     Icon(coordinateSystem(preserveAspectRatio = false, extent={{-200,-120},{200,
