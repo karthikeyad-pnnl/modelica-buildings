@@ -76,8 +76,9 @@ model ModeSelector "Finite State Machine for the operational modes"
     annotation (Placement(transformation(extent={{10,-140},{30,-120}})));
   Modelica.Blocks.Routing.RealPassThrough TRooAve "Average room temperature"
     annotation (Placement(transformation(extent={{-80,110},{-60,130}})));
-  Modelica.Blocks.Sources.BooleanExpression booleanExpression(
-    y=occThrSho.y and (TRooAve.y < TRooSetHeaOcc))
+  Modelica.Blocks.Sources.BooleanExpression booleanExpression(y=(occThrSho.y
+         and (TRooAve.y < TRooSetHeaOcc)) or (optStaAHU.y and (TRooAve.y <
+        TRooSetHeaOcc)))
     "Test that outputs true if room temperature is below occupied heating and system should be switched on soon"
     annotation (Placement(transformation(extent={{-204,-226},{-100,-192}})));
   PreCoolingStarter preCooSta(TRooSetCooOcc=TRooSetCooOcc)
@@ -116,6 +117,15 @@ model ModeSelector "Finite State Machine for the operational modes"
   Modelica.Blocks.Math.BooleanToInteger modIni(integerTrue=Integer(Buildings.Examples.VAVReheat.BaseClasses.Controls.OperationModes.unoccupiedOff))
     "Initial operation mode"
     annotation (Placement(transformation(extent={{-160,10},{-180,30}})));
+  Modelica.Blocks.Routing.BooleanPassThrough optStaAHU
+    "outputs true if optimal start turns on"
+    annotation (Placement(transformation(extent={{-80,50},{-60,70}})));
+  Modelica.Blocks.Sources.BooleanExpression booleanExpression1(y=occThrSho.y
+         and (TRooAve.y < TRooSetHeaOcc))
+    "Test that outputs true if room temperature is below occupied heating and system should be switched on soon"
+    annotation (Placement(transformation(extent={{-40,-224},{64,-190}})));
+  Buildings.Controls.OBC.CDL.Logical.Or or3
+    annotation (Placement(transformation(extent={{-8,150},{12,170}})));
 equation
   connect(start.outPort, unOccOff.inPort[1]) annotation (Line(
       points={{-38.5,30},{-29.75,30},{-29.75,30.6667},{-21,30.6667}},
@@ -256,10 +266,6 @@ equation
       points={{101,110},{108,110},{108,118}},
       color={255,0,255},
       smooth=Smooth.None));
-  connect(occupied.y, not2.u) annotation (Line(
-      points={{-59,90},{-20,90},{-20,110},{-2,110}},
-      color={255,0,255},
-      smooth=Smooth.None));
   connect(not2.y, and2.u1) annotation (Line(
       points={{21,110},{78,110}},
       color={255,0,255},
@@ -342,8 +348,22 @@ equation
           -200,136.5},{-192,136.5}}, color={255,127,0}));
   connect(t6.condition, booleanExpression.y) annotation (Line(points={{-66,-102},
           {-66,-209},{-94.8,-209}}, color={255,0,255}));
-  connect(t5.condition, booleanExpression.y) annotation (Line(points={{128,18},
-          {128,-209},{-94.8,-209}}, color={255,0,255}));
+  connect(cb.optStaAHU, optStaAHU.u) annotation (Line(
+      points={{-158,140},{-140,140},{-140,60},{-82,60}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(booleanExpression1.y, t5.condition) annotation (Line(points={{69.2,
+          -207},{128,-207},{128,18}}, color={255,0,255}));
+  connect(occupied.y, or3.u1) annotation (Line(points={{-59,90},{-20,90},{-20,
+          160},{-10,160}}, color={255,0,255}));
+  connect(optStaAHU.y, or3.u2) annotation (Line(points={{-59,60},{-14,60},{-14,
+          152},{-10,152}}, color={255,0,255}));
+  connect(or3.y, not2.u) annotation (Line(points={{14,160},{30,160},{30,140},{
+          -8,140},{-8,110},{-2,110}}, color={255,0,255}));
   annotation (Diagram(coordinateSystem(preserveAspectRatio=true, extent={{-220,
             -220},{220,220}})), Icon(coordinateSystem(
           preserveAspectRatio=true, extent={{-220,-220},{220,220}}), graphics={

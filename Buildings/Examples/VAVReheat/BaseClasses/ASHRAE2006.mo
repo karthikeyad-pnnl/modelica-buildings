@@ -29,7 +29,7 @@ model ASHRAE2006
     final THeaOff=THeaOff,
     final TCooOn=TCooOn,
     final TCooOff=TCooOff)
-    annotation (Placement(transformation(extent={{-300,-358},{-280,-338}})));
+    annotation (Placement(transformation(extent={{-300,-360},{-280,-340}})));
   Controls.DuctStaticPressureSetpoint pSetDuc(
     nin=5,
     pMin=50) "Duct static pressure setpoint"
@@ -100,6 +100,26 @@ model ASHRAE2006
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={490,30})));
+  Buildings.Controls.OBC.Utilities.OptimalStart optSta[5](computeHeating=fill(
+        true, 5), computeCooling=fill(true, 5))
+    annotation (Placement(transformation(extent={{-160,240},{-140,260}})));
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(k=TSetRoo.THeaOn)
+    annotation (Placement(transformation(extent={{-250,370},{-230,390}})));
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con1(k=TSetRoo.TCooOn)
+    annotation (Placement(transformation(extent={{-250,330},{-230,350}})));
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaScaRep(nout=5)
+    annotation (Placement(transformation(extent={{-220,370},{-200,390}})));
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaScaRep1(nout=5)
+    annotation (Placement(transformation(extent={{-220,330},{-200,350}})));
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaScaRep2(nout=5)
+    annotation (Placement(transformation(extent={{-220,210},{-200,230}})));
+  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(nin=5)
+    annotation (Placement(transformation(extent={{-320,-120},{-300,-100}})));
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con2(k=false)
+    annotation (Placement(transformation(extent={{-300,-270},{-280,-250}})));
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol(trueHoldDuration=
+        60)
+    annotation (Placement(transformation(extent={{-280,-70},{-260,-50}})));
 equation
   connect(controlBus, modeSelector.cb) annotation (Line(
       points={{-240,-340},{-152,-340},{-152,-303.182},{-196.818,-303.182}},
@@ -121,7 +141,7 @@ equation
       smooth=Smooth.None,
       pattern=LinePattern.Dash));
   connect(TSetRoo.controlBus, controlBus) annotation (Line(
-      points={{-288,-342},{-264,-342},{-264,-340},{-240,-340}},
+      points={{-288,-344},{-264,-344},{-264,-340},{-240,-340}},
       color={255,204,51},
       thickness=0.5,
       smooth=Smooth.None));
@@ -165,15 +185,8 @@ equation
       points={{-70.6667,141.467},{-70.6667,120},{-240,120},{-240,-340}},
       color={255,204,51},
       thickness=0.5));
-  connect(modeSelector.yFan, conFanSup.uFan) annotation (Line(points={{-179.091,
-          -305.455},{260,-305.455},{260,-30},{226,-30},{226,6},{238,6}},
-                                                                 color={255,0,
-          255}));
   connect(conFanSup.y, fanSup.y) annotation (Line(points={{261,0},{280,0},{280,
           -20},{310,-20},{310,-28}}, color={0,0,127}));
-  connect(or2.u2, modeSelector.yFan) annotation (Line(points={{-102,-248},{-120,
-          -248},{-120,-305.455},{-179.091,-305.455}},
-                                     color={255,0,255}));
   connect(VAVBox.y_actual, pSetDuc.u) annotation (Line(points={{762,40},{770,40},
           {770,80},{140,80},{140,-6},{158,-6}},     color={0,0,127}));
   connect(TSup.T, conTSup.TSup) annotation (Line(
@@ -227,11 +240,6 @@ equation
           {160,-210},{208,-210}},       color={0,0,127}));
   connect(sysHysCoo.yPum, pumCooCoi.y) annotation (Line(points={{62,-247},{200,
           -247},{200,-120},{192,-120}}, color={0,0,127}));
-  connect(sysHysCoo.sysOn, modeSelector.yFan) annotation (Line(points={{38,-234},
-          {20,-234},{20,-305.455},{-179.091,-305.455}}, color={255,0,255}));
-  connect(sysHysHea.sysOn, modeSelector.yFan) annotation (Line(points={{-12,
-          -134},{-18,-134},{-18,-306},{-98,-306},{-98,-305.455},{-179.091,
-          -305.455}}, color={255,0,255}));
   connect(yFreHeaCoi.y, swiFreStaPum.u1) annotation (Line(points={{-118,-120},{
           -80,-120},{-80,-112},{38,-112}}, color={0,0,127}));
   connect(yFreHeaCoi.y, swiFreStaVal.u1) annotation (Line(points={{-118,-120},{
@@ -292,6 +300,42 @@ equation
     annotation (Line(points={{601,54.8},{716,56}}, color={0,0,127}));
   connect(conVAV.yVal, VAVBox.yHea) annotation (Line(points={{601,45},{608,45},
           {608,46},{716,46}}, color={0,0,127}));
+  connect(con.y, reaScaRep.u)
+    annotation (Line(points={{-228,380},{-222,380}}, color={0,0,127}));
+  connect(con1.y, reaScaRep1.u)
+    annotation (Line(points={{-228,340},{-222,340}}, color={0,0,127}));
+  connect(reaScaRep.y, optSta.TSetZonHea) annotation (Line(points={{-198,380},{
+          -170,380},{-170,258},{-162,258}}, color={0,0,127}));
+  connect(reaScaRep1.y, optSta.TSetZonCoo) annotation (Line(points={{-198,340},
+          {-180,340},{-180,254},{-162,254}}, color={0,0,127}));
+  connect(TRoo, optSta.TZon) annotation (Line(points={{-400,320},{-360,320},{
+          -360,290},{-200,290},{-200,246},{-162,246}}, color={0,0,127}));
+  connect(occSch.tNexOcc, reaScaRep2.u) annotation (Line(points={{-299,-204},{
+          -240,-204},{-240,220},{-222,220}}, color={0,0,127}));
+  connect(reaScaRep2.y, optSta.tNexOcc) annotation (Line(points={{-198,220},{
+          -180,220},{-180,242},{-162,242}}, color={0,0,127}));
+  connect(optSta.optOn, mulOr.u[1:5]) annotation (Line(points={{-138,246},{-136,
+          246},{-136,200},{-220,200},{-220,-80},{-340,-80},{-340,-115.6},{-322,
+          -115.6}}, color={255,0,255}));
+  connect(modeSelector.yFan, or2.u2) annotation (Line(points={{-179.091,
+          -305.455},{-120,-305.455},{-120,-248},{-102,-248}}, color={255,0,255}));
+  connect(modeSelector.yFan, sysHysHea.sysOn) annotation (Line(points={{
+          -179.091,-305.455},{-20,-305.455},{-20,-134},{-12,-134}}, color={255,
+          0,255}));
+  connect(modeSelector.yFan, sysHysCoo.sysOn) annotation (Line(points={{
+          -179.091,-305.455},{-20,-305.455},{-20,-234},{38,-234}}, color={255,0,
+          255}));
+  connect(modeSelector.yFan, conFanSup.uFan) annotation (Line(points={{-179.091,
+          -305.455},{-20,-305.455},{-20,-320},{260,-320},{260,-66},{230,-66},{
+          230,6},{238,6}}, color={255,0,255}));
+  connect(mulOr.y, truFalHol.u) annotation (Line(points={{-298,-110},{-290,-110},
+          {-290,-60},{-282,-60}}, color={255,0,255}));
+  connect(mulOr.y, controlBus.optStaAHU) annotation (Line(points={{-298,-110},{
+          -240,-110},{-240,-340}}, color={255,0,255}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
   annotation (
   defaultComponentName="hvac",
     Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-380,-400},{1420,
