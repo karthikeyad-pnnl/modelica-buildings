@@ -58,8 +58,7 @@ model ModeSelector "Finite State Machine for the operational modes"
     annotation (Placement(transformation(extent={{-80,140},{-60,160}})));
   Modelica.Blocks.Math.Feedback TRooMinErrHea "Room control error for heating"
     annotation (Placement(transformation(extent={{-40,170},{-20,190}})));
-  Modelica.StateGraph.Transition t3(condition=TRooMin.y + delTRooOnOff/2 >
-        TRooSetHeaOcc or occupied.y)
+  Modelica.StateGraph.Transition t3(condition=occupied.y)
     annotation (Placement(transformation(extent={{10,-100},{30,-80}})));
   Modelica.Blocks.Routing.BooleanPassThrough occupied
     "outputs true if building is occupied"
@@ -71,8 +70,7 @@ model ModeSelector "Finite State Machine for the operational modes"
     mode=Buildings.Examples.VAVReheat.BaseClasses.Controls.OperationModes.unoccupiedPreCool,
     nOut=1) "Pre-cooling mode"
     annotation (Placement(transformation(extent={{-40,-140},{-20,-120}})));
-  Modelica.StateGraph.Transition t7(condition=TRooMin.y - delTRooOnOff/2 <
-        TRooSetCooOcc or occupied.y)
+  Modelica.StateGraph.Transition t7(condition=occupied.y)
     annotation (Placement(transformation(extent={{10,-140},{30,-120}})));
   Modelica.Blocks.Routing.RealPassThrough TRooAve "Average room temperature"
     annotation (Placement(transformation(extent={{-80,110},{-60,130}})));
