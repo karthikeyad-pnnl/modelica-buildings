@@ -73,7 +73,7 @@ model Guideline36_DRDemonstration
     annotation (Placement(transformation(extent={{60,-100},{80,-80}})));
 equation
   connect(weaDat.weaBus, hvac.weaBus) annotation (Line(
-      points={{-40,40},{-26,40},{-26,41.4444},{-10.225,41.4444}},
+      points={{-40,40},{-26,40},{-26,25.2},{-1.4209,25.2}},
       color={255,204,51},
       thickness=0.5));
   connect(weaDat.weaBus, weaBus) annotation (Line(
@@ -119,11 +119,11 @@ equation
   connect(sheFac.yShe, demLimLevGen.uShe) annotation (Line(points={{-38,-90},{
           -32,-90},{-32,-110},{50,-110},{50,-90},{58,-90}}, color={0,0,127}));
   connect(demLimLevGen.yDemLimLev, hvac.uCooDemLimLev) annotation (Line(points={{82,-90},
-          {90,-90},{90,-64},{-60,-64},{-60,-20},{-30,-20},{-30,35.3333},{-21.5,
-          35.3333}},                 color={255,127,0}));
+          {90,-90},{90,-64},{-60,-64},{-60,-20},{-30,-20},{-30,23},{-6.80597,23}},
+                                     color={255,127,0}));
   connect(demLimLevGen.yDemLimLev, hvac.uHeaDemLimLev) annotation (Line(points={{82,-90},
-          {90,-90},{90,-64},{-60,-64},{-60,-20},{-30,-20},{-30,24.2222},{-21.5,
-          24.2222}},                 color={255,127,0}));
+          {90,-90},{90,-64},{-60,-64},{-60,-20},{-30,-20},{-30,19},{-6.80597,19}},
+                                     color={255,127,0}));
   annotation (
     Documentation(info="<html>
 <p>
@@ -284,6 +284,6 @@ This is for
           "modelica://Buildings/Resources/Scripts/Dymola/Examples/VAVReheat/Guideline36_DRDemonstration.mos"
         "Simulate and plot"),
     experiment(StopTime=172800, Tolerance=1e-06),
-    Icon(coordinateSystem(extent={{-100,-100},{100,100}})),
-    Diagram(coordinateSystem(extent={{-140,-140},{140,140}})));
+    Icon(coordinateSystem(extent={{-220,-140},{140,140}})),
+    Diagram(coordinateSystem(extent={{-220,-140},{140,140}})));
 end Guideline36_DRDemonstration;

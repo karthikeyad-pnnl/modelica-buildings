@@ -421,8 +421,8 @@ equation
           {-176,80},{-176,186},{-102,186}}, color={255,127,0}));
   annotation (
   defaultComponentName="hvac",
-    Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-380,-320},{1420,
-            680}})),
+    Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-200,-140},{440,
+            220}})),
     Documentation(info="<html>
 <p>
 This model consist of an HVAC system is a variable air volume (VAV) flow system with economizer
@@ -575,7 +575,8 @@ This is for
 </li>
 </ul>
 </html>"),
-    Icon(graphics={
+    Icon(coordinateSystem(extent={{-200,-140},{440,220}}),
+         graphics={
         Rectangle(
           extent={{240,172},{220,100}},
           lineColor={175,175,175},

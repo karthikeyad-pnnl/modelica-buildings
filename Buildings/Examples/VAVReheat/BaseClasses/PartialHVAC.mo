@@ -121,12 +121,12 @@ partial model PartialHVAC
   Modelica.Fluid.Interfaces.FluidPort_a port_supAir[numZon](redeclare package
       Medium = MediumA)
     "Supply air to thermal zones"
-    annotation (Placement(transformation(extent={{1410,150},{1430,170}}),
+    annotation (Placement(transformation(extent={{950,150},{970,170}}),
         iconTransformation(extent={{432,190},{452,210}})));
   Modelica.Fluid.Interfaces.FluidPort_a port_retAir[numZon](redeclare package
       Medium = MediumA)
     "Return air from thermal zones"
-    annotation (Placement(transformation(extent={{1410,110},{1430,130}}),
+    annotation (Placement(transformation(extent={{950,120},{970,140}}),
         iconTransformation(extent={{432,20},{452,40}})));
 
   Modelica.Blocks.Interfaces.RealInput TRoo[numZon](
@@ -581,7 +581,7 @@ equation
           {240,-240},{180,-240},{180,-180}}, color={0,127,255}));
 
   connect(VAVBox.port_bAir, port_supAir) annotation (Line(points={{740,60},{740,
-          160},{1420,160}}, color={0,127,255}));
+          160},{960,160}},  color={0,127,255}));
 
   for i in 1:numZon loop
     connect(VAVBox[i].port_aHeaWat, portHeaTerSup)
@@ -601,8 +601,7 @@ equation
   connect(splSupRoo.port_3, VAVBox[1:(numZon-1)].port_aAir)
     annotation (Line(points={{740,-30},{740,20}}, color={0,127,255}));
   connect(splRetRoo.port_3, port_retAir[1:(numZon-1)])
-    annotation (Line(points={{840,110},{840,128},{1384,128},{1384,120},{1420,
-          120}},
+    annotation (Line(points={{840,110},{840,130},{960,130}},
     color={0,127,255}));
 
   for i in 1:(numZon - 2) loop
