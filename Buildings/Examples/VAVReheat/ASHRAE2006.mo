@@ -197,7 +197,10 @@ This is for
           "modelica://Buildings/Resources/Scripts/Dymola/Examples/VAVReheat/ASHRAE2006.mos"
         "Simulate and plot"),
     experiment(
-      StopTime=172800,
-      Tolerance=1e-06),
+      StartTime=15724800,
+      StopTime=16588800,
+      Interval=60,
+      Tolerance=1e-06,
+      __Dymola_Algorithm="Dassl"),
     Icon(coordinateSystem(extent={{-100,-100},{100,100}})));
 end ASHRAE2006;
