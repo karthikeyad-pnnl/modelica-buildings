@@ -17,9 +17,9 @@ model DemandLimitLevelGeneration
     annotation (Placement(transformation(extent={{0,-20},{20,0}})));
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt2(k=3)
     annotation (Placement(transformation(extent={{30,10},{50,30}})));
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(uLow=0.45, uHigh=0.5)
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(uLow=0.25, uHigh=0.3)
     annotation (Placement(transformation(extent={{-70,70},{-50,90}})));
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys1(uLow=0.2, uHigh=0.25)
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys1(uLow=0.15, uHigh=0.2)
     annotation (Placement(transformation(extent={{-70,40},{-50,60}})));
   Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys2(uLow=0.05, uHigh=0.1)
     annotation (Placement(transformation(extent={{-70,10},{-50,30}})));
