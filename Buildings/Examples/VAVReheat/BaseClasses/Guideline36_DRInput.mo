@@ -5,7 +5,8 @@ model Guideline36_DRInput
     damOut(
       dpDamper_nominal=10,
       dpFixed_nominal=10),
-    amb(nPorts=3));
+    amb(nPorts=3),
+    occSch(occupancy=3600*{6,22}));
 
   parameter Modelica.Units.SI.VolumeFlowRate minZonPriFlo[numZon]=conVAV.VDisSetMin_flow
     "Minimum expected zone primary flow rate";

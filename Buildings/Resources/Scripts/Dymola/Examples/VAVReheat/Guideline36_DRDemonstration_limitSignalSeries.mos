@@ -1,0 +1,5 @@
+simulateModel("Buildings.Examples.VAVReheat.Guideline36_DRDemonstration_limitSignalSeries", startTime=0, stopTime=2764800, method="cvode", tolerance=1e-06, resultFile="Guideline36DR_limitSignalSeries", outputInterval=60);
+
+createPlot(id=1, position={0, 0, 1713, 978}, y={"hvac.conVAV[1].TZonCooSet", "hvac.conVAV[1].TZonHeaSet", "hvac.conVAV[1].TZon", "hvac.conVAV[2].TZon", "hvac.conVAV[3].TZon", "hvac.conVAV[4].TZon", "hvac.conVAV[5].TZon"}, range={15720000.0, 16600000.0, 10.0, 35.0}, grid=true, colors={{28,108,200}, {238,46,47}, {0,140,72}, {217,67,180}, {0,0,0}, {162,29,33}, {244,125,35}}, displayUnits={"degC", "degC", "degC", "degC", "degC", "degC", "degC"});
+createPlot(id=1, position={0, 0, 1713, 322}, y={"PTot.PTot"}, range={15700000.0, 16600000.0, -20000.0, 100000.0}, grid=true, subPlot=2, colors={{28,108,200}});
+createPlot(id=1, position={0, 0, 1713, 323}, y={"bui90.y[1]"}, range={15720000.0, 16600000.0, -0.5, 2.5}, grid=true, subPlot=3, colors={{28,108,200}});
