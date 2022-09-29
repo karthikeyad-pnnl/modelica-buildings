@@ -36,22 +36,22 @@ model Guideline36_DRDemonstration_limitSignalSeries
     extrapolation=Modelica.Blocks.Types.Extrapolation.Periodic,
     fileName=Modelica.Utilities.Files.loadResource("./Buildings/Resources/Data/Examples/VAVReheat/DR_input_data.mos"),
     columns={2})     "LBNL building 90 data"
-    annotation (Placement(transformation(extent={{-140,-10},{-120,10}})));
+    annotation (Placement(transformation(extent={{-120,-10},{-100,10}})));
 
   Controls.OBC.CDL.Integers.Sources.Constant conInt(k=0)
     annotation (Placement(transformation(extent={{-120,-110},{-100,-90}})));
   Controls.OBC.CDL.Conversions.RealToInteger reaToInt
-    annotation (Placement(transformation(extent={{-100,-10},{-80,10}})));
+    annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
 equation
   connect(weaDat.weaBus, hvac.weaBus) annotation (Line(
       points={{-40,40},{-26,40},{-26,41.4444},{-10.225,41.4444}},
       color={255,204,51},
       thickness=0.5));
   connect(bui90.y[1], reaToInt.u)
-    annotation (Line(points={{-119,0},{-102,0}}, color={0,0,127}));
-  connect(reaToInt.y, hvac.uCooDemLimLev) annotation (Line(points={{-78,0},{-26,
+    annotation (Line(points={{-99,0},{-82,0}},   color={0,0,127}));
+  connect(reaToInt.y, hvac.uCooDemLimLev) annotation (Line(points={{-58,0},{-26,
           0},{-26,35.3333},{-21.5,35.3333}}, color={255,127,0}));
-  connect(reaToInt.y, hvac.uHeaDemLimLev) annotation (Line(points={{-78,0},{-26,
+  connect(reaToInt.y, hvac.uHeaDemLimLev) annotation (Line(points={{-58,0},{-26,
           0},{-26,24.2222},{-21.5,24.2222}}, color={255,127,0}));
   annotation (
     Documentation(info="<html>
@@ -214,5 +214,5 @@ This is for
         "Simulate and plot"),
     experiment(StopTime=172800, Tolerance=1e-06),
     Icon(coordinateSystem(extent={{-100,-100},{100,100}})),
-    Diagram(coordinateSystem(extent={{-220,-140},{140,160}})));
+    Diagram(coordinateSystem(extent={{-140,-140},{140,140}})));
 end Guideline36_DRDemonstration_limitSignalSeries;
