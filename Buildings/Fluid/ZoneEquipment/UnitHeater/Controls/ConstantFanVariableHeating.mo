@@ -70,21 +70,21 @@ equation
           {-60,-100},{-60,-78},{70,-78}}, color={255,0,255}));
   connect(conOpeMod.yMod, conFanCyc.heaCooOpe) annotation (Line(points={{12,66},
           {40,66},{40,-62},{70,-62}}, color={255,0,255}));
-  connect(conFanCyc.yFan, yFan) annotation (Line(points={{102,-70},{120,-70},{
-          120,-60},{160,-60}}, color={255,0,255}));
-  connect(conFanCyc.yFanSpe, yFanSpe) annotation (Line(points={{102,-62},{110,
-          -62},{110,-20},{160,-20}}, color={0,0,127}));
-  connect(conOpeMod.y, yHea) annotation (Line(points={{12,74},{60,74},{60,20},{
-          160,20}}, color={0,0,127}));
+  connect(conFanCyc.yFan, yFan) annotation (Line(points={{102,-70},{120,-70},{120,
+          -100},{160,-100}},   color={255,0,255}));
+  connect(conFanCyc.yFanSpe, yFanSpe) annotation (Line(points={{102,-62},{110,-62},
+          {110,-60},{160,-60}},      color={0,0,127}));
+  connect(conOpeMod.y, yHea) annotation (Line(points={{12,74},{60,74},{60,-20},{
+          160,-20}},color={0,0,127}));
   annotation (defaultComponentName="conVarWatConFan",
-    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-180,-180},{180,180}}),
+    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-180,-240},{180,240}}),
         graphics={Rectangle(
-          extent={{-180,180},{180,-180}},
+          extent={{-180,240},{180,-240}},
           lineColor={0,0,0},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid),
         Text(
-          extent={{-180,180},{180,220}},
+          extent={{-180,240},{180,280}},
           textString="%name",
           textColor={0,0,255})}),
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-140,-120},{

@@ -5,5 +5,7 @@ ZoneTemperatureSetpoint
 Validation
 Types
 HeatingCooling
-Cooling
 CyclingFan
+VariableFan
+ModularController
+MultispeedFan

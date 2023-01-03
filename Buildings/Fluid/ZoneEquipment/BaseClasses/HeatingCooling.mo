@@ -34,28 +34,35 @@ model HeatingCooling
     displayUnit="K",
     final quantity="ThermodynamicTemperature") "Measured zone temperature"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}}),
-        iconTransformation(extent={{-140,-20},{-100,20}})));
+        iconTransformation(extent={{-180,-20},{-140,20}})));
   Modelica.Blocks.Interfaces.RealInput TZonSet(
     final unit="K",
     displayUnit="K",
     final quantity="ThermodynamicTemperature")
     "Zone temperature setpoint" annotation (Placement(transformation(extent={{-140,
-            -60},{-100,-20}}), iconTransformation(extent={{-140,-100},{-100,-60}})));
+            -60},{-100,-20}}), iconTransformation(extent={{-180,-100},{-140,-60}})));
   Modelica.Blocks.Interfaces.BooleanInput uFan "Fan proven on signal"
     annotation (Placement(transformation(extent={{-140,20},{-100,60}}),
-        iconTransformation(extent={{-140,60},{-100,100}})));
+        iconTransformation(extent={{-180,60},{-140,100}})));
   Modelica.Blocks.Interfaces.RealOutput y(final unit="1", displayUnit="1")
                                 "Heating/cooling signal" annotation (Placement(
-        transformation(extent={{100,30},{140,70}}), iconTransformation(extent={{100,20},
-            {140,60}})));
+        transformation(extent={{100,30},{140,70}}), iconTransformation(extent={{140,60},
+            {180,100}})));
   Modelica.Blocks.Interfaces.BooleanOutput yMod
     "Heating/cooling mode enable signal"
     annotation (Placement(transformation(extent={{100,-80},{140,-40}}),
-      iconTransformation(extent={{100,-60},{140,-20}})));
+      iconTransformation(extent={{140,-100},{180,-60}})));
 
   parameter Boolean conMod=false
     "Mode being controlled: Select false for cooling and true for heating";
-protected
+  Modelica.Blocks.Interfaces.BooleanOutput yEna
+    "Heating/cooling component enable signal" annotation (Placement(
+        transformation(extent={{100,-20},{140,20}}), iconTransformation(extent={
+            {140,-20},{180,20}})));
+  Controls.OBC.CDL.Logical.And andHeaCooEna
+    "Enable heating/cooling component only when fan is proven on"
+    annotation (Placement(transformation(extent={{40,-10},{60,10}})));
+// protected
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea
     "Convert fan proven on signal to real value"
     annotation (Placement(transformation(extent={{-60,60},{-40,80}})));
@@ -71,7 +78,7 @@ protected
   Buildings.Controls.OBC.CDL.Continuous.Hysteresis hysModCoo(final uLow=-dTHys,
       final uHigh=0) if not conMod
     "Enable cooling mode when zone temperature is not at setpoint"
-    annotation (Placement(transformation(extent={{50,-50},{70,-30}})));
+    annotation (Placement(transformation(extent={{0,-50},{20,-30}})));
 
   Buildings.Controls.OBC.CDL.Continuous.PID conPID(
     final controllerType=controllerType,
@@ -93,10 +100,25 @@ protected
   Controls.OBC.CDL.Logical.Not notHea if conMod
     "Pass tru for heating mode signal when hysteresis becomes false"
     annotation (Placement(transformation(extent={{50,-90},{70,-70}})));
+  Controls.OBC.CDL.Logical.TrueFalseHold truFalHol(trueHoldDuration=180,
+      falseHoldDuration=0)
+    annotation (Placement(transformation(extent={{70,-10},{90,10}})));
+  Modelica.Blocks.Interfaces.RealInput TSup(
+    final unit="K",
+    displayUnit="K",
+    final quantity="ThermodynamicTemperature") "Measured supply temperature"
+    annotation (Placement(transformation(extent={{-140,-100},{-100,-60}}),
+        iconTransformation(extent={{-180,-160},{-140,-120}})));
+  Controls.OBC.CDL.Continuous.GreaterThreshold greThr(t=273.15 + 15)
+    annotation (Placement(transformation(extent={{-80,-80},{-60,-60}})));
+  Controls.OBC.CDL.Logical.And andTSupLow
+    "Enable heating/cooling component only when measured supply temperature is above dew point at thermal comfort level"
+    annotation (Placement(transformation(extent={{54,-38},{74,-18}})));
 equation
 
-  connect(TSub.y, hysModCoo.u) annotation (Line(points={{-38,-20},{-10,-20},{-10,
-          -40},{48,-40}}, color={0,0,127}));
+  connect(TSub.y, hysModCoo.u) annotation (Line(points={{-38,-20},{-10,-20},{
+          -10,-40},{-2,-40}},
+                          color={0,0,127}));
 
   connect(TSub.y, conPID.u_m)
     annotation (Line(points={{-38,-20},{-10,-20},{-10,18}},
@@ -114,12 +136,12 @@ equation
   connect(uFan, booToRea.u)
     annotation (Line(points={{-120,40},{-80,40},{-80,70},{-62,70}},
                                                   color={255,0,255}));
-  connect(TZon, TSub.u1) annotation (Line(points={{-120,0},{-80,0},{-80,-14},{-62,
+  connect(TZon, TSub.u1) annotation (Line(points={{-120,0},{-90,0},{-90,-14},{-62,
           -14}},
                color={0,0,127}));
-  connect(TZonSet, TSub.u2) annotation (Line(points={{-120,-40},{-80,-40},{-80,-26},
+  connect(TZonSet, TSub.u2) annotation (Line(points={{-120,-40},{-90,-40},{-90,-26},
           {-62,-26}},color={0,0,127}));
-  connect(hysModCoo.y, yMod) annotation (Line(points={{72,-40},{92,-40},{92,-60},
+  connect(hysModCoo.y, yMod) annotation (Line(points={{22,-40},{92,-40},{92,-60},
           {120,-60}}, color={255,0,255}));
   connect(TSub.y, hysModHea.u) annotation (Line(points={{-38,-20},{-10,-20},{-10,
           -80},{18,-80}}, color={0,0,127}));
@@ -127,15 +149,33 @@ equation
     annotation (Line(points={{42,-80},{48,-80}}, color={255,0,255}));
   connect(notHea.y, yMod) annotation (Line(points={{72,-80},{92,-80},{92,-60},{120,
           -60}}, color={255,0,255}));
+  connect(hysModCoo.y, andHeaCooEna.u2) annotation (Line(points={{22,-40},{30,
+          -40},{30,-8},{38,-8}},
+                            color={255,0,255}));
+  connect(notHea.y, andHeaCooEna.u2) annotation (Line(points={{72,-80},{92,-80},
+          {92,-40},{30,-40},{30,-8},{38,-8}}, color={255,0,255}));
+  connect(uFan, andHeaCooEna.u1) annotation (Line(points={{-120,40},{-80,40},{
+          -80,0},{38,0}},
+                      color={255,0,255}));
+  connect(truFalHol.y, yEna) annotation (Line(points={{92,0},{100,0},{100,0},{
+          120,0}}, color={255,0,255}));
+  connect(TSup, greThr.u) annotation (Line(points={{-120,-80},{-90,-80},{-90,
+          -70},{-82,-70}}, color={0,0,127}));
+  connect(greThr.y, andTSupLow.u2) annotation (Line(points={{-58,-70},{10,-70},
+          {10,-60},{40,-60},{40,-36},{52,-36}}, color={255,0,255}));
+  connect(andHeaCooEna.y, andTSupLow.u1) annotation (Line(points={{62,0},{64,0},
+          {64,-12},{40,-12},{40,-28},{52,-28}}, color={255,0,255}));
+  connect(andTSupLow.y, truFalHol.u) annotation (Line(points={{76,-28},{80,-28},
+          {80,-12},{66,-12},{66,0},{68,0}}, color={255,0,255}));
   annotation (defaultComponentName="conOpeMod",
-    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
+    Icon(coordinateSystem(preserveAspectRatio=false, extent={{-140,-140},{140,140}}),
         graphics={Rectangle(
-          extent={{-100,100},{100,-100}},
+          extent={{-140,140},{140,-140}},
           lineColor={0,0,0},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid),
         Text(
-          extent={{-100,100},{100,140}},
+          extent={{-140,140},{140,180}},
           textString="%name",
           textColor={0,0,255})}),
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,

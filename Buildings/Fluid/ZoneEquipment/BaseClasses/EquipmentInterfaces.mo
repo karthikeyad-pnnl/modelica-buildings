@@ -11,17 +11,18 @@ partial model EquipmentInterfaces
   replaceable package MediumCHW = Modelica.Media.Interfaces.PartialMedium
     "Medium model for chilled water";
 
-  parameter Modelica.Units.SI.MassFlowRate mHotWat_flow_nominal
+  parameter Modelica.Units.SI.MassFlowRate mHotWat_flow_nominal = 0.1
     "Nominal mass flow rate of heating hot water"
-    annotation(Dialog(enable=has_HW, group="Heating coil parameters"));
+    annotation(Dialog(enable=heaCoiTyp == Buildings.Fluid.ZoneEquipment.BaseClasses.Types.HeaSou.hotWat, group="Heating coil parameters"));
 
-  parameter Modelica.Units.SI.MassFlowRate mChiWat_flow_nominal
+  parameter Modelica.Units.SI.MassFlowRate mChiWat_flow_nominal = 0.1
     "Nominal mass flow rate of chilled water"
-    annotation(Dialog(enable=has_CHW, group="Cooling coil parameters"));
+    annotation(Dialog(enable=cooCoiTyp ==Buildings.Fluid.ZoneEquipment.BaseClasses.Types.CooSou.chiWat, group="Cooling coil parameters"));
 
   parameter Modelica.Units.SI.MassFlowRate mAirOut_flow_nominal
     "Nominal mass flow rate of outdoor air"
-    annotation(Dialog(enable=has_ven, group="System parameters"));
+    annotation(Dialog(enable=((oaPorTyp ==Buildings.Fluid.ZoneEquipment.BaseClasses.Types.OAPorts.oaMix) or
+    (oaPorTyp ==Buildings.Fluid.ZoneEquipment.BaseClasses.Types.OAPorts.oaPorts)), group="System parameters"));
 
   parameter Modelica.Units.SI.MassFlowRate mAir_flow_nominal
     "Nominal mass flow rate of supply air"
@@ -285,7 +286,7 @@ partial model EquipmentInterfaces
     "Supply air volume flow rate"
     annotation (Placement(transformation(extent={{280,-10},{300,10}})));
 
-// protected
+protected
   final parameter Boolean has_HW=(heaCoiTyp ==Buildings.Fluid.ZoneEquipment.BaseClasses.Types.HeaSou.hotWat)
     "Does the zone equipment have a hot water heating coil?";
 

@@ -118,7 +118,7 @@ equation
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid),
         Text(
-          extent={{-180,180},{180,220}},
+          extent={{-140,140},{140,180}},
           textString="%name",
           textColor={0,0,255})}),
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-140,-120},{

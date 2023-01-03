@@ -10,10 +10,10 @@ model ConstantFanVariableHeating
     final tFanEnaDel=2,
     final tFanEna=5)
     "Instance of controller with variable fan speed and constant water flowrate"
-    annotation (Placement(transformation(extent={{10,-10},{30,10}})));
+    annotation (Placement(transformation(extent={{10,-10},{46,38}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(delayTime=300)
-    annotation (Placement(transformation(extent={{50,-10},{70,10}})));
+    annotation (Placement(transformation(extent={{62,-16},{82,4}})));
 protected
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse supFanOpeMod(
     final period=900) "Supply fan operating mode signal"
@@ -36,19 +36,19 @@ protected
     annotation (Placement(transformation(extent={{-40,-30},{-20,-10}})));
 equation
   connect(heaSetPoi.y, conVarWatConFan.THeaSet) annotation (Line(points={{-18,20},
-          {-10,20},{-10,-2.22222},{8.88889,-2.22222}},
+          {-10,20},{-10,10},{8,10}},
                                   color={0,0,127}));
   connect(TZon.y, conVarWatConFan.TZon)
-    annotation (Line(points={{-18,60},{0,60},{0,5.55556},{8.88889,5.55556}},
+    annotation (Line(points={{-18,60},{0,60},{0,26},{8,26}},
                                                            color={0,0,127}));
   connect(supFanOpeMod.y, conVarWatConFan.fanOpeMod) annotation (Line(points={{-18,-60},
-          {0,-60},{0,-8.88889},{8.88889,-8.88889}},      color={255,0,255}));
+          {0,-60},{0,-6},{8,-6}},                        color={255,0,255}));
   connect(uAva.y, conVarWatConFan.uAva) annotation (Line(points={{-18,-20},{-10,
-          -20},{-10,-5.55556},{8.88889,-5.55556}}, color={255,0,255}));
-  connect(conVarWatConFan.yFan, truDel.u) annotation (Line(points={{31.1111,
-          -6.66667},{40.5555,-6.66667},{40.5555,0},{48,0}}, color={255,0,255}));
-  connect(truDel.y, conVarWatConFan.uFan) annotation (Line(points={{72,0},{80,0},
-          {80,20},{4,20},{4,8.88889},{8.88889,8.88889}}, color={255,0,255}));
+          -20},{-10,2},{8,2}},                     color={255,0,255}));
+  connect(conVarWatConFan.yFan, truDel.u) annotation (Line(points={{48,-6},{60,
+          -6}},                                             color={255,0,255}));
+  connect(truDel.y, conVarWatConFan.uFan) annotation (Line(points={{84,-6},{90,
+          -6},{90,20},{4,20},{4,34},{8,34}},             color={255,0,255}));
   annotation(Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),
     __Dymola_Commands(file= "modelica://Buildings/Resources/Scripts/Dymola/Fluid/ZoneEquipment/UnitHeater/Controls/Validation/ConstantFanVariableHeating.mos"
