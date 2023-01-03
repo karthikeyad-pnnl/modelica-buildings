@@ -93,7 +93,7 @@ model SingleZoneVariableFanConstantWaterFlowrate_backup
     annotation (Placement(transformation(extent={{-100,120},{-80,140}})));
   inner ThermalZones.EnergyPlus_9_6_0.Building building(
     final idfName=Modelica.Utilities.Files.loadResource(
-        "./Buildings/Resources/Data/Fluid/ZoneEquipment/FanCoilAutoSize_ConstantFlowVariableFan.idf"),
+        "./Buildings/Resources/Data/Fluid/ZoneEquipment/FanCoilUnit/FanCoilAutoSize_ConstantFlowVariableFan.idf"),
     final epwName=Modelica.Utilities.Files.loadResource(
         "./Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw"),
     final weaName=Modelica.Utilities.Files.loadResource(
@@ -143,15 +143,16 @@ model SingleZoneVariableFanConstantWaterFlowrate_backup
     annotation (Placement(transformation(extent={{-20,100},{0,120}})));
 
 equation
-  connect(fanCoiUni.port_HW_b, sinHea.ports[1]) annotation (Line(points={{78,-20},
-          {78,-60},{40,-60},{40,-90}},  color={0,127,255}));
+  connect(fanCoiUni.port_HW_b, sinHea.ports[1]) annotation (Line(points={{78,
+          -19.8},{78,-60},{40,-60},{40,-90}},
+                                        color={0,127,255}));
 
   connect(con.y, fanCoiUni.uEco) annotation (Line(points={{-28,20},{-20,20},{-20,
           18},{68,18}},
                       color={0,0,127}));
 
   connect(sinCoo.ports[1], fanCoiUni.port_CHW_b)
-    annotation (Line(points={{110,-90},{110,-70},{96,-70},{96,-20}},
+    annotation (Line(points={{110,-90},{110,-70},{96,-70},{96,-19.8}},
                                                  color={0,127,255}));
   connect(occSch.occupied, conVarFanConWat.uOcc) annotation (Line(points={{-129,
           -16},{-120,-16},{-120,-18},{-52,-18}}, color={255,0,255}));
@@ -192,9 +193,11 @@ equation
   connect(zon.TAir, conVarFanConWat.TZon) annotation (Line(points={{109,138},{120,
           138},{120,150},{-72,150},{-72,-6},{-52,-6}}, color={0,0,127}));
   connect(souHea.ports[1], fanCoiUni.port_HW_a) annotation (Line(points={{70,-90},
-          {70,-80},{84,-80},{84,-20}}, color={0,127,255}));
+          {70,-80},{84,-80},{84,-19.8}},
+                                       color={0,127,255}));
   connect(souCoo.ports[1], fanCoiUni.port_CHW_a) annotation (Line(points={{140,-90},
-          {142,-90},{142,-62},{102,-62},{102,-20}}, color={0,127,255}));
+          {142,-90},{142,-62},{102,-62},{102,-19.8}},
+                                                    color={0,127,255}));
   connect(not1.y, truDel1.u)
     annotation (Line(points={{-78,-90},{-72,-90}}, color={255,0,255}));
   connect(greThrFanProOn.y, not1.u) annotation (Line(points={{-108,-50},{-104,

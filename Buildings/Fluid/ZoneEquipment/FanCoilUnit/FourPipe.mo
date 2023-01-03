@@ -61,7 +61,8 @@ model FourPipe "System model for a four-pipe fan coil unit"
     final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
     final m_flow_nominal=mAir_flow_nominal,
     final per=fanPer,
-    final dp_nominal=dpAir_nominal)
+    final dp_nominal=dpAir_nominal,
+    dpMax=15000)
     "Supply fan"
     annotation (Placement(transformation(extent={{200,-20},{220,0}})));
 
