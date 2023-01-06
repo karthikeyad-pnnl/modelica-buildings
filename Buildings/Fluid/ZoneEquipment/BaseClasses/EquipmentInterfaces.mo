@@ -357,13 +357,8 @@ equation
     annotation (Line(points={{-240,10},{-230,10}},   color={0,127,255}));
   connect(uEco, eco.y) annotation (Line(points={{-380,160},{-190,160},{-190,42}},
         color={0,0,127}));
-  connect(eco.port_Ret, TAirMix.port_a)
-    annotation (Line(points={{-180,24},{-160,24},{-160,0},{-130,0}},
-                                                   color={0,127,255}));
   connect(TAirRet.port_b, vAirRet.port_a)
     annotation (Line(points={{-120,50},{-110,50}}, color={0,127,255}));
-  connect(vAirRet.port_b, eco.port_Sup) annotation (Line(points={{-90,50},{-80,50},
-          {-80,80},{-180,80},{-180,36}},color={0,127,255}));
   connect(TAirMix.port_b, vAirMix.port_a) annotation (Line(points={{-110,0},{-100,
           0}},                      color={0,127,255}));
   connect(port_Air_a1, TAirMix.port_a) annotation (Line(points={{-360,0},{-330,0},
@@ -376,8 +371,8 @@ equation
                                            color={0,127,255}));
   if not has_ven then
     connect(port_Air_a2, TAirMix.port_a)
-    annotation (Line(points={{360,40},{340,40},{340,100},{-140,100},{-140,0},{-130,
-            0}},                                color={0,127,255}));
+    annotation (Line(points={{360,40},{340,40},{340,100},{-140,100},{-140,0},{
+            -130,0}},                           color={0,127,255}));
   end if;
   connect(TAirLvg.port_b,vAirSup. port_a)
     annotation (Line(points={{260,0},{280,0}},     color={0,127,255}));
@@ -385,6 +380,10 @@ equation
           {340,-40},{360,-40}}, color={0,127,255}));
   connect(TAirLvg.T, TAirSup)
     annotation (Line(points={{250,11},{250,80},{370,80}},color={0,0,127}));
+  connect(eco.port_Sup, TAirMix.port_a) annotation (Line(points={{-180,36},{
+          -160,36},{-160,0},{-130,0}}, color={0,127,255}));
+  connect(vAirRet.port_b, eco.port_Ret) annotation (Line(points={{-90,50},{-80,
+          50},{-80,80},{-170,80},{-170,24},{-180,24}}, color={0,127,255}));
   annotation (defaultComponentName = "zonHVACSys",
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-200,-200},{200,200}}),
                                graphics={Rectangle(

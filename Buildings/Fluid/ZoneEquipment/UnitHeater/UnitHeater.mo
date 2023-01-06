@@ -3,7 +3,8 @@ model UnitHeater "System model for a zonal unit heater"
 
   extends Buildings.Fluid.ZoneEquipment.BaseClasses.EquipmentInterfaces(
     final cooCoiTyp=Buildings.Fluid.ZoneEquipment.BaseClasses.Types.CooSou.noCoo,
-    final oaPorTyp=Buildings.Fluid.ZoneEquipment.BaseClasses.Types.OAPorts.noOA);
+    final oaPorTyp=Buildings.Fluid.ZoneEquipment.BaseClasses.Types.OAPorts.noOA,
+    final MediumCHW=Modelica.Media.Interfaces.PartialMedium);
 
   parameter Modelica.Units.SI.HeatFlowRate QHeaCoi_flow_nominal(
     final min = 0)

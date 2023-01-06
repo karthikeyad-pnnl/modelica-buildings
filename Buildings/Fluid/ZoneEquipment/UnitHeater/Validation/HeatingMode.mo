@@ -29,12 +29,11 @@ model HeatingMode
       rotation=90,
       origin={0,-92})));
 
-  Buildings.Fluid.ZoneEquipment.UnitHeater.UnitHeater fanCoiUni(
+  Buildings.Fluid.ZoneEquipment.UnitHeater.UnitHeater uniHea(
     final heaCoiTyp=Buildings.Fluid.ZoneEquipment.BaseClasses.Types.HeaSou.hotWat,
     final dpAir_nominal(displayUnit="Pa") = 100,
     final mAirOut_flow_nominal=FCUSizing.mAirOut_flow_nominal,
     redeclare package MediumA = MediumA,
-    redeclare package MediumCHW = MediumW,
     redeclare package MediumHW = MediumW,
     final mAir_flow_nominal=FCUSizing.mAir_flow_nominal,
     final QHeaCoi_flow_nominal=13866,
@@ -42,7 +41,7 @@ model HeatingMode
     final UAHeaCoi_nominal=FCUSizing.UAHeaCoi_nominal,
     final mChiWat_flow_nominal=FCUSizing.mChiWat_flow_nominal,
     final UACooCoi_nominal=FCUSizing.UACooCoiTot_nominal,
-    redeclare Data.FanData fanPer) "Fan coil system model"
+    redeclare Data.FanData fanPer) "Unit heater system model"
     annotation (Placement(transformation(extent={{16,-20},{56,20}})));
 
   Buildings.Fluid.Sources.MassFlowSource_T souCoo(
@@ -130,23 +129,20 @@ model HeatingMode
 
 equation
 
-  connect(fanCoiUni.port_HW_b, sinHea.ports[1]) annotation (Line(points={{24,-20},
-          {24,-60},{8.88178e-16,-60},{8.88178e-16,-82}},
-                                        color={0,127,255}));
+  connect(uniHea.port_HW_b, sinHea.ports[1]) annotation (Line(points={{24,-19.8},
+          {24,-60},{8.88178e-16,-60},{8.88178e-16,-82}}, color={0,127,255}));
 
-  connect(souHea.ports[1], fanCoiUni.port_HW_a)
-    annotation (Line(points={{30,-80},{30,-20}},         color={0,127,255}));
+  connect(souHea.ports[1], uniHea.port_HW_a)
+    annotation (Line(points={{30,-80},{30,-19.8}}, color={0,127,255}));
 
-  connect(souAir.ports[1], fanCoiUni.port_Air_a) annotation (Line(points={{100,50},
-          {110,50},{110,4},{56,4}},   color={0,127,255}));
+  connect(souAir.ports[1], uniHea.port_Air_a) annotation (Line(points={{100,50},
+          {110,50},{110,4},{56,4}}, color={0,127,255}));
 
-  connect(sinAir.ports[1], fanCoiUni.port_Air_b) annotation (Line(points={{100,-30},
-          {110,-30},{110,-4},{56,-4}},
-                                     color={0,127,255}));
+  connect(sinAir.ports[1], uniHea.port_Air_b) annotation (Line(points={{100,-30},
+          {110,-30},{110,-4},{56,-4}}, color={0,127,255}));
 
-  connect(con.y, fanCoiUni.uEco) annotation (Line(points={{-58,30},{-20,30},{-20,
-          12},{14,12}},
-                      color={0,0,127}));
+  connect(con.y, uniHea.uEco) annotation (Line(points={{-58,30},{-20,30},{-20,18},
+          {14,18}}, color={0,0,127}));
 
   connect(addPar[1].y, souAir.T_in) annotation (Line(points={{-58,70},{-16,70},{
           -16,54},{78,54}},  color={0,0,127}));
@@ -158,8 +154,8 @@ equation
   connect(addPar[3].y, souCoo.T_in) annotation (Line(points={{-58,70},{-16,70},{
           -16,-120},{86,-120},{86,-102}}, color={0,0,127}));
 
-  connect(weaDat.weaBus, fanCoiUni.weaBus) annotation (Line(
-      points={{-60,110},{-10,110},{-10,17.6},{18.8,17.6}},
+  connect(weaDat.weaBus, uniHea.weaBus) annotation (Line(
+      points={{-60,110},{-10,110},{-10,18},{20.2,18}},
       color={255,204,51},
       thickness=0.5));
 
@@ -177,10 +173,10 @@ equation
           -126},{-62,-126}}, color={0,0,127}));
   connect(div.y, souAir.Xi_in[1]) annotation (Line(points={{-38,-120},{-26,-120},
           {-26,46},{78,46}}, color={0,0,127}));
-  connect(con1.y, fanCoiUni.uCoo) annotation (Line(points={{-58,-30},{-30,-30},{
-          -30,-4},{14,-4}},   color={0,0,127}));
-  connect(con1.y, fanCoiUni.uHea) annotation (Line(points={{-58,-30},{-30,-30},{
-          -30,-12},{14,-12}}, color={0,0,127}));
+  connect(con1.y, uniHea.uCoo) annotation (Line(points={{-58,-30},{-30,-30},{-30,
+          -9.8},{14,-9.8}}, color={0,0,127}));
+  connect(con1.y, uniHea.uHea) annotation (Line(points={{-58,-30},{-30,-30},{-30,
+          -17.8},{14,-17.8}}, color={0,0,127}));
   connect(datRea.y[10], souHea.m_flow_in) annotation (Line(points={{-119,0},{-110,
           0},{-110,-100},{-20,-100},{-20,-112},{22,-112},{22,-102}},    color={
           0,0,127}));
@@ -189,12 +185,12 @@ equation
           {0,0,127}));
   connect(datRea.y[6], gai.u)
     annotation (Line(points={{-119,0},{-102,0}}, color={0,0,127}));
-  connect(gai.y, fanCoiUni.uFan) annotation (Line(points={{-78,0},{-20,0},{-20,4},
-          {14,4}}, color={0,0,127}));
-  connect(sinCoo.ports[1], fanCoiUni.port_CHW_b) annotation (Line(points={{60,-80},
-          {60,-74},{42,-74},{42,-20}}, color={0,127,255}));
-  connect(souCoo.ports[1], fanCoiUni.port_CHW_a) annotation (Line(points={{90,-80},
-          {90,-60},{48,-60},{48,-20}}, color={0,127,255}));
+  connect(gai.y, uniHea.uFan) annotation (Line(points={{-78,0},{-20,0},{-20,10},
+          {14,10}}, color={0,0,127}));
+  connect(sinCoo.ports[1], uniHea.port_CHW_b) annotation (Line(points={{60,-80},
+          {60,-74},{42,-74},{42,-19.8}}, color={0,127,255}));
+  connect(souCoo.ports[1], uniHea.port_CHW_a) annotation (Line(points={{90,-80},
+          {90,-60},{48,-60},{48,-19.8}}, color={0,127,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}})),                                        Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-160,-160},{160,160}})),
