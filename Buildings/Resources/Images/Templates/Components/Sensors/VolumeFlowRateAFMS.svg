@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="134.02721mm"
+   height="343.95834mm"
+   viewBox="0 0 134.02721 343.95834"
+   version="1.1"
+   id="svg1653"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1650" />
+  <g
+     id="layer1"
+     transform="translate(-101.01605,-126.10961)">
+    <polyline
+       points="396.527,459.71 392.545,457.055 "
+       id="polyline458"
+       style="fill:none;stroke:#000000;stroke-width:0.267705;stroke-miterlimit:4;stroke-dasharray:none"
+       transform="matrix(9.8991469,0,0,9.8676666,-3717.8311,-4277.8587)" />
+    <polyline
+       points="392.545,457.055 388.563,459.71 "
+       id="polyline460"
+       style="fill:none;stroke:#000000;stroke-width:0.267705;stroke-miterlimit:4;stroke-dasharray:none"
+       transform="matrix(9.8991469,0,0,9.8676666,-3717.8311,-4277.8587)" />
+    <polyline
+       points="388.563,459.71 392.545,462.364 "
+       id="polyline462"
+       style="fill:none;stroke:#000000;stroke-width:0.267705;stroke-miterlimit:4;stroke-dasharray:none"
+       transform="matrix(9.8991469,0,0,9.8676666,-3717.8311,-4277.8587)" />
+    <polyline
+       points="392.545,462.364 396.527,459.71 "
+       id="polyline464"
+       style="fill:none;stroke:#000000;stroke-width:0.267705;stroke-miterlimit:4;stroke-dasharray:none"
+       transform="matrix(9.8991469,0,0,9.8676666,-3717.8311,-4277.8587)" />
+    <polyline
+       points="392.545,462.364 392.545,470.328 "
+       id="polyline466"
+       style="fill:none;stroke:#000000;stroke-width:0.267705;stroke-miterlimit:4;stroke-dasharray:none"
+       transform="matrix(9.8991469,0,0,9.8676666,-3717.8311,-4277.8587)" />
+    <polyline
+       points="392.545,457.055 392.545,449.091 "
+       id="polyline468"
+       style="fill:none;stroke:#000000;stroke-width:0.267705;stroke-miterlimit:4;stroke-dasharray:none"
+       transform="matrix(9.8991469,0,0,9.8676666,-3717.8311,-4277.8587)" />
+    <polyline
+       points="388.563,470.328 396.527,470.328 "
+       id="polyline470"
+       style="fill:none;stroke:#000000;stroke-width:0.267705;stroke-miterlimit:4;stroke-dasharray:none"
+       transform="matrix(9.8991469,0,0,9.8676666,-3717.8311,-4277.8587)" />
+    <polyline
+       points="396.527,446.437 396.527,472.982 "
+       id="polyline472"
+       style="fill:none;stroke:#000000;stroke-width:0.267705;stroke-miterlimit:4;stroke-dasharray:none"
+       transform="matrix(9.8991469,0,0,9.8676666,-3717.8311,-4277.8587)" />
+    <polyline
+       points="388.563,449.091 396.527,449.091 "
+       id="polyline474"
+       style="fill:none;stroke:#000000;stroke-width:0.267705;stroke-miterlimit:4;stroke-dasharray:none"
+       transform="matrix(9.8991469,0,0,9.8676666,-3717.8311,-4277.8587)" />
+    <path
+       id="polyline480"
+       style="fill:none;stroke:#000000;stroke-width:2.64584"
+       d="m 102.33897,127.43253 v 261.9375 h 131.38136 v -261.9375 z" />
+    <polyline
+       points="388.563,446.437 388.563,472.982 "
+       id="polyline484"
+       style="fill:none;stroke:#000000;stroke-width:0.267705;stroke-miterlimit:4;stroke-dasharray:none"
+       transform="matrix(9.8991469,0,0,9.8676666,-3717.8311,-4277.8587)" />
+  </g>
+  <path
+     style="fill:none;stroke:#000000;stroke-width:2.64582;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+     d="m 67.013598,263.26041 v 80.69792"
+     id="path868" />
+</svg>

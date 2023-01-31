@@ -7,10 +7,10 @@ block Controller "Single zone VAV AHU economizer control sequence"
     "Economizer high limit control device";
   parameter Buildings.Controls.OBC.ASHRAE.G36.Types.ASHRAEClimateZone ashCliZon=Buildings.Controls.OBC.ASHRAE.G36.Types.ASHRAEClimateZone.Not_Specified
     "ASHRAE climate zone"
-    annotation (Dialog(enable=eneStd==Buildings.Controls.OBC.ASHRAE.G36.Types.EnergyStandard.ASHRAE90_1_2016));
+    annotation (Dialog(enable=eneStd==Buildings.Controls.OBC.ASHRAE.G36.Types.EnergyStandard.ASHRAE90_1));
   parameter Buildings.Controls.OBC.ASHRAE.G36.Types.Title24ClimateZone tit24CliZon=Buildings.Controls.OBC.ASHRAE.G36.Types.Title24ClimateZone.Not_Specified
     "California Title 24 climate zone"
-    annotation (Dialog(enable=eneStd==Buildings.Controls.OBC.ASHRAE.G36.Types.EnergyStandard.California_Title_24_2016));
+    annotation (Dialog(enable=eneStd==Buildings.Controls.OBC.ASHRAE.G36.Types.EnergyStandard.California_Title_24));
   parameter Boolean have_heaCoi=true
     "True if the air handling unit has heating coil";
   parameter Real uMin(
@@ -157,7 +157,7 @@ block Controller "Single zone VAV AHU economizer control sequence"
   Buildings.Controls.OBC.CDL.Interfaces.RealInput hAirRet(
     final unit="J/kg",
     final quantity="SpecificEnergy")
-    if (eneStd == Buildings.Controls.OBC.ASHRAE.G36.Types.EnergyStandard.ASHRAE90_1_2016
+    if (eneStd == Buildings.Controls.OBC.ASHRAE.G36.Types.EnergyStandard.ASHRAE90_1
      and ecoHigLimCon == Buildings.Controls.OBC.ASHRAE.G36.Types.ControlEconomizer.DifferentialEnthalpyWithFixedDryBulb)
     "Return air enthalpy"
     annotation (Placement(transformation(extent={{-180,90},{-140,130}}),
@@ -276,10 +276,24 @@ block Controller "Single zone VAV AHU economizer control sequence"
     final ashCliZon=ashCliZon,
     final tit24CliZon=tit24CliZon) "High limits"
     annotation (Placement(transformation(extent={{-40,-40},{-20,-20}})));
-  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(final p=-1)
-   if eneStd == Buildings.Controls.OBC.ASHRAE.G36.Types.EnergyStandard.Not_Specified
-    "Dummy block"
-    annotation (Placement(transformation(extent={{-40,-120},{-20,-100}})));
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant noAshCli(
+    final k=ashCliZon == Buildings.Controls.OBC.ASHRAE.G36.Types.ASHRAEClimateZone.Not_Specified)
+    "No ASHRAE climate zone"
+    annotation (Placement(transformation(extent={{-20,-160},{0,-140}})));
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant noTit24Cli(
+    final k=tit24CliZon == Buildings.Controls.OBC.ASHRAE.G36.Types.Title24ClimateZone.Not_Specified)
+    "No Title 24 climate zone"
+    annotation (Placement(transformation(extent={{-20,-200},{0,-180}})));
+  Buildings.Controls.OBC.CDL.Logical.And noCli
+    "Climate zone is not specified"
+    annotation (Placement(transformation(extent={{20,-160},{40,-140}})));
+  Buildings.Controls.OBC.CDL.Logical.Not not2
+    "Logical not"
+    annotation (Placement(transformation(extent={{60,-160},{80,-140}})));
+  Buildings.Controls.OBC.CDL.Utilities.Assert assMes2(
+    final message="Warning: Climate zone is not specified!")
+    "Warning when the climate zone is not specified"
+    annotation (Placement(transformation(extent={{100,-160},{120,-140}})));
 equation
   connect(u1SupFan, enaDis.u1SupFan) annotation (Line(points={{-160,-90},{-120,-90},
           {-120,-70},{18,-70}}, color={255,0,255}));
@@ -337,10 +351,14 @@ equation
           {-52,-24},{-42,-24}}, color={0,0,127}));
   connect(hAirRet, ecoHigLim.hRet) annotation (Line(points={{-160,110},{-56,110},
           {-56,-36},{-42,-36}}, color={0,0,127}));
-  connect(TOut, addPar.u) annotation (Line(points={{-160,220},{-68,220},{-68,-110},
-          {-42,-110}}, color={0,0,127}));
-  connect(addPar.y, enaDis.TCut) annotation (Line(points={{-18,-110},{0,-110},{0,
-          -63},{18,-63}}, color={0,0,127}));
+  connect(noAshCli.y, noCli.u1)
+    annotation (Line(points={{2,-150},{18,-150}}, color={255,0,255}));
+  connect(noTit24Cli.y, noCli.u2) annotation (Line(points={{2,-190},{10,-190},{10,
+          -158},{18,-158}}, color={255,0,255}));
+  connect(noCli.y, not2.u)
+    annotation (Line(points={{42,-150},{58,-150}}, color={255,0,255}));
+  connect(not2.y, assMes2.u)
+    annotation (Line(points={{82,-150},{98,-150}}, color={255,0,255}));
 annotation (defaultComponentName = "conEco",
         Icon(coordinateSystem(extent={{-100,-200},{100,200}}),
              graphics={Rectangle(
