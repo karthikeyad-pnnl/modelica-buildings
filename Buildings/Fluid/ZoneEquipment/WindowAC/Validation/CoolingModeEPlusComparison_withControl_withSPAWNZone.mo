@@ -39,7 +39,7 @@ model CoolingModeEPlusComparison_withControl_withSPAWNZone
     "Outdoor air damper position"
     annotation (Placement(transformation(extent={{-120,-10},{-100,10}})));
   Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaDat(final filNam=
-        ModelicaServices.ExternalReferences.loadResource("./Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"))
+        Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"))
     "Outdoor weather data"
     annotation (Placement(transformation(extent={{-80,110},{-60,130}})));
   Buildings.Fluid.ZoneEquipment.WindowAC.Validation.Data.SizingData winACSizing
@@ -64,8 +64,7 @@ model CoolingModeEPlusComparison_withControl_withSPAWNZone
     annotation (Placement(transformation(extent={{0,100},{20,120}})));
   Modelica.Blocks.Sources.CombiTimeTable datRea(
     final tableOnFile=true,
-    final fileName=ModelicaServices.ExternalReferences.loadResource(
-        "./Buildings/Resources/Data/Fluid/ZoneEquipment/WindowAC/WindACFanOnOff.dat"),
+    final fileName=Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/Data/Fluid/ZoneEquipment/WindowAC/WindACFanOnOff.dat"),
     final columns=2:20,
     final tableName="EnergyPlus",
     final smoothness=Modelica.Blocks.Types.Smoothness.ConstantSegments)
@@ -114,9 +113,9 @@ model CoolingModeEPlusComparison_withControl_withSPAWNZone
         averagingTimestep)
     annotation (Placement(transformation(extent={{-120,60},{-100,80}})));
   inner ThermalZones.EnergyPlus_9_6_0.Building building(
-    idfName=Modelica.Utilities.Files.loadResource("./Buildings/Resources/Data/Fluid/ZoneEquipment/WindowAC/WindACFanOnOff.idf"),
-    epwName=Modelica.Utilities.Files.loadResource("./Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw"),
-    weaName=Modelica.Utilities.Files.loadResource("./Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"))
+    idfName=Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/Data/Fluid/ZoneEquipment/WindowAC/WindACFanOnOff.idf"),
+    epwName=Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.epw"),
+    weaName=Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"))
     annotation (Placement(transformation(extent={{30,110},{50,130}})));
 
   ThermalZones.EnergyPlus_9_6_0.ThermalZone zon(

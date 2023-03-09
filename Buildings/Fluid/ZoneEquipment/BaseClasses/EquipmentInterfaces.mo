@@ -205,7 +205,7 @@ partial model EquipmentInterfaces
     annotation (Placement(transformation(extent={{-370,70},{-350,90}}),
       iconTransformation(extent={{-210,30},{-190,50}})));
 
-  BoundaryConditions.WeatherData.Bus weaBus if not has_extOAPor and has_ven
+  BoundaryConditions.WeatherData.Bus weaBus "if not has_extOAPor and has_ven"
     annotation (Placement(transformation(extent={{-350,10},{-310,50}}),
       iconTransformation(extent={{-168,170},{-148,190}})));
 
@@ -361,14 +361,14 @@ equation
     annotation (Line(points={{-120,50},{-110,50}}, color={0,127,255}));
   connect(TAirMix.port_b, vAirMix.port_a) annotation (Line(points={{-110,0},{-100,
           0}},                      color={0,127,255}));
-  connect(port_Air_a1, TAirMix.port_a) annotation (Line(points={{-360,0},{-330,0},
-          {-330,-20},{-160,-20},{-160,0},{-130,0}},
+  connect(port_Air_a1, TAirMix.port_a) annotation (Line(points={{-360,0},{-330,
+          0},{-330,-26},{-160,-26},{-160,0},{-130,0}},
                                                  color={0,127,255}));
-  connect(port_Air_b1, vAirRet.port_b) annotation (Line(points={{-360,80},{-80,80},
-          {-80,50},{-90,50}},                        color={0,127,255}));
+  connect(port_Air_b1, vAirRet.port_b) annotation (Line(points={{-360,80},{-312,
+          80},{-312,108},{-66,108},{-66,50},{-90,50}},
+                                                     color={0,127,255}));
   connect(TAirRet.port_a, port_Air_a2) annotation (Line(points={{-140,50},{-140,
-          100},{340,100},{340,40},{360,40}},
-                                           color={0,127,255}));
+          78},{-2,78},{-2,40},{360,40}},   color={0,127,255}));
   if not has_ven then
     connect(port_Air_a2, TAirMix.port_a)
     annotation (Line(points={{360,40},{340,40},{340,100},{-140,100},{-140,0},{
