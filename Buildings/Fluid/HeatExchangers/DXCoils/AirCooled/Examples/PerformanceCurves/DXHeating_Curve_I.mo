@@ -5,7 +5,8 @@ record DXHeating_Curve_I "Performance curve DX heating coil I"
     capFunT={0.5120426675,-0.0023934427,-0.0000165785,0.0227700422,0.0000806439,
         -0.0000886025},
     capFunFF={1,0,0,0},
-    EIRFunT={0.7969361175,0.012575857,0.0003214811,-0.006662416,0.0005931581,-0.0006690053},
+    EIRFunT={0.7969361175,0.012575857,0.0003214811,-0.006662416,0.0005931581,
+     -0.0006690053},
     EIRFunFF={1,0,0,0},
     TConInMin=17.78+273.15,
     TConInMax=23.33+273.15,
@@ -16,24 +17,15 @@ record DXHeating_Curve_I "Performance curve DX heating coil I"
 
   annotation (defaultComponentName="per", Documentation(info="<html>
 <p>
-This record declares performance curves for the cooling capacity and the EIR.
-It has been obtained from the EnergyPlus 7.1 example file
-<code>DXCoilSystemAuto.idf</code>.
+This record declares performance curves for the heating capacity and the EIR.
+It has been obtained from the EnergyPlus 9.6 example file
+<code>PackagedTerminalHeatPump.idf</code>.
 </p>
 </html>",
 revisions="<html>
 <ul>
 <li>
-April 9, 2021, by Michael Wetter:<br/>
-Corrected placement of <code>each</code> keyword.<br/>
-See <a href=\"https://github.com/lbl-srg/modelica-buildings/pull/2440\">Buildings, PR #2440</a>.
-</li>
-<li>
-September 25, 2012 by Michael Wetter:<br/>
-Revised documentation.
-</li>
-<li>
-August 15, 2012 by Kaustubh Phalak:<br/>
+March 08, 2023 by Xing Lu:<br/>
 First implementation.
 </li>
 </ul>
