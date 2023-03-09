@@ -1,26 +1,26 @@
-within Buildings.Controls.OBC.CDL.CompositeBlocks.Validation;
+within Buildings.Controls.OBC.Utilities.Validation;
 model Proof
-  Buildings.Controls.OBC.CDL.CompositeBlocks.Proof proof(
+  Buildings.Controls.OBC.Utilities.Proof proof(
     meaDis=0.05,
     meaEna=0.10,
     mea_nominal=1,
     tau=30,
     tAla=45) annotation (Placement(transformation(extent={{40,40},{60,60}})));
-  Logical.Sources.Pulse booPul(
+  CDL.Logical.Sources.Pulse booPul(
     width=0.2,
     period=60,
     shift=0) annotation (Placement(transformation(extent={{-80,40},{-60,60}})));
-  Conversions.BooleanToReal booToRea
+  CDL.Conversions.BooleanToReal booToRea
     annotation (Placement(transformation(extent={{-10,60},{10,80}})));
-  Buildings.Controls.OBC.CDL.CompositeBlocks.Proof proof1(
+  Buildings.Controls.OBC.Utilities.Proof proof1(
     meaDis=0.05,
     meaEna=0.10,
     mea_nominal=1,
     tau=30,
     tAla=45) annotation (Placement(transformation(extent={{40,-60},{60,-40}})));
-  Conversions.BooleanToReal booToRea1(realTrue=0, realFalse=1)
+  CDL.Conversions.BooleanToReal booToRea1(realTrue=0, realFalse=1)
     annotation (Placement(transformation(extent={{-10,-40},{10,-20}})));
-  Logical.Not not1
+  CDL.Logical.Not not1
     annotation (Placement(transformation(extent={{-50,40},{-30,60}})));
 equation
   connect(booToRea.y, proof.uMea) annotation (Line(points={{12,70},{20,70},{20,

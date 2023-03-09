@@ -4,3 +4,5 @@ OptimalStartHeating
 OptimalStartHeatingCooling
 OptimalStartNoHeatingNoCooling
 PIDWithInputGains
+Proof
+MinimumOnTime

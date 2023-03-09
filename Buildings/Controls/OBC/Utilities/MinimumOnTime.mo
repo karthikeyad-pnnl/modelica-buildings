@@ -1,37 +1,37 @@
-within Buildings.Controls.OBC.CDL.CompositeBlocks;
+within Buildings.Controls.OBC.Utilities;
 block MinimumOnTime
   "Keep component enabled for minimum run duration to prevent short cycling"
   parameter Real tEnaMin;
   parameter Real tDisMin;
-  Interfaces.BooleanInput uDis "Component disable signal"   annotation (
+  CDL.Interfaces.BooleanInput uDis "Component disable signal" annotation (
       Placement(transformation(extent={{-140,20},{-100,60}}),
         iconTransformation(extent={{-140,-20},{-100,20}})));
-  Interfaces.BooleanOutput yEna "Enable mode output signal" annotation (
+  CDL.Interfaces.BooleanOutput yEna "Enable mode output signal" annotation (
       Placement(transformation(extent={{100,-20},{140,20}}), iconTransformation(
           extent={{100,-20},{140,20}})));
-  Logical.Latch lat
+  CDL.Logical.Latch lat
     annotation (Placement(transformation(extent={{60,-10},{80,10}})));
-  Interfaces.BooleanInput uEna "Component enable signal" annotation (Placement(
-        transformation(extent={{-140,60},{-100,100}}), iconTransformation(
-          extent={{-140,20},{-100,60}})));
-  Interfaces.BooleanInput uEmeOff "Component emergency off signal" annotation (
-      Placement(transformation(extent={{-140,-120},{-100,-80}}),
+  CDL.Interfaces.BooleanInput uEna "Component enable signal" annotation (
+      Placement(transformation(extent={{-140,60},{-100,100}}),
+        iconTransformation(extent={{-140,20},{-100,60}})));
+  CDL.Interfaces.BooleanInput uEmeOff "Component emergency off signal"
+    annotation (Placement(transformation(extent={{-140,-120},{-100,-80}}),
         iconTransformation(extent={{-140,-60},{-100,-20}})));
-  Logical.And andEna
+  CDL.Logical.And andEna
     "Enable component if signal is received and minimum disable time has passed"
     annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
-  Logical.Timer timEna(t=tEnaMin)
+  CDL.Logical.Timer timEna(t=tEnaMin)
     annotation (Placement(transformation(extent={{-40,-50},{-20,-30}})));
-  Logical.And andDis
+  CDL.Logical.And andDis
     "Disable component if signal is received and minimum enable time has passed"
     annotation (Placement(transformation(extent={{-60,30},{-40,50}})));
-  Logical.Timer timDis(t=tDisMin)
+  CDL.Logical.Timer timDis(t=tDisMin)
     annotation (Placement(transformation(extent={{-20,-90},{0,-70}})));
-  Logical.Pre pre
+  CDL.Logical.Pre pre
     annotation (Placement(transformation(extent={{-80,-50},{-60,-30}})));
-  Logical.Not not1
+  CDL.Logical.Not not1
     annotation (Placement(transformation(extent={{-50,-90},{-30,-70}})));
-  Logical.Or or2
+  CDL.Logical.Or or2
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
 equation
   connect(lat.y, yEna)

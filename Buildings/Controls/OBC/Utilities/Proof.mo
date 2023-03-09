@@ -1,6 +1,5 @@
-within Buildings.Controls.OBC.CDL.CompositeBlocks;
-block Proof
-  "Composite block for equipment proven on"
+within Buildings.Controls.OBC.Utilities;
+block Proof "Composite block for equipment proven on"
 
   parameter Real meaDis
     "Percent limit for measured signal below which component is assumed to be disabled";
@@ -17,42 +16,38 @@ block Proof
   parameter Real tAla
     "Time limit beyond which alarm is triggered if the device is not proven on";
 
-  Interfaces.BooleanInput uDes
-    "Desired state"
-    annotation (Placement(transformation(extent={{-140,-60},{-100,-20}}),
-      iconTransformation(extent={{-140,-60},{-100,-20}})));
+  CDL.Interfaces.BooleanInput uDes "Desired state" annotation (Placement(
+        transformation(extent={{-140,-60},{-100,-20}}), iconTransformation(
+          extent={{-140,-60},{-100,-20}})));
 
-  Interfaces.RealInput uMea
-    "Measured signal"
-    annotation (Placement(transformation(extent={{-140,20},{-100,60}}),
-      iconTransformation(extent={{-140,20},{-100,60}})));
+  CDL.Interfaces.RealInput uMea "Measured signal" annotation (Placement(
+        transformation(extent={{-140,20},{-100,60}}), iconTransformation(extent
+          ={{-140,20},{-100,60}})));
 
-  Interfaces.BooleanOutput yPro
-    "Equipment proven on signal"
-    annotation (Placement(transformation(extent={{100,20},{140,60}}),
-      iconTransformation(extent={{100,20},{140,60}})));
+  CDL.Interfaces.BooleanOutput yPro "Equipment proven on signal" annotation (
+      Placement(transformation(extent={{100,20},{140,60}}), iconTransformation(
+          extent={{100,20},{140,60}})));
 
-  Interfaces.BooleanOutput yAla
-    "Alarm signal"
-    annotation (Placement(transformation(extent={{100,-60},{140,-20}}),
-      iconTransformation(extent={{100,-60},{140,-20}})));
+  CDL.Interfaces.BooleanOutput yAla "Alarm signal" annotation (Placement(
+        transformation(extent={{100,-60},{140,-20}}), iconTransformation(extent
+          ={{100,-60},{140,-20}})));
 
-  Continuous.Hysteresis hys(uLow=meaDis, uHigh=meaEna)
+  CDL.Continuous.Hysteresis hys(uLow=meaDis, uHigh=meaEna)
     annotation (Placement(transformation(extent={{-60,30},{-40,50}})));
 
-  Continuous.MultiplyByParameter gai(k=1/mea_nominal)
+  CDL.Continuous.MultiplyByParameter gai(k=1/mea_nominal)
     "Normalize measured signal by dividng it by it's nominal value"
     annotation (Placement(transformation(extent={{-90,30},{-70,50}})));
 
-  Logical.Timer tim(t=tau)
+  CDL.Logical.Timer tim(t=tau)
     "Ensure compoenent is at enabled position for minimum duration"
     annotation (Placement(transformation(extent={{-30,30},{-10,50}})));
 
-  Logical.Not not1
+  CDL.Logical.Not not1
     annotation (Placement(transformation(extent={{10,-10},{30,10}})));
-  Logical.And and2
+  CDL.Logical.And and2
     annotation (Placement(transformation(extent={{70,-50},{90,-30}})));
-  Logical.Timer tim1(t=tAla)
+  CDL.Logical.Timer tim1(t=tAla)
     "Check if component responds in time allowed before alarm is triggered"
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
 equation

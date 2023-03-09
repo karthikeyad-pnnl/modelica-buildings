@@ -1,19 +1,19 @@
-within Buildings.Controls.OBC.CDL.CompositeBlocks.Validation;
+within Buildings.Controls.OBC.Utilities.Validation;
 model MinimumOnTime
-  Buildings.Controls.OBC.CDL.CompositeBlocks.MinimumOnTime minimumOnTime(
-      tEnaMin=40, tDisMin=40)
+  Buildings.Controls.OBC.Utilities.MinimumOnTime minimumOnTime(tEnaMin=40,
+      tDisMin=40)
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
-  Logical.Sources.Pulse booPul(period=50)
+  CDL.Logical.Sources.Pulse booPul(period=50)
     annotation (Placement(transformation(extent={{-80,10},{-60,30}})));
-  Buildings.Controls.OBC.CDL.CompositeBlocks.MinimumOnTime minimumOnTime1(
-      tEnaMin=40, tDisMin=0)
+  Buildings.Controls.OBC.Utilities.MinimumOnTime minimumOnTime1(tEnaMin=40,
+      tDisMin=0)
     annotation (Placement(transformation(extent={{20,30},{40,50}})));
-  Buildings.Controls.OBC.CDL.CompositeBlocks.MinimumOnTime minimumOnTime2(
-      tEnaMin=0, tDisMin=40)
+  Buildings.Controls.OBC.Utilities.MinimumOnTime minimumOnTime2(tEnaMin=0,
+      tDisMin=40)
     annotation (Placement(transformation(extent={{20,-50},{40,-30}})));
-  Logical.Not not1
+  CDL.Logical.Not not1
     annotation (Placement(transformation(extent={{-40,10},{-20,30}})));
-  Logical.Sources.Pulse booPul1(
+  CDL.Logical.Sources.Pulse booPul1(
     width=1/200,
     period=180,
     shift=180)
