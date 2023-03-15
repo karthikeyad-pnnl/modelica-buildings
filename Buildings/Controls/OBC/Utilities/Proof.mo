@@ -17,62 +17,58 @@ block Proof "Composite block for equipment proven on"
     "Time limit beyond which alarm is triggered if the device is not proven on";
 
   CDL.Interfaces.BooleanInput uDes "Desired state" annotation (Placement(
-        transformation(extent={{-140,-60},{-100,-20}}), iconTransformation(
+        transformation(extent={{-140,-40},{-100,0}}),   iconTransformation(
           extent={{-140,-60},{-100,-20}})));
 
   CDL.Interfaces.RealInput uMea "Measured signal" annotation (Placement(
-        transformation(extent={{-140,20},{-100,60}}), iconTransformation(extent
-          ={{-140,20},{-100,60}})));
+        transformation(extent={{-140,0},{-100,40}}),  iconTransformation(extent=
+           {{-140,20},{-100,60}})));
 
   CDL.Interfaces.BooleanOutput yPro "Equipment proven on signal" annotation (
-      Placement(transformation(extent={{100,20},{140,60}}), iconTransformation(
+      Placement(transformation(extent={{100,0},{140,40}}),  iconTransformation(
           extent={{100,20},{140,60}})));
 
   CDL.Interfaces.BooleanOutput yAla "Alarm signal" annotation (Placement(
-        transformation(extent={{100,-60},{140,-20}}), iconTransformation(extent
-          ={{100,-60},{140,-20}})));
+        transformation(extent={{100,-40},{140,0}}),   iconTransformation(extent=
+           {{100,-60},{140,-20}})));
 
   CDL.Continuous.Hysteresis hysMea(uLow=meaDis, uHigh=meaEna)
     "Hysteresis block to determine component is enabled/disabled from measurement"
-    annotation (Placement(transformation(extent={{-60,30},{-40,50}})));
+    annotation (Placement(transformation(extent={{-60,10},{-40,30}})));
 
   CDL.Continuous.MultiplyByParameter gaiNor(k=1/mea_nominal)
     "Normalize measured signal by dividng it by it's nominal value"
-    annotation (Placement(transformation(extent={{-90,30},{-70,50}})));
+    annotation (Placement(transformation(extent={{-90,10},{-70,30}})));
 
   CDL.Logical.Timer timEna(t=tau)
     "Time for which component is measured as enabled"
-    annotation (Placement(transformation(extent={{-30,30},{-10,50}})));
+    annotation (Placement(transformation(extent={{-30,10},{-10,30}})));
 
-  CDL.Logical.Not notEna
-    "Not operator to get disabled status from enabled status"
-    annotation (Placement(transformation(extent={{10,-10},{30,10}})));
-  CDL.Logical.And andDisReqEna
-    "Output true signal if component that is required enabled is still in disabled mode"
-    annotation (Placement(transformation(extent={{70,-50},{90,-30}})));
   CDL.Logical.Timer timDis(t=tAla)
     "Time for which component is measured as disabled"
-    annotation (Placement(transformation(extent={{40,-10},{60,10}})));
+    annotation (Placement(transformation(extent={{60,-30},{80,-10}})));
+  CDL.Logical.Latch latNoEna
+    "Latch that outputs true when component receives enable signal but is not yet proven on"
+    annotation (Placement(transformation(extent={{20,-30},{40,-10}})));
 equation
   connect(gaiNor.y, hysMea.u)
-    annotation (Line(points={{-68,40},{-62,40}}, color={0,0,127}));
+    annotation (Line(points={{-68,20},{-62,20}}, color={0,0,127}));
   connect(uMea, gaiNor.u)
-    annotation (Line(points={{-120,40},{-92,40}}, color={0,0,127}));
+    annotation (Line(points={{-120,20},{-92,20}}, color={0,0,127}));
   connect(hysMea.y, timEna.u)
-    annotation (Line(points={{-38,40},{-32,40}}, color={255,0,255}));
-  connect(timEna.passed, yPro) annotation (Line(points={{-8,32},{0,32},{0,40},{
-          120,40}}, color={255,0,255}));
-  connect(timEna.passed, notEna.u)
-    annotation (Line(points={{-8,32},{0,32},{0,0},{8,0}}, color={255,0,255}));
-  connect(andDisReqEna.y, yAla)
-    annotation (Line(points={{92,-40},{120,-40}}, color={255,0,255}));
-  connect(notEna.y, timDis.u)
-    annotation (Line(points={{32,0},{38,0}}, color={255,0,255}));
-  connect(timDis.passed, andDisReqEna.u1) annotation (Line(points={{62,-8},{64,
-          -8},{64,-40},{68,-40}}, color={255,0,255}));
-  connect(uDes, andDisReqEna.u2) annotation (Line(points={{-120,-40},{40,-40},{
-          40,-48},{68,-48}}, color={255,0,255}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+    annotation (Line(points={{-38,20},{-32,20}}, color={255,0,255}));
+  connect(timEna.passed, yPro) annotation (Line(points={{-8,12},{0,12},{0,20},{120,
+          20}},     color={255,0,255}));
+  connect(timDis.passed, yAla) annotation (Line(points={{82,-28},{90,-28},{90,-20},
+          {120,-20}}, color={255,0,255}));
+  connect(latNoEna.y, timDis.u)
+    annotation (Line(points={{42,-20},{58,-20}}, color={255,0,255}));
+  connect(timEna.passed, latNoEna.clr) annotation (Line(points={{-8,12},{0,12},{
+          0,-26},{18,-26}}, color={255,0,255}));
+  connect(uDes, latNoEna.u)
+    annotation (Line(points={{-120,-20},{18,-20}}, color={255,0,255}));
+  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
+            {100,100}}),                                         graphics={
           Rectangle(
           extent={{-100,100},{100,-100}},
           lineColor={0,0,0},
@@ -83,5 +79,5 @@ equation
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
           textString="Proof")}),                                 Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false, extent={{-100,-40},{100,40}})));
 end Proof;
