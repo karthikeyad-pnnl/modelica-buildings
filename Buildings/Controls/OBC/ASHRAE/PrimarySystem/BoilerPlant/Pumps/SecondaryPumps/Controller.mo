@@ -337,6 +337,16 @@ protected
   parameter Integer pumInd[nPum]={i for i in 1:nPum}
     "Pump index, {1,2,...,n}";
 
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.ZeroIndexCorrection
+    zerStaIndCor
+    "Block to resolve zero index errors"
+    annotation (Placement(transformation(extent={{-102,-84},{-82,-64}})));
+
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.ZeroIndexCorrection
+    zerStaIndCor1
+    "Block to resolve zero index errors"
+    annotation (Placement(transformation(extent={{-114,-134},{-94,-114}})));
+
   Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel(
     final samplePeriod=1) if have_varSecPum and not have_secFloSen
     "Unit delay for pump speed"
@@ -410,7 +420,7 @@ protected
 
   Buildings.Controls.OBC.CDL.Integers.Add addInt
     "Integer add"
-    annotation (Placement(transformation(extent={{-120,-80},{-100,-60}})));
+    annotation (Placement(transformation(extent={{-132,-80},{-112,-60}})));
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1[nPumPri] if not have_varSecPum
     "Convert boolean to integer"
@@ -558,19 +568,13 @@ equation
   connect(booToInt.y, mulSumInt.u)
     annotation (Line(points={{-228,-120},{-202,-120}}, color={255,127,0}));
 
-  connect(addInt.y, nexLagPum.index)
-    annotation (Line(points={{-98,-70},{-70,-70},{-70,-62}}, color={255,127,0}));
-
   connect(mulSumInt.y, addInt.u2)
-    annotation (Line(points={{-178,-120},{-128,-120},{-128,-76},{-122,-76}},
+    annotation (Line(points={{-178,-120},{-166,-120},{-166,-76},{-134,-76}},
       color={255,127,0}));
 
   connect(conInt.y, addInt.u1)
-    annotation (Line(points={{-252,200},{-140,200},{-140,-64},{-122,-64}},
+    annotation (Line(points={{-252,200},{-140,200},{-140,-64},{-134,-64}},
       color={255,127,0}));
-
-  connect(mulSumInt.y, lasLagPum.index)
-    annotation (Line(points={{-178,-120},{-70,-120},{-70,-112}}, color={255,127,0}));
 
   connect(reaToInt.y, chaPumSta1.uNexLagPum) annotation (Line(points={{-18,230},
           {46,230},{46,74},{56,74}}, color={255,127,0}));
@@ -659,12 +663,6 @@ equation
   connect(or2.y, chaPumSta3.uLasLagPumSta) annotation (Line(points={{56,-218},{58,
           -218},{58,-167},{60,-167}}, color={255,0,255}));
 
-  connect(nexLagPum.y, reaToInt1.u)
-    annotation (Line(points={{-58,-50},{-10,-50}}, color={0,0,127}));
-
-  connect(lasLagPum.y, reaToInt2.u)
-    annotation (Line(points={{-58,-100},{-10,-100}}, color={0,0,127}));
-
   connect(mulSumInt.y, intLesEquThr.u) annotation (Line(points={{-178,-120},{-166,
           -120},{-166,-218},{-160,-218}}, color={255,127,0}));
 
@@ -736,6 +734,22 @@ equation
                                                    color={255,127,0}));
   connect(min.y, yPumSpe)
     annotation (Line(points={{182,-400},{300,-400}}, color={0,0,127}));
+  connect(addInt.y, zerStaIndCor.uInd)
+    annotation (Line(points={{-110,-70},{-104,-70}}, color={255,127,0}));
+  connect(zerStaIndCor.yIndMod, nexLagPum.index) annotation (Line(points={{-80,-70},
+          {-70,-70},{-70,-62}}, color={255,127,0}));
+  connect(zerStaIndCor.yCapMod, reaToInt1.u) annotation (Line(points={{-80,-78},
+          {-46,-78},{-46,-50},{-10,-50}}, color={0,0,127}));
+  connect(nexLagPum.y, zerStaIndCor.uCap) annotation (Line(points={{-58,-50},{-52,
+          -50},{-52,-32},{-108,-32},{-108,-78},{-104,-78}}, color={0,0,127}));
+  connect(mulSumInt.y, zerStaIndCor1.uInd)
+    annotation (Line(points={{-178,-120},{-116,-120}}, color={255,127,0}));
+  connect(zerStaIndCor1.yIndMod, lasLagPum.index) annotation (Line(points={{-92,
+          -120},{-70,-120},{-70,-112}}, color={255,127,0}));
+  connect(zerStaIndCor1.yCapMod, reaToInt2.u) annotation (Line(points={{-92,-128},
+          {-44,-128},{-44,-100},{-10,-100}}, color={0,0,127}));
+  connect(lasLagPum.y, zerStaIndCor1.uCap) annotation (Line(points={{-58,-100},{
+          -50,-100},{-50,-86},{-122,-86},{-122,-128},{-116,-128}}, color={0,0,127}));
 annotation (defaultComponentName="secPumCon",
   Diagram(coordinateSystem(preserveAspectRatio=false,
           extent={{-280,-440},{280,260}}),
