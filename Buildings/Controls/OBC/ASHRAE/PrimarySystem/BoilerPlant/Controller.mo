@@ -50,12 +50,12 @@ model Controller
   parameter Integer nIgnReq(
     final min=0) = 0
     "Number of hot-water requests to be ignored before enabling boiler plant loop"
-    annotation(dialog(tab="Plant enable/disable parameters"));
+    annotation(Dialog(tab="Plant enable/disable parameters"));
 
   parameter Integer nSchRow(
     final min=1) = 4
     "Number of rows to be created for plant schedule table"
-    annotation(dialog(tab="Plant enable/disable parameters"));
+    annotation(Dialog(tab="Plant enable/disable parameters"));
 
   parameter Integer nBoi
     "Number of boilers"
@@ -116,38 +116,38 @@ model Controller
 
   parameter Real schTab[nSchRow,2] = [0,1;6,1;18,1;24,1]
     "Table defining schedule for enabling plant"
-    annotation(dialog(tab="Plant enable/disable parameters"));
+    annotation(Dialog(tab="Plant enable/disable parameters"));
 
   parameter Real TOutLoc(
     final unit="K",
     displayUnit="K") = 300
     "Boiler lock-out temperature for outdoor air"
-    annotation(dialog(tab="Plant enable/disable parameters"));
+    annotation(Dialog(tab="Plant enable/disable parameters"));
 
   parameter Real locDt(
     final unit="K",
     displayUnit="K",
     final quantity="ThermodynamicTemperature") = 1
     "Temperature deadband for boiler lockout"
-    annotation(dialog(tab="Plant enable/disable parameters", group="Advanced"));
+    annotation(Dialog(tab="Plant enable/disable parameters", group="Advanced"));
 
   parameter Real plaOffThrTim(
     final unit="s",
     displayUnit="s") = 900
     "Minimum time for which the plant has to stay off once it has been disabled"
-    annotation(dialog(tab="Plant enable/disable parameters"));
+    annotation(Dialog(tab="Plant enable/disable parameters"));
 
   parameter Real plaOnThrTim(
     final unit="s",
     displayUnit="s") = plaOffThrTim
     "Minimum time for which the boiler plant has to stay on once it has been enabled"
-    annotation(dialog(tab="Plant enable/disable parameters"));
+    annotation(Dialog(tab="Plant enable/disable parameters"));
 
   parameter Real staOnReqTim(
     final unit="s",
     displayUnit="s") = 180
     "Time-limit for receiving hot-water requests to maintain enabled plant on"
-    annotation(dialog(tab="Plant enable/disable parameters"));
+    annotation(Dialog(tab="Plant enable/disable parameters"));
 
   parameter Real boiDesCap[nBoi](
     final unit="W",
@@ -1698,8 +1698,8 @@ equation
   connect(plaEna.yPla, priPumCon.uPlaEna) annotation (Line(points={{-318,330},{
           -230,330},{-230,-78},{90,-78},{90,-158.533},{118,-158.533}},
                                                                   color={255,0,255}));
-  connect(hotWatSupTemRes.TPlaHotWatSupSet, upProCon.THotWatSupSet) annotation
-    (Line(points={{-118,184},{-100,184},{-100,107},{118,107}}, color={0,0,127}));
+  connect(hotWatSupTemRes.TPlaHotWatSupSet, upProCon.THotWatSupSet) annotation (
+     Line(points={{-118,184},{-100,184},{-100,107},{118,107}}, color={0,0,127}));
   connect(TRetPri, staSetCon.THotWatRetPri) annotation (Line(points={{-420,230},
           {-260,230},{-260,-1},{-212,-1}},   color={0,0,127}));
   connect(TRetSec, staSetCon.THotWatRetSec) annotation (Line(points={{-420,150},
