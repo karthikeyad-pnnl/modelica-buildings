@@ -26,21 +26,21 @@ block HotWaterSupplyTemperatureReset
 
   parameter Real TPlaHotWatSetMax(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 353.15
     "The maximum allowed hot-water setpoint temperature for the plant"
     annotation(Dialog(group="Trim-and-Respond Logic parameters"));
 
   parameter Real TConBoiHotWatSetMax(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 353.15
     "The maximum allowed hot water setpoint temperature for condensing boilers"
     annotation(Dialog(group="Trim-and-Respond Logic parameters"));
 
   parameter Real dTConBoi(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = -10
     "The offset for hot water setpoint temperature for condensing boilers in 
     non-condensing stage type"
@@ -48,14 +48,14 @@ block HotWaterSupplyTemperatureReset
 
   parameter Real THotWatSetMinNonConBoi(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 341.48
     "The minimum allowed hot-water setpoint temperature for non-condensing boilers"
     annotation(Dialog(group="Trim-and-Respond Logic parameters"));
 
   parameter Real THotWatSetMinConBoi(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 305.37
     "The minimum allowed hot-water setpoint temperature for condensing boilers"
     annotation(Dialog(group="Trim-and-Respond Logic parameters"));
@@ -76,21 +76,21 @@ block HotWaterSupplyTemperatureReset
 
   parameter Real triAmoVal(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = -2
     "Setpoint trim value"
     annotation(Dialog(group="Trim-and-Respond Logic parameters"));
 
   parameter Real resAmoVal(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 3
     "Setpoint respond value"
     annotation(Dialog(group="Trim-and-Respond Logic parameters"));
 
   parameter Real maxResVal(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 7
     "Setpoint maximum respond value"
     annotation(Dialog(group="Trim-and-Respond Logic parameters"));
@@ -129,7 +129,7 @@ block HotWaterSupplyTemperatureReset
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput TPlaHotWatSupSet(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "Hot-water supply temperature setpoint for the plant"
     annotation (Placement(transformation(extent={{140,-20},{180,20}}),

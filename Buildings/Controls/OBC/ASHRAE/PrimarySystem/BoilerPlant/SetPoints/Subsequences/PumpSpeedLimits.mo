@@ -31,7 +31,7 @@ block PumpSpeedLimits
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uRegSig(
     final unit="K",
-    final displayUnit="K",
+    final displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "Regulation signal from proportional regulator"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}}),

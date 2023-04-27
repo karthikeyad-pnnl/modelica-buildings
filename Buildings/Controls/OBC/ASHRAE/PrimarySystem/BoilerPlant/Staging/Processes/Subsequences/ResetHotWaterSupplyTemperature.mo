@@ -14,14 +14,14 @@ block ResetHotWaterSupplyTemperature
   parameter Real TMinSupNonConBoi(
     final min=0,
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 333.2
     "Minimum supply temperature required for non-condensing boilers";
 
   parameter Real sigDif(
     final min=0,
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 0.1
     "Significant difference based on minimum resolution of temperature sensor"
     annotation (Dialog(tab="Advanced"));
@@ -44,7 +44,7 @@ block ResetHotWaterSupplyTemperature
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatSup(
     final min=0,
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "Measured hot water supply temperature"
     annotation (Placement(transformation(extent={{-200,10},{-160,50}}),

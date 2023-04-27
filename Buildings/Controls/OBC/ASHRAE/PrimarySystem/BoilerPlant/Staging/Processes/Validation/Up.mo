@@ -28,13 +28,13 @@ model Up
 
   parameter Real TMinSupNonConBoi(
     final unit="K",
-    final displayUnit="K",
+    final displayUnit="degC",
     final quantity="ThermodynamicTemperature")=333.2
     "Minimum supply temperature required for non-condensing boilers";
 
   parameter Real sigDif(
     final unit="K",
-    final displayUnit="K",
+    final displayUnit="degC",
     final quantity="ThermodynamicTemperature")=0.1
     "Significant difference based on minimum resolution of temperature sensor";
 

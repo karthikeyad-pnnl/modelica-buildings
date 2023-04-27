@@ -15,7 +15,7 @@ block PlantEnable
 
   parameter Real TOutLoc(
     final unit="K",
-    final displayUnit="K") = 300
+    final displayUnit="degC") = 300
     "Boiler lock-out temperature for outdoor air";
 
   parameter Real plaOffThrTim(
@@ -35,7 +35,7 @@ block PlantEnable
 
   parameter Real locDt(
     final unit="K",
-    final displayUnit="K",
+    final displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 1
     "Temperature deadband for boiler lockout"
     annotation (Dialog(tab="Advanced"));
@@ -47,7 +47,7 @@ block PlantEnable
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TOut(
     final unit="K",
-    final displayUnit="K",
+    final displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "Measured outdoor air temperature"
     annotation (Placement(transformation(extent={{-200,-40},{-160,0}}),

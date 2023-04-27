@@ -191,7 +191,7 @@ block Controller
 
   parameter Real twoReqLimLow(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 1.2
     "Lower limit of hysteresis loop sending two requests"
     annotation (Dialog(tab="Pump control parameters",
@@ -200,7 +200,7 @@ block Controller
 
   parameter Real twoReqLimHig(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 2
     "Higher limit of hysteresis loop sending two requests"
     annotation (Dialog(tab="Pump control parameters",
@@ -209,7 +209,7 @@ block Controller
 
   parameter Real oneReqLimLow(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 0.2
     "Lower limit of hysteresis loop sending one request"
     annotation (Dialog(tab="Pump control parameters",
@@ -218,7 +218,7 @@ block Controller
 
   parameter Real oneReqLimHig(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 1
     "Higher limit of hysteresis loop sending one request"
     annotation (Dialog(tab="Pump control parameters",
@@ -365,7 +365,7 @@ block Controller
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatPri(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") if not have_priOnl and
     have_varPriPum and temReg and
     have_priSecTemSen
@@ -375,7 +375,7 @@ block Controller
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatSec(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") if not have_priOnl and
     have_varPriPum and temReg
     "Measured hot water temperature at secondary loop supply"

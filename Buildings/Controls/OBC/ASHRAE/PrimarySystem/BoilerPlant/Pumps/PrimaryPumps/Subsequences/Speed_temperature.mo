@@ -70,28 +70,28 @@ block Speed_temperature
 
   parameter Real twoReqLimLow(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference")=1.2
     "Lower limit of hysteresis loop sending two requests"
     annotation(Dialog(group="Hysteresis loop parameters for request generation"));
 
   parameter Real twoReqLimHig(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference")=2
     "Higher limit of hysteresis loop sending two requests"
     annotation(Dialog(group="Hysteresis loop parameters for request generation"));
 
   parameter Real oneReqLimLow(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference")=0.2
     "Lower limit of hysteresis loop sending one request"
     annotation(Dialog(group="Hysteresis loop parameters for request generation"));
 
   parameter Real oneReqLimHig(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference")=1
     "Higher limit of hysteresis loop sending one request"
     annotation(Dialog(group="Hysteresis loop parameters for request generation"));
@@ -108,7 +108,7 @@ block Speed_temperature
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatPri(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") if primarySecondarySensors
     "Measured hot water temperature in primary circuit"
     annotation (Placement(transformation(extent={{-160,30},{-120,70}}),
@@ -116,7 +116,7 @@ block Speed_temperature
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatSec(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "Measured hot water temperature in secondary circuit"
     annotation (Placement(transformation(extent={{-160,-20},{-120,20}}),

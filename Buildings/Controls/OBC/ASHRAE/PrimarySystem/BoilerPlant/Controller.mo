@@ -121,13 +121,13 @@ model Controller
 
   parameter Real TOutLoc(
     final unit="K",
-    displayUnit="K") = 300
+    displayUnit="degC") = 300
     "Boiler lock-out temperature for outdoor air"
     annotation(Dialog(tab="Plant enable/disable parameters"));
 
   parameter Real locDt(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 1
     "Temperature deadband for boiler lockout"
     annotation(Dialog(tab="Plant enable/disable parameters", group="Advanced"));
@@ -200,7 +200,7 @@ model Controller
 
   parameter Real TDif(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 10
     "Required temperature difference between setpoint and measured temperature"
     annotation(Dialog(tab="Staging setpoint parameters", group="Failsafe condition parameters"));
@@ -220,7 +220,7 @@ model Controller
 
   parameter Real TDifHys(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 1
     "Temperature deadband for hysteresis loop"
     annotation (Dialog(tab="Staging setpoint parameters", group="Advanced"));
@@ -274,7 +274,7 @@ model Controller
 
   parameter Real TCirDif(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 3
     "Required return water temperature difference between primary and secondary
     circuits for staging down"
@@ -312,7 +312,7 @@ model Controller
 
   parameter Real dTemp(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 0.1
     "Hysteresis deadband for measured temperatures"
     annotation (Dialog(tab="Staging setpoint parameters", group="Advanced"));
@@ -343,14 +343,14 @@ model Controller
 
   parameter Real TPlaHotWatSetMax(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 353.15
     "The maximum allowed hot-water setpoint temperature for the plant"
     annotation(Dialog(tab="Supply temperature reset parameters", group="Trim-and-Respond Logic parameters"));
 
   parameter Real TConBoiHotWatSetMax(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 353.15
     "The maximum allowed hot water setpoint temperature for condensing boilers"
     annotation(Dialog(tab="Supply temperature reset parameters", group="Trim-and-Respond Logic parameters"));
@@ -365,14 +365,14 @@ model Controller
 
   parameter Real THotWatSetMinNonConBoi(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 341.48
     "The minimum allowed hot-water setpoint temperature for non-condensing boilers"
     annotation(Dialog(tab="Supply temperature reset parameters", group="Trim-and-Respond Logic parameters"));
 
   parameter Real THotWatSetMinConBoi(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 305.37
     "The minimum allowed hot-water setpoint temperature for condensing boilers"
     annotation(Dialog(tab="Supply temperature reset parameters", group="Trim-and-Respond Logic parameters"));
@@ -393,21 +393,21 @@ model Controller
 
   parameter Real triAmoVal(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = -2
     "Setpoint trim value"
     annotation(Dialog(tab="Supply temperature reset parameters", group="Trim-and-Respond Logic parameters"));
 
   parameter Real resAmoVal(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 3
     "Setpoint respond value"
     annotation(Dialog(tab="Supply temperature reset parameters", group="Trim-and-Respond Logic parameters"));
 
   parameter Real maxResVal(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 7
     "Setpoint maximum respond value"
     annotation(Dialog(tab="Supply temperature reset parameters", group="Trim-and-Respond Logic parameters"));
@@ -421,7 +421,7 @@ model Controller
 
   parameter Real TMinSupNonConBoi(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 333.2
     "Minimum supply temperature required for non-condensing boilers"
     annotation(Dialog(tab="General", group="Boiler plant configuration parameters"));
@@ -629,7 +629,7 @@ model Controller
 
   parameter Real twoReqLimLow_priPum(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 1.2
     "Lower limit of hysteresis loop sending two requests"
     annotation (Dialog(tab="Primary pump control parameters",
@@ -638,7 +638,7 @@ model Controller
 
   parameter Real twoReqLimHig_priPum(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 2
     "Higher limit of hysteresis loop sending two requests"
     annotation (Dialog(tab="Primary pump control parameters",
@@ -647,7 +647,7 @@ model Controller
 
   parameter Real oneReqLimLow_priPum(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 0.2
     "Lower limit of hysteresis loop sending one request"
     annotation (Dialog(tab="Primary pump control parameters",
@@ -656,7 +656,7 @@ model Controller
 
   parameter Real oneReqLimHig_priPum(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 1
     "Higher limit of hysteresis loop sending one request"
     annotation (Dialog(tab="Primary pump control parameters",
@@ -688,14 +688,14 @@ model Controller
 
   parameter Real TRetSet(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 333.15
     "Minimum hot water return temperature for optimal non-condensing boiler performance"
     annotation(Dialog(tab="Condensation control parameters"));
 
   parameter Real TRetMinAll(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 330.35
     "Minimum allowed hot water return temperature for non-condensing boiler"
     annotation(Dialog(tab="Condensation control parameters"));

@@ -75,7 +75,7 @@ block Down
 
   parameter Real TCirDif(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 3
     "Required return water temperature difference between the primary and
     secondary circuits for staging down"
@@ -100,14 +100,14 @@ block Down
 
   parameter Real dTemp(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 0.1
     "Hysteresis deadband for measured temperatures"
     annotation(Dialog(tab="Advanced"));
 
   parameter Real TDif(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 10
     "Temperature difference for failsafe condition"
     annotation(Dialog(group="Failsafe condition parameters"));
@@ -149,7 +149,7 @@ block Down
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatSupSet(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "Hot water supply temperature setpoint"
     annotation (Placement(transformation(extent={{-220,130},{-180,170}}),
@@ -157,7 +157,7 @@ block Down
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatSup(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "Measured hot water supply temperature"
     annotation (Placement(transformation(extent={{-220,100},{-180,140}}),
@@ -207,7 +207,7 @@ block Down
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TPriHotWatRet(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") if not have_priOnl
     "Measured primary hot water return temperature"
     annotation (Placement(transformation(extent={{-220,-180},{-180,-140}}),
@@ -215,7 +215,7 @@ block Down
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TSecHotWatRet(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") if not have_priOnl
     "Measured secondary hot water return temperature"
     annotation (Placement(transformation(extent={{-220,-210},{-180,-170}}),
