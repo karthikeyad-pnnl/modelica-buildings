@@ -29,8 +29,8 @@ model Controller
     annotation(Dialog(tab="General", group="Boiler plant configuration parameters"));
 
   parameter Boolean have_secFloSen=false
-    "True: Flowrate sensor in secondary loop;
-    False: Flowrate sensor in decoupler"
+    "True: Flow sensor in secondary loop;
+    False: Neither a flow sensor in the secondary loop nor in the decoupler"
     annotation(Dialog(tab="General",
       group="Boiler plant configuration parameters",
       enable = not have_priOnl));
@@ -42,10 +42,11 @@ model Controller
       group="General parameters",
       enable = speConTypPri == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
 
-  parameter Boolean have_varSecPum = false
+  parameter Boolean have_varSecPum = true
     "True: Variable-speed secondary pumps;
     False: Fixed-speed secondary pumps"
-    annotation (Dialog(group="Boiler plant configuration parameters"));
+    annotation (Dialog(group="Boiler plant configuration parameters",
+    enable = not have_priOnl));
 
   parameter Integer nIgnReq(
     final min=0) = 0
@@ -354,9 +355,9 @@ model Controller
     "The maximum allowed hot water setpoint temperature for condensing boilers"
     annotation(Dialog(tab="Supply temperature reset parameters", group="Trim-and-Respond Logic parameters"));
 
-  parameter Real TConBoiHotWatSetOff(
+  parameter Real dTConBoi(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degF",
     final quantity="TemperatureDifference") = -10
     "The offset for hot water setpoint temperature for condensing boilers in 
     non-condensing stage type"
@@ -1061,7 +1062,7 @@ model Controller
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput TPlaHotWatSupSet(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "Plant hot water supply temperature setpoint"
     annotation (Placement(transformation(extent={{400,220},{440,260}}),
@@ -1303,7 +1304,7 @@ protected
     final boiTyp=boiTyp,
     final TPlaHotWatSetMax = TPlaHotWatSetMax,
     final TConBoiHotWatSetMax = TConBoiHotWatSetMax,
-    final TConBoiHotWatSetOff=TConBoiHotWatSetOff,
+    final dTConBoi=dTConBoi,
     final THotWatSetMinNonConBoi = THotWatSetMinNonConBoi,
     final THotWatSetMinConBoi = THotWatSetMinConBoi,
     final delTimVal=delTimVal,

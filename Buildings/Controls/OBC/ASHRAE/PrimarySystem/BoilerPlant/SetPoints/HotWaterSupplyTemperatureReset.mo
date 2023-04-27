@@ -38,7 +38,7 @@ block HotWaterSupplyTemperatureReset
     "The maximum allowed hot water setpoint temperature for condensing boilers"
     annotation(Dialog(group="Trim-and-Respond Logic parameters"));
 
-  parameter Real TConBoiHotWatSetOff(
+  parameter Real dTConBoi(
     final unit="K",
     displayUnit="K",
     final quantity="TemperatureDifference") = -10
@@ -253,7 +253,7 @@ protected
     annotation (Placement(transformation(extent={{-120,-160},{-100,-140}})));
 
   Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
-    final p=TConBoiHotWatSetOff)
+    final p=dTConBoi)
     "Boiler setpoint for condensing boilers in non-condensing type stage"
     annotation (Placement(transformation(extent={{-120,-200},{-100,-180}})));
 
@@ -427,8 +427,8 @@ minimum setpoint <code>minSet</code> in the Trim-and-Respond logic is reset to <
 <li>
 condensing boiler setpoints in <code>TBoiHotWatSupSet</code> shall be
 lesser of condensing boiler design supply temperature <code>TConBoiHotWatSetMax</code>,
-and <code>TPlaHotWatSupSet</code> less an offset of <code>TConBoiHotWatSetOff</code>,
-ie, <code>TPlaHotWatSupSet</code> - <code>TConBoiHotWatSetOff</code>.
+and <code>TPlaHotWatSupSet</code> less an offset of <code>dTConBoi</code>,
+ie, <code>TPlaHotWatSupSet</code> - <code>dTConBoi</code>.
 </li>
 </ul>
 </li>
