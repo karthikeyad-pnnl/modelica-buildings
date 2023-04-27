@@ -506,16 +506,8 @@ model Controller
     final unit="1",
     displayUnit="1",
     final min=0,
-    final max=maxPumSpePri) = 0.1
+    final max=1) = 0.1
     "Minimum pump speed"
-    annotation (Dialog(tab="Primary pump control parameters", group="General parameters", enable=have_varPriPum));
-
-  parameter Real maxPumSpePri(
-    final unit="1",
-    displayUnit="1",
-    final min=minPumSpePri,
-    final max=1) = 1
-    "Maximum pump speed"
     annotation (Dialog(tab="Primary pump control parameters", group="General parameters", enable=have_varPriPum));
 
   parameter Real VHotWatPri_flow_nominal(
@@ -1261,7 +1253,6 @@ protected
     final numIgnReq=numIgnReq,
     final nPum_nominal=nPumPri,
     final minPumSpe=minPumSpePri,
-    final maxPumSpe=maxPumSpePri,
     final VHotWat_flow_nominal=VHotWatPri_flow_nominal,
     final boiDesFlo=boiDesFlo,
     final maxLocDp=maxLocDpPri,
