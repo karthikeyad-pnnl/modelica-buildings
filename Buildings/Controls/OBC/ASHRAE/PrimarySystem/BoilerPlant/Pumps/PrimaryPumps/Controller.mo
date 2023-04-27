@@ -1247,6 +1247,7 @@ for other plants with headered pumps.
 for plants with dedicated pumps.
 </li>
 </ul>
+</li>
 <li>
 Subsequences to control pump speed,
 <ul>

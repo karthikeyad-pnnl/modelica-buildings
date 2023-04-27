@@ -864,6 +864,7 @@ Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Sub
 for fixed-speed pumps.
 </li>
 </ul>
+</li>
 <li>
 Subsequences to control pump speed,
 <ul>
