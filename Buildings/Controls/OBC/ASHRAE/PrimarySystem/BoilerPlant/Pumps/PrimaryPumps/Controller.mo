@@ -83,9 +83,9 @@ block Controller
     annotation (Dialog(group="Plant parameters"));
 
   parameter Real boiDesFlo[nBoi](
-    final min=1e-6,
-    final unit="m3/s",
-    displayUnit="m3/s",
+    each final min=1e-6,
+    each final unit="m3/s",
+    each displayUnit="m3/s",
     final quantity="VolumeFlowRate") = {0.5,0.5}
     "Vector of design flowrates for all boilers in plant"
     annotation (Dialog(group="Plant parameters"));
@@ -299,8 +299,8 @@ block Controller
       iconTransformation(extent={{-140,270},{-100,310}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uHotIsoVal[nBoi](
-    final unit="1",
-    displayUnit="1") if have_heaPriPum
+    each final unit="1",
+    each displayUnit="1") if have_heaPriPum
     "Hot water isolation valve status"
     annotation (Placement(transformation(extent={{-320,50},{-280,90}}),
       iconTransformation(extent={{-140,180},{-100,220}})));
@@ -607,8 +607,8 @@ protected
     "Integer add"
     annotation (Placement(transformation(extent={{-120,-80},{-100,-60}})));
 
-  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1[nPum] if
-    have_heaPriPum and (not have_priOnl)
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1[nPum]
+ if have_heaPriPum and (not have_priOnl)
     "Convert boolean to integer"
     annotation (Placement(transformation(extent={{-250,-166},{-230,-146}})));
 
@@ -617,8 +617,8 @@ protected
     "Sum of integer inputs"
     annotation (Placement(transformation(extent={{-200,-166},{-180,-146}})));
 
-  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt2[nPum] if
-    have_heaPriPum and (not have_priOnl)
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt2[nPum]
+ if have_heaPriPum and (not have_priOnl)
     "Convert boolean to integer"
     annotation (Placement(transformation(extent={{-248,-250},{-228,-230}})));
 
@@ -669,8 +669,8 @@ protected
     annotation (Placement(transformation(extent={{50,-250},{70,-230}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.Generic.ChangeStatus
-    chaPumSta(final nPum=nPum) if
-                        not have_heaPriPum
+    chaPumSta(final nPum=nPum)
+                     if not have_heaPriPum
     "Change lead pump status for dedicated primary pumps"
     annotation (Placement(transformation(extent={{58,100},{80,120}})));
 

@@ -151,15 +151,15 @@ model Controller
     annotation(Dialog(tab="Plant enable/disable parameters"));
 
   parameter Real boiDesCap[nBoi](
-    final unit="W",
-    displayUnit="W",
-    final quantity="Power")
+    each final unit="W",
+    each displayUnit="W",
+    each final quantity="Power")
     "Design boiler capacities vector"
     annotation(Dialog(tab="General", group="Boiler plant configuration parameters"));
 
   parameter Real boiFirMin[nBoi](
-    final unit="1",
-    displayUnit="1")
+    each final unit="1",
+    each displayUnit="1")
     "Boiler minimum firing ratio"
     annotation(Dialog(tab="General", group="Boiler plant configuration parameters"));
 
@@ -318,19 +318,19 @@ model Controller
     annotation (Dialog(tab="Staging setpoint parameters", group="Advanced"));
 
   parameter Real minFloSet[nBoi](
-    final unit="m3/s",
-    displayUnit="m3/s",
-    final quantity="VolumeFlowRate",
-    final min=1e-6,
-    final max=maxFloSet)
+    each final unit="m3/s",
+    each displayUnit="m3/s",
+    each final quantity="VolumeFlowRate",
+    each final min=1e-6,
+    each final max=maxFloSet)
     "Design minimum hot water flow through each boiler"
     annotation(Dialog(tab="General", group="Boiler plant configuration parameters"));
 
   parameter Real maxFloSet[nBoi](
-    final unit="m3/s",
-    displayUnit="m3/s",
-    final quantity="VolumeFlowRate",
-    final min=minFloSet)
+    each final unit="m3/s",
+    each displayUnit="m3/s",
+    each final quantity="VolumeFlowRate",
+    each final min=minFloSet)
     "Design maximum hot water flow through each boiler"
     annotation(Dialog(tab="General", group="Boiler plant configuration parameters"));
 
@@ -519,10 +519,10 @@ model Controller
     annotation (Dialog(group="Boiler plant configuration parameters"));
 
   parameter Real boiDesFlo[nBoi](
-    final min=1e-6,
-    final unit="m3/s",
-    displayUnit="m3/s",
-    final quantity="VolumeFlowRate")
+    each final min=1e-6,
+    each final unit="m3/s",
+    each displayUnit="m3/s",
+    each final quantity="VolumeFlowRate")
     "Vector of design flowrates for all boilers in plant"
     annotation (Dialog(group="Boiler plant configuration parameters"));
 
