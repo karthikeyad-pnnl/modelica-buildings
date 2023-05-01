@@ -161,7 +161,7 @@ model Controller
     each final unit="1",
     each displayUnit="1")
     "Boiler minimum firing ratio"
-    annotation(Dialog(tab="General", group="Boiler plant configuration parameters"));
+    annotation(Dialog(tab="General", group="Boiler plant configuration parameters", enable=have_priOnl));
 
   parameter Real delStaCha(
     final unit="s",
@@ -367,7 +367,7 @@ model Controller
     final unit="K",
     displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 341.48
-    "The minimum allowed hot-water setpoint temperature for non-condensing boilers"
+    "The minimum allowed supply hot-water setpoint temperature for non-condensing boilers"
     annotation(Dialog(tab="Supply temperature reset parameters", group="Trim-and-Respond Logic parameters"));
 
   parameter Real THotWatSetMinConBoi(
@@ -424,7 +424,7 @@ model Controller
     displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 333.2
     "Minimum supply temperature required for non-condensing boilers"
-    annotation(Dialog(tab="General", group="Boiler plant configuration parameters"));
+    annotation(Dialog(tab="General", group="Boiler plant configuration parameters", enable=have_priOnl));
 
   parameter Real delProSupTemSet(
     final unit="s",
@@ -516,7 +516,7 @@ model Controller
     displayUnit="m3/s",
     final quantity="VolumeFlowRate")
     "Plant design hot water flow rate thorugh primary loop"
-    annotation (Dialog(group="Boiler plant configuration parameters"));
+    annotation (Dialog(group="Boiler plant configuration parameters", enable=have_varPriPum));
 
   parameter Real boiDesFlo[nBoi](
     each final min=1e-6,
@@ -883,7 +883,7 @@ model Controller
       iconTransformation(extent={{-140,-190},{-100,-150}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uPriPum[nPumPri]
-    "Primary pump proven on signal from plant"
+    "Primary pump status: proven on"
     annotation (Placement(transformation(extent={{-440,-420},{-400,-380}}),
       iconTransformation(extent={{-140,-220},{-100,-180}})));
 
