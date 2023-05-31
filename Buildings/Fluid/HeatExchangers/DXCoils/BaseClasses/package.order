@@ -4,6 +4,7 @@ CoilCapacityAirSource
 CoilDefrostCapacity
 CoilDefrostTimeCalculations
 Condensation
+CoolingCapacityAirCooled
 CoolingCapacityWaterCooled
 DXCooling
 DryCoil
@@ -14,6 +15,7 @@ InputPower
 PartialCoilCapacity
 PartialCoilCondition
 PartialCoilInterface
+PartialCoolingCapacity
 PartialDXCoil
 PartialDXCoolingCoil
 PartialDXHeatingCoil
