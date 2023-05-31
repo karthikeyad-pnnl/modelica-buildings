@@ -10,7 +10,6 @@ Geothermal
 HeatExchangers
 HeatPumps
 Humidifiers
-HydronicConfigurations
 MassExchangers
 MixingVolumes
 Movers
@@ -19,6 +18,7 @@ SolarCollectors
 Sources
 Storage
 Utilities
+ZoneEquipment
 Data
 Types
 Examples

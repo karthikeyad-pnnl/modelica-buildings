@@ -187,8 +187,7 @@ protected
     else zeros(9)
     "Coefficients for cubic spline of motor efficiency vs. motor PLR with generic curves";
 
-  final parameter Modelica.Units.SI.PressureDifference dpMax(
-    displayUnit="Pa")=
+  parameter Modelica.Units.SI.PressureDifference dpMax(displayUnit="Pa")=
     per.dpMax "Maximum head";
 
   parameter Real delta = 0.05
