@@ -135,9 +135,6 @@ void cfdSendStopCommand(void *thread) {
   if (cosim->ffd->temHea != NULL){
     free(cosim->ffd->temHea);
   }
-  if (cosim->ffd->msg != NULL){
-    free(cosim->ffd->msg);
-  }
   if (cosim->para != NULL){
     free(cosim->para);
   }
