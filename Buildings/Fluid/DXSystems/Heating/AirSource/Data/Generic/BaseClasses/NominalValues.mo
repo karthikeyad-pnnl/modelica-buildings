@@ -7,10 +7,8 @@ record NominalValues "Data record of nominal values"
     "Nominal capacity"
     annotation (Dialog(group="Nominal condition"));
 
-  parameter Real COP_nominal(final unit="1") "Nominal coefficient of performance"
-    annotation (Dialog(group="Nominal condition"));
-
-  parameter Real SHR_nominal(final unit="1") "Nominal sensible heat ratio"
+  parameter Real COP_nominal(final unit="1")
+    "Nominal coefficient of performance"
     annotation (Dialog(group="Nominal condition"));
 
   parameter Modelica.Units.SI.MassFlowRate m_flow_nominal
@@ -32,14 +30,6 @@ record NominalValues "Data record of nominal values"
   parameter Modelica.Units.SI.Pressure p_nominal=101325
     "Atmospheric pressure"
     annotation (Dialog(tab="General", group="Nominal condition"));
-
-  final parameter Modelica.Units.SI.Time tWet=0
-    "Time until moisture drips from coil when a dry coil is switched on"
-    annotation(HideResult=true);
-
-  final parameter Real gamma(min=0) = 0
-    "Ratio of evaporation heat transfer divided by latent heat transfer at nominal conditions"
-   annotation(HideResult=true);
 
 annotation (defaultComponentName="nomVal",
               preferredView="info",

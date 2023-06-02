@@ -6,12 +6,15 @@ record Stage "Generic data record for a stage of a air source DX coil"
     "Rotational speed";
 
   replaceable parameter Buildings.Fluid.DXSystems.Heating.AirSource.Data.Generic.BaseClasses.NominalValues
-    nomVal "Nominal values"
+    nomVal
+    "Nominal values"
     annotation (Placement(transformation(extent={{60,60},{80,80}})));
 
   replaceable parameter
     Buildings.Fluid.DXSystems.Heating.AirSource.Data.Generic.BaseClasses.PerformanceCurve
-    perCur "Performance curves for this stage" annotation (choicesAllMatching=true,
+    perCur
+    "Performance curves for this stage"
+    annotation (choicesAllMatching=true,
       Placement(transformation(extent={{60,20},{80,40}})));
 
 annotation (defaultComponentName="per",
