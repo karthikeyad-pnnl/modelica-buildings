@@ -9,7 +9,6 @@ record SingleSpeedHeating
           Buildings.Fluid.DXSystems.Heating.AirSource.Data.Generic.BaseClasses.NominalValues(
           Q_flow_nominal=15000,
           COP_nominal=2.75,
-          SHR_nominal=1,
           m_flow_nominal=0.782220983308365,
           TEvaIn_nominal=273.15 + 6,
           TConIn_nominal=273.15 + 21),

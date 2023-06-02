@@ -31,6 +31,14 @@ record NominalValues "Data record of nominal values"
     "Atmospheric pressure"
     annotation (Dialog(tab="General", group="Nominal condition"));
 
+  final parameter Modelica.Units.SI.Time tWet=0
+    "Time until moisture drips from coil when a dry coil is switched on"
+    annotation(HideResult=true);
+
+  final parameter Real gamma(min=0) = 0
+    "Ratio of evaporation heat transfer divided by latent heat transfer at nominal conditions"
+    annotation(HideResult=true);
+
 annotation (defaultComponentName="nomVal",
               preferredView="info",
   Documentation(info="<html>
