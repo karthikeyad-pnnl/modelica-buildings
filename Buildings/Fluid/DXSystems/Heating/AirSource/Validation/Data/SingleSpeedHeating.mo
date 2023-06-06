@@ -1,7 +1,7 @@
 within Buildings.Fluid.DXSystems.Heating.AirSource.Validation.Data;
 record SingleSpeedHeating
   "Data record for DX heating coil in validation models"
-  extends Buildings.Fluid.DXSystems.Heating.AirSource.Data.Generic.Coil(
+  extends Buildings.Fluid.DXSystems.Heating.AirSource.Data.Generic.DXCoil(
     sta={
         Buildings.Fluid.DXSystems.Heating.AirSource.Data.Generic.BaseClasses.Stage(
         spe=1800/60,
