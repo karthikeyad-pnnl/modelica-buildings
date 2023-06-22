@@ -363,7 +363,7 @@ equation
     annotation (Line(points={{-99,90},{-82,90}}, color={0,0,127}));
   connect(datRea.y[24], K2C[2].u)
     annotation (Line(points={{-99,90},{-82,90}}, color={0,0,127}));
-  connect(fanProOn.y, modCon.uFan) annotation (Line(points={{56,10},{54,10},{54,
+  connect(fanProOn.y, modCon.uFan) annotation (Line(points={{56,10},{60,10},{60,
           -96},{-102,-96},{-102,-53},{-88,-53}}, color={255,0,255}));
   connect(zon.TAir, modCon.TZon) annotation (Line(points={{99,68},{112,68},{112,
           -100},{-98,-100},{-98,-56.6},{-88,-56.6}}, color={0,0,127}));

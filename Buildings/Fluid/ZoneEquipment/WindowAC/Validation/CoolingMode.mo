@@ -102,7 +102,7 @@ model CoolingMode
     annotation (Placement(transformation(extent={{-130,-90},{-110,-70}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Hysteresis fanProOn(uLow=0.04, uHigh=
-        0.05) "Check if fan is proven on based off of measured fan speed"
+        0.05) "Check if fan is proven on based on measured fan speed"
     annotation (Placement(transformation(extent={{30,6},{50,26}})));
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea

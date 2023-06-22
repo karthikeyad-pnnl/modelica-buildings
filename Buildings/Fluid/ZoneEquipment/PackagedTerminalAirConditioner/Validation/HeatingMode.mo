@@ -376,8 +376,9 @@ equation
           {-94,66},{-126,66},{-126,10},{-94,10}}, color={0,0,127}));
   connect(Nominal_mass_flow.y, division.u2)
     annotation (Line(points={{-111,-2},{-94,-2}}, color={0,0,127}));
-  connect(fanProOn.y, modCon.uFan) annotation (Line(points={{56,10},{56,-100},{-104,
-          -100},{-104,-53},{-88,-53}}, color={255,0,255}));
+  connect(fanProOn.y, modCon.uFan) annotation (Line(points={{56,10},{60,10},{60,
+          -100},{-104,-100},{-104,-53},{-88,-53}},
+                                       color={255,0,255}));
   connect(zon.TAir, modCon.TZon) annotation (Line(points={{99,68},{106,68},{106,
           -104},{-92,-104},{-92,-56.6},{-88,-56.6}}, color={0,0,127}));
   connect(K2C[2].y, modCon.TCooSet) annotation (Line(points={{-58,90},{-52,90},{
