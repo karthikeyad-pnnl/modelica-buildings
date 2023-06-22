@@ -34,6 +34,9 @@ equation
           20,-66},{20,-6},{38,-6}}, color={255,0,255}));
   annotation(Icon(coordinateSystem(preserveAspectRatio=false)),
     Diagram(coordinateSystem(preserveAspectRatio=false)),
+    experiment(Tolerance=1e-06),
+    __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Fluid/ZoneEquipment/BaseClasses/Validation/CyclingFan.mos"
+        "Simulate and Plot"),
     Documentation(info="<html>
     <p>
     This is a validation model for the controller 
