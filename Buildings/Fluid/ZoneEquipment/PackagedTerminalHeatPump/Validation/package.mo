@@ -1,5 +1,5 @@
 within Buildings.Fluid.ZoneEquipment.PackagedTerminalHeatPump;
-package Validation
+package Validation "Package with validation models for the packaged terminal heat pump"
     extends Modelica.Icons.ExamplesPackage;
 
 annotation (Documentation(info="<html>

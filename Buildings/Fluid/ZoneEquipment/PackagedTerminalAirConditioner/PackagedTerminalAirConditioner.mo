@@ -1,5 +1,5 @@
 within Buildings.Fluid.ZoneEquipment.PackagedTerminalAirConditioner;
-model PackagedTerminalAirConditioner
+model PackagedTerminalAirConditioner "Package with system model for the packaged terminal air conditioner"
   extends Buildings.Fluid.ZoneEquipment.BaseClasses.EquipmentInterfaces(
     final cooCoiTyp=Buildings.Fluid.ZoneEquipment.BaseClasses.Types.CooSou.eleDX,
     final heaCoiTyp=Buildings.Fluid.ZoneEquipment.BaseClasses.Types.HeaSou.ele,

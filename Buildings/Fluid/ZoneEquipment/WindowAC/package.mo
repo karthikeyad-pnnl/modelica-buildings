@@ -1,5 +1,5 @@
 within Buildings.Fluid.ZoneEquipment;
-package WindowAC
+package WindowAC "Package with models for the window air conditioner"
   annotation (Icon(graphics={
         Rectangle(
           lineColor={200,200,200},
@@ -33,5 +33,14 @@ package WindowAC
           lineColor={128,128,128},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
-          extent={{-80.0,0.0},{-20.0,60.0}})}));
+          extent={{-80.0,0.0},{-20.0,60.0}})}),
+  Documentation(info="<html>
+  This package contains models for the window air conditioner unit, including the system model
+  <a href=\"modelica://Buildings.Fluid.ZoneEquipment.WindowAC.WindowAC\">
+  Buildings.Fluid.ZoneEquipment.WindowAC.WindowAC</a>, example model in 
+  <a href=\"modelica://Buildings.Fluid.ZoneEquipment.WindowAC.Examples\">
+  Buildings.Fluid.ZoneEquipment.WindowAC.Examples</a>, and validation model in 
+  <a href=\"modelica://Buildings.Fluid.ZoneEquipment.WindowAC.Validation\">
+  Buildings.Fluid.ZoneEquipment.WindowAC.Validation</a>. 
+  </html>"));
 end WindowAC;

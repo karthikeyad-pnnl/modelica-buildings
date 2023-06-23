@@ -1,11 +1,13 @@
 within Buildings.Fluid.ZoneEquipment.WindowAC;
-model WindowAC
+model WindowAC "Package with system model for the window air conditioner"
     extends Buildings.Fluid.ZoneEquipment.BaseClasses.EquipmentInterfaces(
     final cooCoiTyp=Buildings.Fluid.ZoneEquipment.BaseClasses.Types.CooSou.eleDX,
     final heaCoiTyp=Buildings.Fluid.ZoneEquipment.BaseClasses.Types.HeaSou.noHea,
     oaPorTyp=Buildings.Fluid.ZoneEquipment.BaseClasses.Types.OAPorts.oaMix,
-    redeclare final package MediumHW =Modelica.Media.Interfaces.PartialMedium,
-    redeclare final package MediumCHW =Modelica.Media.Interfaces.PartialMedium);
+    redeclare final package MediumHW =
+        Modelica.Media.Interfaces.PartialMedium,
+    redeclare final package MediumCHW =
+        Modelica.Media.Interfaces.PartialMedium);
 
   parameter Modelica.Units.SI.PressureDifference dpAir_nominal
     "Total pressure difference across supply and return ports in airloop"

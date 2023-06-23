@@ -126,7 +126,8 @@ model HeatingMode
 
   Buildings.Controls.OBC.CDL.Continuous.Hysteresis fanProOn(
     final uLow=0.04,
-    final uHigh=0.05) "Check if fan is proven on based on measured fan speed"
+    final uHigh=0.05)
+    "Check if fan is proven on based on measured fan speed"
     annotation (Placement(transformation(extent={{34,0},{54,20}})));
 
   inner Buildings.ThermalZones.EnergyPlus_9_6_0.Building building(

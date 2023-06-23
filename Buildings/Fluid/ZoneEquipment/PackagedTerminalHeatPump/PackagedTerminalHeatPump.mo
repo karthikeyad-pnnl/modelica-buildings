@@ -1,5 +1,5 @@
 within Buildings.Fluid.ZoneEquipment.PackagedTerminalHeatPump;
-model PackagedTerminalHeatPump
+model PackagedTerminalHeatPump "Package with system model for the packaged terminal heat pump"
   extends Buildings.Fluid.ZoneEquipment.BaseClasses.EquipmentInterfaces(
     final cooCoiTyp=Buildings.Fluid.ZoneEquipment.BaseClasses.Types.CooSou.eleDX,
     final heaCoiTyp=Buildings.Fluid.ZoneEquipment.BaseClasses.Types.HeaSou.heaPum,
@@ -211,7 +211,7 @@ equation
     <p>
     This is a packaged terminal heat pump system model. The system consists of an 
     outdoor air mixer, a signle-speed direct expansion (DX) cooling coil, 
-    a single-speed DX heating coil, constant speed supply air fan, and a supplemental 
+    a single-speed DX heating coil, a constant speed supply air fan, and a supplemental 
     heating coil. 
     </p>
     <p>

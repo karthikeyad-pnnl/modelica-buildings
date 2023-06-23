@@ -58,16 +58,16 @@ equation
     Simulation results are observed as follows: 
     <ul>
     <li>
-    When the zone temperature (<code>TZon</code>) is below the heating setpoint
+    When the zone temperature (<code>TZon</code>) falls below the heating setpoint
     (<code>THeaSet</code>) or exceeds the cooling setpoint
     (<code>TCooSet</code>), the fan is enabled (<code>conVarFanConWat.yFan</code>) 
-    operating at a maximum speed.
+    to operate at its maximum speed.
     </li>
     <li>
-    When the zone temperature (<code>TZon</code>) is between the cooling setpoint
+    When the zone temperature (<code>TZon</code>) is within the range of the cooling setpoint
     (<code>TCooSet</code>) and heating setpoint(<code>THeaSet</code>), 
-    the fan is run at a minimum speed if the occupancy availability signal is true (
-    <code>uAva=ture</code>) and is disabled if the occupancy availability signal is false (
+    the fan is controlled to run at a minimum speed if the occupancy availability signal is true (
+    <code>uAva=ture</code>), and it is disabled if the occupancy availability signal is false (
     <code>uAva=false</code>).
     </li>
     </ul>

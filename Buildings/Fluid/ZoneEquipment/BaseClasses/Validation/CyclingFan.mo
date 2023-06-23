@@ -52,9 +52,9 @@ equation
     <ul>
     <li>
     When the fan operation mode signal is enabled (<code>fanOpeMod=true</code>),
-    the fan is enabled (<code>conFanCyc.yFan=true</code>) and run at a minimum speed 
-    <code>conFanCyc.minFanSpe</code>. Until the fan proven signal is ture (<code>uFan=true</code>),  
-    the fan speed (<code>conFanCyc.yFanSpe</code>) is then set to a maximum speed.
+    the fan is enabled (<code>conFanCyc.yFan=true</code>) and starts running at the minimum speed 
+    <code>conFanCyc.minFanSpe</code>. Once the fan proven on signal is true (<code>uFan=true</code>),  
+    the fan speed (<code>conFanCyc.yFanSpe</code>) is then adjusted to the maximum speed.
     </li>
     <li>
     When the fan operation mode signal is false (<code>fanOpeMod=false</code>), 

@@ -3,6 +3,6 @@ package Examples "Package with example model for the packaged terminal air condi
     extends Modelica.Icons.ExamplesPackage;
 
 annotation (Documentation(info="<html>
-<p>This package contains example models for the PTAC. </p>
+<p>This package contains example models for the packaged terminal air conditioner (PTAC). </p>
 </html>"));
 end Examples;

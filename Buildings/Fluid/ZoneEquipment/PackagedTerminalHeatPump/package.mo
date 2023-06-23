@@ -1,5 +1,5 @@
 within Buildings.Fluid.ZoneEquipment;
-package PackagedTerminalHeatPump
+package PackagedTerminalHeatPump "Package with models for the packaged terminal heat pump"
   annotation (Icon(graphics={
         Rectangle(
           lineColor={200,200,200},
@@ -33,11 +33,14 @@ package PackagedTerminalHeatPump
           lineColor={128,128,128},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
-          extent={{-80.0,0.0},{-20.0,60.0}})}), Documentation(info="<html>
+          extent={{-80.0,0.0},{-20.0,60.0}})}),
+  Documentation(info="<html>
   This package contains models for the packaged terminal heat pump unit, including the system model
   <a href=\"modelica://Buildings.Fluid.ZoneEquipment.PackagedTerminalHeatPump.PackagedTerminalHeatPump\">
-  Buildings.Fluid.ZoneEquipment.PackagedTerminalHeatPump.PackagedTerminalHeatPump</a> and the package of control modules
-  <a href=\"modelica://Buildings.Fluid.ZoneEquipment.PackagedTerminalHeatPump.Controls\">
-  Buildings.Fluid.ZoneEquipment.PackagedTerminalHeatPump.Controls</a>. 
-</html>"));
+  Buildings.Fluid.ZoneEquipment.PackagedTerminalHeatPump.PackagedTerminalHeatPump</a>, example model in 
+  <a href=\"modelica://Buildings.Fluid.ZoneEquipment.PackagedTerminalHeatPump.Examples\">
+  Buildings.Fluid.ZoneEquipment.PackagedTerminalHeatPump.Examples</a>, and validation models in 
+  <a href=\"modelica://Buildings.Fluid.ZoneEquipment.PackagedTerminalHeatPump.Validation\">
+  Buildings.Fluid.ZoneEquipment.PackagedTerminalHeatPump.Validation</a>. 
+  </html>"));
 end PackagedTerminalHeatPump;

@@ -1,5 +1,5 @@
 within Buildings.Fluid.ZoneEquipment;
-package PackagedTerminalAirConditioner
+package PackagedTerminalAirConditioner "Package with models for the packaged terminal air conditioner"
   annotation (Icon(graphics={
         Rectangle(
           lineColor={200,200,200},
@@ -33,11 +33,14 @@ package PackagedTerminalAirConditioner
           lineColor={128,128,128},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
-          extent={{-80.0,0.0},{-20.0,60.0}})}), Documentation(info="<html>
+          extent={{-80.0,0.0},{-20.0,60.0}})}),
+  Documentation(info="<html>
   This package contains models for the packaged terminal air conditioner unit, including the system model
   <a href=\"modelica://Buildings.Fluid.ZoneEquipment.PackagedTerminalAirConditioner.PackagedTerminalAirConditioner\">
-  Buildings.Fluid.ZoneEquipment.PackagedTerminalAirConditioner.PackagedTerminalAirConditioner</a> and the package of control modules
-  <a href=\"modelica://Buildings.Fluid.ZoneEquipment.PackagedTerminalAirConditioner.Controls\">
-  Buildings.Fluid.ZoneEquipment.PackagedTerminalAirConditioner.Controls</a>. 
-</html>"));
+  Buildings.Fluid.ZoneEquipment.PackagedTerminalAirConditioner.PackagedTerminalAirConditioner</a>, example model in 
+  <a href=\"modelica://Buildings.Fluid.ZoneEquipment.PackagedTerminalAirConditioner.Examples\">
+  Buildings.Fluid.ZoneEquipment.PackagedTerminalAirConditioner.Examples</a>, and validation models in 
+  <a href=\"modelica://Buildings.Fluid.ZoneEquipment.PackagedTerminalAirConditioner.Validation\">
+  Buildings.Fluid.ZoneEquipment.PackagedTerminalAirConditioner.Validation</a>. 
+  </html>"));
 end PackagedTerminalAirConditioner;
