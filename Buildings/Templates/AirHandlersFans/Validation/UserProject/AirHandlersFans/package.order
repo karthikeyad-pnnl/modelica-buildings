@@ -1,10 +1,14 @@
 VAVMZBase
 VAVMZCoilElectricHeating
 VAVMZCoilEvaporatorMultiStage
+VAVMZCoilDXHeatingSingleSpeed
 VAVMZCoilEvaporatorVariable
 VAVMZCoilWaterHeating3WVReheat
+VAVMZCoilWaterHeatingCooling
 VAVMZControlG36Airflow
 VAVMZControlG36Pressure
+VAVMZDedicatedDampersAirflow
 VAVMZDedicatedDampersPressure
 VAVMZFanRelief
+VAVMZFanSupplyArrayVariable
 VAVMZFanSupplyBlowThrough
