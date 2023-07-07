@@ -1,5 +1,5 @@
 within Buildings.Templates.AirHandlersFans;
-model VAVMultiZone "Multiple-zone VAV"
+model ZonalHVAC "Zonal HVAC system"
 /*
   HACK: In Dymola only (ticket SR00860858-01), bindings for the parameter record
   cannot be made final if propagation from a top-level record (whole building)
@@ -9,7 +9,7 @@ model VAVMultiZone "Multiple-zone VAV"
 */
   extends Buildings.Templates.AirHandlersFans.Interfaces.PartialAirHandler(
     nZon(final min=2),
-    redeclare Buildings.Templates.AirHandlersFans.Data.VAVMultiZone dat(
+    redeclare Buildings.Templates.AirHandlersFans.Data.ZonalHVAC dat(
       typCoiHeaPre=coiHeaPre.typ,
       typCoiCoo=coiCoo.typ,
       typCoiHeaReh=coiHeaReh.typ,
@@ -768,4 +768,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end VAVMultiZone;
+end ZonalHVAC;

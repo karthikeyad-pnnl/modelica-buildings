@@ -15,7 +15,9 @@ package Types "Package with type definitions"
       G36VAVMultiZone
       "Guideline 36 controller for multiple-zone VAV",
       OpenLoop
-      "Open loop controller")
+      "Open loop controller",
+      EPlusAnalog
+      "Controller that tries to replicate controls in EnergyPlus")
     "Enumeration to configure the AHU controller";
   type ControlFanReturn = enumeration(
       AirflowMeasured
