@@ -1,139 +1,139 @@
 within Buildings.Templates.AirHandlersFans.Components.Data;
-record ZonalHVACController "Record for zonal HVAC system controller"
-  extends Buildings.Templates.AirHandlersFans.Components.Data.PartialController;
+record ZonalHVACController
+  "Record for zonal HVAC system controller"
+  extends Buildings.Templates.AirHandlersFans.Components.Data.PartialController(
+    final typFanRel=false,
+    final typFanRet=false);
 
-  parameter Buildings.Controls.OBC.ASHRAE.G36.Types.OutdoorAirSection typSecOut
-    "Type of outdoor air section"
-    annotation (Evaluate=true, Dialog(group="Configuration", enable=false));
-
-  parameter Modelica.Units.SI.Temperature TAirSupSet_min(
-    final min=273.15,
-    displayUnit="degC")=12+273.15
-    "Lowest supply air temperature setpoint"
-    annotation (Dialog(group="Temperature setpoints",
-    enable=typ==Buildings.Templates.AirHandlersFans.Types.Controller.G36VAVMultiZone));
-
-  parameter Modelica.Units.SI.Temperature TAirSupSet_max(
-    final min=273.15,
-    displayUnit="degC")=18+273.15
-    "Highest supply air temperature setpoint"
-    annotation (Dialog(group="Temperature setpoints",
-    enable=typ==Buildings.Templates.AirHandlersFans.Types.Controller.G36VAVMultiZone));
-
-  parameter Modelica.Units.SI.Temperature TOutRes_min(
-    final min=273.15,
-    displayUnit="degC")=16+273.15
-    "Lowest value of the outdoor air temperature reset range"
-    annotation (Dialog(group="Temperature setpoints",
-    enable=typ==Buildings.Templates.AirHandlersFans.Types.Controller.G36VAVMultiZone));
-
-  parameter Modelica.Units.SI.Temperature TOutRes_max(
-    final min=273.15,
-    displayUnit="degC")=21+273.15
-    "Highest value of the outdoor air temperature reset range"
-    annotation (Dialog(group="Temperature setpoints",
-    enable=typ==Buildings.Templates.AirHandlersFans.Types.Controller.G36VAVMultiZone));
-
-  parameter Modelica.Units.SI.VolumeFlowRate VOutUnc_flow_nominal(
-    start=0)
-    "Uncorrected design outdoor air flow rate, including diversity where applicable"
-    annotation (Dialog(group="Ventilation setpoints",
-      enable=typ==Buildings.Templates.AirHandlersFans.Types.Controller.G36VAVMultiZone and
-      stdVen==Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1));
-  parameter Modelica.Units.SI.VolumeFlowRate VOutTot_flow_nominal(
-    start=0)
-    "Design total outdoor air flow rate"
-    annotation (Dialog(group="Ventilation setpoints",
-      enable=typ==Buildings.Templates.AirHandlersFans.Types.Controller.G36VAVMultiZone and
-      stdVen==Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1));
-  parameter Modelica.Units.SI.VolumeFlowRate VOutAbsMin_flow_nominal(
-    start=0)
-    "Design outdoor air flow rate when all zones with CO2 sensors or occupancy sensors are unpopulated"
-    annotation (Dialog(group="Ventilation setpoints",
-      enable=typ==Buildings.Templates.AirHandlersFans.Types.Controller.G36VAVMultiZone and
-      stdVen==Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24));
-  parameter Modelica.Units.SI.VolumeFlowRate VOutMin_flow_nominal(
-    start=0)
-    "Design minimum outdoor air flow rate when all zones are occupied at their design population, including diversity"
-    annotation (Dialog(group="Ventilation setpoints",
-      enable=typ==Buildings.Templates.AirHandlersFans.Types.Controller.G36VAVMultiZone and
-      stdVen==Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24));
-
-  parameter Modelica.Units.SI.PressureDifference pAirSupSet_rel_max(
-    final min=0,
-    displayUnit="Pa",
-    start=500)
-    "Duct design maximum static pressure"
-    annotation (Dialog(group="Information provided by testing, adjusting, and balancing contractor",
-    enable=typ==Buildings.Templates.AirHandlersFans.Types.Controller.G36VAVMultiZone));
-  parameter Modelica.Units.SI.PressureDifference dpDamOutMinAbs(
-    final min=2.4,
-    displayUnit="Pa",
-    start=5)
-    "Differential pressure across the minimum outdoor air damper that provides the absolute minimum outdoor airflow"
-    annotation (Dialog(group="Information provided by testing, adjusting, and balancing contractor",
-      enable=typ==Buildings.Templates.AirHandlersFans.Types.Controller.G36VAVMultiZone and
-        stdVen==Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24
-        and typSecOut == Buildings.Controls.OBC.ASHRAE.G36.Types.OutdoorAirSection.DedicatedDampersPressure));
-  parameter Modelica.Units.SI.PressureDifference dpDamOutMin_nominal(
-    final min=5,
-    displayUnit="Pa",
-    start=15)
-    "Differential pressure across the minimum outdoor air damper that provides the design minimum outdoor airflow"
-    annotation (Dialog(group="Information provided by testing, adjusting, and balancing contractor",
-      enable=typ==Buildings.Templates.AirHandlersFans.Types.Controller.G36VAVMultiZone and
-        typSecOut==Buildings.Controls.OBC.ASHRAE.G36.Types.OutdoorAirSection.DedicatedDampersPressure));
-
-  parameter Modelica.Units.SI.PressureDifference pAirRetSet_rel_min(
-    final min=2.4,
-    displayUnit="Pa")=10
-    "Return fan minimum discharge static pressure setpoint"
-    annotation (Dialog(group="Information provided by testing, adjusting, and balancing contractor",
-      enable=typ==Buildings.Templates.AirHandlersFans.Types.Controller.G36VAVMultiZone and
-      buiPreCon==Buildings.Controls.OBC.ASHRAE.G36.Types.BuildingPressureControlTypes.ReturnFanDp));
-
-  parameter Modelica.Units.SI.PressureDifference pAirRetSet_rel_max(
-    final min=10,
-    displayUnit="Pa")=40
-    "Return fan maximum discharge static pressure setpoint"
-    annotation (Dialog(group="Information provided by testing, adjusting, and balancing contractor",
-      enable=typ==Buildings.Templates.AirHandlersFans.Types.Controller.G36VAVMultiZone and
-      buiPreCon==Buildings.Controls.OBC.ASHRAE.G36.Types.BuildingPressureControlTypes.ReturnFanDp));
-
-  parameter Modelica.Units.SI.VolumeFlowRate dVFanRet_flow(
-    final min=0,
-    start=0.1)
-    "Airflow differential between supply and return fans to maintain building pressure at setpoint"
-    annotation (Dialog(group="Information provided by testing, adjusting, and balancing contractor",
-      enable=typ==Buildings.Templates.AirHandlersFans.Types.Controller.G36VAVMultiZone and
-      buiPreCon==Buildings.Controls.OBC.ASHRAE.G36.Types.BuildingPressureControlTypes.ReturnFanMeasuredAir));
-
-  parameter Real yFanSup_min(
+  parameter Real minFanSpe(
     final unit="1",
-    final min=0,
-    final max=1)= 0.1
-    "Lowest allowed fan speed if fan is on"
-    annotation (Dialog(group="Information provided by testing, adjusting, and balancing contractor",
-    enable=typ==Buildings.Templates.AirHandlersFans.Types.Controller.G36VAVMultiZone and
-    typFanSup<>Buildings.Templates.Components.Types.Fan.None));
+    displayUnit="1",
+    final min=0)
+    "Minimum allowed fan speed"
+    annotation(Dialog(group="Fan parameters",
+      enable= not has_mulFan_new));
 
-  parameter Real yFanRel_min(
-    final unit="1",
-    final min=0,
-    final max=1)=0.1
-    "Minimum relief fan speed"
-    annotation (Dialog(group="Information provided by testing, adjusting, and balancing contractor",
-      enable=typ==Buildings.Templates.AirHandlersFans.Types.Controller.G36VAVMultiZone and
-      typFanRel<>Buildings.Templates.Components.Types.Fan.None));
+  parameter Modelica.Units.SI.Time tFanEnaDel = 30
+    "Time period for delay between switching from deadband mode to heating/cooling mode"
+    annotation(Dialog(group="Fan parameters"));
 
-  parameter Real yFanRet_min(
+  parameter Modelica.Units.SI.Time tFanEna = 300
+    "Minimum duration for which fan is enabled"
+    annotation(Dialog(group="Fan parameters"));
+
+  parameter Integer nSpe(
+    final min=2) = 2
+    "Number of fan speeds"
+    annotation(Dialog(group="Fan parameters",
+      enable=has_mulFan_new));
+
+  parameter Real fanSpe[nSpe](
+    final min=fill(0, nSpe),
+    final max=fill(1, nSpe),
+    final unit=fill("1", nSpe),
+    displayUnit=fill("1", nSpe)) = {0,1}
+    "Fan speed values"
+    annotation(Dialog(group="Fan parameters",
+      enable=has_mulFan_new));
+
+  parameter Modelica.Units.SI.Time tSpe=180
+    "Minimum amount of time for which calculated speed exceeds preset value for 
+    speed to be changed"
+    annotation(Dialog(group="Fan parameters",
+      enable=has_mulFan_new));
+
+  parameter Modelica.Units.SI.TemperatureDifference dTHys = 0.2
+    "Temperature difference used for enabling cooling and heating mode"
+    annotation(Dialog(tab="Advanced"));
+
+  parameter Buildings.Controls.OBC.CDL.Types.SimpleController controllerTypeCoo=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "Type of cooling loop controller"
+    annotation (Dialog(group="Cooling mode control"));
+
+  parameter Real kCoo(
     final unit="1",
-    final min=0,
-    final max=1)=0.1
-    "Minimum return fan speed"
-    annotation (Dialog(group="Information provided by testing, adjusting, and balancing contractor",
-      enable=typ==Buildings.Templates.AirHandlersFans.Types.Controller.G36VAVMultiZone and
-      typFanRet<>Buildings.Templates.Components.Types.Fan.None));
+    displayUnit="1",
+    final min=0)=1
+    "Gain of cooling loop controller"
+    annotation(Dialog(group="Cooling mode control"));
+
+  parameter Modelica.Units.SI.Time TiCoo=0.5
+    "Time constant of cooling loop integrator block"
+    annotation(Dialog(group="Cooling mode control",
+      enable = controllerTypeCoo == Buildings.Controls.OBC.CDL.Types.SimpleController.PI or
+      controllerTypeCoo == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
+
+  parameter Modelica.Units.SI.Time TdCoo=0.1
+    "Time constant of cooling loop derivative block"
+    annotation(Dialog(group="Cooling mode control",
+      enable = controllerTypeCoo == Buildings.Controls.OBC.CDL.Types.SimpleController.PD or
+      controllerTypeCoo == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
+
+  parameter Real TSupDew(
+    final unit="K",
+    displayUnit="K",
+    final quantity="ThermodynamicTemperature")=273.15 + 12
+    "Supply air temperature limit under which condensation will be caused"
+    annotation(Dialog(tab="Advanced"));
+
+  parameter Buildings.Controls.OBC.CDL.Types.SimpleController controllerTypeHea=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "Type of heating loop controller"
+    annotation (Dialog(group="Heating mode control"));
+
+  parameter Real kHea(
+    final unit="1",
+    displayUnit="1",
+    final min=0)=1
+    "Gain of heating loop controller"
+    annotation(Dialog(group="Heating mode control"));
+
+  parameter Modelica.Units.SI.Time TiHea=0.5
+    "Time constant of heating loop integrator block"
+    annotation(Dialog(group="Heating mode control",
+      enable = controllerTypeHea == Buildings.Controls.OBC.CDL.Types.SimpleController.PI or
+      controllerTypeHea == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
+
+  parameter Modelica.Units.SI.Time TdHea=0.1
+    "Time constant of heating loop derivative block"
+    annotation(Dialog(group="Heating mode control",
+      enable = controllerTypeHea == Buildings.Controls.OBC.CDL.Types.SimpleController.PD or
+      controllerTypeHea == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
+
+  parameter Modelica.Blocks.Types.SimpleController controllerTypeSupHea=Modelica.Blocks.Types.SimpleController.PI
+    "Type of supplementary heating controller"
+    annotation (Dialog(group="Supplementary heating control"));
+
+  parameter Real kSupHea(
+    final unit="1",
+    displayUnit="1",
+    final min=0)=1
+    "Gain of supplementary heating controller"
+    annotation (Dialog(group="Supplementary heating control"));
+
+  parameter Modelica.Units.SI.Time TiSupHea=120
+    "Time constant of Integrator block for supplementary heating"
+    annotation (Dialog(group="Supplementary heating control"));
+
+  parameter Modelica.Units.SI.Time TdSupHea=0.1
+    "Time constant of Derivative block for supplementary heating"
+    annotation (Dialog(group="Supplementary heating control"));
+
+  parameter Real TLocOut(
+    final unit="K",
+    displayUnit="degC",
+    final quantity="ThermodynamicTemperature")=273.15-8
+    "Minimum outdoor dry-bulb temperature for compressor operation";
+
+  parameter Real dTHeaSet(
+    final unit="K",
+    displayUnit="degC",
+    final quantity="ThermodynamicTemperature")=-2
+    "Constant value to reduce heating setpoint for supplementary heating"
+    annotation(Dialog(group="Setpoint adjustment"));
+
+  parameter Boolean has_mulFan_new = has_mulFan
+    "Does the zone equipment have multiple speed fan?"
+    annotation(Dialog(enable=false, tab="Non-configurable"));
 
   annotation (Documentation(info="<html>
 <p>

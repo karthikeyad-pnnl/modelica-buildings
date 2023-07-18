@@ -1,16 +1,14 @@
 within Buildings.Templates.AirHandlersFans.Data;
 record ZonalHVAC "Record for zonal HVAC system"
   extends Buildings.Templates.AirHandlersFans.Data.PartialAirHandler(
+    final typ=Buildings.Templates.AirHandlersFans.Types.Configuration.SingleDuct,
     final typCtl=Buildings.Templates.AirHandlersFans.Types.Controller.EPlusAnalog,
-
     final typFanRet=Buildings.Templates.Components.Types.Fan.None,
     final typFanRel=Buildings.Templates.Components.Types.Fan.None,
     redeclare
       Buildings.Templates.AirHandlersFans.Components.Data.ZonalHVACController
       ctl(
-      final typSecOut=typSecOut,
-      final buiPreCon=buiPreCon,
-      final stdVen=stdVen),
+        final typFanSup=typFanSup),
     final mAirSup_flow_nominal=fanSup.m_flow_nominal,
     final mAirRet_flow_nominal=if typFanRet <> Buildings.Templates.Components.Types.Fan.None
          then fanRet.m_flow_nominal elseif typFanRel <> Buildings.Templates.Components.Types.Fan.None
@@ -35,15 +33,6 @@ record ZonalHVAC "Record for zonal HVAC system"
   parameter Buildings.Templates.Components.Types.Valve typValCoiHeaReh
     "Type of valve for heating coil in reheat position"
     annotation (Evaluate=true, Dialog(group="Configuration", enable=false));
-  parameter Buildings.Controls.OBC.ASHRAE.G36.Types.OutdoorAirSection typSecOut
-    "Type of outdoor air section"
-    annotation (Evaluate=true, Dialog(group="Configuration", enable=false));
-  parameter Buildings.Controls.OBC.ASHRAE.G36.Types.BuildingPressureControlTypes buiPreCon
-    "Type of building pressure control system"
-    annotation (Evaluate=true, Dialog(group="Configuration", enable=false));
-  parameter Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard stdVen
-    "Ventilation standard"
-    annotation(Evaluate=true, Dialog(group="Energy and ventilation standards", enable=false));
 
   parameter Buildings.Templates.Components.Data.Fan fanSup(
     final typ=typFanSup)

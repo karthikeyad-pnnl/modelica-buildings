@@ -61,7 +61,9 @@ package Types "Package with type definitions"
       SingleVariable
       "Single fan - Variable speed",
       ArrayVariable
-      "Fan array - Variable speed")
+      "Fan array - Variable speed",
+      SingleMultispeed
+      "Single fan - Multi speed")
     "Enumeration to configure the fan";
   type FanSingle = enumeration(
       Housed
