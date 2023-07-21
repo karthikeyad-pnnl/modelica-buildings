@@ -1,6 +1,7 @@
 within Buildings.Templates.AirHandlersFans.Components.Data;
 record ZonalHVACController
   "Record for zonal HVAC system controller"
+
   extends Buildings.Templates.AirHandlersFans.Components.Data.PartialController(
     final typFanRel=false,
     final typFanRet=false);

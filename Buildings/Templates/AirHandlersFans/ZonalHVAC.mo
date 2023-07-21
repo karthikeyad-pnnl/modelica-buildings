@@ -1,5 +1,6 @@
 within Buildings.Templates.AirHandlersFans;
-model ZonalHVAC "Zonal HVAC system"
+model ZonalHVAC
+  "Zonal HVAC system"
 /*
   HACK: In Dymola only (ticket SR00860858-01), bindings for the parameter record
   cannot be made final if propagation from a top-level record (whole building)
@@ -7,8 +8,7 @@ model ZonalHVAC "Zonal HVAC system"
   Instead those parameter declarations are annoted with enable=false
   in the record class.
 */
-  extends Buildings.Templates.AirHandlersFans.Interfaces.PartialAirHandler(
-    nZon(final min=2),
+  extends Buildings.Templates.AirHandlersFans.Interfaces.ZonalHVAC(
     redeclare Buildings.Templates.AirHandlersFans.Data.ZonalHVAC dat(
       typCoiHeaPre=coiHeaPre.typ,
       typCoiCoo=coiCoo.typ,
@@ -70,9 +70,8 @@ model ZonalHVAC "Zonal HVAC system"
       final fanRel=dat.fanRel,
       final fanRet=dat.fanRet))
      "Outdoor/relief/return air section"
-     annotation (
-     Dialog(group="Configuration"), Placement(transformation(extent={{-280,-220},
-            {-120,-60}})));
+     annotation (Dialog(group="Configuration"),
+       Placement(transformation(extent={{-280,-220},{-120,-60}})));
 
   Buildings.Templates.Components.Sensors.Temperature TAirMix(
     redeclare final package Medium = MediumAir,
@@ -174,15 +173,16 @@ model ZonalHVAC "Zonal HVAC system"
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={-40,90})));
+
   Buildings.Fluid.Sources.Boundary_pT bui(
     redeclare final package Medium = MediumAir,
     final use_p_in=have_senPreBui,
     final nPorts=1)
     "Building absolute pressure in representative space"
     annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=-90,
-        origin={40,60})));
+      extent={{-10,-10},{10,10}},
+      rotation=-90,
+      origin={40,60})));
 
   Buildings.Templates.Components.Sensors.Temperature TAirRet(
     redeclare final package Medium = MediumAir,
@@ -194,8 +194,7 @@ model ZonalHVAC "Zonal HVAC system"
     final typ=Buildings.Templates.Components.Types.SensorTemperature.Standard,
     final m_flow_nominal=mAirRet_flow_nominal)
     "Return air temperature sensor"
-    annotation (
-      Placement(transformation(extent={{220,-90},{200,-70}})));
+    annotation (Placement(transformation(extent={{220,-90},{200,-70}})));
 
   Buildings.Templates.Components.Sensors.SpecificEnthalpy hAirRet(
     redeclare final package Medium = MediumAir,
@@ -205,15 +204,13 @@ model ZonalHVAC "Zonal HVAC system"
       ctl.typCtlEco==Buildings.Controls.OBC.ASHRAE.G36.Types.ControlEconomizer.DifferentialEnthalpyWithFixedDryBulb,
     final m_flow_nominal=mAirRet_flow_nominal)
     "Return air enthalpy sensor"
-    annotation (
-      Placement(transformation(extent={{250,-90},{230,-70}})));
+    annotation (Placement(transformation(extent={{250,-90},{230,-70}})));
 
   Buildings.Templates.Components.Sensors.DifferentialPressure pAirSup_rel(
     redeclare final package Medium = MediumAir,
     final have_sen=true)
     "Duct static pressure sensor"
-    annotation (
-      Placement(transformation(extent={{250,-230},{270,-210}})));
+    annotation (Placement(transformation(extent={{250,-230},{270,-210}})));
 
   inner replaceable Buildings.Templates.Components.Coils.WaterBasedHeating coiHeaPre(
     redeclare final package MediumHeaWat=MediumHeaWat,
@@ -264,6 +261,7 @@ model ZonalHVAC "Zonal HVAC system"
         "Chilled water coil with two-way valve")),
     Dialog(group="Configuration"),
     Placement(transformation(extent={{70,-210},{90,-190}})));
+
   inner replaceable Buildings.Templates.Components.Coils.None coiHeaReh
     constrainedby Buildings.Templates.Components.Interfaces.PartialCoil(
       final dat=dat.coiHeaReh,
@@ -287,6 +285,7 @@ model ZonalHVAC "Zonal HVAC system"
       enable=coiHeaPre.typ==Buildings.Templates.Components.Types.Coil.None and
       ctl.typ<>Buildings.Templates.AirHandlersFans.Types.Controller.G36VAVMultiZone),
     Placement(transformation(extent={{130,-210},{150,-190}})));
+
   Buildings.Fluid.FixedResistances.Junction junHeaWatSup(
     redeclare final package Medium = MediumHeaWat,
     final m_flow_nominal=mHeaWat_flow_nominal*{1,-1,-1},
@@ -306,6 +305,7 @@ model ZonalHVAC "Zonal HVAC system"
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={20,-260})));
+
   Buildings.Fluid.FixedResistances.Junction junHeaWatRet(
     redeclare final package Medium = MediumHeaWat,
     final m_flow_nominal=mHeaWat_flow_nominal*{1,-1,1},
@@ -325,11 +325,11 @@ model ZonalHVAC "Zonal HVAC system"
         extent={{10,-10},{-10,10}},
         rotation=90,
         origin={-20,-240})));
-  inner replaceable Buildings.Templates.AirHandlersFans.Components.Controls.G36VAVMultiZone ctl
+
+  inner replaceable Buildings.Templates.AirHandlersFans.Components.Controls.EPlusZonalHVAC ctl
     constrainedby
-    Buildings.Templates.AirHandlersFans.Components.Interfaces.PartialControllerVAVMultizone(
-      final dat=dat.ctl,
-      final nZon=nZon)
+    Buildings.Templates.AirHandlersFans.Components.Interfaces.PartialControllerZonalHVAC(
+      final dat=dat.ctl)
     "Control selections"
     annotation (
       Dialog(group="Controls"),
@@ -343,6 +343,7 @@ initial equation
     fanSupDra.typ<>Buildings.Templates.Components.Types.Fan.None),
     "In "+ getInstanceName() + ": "+
     "The template is configured with both a blow-through fan and a draw-through fan, which is not supported.");
+
 equation
   /* Control point connection - start */
   connect(TAirMix.y, bus.TAirMix);
