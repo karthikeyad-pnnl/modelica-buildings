@@ -1,6 +1,6 @@
-VAVMultiZone
-VAVMZReliefDamperNoFan
-PartialVAVMultizone
-OpenLoop
-G36VAVMultiZone
 AllSystems
+G36VAVMultiZone
+OpenLoop
+PartialVAVMultizone
+VAVMZReliefDamperNoFan
+VAVMultiZone
