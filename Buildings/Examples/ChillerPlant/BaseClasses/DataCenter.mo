@@ -193,8 +193,8 @@ partial model DataCenter
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={98,180})));
-  Buildings.Fluid.Sensors.TemperatureTwoPort TAirSup(redeclare package Medium
-      = MediumA, m_flow_nominal=mAir_flow_nominal)
+  Buildings.Fluid.Sensors.TemperatureTwoPort TAirSup(redeclare package Medium =
+        MediumA, m_flow_nominal=mAir_flow_nominal)
     "Supply air temperature to data center" annotation (Placement(
         transformation(
         extent={{10,-10},{-10,10}},
@@ -206,8 +206,8 @@ partial model DataCenter
         extent={{10,10},{-10,-10}},
         rotation=270,
         origin={218,0})));
-  Buildings.Fluid.Sensors.TemperatureTwoPort TCWLeaTow(redeclare package Medium
-      = MediumW, m_flow_nominal=mCW_flow_nominal)
+  Buildings.Fluid.Sensors.TemperatureTwoPort TCWLeaTow(redeclare package Medium =
+        MediumW, m_flow_nominal=mCW_flow_nominal)
     "Temperature of condenser water leaving the cooling tower"      annotation (
      Placement(transformation(
         extent={{10,-10},{-10,10}},
@@ -245,10 +245,12 @@ partial model DataCenter
         rotation=270,
         origin={218,-80})));
   Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaData(filNam=
-        Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos"))
+        Modelica.Utilities.Files.loadResource(
+        "./Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos"))
     annotation (Placement(transformation(extent={{-360,-100},{-340,-80}})));
   BoundaryConditions.WeatherData.Bus weaBus
-    annotation (Placement(transformation(extent={{-332,-98},{-312,-78}})));
+    annotation (Placement(transformation(extent={{-332,-98},{-312,-78}}),
+        iconTransformation(extent={{-90,70},{-70,90}})));
   Modelica.Blocks.Math.Gain gain(k=20*6485)
     annotation (Placement(transformation(extent={{-60,90},{-40,110}})));
   Modelica.Blocks.Math.Feedback feedback
@@ -297,24 +299,29 @@ partial model DataCenter
         origin={42,-49})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uMasFloRat annotation (
       Placement(transformation(extent={{-440,20},{-400,60}}),
-        iconTransformation(extent={{-554,-50},{-514,-10}})));
+        iconTransformation(extent={{-140,40},{-100,80}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uTCHWSet
     "Chilled water supply temperature setpoint" annotation (Placement(
-        transformation(extent={{-438.0,-40.0},{-398.0,0.0}},rotation = 0.0,origin = {0.0,0.0}), iconTransformation(extent
-          ={{-554,-50},{-514,-10}})));
+        transformation(extent={{-438.0,-40.0},{-398.0,0.0}},rotation = 0.0,origin = {0.0,0.0}), iconTransformation(extent={{-140,
+            -20},{-100,20}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput TEntCoi
     "Chilled water temperature entering the coil" annotation (Placement(
-        transformation(extent={{400,-60},{440,-20}}), iconTransformation(extent
-          ={{122,-38},{162,2}})));
+        transformation(extent={{400,-60},{440,-20}}), iconTransformation(extent={{100,-80},
+            {140,-40}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput VCHWEntCoi_flow
     "Chilled water mass flowrate enterign the coil" annotation (Placement(
-        transformation(extent={{400,-20},{440,20}}), iconTransformation(extent=
-            {{122,-38},{162,2}})));
+        transformation(extent={{400,-20},{440,20}}), iconTransformation(extent={{100,-40},
+            {140,0}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput TEntChi
     "Chilled water temperature returned to the chiller" annotation (Placement(
-        transformation(extent={{400,40},{440,80}}), iconTransformation(extent={
-            {122,-38},{162,2}})));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealInput uLoad annotation(Placement(transformation(extent = {{-438,-82},{-398,-42}},origin = {0,0},rotation = 0)));
+        transformation(extent={{400,40},{440,80}}), iconTransformation(extent={{100,0},
+            {140,40}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealInput uLoad annotation(Placement(transformation(extent = {{-438,-82},{-398,-42}},origin = {0,0},rotation = 0),
+        iconTransformation(extent={{-140,-80},{-100,-40}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput TDelta
+    "Difference between measured supply air temperature and setpoint"
+    annotation (Placement(transformation(extent={{400,-180},{440,-140}}),
+        iconTransformation(extent={{100,40},{140,80}})));
 equation
   connect(expVesCHW.port_a, cooCoi.port_b1) annotation (Line(
       points={{258,-147},{258,-164},{280,-164}},
@@ -356,11 +363,6 @@ equation
       color={255,0,255},
       smooth=Smooth.None,
       pattern=LinePattern.Dash));
-  connect(chiCon.y, val5.y) annotation (Line(
-      points={{-139,50},{-80,50},{-80,60},{196,60},{196,180},{206,180}},
-      color={0,0,127},
-      smooth=Smooth.None,
-      pattern=LinePattern.Dash));
 
   connect(cooTowFanCon.y, cooTow.y) annotation (Line(
       points={{241,271},{250,271},{250,247},{257,247}},
@@ -383,11 +385,6 @@ equation
       color={0,127,255},
       smooth=Smooth.None,
       thickness=0.5));
-  connect(wseCon.y1, val4.y) annotation (Line(
-      points={{-139,-27.2353},{-20,-27.2353},{-20,180},{86,180}},
-      color={0,0,127},
-      smooth=Smooth.None,
-      pattern=LinePattern.Dash));
   connect(TAirSup.port_a, fan.port_b) annotation (Line(
       points={{298,-225},{328,-225}},
       color={0,127,255},
@@ -620,6 +617,12 @@ equation
     connect(chiSwi.TSet,uTCHWSet) annotation(Line(points = {{-227,88},{-346,88},{-346,-20},{-418,-20}},color = {0,0,127}));
     connect(senVolFlo.V_flow,VCHWEntCoi_flow) annotation(Line(points = {{371,-78},{380,-78},{380,0},{420,0}},color = {0,0,127}));
     connect(uLoad,roo.uLoad) annotation(Line(points = {{-418,-62},{-88.7,-62},{-88.7,-235},{240.6,-235}},color = {0,0,127}));
+  connect(feedback.y, TDelta) annotation (Line(points={{-191,200},{-130,200},{
+          -130,-260},{382,-260},{382,-160},{420,-160}}, color={0,0,127}));
+  connect(cooTowFanCon1.y, val5.y) annotation (Line(points={{51,-19},{64,-19},{
+          64,160},{180,160},{180,180},{206,180}}, color={0,0,127}));
+  connect(cooTowFanCon2.y, val4.y) annotation (Line(points={{53,-49},{74,-49},{
+          74,180},{86,180}}, color={0,0,127}));
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-400,-300},{400,
             300}})),

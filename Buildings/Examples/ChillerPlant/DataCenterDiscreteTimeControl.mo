@@ -1,7 +1,8 @@
 within Buildings.Examples.ChillerPlant;
 model DataCenterDiscreteTimeControl
   "Model of data center with trim and respond control"
-  extends Buildings.Examples.ChillerPlant.BaseClasses.DataCenter;
+  extends Buildings.Examples.ChillerPlant.BaseClasses.DataCenter(TAirSet(k=
+          273.15 + 14));
   extends Modelica.Icons.Example;
 
   BaseClasses.Controls.TrimAndRespond triAndRes(
@@ -58,7 +59,6 @@ First implementation.
 </ul>
 </html>"),
     Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-400,-300},{
-            400,300}}),
-                    graphics),
+            400,300}})),
     experiment(StartTime=13046400, Tolerance=1e-6, StopTime=13651200));
 end DataCenterDiscreteTimeControl;

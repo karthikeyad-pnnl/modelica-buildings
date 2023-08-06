@@ -1,5 +1,4 @@
 within Buildings.Examples.ChillerPlant.BaseClasses;
-
 model SimplifiedRoom_customLoad "Simplified data center room"
   extends .Buildings.BaseClasses.BaseIcon;
   replaceable package Medium = .Modelica.Media.Interfaces.PartialMedium
