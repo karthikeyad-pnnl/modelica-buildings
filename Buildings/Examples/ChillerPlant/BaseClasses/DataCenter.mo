@@ -47,7 +47,7 @@ partial model DataCenter
   Modelica.Blocks.Sources.Constant mFanFlo(k=mAir_flow_nominal)
     "Mass flow rate of fan" annotation (Placement(transformation(extent={{298,
             -210},{318,-190}})));
-  BaseClasses.SimplifiedRoom roo(
+  Buildings.Examples.ChillerPlant.BaseClasses.SimplifiedRoom_customLoad roo(
     redeclare package Medium = MediumA,
     nPorts=2,
     rooLen=50,
@@ -300,13 +300,13 @@ partial model DataCenter
         iconTransformation(extent={{-554,-50},{-514,-10}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uTCHWSet
     "Chilled water supply temperature setpoint" annotation (Placement(
-        transformation(extent={{-440,-40},{-400,0}}), iconTransformation(extent
+        transformation(extent={{-438.0,-40.0},{-398.0,0.0}},rotation = 0.0,origin = {0.0,0.0}), iconTransformation(extent
           ={{-554,-50},{-514,-10}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput TEntCoi
     "Chilled water temperature entering the coil" annotation (Placement(
         transformation(extent={{400,-60},{440,-20}}), iconTransformation(extent
           ={{122,-38},{162,2}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput mCHWEntCoi_flow
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput VCHWEntCoi_flow
     "Chilled water mass flowrate enterign the coil" annotation (Placement(
         transformation(extent={{400,-20},{440,20}}), iconTransformation(extent=
             {{122,-38},{162,2}})));
@@ -314,6 +314,7 @@ partial model DataCenter
     "Chilled water temperature returned to the chiller" annotation (Placement(
         transformation(extent={{400,40},{440,80}}), iconTransformation(extent={
             {122,-38},{162,2}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealInput uLoad annotation(Placement(transformation(extent = {{-438,-82},{-398,-42}},origin = {0,0},rotation = 0)));
 equation
   connect(expVesCHW.port_a, cooCoi.port_b1) annotation (Line(
       points={{258,-147},{258,-164},{280,-164}},
@@ -357,11 +358,6 @@ equation
       pattern=LinePattern.Dash));
   connect(chiCon.y, val5.y) annotation (Line(
       points={{-139,50},{-80,50},{-80,60},{196,60},{196,180},{206,180}},
-      color={0,0,127},
-      smooth=Smooth.None,
-      pattern=LinePattern.Dash));
-  connect(linPieTwo.y[2], chiSwi.TSet) annotation (Line(
-      points={{-99,200.3},{-64,200.3},{-64,249},{-274,249},{-274,88},{-227,88}},
       color={0,0,127},
       smooth=Smooth.None,
       pattern=LinePattern.Dash));
@@ -613,17 +609,17 @@ equation
           90,-20},{130,-20},{130,-40},{206,-40}}, color={0,0,127}));
   connect(cooTowFanCon2.y, val3.y) annotation (Line(points={{53,-49},{80,-49},{
           80,-28},{118,-28},{118,-48}}, color={0,0,127}));
-  connect(uTCHWSet, chi.TSet) annotation (Line(points={{-420,-20},{-346,-20},{
-          -346,20},{176,20},{176,112},{286,112},{286,90},{276,90}}, color={0,0,
+  connect(uTCHWSet, chi.TSet) annotation (Line(points={{-418,-20},{-346,-20},{-346,20},{176,20},{176,112},{286,112},{286,90},{276,90}}, color={0,0,
           127}));
   connect(uMasFloRat, pumCHW.m_flow_in) annotation (Line(points={{-420,40},{
           -248,40},{-248,-120},{206,-120}}, color={0,0,127}));
   connect(TCHWEntCoi.T, TEntCoi) annotation (Line(points={{371,-132},{390,-132},
           {390,-40},{420,-40}}, color={0,0,127}));
-  connect(senVolFlo.V_flow, mCHWEntCoi_flow) annotation (Line(points={{371,-78},
-          {380,-78},{380,0},{420,0}}, color={0,0,127}));
   connect(TCHWEntChi.T, TEntChi) annotation (Line(points={{207,0},{194,0},{194,
           2},{188,2},{188,60},{420,60}}, color={0,0,127}));
+    connect(chiSwi.TSet,uTCHWSet) annotation(Line(points = {{-227,88},{-346,88},{-346,-20},{-418,-20}},color = {0,0,127}));
+    connect(senVolFlo.V_flow,VCHWEntCoi_flow) annotation(Line(points = {{371,-78},{380,-78},{380,0},{420,0}},color = {0,0,127}));
+    connect(uLoad,roo.uLoad) annotation(Line(points = {{-418,-62},{-88.7,-62},{-88.7,-235},{240.6,-235}},color = {0,0,127}));
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-400,-300},{400,
             300}})),
