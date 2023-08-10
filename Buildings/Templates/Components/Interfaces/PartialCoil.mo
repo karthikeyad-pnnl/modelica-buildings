@@ -41,9 +41,7 @@ partial model PartialCoil "Interface class for coil"
     final typ=typ,
     final typVal=typVal)
     "Design and operating parameters"
-    annotation (
-    Placement(transformation(extent={{70,70},{90,90}})),
-    __ctrl_flow(enable=false));
+    annotation (Placement(transformation(extent={{70,70},{90,90}})), __ctrl_flow(enable=false));
 
   final parameter Modelica.Units.SI.MassFlowRate mAir_flow_nominal(
     final min=0) = dat.mAir_flow_nominal
@@ -88,16 +86,16 @@ partial model PartialCoil "Interface class for coil"
   Modelica.Fluid.Interfaces.FluidPort_a port_aSou(
     redeclare final package Medium = MediumSou,
     m_flow(min=if allowFlowReversalLiq then -Modelica.Constants.inf else 0),
-    h_outflow(start=MediumSou.h_default, nominal=MediumSou.h_default))
-    if have_sou
+    h_outflow(start=MediumSou.h_default, nominal=MediumSou.h_default)) if
+       have_sou
     "Fluid connector a (positive design flow direction is from port_a to port_b)"
     annotation (Placement(transformation(extent={{30,-110},{50,-90}}),
         iconTransformation(extent={{40,-110},{60,-90}})));
   Modelica.Fluid.Interfaces.FluidPort_b port_bSou(
     redeclare final package Medium = MediumSou,
     m_flow(max=if allowFlowReversalLiq then +Modelica.Constants.inf else 0),
-    h_outflow(start = MediumSou.h_default, nominal = MediumSou.h_default))
-    if have_sou
+    h_outflow(start = MediumSou.h_default, nominal = MediumSou.h_default)) if
+       have_sou
     "Fluid connector b (positive design flow direction is from port_a to port_b)"
     annotation (Placement(transformation(extent={{-30,-110},{-50,-90}}),
         iconTransformation(extent={{-40,-110},{-60,-90}})));
@@ -106,8 +104,8 @@ partial model PartialCoil "Interface class for coil"
     annotation (Placement(
         transformation(extent={{-80,80},{-40,120}}), iconTransformation(extent={{-50,90},
             {-30,110}})));
-  Buildings.Templates.Components.Interfaces.Bus bus
-    if typ <> Buildings.Templates.Components.Types.Coil.None
+  Buildings.Templates.Components.Interfaces.Bus bus if
+       typ <> Buildings.Templates.Components.Types.Coil.None
     "Control bus"
     annotation (Placement(
       transformation(

@@ -2,12 +2,12 @@ within Buildings.Templates.Components.OutdoorAirMixer;
 model OutdoorAirMixer "Outdoor Air Mixer"
   extends
     Buildings.Templates.Components.OutdoorAirMixer.Interfaces.PartialOutdoorAirMixer(
-    final typDamOut=damOut.typ,
-    final typDamRel=damRel.typ,
-    final typDamRet=damRet.typ,
+    final typDamOut=Buildings.Templates.Components.Types.Damper.PressureIndependent,
+    final typDamRel=Buildings.Templates.Components.Types.Damper.PressureIndependent,
+    final typDamRet=Buildings.Templates.Components.Types.Damper.PressureIndependent,
     final have_eco=false,
-    final have_recHea=false);
-
+    final have_recHea=false,
+    final typCtlEco=Buildings.Controls.OBC.ASHRAE.G36.Types.ControlEconomizer.FixedDryBulb);
 
   Buildings.Templates.Components.Dampers.PressureIndependent damOut(
     redeclare final package Medium = MediumAir,
@@ -64,8 +64,8 @@ model OutdoorAirMixer "Outdoor Air Mixer"
         origin={-110,80})));
   Buildings.Templates.Components.Sensors.SpecificEnthalpy  hAirOut(
     redeclare final package Medium = MediumAir,
-    final have_sen=typCtlEco == Buildings.Controls.OBC.ASHRAE.G36.Types.ControlEconomizer.FixedEnthalpyWithFixedDryBulb
-         or typCtlEco == Buildings.Controls.OBC.ASHRAE.G36.Types.ControlEconomizer.DifferentialEnthalpyWithFixedDryBulb,
+    final have_sen=typCtlEco==Buildings.Controls.OBC.ASHRAE.G36.Types.ControlEconomizer.FixedEnthalpyWithFixedDryBulb
+      or typCtlEco==Buildings.Controls.OBC.ASHRAE.G36.Types.ControlEconomizer.DifferentialEnthalpyWithFixedDryBulb,
     final m_flow_nominal=dat.damOut.m_flow_nominal) "Outdoor air enthalpy sensor"
     annotation (Placement(transformation(extent={{-100,-90},{-80,-70}})));
 

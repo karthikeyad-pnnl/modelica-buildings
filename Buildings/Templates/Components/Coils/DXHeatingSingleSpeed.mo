@@ -1,13 +1,14 @@
 within Buildings.Templates.Components.Coils;
 model DXHeatingSingleSpeed "Single speed DX heating coil"
   extends Buildings.Templates.Components.Interfaces.PartialCoil(
+    redeclare Buildings.Templates.Components.Data.HeatingCoil dat,
     final typ=Buildings.Templates.Components.Types.Coil.DXHeatingSingleSpeed,
     final typVal=Buildings.Templates.Components.Types.Valve.None);
 
   parameter Boolean have_dryCon = true
     "Set to true for air-cooled condenser, false for evaporative condenser";
 
-  Fluid.HeatExchangers.DXCoils.AirSource.SingleSpeedHeating hex(
+  Buildings.Fluid.DXSystems.Heating.AirSource.SingleSpeed hex(
     redeclare final package Medium = MediumAir,
     final datCoi=dat.datHeaCoi,
     final dp_nominal=dpAir_nominal,
@@ -35,8 +36,8 @@ equation
       index=-1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(TDry.y, hex.TOut) annotation (Line(points={{-29,24},{-20,24},{-20,3},
-          {19,3}},  color={0,0,127}));
+  connect(TDry.y, hex.TOut) annotation (Line(points={{-29,24},{-20,24},{-20,-4},
+          {19,-4}}, color={0,0,127}));
   connect(bus.y1, hex.on) annotation (Line(
       points={{0,100},{0,8},{19,8}},
       color={255,204,51},

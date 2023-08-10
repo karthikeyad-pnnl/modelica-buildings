@@ -24,8 +24,6 @@ partial model ZonalHVAC "Interface class for zonal HVAC"
     Buildings.Templates.AirHandlersFans.Data.ZonalHVAC dat(
     final typ=typ,
     final typFanSup=typFanSup,
-    final typFanRel=typFanRel,
-    final typFanRet=typFanRet,
     final have_souChiWat=have_souChiWat,
     final have_souHeaWat=have_souHeaWat)
     "Design and operating parameters"
@@ -53,14 +51,6 @@ partial model ZonalHVAC "Interface class for zonal HVAC"
 
   inner parameter Buildings.Templates.Components.Types.Fan typFanSup
     "Type of supply fan"
-    annotation (Evaluate=true, Dialog(group="Configuration"));
-  final inner parameter Buildings.Templates.Components.Types.Fan typFanRet=
-     Buildings.Templates.Components.Types.Fan.None
-    "Type of return fan"
-    annotation (Evaluate=true, Dialog(group="Configuration"));
-  final inner parameter Buildings.Templates.Components.Types.Fan typFanRel=
-     Buildings.Templates.Components.Types.Fan.None
-    "Type of relief fan"
     annotation (Evaluate=true, Dialog(group="Configuration"));
 
   // Design parameters

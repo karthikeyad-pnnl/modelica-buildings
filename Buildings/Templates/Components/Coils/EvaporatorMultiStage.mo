@@ -2,13 +2,14 @@ within Buildings.Templates.Components.Coils;
 model EvaporatorMultiStage
   "Evaporator coil with multi-stage compressor"
   extends Buildings.Templates.Components.Interfaces.PartialCoil(
+    redeclare Buildings.Templates.Components.Data.CoolingCoil dat,
     final typ=Buildings.Templates.Components.Types.Coil.EvaporatorMultiStage,
     final typVal=Buildings.Templates.Components.Types.Valve.None);
 
   parameter Boolean have_dryCon = true
     "Set to true for air-cooled condenser, false for evaporative condenser";
 
-  Buildings.Fluid.HeatExchangers.DXCoils.AirSource.MultiStage hex(
+  Buildings.Fluid.DXSystems.Cooling.AirSource.MultiStage hex(
     redeclare final package Medium = MediumAir,
     final datCoi=dat.datCoi,
     final dp_nominal=dpAir_nominal,

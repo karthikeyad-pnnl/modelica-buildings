@@ -24,12 +24,11 @@ record VAVBox "Record for VAV terminal unit"
     "VAV damper"
     annotation (Dialog(group="Equipment"));
 
-  parameter Buildings.Templates.Components.Data.Coil coiHea(
+  parameter Buildings.Templates.Components.Data.HeatingCoil coiHea(
     final typ=typCoiHea,
     final typVal=typValCoiHea,
     final have_sou=have_souHeaWat,
-    mAir_flow_nominal=ctl.VAirHeaSet_flow_max*1.2)
-    "Reheat coil"
+    mAir_flow_nominal=ctl.VAirHeaSet_flow_max*1.2) "Reheat coil"
     annotation (Dialog(group="Equipment"));
 
 annotation (

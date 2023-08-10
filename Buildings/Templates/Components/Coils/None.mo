@@ -1,6 +1,7 @@
 within Buildings.Templates.Components.Coils;
 model None "No coil"
   extends Buildings.Templates.Components.Interfaces.PartialCoil(
+    redeclare Buildings.Templates.Components.Data.CoolingCoil dat,
     final typ=Buildings.Templates.Components.Types.Coil.None,
     final typVal=Buildings.Templates.Components.Types.Valve.None);
 

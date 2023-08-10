@@ -2,9 +2,27 @@ within Buildings.Templates.AirHandlersFans.Components.Data;
 record ZonalHVACController
   "Record for zonal HVAC system controller"
 
-  extends Buildings.Templates.AirHandlersFans.Components.Data.PartialController(
-    final typFanRel=false,
-    final typFanRet=false);
+  extends Buildings.Templates.AirHandlersFans.Components.Data.PartialController;
+
+  parameter Boolean has_fanOpeMod
+    "Does the controller need a fan operating mode signal interface?";
+
+  parameter Buildings.Fluid.ZoneEquipment.BaseClasses.Types.FanTypes fanTyp
+    "Select zonal HVAC fan type";
+
+  parameter Boolean has_mulFan=
+    fanTyp==Buildings.Fluid.ZoneEquipment.BaseClasses.Types.FanTypes.mulSpeFan
+    "Does the zone equipment have multiple speed fan?"
+    annotation(Dialog(enable=false, tab="Non-configurable"));
+
+  parameter Buildings.Fluid.ZoneEquipment.BaseClasses.Types.HeaSou heaCoiTyp
+    "Type of heating coil used";
+
+  parameter Buildings.Fluid.ZoneEquipment.BaseClasses.Types.CooSou cooCoiTyp
+    "Type of cooling coil used";
+
+  parameter Buildings.Fluid.ZoneEquipment.BaseClasses.Types.SupHeaSou supHeaTyp
+    "Type of supplemental heating coil used";
 
   parameter Real minFanSpe(
     final unit="1",

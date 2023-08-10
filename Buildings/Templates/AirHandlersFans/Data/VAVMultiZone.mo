@@ -62,32 +62,26 @@ record VAVMultiZone "Record for multiple-zone VAV"
     damRet(
       m_flow_nominal=mAirRet_flow_nominal));
 
-  parameter Buildings.Templates.Components.Data.Coil coiHeaPre(
+  parameter Buildings.Templates.Components.Data.HeatingCoil coiHeaPre(
     final typ=typCoiHeaPre,
     final typVal=typValCoiHeaPre,
     final have_sou=have_souHeaWat,
-    mAir_flow_nominal=mAirSup_flow_nominal)
-    "Heating coil in preheat position"
-    annotation (Dialog(group="Coils",
-    enable=typCoiHeaPre <> Buildings.Templates.Components.Types.Coil.None));
+    mAir_flow_nominal=mAirSup_flow_nominal) "Heating coil in preheat position"
+    annotation (Dialog(group="Coils", enable=typCoiHeaPre <> Buildings.Templates.Components.Types.Coil.None));
 
-  parameter Buildings.Templates.Components.Data.Coil coiCoo(
+  parameter Buildings.Templates.Components.Data.CoolingCoil coiCoo(
     final typ=typCoiCoo,
     final typVal=typValCoiCoo,
     final have_sou=have_souChiWat,
-    mAir_flow_nominal=mAirSup_flow_nominal)
-    "Cooling coil"
-    annotation (Dialog(
-    group="Coils", enable=typCoiCoo <> Buildings.Templates.Components.Types.Coil.None));
+    mAir_flow_nominal=mAirSup_flow_nominal) "Cooling coil" annotation (Dialog(
+        group="Coils", enable=typCoiCoo <> Buildings.Templates.Components.Types.Coil.None));
 
-  parameter Buildings.Templates.Components.Data.Coil coiHeaReh(
+  parameter Buildings.Templates.Components.Data.HeatingCoil coiHeaReh(
     final typ=typCoiHeaReh,
     final typVal=typValCoiHeaReh,
     final have_sou=have_souHeaWat,
-    mAir_flow_nominal=mAirSup_flow_nominal)
-    "Heating coil in reheat position"
-    annotation (Dialog(group="Coils",
-    enable=typCoiHeaReh <> Buildings.Templates.Components.Types.Coil.None));
+    mAir_flow_nominal=mAirSup_flow_nominal) "Heating coil in reheat position"
+    annotation (Dialog(group="Coils", enable=typCoiHeaReh <> Buildings.Templates.Components.Types.Coil.None));
 
 annotation (
   defaultComponentPrefixes = "parameter",

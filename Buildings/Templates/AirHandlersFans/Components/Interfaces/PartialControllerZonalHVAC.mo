@@ -12,6 +12,10 @@ partial block PartialControllerZonalHVAC
   outer replaceable Buildings.Templates.Components.Coils.None coiHeaReh
     "Heating coil (reheat position)";
 
+  parameter Buildings.Templates.AirHandlersFans.Types.Controller typ
+    "Type of controller"
+    annotation (Evaluate=true, Dialog(group="Configuration"));
+
   parameter Buildings.Templates.AirHandlersFans.Components.Data.ZonalHVACController dat(
     final typ=typ,
     final typFanSup=typFanSup)

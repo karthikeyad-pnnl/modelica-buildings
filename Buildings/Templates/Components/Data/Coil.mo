@@ -17,18 +17,7 @@ For evaporator coils this is also provided by the performance data record.
 The coil model shall generate a warning in case the design value exceeds
 the maximum value from the performance data record.
 */
-  parameter Modelica.Units.SI.MassFlowRate mAir_flow_nominal(
-    final min=0,
-    start=if typ==Buildings.Templates.Components.Types.Coil.EvaporatorMultiStage or
-      typ==Buildings.Templates.Components.Types.Coil.EvaporatorVariableSpeed then
-      datCoi.sta[datCoi.nSta].nomVal.m_flow_nominal
-    else 1)
-    "Air mass flow rate"
-    annotation (
-      Dialog(group="Nominal condition",
-      enable=typ<>Buildings.Templates.Components.Types.Coil.None and
-      typ<>Buildings.Templates.Components.Types.Coil.EvaporatorMultiStage and
-      typ<>Buildings.Templates.Components.Types.Coil.EvaporatorVariableSpeed));
+
   parameter Modelica.Units.SI.PressureDifference dpAir_nominal(
     final min=0,
     displayUnit="Pa",
@@ -38,16 +27,7 @@ the maximum value from the performance data record.
     annotation (
       Dialog(group="Nominal condition",
         enable=typ<>Buildings.Templates.Components.Types.Coil.None));
-  parameter Modelica.Units.SI.MassFlowRate mWat_flow_nominal(
-    final min=0,
-    start=if typ==Buildings.Templates.Components.Types.Coil.WaterBasedHeating then
-      Q_flow_nominal / 4186 / 10 elseif
-      typ==Buildings.Templates.Components.Types.Coil.WaterBasedCooling then
-      -Q_flow_nominal / 4186 / 5 else
-      0)
-    "Liquid mass flow rate"
-    annotation (
-      Dialog(group="Nominal condition", enable=have_sou));
+
   parameter Modelica.Units.SI.PressureDifference dpWat_nominal(
     final min=0,
     displayUnit="Pa",
@@ -66,29 +46,13 @@ the maximum value from the performance data record.
     "Liquid pressure drop across fully open valve"
     annotation(Dialog(group="Nominal condition",
       enable=have_sou and typVal<>Buildings.Templates.Components.Types.Valve.None));
-  parameter Modelica.Units.SI.HeatFlowRate cap_nominal(
-    start=if typ==Buildings.Templates.Components.Types.Coil.None then 0
-    elseif typ==Buildings.Templates.Components.Types.Coil.EvaporatorMultiStage or
-      typ==Buildings.Templates.Components.Types.Coil.EvaporatorVariableSpeed then
-      datCoi.sta[datCoi.nSta].nomVal.Q_flow_nominal
-    elseif typ==Buildings.Templates.Components.Types.Coil.WaterBasedCooling then -1E4
-    else 1E4)
-    "Coil capacity"
-    annotation(Dialog(group="Nominal condition",
-      enable=typ<>Buildings.Templates.Components.Types.Coil.None and
-      typ<>Buildings.Templates.Components.Types.Coil.EvaporatorMultiStage and
-      typ<>Buildings.Templates.Components.Types.Coil.EvaporatorVariableSpeed));
+
   /*
 For evaporator coils this is also provided by the performance data record.
 The coil model shall generate a warning in case the design value exceeds
 the maximum value from the performance data record.
 */
-  final parameter Modelica.Units.SI.HeatFlowRate Q_flow_nominal=
-    if typ==Buildings.Templates.Components.Types.Coil.WaterBasedHeating or
-       typ==Buildings.Templates.Components.Types.Coil.ElectricHeating then abs(cap_nominal)
-    else -1 * abs(cap_nominal)
-    "Nominal heat flow rate"
-    annotation (Dialog(group="Nominal condition"));
+
   parameter Modelica.Units.SI.Temperature TWatEnt_nominal(
     final min=273.15,
     displayUnit="degC",
@@ -115,14 +79,7 @@ the maximum value from the performance data record.
     annotation (Dialog(
       group="Nominal condition",
       enable=typ==Buildings.Templates.Components.Types.Coil.WaterBasedCooling));
-  replaceable parameter
-    Buildings.Fluid.HeatExchangers.DXCoils.AirSource.Data.SingleSpeed.Carrier_Centurion_50PG06 datCoi
-    constrainedby
-    Buildings.Fluid.HeatExchangers.DXCoils.AirSource.Data.Generic.DXCoil
-    "Performance data record of evaporator coil"
-    annotation(choicesAllMatching=true, Dialog(
-      enable=typ==Buildings.Templates.Components.Types.Coil.EvaporatorMultiStage or
-      typ==Buildings.Templates.Components.Types.Coil.EvaporatorVariableSpeed));
+
   annotation (Documentation(info="<html>
 <p>
 This record provides the set of sizing and operating parameters for

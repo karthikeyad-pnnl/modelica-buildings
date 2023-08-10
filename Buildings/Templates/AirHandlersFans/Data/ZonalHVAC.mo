@@ -1,19 +1,12 @@
 within Buildings.Templates.AirHandlersFans.Data;
 record ZonalHVAC "Record for zonal HVAC system"
   extends Buildings.Templates.AirHandlersFans.Data.PartialAirHandler(
-    final typ=Buildings.Templates.AirHandlersFans.Types.Configuration.SingleDuct,
-    final typCtl=Buildings.Templates.AirHandlersFans.Types.Controller.EPlusAnalog,
-    final typFanRet=Buildings.Templates.Components.Types.Fan.None,
-    final typFanRel=Buildings.Templates.Components.Types.Fan.None,
     redeclare
-      Buildings.Templates.AirHandlersFans.Components.Data.ZonalHVACController
-      ctl(
-        final typFanSup=typFanSup),
+      Buildings.Templates.AirHandlersFans.Components.Data.ZonalHVACController ctl,
+    final typFanRet = Buildings.Templates.Components.Types.Fan.None,
+    final typFanRel = Buildings.Templates.Components.Types.Fan.None,
     final mAirSup_flow_nominal=fanSup.m_flow_nominal,
-    final mAirRet_flow_nominal=if typFanRet <> Buildings.Templates.Components.Types.Fan.None
-         then fanRet.m_flow_nominal elseif typFanRel <> Buildings.Templates.Components.Types.Fan.None
-         then fanRel.m_flow_nominal elseif typFanSup <> Buildings.Templates.Components.Types.Fan.None
-         then fanSup.m_flow_nominal else 0);
+    final mAirRet_flow_nominal=fanSup.m_flow_nominal);
 
   parameter Buildings.Templates.Components.Types.Coil typCoiHeaPre
     "Type of heating coil in preheat position"
@@ -42,8 +35,8 @@ record ZonalHVAC "Record for zonal HVAC system"
 
   extends
     Buildings.Templates.AirHandlersFans.Components.Data.OutdoorReliefReturnSection(
-    fanRel,
-    fanRet,
+    typFanRel=Buildings.Templates.Components.Types.Fan.None,
+    typFanRet=Buildings.Templates.Components.Types.Fan.None,
     damOut(
       m_flow_nominal=mAirSup_flow_nominal),
     damOutMin(
@@ -53,32 +46,26 @@ record ZonalHVAC "Record for zonal HVAC system"
     damRet(
       m_flow_nominal=mAirRet_flow_nominal));
 
-  parameter Buildings.Templates.Components.Data.Coil coiHeaPre(
+  parameter Buildings.Templates.Components.Data.HeatingCoil coiHeaPre(
     final typ=typCoiHeaPre,
     final typVal=typValCoiHeaPre,
     final have_sou=have_souHeaWat,
-    mAir_flow_nominal=mAirSup_flow_nominal)
-    "Heating coil in preheat position"
-    annotation (Dialog(group="Coils",
-    enable=typCoiHeaPre <> Buildings.Templates.Components.Types.Coil.None));
+    mAir_flow_nominal=mAirSup_flow_nominal) "Heating coil in preheat position"
+    annotation (Dialog(group="Coils", enable=typCoiHeaPre <> Buildings.Templates.Components.Types.Coil.None));
 
-  parameter Buildings.Templates.Components.Data.Coil coiCoo(
+  parameter Buildings.Templates.Components.Data.CoolingCoil coiCoo(
     final typ=typCoiCoo,
     final typVal=typValCoiCoo,
     final have_sou=have_souChiWat,
-    mAir_flow_nominal=mAirSup_flow_nominal)
-    "Cooling coil"
-    annotation (Dialog(
-    group="Coils", enable=typCoiCoo <> Buildings.Templates.Components.Types.Coil.None));
+    mAir_flow_nominal=mAirSup_flow_nominal) "Cooling coil" annotation (Dialog(
+        group="Coils", enable=typCoiCoo <> Buildings.Templates.Components.Types.Coil.None));
 
-  parameter Buildings.Templates.Components.Data.Coil coiHeaReh(
+  parameter Buildings.Templates.Components.Data.HeatingCoil coiHeaReh(
     final typ=typCoiHeaReh,
     final typVal=typValCoiHeaReh,
     final have_sou=have_souHeaWat,
-    mAir_flow_nominal=mAirSup_flow_nominal)
-    "Heating coil in reheat position"
-    annotation (Dialog(group="Coils",
-    enable=typCoiHeaReh <> Buildings.Templates.Components.Types.Coil.None));
+    mAir_flow_nominal=mAirSup_flow_nominal) "Heating coil in reheat position"
+    annotation (Dialog(group="Coils", enable=typCoiHeaReh <> Buildings.Templates.Components.Types.Coil.None));
 
 annotation (
   defaultComponentPrefixes = "parameter",

@@ -19,7 +19,9 @@ package Types "Package with type definitions"
       WaterBasedCooling
       "Chilled water coil",
       WaterBasedHeating
-      "Hot water coil")
+      "Hot water coil",
+      DXHeatingSingleSpeed
+      "Heat-pump heating coil")
     "Enumeration to configure the coil";
   type Cooler = enumeration(
       None
