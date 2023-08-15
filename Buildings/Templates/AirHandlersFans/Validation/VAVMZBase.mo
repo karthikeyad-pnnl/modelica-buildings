@@ -103,23 +103,23 @@ protected
 
 equation
   connect(bouHeaWat.ports[1], VAV_1.port_aHeaWat)
-    annotation (Line(points={{-80,-71},{-5,-71},{-5,-50}}, color={0,127,255}));
+    annotation (Line(points={{-80,-68},{-5,-68},{-5,-50}}, color={0,127,255}));
   connect(bouChiWat.ports[2], VAV_1.port_bChiWat)
-    annotation (Line(points={{-80,-99},{5,-99},{5,-50}},  color={0,127,255}));
+    annotation (Line(points={{-80,-102},{5,-102},{5,-50}},color={0,127,255}));
   connect(VAV_1.port_bHeaWat, bouHeaWat.ports[2]) annotation (Line(points={{-13,-50},
-          {-13,-68},{-80,-68},{-80,-69}},      color={0,127,255}));
+          {-13,-68},{-80,-68},{-80,-72}},      color={0,127,255}));
   connect(VAV_1.port_aChiWat, bouChiWat.ports[1]) annotation (Line(points={{13,-50},
-          {13,-102},{-80,-102},{-80,-101}},
+          {13,-102},{-80,-102},{-80,-98}},
                                       color={0,127,255}));
-  connect(bouOut.ports[1], res.port_a) annotation (Line(points={{-80,-31},{-60,
-          -31},{-60,-40},{-50,-40}},
+  connect(bouOut.ports[1], res.port_a) annotation (Line(points={{-80,-28},{-60,
+          -28},{-60,-40},{-50,-40}},
                                 color={0,127,255}));
   connect(res.port_b, VAV_1.port_Out)
     annotation (Line(points={{-30,-40},{-20,-40}}, color={0,127,255}));
   connect(VAV_1.port_Sup, res1.port_a)
     annotation (Line(points={{20,-40},{30,-40}}, color={0,127,255}));
   connect(res1.port_b, bouBui.ports[1]) annotation (Line(points={{50,-40},{60,
-          -40},{60,-31.3333},{70,-31.3333}},
+          -40},{60,-27.3333},{70,-27.3333}},
                                         color={0,127,255}));
   connect(bouBui.ports[2], pBui.port)
     annotation (Line(points={{70,-30},{70,0}},           color={0,127,255}));
@@ -135,13 +135,13 @@ equation
     annotation (Line(points={{-20,-20},{-30,-20}},
                                                  color={0,127,255}));
   connect(res2.port_b, bouOut.ports[2]) annotation (Line(points={{-50,-20},{-60,
-          -20},{-60,-29},{-80,-29}},
+          -20},{-60,-32},{-80,-32}},
                             color={0,127,255}));
   connect(VAV_1.port_Ret, res3.port_b)
     annotation (Line(points={{20,-20},{30,-20}},
                                                color={0,127,255}));
   connect(res3.port_a, bouBui.ports[3]) annotation (Line(points={{50,-20},{60,
-          -20},{60,-28.6667},{70,-28.6667}},
+          -20},{60,-32.6667},{70,-32.6667}},
                                       color={0,127,255}));
   connect(pBui.p, busAHU.pBui) annotation (Line(points={{59,10},{-20,10}},
         color={0,0,127}), Text(
