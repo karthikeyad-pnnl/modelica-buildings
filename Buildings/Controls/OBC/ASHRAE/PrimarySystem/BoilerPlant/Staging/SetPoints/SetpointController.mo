@@ -86,7 +86,7 @@ block SetpointController
 
   parameter Real TDif(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 10
     "Required temperature difference between setpoint and measured temperature"
     annotation(Dialog(tab="Staging parameters", group="Failsafe condition parameters"));
@@ -106,7 +106,7 @@ block SetpointController
 
   parameter Real TDifHys(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 1
     "Temperature deadband for hysteresis loop"
     annotation(Dialog(tab="Advanced", group="Failsafe condition parameters"));
@@ -160,7 +160,7 @@ block SetpointController
 
   parameter Real TCirDif(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 3
     "Required return water temperature difference between primary and secondary
     circuits for staging down"
@@ -198,7 +198,7 @@ block SetpointController
 
   parameter Real dTemp(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 0.1
     "Hysteresis deadband for measured temperatures"
     annotation (Dialog(tab="Advanced", group="Failsafe condition parameters"));
@@ -229,7 +229,7 @@ block SetpointController
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatRetPri(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") if not have_priOnl
     "Measured temperature of return hot water in primary circuit"
     annotation (Placement(transformation(extent={{-440,30},{-400,70}}),
@@ -237,7 +237,7 @@ block SetpointController
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatRetSec(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") if not have_priOnl
     "Measured temperature of return hot water in secondary circuit"
     annotation (Placement(transformation(extent={{-440,-10},{-400,30}}),
@@ -245,7 +245,7 @@ block SetpointController
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatSupSet(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "Hot water supply temperature setpoint"
     annotation (Placement(transformation(extent={{-440,270},{-400,310}}),
@@ -253,7 +253,7 @@ block SetpointController
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatSup(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "Measured hot water supply temperature"
     annotation (Placement(transformation(extent={{-440,150},{-400,190}}),
@@ -261,7 +261,7 @@ block SetpointController
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatRet(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "Hot water return temperature"
     annotation (Placement(transformation(extent={{-440,230},{-400,270}}),

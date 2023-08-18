@@ -6,41 +6,43 @@ block Controller
     "Type of controller"
     annotation (Dialog(tab="Pump control parameters", group="PID parameters"));
 
-  parameter Boolean have_heaPriPum
+  parameter Boolean have_heaPriPum = true
     "Flag of headered hot water pumps design: true=headered, false=dedicated"
     annotation (Dialog(group="Plant parameters"));
 
-  parameter Boolean have_priOnl
+  parameter Boolean have_priOnl = false
     "True: Plant is primary-only;
      False: Plant is primary-secondary"
     annotation (Dialog(group="Plant parameters"));
 
-  parameter Boolean have_varPriPum
+  parameter Boolean have_varPriPum = false
     "True: Variable-speed primary pumps;
      False: Fixed-speed primary pumps"
     annotation (Dialog(group="Plant parameters"));
 
-  parameter Boolean use_priSecFloSen
-    "True: Use flowrate sensors in primary/secondary loops for speed regulation;
-    False: Flowrate sensor in decoupler leg for spoeed regulation"
-    annotation (Dialog(group="Plant parameters",
+  parameter Boolean have_secFloSen = true
+    "True: Flowrate sensors in primary and secondary loops;
+     False: Flowrate sensor in decoupler"
+    annotation (Dialog(tab="Pump control parameters",
+      group="Flowrate-based speed regulation",
       enable= speConTyp == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.flowrate));
 
-  parameter Boolean use_priTemSen
-    "True: Use Temperature sensors in primary loop for speed control;
-    False: Use temperature sensors in boiler supply for speed control"
-    annotation (Dialog(group="Plant parameters",
+  parameter Boolean have_priSecTemSen = true
+    "True: Temperature sensors in primary and secondary loops;
+     False: Temperature sensors in boiler supply and secondary loop"
+    annotation (Dialog(tab="Pump control parameters",
+      group="Temperature-based speed regulation",
       enable= speConTyp == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.temperature));
 
-  parameter Integer nPum
+  parameter Integer nPum = 2
     "Total number of hot water pumps"
     annotation (Dialog(group="Plant parameters"));
 
-  parameter Integer nBoi
+  parameter Integer nBoi = 2
     "Total number of boilers"
     annotation (Dialog(group="Plant parameters"));
 
-  parameter Integer nSen
+  parameter Integer nSen = 2
     "Total number of remote differential pressure sensors"
     annotation (Dialog(group="Plant parameters"));
 
@@ -76,15 +78,15 @@ block Controller
     final min=1e-6,
     final unit="m3/s",
     displayUnit="m3/s",
-    final quantity="VolumeFlowRate")
+    final quantity="VolumeFlowRate") = 0.5
     "Total plant design hot water flow rate"
     annotation (Dialog(group="Plant parameters"));
 
   parameter Real boiDesFlo[nBoi](
-    final min=1e-6,
-    final unit="m3/s",
-    displayUnit="m3/s",
-    final quantity="VolumeFlowRate")=
+    each final min=1e-6,
+    each final unit="m3/s",
+    each displayUnit="m3/s",
+    final quantity="VolumeFlowRate") = {0.5,0.5}
     "Vector of design flowrates for all boilers in plant"
     annotation (Dialog(group="Plant parameters"));
 
@@ -92,7 +94,7 @@ block Controller
     final unit="Pa",
     displayUnit="Pa",
     final quantity="PressureDifference",
-    final min=1e-6)
+    final min=1e-6) = 5*6894.75
     "Maximum hot water loop local differential pressure setpoint"
     annotation (Dialog(tab="Pump control parameters", group="DP-based speed regulation",
       enable = speConTyp == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.localDP));
@@ -101,7 +103,7 @@ block Controller
     final unit="Pa",
     displayUnit="Pa",
     final quantity="PressureDifference",
-    final min=1e-6)
+    final min=1e-6) = 5*6894.75
     "Minimum hot water loop local differential pressure setpoint"
     annotation (Dialog(tab="Pump control parameters",
       group="DP-based speed regulation",
@@ -189,7 +191,7 @@ block Controller
 
   parameter Real twoReqLimLow(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 1.2
     "Lower limit of hysteresis loop sending two requests"
     annotation (Dialog(tab="Pump control parameters",
@@ -198,7 +200,7 @@ block Controller
 
   parameter Real twoReqLimHig(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 2
     "Higher limit of hysteresis loop sending two requests"
     annotation (Dialog(tab="Pump control parameters",
@@ -207,7 +209,7 @@ block Controller
 
   parameter Real oneReqLimLow(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 0.2
     "Lower limit of hysteresis loop sending one request"
     annotation (Dialog(tab="Pump control parameters",
@@ -216,7 +218,7 @@ block Controller
 
   parameter Real oneReqLimHig(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 1
     "Higher limit of hysteresis loop sending one request"
     annotation (Dialog(tab="Pump control parameters",
@@ -297,8 +299,8 @@ block Controller
       iconTransformation(extent={{-140,270},{-100,310}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uHotIsoVal[nBoi](
-    final unit="1",
-    displayUnit="1") if have_heaPriPum
+    each final unit="1",
+    each displayUnit="1") if have_heaPriPum
     "Hot water isolation valve status"
     annotation (Placement(transformation(extent={{-320,50},{-280,90}}),
       iconTransformation(extent={{-140,180},{-100,220}})));
@@ -338,7 +340,7 @@ block Controller
   Buildings.Controls.OBC.CDL.Interfaces.RealInput VHotWat_flow(
     final unit="m3/s",
     displayUnit="m3/s",
-    final quantity="VolumeFlowRate") if have_varPriPum
+    final quantity="VolumeFlowRate")
     "Hot water flow"
     annotation (Placement(transformation(extent={{-320,-40},{-280,0}}),
       iconTransformation(extent={{-140,150},{-100,190}})));
@@ -347,7 +349,7 @@ block Controller
     final unit="m3/s",
     displayUnit="m3/s",
     final quantity="VolumeFlowRate") if not have_priOnl and have_varPriPum
-     and floReg and use_priSecFloSen
+     and floReg and have_secFloSen
     "Measured hot water flowrate through secondary loop"
     annotation (Placement(transformation(extent={{-320,-600},{-280,-560}}),
       iconTransformation(extent={{-140,-190},{-100,-150}})));
@@ -356,23 +358,24 @@ block Controller
     final unit="m3/s",
     displayUnit="m3/s",
     final quantity="VolumeFlowRate") if not have_priOnl and have_varPriPum
-     and floReg and not use_priSecFloSen
+     and floReg and not have_secFloSen
     "Measured hot water flowrate through decoupler"
     annotation (Placement(transformation(extent={{-320,-630},{-280,-590}}),
       iconTransformation(extent={{-140,-220},{-100,-180}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatPri(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") if not have_priOnl and
-    have_varPriPum and temReg and use_priTemSen
+    have_varPriPum and temReg and
+    have_priSecTemSen
     "Measured hot water temperature at primary loop supply"
     annotation (Placement(transformation(extent={{-320,-660},{-280,-620}}),
       iconTransformation(extent={{-140,-250},{-100,-210}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatSec(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") if not have_priOnl and
     have_varPriPum and temReg
     "Measured hot water temperature at secondary loop supply"
@@ -383,7 +386,8 @@ block Controller
     final unit=fill("K", nBoi),
     displayUnit=fill("K",nBoi),
     final quantity=fill("ThermodynamicTemperature",nBoi)) if not have_priOnl
-     and have_varPriPum and temReg and not use_priTemSen
+     and have_varPriPum and temReg and not
+    have_priSecTemSen
     "Measured hot water temperature at boiler supply"
     annotation (Placement(transformation(extent={{-320,-720},{-280,-680}}),
       iconTransformation(extent={{-140,-310},{-100,-270}})));
@@ -408,7 +412,8 @@ block Controller
     final timPer=timPer,
     final staCon=staCon,
     final relFloHys=relFloHys,
-    final VHotWat_flow_nominal=VHotWat_flow_nominal) if have_priOnl and have_heaPriPum
+    final VHotWat_flow_nominal=VHotWat_flow_nominal) if have_priOnl and
+    have_heaPriPum
     "Enable lag pump for primary-only plants using differential pressure pump speed control"
     annotation (Placement(transformation(extent={{-200,-10},{-180,10}})));
 
@@ -511,7 +516,7 @@ protected
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.Speed_flow
     pumSpeFlo(
     final controllerType=controllerType,
-    final primarySecondarySensors=use_priSecFloSen,
+    final primarySecondarySensors=have_secFloSen,
     final nPum=nPum,
     final minPumSpe=minPumSpe,
     final maxPumSpe=maxPumSpe,
@@ -525,7 +530,7 @@ protected
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPumps.Subsequences.Speed_temperature
     pumSpeTem(
-    final primarySecondarySensors=use_priTemSen,
+    final primarySecondarySensors=have_priSecTemSen,
     final nBoi=nBoi,
     final nPum=nPum,
     final numIgnReq=numIgnReq,
@@ -602,8 +607,8 @@ protected
     "Integer add"
     annotation (Placement(transformation(extent={{-120,-80},{-100,-60}})));
 
-  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1[nPum] if
-    have_heaPriPum and (not have_priOnl)
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1[nPum]
+ if have_heaPriPum and (not have_priOnl)
     "Convert boolean to integer"
     annotation (Placement(transformation(extent={{-250,-166},{-230,-146}})));
 
@@ -612,8 +617,8 @@ protected
     "Sum of integer inputs"
     annotation (Placement(transformation(extent={{-200,-166},{-180,-146}})));
 
-  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt2[nPum] if
-    have_heaPriPum and (not have_priOnl)
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt2[nPum]
+ if have_heaPriPum and (not have_priOnl)
     "Convert boolean to integer"
     annotation (Placement(transformation(extent={{-248,-250},{-228,-230}})));
 
@@ -664,8 +669,8 @@ protected
     annotation (Placement(transformation(extent={{50,-250},{70,-230}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.Generic.ChangeStatus
-    chaPumSta(final nPum=nPum) if
-                        not have_heaPriPum
+    chaPumSta(final nPum=nPum)
+                     if not have_heaPriPum
     "Change lead pump status for dedicated primary pumps"
     annotation (Placement(transformation(extent={{58,100},{80,120}})));
 
@@ -1242,6 +1247,7 @@ for other plants with headered pumps.
 for plants with dedicated pumps.
 </li>
 </ul>
+</li>
 <li>
 Subsequences to control pump speed,
 <ul>
@@ -1353,7 +1359,7 @@ The parameter values for valid pump configurations are as follows:
             <td>NA</td>
           </tr>
           <tr>
-            <td>use_priSecFloSen</td>
+            <td>have_secFloSen</td>
             <td>NA</td>
             <td>NA</td>
             <td>TRUE</td>
@@ -1368,7 +1374,7 @@ The parameter values for valid pump configurations are as follows:
             <td>NA</td>
           </tr>
           <tr>
-            <td>use_priTemSen</td>
+            <td>have_priSecTemSen</td>
             <td>NA</td>
             <td>NA</td>
             <td>NA</td>

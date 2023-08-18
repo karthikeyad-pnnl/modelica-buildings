@@ -49,6 +49,7 @@ annotation (
     </p>
     <p>
     It contains two instances:
+    </p>
     <ul>
     <li>
     zerStaIndCor: Gets a zero index input signal.
@@ -57,6 +58,7 @@ annotation (
     zerStaIndCor1: Gets a non-zero index input signal.
     </li>
     </ul>
+    <p>
     The model simulates and plots these two instances to demonstrate that the block
     is performing the modifications correctly.
     </p>

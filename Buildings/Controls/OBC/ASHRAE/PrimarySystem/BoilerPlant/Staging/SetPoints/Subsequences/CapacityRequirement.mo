@@ -10,7 +10,7 @@ block CapacityRequirement
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TSupSet(
     final unit="K",
-    final displayUnit="K",
+    final displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "Hot water supply temperature setpoint"
     annotation (Placement(transformation(extent={{-160,50},{-120,90}}),
@@ -18,7 +18,7 @@ block CapacityRequirement
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TRet(
     final unit="K",
-    final displayUnit="K",
+    final displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "Measured hot water return temperature"
     annotation (Placement(transformation(extent={{-160,-20},{-120,20}}),

@@ -4,19 +4,19 @@ block ProportionalRegulator
 
   parameter Real TRetSet(
     final unit="K",
-    final displayUnit="K",
+    final displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 60
     "Minimum hot water return temperature for optimal non-condensing boiler performance";
 
   parameter Real TRetMinAll(
     final unit="K",
-    final displayUnit="K",
+    final displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 57.2
     "Minimum allowed hot water return temperature for non-condensing boiler";
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotWatRet(
     final unit="K",
-    final displayUnit="K",
+    final displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "Measured hot water return temperature"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}}),

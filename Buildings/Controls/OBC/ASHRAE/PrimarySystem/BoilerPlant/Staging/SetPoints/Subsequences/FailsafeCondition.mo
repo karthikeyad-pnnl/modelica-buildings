@@ -4,14 +4,14 @@ block FailsafeCondition
 
   parameter Real TDif(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 10
     "Required temperature difference between setpoint and measured temperature
     for failsafe condition";
 
   parameter Real TDifHys(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="TemperatureDifference") = 1
     "Temperature deadband for hysteresis loop"
     annotation (Dialog(tab="Advanced"));
@@ -29,7 +29,7 @@ block FailsafeCondition
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TSupSet(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "Hot water supply temperature setpoint"
     annotation (Placement(transformation(extent={{-160,30},{-120,70}}),
@@ -37,7 +37,7 @@ block FailsafeCondition
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TSup(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "Measured hot water supply temperature"
     annotation (Placement(transformation(extent={{-160,-20},{-120,20}}),

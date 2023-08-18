@@ -38,7 +38,7 @@ block Up
 
   parameter Real TDif(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 10
     "Required temperature difference between setpoint and measured temperature
     for failsafe condition"
@@ -46,7 +46,7 @@ block Up
 
   parameter Real TDifHys(
     final unit="K",
-    displayUnit="K",
+    displayUnit="degC",
     final quantity="ThermodynamicTemperature") = 1
     "Temperature deadband for hysteresis loop in failsafe condition"
     annotation (Dialog(tab="Advanced",

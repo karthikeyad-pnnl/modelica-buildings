@@ -107,6 +107,7 @@ equation
       current index value, and <code>uCap</code> for the current capacity signal. 
       It outputs a modified index signal <code>yIndMod</code> and a modified 
       capacity signal <code>yCapMod</code>.
+	  </p>
       <ul>
       <li>
       <code>yIndMod</code> is set to 1 and <code>yCapMod</code> is set to zero 
@@ -117,7 +118,6 @@ equation
       set to <code>uCap</code> when <code>uInd</code> is not zero.
       </li>
       </ul>
-      </p>
       <p>
       For an example of usage, check the
       <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Capacities\">
