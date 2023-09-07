@@ -9,6 +9,10 @@ model EvaporatorMultiStage
   parameter Boolean have_dryCon = true
     "Set to true for air-cooled condenser, false for evaporative condenser";
 
+  final parameter Modelica.Units.SI.HeatFlowRate Q_flow_nominal=
+    dat.Q_flow_nominal
+    "Nominal heat flow rate";
+
   Buildings.Fluid.DXSystems.Cooling.AirSource.MultiStage hex(
     redeclare final package Medium = MediumAir,
     final datCoi=dat.datCoi,
@@ -24,6 +28,21 @@ model EvaporatorMultiStage
     annotation (Placement(transformation(extent={{-50,50},{-30,70}})));
   Modelica.Blocks.Routing.RealPassThrough TDry if have_dryCon
     annotation (Placement(transformation(extent={{-50,10},{-30,30}})));
+
+initial equation
+  assert(mAir_flow_nominal<=dat.datCoi.sta[dat.datCoi.nSta].nomVal.m_flow_nominal,
+    "In "+ getInstanceName() + ": "+
+    "The coil design airflow ("+String(mAir_flow_nominal)+
+    ") exceeds the maximum airflow provided in the performance data record ("+
+    String(dat.datCoi.sta[dat.datCoi.nSta].nomVal.m_flow_nominal)+").",
+    level=AssertionLevel.warning);
+  assert(abs(Q_flow_nominal)<=abs(dat.datCoi.sta[dat.datCoi.nSta].nomVal.Q_flow_nominal),
+    "In "+ getInstanceName() + ": "+
+    "The coil design capacity ("+String(Q_flow_nominal)+
+    ") exceeds the maximum capacity provided in the performance data record ("+
+    String(dat.datCoi.sta[dat.datCoi.nSta].nomVal.Q_flow_nominal)+").",
+    level=AssertionLevel.warning);
+
 equation
   connect(port_a, hex.port_a)
     annotation (Line(points={{-100,0},{-10,0}}, color={0,127,255}));

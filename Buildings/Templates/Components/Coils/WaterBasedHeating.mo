@@ -4,7 +4,8 @@ model WaterBasedHeating "Hot water coil"
     redeclare Buildings.Templates.Components.Data.HeatingCoil dat,
     final typ=Buildings.Templates.Components.Types.Coil.WaterBasedHeating,
     final typVal=val.typ,
-    redeclare final package MediumSou = MediumHeaWat);
+    redeclare final package MediumSou = MediumHeaWat,
+    datVal(final m_flow_nominal=dat.mWat_flow_nominal));
 
   replaceable package MediumHeaWat=Buildings.Media.Water
     "Source side medium";

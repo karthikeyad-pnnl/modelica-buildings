@@ -1,16 +1,14 @@
 within Buildings.Templates.AirHandlersFans.Validation.UserProject.AirHandlersFans;
 model ZonalHVACPTHP
   "Configuration of packaged terminal heat pump using zonal HVAC tempelate"
-  extends Buildings.Templates.AirHandlersFans.VAVMultiZone(
-    redeclare replaceable Buildings.Templates.AirHandlersFans.Components.Controls.OpenLoop ctl "Open loop controller",
-    redeclare replaceable
-      Buildings.Templates.Components.Coils.DXHeatingSingleSpeed coiHeaReh,
-    redeclare replaceable Buildings.Templates.Components.Coils.None coiHeaPre,
-    nZon=2);
+  extends Buildings.Templates.AirHandlersFans.ZonalHVAC(
+    redeclare Buildings.Templates.Components.Coils.DXHeatingSingleSpeed coiHeaReh,
+    redeclare Buildings.Templates.Components.Coils.None coiHeaPre,
+    redeclare Buildings.Templates.Components.Coils.EvaporatorVariableSpeed coiCoo);
 
 equation
   connect(busWea, coiHeaReh.busWea) annotation (Line(
-      points={{0,280},{0,100},{136,100},{136,-190}},
+      points={{0,280},{0,100},{140,100},{140,-190},{136,-190}},
       color={255,204,51},
       thickness=0.5));
   annotation (

@@ -20,9 +20,10 @@ model ZonalHVAC
       typDamOutMin=secOutRel.typDamOutMin,
       typDamRet=secOutRel.typDamRet,
       typDamRel=secOutRel.typDamRel,
-      typCtl=ctl.typ),
-    final typ=Buildings.Templates.AirHandlersFans.Types.Configuration.SingleDuct,
-    final have_porRel=secOutRel.typ <> Types.OutdoorReliefReturnSection.MixedAirNoRelief,
+      typCtl=ctl.typ,
+      typFanRel=Buildings.Templates.Components.Types.Fan.None,
+      typFanRet=Buildings.Templates.Components.Types.Fan.None),
+    final have_porRel=true,
     final have_souChiWat=coiCoo.have_sou,
     final have_souHeaWat=coiHeaPre.have_sou or coiHeaReh.have_sou,
     final typFanSup=if
@@ -41,7 +42,7 @@ model ZonalHVAC
   Hence, no choices annotation, but still replaceable to access parameter
   dialog box of the component.
   */
-  Buildings.Templates.Components.OutdoorAirMixer.OutdoorAirMixer
+  inner Buildings.Templates.Components.OutdoorAirMixer.OutdoorAirMixer
     secOutRel(
     redeclare final package MediumAir = MediumAir,
     final allowFlowReversal=allowFlowReversalAir,
@@ -164,7 +165,7 @@ model ZonalHVAC
     annotation (
     choices(
       choice(
-        redeclare replaceable Buildings.Templates.Components.Coils.None coiHeaPre
+        redeclare replaceable Buildings.Templates.Components.Coils.NoHeating coiHeaPre
         "No coil"),
       choice(
         redeclare replaceable Buildings.Templates.Components.Coils.WaterBasedHeating coiHeaPre(
@@ -194,7 +195,7 @@ model ZonalHVAC
     "Cooling coil"
     annotation (
       choices(
-      choice(redeclare replaceable Buildings.Templates.Components.Coils.None coiCoo
+      choice(redeclare replaceable Buildings.Templates.Components.Coils.NoCooling coiCoo
         "No coil"),
       choice(redeclare replaceable Buildings.Templates.Components.Coils.WaterBasedCooling coiCoo(
         redeclare final package MediumChiWat=MediumChiWat,
@@ -218,7 +219,7 @@ model ZonalHVAC
     "Heating coil in reheat position"
     annotation (
     choices(
-      choice(redeclare replaceable Buildings.Templates.Components.Coils.None coiHeaReh
+      choice(redeclare replaceable Buildings.Templates.Components.Coils.NoHeating coiHeaReh
         "No coil"),
       choice(redeclare replaceable Buildings.Templates.Components.Coils.WaterBasedHeating coiHeaReh(
         redeclare final package MediumHeaWat=MediumHeaWat)
@@ -276,7 +277,7 @@ model ZonalHVAC
   inner replaceable Buildings.Templates.AirHandlersFans.Components.Controls.EPlusZonalHVAC ctl
     constrainedby
     Buildings.Templates.AirHandlersFans.Components.Interfaces.PartialControllerZonalHVAC(
-      final dat=dat.ctl)
+      dat=dat.ctl)
     "Control selections"
     annotation (
       Dialog(group="Controls"),

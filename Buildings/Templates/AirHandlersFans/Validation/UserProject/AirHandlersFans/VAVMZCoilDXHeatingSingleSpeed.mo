@@ -10,7 +10,7 @@ model VAVMZCoilDXHeatingSingleSpeed
 
 equation
   connect(busWea, coiHeaReh.busWea) annotation (Line(
-      points={{0,280},{0,100},{134,100},{134,-190}},
+      points={{0,280},{0,100},{136,100},{136,-190}},
       color={255,204,51},
       thickness=0.5));
   annotation (

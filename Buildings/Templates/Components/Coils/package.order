@@ -5,3 +5,5 @@ EvaporatorVariableSpeed
 None
 WaterBasedCooling
 WaterBasedHeating
+NoHeating
+NoCooling

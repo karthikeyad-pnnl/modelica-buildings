@@ -15,7 +15,7 @@ class AllSystems "Top-level (whole building) system parameters"
   class for each MZVAV model instance.
   */
   replaceable model VAV =
-      Buildings.Templates.AirHandlersFans.Interfaces.PartialAirHandler
+    Buildings.Templates.AirHandlersFans.Interfaces.PartialAirHandler
     "Model of MZVAV";
 
   outer VAV VAV_1

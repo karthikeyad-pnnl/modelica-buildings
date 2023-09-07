@@ -5,21 +5,27 @@ record PartialAirHandler "Record for air handler interface class"
   parameter Buildings.Templates.AirHandlersFans.Types.Configuration typ
     "Type of system"
     annotation (Evaluate=true, Dialog(group="Configuration", enable=false));
+
   parameter Buildings.Templates.Components.Types.Fan typFanSup
     "Type of supply fan"
     annotation (Evaluate=true, Dialog(group="Configuration", enable=false));
+
   parameter Buildings.Templates.Components.Types.Fan typFanRet
     "Type of return fan"
     annotation (Evaluate=true, Dialog(group="Configuration", enable=false));
+
   parameter Buildings.Templates.Components.Types.Fan typFanRel
     "Type of relief fan"
     annotation (Evaluate=true, Dialog(group="Configuration", enable=false));
+
   parameter Boolean have_souChiWat
     "Set to true if cooling coil requires fluid ports on the source side"
     annotation (Evaluate=true, Dialog(group="Configuration", enable=false));
+
   parameter Boolean have_souHeaWat
     "Set to true if heating coil requires fluid ports on the source side"
     annotation (Evaluate=true, Dialog(group="Configuration", enable=false));
+
   parameter Buildings.Templates.AirHandlersFans.Types.Controller typCtl
     "Type of controller"
     annotation (Evaluate=true, Dialog(group="Configuration", enable=false));
@@ -27,9 +33,11 @@ record PartialAirHandler "Record for air handler interface class"
   parameter String id=""
     "System tag"
     annotation (Dialog(tab="Advanced"));
+
   parameter String id_souChiWat=""
     "CHW supply system tag"
     annotation (Dialog(tab="Advanced", enable=have_souChiWat));
+
   parameter String id_souHeaWat=""
     "HHW supply system tag"
     annotation (Dialog(tab="Advanced", enable=have_souHeaWat));
@@ -46,6 +54,7 @@ record PartialAirHandler "Record for air handler interface class"
   parameter Modelica.Units.SI.MassFlowRate mAirSup_flow_nominal
     "Supply air mass flow rate"
     annotation (Dialog(enable=typ<>Buildings.Templates.AirHandlersFans.Types.Configuration.ExhaustOnly));
+
   parameter Modelica.Units.SI.MassFlowRate mAirRet_flow_nominal
     "Return air mass flow rate"
     annotation (Dialog(enable=typ<>Buildings.Templates.AirHandlersFans.Types.Configuration.SupplyOnly));

@@ -108,6 +108,6 @@ equation
   connect(hAirOut.port_a, damOut.port_b)
     annotation (Line(points={{-100,-80},{-130,-80}}, color={0,127,255}));
   annotation (Documentation(info="<html>
-<p>This model represents an OA mixer with pressure dependent dampers. </p>
+<p>This model represents an OA mixer with pressure independent dampers. </p>
 </html>"));
 end OutdoorAirMixer;

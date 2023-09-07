@@ -8,12 +8,15 @@ model DXHeatingSingleSpeed "Single speed DX heating coil"
   parameter Boolean have_dryCon = true
     "Set to true for air-cooled condenser, false for evaporative condenser";
 
+  final parameter Modelica.Units.SI.HeatFlowRate Q_flow_nominal=
+    dat.Q_flow_nominal
+    "Nominal heat flow rate";
+
   Buildings.Fluid.DXSystems.Heating.AirSource.SingleSpeed hex(
     redeclare final package Medium = MediumAir,
-    final datCoi=dat.datHeaCoi,
+    final datCoi=dat.datCoi,
     final dp_nominal=dpAir_nominal,
-    energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
-    datDef(QDefResCap=dat.QDefResCap, QCraCap=dat.QCraCap))
+    energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial)
     "Heat exchanger"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
 
@@ -21,8 +24,21 @@ model DXHeatingSingleSpeed "Single speed DX heating coil"
     annotation (Placement(transformation(extent={{-50,14},{-30,34}})));
   Modelica.Blocks.Routing.RealPassThrough phi if have_dryCon
     annotation (Placement(transformation(extent={{-50,-30},{-30,-10}})));
-  Utilities.Psychrometrics.X_pTphi x_pTphi(use_p_in=false)
-    annotation (Placement(transformation(extent={{-10,-30},{10,-10}})));
+
+initial equation
+  assert(mAir_flow_nominal<=dat.datCoi.sta[dat.datCoi.nSta].nomVal.m_flow_nominal,
+    "In "+ getInstanceName() + ": "+
+    "The coil design airflow ("+String(mAir_flow_nominal)+
+    ") exceeds the maximum airflow provided in the performance data record ("+
+    String(dat.datCoi.sta[dat.datCoi.nSta].nomVal.m_flow_nominal)+").",
+    level=AssertionLevel.warning);
+  assert(abs(Q_flow_nominal)<=abs(dat.datCoi.sta[dat.datCoi.nSta].nomVal.Q_flow_nominal),
+    "In "+ getInstanceName() + ": "+
+    "The coil design capacity ("+String(Q_flow_nominal)+
+    ") exceeds the maximum capacity provided in the performance data record ("+
+    String(dat.datCoi.sta[dat.datCoi.nSta].nomVal.Q_flow_nominal)+").",
+    level=AssertionLevel.warning);
+
 equation
   connect(port_a, hex.port_a)
     annotation (Line(points={{-100,0},{20,0}},  color={0,127,255}));
@@ -54,12 +70,8 @@ equation
       index=-1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(x_pTphi.X[1], hex.XOut) annotation (Line(points={{11,-20},{12,-20},{
-          12,-9},{19,-9}}, color={0,0,127}));
-  connect(phi.y, x_pTphi.phi) annotation (Line(points={{-29,-20},{-22,-20},{-22,
-          -26},{-12,-26}}, color={0,0,127}));
-  connect(TDry.y, x_pTphi.T) annotation (Line(points={{-29,24},{-20,24},{-20,
-          -20},{-12,-20}}, color={0,0,127}));
+  connect(phi.y, hex.phi) annotation (Line(points={{-29,-20},{-20,-20},{-20,-8},
+          {19,-8}}, color={0,0,127}));
   annotation (
     Diagram(
         coordinateSystem(preserveAspectRatio=false)), Documentation(info="<html>

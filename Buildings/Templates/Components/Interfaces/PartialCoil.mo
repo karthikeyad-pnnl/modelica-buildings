@@ -36,7 +36,7 @@ partial model PartialCoil "Interface class for coil"
     "Set to true to use a weather bus"
     annotation (Evaluate=true, Dialog(group="Configuration"));
 
-  parameter Buildings.Templates.Components.Data.Coil dat(
+  replaceable parameter Buildings.Templates.Components.Data.Coil dat(
     final have_sou=have_sou,
     final typ=typ,
     final typVal=typVal)
@@ -50,9 +50,6 @@ partial model PartialCoil "Interface class for coil"
     final min=0,
     displayUnit="Pa") = dat.dpAir_nominal
     "Air pressure drop";
-  final parameter Modelica.Units.SI.HeatFlowRate Q_flow_nominal=
-    dat.Q_flow_nominal
-    "Nominal heat flow rate";
 
   parameter Modelica.Units.SI.Time tau=20
     "Time constant at nominal flow"
@@ -119,27 +116,10 @@ partial model PartialCoil "Interface class for coil"
 protected
   parameter Buildings.Templates.Components.Data.Valve datVal(
     final typ=typVal,
-    final m_flow_nominal=dat.mWat_flow_nominal,
     final dpValve_nominal=dat.dpValve_nominal,
     final dpFixed_nominal=if typVal <> Buildings.Templates.Components.Types.Valve.None
       then dat.dpWat_nominal else 0)
     "Local record for control valve with lumped flow resistance";
-initial equation
-  if typ==Buildings.Templates.Components.Types.Coil.EvaporatorMultiStage or
-    typ==Buildings.Templates.Components.Types.Coil.EvaporatorVariableSpeed then
-    assert(mAir_flow_nominal<=dat.datCoi.sta[dat.datCoi.nSta].nomVal.m_flow_nominal,
-      "In "+ getInstanceName() + ": "+
-      "The coil design airflow ("+String(mAir_flow_nominal)+
-      ") exceeds the maximum airflow provided in the performance data record ("+
-      String(dat.datCoi.sta[dat.datCoi.nSta].nomVal.m_flow_nominal)+").",
-      level=AssertionLevel.warning);
-    assert(abs(Q_flow_nominal)<=abs(dat.datCoi.sta[dat.datCoi.nSta].nomVal.Q_flow_nominal),
-      "In "+ getInstanceName() + ": "+
-      "The coil design capacity ("+String(Q_flow_nominal)+
-      ") exceeds the maximum capacity provided in the performance data record ("+
-      String(dat.datCoi.sta[dat.datCoi.nSta].nomVal.Q_flow_nominal)+").",
-      level=AssertionLevel.warning);
-  end if;
 
   annotation (
   Icon(

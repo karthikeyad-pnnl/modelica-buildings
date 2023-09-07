@@ -60,8 +60,8 @@ model VAVMultiZone "Multiple-zone VAV"
       final damRel=dat.damRel,
       final damRet=dat.damRet,
       final fanRel=dat.fanRel,
-      final fanRet=dat.fanRet)) "Outdoor/relief/return air section" annotation
-    (Dialog(group="Configuration"), Placement(transformation(extent={{-280,-220},
+      final fanRet=dat.fanRet)) "Outdoor/relief/return air section" annotation (
+     Dialog(group="Configuration"), Placement(transformation(extent={{-280,-220},
             {-120,-60}})));
 
   Buildings.Templates.Components.Sensors.Temperature TAirMix(
@@ -282,9 +282,9 @@ model VAVMultiZone "Multiple-zone VAV"
         rotation=90,
         origin={-20,-240})));
   inner replaceable
-    Buildings.Templates.Components.OutdoorAirMixer.Examples.BaseClasses.G36VAVMultiZone
+    Buildings.Templates.AirHandlersFans.Components.Controls.G36VAVMultiZone
     ctl constrainedby
-    Buildings.Templates.Components.OutdoorAirMixer.Examples.BaseClasses.PartialVAVMultizone(
+    Buildings.Templates.AirHandlersFans.Components.Interfaces.PartialControllerVAVMultizone(
       final dat=dat.ctl, final nZon=nZon) "Control selections" annotation (
       Dialog(group="Controls"), Placement(transformation(extent={{-220,-10},{-200,
             10}})));
@@ -322,7 +322,7 @@ equation
           75,-268},{60,-268},{60,-280}},
                                       color={0,127,255}));
   connect(busWea,coiCoo.busWea)  annotation (Line(
-      points={{0,280},{0,100},{74,100},{74,-190}},
+      points={{0,280},{0,100},{76,100},{76,-190}},
       color={255,204,51},
       thickness=0.5));
   connect(TAirMix.port_b, fanSupBlo.port_a)

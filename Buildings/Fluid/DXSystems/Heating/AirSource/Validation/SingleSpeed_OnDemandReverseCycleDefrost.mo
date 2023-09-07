@@ -4,8 +4,8 @@ model SingleSpeed_OnDemandReverseCycleDefrost
   extends Modelica.Icons.Example;
   extends
     Buildings.Fluid.DXSystems.Heating.AirSource.Validation.BaseClasses.SingleSpeedHeating(
-    datRea(
-      final fileName=ModelicaServices.ExternalReferences.loadResource("modelica://Buildings/Resources/Data/Fluid/DXSystems/Heating/AirSource/Validation/SingleSpeedHeating_OnDemandReverseCycleDefrost/DXCoilSystemAuto.dat")),
+    datRea(final fileName=ModelicaServices.ExternalReferences.loadResource(
+          "./Buildings/Resources/Data/Fluid/DXSystems/Heating/AirSource/Validation/SingleSpeedHeating_OnDemandReverseCycleDefrost/DXCoilSystemAuto.dat")),
     datCoi(
       final defOpe=Buildings.Fluid.DXSystems.Heating.BaseClasses.Types.DefrostOperation.reverseCycle,
       final defTri=Buildings.Fluid.DXSystems.Heating.BaseClasses.Types.DefrostTimeMethods.onDemand));

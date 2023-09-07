@@ -80,6 +80,17 @@ the maximum value from the performance data record.
       group="Nominal condition",
       enable=typ==Buildings.Templates.Components.Types.Coil.WaterBasedCooling));
 
+  parameter Modelica.Units.SI.MassFlowRate mAir_flow_nominal(
+    final min=0,
+    start= 1)
+    "Air mass flow rate"
+    annotation (
+      Dialog(group="Nominal condition",
+      enable=typ<>Buildings.Templates.Components.Types.Coil.None and
+      typ<>Buildings.Templates.Components.Types.Coil.DXHeatingSingleSpeed and
+      typ<>Buildings.Templates.Components.Types.Coil.EvaporatorMultiStage and
+      typ<>Buildings.Templates.Components.Types.Coil.EvaporatorVariableSpeed));
+
   annotation (Documentation(info="<html>
 <p>
 This record provides the set of sizing and operating parameters for

@@ -4,7 +4,9 @@ model WaterBasedCooling "Chilled water coil"
     redeclare Buildings.Templates.Components.Data.CoolingCoil dat,
     final typ=Buildings.Templates.Components.Types.Coil.WaterBasedCooling,
     final typVal=val.typ,
-    redeclare final package MediumSou = MediumChiWat);
+    redeclare final package MediumSou = MediumChiWat,
+    datVal(
+      final m_flow_nominal=dat.mWat_flow_nominal));
 
   replaceable package MediumChiWat=Buildings.Media.Water
     "Source side medium";

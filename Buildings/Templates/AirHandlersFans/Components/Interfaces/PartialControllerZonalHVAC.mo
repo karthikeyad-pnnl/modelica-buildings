@@ -2,15 +2,15 @@ within Buildings.Templates.AirHandlersFans.Components.Interfaces;
 partial block PartialControllerZonalHVAC
   "Interface class for zonal HVAC controller"
 
-  outer replaceable
-    Buildings.Templates.AirHandlersFans.Components.Interfaces.PartialOutdoorReliefReturnSection
-    secOutRel "Outdoor/relief/return air section";
-  outer replaceable Buildings.Templates.Components.Coils.None coiCoo
-    "Cooling coil";
-  outer replaceable Buildings.Templates.Components.Coils.None coiHeaPre
-    "Heating coil (preheat position)";
-  outer replaceable Buildings.Templates.Components.Coils.None coiHeaReh
-    "Heating coil (reheat position)";
+//   outer replaceable
+//     Buildings.Templates.Components.OutdoorAirMixer.OutdoorAirMixer
+//     secOutRel "Outdoor/relief/return air section";
+//   outer replaceable Buildings.Templates.Components.Coils.NoCooling coiCoo
+//     "Cooling coil";
+//   outer replaceable Buildings.Templates.Components.Coils.NoHeating coiHeaPre
+//     "Heating coil (preheat position)";
+//   outer replaceable Buildings.Templates.Components.Coils.NoHeating coiHeaReh
+//     "Heating coil (reheat position)";
 
   parameter Buildings.Templates.AirHandlersFans.Types.Controller typ
     "Type of controller"
