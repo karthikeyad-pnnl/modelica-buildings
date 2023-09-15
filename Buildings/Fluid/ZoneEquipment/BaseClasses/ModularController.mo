@@ -3,8 +3,6 @@ model ModularController
   "Modular controller for zonal HVAC systems"
   extends Buildings.Fluid.ZoneEquipment.BaseClasses.ControllerInterfaces;
 
-  Real trial = Buildings.Utilities.Psychrometrics.Constants.T_ref;
-
   parameter Real minFanSpe(
     final unit="1",
     displayUnit="1",
