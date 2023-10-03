@@ -311,14 +311,17 @@ partial model DataCenter
             -162},{140,-122}})));
     .Buildings.Controls.OBC.CDL.Interfaces.RealOutput mCW_flow "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{396.0,140.0},{436.0,180.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,120},{140,160}})));
     .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PChi "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{408.0,190.0},{448.0,230.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,160},{140,200}})));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PCHWPum "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{394.0,230.0},{434.0,270.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent={{100,200},
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PCHWPum "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{394.0,230.0},{434.0,270.0}},rotation = 0.0,origin={6,0}),      iconTransformation(extent={{100,200},
             {140,240}})));
     .Buildings.Controls.OBC.CDL.Interfaces.RealInput TWetBul "Chilled water supply temperature setpoint" annotation(Placement(transformation(extent = {{-438.0,-110.0},{-398.0,-70.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent={{-140,
             -40},{-100,0}})));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PCWPum "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{394.0,272.0},{434.0,312.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent={{100,240},
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PCWPum "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{394.0,272.0},{434.0,312.0}},rotation = 0.0,origin={6,-2}),     iconTransformation(extent={{100,240},
             {140,280}})));
     .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PFan "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{404.0,-102.0},{444.0,-62.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent={{100,-80},
             {140,-40}})));
+    Buildings.Controls.OBC.CDL.Interfaces.RealOutput  PCooTow
+                                                             "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{394.0,272.0},{434.0,312.0}},rotation = 0.0,origin={6,48}),     iconTransformation(extent={{100,280},
+            {140,320}})));
 equation
   connect(expVesCHW.port_a, cooCoi.port_b1) annotation (Line(
       points={{258,-147},{258,-164},{280,-164}},
@@ -585,7 +588,8 @@ equation
     connect(fan.m_flow_actual,mSupAir_flow) annotation(Line(points = {{327,-220},{321,-220},{321,-206},{426,-206}},color = {0,0,127}));
     connect(pumCW.m_flow_actual,mCW_flow) annotation(Line(points = {{353,189},{353,160},{416,160}},color = {0,0,127}));
     connect(chi.P,PChi) annotation(Line(points = {{253,102},{253,140},{386,140},{386,210},{428,210}},color = {0,0,127}));
-    connect(pumCHW.P,PCHWPum) annotation(Line(points = {{209,-109},{203,-109},{203,250},{414,250}},color = {0,0,127}));
+    connect(pumCHW.P,PCHWPum) annotation(Line(points={{209,-109},{203,-109},{
+          203,250},{420,250}},                                                                     color = {0,0,127}));
     connect(gain.y,pumCHW.dp_in) annotation(Line(points = {{-39,100},{83.5,100},{83.5,-120},{206,-120}},color = {0,0,127}));
     connect(linPieTwo.y[2],chi.TSet) annotation(Line(points={{-99,200.3},{-88,
           200.3},{-88,70},{276,70},{276,90}},                                                                      color = {0,0,127}));
@@ -598,8 +602,11 @@ equation
     connect(uFan,cooTow.y) annotation(Line(points = {{-418,-20},{-344,-20},{-344,247},{257,247}},color = {0,0,127}));
     connect(TWetBul,wseCon.TWetBul) annotation(Line(points = {{-418,-90},{-290,-90},{-290,-28.41176470588235},{-162,-28.41176470588235}},color = {0,0,127}));
     connect(TWetBul,cooTow.TAir) annotation(Line(points = {{-418,-90},{-290,-90},{-290,230},{257,230},{257,243}},color = {0,0,127}));
-    connect(pumCW.P,PCWPum) annotation(Line(points = {{349,189},{343,189},{343,292},{414,292}},color = {0,0,127}));
+    connect(pumCW.P,PCWPum) annotation(Line(points={{349,189},{343,189},{343,
+          290},{420,290}},                                                                     color = {0,0,127}));
     connect(fan.P,PFan) annotation(Line(points = {{327,-216},{327,-82},{424,-82}},color = {0,0,127}));
+  connect(cooTow.PFan, PCooTow) annotation (Line(points={{280,247},{342,247},{
+          342,340},{420,340}}, color={0,0,127}));
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-400,-300},{400,
             300}})),
