@@ -1,7 +1,7 @@
 within Buildings.Examples.ChillerPlant;
 model DataCenterContinuousTimeControl
   "Model of data center that approximates the trim and respond logic"
-  extends Buildings.Examples.ChillerPlant.BaseClasses.DataCenter;
+  extends Buildings.Examples.ChillerPlant.BaseClasses.DataCenter(TAirSet(k = 273.15 + 12.78));
   extends Modelica.Icons.Example;
 
   BaseClasses.Controls.TrimAndRespondContinuousTimeApproximation triAndRes

@@ -44,9 +44,6 @@ partial model DataCenter
     dp1_nominal(displayUnit="Pa") = 1000 + 89580)
     "Cooling coil"
     annotation (Placement(transformation(extent={{300,-180},{280,-160}})));
-  Modelica.Blocks.Sources.Constant mFanFlo(k=mAir_flow_nominal)
-    "Mass flow rate of fan" annotation (Placement(transformation(extent={{298,
-            -210},{318,-190}})));
   Buildings.Examples.ChillerPlant.BaseClasses.SimplifiedRoom_customLoad roo(
     redeclare package Medium = MediumA,
     nPorts=2,
@@ -57,7 +54,7 @@ partial model DataCenter
     QRoo_flow=500000) "Room model" annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         origin={248,-238})));
-  Fluid.Movers.FlowControlled_m_flow       pumCHW(
+  Fluid.Movers.FlowControlled_dp      pumCHW(
     redeclare package Medium = MediumW,
     m_flow_nominal=mCHW_flow_nominal,
     m_flow(start=mCHW_flow_nominal),
@@ -212,10 +209,6 @@ partial model DataCenter
      Placement(transformation(
         extent={{10,-10},{-10,10}},
         origin={330,119})));
-  Modelica.Blocks.Sources.Constant cooTowFanCon(k=1)
-    "Control singal for cooling tower fan" annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        origin={230,271})));
   Buildings.Fluid.Actuators.Valves.TwoWayEqualPercentage valByp(
     redeclare package Medium = MediumW,
     m_flow_nominal=mCHW_flow_nominal,
@@ -245,8 +238,7 @@ partial model DataCenter
         rotation=270,
         origin={218,-80})));
   Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaData(filNam=
-        Modelica.Utilities.Files.loadResource(
-        "./Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos"))
+        Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos"))
     annotation (Placement(transformation(extent={{-360,-100},{-340,-80}})));
   BoundaryConditions.WeatherData.Bus weaBus
     annotation (Placement(transformation(extent={{-332,-98},{-312,-78}}),
@@ -284,44 +276,40 @@ partial model DataCenter
         extent={{10,10},{-10,-10}},
         rotation=90,
         origin={360,-132})));
-  Fluid.Sensors.VolumeFlowRate senVolFlo(redeclare package Medium = MediumW,
-      m_flow_nominal=mCHW_flow_nominal) annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        rotation=270,
-        origin={360,-78})));
-  Modelica.Blocks.Sources.Constant cooTowFanCon1(k=1)
-    "Control singal for cooling tower fan" annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        origin={40,-19})));
-  Modelica.Blocks.Sources.Constant cooTowFanCon2(k=0)
-    "Control singal for cooling tower fan" annotation (Placement(transformation(
-        extent={{-10,-10},{10,10}},
-        origin={42,-49})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uMasFloRat annotation (
-      Placement(transformation(extent={{-440,20},{-400,60}}),
-        iconTransformation(extent={{-140,40},{-100,80}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uTCHWSet
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uFan
     "Chilled water supply temperature setpoint" annotation (Placement(
-        transformation(extent={{-438.0,-40.0},{-398.0,0.0}},rotation = 0.0,origin = {0.0,0.0}), iconTransformation(extent={{-140,
-            -20},{-100,20}})));
+        transformation(extent={{-438.0,-40.0},{-398.0,0.0}},rotation = 0.0,origin = {0.0,0.0}), iconTransformation(extent={{-140,0},{-100,40}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput TEntCoi
     "Chilled water temperature entering the coil" annotation (Placement(
-        transformation(extent={{400,-60},{440,-20}}), iconTransformation(extent={{100,-80},
-            {140,-40}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput VCHWEntCoi_flow
-    "Chilled water mass flowrate enterign the coil" annotation (Placement(
-        transformation(extent={{400,-20},{440,20}}), iconTransformation(extent={{100,-40},
+        transformation(extent={{400,-60},{440,-20}}), iconTransformation(extent={{100,-40},
             {140,0}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput mCHWEntCoi_flow
+    "Chilled water mass flowrate enterign the coil" annotation (Placement(
+        transformation(extent={{400,-20},{440,20}}), iconTransformation(extent={{100,0},
+            {140,40}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput TEntChi
     "Chilled water temperature returned to the chiller" annotation (Placement(
-        transformation(extent={{400,40},{440,80}}), iconTransformation(extent={{100,0},
-            {140,40}})));
+        transformation(extent={{404.0,36.0},{444.0,76.0}},rotation = 0.0,origin = {0.0,0.0}), iconTransformation(extent={{100,40},
+            {140,80}})));
     .Buildings.Controls.OBC.CDL.Interfaces.RealInput uLoad annotation(Placement(transformation(extent = {{-438,-82},{-398,-42}},origin = {0,0},rotation = 0),
-        iconTransformation(extent={{-140,-80},{-100,-40}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput TDelta
+        iconTransformation(extent={{-140,-40},{-100,0}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput TSupAirDelta
     "Difference between measured supply air temperature and setpoint"
-    annotation (Placement(transformation(extent={{400,-180},{440,-140}}),
-        iconTransformation(extent={{100,40},{140,80}})));
+    annotation (Placement(transformation(extent={{406.0,-156.0},{446.0,-116.0}},rotation = 0.0,origin = {0.0,0.0}),
+        iconTransformation(extent={{100,-80},{140,-40}})));
+    .Modelica.Blocks.Math.Gain gain2(k = mAir_flow_nominal) annotation(Placement(transformation(extent = {{312.0,-208.0},{332.0,-188.0}},rotation = 0.0,origin = {0.0,0.0})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealInput TRooSet annotation(Placement(transformation(extent = {{-438.0,-142.0},{-398.0,-102.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{-140,-80},{-100,-40}})));
+    .Buildings.Controls.OBC.CDL.Continuous.PID conPID(Ti = 1000,reverseActing = false) annotation(Placement(transformation(extent = {{276.0,-290.0},{296.0,-270.0}},origin = {0.0,0.0},rotation = 0.0)));
+    .Buildings.Fluid.Sensors.MassFlowRate senMasFlo(redeclare replaceable package Medium = MediumW) annotation(Placement(transformation(extent = {{-10.0,-10.0},{10.0,10.0}},origin = {360.0,-56.0},rotation = -90.0)));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput TRoo "Difference between measured supply air temperature and setpoint" annotation(Placement(transformation(extent = {{412.0,-258.0},{452.0,-218.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,-160},{140,-120}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput yValByp "Chilled water temperature returned to the chiller" annotation(Placement(transformation(extent = {{400.0,96.0},{440.0,136.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,80},{140,120}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput mSupAir_flow "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{406.0,-226.0},{446.0,-186.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,-120},{140,-80}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput mCW_flow "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{396.0,140.0},{436.0,180.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,120},{140,160}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PChi "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{408.0,190.0},{448.0,230.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,160},{140,200}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PCHWPum "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{394.0,230.0},{434.0,270.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,200},{140,240}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealInput TWetBul "Chilled water supply temperature setpoint" annotation(Placement(transformation(extent = {{-438.0,-110.0},{-398.0,-70.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{-140,0},{-100,40}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PCWPum "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{394.0,272.0},{434.0,312.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,160},{140,200}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PFan "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{404.0,-102.0},{444.0,-62.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,160},{140,200}})));
 equation
   connect(expVesCHW.port_a, cooCoi.port_b1) annotation (Line(
       points={{258,-147},{258,-164},{280,-164}},
@@ -363,22 +351,11 @@ equation
       color={255,0,255},
       smooth=Smooth.None,
       pattern=LinePattern.Dash));
-
-  connect(cooTowFanCon.y, cooTow.y) annotation (Line(
-      points={{241,271},{250,271},{250,247},{257,247}},
-      color={0,0,127},
-      smooth=Smooth.None,
-      pattern=LinePattern.Dash));
   connect(cooCoi.port_b2, fan.port_a) annotation (Line(
       points={{300,-176},{359,-176},{359,-225},{348,-225}},
       color={0,127,255},
       smooth=Smooth.None,
       thickness=0.5));
-  connect(mFanFlo.y, fan.m_flow_in) annotation (Line(
-      points={{319,-200},{338,-200},{338,-213}},
-      color={0,0,127},
-      smooth=Smooth.None,
-      pattern=LinePattern.Dash));
 
   connect(wse.port_a2, val3.port_b) annotation (Line(
       points={{106,87},{98,87},{98,-60},{108,-60}},
@@ -469,22 +446,6 @@ equation
       textString="%second",
       index=1,
       extent={{6,3},{6,3}}));
-  connect(wseCon.TWetBul, weaBus.TWetBul) annotation (Line(
-      points={{-162,-28.4118},{-322,-28.4118},{-322,-88}},
-      color={0,0,127},
-      smooth=Smooth.None,
-      pattern=LinePattern.Dash), Text(
-      textString="%second",
-      index=1,
-      extent={{6,3},{6,3}}));
-  connect(cooTow.TAir, weaBus.TWetBul) annotation (Line(
-      points={{257,243},{82,243},{82,268},{-322,268},{-322,-88}},
-      color={0,0,127},
-      smooth=Smooth.None,
-      pattern=LinePattern.Dash), Text(
-      textString="%second",
-      index=1,
-      extent={{6,3},{6,3}}));
   connect(TCHWEntChi.port_a, wse.port_b2)
                                          annotation (Line(
       points={{218,-10},{218,-20},{138,-20},{138,87},{126,87}},
@@ -537,7 +498,7 @@ equation
       smooth=Smooth.None,
       pattern=LinePattern.Dash));
   connect(linPieTwo.y[1], gain.u) annotation (Line(
-      points={{-99,199.3},{-80,199.3},{-80,100},{-62,100}},
+      points={{-99,199.3},{-74,199.3},{-74,100},{-62,100}},
       color={0,0,127},
       smooth=Smooth.None,
       pattern=LinePattern.Dash));
@@ -598,31 +559,36 @@ equation
       smooth=Smooth.None));
   connect(cooCoi.port_a1, TCHWEntCoi.port_b) annotation (Line(points={{300,-164},
           {360,-164},{360,-142}}, color={0,127,255}));
-  connect(val6.port_b, senVolFlo.port_a)
-    annotation (Line(points={{360,30},{360,-68}}, color={0,127,255}));
-  connect(senVolFlo.port_b, TCHWEntCoi.port_a)
-    annotation (Line(points={{360,-88},{360,-122}}, color={0,127,255}));
-  connect(cooTowFanCon1.y, val1.y) annotation (Line(points={{51,-19},{90,-19},{
-          90,-20},{130,-20},{130,-40},{206,-40}}, color={0,0,127}));
-  connect(cooTowFanCon2.y, val3.y) annotation (Line(points={{53,-49},{80,-49},{
-          80,-28},{118,-28},{118,-48}}, color={0,0,127}));
-  connect(uTCHWSet, chi.TSet) annotation (Line(points={{-418,-20},{-346,-20},{-346,20},{176,20},{176,112},{286,112},{286,90},{276,90}}, color={0,0,
-          127}));
-  connect(uMasFloRat, pumCHW.m_flow_in) annotation (Line(points={{-420,40},{
-          -248,40},{-248,-120},{206,-120}}, color={0,0,127}));
   connect(TCHWEntCoi.T, TEntCoi) annotation (Line(points={{371,-132},{390,-132},
           {390,-40},{420,-40}}, color={0,0,127}));
-  connect(TCHWEntChi.T, TEntChi) annotation (Line(points={{207,0},{194,0},{194,
-          2},{188,2},{188,60},{420,60}}, color={0,0,127}));
-    connect(chiSwi.TSet,uTCHWSet) annotation(Line(points = {{-227,88},{-346,88},{-346,-20},{-418,-20}},color = {0,0,127}));
-    connect(senVolFlo.V_flow,VCHWEntCoi_flow) annotation(Line(points = {{371,-78},{380,-78},{380,0},{420,0}},color = {0,0,127}));
+  connect(TCHWEntChi.T, TEntChi) annotation (Line(points={{207,0},{188,0},{188,56},{424,56}}, color={0,0,127}));
     connect(uLoad,roo.uLoad) annotation(Line(points = {{-418,-62},{-88.7,-62},{-88.7,-235},{240.6,-235}},color = {0,0,127}));
-  connect(feedback.y, TDelta) annotation (Line(points={{-191,200},{-130,200},{
-          -130,-260},{382,-260},{382,-160},{420,-160}}, color={0,0,127}));
-  connect(cooTowFanCon1.y, val5.y) annotation (Line(points={{51,-19},{64,-19},{
-          64,160},{180,160},{180,180},{206,180}}, color={0,0,127}));
-  connect(cooTowFanCon2.y, val4.y) annotation (Line(points={{53,-49},{74,-49},{
-          74,180},{86,180}}, color={0,0,127}));
+    connect(gain2.y,fan.m_flow_in) annotation(Line(points = {{333,-198},{338,-198},{338,-213}},color = {0,0,127}));
+    connect(roo.TRooAir,conPID.u_m) annotation(Line(points = {{259,-238},{264,-238},{264,-298},{286,-298},{286,-292}},color = {0,0,127}));
+    connect(TRooSet,conPID.u_s) annotation(Line(points = {{-418,-122},{-182,-122},{-182,-280},{274,-280}},color = {0,0,127}));
+    connect(conPID.y,gain2.u) annotation(Line(points = {{298,-280},{304,-280},{304,-198},{310,-198}},color = {0,0,127}));
+    connect(val6.port_b,senMasFlo.port_a) annotation(Line(points = {{360,30},{360,-46}},color = {0,127,255}));
+    connect(TCHWEntCoi.port_a,senMasFlo.port_b) annotation(Line(points = {{360,-122},{360,-66}},color = {0,127,255}));
+    connect(senMasFlo.m_flow,mCHWEntCoi_flow) annotation(Line(points = {{371,-56},{382,-56},{382,0},{420,0}},color = {0,0,127}));
+    connect(roo.TRooAir,TRoo) annotation(Line(points = {{259,-238},{432,-238}},color = {0,0,127}));
+    connect(valByp.y_actual,yValByp) annotation(Line(points = {{293,27},{378,27},{378,116},{420,116}},color = {0,0,127}));
+    connect(feedback.y,TSupAirDelta) annotation(Line(points = {{-191,200},{-130,200},{-130,-260},{382,-260},{382,-136},{426,-136}},color = {0,0,127}));
+    connect(fan.m_flow_actual,mSupAir_flow) annotation(Line(points = {{327,-220},{321,-220},{321,-206},{426,-206}},color = {0,0,127}));
+    connect(pumCW.m_flow_actual,mCW_flow) annotation(Line(points = {{353,189},{353,160},{416,160}},color = {0,0,127}));
+    connect(chi.P,PChi) annotation(Line(points = {{253,102},{253,140},{386,140},{386,210},{428,210}},color = {0,0,127}));
+    connect(pumCHW.P,PCHWPum) annotation(Line(points = {{209,-109},{203,-109},{203,250},{414,250}},color = {0,0,127}));
+    connect(gain.y,pumCHW.dp_in) annotation(Line(points = {{-39,100},{83.5,100},{83.5,-120},{206,-120}},color = {0,0,127}));
+    connect(linPieTwo.y[2],chi.TSet) annotation(Line(points = {{-99,199.8},{-88,199.8},{-88,70},{276,70},{276,90}},color = {0,0,127}));
+    connect(linPieTwo.y[2],chiSwi.TSet) annotation(Line(points = {{-99,199.8},{-93,199.8},{-93,143.9},{-232,143.9},{-232,88},{-227,88}},color = {0,0,127}));
+    connect(wseCon.y1,val3.y) annotation(Line(points = {{-139,-27.235294117647058},{118,-27.235294117647058},{118,-48}},color = {0,0,127}));
+    connect(wseCon.y2,val1.y) annotation(Line(points = {{-139,-31.941176470588236},{33.5,-31.941176470588236},{33.5,-40},{206,-40}},color = {0,0,127}));
+    connect(wseCon.y1,val4.y) annotation(Line(points = {{-139,-27.235294117647058},{-26.5,-27.235294117647058},{-26.5,180},{86,180}},color = {0,0,127}));
+    connect(chiCon.y,val5.y) annotation(Line(points = {{-139,50},{-80,50},{-80,164},{206,164},{206,180}},color = {0,0,127}));
+    connect(uFan,cooTow.y) annotation(Line(points = {{-418,-20},{-344,-20},{-344,247},{257,247}},color = {0,0,127}));
+    connect(TWetBul,wseCon.TWetBul) annotation(Line(points = {{-418,-90},{-290,-90},{-290,-28.41176470588235},{-162,-28.41176470588235}},color = {0,0,127}));
+    connect(TWetBul,cooTow.TAir) annotation(Line(points = {{-418,-90},{-290,-90},{-290,230},{257,230},{257,243}},color = {0,0,127}));
+    connect(pumCW.P,PCWPum) annotation(Line(points = {{349,189},{343,189},{343,292},{414,292}},color = {0,0,127}));
+    connect(fan.P,PFan) annotation(Line(points = {{327,-216},{327,-82},{424,-82}},color = {0,0,127}));
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-400,-300},{400,
             300}})),
