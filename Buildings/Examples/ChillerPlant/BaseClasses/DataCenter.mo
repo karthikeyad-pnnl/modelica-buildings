@@ -278,7 +278,8 @@ partial model DataCenter
         origin={360,-132})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uFan
     "Chilled water supply temperature setpoint" annotation (Placement(
-        transformation(extent={{-438.0,-40.0},{-398.0,0.0}},rotation = 0.0,origin = {0.0,0.0}), iconTransformation(extent={{-140,0},{-100,40}})));
+        transformation(extent={{-438.0,-40.0},{-398.0,0.0}},rotation = 0.0,origin = {0.0,0.0}), iconTransformation(extent={{-140,40},
+            {-100,80}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput TEntCoi
     "Chilled water temperature entering the coil" annotation (Placement(
         transformation(extent={{400,-60},{440,-20}}), iconTransformation(extent={{100,-40},
@@ -292,24 +293,32 @@ partial model DataCenter
         transformation(extent={{404.0,36.0},{444.0,76.0}},rotation = 0.0,origin = {0.0,0.0}), iconTransformation(extent={{100,40},
             {140,80}})));
     .Buildings.Controls.OBC.CDL.Interfaces.RealInput uLoad annotation(Placement(transformation(extent = {{-438,-82},{-398,-42}},origin = {0,0},rotation = 0),
-        iconTransformation(extent={{-140,-40},{-100,0}})));
+        iconTransformation(extent={{-140,0},{-100,40}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput TSupAirDelta
     "Difference between measured supply air temperature and setpoint"
     annotation (Placement(transformation(extent={{406.0,-156.0},{446.0,-116.0}},rotation = 0.0,origin = {0.0,0.0}),
-        iconTransformation(extent={{100,-80},{140,-40}})));
+        iconTransformation(extent={{100,-122},{140,-82}})));
     .Modelica.Blocks.Math.Gain gain2(k = mAir_flow_nominal) annotation(Placement(transformation(extent = {{312.0,-208.0},{332.0,-188.0}},rotation = 0.0,origin = {0.0,0.0})));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealInput TRooSet annotation(Placement(transformation(extent = {{-438.0,-142.0},{-398.0,-102.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{-140,-80},{-100,-40}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealInput TRooSet annotation(Placement(transformation(extent = {{-438.0,-142.0},{-398.0,-102.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent={{-140,
+            -80},{-100,-40}})));
     .Buildings.Controls.OBC.CDL.Continuous.PID conPID(Ti = 1000,reverseActing = false) annotation(Placement(transformation(extent = {{276.0,-290.0},{296.0,-270.0}},origin = {0.0,0.0},rotation = 0.0)));
-    .Buildings.Fluid.Sensors.MassFlowRate senMasFlo(redeclare replaceable package Medium = MediumW) annotation(Placement(transformation(extent = {{-10.0,-10.0},{10.0,10.0}},origin = {360.0,-56.0},rotation = -90.0)));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput TRoo "Difference between measured supply air temperature and setpoint" annotation(Placement(transformation(extent = {{412.0,-258.0},{452.0,-218.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,-160},{140,-120}})));
+    .Buildings.Fluid.Sensors.MassFlowRate senMasFlo(redeclare replaceable
+      package                                                                     Medium = MediumW) annotation(Placement(transformation(extent = {{-10.0,-10.0},{10.0,10.0}},origin = {360.0,-56.0},rotation = -90.0)));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput TRoo "Difference between measured supply air temperature and setpoint" annotation(Placement(transformation(extent = {{412.0,-258.0},{452.0,-218.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent={{100,
+            -202},{140,-162}})));
     .Buildings.Controls.OBC.CDL.Interfaces.RealOutput yValByp "Chilled water temperature returned to the chiller" annotation(Placement(transformation(extent = {{400.0,96.0},{440.0,136.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,80},{140,120}})));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput mSupAir_flow "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{406.0,-226.0},{446.0,-186.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,-120},{140,-80}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput mSupAir_flow "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{406.0,-226.0},{446.0,-186.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent={{100,
+            -162},{140,-122}})));
     .Buildings.Controls.OBC.CDL.Interfaces.RealOutput mCW_flow "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{396.0,140.0},{436.0,180.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,120},{140,160}})));
     .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PChi "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{408.0,190.0},{448.0,230.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,160},{140,200}})));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PCHWPum "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{394.0,230.0},{434.0,270.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,200},{140,240}})));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealInput TWetBul "Chilled water supply temperature setpoint" annotation(Placement(transformation(extent = {{-438.0,-110.0},{-398.0,-70.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{-140,0},{-100,40}})));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PCWPum "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{394.0,272.0},{434.0,312.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,160},{140,200}})));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PFan "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{404.0,-102.0},{444.0,-62.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,160},{140,200}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PCHWPum "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{394.0,230.0},{434.0,270.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent={{100,200},
+            {140,240}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealInput TWetBul "Chilled water supply temperature setpoint" annotation(Placement(transformation(extent = {{-438.0,-110.0},{-398.0,-70.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent={{-140,
+            -40},{-100,0}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PCWPum "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{394.0,272.0},{434.0,312.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent={{100,240},
+            {140,280}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PFan "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{404.0,-102.0},{444.0,-62.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent={{100,-80},
+            {140,-40}})));
 equation
   connect(expVesCHW.port_a, cooCoi.port_b1) annotation (Line(
       points={{258,-147},{258,-164},{280,-164}},
@@ -578,8 +587,10 @@ equation
     connect(chi.P,PChi) annotation(Line(points = {{253,102},{253,140},{386,140},{386,210},{428,210}},color = {0,0,127}));
     connect(pumCHW.P,PCHWPum) annotation(Line(points = {{209,-109},{203,-109},{203,250},{414,250}},color = {0,0,127}));
     connect(gain.y,pumCHW.dp_in) annotation(Line(points = {{-39,100},{83.5,100},{83.5,-120},{206,-120}},color = {0,0,127}));
-    connect(linPieTwo.y[2],chi.TSet) annotation(Line(points = {{-99,199.8},{-88,199.8},{-88,70},{276,70},{276,90}},color = {0,0,127}));
-    connect(linPieTwo.y[2],chiSwi.TSet) annotation(Line(points = {{-99,199.8},{-93,199.8},{-93,143.9},{-232,143.9},{-232,88},{-227,88}},color = {0,0,127}));
+    connect(linPieTwo.y[2],chi.TSet) annotation(Line(points={{-99,200.3},{-88,
+          200.3},{-88,70},{276,70},{276,90}},                                                                      color = {0,0,127}));
+    connect(linPieTwo.y[2],chiSwi.TSet) annotation(Line(points={{-99,200.3},{
+          -93,200.3},{-93,143.9},{-232,143.9},{-232,88},{-227,88}},                                                                     color = {0,0,127}));
     connect(wseCon.y1,val3.y) annotation(Line(points = {{-139,-27.235294117647058},{118,-27.235294117647058},{118,-48}},color = {0,0,127}));
     connect(wseCon.y2,val1.y) annotation(Line(points = {{-139,-31.941176470588236},{33.5,-31.941176470588236},{33.5,-40},{206,-40}},color = {0,0,127}));
     connect(wseCon.y1,val4.y) annotation(Line(points = {{-139,-27.235294117647058},{-26.5,-27.235294117647058},{-26.5,180},{86,180}},color = {0,0,127}));
