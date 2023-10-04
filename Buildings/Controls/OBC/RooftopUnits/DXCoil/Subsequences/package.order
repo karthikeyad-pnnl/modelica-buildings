@@ -1,8 +1,8 @@
-DXCoilStage
-DXCoilEnable
-CompressorSpeedStage
 ChangeStatus
-ZeroIndexCorrection
-Validation
+CompressorSpeedStage
+Enable
 NextCoil
 NextCoil_v2
+StageUpDown
+ZeroIndexCorrection
+Validation
