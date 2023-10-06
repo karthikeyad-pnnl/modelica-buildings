@@ -3,3 +3,6 @@ DataCenterDiscreteTimeControl
 DataCenterRenewables
 BaseClasses
 ClosedLoop
+DataCenterDiscreteTimeControl_purePhysics
+ClosedLoop_purePhysics
+ClosedLoop_cooTowFan

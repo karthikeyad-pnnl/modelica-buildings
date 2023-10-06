@@ -1,0 +1,31 @@
+within Buildings.Examples.ChillerPlant;
+model ClosedLoop_cooTowFan
+    .Buildings.Examples.ChillerPlant.DataCenterContinuousTimeControl dataCenterContinuousTimeControl annotation(Placement(transformation(extent = {{34,-2},{54,18}},origin = {0,0},rotation = 0)));
+    .Buildings.Controls.OBC.CDL.Continuous.MultiplyByParameter gai(k = 250000 / (9 * 3600)) annotation(Placement(transformation(extent = {{-1.0,10.0},{19.0,30.0}},rotation = 0.0,origin = {0.0,0.0})));
+    .Buildings.Controls.OBC.CDL.Logical.Timer tim annotation(Placement(transformation(extent = {{-31.0,10.0},{-11.0,30.0}},rotation = 0.0,origin = {0.0,0.0})));
+    .Buildings.Controls.OBC.CDL.Logical.And and1 annotation(Placement(transformation(extent = {{-61.0,10.0},{-41.0,30.0}},rotation = 0.0,origin = {0.0,0.0})));
+    .Buildings.Controls.OBC.CDL.Integers.GreaterEqualThreshold intGreEquThr(t = 8) annotation(Placement(transformation(extent = {{-91.0,20.0},{-71.0,40.0}},rotation = 0.0,origin = {0.0,0.0})));
+    .Buildings.Controls.OBC.CDL.Integers.LessEqualThreshold intLesEquThr(t = 17) annotation(Placement(transformation(extent = {{-91.0,-20.0},{-71.0,0.0}},rotation = 0.0,origin = {0.0,0.0})));
+    .Buildings.Controls.OBC.CDL.Continuous.Sources.CalendarTime calTim(zerTim = .Buildings.Controls.OBC.CDL.Types.ZeroTime.NY2020) annotation(Placement(transformation(extent = {{-121.0,18.0},{-101.0,38.0}},rotation = 0.0,origin = {0.0,0.0})));
+    .Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaData(filNam = .Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos")) annotation(Placement(transformation(extent = {{-42.0,59.0},{-22.0,79.0}},rotation = 0.0,origin = {0.0,0.0})));
+    .Buildings.BoundaryConditions.WeatherData.Bus weaBus annotation(Placement(transformation(extent = {{-14.0,61.0},{6.0,81.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{-90,70},{-70,90}})));
+    .Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(k = 297.15) annotation(Placement(transformation(extent = {{-28.0,-30.0},{-8.0,-10.0}},rotation = 0.0,origin = {0.0,0.0})));
+    .Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con2(k = 273.15 + 6) annotation(Placement(transformation(extent = {{-60.0,-60.0},{-40.0,-40.0}},rotation = 0.0,origin = {0.0,0.0})));
+    .Buildings.Controls.OBC.CDL.Continuous.PID conPID(Ti = 1000,reverseActing = false) annotation(Placement(transformation(extent = {{-30.0,-60.0},{-10.0,-40.0}},origin = {0.0,0.0},rotation = 0.0)));
+    .Modelica.Blocks.Sources.RealExpression expTowTApp(y = dataCenterContinuousTimeControl.TCWLeaTow.T) "Cooling tower approach" annotation(Placement(transformation(extent = {{-60.0,-90.0},{-40.0,-70.0}},origin = {0.0,0.0},rotation = 0.0)));
+equation
+    connect(tim.y,gai.u) annotation(Line(points = {{-9,20},{-3,20}},color = {0,0,127}));
+    connect(and1.y,tim.u) annotation(Line(points = {{-39,20},{-33,20}},color = {255,0,255}));
+    connect(intGreEquThr.y,and1.u1) annotation(Line(points = {{-69,30},{-69,20},{-63,20}},color = {255,0,255}));
+    connect(intLesEquThr.y,and1.u2) annotation(Line(points = {{-69,-10},{-69,12},{-63,12}},color = {255,0,255}));
+    connect(calTim.hour,intGreEquThr.u) annotation(Line(points = {{-100,34},{-100,30},{-93,30}},color = {255,127,0}));
+    connect(calTim.hour,intLesEquThr.u) annotation(Line(points = {{-100,34},{-100,-10},{-93,-10}},color = {255,127,0}));
+    connect(gai.y,dataCenterContinuousTimeControl.uLoad) annotation(Line(points = {{21,20},{26.5,20},{26.5,10},{32,10}},color = {0,0,127}));
+    connect(weaData.weaBus,weaBus) annotation(Line(points = {{-22,69},{-13,69},{-13,71},{-4,71}},color = {255,204,51}));
+    connect(weaBus.TWetBul,dataCenterContinuousTimeControl.TWetBul) annotation(Line(points = {{-4,71},{14,71},{14,6},{32,6}},color = {255,204,51}));
+    connect(con.y,dataCenterContinuousTimeControl.TRooSet) annotation(Line(points = {{-6,-20},{13,-20},{13,2},{32,2}},color = {0,0,127}));
+    connect(con2.y,conPID.u_s) annotation(Line(points = {{-38,-50},{-32,-50}},color = {0,0,127}));
+    connect(conPID.y,dataCenterContinuousTimeControl.uFan) annotation(Line(points = {{-8,-50},{12,-50},{12,14},{32,14}},color = {0,0,127}));
+    connect(expTowTApp.y,conPID.u_m) annotation(Line(points = {{-39,-80},{-20,-80},{-20,-62}},color = {0,0,127}));
+    annotation(Icon(coordinateSystem(preserveAspectRatio = false,extent = {{-100.0,-100.0},{100.0,100.0}}),graphics = {Rectangle(lineColor={0,0,0},fillColor={230,230,230},fillPattern=FillPattern.Solid,extent={{-100.0,-100.0},{100.0,100.0}}),Text(lineColor={0,0,255},extent={{-150,150},{150,110}},textString="%name")}));
+end ClosedLoop_cooTowFan;

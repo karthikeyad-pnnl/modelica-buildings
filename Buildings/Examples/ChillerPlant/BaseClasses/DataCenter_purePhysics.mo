@@ -1,37 +1,38 @@
 within Buildings.Examples.ChillerPlant.BaseClasses;
-partial model DataCenter
+
+partial model DataCenter_purePhysics
   "Primary only chiller plant system with water-side economizer"
-  replaceable package MediumA = Buildings.Media.Air "Medium model";
-  replaceable package MediumW = Buildings.Media.Water "Medium model";
-  parameter Modelica.Units.SI.MassFlowRate mAir_flow_nominal=roo.QRoo_flow/(
+  replaceable package MediumA = .Buildings.Media.Air "Medium model";
+  replaceable package MediumW = .Buildings.Media.Water "Medium model";
+  parameter .Modelica.Units.SI.MassFlowRate mAir_flow_nominal=roo.QRoo_flow/(
       1005*15) "Nominal mass flow rate at fan";
-  parameter Modelica.Units.SI.Power P_nominal=80E3
+  parameter .Modelica.Units.SI.Power P_nominal=80E3
     "Nominal compressor power (at y=1)";
-  parameter Modelica.Units.SI.TemperatureDifference dTEva_nominal=10
+  parameter .Modelica.Units.SI.TemperatureDifference dTEva_nominal=10
     "Temperature difference evaporator inlet-outlet";
-  parameter Modelica.Units.SI.TemperatureDifference dTCon_nominal=10
+  parameter .Modelica.Units.SI.TemperatureDifference dTCon_nominal=10
     "Temperature difference condenser outlet-inlet";
   parameter Real COPc_nominal=3 "Chiller COP";
-  parameter Modelica.Units.SI.MassFlowRate mCHW_flow_nominal=2*roo.QRoo_flow/(
+  parameter .Modelica.Units.SI.MassFlowRate mCHW_flow_nominal=2*roo.QRoo_flow/(
       4200*20) "Nominal mass flow rate at chilled water";
 
-  parameter Modelica.Units.SI.MassFlowRate mCW_flow_nominal=2*roo.QRoo_flow/(
+  parameter .Modelica.Units.SI.MassFlowRate mCW_flow_nominal=2*roo.QRoo_flow/(
       4200*6) "Nominal mass flow rate at condenser water";
 
-  parameter Modelica.Units.SI.PressureDifference dp_nominal=500
+  parameter .Modelica.Units.SI.PressureDifference dp_nominal=500
     "Nominal pressure difference";
-  Buildings.Fluid.Movers.FlowControlled_m_flow fan(
+  .Buildings.Fluid.Movers.FlowControlled_m_flow fan(
     redeclare package Medium = MediumA,
     m_flow_nominal=mAir_flow_nominal,
     dp(start=249),
     m_flow(start=mAir_flow_nominal),
     nominalValuesDefineDefaultPressureCurve=true,
     use_inputFilter=false,
-    energyDynamics=Modelica.Fluid.Types.Dynamics.SteadyState,
+    energyDynamics=.Modelica.Fluid.Types.Dynamics.SteadyState,
     T_start=293.15,
     dp_nominal=750) "Fan for air flow through the data center"
     annotation (Placement(transformation(extent={{348,-235},{328,-215}})));
-  Buildings.Fluid.HeatExchangers.DryCoilCounterFlow cooCoi(
+  .Buildings.Fluid.HeatExchangers.DryCoilCounterFlow cooCoi(
     redeclare package Medium1 = MediumW,
     redeclare package Medium2 = MediumA,
     m2_flow_nominal=mAir_flow_nominal,
@@ -40,11 +41,11 @@ partial model DataCenter
     m2_flow(start=mAir_flow_nominal),
     dp2_nominal=249*3,
     UA_nominal=mAir_flow_nominal*1006*5,
-    energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
+    energyDynamics=.Modelica.Fluid.Types.Dynamics.FixedInitial,
     dp1_nominal(displayUnit="Pa") = 1000 + 89580)
     "Cooling coil"
     annotation (Placement(transformation(extent={{300,-180},{280,-160}})));
-  Buildings.Examples.ChillerPlant.BaseClasses.SimplifiedRoom_customLoad roo(
+  .Buildings.Examples.ChillerPlant.BaseClasses.SimplifiedRoom_customLoad roo(
     redeclare package Medium = MediumA,
     nPorts=2,
     rooLen=50,
@@ -54,47 +55,47 @@ partial model DataCenter
     QRoo_flow=500000) "Room model" annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         origin={248,-238})));
-  Fluid.Movers.FlowControlled_dp      pumCHW(
+  .Buildings.Fluid.Movers.FlowControlled_m_flow       pumCHW(
     redeclare package Medium = MediumW,
     m_flow_nominal=mCHW_flow_nominal,
     m_flow(start=mCHW_flow_nominal),
     dp(start=325474),
     nominalValuesDefineDefaultPressureCurve=true,
     use_inputFilter=false,
-    energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
+    energyDynamics=.Modelica.Fluid.Types.Dynamics.FixedInitial,
     dp_nominal=130000)
     "Chilled water pump" annotation (Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=270,
         origin={218,-120})));
-  Buildings.Fluid.Storage.ExpansionVessel expVesCHW(redeclare package Medium =
+  .Buildings.Fluid.Storage.ExpansionVessel expVesCHW(redeclare package Medium =
         MediumW, V_start=1) "Expansion vessel"
     annotation (Placement(transformation(extent={{248,-147},{268,-127}})));
-  Buildings.Fluid.HeatExchangers.CoolingTowers.YorkCalc cooTow(
+  .Buildings.Fluid.HeatExchangers.CoolingTowers.YorkCalc cooTow(
     redeclare package Medium = MediumW,
     m_flow_nominal=mCW_flow_nominal,
     PFan_nominal=6000,
     TAirInWB_nominal(displayUnit="degC") = 283.15,
     TApp_nominal=6,
     dp_nominal=14930 + 14930 + 74650,
-    energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial)
+    energyDynamics=.Modelica.Fluid.Types.Dynamics.FixedInitial)
     "Cooling tower"                                   annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
         origin={269,239})));
-  Buildings.Fluid.Movers.FlowControlled_m_flow pumCW(
+  .Buildings.Fluid.Movers.FlowControlled_m_flow pumCW(
     redeclare package Medium = MediumW,
     m_flow_nominal=mCW_flow_nominal,
     dp(start=214992),
     nominalValuesDefineDefaultPressureCurve=true,
     use_inputFilter=false,
-    energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
+    energyDynamics=.Modelica.Fluid.Types.Dynamics.FixedInitial,
     dp_nominal=130000)
     "Condenser water pump" annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=270,
         origin={358,200})));
-  Buildings.Fluid.HeatExchangers.ConstantEffectiveness wse(
+  .Buildings.Fluid.HeatExchangers.ConstantEffectiveness wse(
     redeclare package Medium1 = MediumW,
     redeclare package Medium2 = MediumW,
     m1_flow_nominal=mCW_flow_nominal,
@@ -103,7 +104,7 @@ partial model DataCenter
     dp2_nominal=0,
     dp1_nominal=0) "Water side economizer (Heat exchanger)"
     annotation (Placement(transformation(extent={{126,83},{106,103}})));
-  Buildings.Fluid.Actuators.Valves.TwoWayLinear val5(
+  .Buildings.Fluid.Actuators.Valves.TwoWayLinear val5(
     redeclare package Medium = MediumW,
     m_flow_nominal=mCW_flow_nominal,
     dpValve_nominal=20902,
@@ -114,7 +115,7 @@ partial model DataCenter
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={218,180})));
-  Buildings.Fluid.Actuators.Valves.TwoWayLinear val1(
+  .Buildings.Fluid.Actuators.Valves.TwoWayLinear val1(
     redeclare package Medium = MediumW,
     m_flow_nominal=mCHW_flow_nominal,
     dpValve_nominal=20902,
@@ -124,28 +125,28 @@ partial model DataCenter
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={218,-40})));
-  Buildings.Fluid.Storage.ExpansionVessel expVesChi(redeclare package Medium =
+  .Buildings.Fluid.Storage.ExpansionVessel expVesChi(redeclare package Medium =
         MediumW, V_start=1)
     annotation (Placement(transformation(extent={{236,143},{256,163}})));
-  Buildings.Examples.ChillerPlant.BaseClasses.Controls.WSEControl wseCon
+  .Buildings.Examples.ChillerPlant.BaseClasses.Controls.WSEControl wseCon
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         origin={-150,-29})));
-  Modelica.Blocks.Sources.RealExpression expTowTApp(y=cooTow.TApp_nominal)
+  .Modelica.Blocks.Sources.RealExpression expTowTApp(y=cooTow.TApp_nominal)
     "Cooling tower approach" annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         origin={-212,-20})));
-  Buildings.Fluid.Chillers.ElectricEIR chi(
+  .Buildings.Fluid.Chillers.ElectricEIR chi(
     redeclare package Medium1 = MediumW,
     redeclare package Medium2 = MediumW,
     m1_flow_nominal=mCW_flow_nominal,
     m2_flow_nominal=mCHW_flow_nominal,
     dp2_nominal=0,
     dp1_nominal=0,
-    per=Buildings.Fluid.Chillers.Data.ElectricEIR.ElectricEIRChiller_Carrier_19XR_742kW_5_42COP_VSD(),
-    energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial)
+    per=.Buildings.Fluid.Chillers.Data.ElectricEIR.ElectricEIRChiller_Carrier_19XR_742kW_5_42COP_VSD(),
+    energyDynamics=.Modelica.Fluid.Types.Dynamics.FixedInitial)
     annotation (Placement(transformation(extent={{274,83},{254,103}})));
-  Buildings.Fluid.Actuators.Valves.TwoWayLinear val6(
+  .Buildings.Fluid.Actuators.Valves.TwoWayLinear val6(
     redeclare package Medium = MediumW,
     m_flow_nominal=mCHW_flow_nominal,
     dpValve_nominal=20902,
@@ -158,11 +159,11 @@ partial model DataCenter
         extent={{-10,10},{10,-10}},
         rotation=270,
         origin={360,40})));
-  Buildings.Examples.ChillerPlant.BaseClasses.Controls.ChillerSwitch chiSwi(
+  .Buildings.Examples.ChillerPlant.BaseClasses.Controls.ChillerSwitch chiSwi(
       deaBan(displayUnit="K") = 2.2)
     "Control unit switching chiller on or off "
     annotation (Placement(transformation(extent={{-226,83},{-206,103}})));
-  Buildings.Examples.ChillerPlant.BaseClasses.Controls.LinearPiecewiseTwo
+  .Buildings.Examples.ChillerPlant.BaseClasses.Controls.LinearPiecewiseTwo
     linPieTwo(
     x0=0,
     x2=1,
@@ -172,13 +173,13 @@ partial model DataCenter
     y10=0.2,
     y20=273.15 + 22) "Translate the control signal for chiller setpoint reset"
     annotation (Placement(transformation(extent={{-120,190},{-100,210}})));
-  Modelica.Blocks.Sources.Constant TAirSet(k=273.15 + 27)
+  .Modelica.Blocks.Sources.Constant TAirSet(k=273.15 + 27)
     "Set temperature for air supply to the room" annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         origin={-230,170})));
-  Modelica.Blocks.Math.BooleanToReal chiCon "Contorl signal for chiller"
+  .Modelica.Blocks.Math.BooleanToReal chiCon "Contorl signal for chiller"
     annotation (Placement(transformation(extent={{-160,40},{-140,60}})));
-  Buildings.Fluid.Actuators.Valves.TwoWayLinear val4(
+  .Buildings.Fluid.Actuators.Valves.TwoWayLinear val4(
     redeclare package Medium = MediumW,
     m_flow_nominal=mCW_flow_nominal,
     dpValve_nominal=20902,
@@ -190,26 +191,30 @@ partial model DataCenter
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={98,180})));
-  Buildings.Fluid.Sensors.TemperatureTwoPort TAirSup(redeclare package Medium =
+  .Buildings.Fluid.Sensors.TemperatureTwoPort TAirSup(redeclare package Medium =
         MediumA, m_flow_nominal=mAir_flow_nominal)
     "Supply air temperature to data center" annotation (Placement(
         transformation(
         extent={{10,-10},{-10,10}},
         origin={288,-225})));
-  Buildings.Fluid.Sensors.TemperatureTwoPort TCHWEntChi(redeclare package
+  .Buildings.Fluid.Sensors.TemperatureTwoPort TCHWEntChi(redeclare package
       Medium = MediumW, m_flow_nominal=mCHW_flow_nominal)
     "Temperature of chilled water entering chiller" annotation (Placement(
         transformation(
         extent={{10,10},{-10,-10}},
         rotation=270,
         origin={218,0})));
-  Buildings.Fluid.Sensors.TemperatureTwoPort TCWLeaTow(redeclare package Medium =
+  .Buildings.Fluid.Sensors.TemperatureTwoPort TCWLeaTow(redeclare package Medium =
         MediumW, m_flow_nominal=mCW_flow_nominal)
     "Temperature of condenser water leaving the cooling tower"      annotation (
      Placement(transformation(
         extent={{10,-10},{-10,10}},
         origin={330,119})));
-  Buildings.Fluid.Actuators.Valves.TwoWayEqualPercentage valByp(
+  .Modelica.Blocks.Sources.Constant cooTowFanCon(k=1)
+    "Control singal for cooling tower fan" annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        origin={230,271})));
+  .Buildings.Fluid.Actuators.Valves.TwoWayEqualPercentage valByp(
     redeclare package Medium = MediumW,
     m_flow_nominal=mCHW_flow_nominal,
     dpValve_nominal=20902,
@@ -218,9 +223,9 @@ partial model DataCenter
     use_inputFilter=false,
     from_dp=true)          "Bypass valve for chiller." annotation (Placement(
         transformation(extent={{-10,-10},{10,10}}, origin={288,20})));
-  Buildings.Examples.ChillerPlant.BaseClasses.Controls.KMinusU KMinusU(k=1)
+  .Buildings.Examples.ChillerPlant.BaseClasses.Controls.KMinusU KMinusU(k=1)
     annotation (Placement(transformation(extent={{-60,28},{-40,48}})));
-  Buildings.Fluid.Actuators.Valves.TwoWayLinear val3(
+  .Buildings.Fluid.Actuators.Valves.TwoWayLinear val3(
     redeclare package Medium = MediumW,
     m_flow_nominal=mCHW_flow_nominal,
     dpValve_nominal=20902,
@@ -229,7 +234,7 @@ partial model DataCenter
     "Control valve for economizer. 0: disable economizer, 1: enable economoizer"
     annotation (Placement(transformation(extent={{10,-10},{-10,10}}, origin={
             118,-60})));
-  Buildings.Fluid.Sensors.TemperatureTwoPort TCHWLeaCoi(redeclare package
+  .Buildings.Fluid.Sensors.TemperatureTwoPort TCHWLeaCoi(redeclare package
       Medium = MediumW, m_flow_nominal=mCHW_flow_nominal)
     "Temperature of chilled water leaving the cooling coil"
                                                      annotation (Placement(
@@ -237,94 +242,86 @@ partial model DataCenter
         extent={{10,10},{-10,-10}},
         rotation=270,
         origin={218,-80})));
-  Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaData(filNam=
-        Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos"))
+  .Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaData(filNam=
+        .Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/weatherdata/USA_CA_San.Francisco.Intl.AP.724940_TMY3.mos"))
     annotation (Placement(transformation(extent={{-360,-100},{-340,-80}})));
-  BoundaryConditions.WeatherData.Bus weaBus
+  .Buildings.BoundaryConditions.WeatherData.Bus weaBus
     annotation (Placement(transformation(extent={{-332,-98},{-312,-78}}),
         iconTransformation(extent={{-90,70},{-70,90}})));
-  Modelica.Blocks.Math.Gain gain(k=20*6485)
+  .Modelica.Blocks.Math.Gain gain(k=20*6485)
     annotation (Placement(transformation(extent={{-60,90},{-40,110}})));
-  Modelica.Blocks.Math.Feedback feedback
+  .Modelica.Blocks.Math.Feedback feedback
     annotation (Placement(transformation(extent={{-210,190},{-190,210}})));
-  Modelica.Blocks.Logical.GreaterThreshold greaterThreshold
+  .Modelica.Blocks.Logical.GreaterThreshold greaterThreshold
     annotation (Placement(transformation(extent={{-10,190},{10,210}})));
-  Modelica.Blocks.Logical.Or or1
+  .Modelica.Blocks.Logical.Or or1
     annotation (Placement(transformation(extent={{20,190},{40,210}})));
-  Modelica.Blocks.Math.BooleanToReal mCWFlo(realTrue=mCW_flow_nominal)
+  .Modelica.Blocks.Math.BooleanToReal mCWFlo(realTrue=mCW_flow_nominal)
     "Mass flow rate of condenser loop"
     annotation (Placement(transformation(extent={{60,190},{80,210}})));
-  Modelica.Blocks.Sources.RealExpression PHVAC(y=fan.P + pumCHW.P + pumCW.P +
+  .Modelica.Blocks.Sources.RealExpression PHVAC(y=fan.P + pumCHW.P + pumCW.P +
         cooTow.PFan + chi.P) "Power consumed by HVAC system"
                              annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         origin={-290,-250})));
-  Modelica.Blocks.Sources.RealExpression PIT(y=roo.QSou.Q_flow)
+  .Modelica.Blocks.Sources.RealExpression PIT(y=roo.QSou.Q_flow)
     "Power consumed by IT"   annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         origin={-290,-280})));
-  Modelica.Blocks.Continuous.Integrator EHVAC(initType=Modelica.Blocks.Types.Init.InitialState,
+  .Modelica.Blocks.Continuous.Integrator EHVAC(initType=.Modelica.Blocks.Types.Init.InitialState,
       y_start=0) "Energy consumed by HVAC"
     annotation (Placement(transformation(extent={{-240,-260},{-220,-240}})));
-  Modelica.Blocks.Continuous.Integrator EIT(initType=Modelica.Blocks.Types.Init.InitialState,
+  .Modelica.Blocks.Continuous.Integrator EIT(initType=.Modelica.Blocks.Types.Init.InitialState,
       y_start=0) "Energy consumed by IT"
     annotation (Placement(transformation(extent={{-240,-290},{-220,-270}})));
-  Fluid.Sensors.TemperatureTwoPort TCHWEntCoi(redeclare package Medium =
+  .Buildings.Fluid.Sensors.TemperatureTwoPort TCHWEntCoi(redeclare package Medium =
         MediumW, m_flow_nominal=mCHW_flow_nominal)
     "Temperature of chilled water entering the cooling coil" annotation (
       Placement(transformation(
         extent={{10,10},{-10,-10}},
         rotation=90,
         origin={360,-132})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uFan
+  .Modelica.Blocks.Sources.Constant cooTowFanCon1(k=1)
+    "Control singal for cooling tower fan" annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        origin={40,-19})));
+  .Modelica.Blocks.Sources.Constant cooTowFanCon2(k=0)
+    "Control singal for cooling tower fan" annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        origin={42,-49})));
+  .Buildings.Controls.OBC.CDL.Interfaces.RealInput uMasFloRat annotation (
+      Placement(transformation(extent={{-440,20},{-400,60}}),
+        iconTransformation(extent={{-140,40},{-100,80}})));
+  .Buildings.Controls.OBC.CDL.Interfaces.RealInput uTCHWSet
     "Chilled water supply temperature setpoint" annotation (Placement(
-        transformation(extent={{-438.0,-40.0},{-398.0,0.0}},rotation = 0.0,origin = {0.0,0.0}), iconTransformation(extent={{-140,40},
-            {-100,80}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput TEntCoi
+        transformation(extent={{-438.0,-40.0},{-398.0,0.0}},rotation = 0.0,origin = {0.0,0.0}), iconTransformation(extent={{-140,0},{-100,40}})));
+  .Buildings.Controls.OBC.CDL.Interfaces.RealOutput TEntCoi
     "Chilled water temperature entering the coil" annotation (Placement(
         transformation(extent={{400,-60},{440,-20}}), iconTransformation(extent={{100,-40},
             {140,0}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput mCHWEntCoi_flow
+  .Buildings.Controls.OBC.CDL.Interfaces.RealOutput mCHWEntCoi_flow
     "Chilled water mass flowrate enterign the coil" annotation (Placement(
         transformation(extent={{400,-20},{440,20}}), iconTransformation(extent={{100,0},
             {140,40}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput TEntChi
+  .Buildings.Controls.OBC.CDL.Interfaces.RealOutput TEntChi
     "Chilled water temperature returned to the chiller" annotation (Placement(
-        transformation(extent={{404.0,40.0},{444.0,80.0}},rotation = 0.0,origin = {0.0,0.0}), iconTransformation(extent={{100,40},
+        transformation(extent={{404.0,36.0},{444.0,76.0}},rotation = 0.0,origin = {0.0,0.0}), iconTransformation(extent={{100,40},
             {140,80}})));
     .Buildings.Controls.OBC.CDL.Interfaces.RealInput uLoad annotation(Placement(transformation(extent = {{-438,-82},{-398,-42}},origin = {0,0},rotation = 0),
-        iconTransformation(extent={{-140,0},{-100,40}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput TSupAirDelta
+        iconTransformation(extent={{-140,-40},{-100,0}})));
+  .Buildings.Controls.OBC.CDL.Interfaces.RealOutput TSupAirDelta
     "Difference between measured supply air temperature and setpoint"
     annotation (Placement(transformation(extent={{406.0,-156.0},{446.0,-116.0}},rotation = 0.0,origin = {0.0,0.0}),
-        iconTransformation(extent={{100,-122},{140,-82}})));
+        iconTransformation(extent={{100,-80},{140,-40}})));
     .Modelica.Blocks.Math.Gain gain2(k = mAir_flow_nominal) annotation(Placement(transformation(extent = {{312.0,-208.0},{332.0,-188.0}},rotation = 0.0,origin = {0.0,0.0})));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealInput TRooSet annotation(Placement(transformation(extent = {{-438.0,-142.0},{-398.0,-102.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent={{-140,
-            -80},{-100,-40}})));
-    .Buildings.Controls.OBC.CDL.Continuous.PID conPID(Ti = 1000,reverseActing = false) annotation(Placement(transformation(extent = {{276.0,-290.0},{296.0,-270.0}},origin = {0.0,0.0},rotation = 0.0)));
-    .Buildings.Fluid.Sensors.MassFlowRate senMasFlo(redeclare replaceable
-      package                                                                     Medium = MediumW) annotation(Placement(transformation(extent = {{-10.0,-10.0},{10.0,10.0}},origin = {360.0,-56.0},rotation = -90.0)));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput TRoo "Difference between measured supply air temperature and setpoint" annotation(Placement(transformation(extent = {{412.0,-258.0},{452.0,-218.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent={{100,
-            -202},{140,-162}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealInput uFan annotation(Placement(transformation(extent = {{-438.0,-142.0},{-398.0,-102.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{-140,-80},{-100,-40}})));
+    .Buildings.Fluid.Sensors.MassFlowRate senMasFlo(redeclare replaceable package Medium = MediumW) annotation(Placement(transformation(extent = {{-10.0,-10.0},{10.0,10.0}},origin = {360.0,-56.0},rotation = -90.0)));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput TRoo "Difference between measured supply air temperature and setpoint" annotation(Placement(transformation(extent = {{412.0,-258.0},{452.0,-218.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,-160},{140,-120}})));
     .Buildings.Controls.OBC.CDL.Interfaces.RealOutput yValByp "Chilled water temperature returned to the chiller" annotation(Placement(transformation(extent = {{400.0,96.0},{440.0,136.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,80},{140,120}})));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput mSupAir_flow "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{406.0,-226.0},{446.0,-186.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent={{100,
-            -162},{140,-122}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput mSupAir_flow "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{406.0,-226.0},{446.0,-186.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,-120},{140,-80}})));
     .Buildings.Controls.OBC.CDL.Interfaces.RealOutput mCW_flow "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{396.0,140.0},{436.0,180.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,120},{140,160}})));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PChi "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{408.0,190.0},{448.0,230.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,160},{140,200}})));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PCHWPum "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{394.0,230.0},{434.0,270.0}},rotation = 0.0,origin={6,0}),      iconTransformation(extent={{100,200},
-            {140,240}})));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealInput TWetBul "Chilled water supply temperature setpoint" annotation(Placement(transformation(extent = {{-438.0,-110.0},{-398.0,-70.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent={{-140,
-            -40},{-100,0}})));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PCWPum "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{394.0,272.0},{434.0,312.0}},rotation = 0.0,origin={6,-2}),     iconTransformation(extent={{100,240},
-            {140,280}})));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PFan "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{404.0,-102.0},{444.0,-62.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent={{100,-80},
-            {140,-40}})));
-    Buildings.Controls.OBC.CDL.Interfaces.RealOutput  PCooTow
-                                                             "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{394.0,272.0},{434.0,312.0}},rotation = 0.0,origin={6,48}),     iconTransformation(extent={{100,280},
-            {140,320}})));
-    .Buildings.Fluid.Sensors.TemperatureTwoPort TCWRetTow(m_flow_nominal = mCW_flow_nominal,redeclare package Medium = MediumW) "Temperature of condenser water leaving the cooling tower" annotation(Placement(transformation(extent = {{250.0,228.0},{230.0,248.0}},origin = {0.0,0.0},rotation = 0.0)));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput TCWSup "Chilled water temperature returned to the chiller" annotation(Placement(transformation(extent = {{402.0,360.0},{442.0,400.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,40},{140,80}})));
-    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput TCWRet "Chilled water temperature returned to the chiller" annotation(Placement(transformation(extent = {{400.0,392.0},{440.0,432.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,40},{140,80}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PChi "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{396.0,192.0},{436.0,232.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,160},{140,200}})));
+    .Buildings.Controls.OBC.CDL.Interfaces.RealOutput PCHWPum "Chilled water mass flowrate enterign the coil" annotation(Placement(transformation(extent = {{394.0,230.0},{434.0,270.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{100,200},{140,240}})));
 equation
   connect(expVesCHW.port_a, cooCoi.port_b1) annotation (Line(
       points={{258,-147},{258,-164},{280,-164}},
@@ -364,6 +361,12 @@ equation
   connect(chiSwi.y, chi.on) annotation (Line(
       points={{-205,92.4},{-182,92.4},{-182,129},{276,129},{276,96}},
       color={255,0,255},
+      smooth=Smooth.None,
+      pattern=LinePattern.Dash));
+
+  connect(cooTowFanCon.y, cooTow.y) annotation (Line(
+      points={{241,271},{250,271},{250,247},{257,247}},
+      color={0,0,127},
       smooth=Smooth.None,
       pattern=LinePattern.Dash));
   connect(cooCoi.port_b2, fan.port_a) annotation (Line(
@@ -461,6 +464,22 @@ equation
       textString="%second",
       index=1,
       extent={{6,3},{6,3}}));
+  connect(wseCon.TWetBul, weaBus.TWetBul) annotation (Line(
+      points={{-162,-28.4118},{-322,-28.4118},{-322,-88}},
+      color={0,0,127},
+      smooth=Smooth.None,
+      pattern=LinePattern.Dash), Text(
+      textString="%second",
+      index=1,
+      extent={{6,3},{6,3}}));
+  connect(cooTow.TAir, weaBus.TWetBul) annotation (Line(
+      points={{257,243},{82,243},{82,268},{-322,268},{-322,-88}},
+      color={0,0,127},
+      smooth=Smooth.None,
+      pattern=LinePattern.Dash), Text(
+      textString="%second",
+      index=1,
+      extent={{6,3},{6,3}}));
   connect(TCHWEntChi.port_a, wse.port_b2)
                                          annotation (Line(
       points={{218,-10},{218,-20},{138,-20},{138,87},{126,87}},
@@ -476,6 +495,16 @@ equation
   connect(TCHWEntChi.port_b, chi.port_a2)
                                          annotation (Line(
       points={{218,10},{218,88},{254,88},{254,87}},
+      color={0,127,255},
+      smooth=Smooth.None,
+      thickness=0.5));
+  connect(val5.port_b, cooTow.port_a) annotation (Line(
+      points={{218,190},{218,239},{259,239}},
+      color={0,127,255},
+      smooth=Smooth.None,
+      thickness=0.5));
+  connect(val4.port_b, cooTow.port_a) annotation (Line(
+      points={{98,190},{98,239},{259,239}},
       color={0,127,255},
       smooth=Smooth.None,
       thickness=0.5));
@@ -503,7 +532,7 @@ equation
       smooth=Smooth.None,
       pattern=LinePattern.Dash));
   connect(linPieTwo.y[1], gain.u) annotation (Line(
-      points={{-99,199.3},{-74,199.3},{-74,100},{-62,100}},
+      points={{-99,199.3},{-80,199.3},{-80,100},{-62,100}},
       color={0,0,127},
       smooth=Smooth.None,
       pattern=LinePattern.Dash));
@@ -564,14 +593,24 @@ equation
       smooth=Smooth.None));
   connect(cooCoi.port_a1, TCHWEntCoi.port_b) annotation (Line(points={{300,-164},
           {360,-164},{360,-142}}, color={0,127,255}));
+  connect(cooTowFanCon1.y, val1.y) annotation (Line(points={{51,-19},{90,-19},{
+          90,-20},{130,-20},{130,-40},{206,-40}}, color={0,0,127}));
+  connect(cooTowFanCon2.y, val3.y) annotation (Line(points={{53,-49},{80,-49},{
+          80,-28},{118,-28},{118,-48}}, color={0,0,127}));
+  connect(uTCHWSet, chi.TSet) annotation (Line(points={{-418,-20},{-346,-20},{-346,20},{176,20},{176,112},{286,112},{286,90},{276,90}}, color={0,0,
+          127}));
+  connect(uMasFloRat, pumCHW.m_flow_in) annotation (Line(points={{-420,40},{
+          -248,40},{-248,-120},{206,-120}}, color={0,0,127}));
   connect(TCHWEntCoi.T, TEntCoi) annotation (Line(points={{371,-132},{390,-132},
           {390,-40},{420,-40}}, color={0,0,127}));
-  connect(TCHWEntChi.T, TEntChi) annotation (Line(points={{207,0},{188,0},{188,60},{424,60}}, color={0,0,127}));
+  connect(TCHWEntChi.T, TEntChi) annotation (Line(points={{207,0},{188,0},{188,56},{424,56}}, color={0,0,127}));
+    connect(chiSwi.TSet,uTCHWSet) annotation(Line(points = {{-227,88},{-346,88},{-346,-20},{-418,-20}},color = {0,0,127}));
     connect(uLoad,roo.uLoad) annotation(Line(points = {{-418,-62},{-88.7,-62},{-88.7,-235},{240.6,-235}},color = {0,0,127}));
+  connect(cooTowFanCon1.y, val5.y) annotation (Line(points={{51,-19},{64,-19},{
+          64,160},{180,160},{180,180},{206,180}}, color={0,0,127}));
+  connect(cooTowFanCon2.y, val4.y) annotation (Line(points={{53,-49},{74,-49},{
+          74,180},{86,180}}, color={0,0,127}));
     connect(gain2.y,fan.m_flow_in) annotation(Line(points = {{333,-198},{338,-198},{338,-213}},color = {0,0,127}));
-    connect(roo.TRooAir,conPID.u_m) annotation(Line(points = {{259,-238},{264,-238},{264,-298},{286,-298},{286,-292}},color = {0,0,127}));
-    connect(TRooSet,conPID.u_s) annotation(Line(points = {{-418,-122},{-182,-122},{-182,-280},{274,-280}},color = {0,0,127}));
-    connect(conPID.y,gain2.u) annotation(Line(points = {{298,-280},{304,-280},{304,-198},{310,-198}},color = {0,0,127}));
     connect(val6.port_b,senMasFlo.port_a) annotation(Line(points = {{360,30},{360,-46}},color = {0,127,255}));
     connect(TCHWEntCoi.port_a,senMasFlo.port_b) annotation(Line(points = {{360,-122},{360,-66}},color = {0,127,255}));
     connect(senMasFlo.m_flow,mCHWEntCoi_flow) annotation(Line(points = {{371,-56},{382,-56},{382,0},{420,0}},color = {0,0,127}));
@@ -580,31 +619,9 @@ equation
     connect(feedback.y,TSupAirDelta) annotation(Line(points = {{-191,200},{-130,200},{-130,-260},{382,-260},{382,-136},{426,-136}},color = {0,0,127}));
     connect(fan.m_flow_actual,mSupAir_flow) annotation(Line(points = {{327,-220},{321,-220},{321,-206},{426,-206}},color = {0,0,127}));
     connect(pumCW.m_flow_actual,mCW_flow) annotation(Line(points = {{353,189},{353,160},{416,160}},color = {0,0,127}));
-    connect(chi.P,PChi) annotation(Line(points = {{253,102},{253,140},{386,140},{386,210},{428,210}},color = {0,0,127}));
-    connect(pumCHW.P,PCHWPum) annotation(Line(points={{209,-109},{203,-109},{
-          203,250},{420,250}},                                                                     color = {0,0,127}));
-    connect(gain.y,pumCHW.dp_in) annotation(Line(points = {{-39,100},{83.5,100},{83.5,-120},{206,-120}},color = {0,0,127}));
-    connect(linPieTwo.y[2],chi.TSet) annotation(Line(points={{-99,200.3},{-88,
-          200.3},{-88,70},{276,70},{276,90}},                                                                      color = {0,0,127}));
-    connect(linPieTwo.y[2],chiSwi.TSet) annotation(Line(points={{-99,200.3},{
-          -93,200.3},{-93,143.9},{-232,143.9},{-232,88},{-227,88}},                                                                     color = {0,0,127}));
-    connect(wseCon.y1,val3.y) annotation(Line(points = {{-139,-27.235294117647058},{118,-27.235294117647058},{118,-48}},color = {0,0,127}));
-    connect(wseCon.y2,val1.y) annotation(Line(points = {{-139,-31.941176470588236},{33.5,-31.941176470588236},{33.5,-40},{206,-40}},color = {0,0,127}));
-    connect(wseCon.y1,val4.y) annotation(Line(points = {{-139,-27.235294117647058},{-26.5,-27.235294117647058},{-26.5,180},{86,180}},color = {0,0,127}));
-    connect(chiCon.y,val5.y) annotation(Line(points = {{-139,50},{-80,50},{-80,164},{206,164},{206,180}},color = {0,0,127}));
-    connect(uFan,cooTow.y) annotation(Line(points = {{-418,-20},{-344,-20},{-344,247},{257,247}},color = {0,0,127}));
-    connect(TWetBul,wseCon.TWetBul) annotation(Line(points = {{-418,-90},{-290,-90},{-290,-28.41176470588235},{-162,-28.41176470588235}},color = {0,0,127}));
-    connect(TWetBul,cooTow.TAir) annotation(Line(points = {{-418,-90},{-290,-90},{-290,230},{257,230},{257,243}},color = {0,0,127}));
-    connect(pumCW.P,PCWPum) annotation(Line(points={{349,189},{343,189},{343,
-          290},{420,290}},                                                                     color = {0,0,127}));
-    connect(fan.P,PFan) annotation(Line(points = {{327,-216},{327,-82},{424,-82}},color = {0,0,127}));
-  connect(cooTow.PFan, PCooTow) annotation (Line(points={{280,247},{342,247},{
-          342,340},{420,340}}, color={0,0,127}));
-    connect(TCWLeaTow.T,TCWSup) annotation(Line(points = {{330,130},{330,380},{422,380}},color = {0,0,127}));
-    connect(TCWRetTow.port_a,cooTow.port_a) annotation(Line(points = {{250,238},{254.5,238},{254.5,239},{259,239}},color = {0,127,255}));
-    connect(val4.port_b,TCWRetTow.port_b) annotation(Line(points = {{98,190},{98,238},{230,238}},color = {0,127,255}));
-    connect(val5.port_b,TCWRetTow.port_b) annotation(Line(points = {{218,190},{218,238},{230,238}},color = {0,127,255}));
-    connect(TCWRetTow.T,TCWRet) annotation(Line(points = {{240,249},{240,412},{420,412}},color = {0,0,127}));
+    connect(chi.P,PChi) annotation(Line(points = {{253,102},{253,140},{386,140},{386,212},{416,212}},color = {0,0,127}));
+    connect(pumCHW.P,PCHWPum) annotation(Line(points = {{209,-109},{203,-109},{203,250},{414,250}},color = {0,0,127}));
+    connect(uFan,gain2.u) annotation(Line(points = {{-418,-122},{-54,-122},{-54,-198},{310,-198}},color = {0,0,127}));
   annotation (
     Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-400,-300},{400,
             300}})),
@@ -685,4 +702,4 @@ First implementation.
 </li>
 </ul>
 </html>"));
-end DataCenter;
+end DataCenter_purePhysics;
