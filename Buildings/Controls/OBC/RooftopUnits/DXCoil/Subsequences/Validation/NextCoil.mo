@@ -39,6 +39,8 @@ model NextCoil
     annotation (Placement(transformation(extent={{60,-120},{80,-100}})));
   CDL.Logical.TrueDelay truDel1(delayTime=10)
     annotation (Placement(transformation(extent={{-40,-140},{-20,-120}})));
+  CDL.Logical.TrueDelay truDel2(delayTime=10)
+    annotation (Placement(transformation(extent={{-90,-140},{-70,-120}})));
 protected
   parameter Integer nCoi=4;
   parameter Integer coiInd[nCoi]={i for i in 1:nCoi}
@@ -109,10 +111,6 @@ equation
           -110},{130,-132},{0,-132},{0,-116},{18,-116}}, color={255,0,255}));
   connect(con.y, nextCoil_v2_1.uDXCoiAva[1]) annotation (Line(points={{-68,10},{
           -60,10},{-60,-112},{18,-112}}, color={255,0,255}));
-  connect(con.y, nextCoil_v2_1.uDXCoiAva[3]) annotation (Line(points={{-68,10},{
-          -60,10},{-60,-108},{16,-108},{16,-112},{18,-112}}, color={255,0,255}));
-  connect(con.y, nextCoil_v2_1.uDXCoiAva[4]) annotation (Line(points={{-68,10},{
-          -60,10},{-60,-110},{18,-110},{18,-112}}, color={255,0,255}));
   connect(truDel1.y, nextCoil_v2_1.uDXCoiAva[2]) annotation (Line(points={{-18,-130},
           {-4,-130},{-4,-114},{18,-114},{18,-112}}, color={255,0,255}));
   connect(nextCoil_v2_1.yStaUp, chaSta1.uNexDXCoiSta) annotation (Line(points={{
@@ -128,6 +126,12 @@ equation
                                                      color={255,0,255}));
   connect(pre1[4].y, truDel1.u) annotation (Line(points={{116,-110},{130,-110},
           {130,-152},{-50,-152},{-50,-130},{-42,-130}}, color={255,0,255}));
+  connect(con.y, nextCoil_v2_1.uDXCoiAva[3]) annotation (Line(points={{-68,10},
+          {-60,10},{-60,-110},{18,-110},{18,-112}}, color={255,0,255}));
+  connect(pre1[3].y, truDel2.u) annotation (Line(points={{116,-110},{130,-110},
+          {130,-152},{-98,-152},{-98,-130},{-92,-130}}, color={255,0,255}));
+  connect(truDel2.y, nextCoil_v2_1.uDXCoiAva[4]) annotation (Line(points={{-68,
+          -130},{-56,-130},{-56,-112},{18,-112}}, color={255,0,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}}),                                        graphics={
           Ellipse(lineColor = {75,138,73},
