@@ -1,165 +1,192 @@
 within Buildings.Controls.OBC.RooftopUnits.DXCoil.Subsequences;
-block NextCoil_v2 "Find next coil to turn on"
+block NextCoil_v2
+  "Find next coil to turn on"
+
   parameter Integer nCoi
     "Number of coils";
-  CDL.Interfaces.BooleanInput                        uDXCoi[nCoi]
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uDXCoi[nCoi]
     "DX coil status"
     annotation (Placement(transformation(extent={{-180,-80},{-140,-40}}),
       iconTransformation(extent={{-140,-80},{-100,-40}})));
-  CDL.Interfaces.BooleanInput                        uDXCoiAva[nCoi]
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uDXCoiAva[nCoi]
     "DX coil availability"
     annotation (Placement(transformation(extent={{-180,-40},{-140,0}}),
       iconTransformation(extent={{-140,-40},{-100,0}})));
-  CDL.Interfaces.BooleanInput uStaUp "Stage up signal" annotation (Placement(
-        transformation(extent={{-180,0},{-140,40}}),  iconTransformation(extent={{-140,0},
-            {-100,40}})));
-  CDL.Interfaces.BooleanOutput yStaUp
-    "Signal indicating coil to be enabled has been found" annotation (Placement(
-        transformation(extent={{420,-20},{460,20}}),  iconTransformation(extent={{100,0},
-            {140,40}})));
-  CDL.Interfaces.IntegerOutput yNexCoi "Next coil to be enabled" annotation (
-      Placement(transformation(extent={{420,-60},{460,-20}}),
-        iconTransformation(extent={{100,-40},{140,0}})));
 
-  CDL.Interfaces.IntegerInput                        uCoiSeq[nCoi]
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uStaUp
+    "Stage up signal"
+    annotation (Placement(transformation(extent={{-180,0},{-140,40}}),
+      iconTransformation(extent={{-140,0},{-100,40}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yStaUp
+    "Signal indicating coil to be enabled has been found"
+    annotation (Placement(transformation(extent={{420,-20},{460,20}}),
+      iconTransformation(extent={{100,0},{140,40}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yNexCoi
+    "Next coil to be enabled"
+    annotation (Placement(transformation(extent={{420,-60},{460,-20}}),
+      iconTransformation(extent={{100,-40},{140,0}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uCoiSeq[nCoi]
     "DX coil available sequence order"
     annotation (Placement(transformation(extent={{-180,40},{-140,80}}),
       iconTransformation(extent={{-140,40},{-100,80}})));
-  CDL.Logical.Latch latSki[nCoi] "Track coils that have been skipped over"
+
+  Buildings.Controls.OBC.CDL.Logical.Latch latSki[nCoi]
+    "Track coils that have been skipped over"
     annotation (Placement(transformation(extent={{-40,20},{-20,40}})));
-  CDL.Logical.Latch latSkiAva[nCoi]
+
+  Buildings.Controls.OBC.CDL.Logical.Latch latSkiAva[nCoi]
     "Track coils that have been skipped over, but are now available"
     annotation (Placement(transformation(extent={{40,20},{60,40}})));
-  CDL.Logical.And and2[nCoi]
+
+  Buildings.Controls.OBC.CDL.Logical.And and2[nCoi]
     "Check for coils that were skipped but are now available"
     annotation (Placement(transformation(extent={{0,20},{20,40}})));
-  CDL.Logical.Edge edg[nCoi]
+
+  Buildings.Controls.OBC.CDL.Logical.Edge edg[nCoi]
     "Check for coils that become available from unavailable"
     annotation (Placement(transformation(extent={{-100,-30},{-80,-10}})));
-  CDL.Logical.Edge edg1[nCoi] "Check for coils that are enabled"
+
+  Buildings.Controls.OBC.CDL.Logical.Edge edg1[nCoi]
+    "Check for coils that are enabled"
     annotation (Placement(transformation(extent={{-120,-70},{-100,-50}})));
-  CDL.Routing.IntegerExtractor extIndIntOriSeq(nin=nCoi)
+
+  Buildings.Controls.OBC.CDL.Routing.IntegerExtractor extIndIntOriSeq(
+    final nin=nCoi)
     "Next coil based on original sequence (skipped coils assumed enabled)"
     annotation (Placement(transformation(extent={{330,-90},{350,-70}})));
-  CDL.Conversions.BooleanToInteger booToIntSki[nCoi]
+
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToIntSki[nCoi]
     "Convert skipped coils into ones"
     annotation (Placement(transformation(extent={{240,-110},{260,-90}})));
-  CDL.Conversions.BooleanToInteger booToIntEna[nCoi]
+
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToIntEna[nCoi]
     "Convert enabled coils into ones"
     annotation (Placement(transformation(extent={{-120,-150},{-100,-130}})));
-  CDL.Integers.MultiSum mulSumInt(nin=2*nCoi)
+
+  Buildings.Controls.OBC.CDL.Integers.MultiSum mulSumInt(
+    final nin=2*nCoi)
     annotation (Placement(transformation(extent={{280,-130},{300,-110}})));
-  CDL.Integers.Switch intSwi
+
+  Buildings.Controls.OBC.CDL.Integers.Switch intSwi
     annotation (Placement(transformation(extent={{380,-50},{400,-30}})));
-  CDL.Logical.Timer tim[nCoi] "Check time since coil was skipped over"
+
+  Buildings.Controls.OBC.CDL.Logical.Timer tim[nCoi]
+    "Check time since coil was skipped over"
     annotation (Placement(transformation(extent={{0,70},{20,90}})));
-  CDL.Continuous.Round rou[nCoi](n=0)
+
+  Buildings.Controls.OBC.CDL.Continuous.Round rou[nCoi](
+    final n=0)
     annotation (Placement(transformation(extent={{40,100},{60,120}})));
-  CDL.Continuous.MultiMax mulMax(nin=nCoi)
+
+  Buildings.Controls.OBC.CDL.Continuous.MultiMax mulMax(
+    final nin=nCoi)
     annotation (Placement(transformation(extent={{80,130},{100,150}})));
-  CDL.Conversions.BooleanToInteger booToInt[nCoi]
+
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt[nCoi]
     "Convert previously-skipped, now-available coils to 1"
     annotation (Placement(transformation(extent={{80,70},{100,90}})));
-  CDL.Conversions.RealToInteger reaToInt1[nCoi]
+
+  Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt1[nCoi]
     "Convert skip times to integers"
     annotation (Placement(transformation(extent={{110,100},{130,120}})));
-  CDL.Integers.Multiply mulInt[nCoi]
+
+  Buildings.Controls.OBC.CDL.Integers.Multiply mulInt[nCoi]
     annotation (Placement(transformation(extent={{160,90},{180,110}})));
-  CDL.Conversions.RealToInteger reaToInt2 "Convert max skip time to integer"
+
+  Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt2
+    "Convert max skip time to integer"
     annotation (Placement(transformation(extent={{110,130},{130,150}})));
-  CDL.Integers.Equal intEqu[nCoi] "Check if time for coil matches max time"
+
+  Buildings.Controls.OBC.CDL.Integers.Equal intEqu[nCoi]
+    "Check if time for coil matches max time"
     annotation (Placement(transformation(extent={{200,120},{220,140}})));
-  CDL.Routing.IntegerScalarReplicator intScaRep(nout=nCoi)
+
+  Buildings.Controls.OBC.CDL.Routing.IntegerScalarReplicator intScaRep(
+    final nout=nCoi)
     "Replicate max time for comparison block"
     annotation (Placement(transformation(extent={{160,130},{180,150}})));
-  CDL.Conversions.BooleanToInteger booToInt1[nCoi]
+
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1[nCoi]
     "Convert Boolean to integer for counting matching signals"
     annotation (Placement(transformation(extent={{230,120},{250,140}})));
-  CDL.Integers.MultiSum mulSumInt1(nin=nCoi)
+
+  Buildings.Controls.OBC.CDL.Integers.MultiSum mulSumInt1(
+    final nin=nCoi)
     annotation (Placement(transformation(extent={{260,120},{280,140}})));
-  CDL.Integers.Switch intSwi1
+
+  Buildings.Controls.OBC.CDL.Integers.Switch intSwi1
     annotation (Placement(transformation(extent={{332,120},{352,140}})));
-  CDL.Integers.GreaterThreshold intGreThr1(t=1)
+  Buildings.Controls.OBC.CDL.Integers.GreaterThreshold intGreThr1(t=1)
     annotation (Placement(transformation(extent={{300,120},{320,140}})));
-  CDL.Integers.Multiply mulInt1[nCoi]
+  Buildings.Controls.OBC.CDL.Integers.Multiply mulInt1[nCoi]
     annotation (Placement(transformation(extent={{260,70},{280,90}})));
-  CDL.Integers.Sources.Constant conInt[nCoi](k=coiInd)
-    annotation (Placement(transformation(extent={{200,50},{220,70}})));
-  CDL.Integers.MultiSum mulSumInt2(nin=nCoi)
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt[nCoi](k=coiInd)
+    "Coil indices"
+    annotation (Placement(transformation(extent={{-120,250},{-100,270}})));
+  Buildings.Controls.OBC.CDL.Integers.MultiSum mulSumInt2(nin=nCoi)
     annotation (Placement(transformation(extent={{300,70},{320,90}})));
-  CDL.Conversions.IntegerToReal intToRea1[nCoi]
+  Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea1[nCoi]
     annotation (Placement(transformation(extent={{300,160},{320,180}})));
-  CDL.Integers.MultiSum mulSumInt3(nin=nCoi)
+  Buildings.Controls.OBC.CDL.Integers.MultiSum mulSumInt3(nin=nCoi)
     annotation (Placement(transformation(extent={{148,-50},{168,-30}})));
-  CDL.Integers.GreaterThreshold intGreThr2
+  Buildings.Controls.OBC.CDL.Integers.GreaterThreshold intGreThr2
     annotation (Placement(transformation(extent={{180,-50},{200,-30}})));
-  CDL.Continuous.MultiMin mulMin(nin=nCoi)
+  Buildings.Controls.OBC.CDL.Continuous.MultiMin mulMin(nin=nCoi)
     annotation (Placement(transformation(extent={{330,160},{350,180}})));
-  CDL.Conversions.RealToInteger reaToInt3
+  Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt3
     annotation (Placement(transformation(extent={{360,160},{380,180}})));
-  CDL.Integers.AddParameter addPar1(p=1)
+  Buildings.Controls.OBC.CDL.Integers.AddParameter addPar1(p=1)
     annotation (Placement(transformation(extent={{310,-130},{330,-110}})));
-  CDL.Logical.Or or2
+  Buildings.Controls.OBC.CDL.Logical.Or or2
     annotation (Placement(transformation(extent={{150,240},{170,260}})));
-  CDL.Integers.Equal intEqu1[nCoi]
+  Buildings.Controls.OBC.CDL.Integers.Equal intEqu1[nCoi]
     annotation (Placement(transformation(extent={{-60,260},{-40,280}})));
-  CDL.Routing.IntegerScalarReplicator intScaRep1(nout=nCoi)
+  Buildings.Controls.OBC.CDL.Routing.IntegerScalarReplicator intScaRep1(nout=nCoi)
     annotation (Placement(transformation(extent={{360,-130},{380,-110}})));
-  CDL.Logical.And and1[nCoi]
+  Buildings.Controls.OBC.CDL.Logical.And and1[nCoi]
     annotation (Placement(transformation(extent={{0,240},{20,260}})));
-  CDL.Logical.MultiOr mulOr(nin=nCoi)
+  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(nin=nCoi)
     annotation (Placement(transformation(extent={{80,240},{100,260}})));
-  CDL.Logical.And and3
+  Buildings.Controls.OBC.CDL.Logical.And and3
     annotation (Placement(transformation(extent={{200,220},{220,240}})));
-  CDL.Logical.Not not1
+  Buildings.Controls.OBC.CDL.Logical.Not not1
     annotation (Placement(transformation(extent={{240,260},{260,280}})));
-  CDL.Logical.And and4
+  Buildings.Controls.OBC.CDL.Logical.And and4
     annotation (Placement(transformation(extent={{280,260},{300,280}})));
-  CDL.Routing.BooleanScalarReplicator booScaRep(nout=nCoi)
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booScaRep(nout=nCoi)
     annotation (Placement(transformation(extent={{320,260},{340,280}})));
-  CDL.Logical.And and5[nCoi]
+  Buildings.Controls.OBC.CDL.Logical.And and5[nCoi]
     annotation (Placement(transformation(extent={{0,280},{20,300}})));
-  CDL.Logical.VariablePulse varPul(period=30)
+  Buildings.Controls.OBC.CDL.Logical.VariablePulse varPul(period=30)
     annotation (Placement(transformation(extent={{60,160},{80,180}})));
-  CDL.Logical.Or or1
+  Buildings.Controls.OBC.CDL.Logical.Or or1
     annotation (Placement(transformation(extent={{110,210},{130,230}})));
-  CDL.Logical.MultiOr mulOr1(nin=nCoi)
+  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr1(nin=nCoi)
     annotation (Placement(transformation(extent={{-40,160},{-20,180}})));
-  CDL.Logical.Latch lat
+  Buildings.Controls.OBC.CDL.Logical.Latch lat
     annotation (Placement(transformation(extent={{0,160},{20,180}})));
-  CDL.Conversions.BooleanToReal booToRea(realTrue=1 - (1/30))
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea(realTrue=1 - (1/30))
     annotation (Placement(transformation(extent={{30,160},{50,180}})));
-  CDL.Logical.Pre pre
+  Buildings.Controls.OBC.CDL.Logical.Pre pre
     annotation (Placement(transformation(extent={{150,160},{170,180}})));
-  CDL.Logical.Pre pre1[nCoi]
+  Buildings.Controls.OBC.CDL.Logical.Pre pre1[nCoi]
     annotation (Placement(transformation(extent={{-30,260},{-10,280}})));
-  CDL.Logical.Pre pre2[nCoi]
+  Buildings.Controls.OBC.CDL.Logical.Pre pre2[nCoi]
     annotation (Placement(transformation(extent={{348,260},{368,280}})));
-  CDL.Logical.TrueFalseHold truFalHol[nCoi](trueHoldDuration=30,
-      falseHoldDuration=0)
-    annotation (Placement(transformation(extent={{-40,80},{-20,100}})));
-  CDL.Logical.TrueFalseHold truFalHol1[nCoi](trueHoldDuration=30,
-      falseHoldDuration=0)
-    annotation (Placement(transformation(extent={{-38,-50},{-18,-30}})));
-  CDL.Logical.TrueFalseHold truFalHol2[nCoi](trueHoldDuration=30,
-      falseHoldDuration=0)
-    annotation (Placement(transformation(extent={{42,-52},{62,-32}})));
-  CDL.Logical.TrueFalseHold truFalHol3[nCoi](trueHoldDuration=30,
-      falseHoldDuration=0)
-    annotation (Placement(transformation(extent={{44,68},{64,88}})));
-  CDL.Logical.TrueFalseHold truFalHol4(trueHoldDuration=30, falseHoldDuration=0)
-    annotation (Placement(transformation(extent={{2,130},{22,150}})));
-  CDL.Logical.TrueFalseHold truFalHol5(trueHoldDuration=30, falseHoldDuration=0)
-    annotation (Placement(transformation(extent={{58,192},{78,212}})));
-  CDL.Logical.TrueFalseHold truFalHol6(trueHoldDuration=30, falseHoldDuration=0)
+  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol6(trueHoldDuration=30, falseHoldDuration=0)
     annotation (Placement(transformation(extent={{360,200},{380,220}})));
-  CDL.Logical.Not not2
+  Buildings.Controls.OBC.CDL.Logical.Not not2
     annotation (Placement(transformation(extent={{90,160},{110,180}})));
-  CDL.Logical.And and6
+  Buildings.Controls.OBC.CDL.Logical.And and6
     annotation (Placement(transformation(extent={{118,160},{138,180}})));
-  CDL.Logical.Or or3[nCoi]
+  Buildings.Controls.OBC.CDL.Logical.Or or3[nCoi]
     annotation (Placement(transformation(extent={{8,-80},{28,-60}})));
-  CDL.Logical.FallingEdge falEdg[nCoi]
+  Buildings.Controls.OBC.CDL.Logical.FallingEdge falEdg[nCoi]
     annotation (Placement(transformation(extent={{-40,-76},{-20,-56}})));
 protected
   parameter Integer coiInd[nCoi]={i for i in 1:nCoi}
@@ -229,8 +256,9 @@ equation
     annotation (Line(points={{322,130},{330,130}}, color={255,0,255}));
   connect(booToInt1.y, mulInt1.u1) annotation (Line(points={{252,130},{256,130},
           {256,86},{258,86}}, color={255,127,0}));
-  connect(conInt.y, mulInt1.u2) annotation (Line(points={{222,60},{240,60},{240,
-          74},{258,74}}, color={255,127,0}));
+  connect(conInt.y, mulInt1.u2) annotation (Line(points={{-98,260},{-80,260},{-80,
+          10},{250,10},{250,74},{258,74}},
+                         color={255,127,0}));
   connect(mulInt1.y, mulSumInt2.u[1:nCoi])
     annotation (Line(points={{282,80},{290,80},{290,80},{298,80}},
                                                  color={255,127,0}));
@@ -255,14 +283,14 @@ equation
   connect(addPar1.y, extIndIntOriSeq.index) annotation (Line(points={{332,-120},
           {340,-120},{340,-92}}, color={255,127,0}));
   connect(intGreThr2.y, or2.u2) annotation (Line(points={{202,-40},{220,-40},{
-          220,-70},{144,-70},{144,242},{148,242}},
+          220,-70},{142,-70},{142,242},{148,242}},
                                                color={255,0,255}));
   connect(addPar1.y, intScaRep1.u)
     annotation (Line(points={{332,-120},{358,-120}}, color={255,127,0}));
   connect(intScaRep1.y, intEqu1.u2) annotation (Line(points={{382,-120},{388,-120},
           {388,-160},{-72,-160},{-72,262},{-62,262}}, color={255,127,0}));
-  connect(conInt.y, intEqu1.u1) annotation (Line(points={{222,60},{240,60},{240,
-          0},{-80,0},{-80,270},{-62,270}},                 color={255,127,0}));
+  connect(conInt.y, intEqu1.u1) annotation (Line(points={{-98,260},{-80,260},{-80,
+          270},{-62,270}},                                 color={255,127,0}));
   connect(uDXCoiAva, and1.u2) annotation (Line(points={{-160,-20},{-120,-20},{-120,
           242},{-2,242}}, color={255,0,255}));
   connect(and1.y, mulOr.u[1:nCoi])
@@ -307,18 +335,6 @@ equation
     annotation (Line(points={{342,270},{346,270}}, color={255,0,255}));
   connect(pre2.y, and5.u1) annotation (Line(points={{370,270},{380,270},{380,
           320},{-4,320},{-4,290},{-2,290}}, color={255,0,255}));
-  connect(latSki.clr, truFalHol1.u) annotation (Line(points={{-42,24},{-40,24},
-          {-40,-40},{-40,-40}}, color={255,0,255}));
-  connect(latSki.u, truFalHol.u)
-    annotation (Line(points={{-42,30},{-42,90},{-42,90}}, color={255,0,255}));
-  connect(latSkiAva.clr, truFalHol2.u) annotation (Line(points={{38,24},{38,-10},
-          {38,-42},{40,-42}}, color={255,0,255}));
-  connect(latSkiAva.u, truFalHol3.u) annotation (Line(points={{38,30},{42,30},{
-          42,78},{42,78}}, color={255,0,255}));
-  connect(lat.u, truFalHol5.u) annotation (Line(points={{-2,170},{-6,170},{-6,
-          202},{56,202}}, color={255,0,255}));
-  connect(lat.clr, truFalHol4.u) annotation (Line(points={{-2,164},{0,164},{0,
-          140},{0,140}}, color={255,0,255}));
   connect(and3.y, truFalHol6.u) annotation (Line(points={{222,230},{291,230},{
           291,210},{358,210}}, color={255,0,255}));
   connect(pre.y, or1.u2) annotation (Line(points={{172,170},{180,170},{180,190},
