@@ -660,9 +660,9 @@ equation
                                          color={0,0,127}));
   connect(mul.y, CooCoi.speRat) annotation (Line(points={{1152,240},{1160,240},
           {1160,-200},{230,-200},{230,-48},{239,-48}}, color={0,0,127}));
-  connect(RTUCon.yDXHeaCoi, HeaCoi.on) annotation (Line(points={{1032,251.95},{
-          1052,251.95},{1052,252},{1070,252},{1070,-180},{90,-180},{90,-48},{99,
-          -48}},                                              color={255,0,255}));
+  connect(RTUCon.yDXHeaCoi, ParDXHeaCoiCom.on) annotation (Line(points={{1032,
+          251.95},{1052,251.95},{1052,252},{1070,252},{1070,-180},{90,-180},{90,
+          -48},{99,-48}}, color={255,0,255}));
   connect(timDXSta1.passed,RTUCon. uDXCooCoi) annotation (Line(points={{340,
           -148},{950,-148},{950,258.833},{1008,258.833}},
                                                   color={255,0,255}));
@@ -675,18 +675,18 @@ equation
           color={255,0,255}));
   connect(CooCoi.P,hys1. u) annotation (Line(points={{261,-49},{261,-50},{270,
           -50},{270,-140},{278,-140}}, color={0,0,127}));
-  connect(HeaCoi.P,hys. u) annotation (Line(points={{121,-49},{130,-49},{130,
-          -150},{138,-150}}, color={0,0,127}));
+  connect(ParDXHeaCoiCom.P, hys.u) annotation (Line(points={{121,-49},{130,-49},
+          {130,-150},{138,-150}}, color={0,0,127}));
   for i in 1:nCoiCoo loop
   connect(CooCoi[i].TOut, TOut.y) annotation (Line(points={{239,-43},{234,-43},
             {234,80},{-220,80},{-220,180},{-279,180}},
                                                     color={0,0,127}));
   end for;
   for i in 1:nCoiHea loop
-  connect(HeaCoi[i].TOut, TOut.y) annotation (Line(points={{99,-36},{80,-36},{80,
-          70},{-220,70},{-220,180},{-279,180}}, color={0,0,127}));
-  connect(HeaCoi[i].phi, Phi.y) annotation (Line(points={{99,-32},{90,-32},{90,
-            60},{-260,60},{-260,140},{-279,140}}, color={0,0,127}));
+    connect(ParDXHeaCoiCom[i].TOut, TOut.y) annotation (Line(points={{99,-36},{
+            80,-36},{80,70},{-220,70},{-220,180},{-279,180}}, color={0,0,127}));
+    connect(ParDXHeaCoiCom[i].phi, Phi.y) annotation (Line(points={{99,-32},{90,
+            -32},{90,60},{-260,60},{-260,140},{-279,140}}, color={0,0,127}));
   end for;
   connect(RTUCon.uCooCoi, conTSup.yCoo) annotation (Line(points={{1008,246.117},
           {970,246.117},{970,-226},{-38,-226}},

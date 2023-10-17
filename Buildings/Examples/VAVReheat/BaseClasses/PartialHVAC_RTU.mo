@@ -5,6 +5,7 @@ partial model PartialHVAC_RTU
   replaceable package MediumA = Buildings.Media.Air
     constrainedby Modelica.Media.Interfaces.PartialCondensingGases
       "Medium model for air";
+
   replaceable package MediumW = Buildings.Media.Water
       "Medium model for water";
 
@@ -13,6 +14,7 @@ partial model PartialHVAC_RTU
 
   parameter Modelica.Units.SI.Volume VRoo[numZon]
     "Room volume per zone";
+
   parameter Modelica.Units.SI.Area AFlo[numZon]
     "Floor area per zone";
 
@@ -165,7 +167,7 @@ partial model PartialHVAC_RTU
 
   Modelica.Blocks.Interfaces.RealInput TRoo[numZon](
     each final unit="K",
-    each displayUnit="degC")
+    displayUnit="degC")
     "Room temperatures"
     annotation (Placement(transformation(extent={{-20,-20},{20,20}}, origin={-400,320}),
       iconTransformation(extent={{-20,-20},{20,20}}, origin={-220,180})));
@@ -176,28 +178,19 @@ partial model PartialHVAC_RTU
     "Ambient conditions"
     annotation (Placement(transformation(extent={{-136,-56},{-114,-34}})));
 
-  Buildings.Fluid.DXSystems.Heating.AirSource.SingleSpeed HeaCoi[nCoiHea](
-    redeclare each final package Medium = MediumA,
-    each final dp_nominal=dpDXCoi_nominal,
-    each final datCoi=datHeaCoi,
-    each final T_start=datHeaCoi.sta[1].nomVal.TConIn_nominal,
-    each final show_T=true,
-    each final from_dp=true,
-    each final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
-    each final dTHys=1e-6)
-    "Single speed DX heating coil"
+  replaceable Buildings.Examples.VAVReheat.BaseClasses.ParallelDXCoilHea ParDXCoiHea(
+    final m_flow_nominal=mAir_flow_nominal,
+    final show_T=true,
+    final nCoiHea=nCoiHea)
+    "Parallel DX heating coil"
     annotation (Placement(transformation(extent={{100,-30},{120,-50}})));
 
-  Buildings.Fluid.DXSystems.Cooling.AirSource.VariableSpeed CooCoi[nCoiCoo](
-    redeclare each final package Medium = MediumA,
-    each final dp_nominal=dpDXCoi_nominal,
-    each final datCoi=datCooCoi,
-    each final minSpeRat=datCooCoi.minSpeRat,
-    each final T_start=datCooCoi.sta[1].nomVal.TEvaIn_nominal,
-    each final from_dp=true,
-    each final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial)
-    "Variable speed DX cooling coil"
-    annotation (Placement(transformation(extent={{240,-30},{260,-50}})));
+  replaceable Buildings.Examples.VAVReheat.BaseClasses.ParallelDXCoilCoo ParDXCoiCoo(
+    final m_flow_nominal=mAir_flow_nominal,
+    final nCoiCoo=nCoiCoo,
+    final minSpeRat=datCooCoi.minSpeRat)
+    "Parallel DX cooling coil"
+    annotation (Placement(transformation(extent={{240,-50},{260,-30}})));
 
   Buildings.Fluid.HeatExchangers.HeaterCooler_u AuxHeaCoi(
     redeclare final package Medium = MediumA,
@@ -209,8 +202,8 @@ partial model PartialHVAC_RTU
     annotation (Placement(transformation(extent={{480,-50},{500,-30}})));
 
   Buildings.Fluid.FixedResistances.PressureDrop dpRetDuc(
-    m_flow_nominal=mAir_flow_nominal,
     redeclare package Medium = MediumA,
+    m_flow_nominal=mAir_flow_nominal,
     allowFlowReversal=allowFlowReversal,
     dp_nominal=40)
     "Pressure drop for return duct"
@@ -231,7 +224,8 @@ partial model PartialHVAC_RTU
     annotation (Placement(transformation(extent={{600,-50},{620,-30}})));
 
   Buildings.Fluid.Sensors.VolumeFlowRate senRetFlo(
-    redeclare package Medium = MediumA, m_flow_nominal=mAir_flow_nominal)
+    redeclare package Medium = MediumA,
+    m_flow_nominal=mAir_flow_nominal)
     "Sensor for return fan flow rate"
     annotation (Placement(transformation(extent={{360,130},{340,150}})));
 
@@ -278,7 +272,7 @@ partial model PartialHVAC_RTU
     annotation (Placement(transformation(extent={{-330,170},{-310,190}}),
       iconTransformation(extent={{-168,134},{-148,154}})));
 
-  Fluid.Actuators.Dampers.Exponential damRet(
+  Buildings.Fluid.Actuators.Dampers.Exponential damRet(
     redeclare package Medium = MediumA,
     m_flow_nominal=mAir_flow_nominal,
     from_dp=false,
@@ -288,7 +282,7 @@ partial model PartialHVAC_RTU
     "Return air damper"
     annotation (Placement(transformation(origin={0,-10}, extent={{10,-10},{-10,10}}, rotation=90)));
 
-  Fluid.Actuators.Dampers.Exponential damOut(
+  Buildings.Fluid.Actuators.Dampers.Exponential damOut(
     redeclare package Medium = MediumA,
     m_flow_nominal=mAir_flow_nominal,
     from_dp=false,
@@ -394,141 +388,10 @@ partial model PartialHVAC_RTU
     "Supply air temperature sensor"
     annotation (Placement(transformation(extent={{560,-50},{580,-30}})));
 
-  Buildings.Fluid.Sensors.TemperatureTwoPort THeaCoi[nCoiHea](
-    redeclare package Medium = MediumA,
-    each m_flow_nominal=mAir_flow_nominal,
-    each allowFlowReversal=allowFlowReversal)
-    "Heating coil outlet air temperature sensor"
-    annotation (Placement(transformation(extent={{130,-50},{150,-30}})));
-
-  Buildings.Fluid.Sensors.TemperatureTwoPort TCooCoi[nCoiCoo](
-    redeclare package Medium = MediumA,
-    each m_flow_nominal=mAir_flow_nominal,
-    each allowFlowReversal=allowFlowReversal)
-    "Cooling coil outlet air temperature sensor"
-    annotation (Placement(transformation(extent={{270,-50},{290,-30}})));
-
   Modelica.Blocks.Routing.RealPassThrough Phi(y(
     final unit="1"))
     "Outdoor air relative humidity"
     annotation (Placement(transformation(extent={{-300,130},{-280,150}})));
-
-  Buildings.Fluid.FixedResistances.Junction splRetOut1(
-    redeclare package Medium = MediumA,
-    tau=15,
-    m_flow_nominal=mAir_flow_nominal*{1,1,1},
-    energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
-    dp_nominal(each displayUnit="Pa") = {0,0,0},
-    portFlowDirection_1=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Entering,
-    portFlowDirection_2=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Leaving,
-    portFlowDirection_3=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Entering,
-    linearized=true)
-    "Flow splitter"
-    annotation (Placement(transformation(extent={{-10,10},{10,-10}}, origin={80,-40})));
-
-  Buildings.Fluid.FixedResistances.Junction splRetOut2(
-    redeclare package Medium = MediumA,
-    tau=15,
-    m_flow_nominal=mAir_flow_nominal*{1,1,1},
-    energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
-    dp_nominal(each displayUnit="Pa") = {0,0,0},
-    portFlowDirection_1=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Entering,
-    portFlowDirection_2=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Leaving,
-    portFlowDirection_3=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Entering,
-    linearized=true)
-    "Flow splitter"
-    annotation (Placement(transformation(extent={{-10,10},{10,-10}}, origin={170,-40})));
-
-  Buildings.Fluid.FixedResistances.Junction splRetOut3(
-    redeclare package Medium = MediumA,
-    tau=15,
-    m_flow_nominal=mAir_flow_nominal*{1,1,1},
-    energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
-    dp_nominal(each displayUnit="Pa") = {0,0,0},
-    portFlowDirection_1=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Entering,
-    portFlowDirection_2=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Leaving,
-    portFlowDirection_3=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Entering,
-    linearized=true)
-    "Flow splitter"
-    annotation (Placement(transformation(extent={{-10,10},{10,-10}}, origin={220,-40})));
-
-  Buildings.Fluid.FixedResistances.Junction splRetOut4(
-    redeclare package Medium = MediumA,
-    tau=15,
-    m_flow_nominal=mAir_flow_nominal*{1,1,1},
-    energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
-    dp_nominal(each displayUnit="Pa") = {0,0,0},
-    portFlowDirection_1=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Entering,
-    portFlowDirection_2=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Leaving,
-    portFlowDirection_3=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Entering,
-    linearized=true)
-    "Flow splitter"
-    annotation (Placement(transformation(extent={{-10,10},{10,-10}}, origin={310,-40})));
-
-  Buildings.Fluid.FixedResistances.Junction splRetOut5(
-    redeclare package Medium = MediumA,
-    tau=15,
-    m_flow_nominal=mAir_flow_nominal*{1,1,1},
-    energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
-    dp_nominal(each displayUnit="Pa") = {0,0,0},
-    portFlowDirection_1=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Entering,
-    portFlowDirection_2=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Leaving,
-    portFlowDirection_3=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Entering,
-    linearized=true)
-    "Flow splitter"
-    annotation (Placement(transformation(extent={{-10,10},{10,-10}}, origin={440,-40})));
-
-  Buildings.Fluid.FixedResistances.Junction splRetOut6(
-    redeclare package Medium = MediumA,
-    tau=15,
-    m_flow_nominal=mAir_flow_nominal*{1,1,1},
-    energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
-    dp_nominal(each displayUnit="Pa") = {0,0,0},
-    portFlowDirection_1=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Entering,
-    portFlowDirection_2=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Leaving,
-    portFlowDirection_3=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Entering,
-    linearized=true)
-    "Flow splitter"
-    annotation (Placement(transformation(extent={{-10,10},{10,-10}}, origin={530,-40})));
-
-  Buildings.Fluid.Actuators.Dampers.PressureIndependent damPreInd(
-    redeclare package Medium = MediumA,
-    m_flow_nominal=mAir_flow_nominal,
-    dpDamper_nominal=5,
-    dpFixed_nominal=5)
-    annotation (Placement(transformation(extent={{100,-10},{120,10}})));
-
-  Buildings.Fluid.Actuators.Dampers.PressureIndependent damPreInd1(
-    redeclare package Medium = MediumA,
-    m_flow_nominal=mAir_flow_nominal,
-    dpDamper_nominal=5,
-    dpFixed_nominal=5)
-    annotation (Placement(transformation(extent={{240,-10},{260,10}})));
-
-  Buildings.Fluid.Actuators.Dampers.PressureIndependent damPreInd2(
-    redeclare package Medium = MediumA,
-    m_flow_nominal=mAir_flow_nominal,
-    dpDamper_nominal=5,
-    dpFixed_nominal=5)
-    annotation (Placement(transformation(extent={{480,-10},{500,10}})));
 
 protected
   constant Modelica.Units.SI.SpecificHeatCapacity cpAir=Buildings.Utilities.Psychrometrics.Constants.cpAir
@@ -600,7 +463,6 @@ equation
       color={255,204,51},
       thickness=0.5,
       smooth=Smooth.None));
-
   connect(senRetFlo.port_a, dpRetDuc.port_b)
     annotation (Line(points={{360,140},{380,140}}, color={0,127,255}));
   connect(dpDisSupFan.port_b, amb.ports[2]) annotation (Line(
@@ -647,9 +509,9 @@ equation
             100},{830,100}},
     color={0,127,255}));
   end for;
+
   connect(splSupRoo[numZon-1].port_2, VAVBox[numZon].port_aAir);
   connect(splRetRoo[numZon-1].port_2, port_retAir[numZon]);
-
   connect(dpSupDuc.port_b, fanSup.port_a)
     annotation (Line(points={{360,-40},{386,-40}}, color={0,127,255}));
   connect(damOut.port_b, splRetOut.port_1)
@@ -684,18 +546,6 @@ equation
       horizontalAlignment=TextAlignment.Right));
   connect(TSup.port_b, senSupFlo.port_a)
     annotation (Line(points={{580,-40},{600,-40}}, color={0,127,255}));
-  for i in 1:nCoiHea loop
-  connect(splRetOut1.port_2, HeaCoi[i].port_a)
-    annotation (Line(points={{90,-40},{100,-40}}, color={0,127,255}));
-  connect(THeaCoi[i].port_b, splRetOut2.port_1)
-    annotation (Line(points={{150,-40},{160,-40}}, color={0,127,255}));
-  end for;
-  for i in 1:nCoiCoo loop
-  connect(splRetOut3.port_2, CooCoi[i].port_a)
-    annotation (Line(points={{230,-40},{240,-40}}, color={0,127,255}));
-  connect(TCooCoi[i].port_b, splRetOut4.port_1)
-    annotation (Line(points={{290,-40},{300,-40}}, color={0,127,255}));
-  end for;
   connect(weaBus.relHum, Phi.u) annotation (Line(
       points={{-320,180},{-320,140},{-302,140}},
       color={255,204,51},
@@ -704,37 +554,16 @@ equation
       index=-1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-
-  connect(TSup.port_a, splRetOut6.port_2)
-    annotation (Line(points={{560,-40},{540,-40}}, color={0,127,255}));
-  connect(fanSup.port_b, splRetOut5.port_1)
-    annotation (Line(points={{406,-40},{430,-40}}, color={0,127,255}));
-  connect(AuxHeaCoi.port_b, splRetOut6.port_1)
-    annotation (Line(points={{500,-40},{520,-40}}, color={0,127,255}));
-  connect(splRetOut5.port_3, damPreInd2.port_a)
-    annotation (Line(points={{440,-30},{440,0},{480,0}}, color={0,127,255}));
-  connect(damPreInd2.port_b, splRetOut6.port_3)
-    annotation (Line(points={{500,0},{530,0},{530,-30}}, color={0,127,255}));
-  connect(TMix.port_b, splRetOut1.port_1)
-    annotation (Line(points={{50,-40},{70,-40}}, color={0,127,255}));
-  connect(splRetOut1.port_3, damPreInd.port_a)
-    annotation (Line(points={{80,-30},{80,0},{100,0}}, color={0,127,255}));
-  connect(damPreInd.port_b, splRetOut2.port_3)
-    annotation (Line(points={{120,0},{170,0},{170,-30}}, color={0,127,255}));
-  connect(splRetOut3.port_3, damPreInd1.port_a)
-    annotation (Line(points={{220,-30},{220,0},{240,0}}, color={0,127,255}));
-  connect(damPreInd1.port_b, splRetOut4.port_3)
-    annotation (Line(points={{260,0},{310,0},{310,-30}}, color={0,127,255}));
-  connect(HeaCoi.port_b, THeaCoi.port_a)
-    annotation (Line(points={{120,-40},{130,-40}}, color={0,127,255}));
-  connect(CooCoi.port_b, TCooCoi.port_a)
-    annotation (Line(points={{260,-40},{270,-40}}, color={0,127,255}));
-  connect(splRetOut2.port_2, splRetOut3.port_1)
-    annotation (Line(points={{180,-40},{210,-40}}, color={0,127,255}));
-  connect(splRetOut4.port_2, dpSupDuc.port_a)
-    annotation (Line(points={{320,-40},{340,-40}}, color={0,127,255}));
-  connect(splRetOut5.port_2, AuxHeaCoi.port_a)
-    annotation (Line(points={{450,-40},{480,-40}}, color={0,127,255}));
+  connect(AuxHeaCoi.port_a, fanSup.port_b)
+    annotation (Line(points={{480,-40},{406,-40}}, color={0,127,255}));
+  connect(AuxHeaCoi.port_b, TSup.port_a)
+    annotation (Line(points={{500,-40},{560,-40}}, color={0,127,255}));
+  connect(ParDXCoiCoo.port_b, dpSupDuc.port_a)
+    annotation (Line(points={{260,-40},{340,-40}}, color={0,127,255}));
+  connect(ParDXCoiHea.port_b, ParDXCoiCoo.port_a)
+    annotation (Line(points={{120,-40},{240,-40}}, color={0,127,255}));
+  connect(ParDXCoiHea.port_a, TMix.port_b)
+    annotation (Line(points={{100,-40},{50,-40}}, color={0,127,255}));
   annotation (Diagram(
     coordinateSystem(
     preserveAspectRatio=false,
