@@ -57,7 +57,7 @@ block NextCoil_v2
 
   Buildings.Controls.OBC.CDL.Routing.IntegerExtractor extIndIntOriSeq(
     final nin=nCoi)
-    "Next coil based on original sequence (skipped coils assumed enabled)"
+    "Index of next coil to be enabled if there are no skipped coils to be prioritized"
     annotation (Placement(transformation(extent={{330,-90},{350,-70}})));
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToIntSki[nCoi]
@@ -70,9 +70,11 @@ block NextCoil_v2
 
   Buildings.Controls.OBC.CDL.Integers.MultiSum mulSumInt(
     final nin=2*nCoi)
+    "Sum of number of coils that have been enabled or skipped over"
     annotation (Placement(transformation(extent={{280,-130},{300,-110}})));
 
   Buildings.Controls.OBC.CDL.Integers.Switch intSwi
+    "Switch to pass index of skipped coil if prioritized, or pass index of next coil as per original sequence"
     annotation (Placement(transformation(extent={{380,-50},{400,-30}})));
 
   Buildings.Controls.OBC.CDL.Logical.Timer tim[nCoi]
@@ -80,11 +82,11 @@ block NextCoil_v2
     annotation (Placement(transformation(extent={{0,70},{20,90}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Round rou[nCoi](
-    final n=0)
+    final n=0) "Round off time-value to nearest second"
     annotation (Placement(transformation(extent={{40,100},{60,120}})));
 
   Buildings.Controls.OBC.CDL.Continuous.MultiMax mulMax(
-    final nin=nCoi)
+    final nin=nCoi) "Find maximum time for which a coil has been skipped"
     annotation (Placement(transformation(extent={{80,130},{100,150}})));
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt[nCoi]
@@ -96,6 +98,7 @@ block NextCoil_v2
     annotation (Placement(transformation(extent={{110,100},{130,120}})));
 
   Buildings.Controls.OBC.CDL.Integers.Multiply mulInt[nCoi]
+    "Get skip times only for coils that are now available"
     annotation (Placement(transformation(extent={{160,90},{180,110}})));
 
   Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt2
@@ -117,77 +120,120 @@ block NextCoil_v2
 
   Buildings.Controls.OBC.CDL.Integers.MultiSum mulSumInt1(
     final nin=nCoi)
+    "Find number of coils prioritized for enabling"
     annotation (Placement(transformation(extent={{260,120},{280,140}})));
 
   Buildings.Controls.OBC.CDL.Integers.Switch intSwi1
+    "Switch that outputs single coil index irrespective of whether a single coil or multiple coils have been prioritized"
     annotation (Placement(transformation(extent={{332,120},{352,140}})));
   Buildings.Controls.OBC.CDL.Integers.GreaterThreshold intGreThr1(t=1)
+    "Check if more then one coil has been prioritized"
     annotation (Placement(transformation(extent={{300,120},{320,140}})));
   Buildings.Controls.OBC.CDL.Integers.Multiply mulInt1[nCoi]
+    "Generate non-zero values only for coils that are prioritized for enabling"
     annotation (Placement(transformation(extent={{260,70},{280,90}})));
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt[nCoi](k=coiInd)
     "Coil indices"
     annotation (Placement(transformation(extent={{-120,250},{-100,270}})));
   Buildings.Controls.OBC.CDL.Integers.MultiSum mulSumInt2(nin=nCoi)
+    "Transmit index of the only coil prioritized for enabling"
     annotation (Placement(transformation(extent={{300,70},{320,90}})));
   Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea1[nCoi]
-    annotation (Placement(transformation(extent={{300,160},{320,180}})));
+    "Convert indices of prioritized coils to Real number"
+    annotation (Placement(transformation(extent={{292,160},{312,180}})));
   Buildings.Controls.OBC.CDL.Integers.MultiSum mulSumInt3(nin=nCoi)
+    "Number of skipped coils that are prioritized for enable"
     annotation (Placement(transformation(extent={{148,-50},{168,-30}})));
   Buildings.Controls.OBC.CDL.Integers.GreaterThreshold intGreThr2
+    "Check if any skipped coils have been prioritized for enable"
     annotation (Placement(transformation(extent={{180,-50},{200,-30}})));
   Buildings.Controls.OBC.CDL.Continuous.MultiMin mulMin(nin=nCoi)
+    "Identify lowest index between coils that were skipped at the same time"
     annotation (Placement(transformation(extent={{330,160},{350,180}})));
   Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt3
+    "Convert index signal back to Integer"
     annotation (Placement(transformation(extent={{360,160},{380,180}})));
   Buildings.Controls.OBC.CDL.Integers.AddParameter addPar1(p=1)
+    "Sequence index of next coil to be enabled if there are no skipped coils to be prioritized"
     annotation (Placement(transformation(extent={{310,-130},{330,-110}})));
   Buildings.Controls.OBC.CDL.Logical.Or or2
+    "Transmit true signal when a coil is available for stage up"
     annotation (Placement(transformation(extent={{150,240},{170,260}})));
   Buildings.Controls.OBC.CDL.Integers.Equal intEqu1[nCoi]
+    "Return array identifying next coil to be enabled"
     annotation (Placement(transformation(extent={{-60,260},{-40,280}})));
   Buildings.Controls.OBC.CDL.Routing.IntegerScalarReplicator intScaRep1(nout=nCoi)
+    "Change sequence index to a vector of integer values"
     annotation (Placement(transformation(extent={{360,-130},{380,-110}})));
   Buildings.Controls.OBC.CDL.Logical.And and1[nCoi]
+    "Transmit True array for coils that are enabled next, and if they are currently available"
     annotation (Placement(transformation(extent={{0,240},{20,260}})));
   Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(nin=nCoi)
+    "Transmit True if next coil to be enabled is available"
     annotation (Placement(transformation(extent={{80,240},{100,260}})));
   Buildings.Controls.OBC.CDL.Logical.And and3
+    "Transmit stage up signal when a coil is available for stage up"
     annotation (Placement(transformation(extent={{200,220},{220,240}})));
   Buildings.Controls.OBC.CDL.Logical.Not not1
+    "Transmit True if neither next coil or previously skipped coil is available for staging up"
     annotation (Placement(transformation(extent={{240,260},{260,280}})));
   Buildings.Controls.OBC.CDL.Logical.And and4
+    "Transmit True pulse when no coil is available for staging, and pulse signal is received or generated"
     annotation (Placement(transformation(extent={{280,260},{300,280}})));
   Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booScaRep(nout=nCoi)
+    "Replicate staging pulse signal for use in Boolean vector"
     annotation (Placement(transformation(extent={{320,260},{340,280}})));
   Buildings.Controls.OBC.CDL.Logical.And and5[nCoi]
+    "Transmit True signal for coil that is being skipped due to non-availability"
     annotation (Placement(transformation(extent={{0,280},{20,300}})));
   Buildings.Controls.OBC.CDL.Logical.VariablePulse varPul(period=30)
+    "Generate a periodic pulse signal until coil available for enable is found"
     annotation (Placement(transformation(extent={{60,160},{80,180}})));
   Buildings.Controls.OBC.CDL.Logical.Or or1
+    "Transmit True if stage up signal is received from input interface or from internal pulse signal"
     annotation (Placement(transformation(extent={{110,210},{130,230}})));
   Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr1(nin=nCoi)
+    "Check if no coils got enabled because next coil is not available"
     annotation (Placement(transformation(extent={{-40,160},{-20,180}})));
   Buildings.Controls.OBC.CDL.Logical.Latch lat
+    "Hold Treu signal until coil available for enable is found"
     annotation (Placement(transformation(extent={{0,160},{20,180}})));
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea(realTrue=1 - (1/30))
+    "Convert Boolean signal into Real value which will determine pulse transmitter operation"
     annotation (Placement(transformation(extent={{30,160},{50,180}})));
   Buildings.Controls.OBC.CDL.Logical.Pre pre
+    "Pre block to break algebraic loops"
     annotation (Placement(transformation(extent={{150,160},{170,180}})));
   Buildings.Controls.OBC.CDL.Logical.Pre pre1[nCoi]
+    "Pre block to break algebraic loops"
     annotation (Placement(transformation(extent={{-30,260},{-10,280}})));
   Buildings.Controls.OBC.CDL.Logical.Pre pre2[nCoi]
+    "Pre block to break algebraic loops"
     annotation (Placement(transformation(extent={{348,260},{368,280}})));
-  Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol6(trueHoldDuration=30, falseHoldDuration=0)
-    annotation (Placement(transformation(extent={{360,200},{380,220}})));
   Buildings.Controls.OBC.CDL.Logical.Not not2
+    "Use not signal to move True pulse at input to end of pulse generator timeperiod"
     annotation (Placement(transformation(extent={{90,160},{110,180}})));
   Buildings.Controls.OBC.CDL.Logical.And and6
+    "Transmit True pulse signal only when no coils are available for staging up"
     annotation (Placement(transformation(extent={{118,160},{138,180}})));
   Buildings.Controls.OBC.CDL.Logical.Or or3[nCoi]
+    "Check if a coil either becomews unavailable or is enabled"
     annotation (Placement(transformation(extent={{8,-80},{28,-60}})));
   Buildings.Controls.OBC.CDL.Logical.FallingEdge falEdg[nCoi]
+    "Check if coils become unavailable"
     annotation (Placement(transformation(extent={{-40,-76},{-20,-56}})));
+  Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea2[nCoi]
+    "Convert skip times from Integer to Real, for compatibility with mulMax block"
+    annotation (Placement(transformation(extent={{40,130},{60,150}})));
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea1[nCoi](realTrue=1e6)
+    "Convert non-available coils to high value before passing it through minimum block, so that they are not prioritized for enabling"
+    annotation (Placement(transformation(extent={{232,180},{252,200}})));
+  Buildings.Controls.OBC.CDL.Continuous.Add add2[nCoi]
+    "Add large number to non-prioritized coil indices"
+    annotation (Placement(transformation(extent={{310,200},{330,220}})));
+  Buildings.Controls.OBC.CDL.Logical.Not not3[nCoi]
+    "Identify coils that are not on list of skipped, currently-available coils"
+    annotation (Placement(transformation(extent={{160,20},{180,40}})));
 protected
   parameter Integer coiInd[nCoi]={i for i in 1:nCoi}
     "DX coil index, {1,2,...,n}";
@@ -224,12 +270,8 @@ equation
           -80},{360,-48},{378,-48}}, color={255,127,0}));
   connect(latSki.y, tim.u) annotation (Line(points={{-18,30},{-10,30},{-10,80},{
           -2,80}}, color={255,0,255}));
-  connect(tim.y, rou.u) annotation (Line(points={{22,80},{32,80},{32,110},{38,
-          110}},
+  connect(tim.y, rou.u) annotation (Line(points={{22,80},{30,80},{30,110},{38,110}},
         color={0,0,127}));
-  connect(rou.y, mulMax.u[1:nCoi]) annotation (Line(points={{62,110},{70,110},{70,
-          140},{78,140}},
-                     color={0,0,127}));
   connect(latSkiAva.y, booToInt.u) annotation (Line(points={{62,30},{70,30},{70,
           80},{78,80}}, color={255,0,255}));
   connect(rou.y, reaToInt1.u)
@@ -268,10 +310,8 @@ equation
           80},{120,-40},{146,-40}},                  color={255,127,0}));
   connect(mulSumInt3.y, intGreThr2.u)
     annotation (Line(points={{170,-40},{178,-40}}, color={255,127,0}));
-  connect(mulInt1.y, intToRea1.u) annotation (Line(points={{282,80},{290,80},{290,
-          170},{298,170}}, color={255,127,0}));
-  connect(intToRea1.y, mulMin.u[1:nCoi])
-    annotation (Line(points={{322,170},{328,170}}, color={0,0,127}));
+  connect(mulInt1.y, intToRea1.u) annotation (Line(points={{282,80},{286,80},{286,
+          170},{290,170}}, color={255,127,0}));
   connect(mulMin.y, reaToInt3.u)
     annotation (Line(points={{352,170},{358,170}}, color={0,0,127}));
   connect(reaToInt3.y, intSwi1.u1) annotation (Line(points={{382,170},{390,170},
@@ -335,8 +375,6 @@ equation
     annotation (Line(points={{342,270},{346,270}}, color={255,0,255}));
   connect(pre2.y, and5.u1) annotation (Line(points={{370,270},{380,270},{380,
           320},{-4,320},{-4,290},{-2,290}}, color={255,0,255}));
-  connect(and3.y, truFalHol6.u) annotation (Line(points={{222,230},{291,230},{
-          291,210},{358,210}}, color={255,0,255}));
   connect(pre.y, or1.u2) annotation (Line(points={{172,170},{180,170},{180,190},
           {100,190},{100,212},{108,212}}, color={255,0,255}));
   connect(varPul.y, not2.u)
@@ -357,12 +395,30 @@ equation
           -120,-40},{-50,-40},{-50,-66},{-42,-66}}, color={255,0,255}));
   connect(intSwi1.y, intSwi.u1) annotation (Line(points={{354,130},{370,130},{
           370,-32},{378,-32}}, color={255,127,0}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}}),
-                         graphics={Rectangle(
-          extent={{-100,100},{100,-100}},
-          lineColor={0,0,0},
-          fillColor={255,255,255},
-          fillPattern=FillPattern.Solid)}), Diagram(coordinateSystem(
-          preserveAspectRatio=false, extent={{-140,-180},{420,340}})));
+  connect(intToRea2.y, mulMax.u[1:nCoi])
+    annotation (Line(points={{62,140},{78,140}}, color={0,0,127}));
+  connect(mulInt.y, intToRea2.u) annotation (Line(points={{182,100},{190,100},{190,
+          126},{30,126},{30,140},{38,140}}, color={255,127,0}));
+  connect(intToRea1.y, add2.u2) annotation (Line(points={{314,170},{318,170},{318,
+          192},{300,192},{300,204},{308,204}}, color={0,0,127}));
+  connect(booToRea1.y, add2.u1) annotation (Line(points={{254,190},{280,190},{280,
+          216},{308,216}}, color={0,0,127}));
+  connect(add2.y, mulMin.u[1:nCoi]) annotation (Line(points={{332,210},{340,210},{340,
+          194},{320,194},{320,170},{328,170}}, color={0,0,127}));
+  connect(latSkiAva.y, not3.u)
+    annotation (Line(points={{62,30},{158,30}}, color={255,0,255}));
+  connect(not3.y, booToRea1.u) annotation (Line(points={{182,30},{224,30},{224,190},
+          {230,190}}, color={255,0,255}));
+  annotation (Icon(coordinateSystem(preserveAspectRatio=false,
+    extent={{-100,-100},{100,100}}),
+      graphics={Rectangle(
+        extent={{-100,100},{100,-100}},
+        lineColor={0,0,0},
+        fillColor={255,255,255},
+        fillPattern=FillPattern.Solid),
+      Text(
+        extent={{-150,140},{150,100}},
+        textString="%name",
+        textColor={0,0,255})}),
+        Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-140,-180},{420,340}})));
 end NextCoil_v2;
