@@ -62,7 +62,7 @@ model TESS
   Modelica.Blocks.Interfaces.RealInput uQReq(final unit="W", final displayUnit="W")
     "Required charge/discharge rate"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}}),
-        iconTransformation(extent={{-140,-20},{-100,20}})));
+        iconTransformation(extent={{-140,0},{-100,40}})));
   Modelica.Blocks.Interfaces.RealOutput Q_flow(final unit="W")
     "Heat flow rate, positive during charging, negative when melting the ice"
     annotation (Placement(transformation(extent={{100,-30},{120,-10}}),
@@ -88,15 +88,13 @@ model TESS
   Modelica.Blocks.Interfaces.RealInput TOut(final unit="K", displayUnit="degC")
     "Prescribed outdoor air temperature"
     annotation (Placement(transformation(extent={{-140,60},{-100,100}}),
-        iconTransformation(extent={{-140,40},{-100,80}})));
+        iconTransformation(extent={{-140,60},{-100,100}})));
   Modelica.Blocks.Interfaces.RealInput TRet(final unit="K", displayUnit="degC")
     "Chilled water supply temperature from chiller" annotation (Placement(
         transformation(extent={{-140,-70},{-100,-30}}), iconTransformation(
-          extent={{-140,-80},{-100,-40}})));
+          extent={{-140,-60},{-100,-20}})));
   Controls.OBC.CDL.Continuous.Sources.Constant con1(k=273.15 - 5)
     annotation (Placement(transformation(extent={{-92,50},{-72,70}})));
-  Controls.OBC.CDL.Continuous.MultiplyByParameter gai1(k=mCHW_flow_nominal)
-    annotation (Placement(transformation(extent={{-88,-80},{-68,-60}})));
   parameter Data.Tank.Generic perIceTan
     annotation (Placement(transformation(extent={{60,70},{80,90}})));
   parameter Chillers.Data.ElectricReformulatedEIR.Generic datChi
@@ -119,6 +117,15 @@ model TESS
     "state of charge"
     annotation (Placement(transformation(extent={{100,10},{120,30}}),
         iconTransformation(extent={{100,10},{120,30}})));
+
+  Modelica.Blocks.Interfaces.RealInput mCHW_flow(
+    final unit="kg/s",
+    displayUnit="kg/s",
+    quantity="MassFlowRate")
+    "Measured chiled water flowrate"
+    annotation (Placement(transformation(extent={{-140,-100},{-100,-60}}),
+      iconTransformation(extent={{-140,-120},{-100,-80}})));
+
 equation
   connect(electricReformulatedEIR.port_b2, val.port_a)
     annotation (Line(points={{20,44},{-10,44},{-10,20}}, color={0,127,255}));
@@ -162,10 +169,6 @@ equation
           -66},{-56,-66}}, color={0,0,127}));
   connect(con1.y, electricReformulatedEIR.TSet) annotation (Line(points={{-70,60},
           {-10,60},{-10,47},{18,47}}, color={0,0,127}));
-  connect(gai1.y, boundary.m_flow_in) annotation (Line(points={{-66,-70},{-64,-70},
-          {-64,-62},{-56,-62}}, color={0,0,127}));
-  connect(booToRea1.y, gai1.u) annotation (Line(points={{32,-20},{54,-20},{54,-4},
-          {-96,-4},{-96,-70},{-90,-70}}, color={0,0,127}));
   connect(senTem1.port_b, senVolFlo1.port_a)
     annotation (Line(points={{-12,-86},{2,-86}}, color={0,127,255}));
   connect(boundary.ports[1], senTem1.port_a) annotation (Line(points={{-34,-70},
@@ -179,8 +182,10 @@ equation
     annotation (Line(points={{-10,-3.55271e-15},{-10,-2}}, color={0,127,255}));
   connect(senVolFlo.port_a, senTem.port_b)
     annotation (Line(points={{-10,-26},{-10,-22}}, color={0,127,255}));
-  connect(controlledTank_uQReq.SOC, SOC) annotation (Line(points={{31,-54},{38,
-          -54},{38,-30},{66,-30},{66,20},{110,20}}, color={0,0,127}));
+  connect(controlledTank_uQReq.SOC, SOC) annotation (Line(points={{31,-54},{38,-54},
+          {38,-30},{66,-30},{66,20},{110,20}}, color={0,0,127}));
+  connect(mCHW_flow, boundary.m_flow_in) annotation (Line(points={{-120,-80},{
+          -80,-80},{-80,-62},{-56,-62}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
           Rectangle(
           extent={{-100,100},{100,-100}},

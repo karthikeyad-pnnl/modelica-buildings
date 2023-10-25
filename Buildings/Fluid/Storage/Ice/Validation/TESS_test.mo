@@ -19,8 +19,7 @@ model TESS_test
         3600))
     annotation (Placement(transformation(extent={{-80,-20},{-60,0}})));
   Modelica.Blocks.Sources.RealExpression TRet(y=if not sin.y <= 0 then tESS.controlledTank_uQReq.T
-         else 273.15 + 7)
-    "Inlet temperature into tank"
+         else 273.15 + 12) "Inlet temperature into tank"
     annotation (Placement(transformation(extent={{-80,-50},{-60,-30}})));
   parameter Data.Tank.Generic perIceTan(
     mIce_max=4400*1000*3600/perIceTan.Hf,
@@ -34,13 +33,19 @@ model TESS_test
   parameter
     Chillers.Data.ElectricReformulatedEIR.ReformEIRChiller_McQuay_WSC_471kW_5_89COP_Vanes
     datChi annotation (Placement(transformation(extent={{20,60},{40,80}})));
+  Modelica.Blocks.Sources.RealExpression mCHW(y=datChi.mEva_flow_nominal)
+    "Inlet temperature into tank"
+    annotation (Placement(transformation(extent={{-80,-70},{-60,-50}})));
 equation
-  connect(con.y, tESS.TOut) annotation (Line(points={{-58,20},{-40,20},{-40,6},{
-          -12,6}}, color={0,0,127}));
-  connect(sin.y, tESS.uQReq) annotation (Line(points={{-58,-10},{-40,-10},{-40,0},
-          {-12,0}}, color={0,0,127}));
-  connect(TRet.y, tESS.TRet) annotation (Line(points={{-59,-40},{-40,-40},{-40,-20},
-          {-20,-20},{-20,-6},{-12,-6}}, color={0,0,127}));
+  connect(con.y, tESS.TOut) annotation (Line(points={{-58,20},{-40,20},{-40,8},
+          {-12,8}},color={0,0,127}));
+  connect(sin.y, tESS.uQReq) annotation (Line(points={{-58,-10},{-40,-10},{-40,
+          2},{-12,2}},
+                    color={0,0,127}));
+  connect(TRet.y, tESS.TRet) annotation (Line(points={{-59,-40},{-30,-40},{-30,
+          -4},{-12,-4}},                color={0,0,127}));
+  connect(mCHW.y, tESS.mCHW_flow) annotation (Line(points={{-59,-60},{-20,-60},
+          {-20,-10},{-12,-10}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     experiment(
