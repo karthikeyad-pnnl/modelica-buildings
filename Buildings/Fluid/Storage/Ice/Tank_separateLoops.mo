@@ -1,5 +1,6 @@
 ﻿within Buildings.Fluid.Storage.Ice;
-model Tank "Ice tank with performance based on performance curves"
+model Tank_separateLoops
+  "Ice tank with performance based on performance curves"
   extends Buildings.Fluid.Interfaces.TwoPortHeatMassExchanger(
     final allowFlowReversal = false,
     final tau=tauHex,
@@ -7,7 +8,7 @@ model Tank "Ice tank with performance based on performance curves"
     redeclare final Buildings.Fluid.MixingVolumes.MixingVolume vol);
 
   parameter Real SOC_start(min=0, max=1, final unit="1")
-   "Start value for state of charge"
+    "Start value for state of charge"
     annotation(Dialog(tab = "Initialization"));
 
   replaceable parameter Buildings.Fluid.Storage.Ice.Data.Tank.Generic per
@@ -23,7 +24,7 @@ model Tank "Ice tank with performance based on performance curves"
 
   parameter Modelica.Units.SI.Time tauHex(min=1) = 30
     "Time constant of working fluid through the heat exchanger at nominal flow"
-     annotation (Dialog(tab = "Dynamics heat exchanger", group="Conservation equations"));
+    annotation (Dialog(tab = "Dynamics heat exchanger", group="Conservation equations"));
 
   // Initialization
   parameter Medium.AbsolutePressure p_start = Medium.p_default
@@ -48,6 +49,10 @@ model Tank "Ice tank with performance based on performance curves"
         T=273.15,
         X=Medium.X_default))
     "Specific heat capacity of working fluid";
+
+  Modelica.Units.SI.MassFlowRate m_flowDis = port_aDis.m_flow
+    "Mass flow rate from port_a to port_b (m_flow > 0 is design flow direction)";
+
   Modelica.Blocks.Interfaces.RealOutput SOC(
     final unit = "1")
     "state of charge"
@@ -81,56 +86,131 @@ model Tank "Ice tank with performance based on performance curves"
     "Model for tank heat transfer between working fluid and ice"
     annotation (Placement(transformation(extent={{-40,-80},{-20,-60}})));
 
-  Buildings.HeatTransfer.Sources.PrescribedHeatFlow preHeaFlo
+  Buildings.HeatTransfer.Sources.PrescribedHeatFlow preHeaFloCha
     "Prescribed heat flow"
-    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
-        rotation=180,
-        origin={-11,-40})));
-  Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor temSen
+    annotation (Placement(transformation(
+      extent={{-10,-10},{10,10}},
+      rotation=180,
+      origin={-11,-40})));
+  Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor temSenCha
     "Temperature of fluid"
-    annotation (Placement(transformation(extent={{10,-10},{-10,10}},
-        rotation=0,
-        origin={-40,-40})));
+    annotation (Placement(transformation(
+      extent={{10,-10},{-10,10}},
+      rotation=0,
+      origin={-40,-40})));
 
-  Modelica.Blocks.Sources.RealExpression TIn(
+  Modelica.Blocks.Sources.RealExpression TInCha(
     final y=Medium.temperature(state=
-        Medium.setState_phX(
-        p=port_a.p,
-        h=inStream(port_a.h_outflow),
-        X=inStream(port_a.Xi_outflow)))) "Inlet temperature into tank"
+      Medium.setState_phX(
+      p=port_a.p,
+      h=inStream(port_a.h_outflow),
+      X=inStream(port_a.Xi_outflow))))
+    "Inlet temperature into tank"
     annotation (Placement(transformation(extent={{-90,-74},{-70,-54}})));
 
-  Modelica.Blocks.Sources.RealExpression limQ_flow(y=m_flow*cp*(per.TFre - TIn.y))
-   "Upper/Lower limit for charging/discharging rate"
+  Modelica.Blocks.Sources.RealExpression TInDis(
+    final y=Medium.temperature(state=
+      Medium.setState_phX(
+      p=port_aDis.p,
+      h=inStream(port_aDis.h_outflow),
+      X=inStream(port_aDis.Xi_outflow))))
+    "Inlet temperature into tank"
+    annotation (Placement(transformation(extent={{-90,-60},{-70,-40}})));
+
+
+  Modelica.Blocks.Sources.RealExpression limQ_flow(
+    y=m_flow*cp*(per.TFre - TInCha.y))
+    "Upper/Lower limit for charging/discharging rate"
     annotation (Placement(transformation(extent={{-90,-90},{-70,-70}})));
+
+  MixingVolumes.MixingVolume vol1(
+    redeclare package Medium = Medium,
+    m_flow_nominal=m_flow_nominal,
+    V=m_flow_nominal*tau/rho_default)
+    "Volume for fluid stream"
+    annotation (Placement(transformation(extent={{-9,-120},{11,-140}})));
+
+  FixedResistances.PressureDrop preDro1(
+    redeclare package Medium = Medium,
+    m_flow_nominal=m_flow_nominal,
+    dp_nominal=dp_nominal)
+    "Flow resistance"
+    annotation (Placement(transformation(extent={{-60,-130},{-40,-110}})));
+
+  Modelica.Fluid.Interfaces.FluidPort_a port_aDis(
+    redeclare final package Medium = Medium)
+    "Fluid connector a (positive design flow direction is from port_a to port_b)"
+    annotation (Placement(transformation(extent={{-110,-130},{-90,-110}}),
+      iconTransformation(extent={{-110,-120},{-90,-100}})));
+
+  Modelica.Fluid.Interfaces.FluidPort_b port_bDis(
+    redeclare final package Medium = Medium)
+    "Fluid connector b (positive design flow direction is from port_a to port_b)"
+    annotation (Placement(transformation(extent={{110,-130},{90,-110}}),
+        iconTransformation(extent={{110,-120},{90,-100}})));
+  HeatTransfer.Sources.PrescribedHeatFlow preHeaFloDis "Prescribed heat flow"
+    annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=180,
+        origin={-7,-160})));
+  Modelica.Thermal.HeatTransfer.Sensors.TemperatureSensor temSenDis
+    "Temperature of fluid" annotation (Placement(transformation(
+        extent={{10,-10},{-10,10}},
+        rotation=0,
+        origin={-36,-160})));
+  Controls.OBC.CDL.Continuous.Max max
+    annotation (Placement(transformation(extent={{30,-60},{50,-40}})));
+  Controls.OBC.CDL.Continuous.Sources.Constant con(k=0)
+    annotation (Placement(transformation(extent={{-20,-110},{0,-90}})));
+  Controls.OBC.CDL.Continuous.Min min
+    annotation (Placement(transformation(extent={{30,-150},{50,-130}})));
 equation
-  connect(tanHeaTra.TInCha, TIn.y) annotation (Line(points={{-42,-64},{-56,-64},
-          {-56,-64},{-69,-64}}, color={0,0,127}));
-  connect(preHeaFlo.port, vol.heatPort) annotation (Line(points={{-21,-40},{-26,
-          -40},{-26,-10},{-9,-10}},                color={191,0,0}));
-  connect(tanHeaTra.SOC, SOC) annotation (Line(points={{-19,-70},{80,-70},{80,
-          -40},{110,-40}},
-                      color={0,0,127}));
+  connect(preHeaFloCha.port, vol.heatPort) annotation (Line(points={{-21,-40},{-26,
+          -40},{-26,-10},{-9,-10}}, color={191,0,0}));
+  connect(tanHeaTra.SOC, SOC) annotation (Line(points={{-19,-70},{80,-70},{80,-40},
+          {110,-40}}, color={0,0,127}));
   connect(tanHeaTra.mIce, mIce) annotation (Line(points={{-19,-74},{80,-74},{80,
           -80},{110,-80}}, color={0,0,127}));
-  connect(limQ_flow.y, tanHeaTra.QLim_flow) annotation (Line(points={{-69,-80},
-          {-56,-80},{-56,-82},{-42,-82}},color={0,0,127}));
-  connect(tanHeaTra.Q_flow, Q_flow) annotation (Line(points={{-19,-66},{10,-66},
-          {10,-40},{74,-40},{74,40},{110,40}},    color={0,0,127}));
-  connect(tanHeaTra.Q_flow, preHeaFlo.Q_flow) annotation (Line(points={{-19,-66},
-          {10,-66},{10,-40},{-1,-40}},color={0,0,127}));
-  connect(temSen.T, T) annotation (Line(points={{-51,-40},{-80,-40},{-80,50},{
-          74,50},{74,80},{110,80}},
-        color={0,0,127}));
-  connect(temSen.T, tanHeaTra.TOutCha) annotation (Line(points={{-51,-40},{-54,
+  connect(limQ_flow.y, tanHeaTra.QLim_flow) annotation (Line(points={{-69,-80},{
+          -56,-80},{-56,-82},{-42,-82}}, color={0,0,127}));
+  connect(tanHeaTra.Q_flow, Q_flow) annotation (Line(points={{-19,-66},{74,-66},
+          {74,40},{110,40}},                      color={0,0,127}));
+  connect(temSenCha.T, T) annotation (Line(points={{-51,-40},{-80,-40},{-80,50},
+          {74,50},{74,80},{110,80}}, color={0,0,127}));
+  connect(temSenCha.T, tanHeaTra.TOutCha) annotation (Line(points={{-51,-40},{-54,
           -40},{-54,-70},{-42,-70}}, color={0,0,127}));
-  connect(vol.heatPort, temSen.port) annotation (Line(points={{-9,-10},{-26,-10},
+  connect(vol.heatPort, temSenCha.port) annotation (Line(points={{-9,-10},{-26,-10},
           {-26,-40},{-30,-40}}, color={191,0,0}));
-  connect(TIn.y, tanHeaTra.TInDis) annotation (Line(points={{-69,-64},{-48,-64},
+  connect(vol1.ports[2], port_bDis)
+    annotation (Line(points={{1,-120},{100,-120}}, color={0,127,255}));
+  connect(port_aDis, preDro1.port_a)
+    annotation (Line(points={{-100,-120},{-60,-120}}, color={0,127,255}));
+  connect(preDro1.port_b, vol1.ports[1])
+    annotation (Line(points={{-40,-120},{1,-120}}, color={0,127,255}));
+  connect(temSenDis.port, preHeaFloDis.port)
+    annotation (Line(points={{-26,-160},{-17,-160}}, color={191,0,0}));
+  connect(preHeaFloDis.port, vol1.heatPort) annotation (Line(points={{-17,-160},
+          {-20,-160},{-20,-130},{-9,-130}}, color={191,0,0}));
+  connect(con.y, max.u1) annotation (Line(points={{2,-100},{24,-100},{24,-44},{28,
+          -44}}, color={0,0,127}));
+  connect(tanHeaTra.Q_flow, max.u2) annotation (Line(points={{-19,-66},{20,-66},
+          {20,-56},{28,-56}}, color={0,0,127}));
+  connect(max.y, preHeaFloCha.Q_flow) annotation (Line(points={{52,-50},{60,-50},
+          {60,-20},{20,-20},{20,-40},{-1,-40}}, color={0,0,127}));
+  connect(tanHeaTra.Q_flow, min.u2) annotation (Line(points={{-19,-66},{20,-66},
+          {20,-146},{28,-146}}, color={0,0,127}));
+  connect(con.y, min.u1) annotation (Line(points={{2,-100},{24,-100},{24,-134},{
+          28,-134}}, color={0,0,127}));
+  connect(min.y, preHeaFloDis.Q_flow) annotation (Line(points={{52,-140},{60,-140},
+          {60,-160},{3,-160}}, color={0,0,127}));
+  connect(temSenDis.T, tanHeaTra.TOutDis) annotation (Line(points={{-47,-160},{-64,
+          -160},{-64,-76},{-42,-76}}, color={0,0,127}));
+  connect(TInDis.y, tanHeaTra.TInDis) annotation (Line(points={{-69,-50},{-48,-50},
           {-48,-58},{-42,-58}}, color={0,0,127}));
-  connect(temSen.T, tanHeaTra.TOutDis) annotation (Line(points={{-51,-40},{-54,
-          -40},{-54,-76},{-42,-76}}, color={0,0,127}));
-  annotation (defaultComponentModel="iceTan", Icon(graphics={
+  connect(TInCha.y, tanHeaTra.TInCha)
+    annotation (Line(points={{-69,-64},{-42,-64}}, color={0,0,127}));
+  annotation (defaultComponentModel="iceTan", Icon(coordinateSystem(extent={{-100,
+            -180},{100,100}}),                     graphics={
         Rectangle(
           extent={{-70,60},{70,-60}},
           lineColor={0,0,255},
@@ -310,5 +390,6 @@ December 14, 2021, by Yangyang Fu:<br/>
 First implementation.
 </li>
 </ul>
-</html>"));
-end Tank;
+</html>"),
+    Diagram(coordinateSystem(extent={{-100,-180},{100,100}})));
+end Tank_separateLoops;

@@ -17,17 +17,20 @@ model NormalizedHeatFlowRate
             {120,10}}),           iconTransformation(extent={{100,-10},{120,10}})));
   Modelica.Blocks.Interfaces.RealInput SOC "State of charge"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
-  Modelica.Blocks.Interfaces.RealInput lmtdSta "LMTD star"
-    annotation (Placement(transformation(extent={{-140,-80},{-100,-40}})));
+  Modelica.Blocks.Interfaces.RealInput lmtdStaCha "LMTD star" annotation (
+      Placement(transformation(extent={{-140,-60},{-100,-20}}),
+        iconTransformation(extent={{-140,-80},{-100,-40}})));
 
   Modelica.Blocks.Interfaces.BooleanInput canFreeze
     "Set to true if tank can be charged"
-    annotation (Placement(transformation(extent={{-140,20},{-100,60}})));
+    annotation (Placement(transformation(extent={{-140,20},{-100,60}}),
+        iconTransformation(extent={{-140,40},{-100,80}})));
   Modelica.Blocks.Interfaces.BooleanInput canMelt
     "Set to true if tank can be melted"
-    annotation (Placement(transformation(extent={{-140,60},{-100,100}})));
+    annotation (Placement(transformation(extent={{-140,60},{-100,100}}),
+        iconTransformation(extent={{-140,100},{-100,140}})));
 
-protected
+// protected
   Modelica.Blocks.Math.Add SOCCom(final k2=-1) "1 - SOC"
     annotation (Placement(transformation(extent={{-40,20},{-20,40}})));
   Modelica.Blocks.Sources.Constant const(k=1) "Constant output of 1"
@@ -46,11 +49,12 @@ protected
     "Effective normalized heat flow rate"
     annotation (Placement(transformation(extent={{60,-10},{80,10}})));
 
+  Modelica.Blocks.Interfaces.RealInput lmtdStaDis "LMTD star" annotation (
+      Placement(transformation(extent={{-140,-100},{-100,-60}}),
+        iconTransformation(extent={{-140,-140},{-100,-100}})));
 equation
-  connect(qStaCha.lmtdSta, lmtdSta) annotation (Line(points={{18,-12},{0,-12},{
-          0,-60},{-120,-60}},   color={0,0,127}));
-  connect(lmtdSta, qStaDisCha.lmtdSta) annotation (Line(points={{-120,-60},{0,
-          -60},{0,64},{18,64}},      color={0,0,127}));
+  connect(qStaCha.lmtdSta, lmtdStaCha) annotation (Line(points={{18,-12},{0,-12},
+          {0,-40},{-120,-40}}, color={0,0,127}));
   connect(SOC, qStaCha.x) annotation (Line(points={{-120,0},{-60,0},{-60,-6},{
           18,-6}}, color={0,0,127}));
   connect(qStaCha.active, canFreeze) annotation (Line(points={{18,0},{-56,0},{
@@ -69,6 +73,8 @@ equation
     annotation (Line(points={{41,-6},{48,-6},{48,6},{58,6}}, color={0,0,127}));
   connect(qStaDisCha.qNor, qSta.u2) annotation (Line(points={{41,70},{52,70},{52,
           -6},{58,-6}}, color={0,0,127}));
+  connect(lmtdStaDis, qStaDisCha.lmtdSta) annotation (Line(points={{-120,-80},{
+          8,-80},{8,64},{18,64}}, color={0,0,127}));
   annotation (defaultComponentName = "norQSta",
   Icon(coordinateSystem(preserveAspectRatio=false),
     graphics={Text(textColor = {0, 0, 88}, extent = {{-32, 62}, {58, -34}}, textString = "q*")}),

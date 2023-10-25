@@ -31,9 +31,8 @@ model NormalizedHeatFlowRate "Example to calculate qStar"
 equation
   connect(fra.y, norQSta.SOC)
     annotation (Line(points={{-19,0},{58,0}}, color={0,0,127}));
-  connect(lmtd.y, norQSta.lmtdSta) annotation (Line(points={{-19,-50},{-14,-50},
-          {-14,-6},{58,-6}},
-                           color={0,0,127}));
+  connect(lmtd.y, norQSta.lmtdStaCha) annotation (Line(points={{-19,-50},{-14,-50},
+          {-14,-6},{58,-6}}, color={0,0,127}));
   connect(lmtd.y, greThr.u) annotation (Line(points={{-19,-50},{-14,-50},{-14,
           40},{-12,40}}, color={0,0,127}));
   connect(norQSta.canMelt, greThr.y) annotation (Line(points={{58,8},{50,8},{50,

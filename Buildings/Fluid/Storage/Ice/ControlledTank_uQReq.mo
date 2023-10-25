@@ -1,17 +1,19 @@
 within Buildings.Fluid.Storage.Ice;
-model ControlledTank
+model ControlledTank_uQReq
   "Ice tank with performance based on performance curves and built-in control for outlet temperature"
-  extends Buildings.Fluid.Storage.Ice.Tank(
-    limQ_flow(y=if tanHeaTra.canMelt.y
-                then m_flow*cp*(max(per.TFre, TSet) - TIn.y)
-                elseif tanHeaTra.canFreeze.y
-                then m_flow*cp*(max(TIn.y, min(per.TFre, TSet)) - TIn.y)
-                else m_flow*cp*(per.TFre - TIn.y)));
+  extends Buildings.Fluid.Storage.Ice.Tank(limQ_flow(y=if (tanHeaTra.canMelt.y and uQReq<0)
+           then max(QMax, uQReq) elseif (tanHeaTra.canFreeze.y and uQReq>0)
+           then min(QMax, uQReq) else
+           0));
 
-  Modelica.Blocks.Interfaces.RealInput TSet(
-    final unit="K",
-    final displayUnit="degC") "Outlet temperature setpoint during discharging"
+  Modelica.Blocks.Interfaces.RealInput uQReq(final unit="W", final displayUnit="W")
+    "Required charge/discharge rate"
     annotation (Placement(transformation(extent={{-140,40},{-100,80}})));
+
+  Real QMax;
+
+equation
+  QMax = m_flow*cp*(per.TFre - TIn.y);
 
 annotation (
 defaultComponentModel="iceTan",
@@ -72,5 +74,5 @@ First implementation.
     Icon(graphics={
     Text( extent={{-168,130},{-72,84}},
           textColor={0,0,88},
-          textString=DynamicSelect("TSet", String(TSet-273.15, format=".1f")))}));
-end ControlledTank;
+          textString="uQReq")}));
+end ControlledTank_uQReq;
