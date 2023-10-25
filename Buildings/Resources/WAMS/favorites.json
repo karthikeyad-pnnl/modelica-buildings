@@ -1,0 +1,10 @@
+{
+  "version" : "2",
+  "data" : {
+    "Buildings.Examples.ChillerPlant.BaseClasses.DataCenter" : { },
+    "Buildings.Examples.ChillerPlant.BaseClasses.SimplifiedRoom_customLoad" : { },
+    "Buildings.Examples.ChillerPlant.DataCenterDiscreteTimeControl" : { },
+    "Buildings.Examples.ChillerPlant.DataCenterDiscreteTimeControl_purePhysics" : { },
+    "Buildings.Examples.ChillerPlant.BaseClasses.DataCenter_purePhysics" : { }
+  }
+}

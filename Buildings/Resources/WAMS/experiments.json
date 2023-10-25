@@ -1,0 +1,171 @@
+{
+  "Buildings.Examples.ChillerPlant.DataCenterDiscreteTimeControl" : [ {
+    "created" : "2023-08-04T16:53:57.960Z",
+    "lastModified" : "2023-08-04T16:53:57.960Z",
+    "name" : "Experiment 1",
+    "expressions" : [ ],
+    "model" : "Buildings.Examples.ChillerPlant.DataCenterDiscreteTimeControl",
+    "settings" : {
+      "dynamic" : {
+        "startTime" : 1.30464E7,
+        "stopTime" : 1.36512E7,
+        "interval" : 60.0
+      },
+      "steadyState" : { },
+      "custom" : { },
+      "simulationType" : "dynamic"
+    },
+    "filters" : [ ],
+    "isDefault" : true
+  } ],
+  "Buildings.simple_loop" : [ {
+    "created" : "2023-08-11T20:46:42.069Z",
+    "lastModified" : "2023-08-11T20:46:42.069Z",
+    "name" : "Experiment 1",
+    "expressions" : [ ],
+    "model" : "Buildings.simple_loop",
+    "settings" : {
+      "dynamic" : {
+        "stopTime" : 10.0,
+        "interval" : 0.01
+      },
+      "steadyState" : { },
+      "custom" : { },
+      "simulationType" : "dynamic"
+    },
+    "filters" : [ ],
+    "isDefault" : true
+  } ],
+  "Buildings.Examples.ChillerPlant.ClosedLoop" : [ {
+    "created" : "2023-08-21T15:14:57.007Z",
+    "lastModified" : "2023-08-21T15:14:57.007Z",
+    "name" : "Experiment 1",
+    "expressions" : [ ],
+    "model" : "Buildings.Examples.ChillerPlant.ClosedLoop",
+    "settings" : {
+      "dynamic" : {
+        "startTime" : 1.30464E7,
+        "stopTime" : 1.32192E7,
+        "interval" : 1.0,
+        "solver" : "CVode"
+      },
+      "steadyState" : { },
+      "custom" : { },
+      "simulationType" : "dynamic"
+    },
+    "filters" : [ ],
+    "isDefault" : true
+  }, {
+    "created" : "2023-08-23T05:37:05.178Z",
+    "lastModified" : "2023-08-23T05:37:05.178Z",
+    "name" : "Experiment 2",
+    "expressions" : [ ],
+    "model" : "Buildings.Examples.ChillerPlant.ClosedLoop",
+    "settings" : {
+      "dynamic" : {
+        "startTime" : 1.30464E7,
+        "stopTime" : 1.31328E7,
+        "interval" : 600.0,
+        "solver" : "CVode"
+      },
+      "steadyState" : { },
+      "custom" : { },
+      "simulationType" : "dynamic"
+    },
+    "filters" : [ ],
+    "isDefault" : false
+  } ],
+  "Buildings.Examples.ChillerPlant.DataCenterDiscreteTimeControl_purePhysics" : [ {
+    "created" : "2023-08-04T16:53:57.960Z",
+    "lastModified" : "2023-08-04T16:53:57.960Z",
+    "name" : "Experiment 1",
+    "expressions" : [ ],
+    "model" : "Buildings.Examples.ChillerPlant.DataCenterDiscreteTimeControl_purePhysics",
+    "settings" : {
+      "dynamic" : {
+        "startTime" : 1.30464E7,
+        "stopTime" : 1.36512E7,
+        "interval" : 60.0
+      },
+      "steadyState" : { },
+      "custom" : { },
+      "simulationType" : "dynamic"
+    },
+    "filters" : [ ],
+    "isDefault" : true
+  } ],
+  "Buildings.Examples.ChillerPlant.ClosedLoop_purePhysics" : [ {
+    "created" : "2023-08-21T15:14:57.007Z",
+    "lastModified" : "2023-08-21T15:14:57.007Z",
+    "name" : "Experiment 1",
+    "expressions" : [ ],
+    "model" : "Buildings.Examples.ChillerPlant.ClosedLoop_purePhysics",
+    "settings" : {
+      "dynamic" : {
+        "startTime" : 1.30464E7,
+        "stopTime" : 1.36512E7,
+        "interval" : 1.0,
+        "solver" : "CVode"
+      },
+      "steadyState" : { },
+      "custom" : { },
+      "simulationType" : "dynamic"
+    },
+    "filters" : [ ],
+    "isDefault" : true
+  }, {
+    "created" : "2023-08-23T05:37:05.178Z",
+    "lastModified" : "2023-08-23T05:37:05.178Z",
+    "name" : "Experiment 2",
+    "expressions" : [ ],
+    "model" : "Buildings.Examples.ChillerPlant.ClosedLoop_purePhysics",
+    "settings" : {
+      "dynamic" : {
+        "startTime" : 1.30464E7,
+        "stopTime" : 1.31328E7,
+        "interval" : 600.0,
+        "solver" : "CVode"
+      },
+      "steadyState" : { },
+      "custom" : { },
+      "simulationType" : "dynamic"
+    },
+    "filters" : [ ],
+    "isDefault" : false
+  } ],
+  "Buildings.bouncing_ball_experiment" : [ {
+    "created" : "2023-09-25T21:16:41.707Z",
+    "lastModified" : "2023-09-25T21:16:41.707Z",
+    "name" : "Experiment 1",
+    "expressions" : [ ],
+    "model" : "Buildings.bouncing_ball_experiment",
+    "settings" : {
+      "dynamic" : {
+        "stopTime" : 3.0
+      },
+      "steadyState" : { },
+      "custom" : { },
+      "simulationType" : "dynamic"
+    },
+    "filters" : [ ],
+    "isDefault" : true
+  } ],
+  "Buildings.Examples.ChillerPlant.ClosedLoop_cooTowFan" : [ {
+    "created" : "2023-10-03T18:14:10.652Z",
+    "lastModified" : "2023-10-03T18:14:10.652Z",
+    "name" : "Experiment 1",
+    "expressions" : [ ],
+    "model" : "Buildings.Examples.ChillerPlant.ClosedLoop_cooTowFan",
+    "settings" : {
+      "dynamic" : {
+        "stopTime" : 604800.0,
+        "interval" : 1.0
+      },
+      "steadyState" : { },
+      "custom" : { },
+      "simulationType" : "dynamic"
+    },
+    "filters" : [ ],
+    "isDefault" : true
+  } ]
+}
