@@ -303,8 +303,6 @@ model ASHRAE2006_RTU_wSupTemRes
   Buildings.Controls.OBC.RooftopUnits.Controller RTUCon(
     final nCoiHea=nCoiHea,
     final nCoiCoo=nCoiCoo,
-    final uThrCoi1=0.4,
-    final minComSpe=0.25,
     final dUHys=0.05)
     "Controller for rooftop units"
     annotation (Placement(transformation(extent={{1010,232},{1030,260}})));
@@ -874,6 +872,8 @@ equation
     annotation (Line(points={{501,-34},{501,-90},{518,-90}}, color={0,0,127}));
   connect(hys3.y, mulOr2.u[4]) annotation (Line(points={{542,-90},{468,-90},{
           468,-196},{-144,-196},{-144,-329.375}}, color={255,0,255}));
+  connect(TMix.T, conTSup.Tmix) annotation (Line(points={{40,-29},{32,-29},{32,
+          -182},{-62,-182},{-62,-211}}, color={0,0,127}));
   annotation (
   defaultComponentName="hvac",
     Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-380,-400},{1420,

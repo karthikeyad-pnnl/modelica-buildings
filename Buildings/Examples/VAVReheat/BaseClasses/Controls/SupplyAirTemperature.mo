@@ -23,8 +23,7 @@ block SupplyAirTemperature
         iconTransformation(extent={{-140,-80},{-100,-40}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TSup(
     final unit="K",
-    displayUnit="degC")
-    "Supply air temperature measurement"
+    displayUnit="degC") "Supply air temperature measurement"
     annotation (Placement(transformation(extent={{-180,-20},{-140,20}}),
         iconTransformation(extent={{-140,40},{-100,80}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TSupSet(
@@ -115,6 +114,13 @@ block SupplyAirTemperature
     u_m(final unit="K", displayUnit="degC"))
     "Supply temperature controller"
     annotation (Placement(transformation(extent={{-80,14},{-60,34}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput Tmix(final unit="K",
+      displayUnit="degC") "Supply air temperature measurement" annotation (
+      Placement(transformation(extent={{-180,20},{-140,60}}),
+        iconTransformation(extent={{-140,70},{-100,110}})));
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant zero1(k=273.15 + 12)
+                                                                   "Zero"
+    annotation (Placement(transformation(extent={{-134,54},{-114,74}})));
 equation
   connect(TSup, con.u_s) annotation (Line(points={{-160,0},{-112,0}},
                color={0,0,127}));
@@ -178,12 +184,12 @@ equation
           -12}}, color={255,0,255}));
   connect(con1.y, mapOA.u)
     annotation (Line(points={{-58,24},{2,24},{2,0},{8,0}}, color={0,0,127}));
-  connect(con1.u_s, TSup) annotation (Line(points={{-82,24},{-130,24},{-130,0},
-          {-160,0}}, color={0,0,127}));
-  connect(con1.u_m, TSupSet)
-    annotation (Line(points={{-70,12},{-70,-40},{-160,-40}}, color={0,0,127}));
   connect(con1.trigger, uEna) annotation (Line(points={{-76,12},{-76,-46},{-106,
           -46},{-106,-100},{-160,-100}}, color={255,0,255}));
+  connect(Tmix, con1.u_s) annotation (Line(points={{-160,40},{-88,40},{-88,24},
+          {-82,24}}, color={0,0,127}));
+  connect(zero1.y, con1.u_m) annotation (Line(points={{-112,64},{-104,64},{-104,
+          14},{-84,14},{-84,6},{-70,6},{-70,12}}, color={0,0,127}));
   annotation (
   defaultComponentName="conTSup",
   Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(

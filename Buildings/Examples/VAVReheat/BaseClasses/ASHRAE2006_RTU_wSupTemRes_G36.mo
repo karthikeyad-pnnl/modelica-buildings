@@ -303,8 +303,6 @@ model ASHRAE2006_RTU_wSupTemRes_G36
   Buildings.Controls.OBC.RooftopUnits.Controller RTUCon(
     final nCoiHea=nCoiHea,
     final nCoiCoo=nCoiCoo,
-    final uThrCoi1=0.4,
-    final minComSpe=0.25,
     final dUHys=0.05)
     "Controller for rooftop units"
     annotation (Placement(transformation(extent={{1010,232},{1030,260}})));
@@ -852,8 +850,6 @@ equation
           {948,130},{680,130},{680,56},{716,56}}, color={0,0,127}));
   connect(fanSup.P, hys2.u) annotation (Line(points={{407,-31},{420,-31},{420,
           -130},{478,-130}}, color={0,0,127}));
-  connect(conTSupSetG36.TAirSupSet, TSupSet_pasThr.u) annotation (Line(points={{
-          -178,-180},{-164,-180},{-164,-236},{-148,-236}}, color={0,0,127}));
   connect(addPar1.y, uFan_pasThr1.u)
     annotation (Line(points={{-18,-130},{38,-130}}, color={0,0,127}));
   connect(conVAVG36.yVal, yVal_pasThr.u) annotation (Line(points={{834,49},{834,
@@ -874,6 +870,8 @@ equation
     annotation (Line(points={{501,-34},{501,-90},{518,-90}}, color={0,0,127}));
   connect(hys3.y, mulOr2.u[4]) annotation (Line(points={{542,-90},{546,-90},{
           546,-366},{-142,-366},{-142,-345.375}}, color={255,0,255}));
+  connect(conTSupSetG36.TAirSupSet, TSupSet_pasThr.u) annotation (Line(points={
+          {-178,-180},{-168,-180},{-168,-236},{-148,-236}}, color={0,0,127}));
   annotation (
   defaultComponentName="hvac",
     Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-380,-400},{1420,
