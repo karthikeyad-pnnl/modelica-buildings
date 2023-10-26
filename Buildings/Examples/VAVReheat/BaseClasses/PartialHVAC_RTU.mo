@@ -27,7 +27,7 @@ partial model PartialHVAC_RTU
     "Nominal total cooling heat flow rate of rooftop unit coil (negative number)"
     annotation (Dialog(group="Nominal heat flow rate"));
 
-  parameter Modelica.Units.SI.HeatFlowRate QAuxHea_flow_nominal=50000
+  parameter Modelica.Units.SI.HeatFlowRate QAuxHea_flow_nominal=20000
     "Nominal heat flow rate of auxiliary heating coil"
     annotation (Dialog(group="Nominal heat flow rate"));
 

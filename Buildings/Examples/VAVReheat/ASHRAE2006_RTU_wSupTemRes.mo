@@ -294,8 +294,8 @@ This is for
           "modelica://Buildings/Resources/Scripts/Dymola/Examples/VAVReheat/ASHRAE2006_RTU.mos"
         "Simulate and plot"),
     experiment(
-      StartTime=15552000,
-      StopTime=16156800,
+      StartTime=0,
+      StopTime=604800,
       Interval=600,
       Tolerance=1e-06,
       __Dymola_Algorithm="Cvode"),
