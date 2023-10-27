@@ -1,5 +1,4 @@
 within Buildings.Fluid.Storage.Ice.Validation;
-
 model TESS_W_interfaces
   extends .Modelica.Icons.Example;
 

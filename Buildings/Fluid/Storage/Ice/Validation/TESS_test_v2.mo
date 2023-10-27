@@ -1,5 +1,5 @@
 within Buildings.Fluid.Storage.Ice.Validation;
-model TESS_test
+model TESS_test_v2
   extends Modelica.Icons.Example;
 
   parameter Modelica.Units.SI.Mass SOC_start=0
@@ -38,6 +38,8 @@ model TESS_test
     annotation (Placement(transformation(extent={{-80,-70},{-60,-50}})));
   Controls.OBC.CDL.Continuous.Sources.Constant con1(k=1000000)
     annotation (Placement(transformation(extent={{-80,40},{-60,60}})));
+  TESS_W_interfaces tESS_W_interfaces
+    annotation (Placement(transformation(extent={{-8,-80},{12,-60}})));
 equation
   connect(con.y, tESS.TOut) annotation (Line(points={{-58,20},{-40,20},{-40,8},
           {-12,8}},color={0,0,127}));
@@ -45,12 +47,20 @@ equation
           -4},{-12,-4}},                color={0,0,127}));
   connect(mCHW.y, tESS.mCHW_flow) annotation (Line(points={{-59,-60},{-20,-60},
           {-20,-10},{-12,-10}}, color={0,0,127}));
-  connect(sin.y, tESS.uQReq) annotation (Line(points={{-58,-10},{-40,-10},{-40,
+  connect(con.y, tESS_W_interfaces.TOut) annotation (Line(points={{-58,20},{-40,
+          20},{-40,-62},{-10,-62}}, color={0,0,127}));
+  connect(TRet.y, tESS_W_interfaces.TRet) annotation (Line(points={{-59,-40},{
+          -30,-40},{-30,-74},{-10,-74}}, color={0,0,127}));
+  connect(mCHW.y, tESS_W_interfaces.mCHW_flow) annotation (Line(points={{-59,
+          -60},{-20,-60},{-20,-80},{-10,-80}}, color={0,0,127}));
+  connect(sin.y, tESS.uQReq) annotation (Line(points={{-58,-10},{-34,-10},{-34,
           2},{-12,2}}, color={0,0,127}));
+  connect(sin.y, tESS_W_interfaces.uQReq) annotation (Line(points={{-58,-10},{
+          -34,-10},{-34,-68},{-10,-68}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     experiment(
       StopTime=172800,
       Interval=60,
       __Dymola_Algorithm="Dassl"));
-end TESS_test;
+end TESS_test_v2;
