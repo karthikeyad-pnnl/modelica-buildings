@@ -286,17 +286,17 @@ block Controller
       iconTransformation(extent={{-140,-270},{-100,-230}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TSupCoiHea[nCoiHea](
-    final unit="K",
-    displayUnit="degC",
-    final quantity="ThermodynamicTemperature")
+    final unit=fill("K",nCoiHea),
+    displayUnit=fill("degC",nCoiHea),
+    final quantity=fill("ThermodynamicTemperature",nCoiHea))
     "Heating coil supply air temperature"
     annotation (Placement(transformation(extent={{-140,-280},{-100,-240}}),
       iconTransformation(extent={{-140,-210},{-100,-170}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TSupCoiCoo[nCoiCoo](
-    final unit="K",
-    displayUnit="degC",
-    final quantity="ThermodynamicTemperature")
+    final unit=fill("K",nCoiCoo),
+    displayUnit=fill("degC",nCoiCoo),
+    final quantity=fill("ThermodynamicTemperature",nCoiCoo))
     "Cooling coil supply air temperature"
     annotation (Placement(transformation(extent={{-140,-240},{-100,-200}}),
       iconTransformation(extent={{-140,-240},{-100,-200}})));

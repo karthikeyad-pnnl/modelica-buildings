@@ -530,7 +530,7 @@ model ASHRAE2006_RTU_wSupTemRes
     annotation (Placement(transformation(extent={{308,-126},{328,-106}})));
   Buildings.Controls.OBC.CDL.Continuous.Multiply mul5
     annotation (Placement(transformation(extent={{344,-122},{364,-102}})));
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr[nCoiCoo](t=5)
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr[nCoiCoo](each t=5)
     annotation (Placement(transformation(extent={{348,-148},{368,-128}})));
 protected
   Buildings.Controls.Continuous.LimPID conPCoo(
