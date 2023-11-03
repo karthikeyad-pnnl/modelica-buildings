@@ -13,9 +13,9 @@ model TESS_test_v2
     perIceTan=perIceTan,
     datChi=datChi)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant con(k=273.15 + 5.55)
+  Controls.OBC.CDL.Continuous.Sources.Constant con(k=273.15 + 10)
     annotation (Placement(transformation(extent={{-80,10},{-60,30}})));
-  Controls.OBC.CDL.Continuous.Sources.Sin sin(amplitude=550000, freqHz=1/(40*
+  Controls.OBC.CDL.Continuous.Sources.Sin sin(amplitude=200000, freqHz=1/(40*
         3600))
     annotation (Placement(transformation(extent={{-80,-20},{-60,0}})));
   Modelica.Blocks.Sources.RealExpression TRet(y=if not sin.y <= 0 then tESS.controlledTank_uQReq.T
@@ -33,7 +33,8 @@ model TESS_test_v2
   parameter
     Chillers.Data.ElectricReformulatedEIR.ReformEIRChiller_McQuay_WSC_471kW_5_89COP_Vanes
     datChi annotation (Placement(transformation(extent={{20,60},{40,80}})));
-  Modelica.Blocks.Sources.RealExpression mCHW(y=datChi.mEva_flow_nominal)
+  Modelica.Blocks.Sources.RealExpression mCHW(y=if sin.y <= 0 then datChi.mEva_flow_nominal
+         else 0)
     "Inlet temperature into tank"
     annotation (Placement(transformation(extent={{-80,-70},{-60,-50}})));
   Controls.OBC.CDL.Continuous.Sources.Constant con1(k=1000000)

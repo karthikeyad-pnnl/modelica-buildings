@@ -32,7 +32,8 @@ model TESS
   Actuators.Valves.TwoWayPressureIndependent val(redeclare package Medium =
         MediumCHW,
     m_flow_nominal=mCHW_flow_nominal,
-    dpValve_nominal=10)
+    dpValve_nominal=10,
+    y_start=0)
     annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=-90,
         origin={-10,10})));
   Sources.MassFlowSource_T boundary(
@@ -93,7 +94,7 @@ model TESS
     "Chilled water supply temperature from chiller" annotation (Placement(
         transformation(extent={{-140,-70},{-100,-30}}), iconTransformation(
           extent={{-140,-60},{-100,-20}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant con1(k=273.15 - 5)
+  Controls.OBC.CDL.Continuous.Sources.Constant con1(k=273.15 - 3)
     annotation (Placement(transformation(extent={{-92,50},{-72,70}})));
   parameter Data.Tank.Generic perIceTan
     annotation (Placement(transformation(extent={{60,70},{80,90}})));
@@ -141,12 +142,10 @@ equation
           40}}, color={0,0,127}));
   connect(greThr.y, booToRea.u) annotation (Line(points={{-48,40},{-44,40},{-44,
           30},{-42,30}}, color={255,0,255}));
-  connect(booToRea.y, val.y) annotation (Line(points={{-18,30},{8,30},{8,10},{2,
+  connect(booToRea.y, val.y) annotation (Line(points={{-18,30},{6,30},{6,10},{2,
           10}},   color={0,0,127}));
   connect(mov.m_flow_in, gai.y)
     annotation (Line(points={{38,10},{38,30},{36,30}}, color={0,0,127}));
-  connect(booToRea.y, gai.u)
-    annotation (Line(points={{-18,30},{12,30}}, color={0,0,127}));
   connect(controlledTank_uQReq.port_b, val1.port_a) annotation (Line(points={{30,
           -50},{40,-50},{40,-60},{44,-60}}, color={0,127,255}));
   connect(val1.port_b, bou1.ports[1])
@@ -186,6 +185,8 @@ equation
           {38,-30},{66,-30},{66,20},{110,20}}, color={0,0,127}));
   connect(mCHW_flow, boundary.m_flow_in) annotation (Line(points={{-120,-80},{
           -80,-80},{-80,-62},{-56,-62}}, color={0,0,127}));
+  connect(val.y_actual, gai.u) annotation (Line(points={{-3,5},{-3,0},{8,0},{8,
+          30},{12,30}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
           Rectangle(
           extent={{-100,100},{100,-100}},
