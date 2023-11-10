@@ -1,6 +1,5 @@
 within Buildings.Fluid.Storage.Ice.Validation;
 model TESS_W_interfaces
-  extends .Modelica.Icons.Example;
 
   parameter .Modelica.Units.SI.Mass SOC_start=0
     "Start value of ice mass in the tank";
@@ -11,7 +10,8 @@ model TESS_W_interfaces
           X_a=0.25),
     SOC_start=SOC_start,
     perIceTan=perIceTan,
-    datChi=datChi)
+    datChi=datChi,
+    greThr(h=0.5))
     annotation (Placement(transformation(extent={{-10.0,-10.0},{10.0,10.0}},rotation = 0.0,origin = {0.0,0.0})));
   parameter .Buildings.Fluid.Storage.Ice.Data.Tank.Generic perIceTan(
     mIce_max=4400*1000*3600/perIceTan.Hf,
@@ -24,7 +24,13 @@ model TESS_W_interfaces
 
   parameter
     .Buildings.Fluid.Chillers.Data.ElectricReformulatedEIR.ReformEIRChiller_McQuay_WSC_471kW_5_89COP_Vanes
-    datChi annotation (Placement(transformation(extent={{20,60},{40,80}})));
+    datChi(
+    QEva_flow_nominal=-300000,
+    COP_nominal=5.33,
+    mEva_flow_nominal=0.03369*1000,
+    TEvaLvg_nominal=271.15,
+    TEvaLvgMin=273.15 - 5)
+           annotation (Placement(transformation(extent={{20,60},{40,80}})));
     .Modelica.Blocks.Interfaces.RealInput uQReq(displayUnit = "W",unit = "W") "Required charge/discharge rate" annotation(Placement(transformation(extent = {{-98.0,-25.5},{-58.0,14.5}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{-140,0},{-100,40}})));
     .Modelica.Blocks.Interfaces.RealInput TOut(displayUnit = "degC",unit = "K") "Prescribed outdoor air temperature" annotation(Placement(transformation(extent = {{-98.0,54.5},{-58.0,94.5}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{-140,60},{-100,100}})));
     .Modelica.Blocks.Interfaces.RealInput TRet(displayUnit = "degC",unit = "K") "Chilled water supply temperature from chiller" annotation(Placement(transformation(extent = {{-98.0,-72.0},{-58.0,-32.0}},rotation = 0.0,origin = {0.0,0.0}),iconTransformation(extent = {{-140,-60},{-100,-20}})));
@@ -38,7 +44,12 @@ equation
     connect(mCHW_flow,tESS.mCHW_flow) annotation(Line(points = {{-78,-85.5},{-12,-85.5},{-12,-10}},color = {0,0,127}));
     connect(tESS.SOC,SOC) annotation(Line(points = {{11,2},{30.5,2},{30.5,18},{50,18}},color = {0,0,127}));
     connect(tESS.Q_flow,Q_flow) annotation(Line(points = {{11,-2},{30.5,-2},{30.5,-22},{50,-22}},color = {0,0,127}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(
+  annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+          Rectangle(
+          extent={{-100,100},{100,-100}},
+          lineColor={0,0,0},
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid)}),                      Diagram(
         coordinateSystem(preserveAspectRatio=false)),
     experiment(
       StopTime=172800,
