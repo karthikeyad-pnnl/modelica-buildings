@@ -70,60 +70,31 @@ block CoolingCoil "This block commands the cooling coil."
       iconTransformation(extent = {{-142, -26}, {-102, 14}})));
 
   // ---outputs---
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yCC
-    "Cooling coil control signal"
-    annotation (Placement(transformation(extent = {{102, 56}, {142, 96}}),
-      iconTransformation(extent = {{102, -20}, {142, 20}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant erwAdjDP(
-    final k = erwDPadj)
-    "ERW dewpoint set point adjustment"
-    annotation (Placement(transformation(extent = {{-76, 12}, {-56, 32}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con0(
-    final k = 0)
-    "Real constant 0"
-    annotation (Placement(transformation(extent = {{-20, -62}, {0, -42}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Add sub(
-    final k2 = -1)
-    annotation (Placement(transformation(extent = {{-44, 32}, {-24, 52}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Switch swi
-    "Logical switch outputs supply air PI value when fan is proven on."
-    annotation (Placement(transformation(extent = {{14, -54}, {34, -34}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Switch swi1
-    "Logical switch passes different PI calculations to yCC based on dehumidification 
-    mode."
-    annotation (Placement(transformation(extent = {{58, 66}, {78, 86}})));
-
-  Buildings.Controls.OBC.CDL.Logical.And and2
-    "Logical AND;true when dehumidification is on and supply fan is proven on."
-    annotation (Placement(transformation(extent = {{-20, -14}, {0, 8}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Add add2
-    "Convert dewpoint degC to K"
-    annotation (Placement(transformation(extent = {{-14, 26}, {6, 46}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant conKel(
-    final k = 273.15)
-    "Real constant 273.15"
-    annotation (Placement(transformation(extent = {{-44, 6}, {-24, 26}})));
-
-  Buildings.Controls.OBC.CDL.Continuous.PID conPID2
-    annotation (Placement(visible = true, transformation(origin = {-62, -42},
-      extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-
-  Buildings.Controls.OBC.CDL.Continuous.PID conPID
-    annotation (Placement(visible = true,
-      transformation(origin = {14, 80}, extent = {{-10, -10}, {10, 10}})));
-
-  Buildings.Controls.OBC.CDL.Psychrometrics.DewPoint_TDryBulPhi dewPoi
-    annotation (Placement(visible = true,
-      transformation(origin = {-66, 48},
-      extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yCC "Cooling coil control signal" annotation(
+    Placement(transformation(extent = {{102, 56}, {142, 96}}), iconTransformation(extent = {{102, -20}, {142, 20}})));
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant erwAdjDP(final k = erwDPadj) "ERW dewpoint set point adjustment" annotation(
+    Placement(transformation(extent = {{-76, 12}, {-56, 32}})));
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con0(final k = 0) "Real constant 0" annotation(
+    Placement(transformation(extent = {{-20, -62}, {0, -42}})));
+  Buildings.Controls.OBC.CDL.Continuous.Add sub(final k2 = -1) annotation(
+    Placement(transformation(extent = {{-44, 32}, {-24, 52}})));
+  Buildings.Controls.OBC.CDL.Logical.Switch swi "Logical switch outputs supply air PI value when fan is proven on." annotation(
+    Placement(transformation(extent = {{14, -54}, {34, -34}})));
+  Buildings.Controls.OBC.CDL.Logical.Switch swi1 "Logical switch passes different PI calculations to yCC 
+        based on dehumidification mode." annotation(
+    Placement(transformation(extent = {{58, 66}, {78, 86}})));
+  Buildings.Controls.OBC.CDL.Logical.And and2 "Logical AND; true when dehumidification is on and supply fan is proven on." annotation(
+    Placement(transformation(extent = {{-20, -14}, {0, 8}})));
+  Buildings.Controls.OBC.CDL.Continuous.Add add2 "Convert dewpoint degC to K" annotation(
+    Placement(transformation(extent = {{-14, 26}, {6, 46}})));
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant conKel(final k = 273.15) "Real constant 273.15" annotation(
+    Placement(transformation(extent = {{-44, 6}, {-24, 26}})));
+  Buildings.Controls.OBC.CDL.Continuous.PID conPID2(Ti = SAccPITi, k = SAccPIk)  annotation(
+    Placement(visible = true, transformation(origin = {-62, -42}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Buildings.Controls.OBC.CDL.Continuous.PID conPID(Ti = ccPITi, controllerType = Buildings.Controls.OBC.CDL.Types.SimpleController.PI, k = cctPIk)  annotation(
+    Placement(visible = true, transformation(origin = {14, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Buildings.Controls.OBC.CDL.Psychrometrics.DewPoint_TDryBulPhi dewPoi annotation(
+    Placement(visible = true, transformation(origin = {-66, 48}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   connect(con0.y, swi.u3) annotation (
     Line(points = {{2, -52}, {12, -52}}, color = {0, 0, 127}));

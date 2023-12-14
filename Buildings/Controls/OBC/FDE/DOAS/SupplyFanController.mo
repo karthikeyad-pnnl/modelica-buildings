@@ -8,6 +8,10 @@ block SupplyFanController "This block manages start, stop, status, and speed of 
   parameter Real cvDDSPset(min = 0, final unit = "Pa", final quantity = "PressureDifference") = 250 "Constant volume down duct static pressure set point";
   parameter Real damSet(min = 0, max = 1, final unit = "1") = 0.9 "DDSP terminal damper percent open set point";
   parameter Boolean vvUnit = true "Set true when unit serves variable volume system.";
+  parameter Real DampspPIk = 0.0000001 "Damper position setpoint PI gain value k.";
+  parameter Real DampspPITi = 0.000025 "Damper position setpoint PI time constant value Ti.";
+  parameter Real FSspPIk = 0.0000001 "Fan speed set point SAT PI gain value k.";
+  parameter Real FSspPITi = 0.000025 "Fan speed set point SAT PI time constant value Ti.";
   // ---inputs---
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput occ "True when occupied mode is active" annotation(
     Placement(transformation(extent = {{-142, 60}, {-102, 100}}), iconTransformation(extent = {{-140, 50}, {-100, 90}})));
@@ -34,9 +38,9 @@ block SupplyFanController "This block manages start, stop, status, and speed of 
     Placement(transformation(extent = {{14, -40}, {34, -20}})));
   CDL.Continuous.Sources.Constant con0(final k = 0) "Real constant 0" annotation(
     Placement(transformation(extent = {{-26, -64}, {-6, -44}})));
-  Buildings.Controls.OBC.CDL.Continuous.PID conPID1 annotation(
+  Buildings.Controls.OBC.CDL.Continuous.PID DamperSPPI(Ti = DampspPITi, k = DampspPik)  annotation(
     Placement(visible = true, transformation(origin = {-44, 12}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Continuous.PID conPID2 annotation(
+  Buildings.Controls.OBC.CDL.Continuous.PID FanSpeedSPPI(Ti = FSspPITi, k = FSspPIk)  annotation(
     Placement(visible = true, transformation(origin = {62, -30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   connect(supFanStart, occ) annotation(
@@ -49,17 +53,17 @@ equation
     Line(points = {{-122, 42}, {0, 42}, {0, -30}, {12, -30}}, color = {255, 0, 255}));
   connect(cvDDSPsetpt.y, swi.u1) annotation(
     Line(points = {{-50, -54}, {-34, -54}, {-34, -22}, {12, -22}}, color = {0, 0, 127}));
-  connect(dampSet.y, conPID1.u_s) annotation(
+  connect(dampSet.y, DamperSPPI.u_s) annotation(
     Line(points = {{-76, 14}, {-56, 14}, {-56, 12}}, color = {0, 0, 127}));
-  connect(mostOpenDam, conPID1.u_m) annotation(
+  connect(mostOpenDam, DamperSPPI.u_m) annotation(
     Line(points = {{-122, -4}, {-44, -4}, {-44, 0}}, color = {0, 0, 127}));
-  connect(conPID1.y, swi.u1) annotation(
+  connect(DamperSPPI.y, swi.u1) annotation(
     Line(points = {{-32, 12}, {-34, 12}, {-34, -22}, {12, -22}}, color = {0, 0, 127}));
-  connect(swi.y, conPID2.u_s) annotation(
+  connect(swi.y, FanSpeedSPPI.u_s) annotation(
     Line(points = {{36, -30}, {50, -30}}, color = {0, 0, 127}));
-  connect(DDSP, conPID2.u_m) annotation(
+  connect(DDSP, FanSpeedSPPI.u_m) annotation(
     Line(points = {{-122, -86}, {62, -86}, {62, -42}}, color = {0, 0, 127}));
-  connect(conPID2.y, supFanSpeed) annotation(
+  connect(FanSpeedSPPI.y, supFanSpeed) annotation(
     Line(points = {{74, -30}, {122, -30}}, color = {0, 0, 127}));
   annotation(
     defaultComponentName = "SFcon",
