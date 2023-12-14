@@ -41,9 +41,9 @@ block CoolingCoil "This block commands the cooling coil."
     Placement(transformation(extent = {{-14, 26}, {6, 46}})));
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant conKel(final k = 273.15) "Real constant 273.15" annotation(
     Placement(transformation(extent = {{-44, 6}, {-24, 26}})));
-  Buildings.Controls.OBC.CDL.Continuous.PID conPID2 annotation(
+  Buildings.Controls.OBC.CDL.Continuous.PID conPID2(Ti = SAccPITi, k = SAccPIk)  annotation(
     Placement(visible = true, transformation(origin = {-62, -42}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Continuous.PID conPID annotation(
+  Buildings.Controls.OBC.CDL.Continuous.PID conPID(Ti = ccPITi, controllerType = Buildings.Controls.OBC.CDL.Types.SimpleController.PI, k = cctPIk)  annotation(
     Placement(visible = true, transformation(origin = {14, 80}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Buildings.Controls.OBC.CDL.Psychrometrics.DewPoint_TDryBulPhi dewPoi annotation(
     Placement(visible = true, transformation(origin = {-66, 48}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));

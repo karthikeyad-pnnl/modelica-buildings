@@ -2,6 +2,8 @@ within Buildings.Controls.OBC.FDE.DOAS;
 
 block ExhaustFanController "This block manages start, stop, and speed of the exhaust fan."
   parameter Real bldgSPset(final unit = "Pa", final quantity = "PressureDifference") = 15 "Building static pressure set point";
+  parameter Real spPIk(final unit = "1") = 0.00001 "PID heating loop gain value.";
+  parameter Real spPITi(final unit = "s") = 0.00025 "PID loop time constant of integrator.";
   // ---inputs---
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput supFanProof "True when supply fan is proven on" annotation(
     Placement(transformation(extent = {{-142, 34}, {-102, 74}}), iconTransformation(extent = {{-140, 40}, {-100, 80}})));
@@ -20,7 +22,7 @@ block ExhaustFanController "This block manages start, stop, and speed of the exh
     Placement(transformation(extent = {{38, -6}, {58, 14}})));
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con0(final k = 0) "Real constant 0." annotation(
     Placement(transformation(extent = {{-4, -74}, {16, -54}})));
-  Buildings.Controls.OBC.CDL.Continuous.PID conPID1 annotation(
+  Buildings.Controls.OBC.CDL.Continuous.PID conPID1(Ti = spPITi, k = spPIk)  annotation(
     Placement(visible = true, transformation(origin = {-2, 4}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   connect(exhFanStart, supFanProof) annotation(

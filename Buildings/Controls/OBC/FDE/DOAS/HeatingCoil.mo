@@ -18,7 +18,7 @@ block HeatingCoil "This block commands the heating coil."
     Placement(transformation(extent = {{-20, -10}, {0, 10}})));
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con0(final k = 0) "Real constant 0" annotation(
     Placement(transformation(extent = {{-52, -28}, {-32, -8}})));
-  Buildings.Controls.OBC.CDL.Continuous.PID conPID1 annotation(
+  Buildings.Controls.OBC.CDL.Continuous.PID conPID1(Ti = SArhcPiTi, k = SArhcPIk)  annotation(
     Placement(visible = true, transformation(origin = {32, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   connect(swi.u2, supFanProof) annotation(

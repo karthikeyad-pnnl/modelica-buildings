@@ -3,8 +3,10 @@ within Buildings.Controls.OBC.FDE.DOAS;
 block EnergyWheel "This block commands the energy recovery wheel and associated bypass dampers."
   parameter Real recSet(final unit = "K", final displayUnit = "degC", final quantity = "ThermodynamicTemperature") = 7 "Energy recovery set point.";
   parameter Real recSetDelay(final unit = "s", final quantity = "Time") = 300 "Minimum delay after OAT/RAT delta falls below set point.";
-  parameter Real kGain(final unit = "1") = 0.00001 "PID loop gain value.";
-  parameter Real conTi(final unit = "s") = 0.00025 "PID time constant of integrator.";
+  parameter Real kGain_heat(final unit = "1") = 0.00001 "PID heating loop gain value.";
+  parameter Real conTi_heat(final unit = "s") = 0.00025 "PID  heating loop time constant of integrator.";
+  parameter Real kGain_cool(final unit = "1") = 0.00001 "PID cooling loop gain value.";
+  parameter Real conTi_cool(final unit = "s") = 0.00025 "PID cooling loop time constant of integrator.";
   // ---inputs---
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput supFanProof "True when the supply fan is proven on." annotation(
     Placement(transformation(extent = {{-142, 60}, {-102, 100}}), iconTransformation(extent = {{-142, 58}, {-102, 98}})));
@@ -58,10 +60,10 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
     Placement(transformation(extent = {{62, 56}, {82, 76}})));
   Buildings.Controls.OBC.CDL.Logical.Not not2 "Logical NOT; true when ERW start command is off." annotation(
     Placement(transformation(extent = {{34, 40}, {54, 60}})));
-  Buildings.Controls.OBC.CDL.Continuous.PID conPID2 annotation(
-    Placement(visible = true, transformation(origin = {-82, -58}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Continuous.PID pid annotation(
-    Placement(visible = true, transformation(origin = {-78, -84}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Buildings.Controls.OBC.CDL.Continuous.PID conPID_heat(Ti = conTi_heat, k = kGain_heat) "PID loop if heating"  annotation(
+    Placement(visible = true, transformation(origin = {-82, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Buildings.Controls.OBC.CDL.Continuous.PID conPID_cool(Ti = conTi_cool, k = kGain_cool) "PID loop if cooling"  annotation(
+    Placement(visible = true, transformation(origin = {-80, -82}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   connect(difference.y, abs.u) annotation(
     Line(points = {{-68, 0}, {-64, 0}}, color = {0, 0, 127}));
@@ -113,18 +115,18 @@ equation
     Line(points = {{84, 20}, {88, 20}, {88, 36}, {28, 36}, {28, 50}, {32, 50}}, color = {255, 0, 255}));
   connect(or2.y, bypDam) annotation(
     Line(points = {{84, 66}, {122, 66}}, color = {255, 0, 255}));
-  connect(supPrimSP, pid.u_s) annotation(
-    Line(points = {{-122, -86}, {-105, -86}, {-105, -84}, {-90, -84}}, color = {0, 0, 127}));
-  connect(supPrimSP, conPID2.u_s) annotation(
-    Line(points = {{-122, -86}, {-94, -86}, {-94, -58}}, color = {0, 0, 127}));
-  connect(erwT, conPID2.u_m) annotation(
-    Line(points = {{-122, -54}, {-100, -54}, {-100, -70}, {-82, -70}}, color = {0, 0, 127}));
-  connect(erwT, pid.u_m) annotation(
-    Line(points = {{-122, -54}, {-100, -54}, {-100, -96}, {-78, -96}}, color = {0, 0, 127}));
-  connect(conPID2.y, max.u1) annotation(
-    Line(points = {{-70, -58}, {-64, -58}, {-64, -62}}, color = {0, 0, 127}));
-  connect(pid.y, max.u2) annotation(
-    Line(points = {{-66, -84}, {-64, -84}, {-64, -74}}, color = {0, 0, 127}));
+  connect(supPrimSP, conPID_cool.u_s) annotation(
+    Line(points = {{-122, -86}, {-105, -86}, {-105, -82}, {-92, -82}}, color = {0, 0, 127}));
+  connect(supPrimSP, conPID_heat.u_s) annotation(
+    Line(points = {{-122, -86}, {-122, -84}, {-94, -84}, {-94, -50}}, color = {0, 0, 127}));
+  connect(erwT, conPID_heat.u_m) annotation(
+    Line(points = {{-122, -54}, {-102, -54}, {-102, -62}, {-82, -62}}, color = {0, 0, 127}));
+  connect(erwT, conPID_cool.u_m) annotation(
+    Line(points = {{-122, -54}, {-100, -54}, {-100, -94}, {-80, -94}}, color = {0, 0, 127}));
+  connect(conPID_heat.y, max.u1) annotation(
+    Line(points = {{-70, -50}, {-70, -58}, {-64, -58}, {-64, -62}}, color = {0, 0, 127}));
+  connect(conPID_cool.y, max.u2) annotation(
+    Line(points = {{-68, -82}, {-64, -82}, {-64, -74}}, color = {0, 0, 127}));
   annotation(
     defaultComponentName = "ERWcon",
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics = {Rectangle(fillColor = {255, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-100, 100}, {100, -100}}, radius = 10), Line(points = {{48, 0}, {-2, 0}}), Text(textColor = {28, 108, 200}, extent = {{-88, 180}, {92, 76}}, textString = "%name", textStyle = {TextStyle.Bold}), Text(textColor = {28, 108, 200}, extent = {{-98, 84}, {-54, 70}}, textString = "supFanProof"), Text(textColor = {28, 108, 200}, extent = {{-98, 54}, {-62, 44}}, textString = "ecoMode"), Text(textColor = {28, 108, 200}, extent = {{-108, 24}, {-72, 14}}, textString = "raT"), Text(textColor = {28, 108, 200}, extent = {{-108, -12}, {-72, -22}}, textString = "oaT"), Text(textColor = {28, 108, 200}, extent = {{-106, -42}, {-70, -52}}, textString = "erwT"), Text(textColor = {28, 108, 200}, extent = {{-96, -70}, {-56, -82}}, textString = "supPrimSP"), Text(textColor = {28, 108, 200}, extent = {{62, -54}, {98, -64}}, textString = "erwSpeed"), Text(textColor = {28, 108, 200}, extent = {{60, 4}, {96, -6}}, textString = "erwStart"), Text(textColor = {28, 108, 200}, extent = {{60, 66}, {96, 56}}, textString = "bypDam"), Ellipse(lineColor = {28, 108, 200}, fillColor = {170, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-14, 64}, {28, -68}}), Rectangle(lineColor = {170, 255, 255}, fillColor = {170, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-8, 64}, {8, -68}}), Ellipse(lineColor = {28, 108, 200}, fillColor = {170, 255, 255}, fillPattern = FillPattern.Solid, extent = {{-28, 64}, {14, -68}}), Rectangle(lineColor = {0, 140, 72}, fillColor = {0, 140, 72}, fillPattern = FillPattern.Solid, extent = {{32, -34}, {72, -36}}), Polygon(lineColor = {0, 140, 72}, fillColor = {0, 140, 72}, fillPattern = FillPattern.Solid, points = {{72, -34}, {58, -28}, {58, -34}, {72, -34}}), Rectangle(lineColor = {28, 108, 200}, fillColor = {28, 108, 200}, fillPattern = FillPattern.Solid, extent = {{-70, -34}, {-30, -36}}), Polygon(lineColor = {28, 108, 200}, fillColor = {28, 108, 200}, fillPattern = FillPattern.Solid, points = {{-30, -34}, {-44, -28}, {-44, -34}, {-30, -34}}), Line(points = {{-8, 0}, {-58, 0}}), Rectangle(lineColor = {0, 140, 72}, fillColor = {0, 140, 72}, fillPattern = FillPattern.Solid, extent = {{-70, 30}, {-30, 28}}), Polygon(lineColor = {0, 140, 72}, fillColor = {0, 140, 72}, fillPattern = FillPattern.Solid, points = {{-56, 30}, {-56, 36}, {-70, 30}, {-56, 30}}), Polygon(lineColor = {238, 46, 47}, fillColor = {238, 46, 47}, fillPattern = FillPattern.Solid, points = {{44, 30}, {44, 36}, {30, 30}, {44, 30}}), Rectangle(lineColor = {238, 46, 47}, fillColor = {238, 46, 47}, fillPattern = FillPattern.Solid, extent = {{30, 30}, {70, 28}})}),
