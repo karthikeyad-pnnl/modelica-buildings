@@ -1,0 +1,45 @@
+variable_name,value,unit,Description
+K,24,steps,total number of simulation steps
+a_0,0.9061171,N/A,coefficients for psi 1
+a_1,0.029227,N/A,coefficients for psi 1
+a_2,-0.00037,N/A,coefficients for psi 1
+a_3,-0.00097,N/A,coefficients for psi 1
+a_4,-0.0000907,N/A,coefficients for psi 1
+a_5,0.000254,N/A,coefficients for psi 1
+b_0,0.361778,N/A,coefficients for psi 2
+b_1,-0.023,N/A,coefficients for psi 2
+b_2,0.0009672,N/A,coefficients for psi 2
+b_3,0.01318,N/A,coefficients for psi 2
+b_4,0.0003761,N/A,coefficients for psi 2
+b_5,-0.00071,N/A,coefficients for psi 2
+c_0_N,0.222903,N/A,nonlinear model coefficients for psi 3
+c_1_N,0.313387,N/A,nonlinear model coefficients for psi 3
+c_2_N,0.46371,N/A,nonlinear model coefficients for psi 3
+c_0_L,0.001,N/A,linear model coefficients for psi 3
+c_1_L,0.967,N/A,linear model coefficients for psi 3
+p_0,0.7339,N/A,coefficients for psi epsilon_c
+p_1,0.1002,N/A,coefficients for psi epsilon_c
+p_2,-0.7529,N/A,coefficients for psi epsilon_c
+r_0,0.1208,N/A,coefficients for psi epsilon_d
+r_1,1.0335,N/A,coefficients for psi epsilon_d
+r_2,-0.458,N/A,coefficients for psi epsilon_d
+COP_ref,5.33,N/A,COP (3.5)
+Cap_c_base,2300,kW,base chiller capacity
+Cap_c_tess,300,kW,TESS chiller capacity
+m_ice,33.69,kg/s,"maximum mass-flow rate 26.468(california), 33.69(boston), 28.8(texas)"
+c_p,2.1,kJ/kgC,specific heat capacity
+T_fr,0,degree C,freezing temperature
+T_cw_ch,-2,degree C,TESS chiller water output temperature (-2C)
+T_cw_norm,6.7,degree C,TESS chiller water supply temperature (6.7C)
+T_cond_l,25,degree C,Leaving condenser temperature(34.44C)
+Q_tess,4400,kWh,TESS capacity
+L_0,0.1,N/A,initial TESS SOC
+L_tess_min,0.1,N/A,minimum TESS SOC
+L_tess_max,0.9,N/A,maximum TESS SOC
+eta_chg,0.93,N/A,BESS charging efficiency
+eta_dis,0.93,N/A,BESS discharging efficiency
+P_bess,500,kW,BESS rated power
+duration,1.2,hour,BESS duration
+E_0,0.1,N/A,initial BESS SOC
+E_soc_min,0.1,N/A,minimum BESS SOC
+E_soc_max,0.9,N/A,maximum BESS SOC

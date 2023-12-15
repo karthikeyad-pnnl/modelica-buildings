@@ -1,0 +1,5 @@
+{
+    "sizing_filename": "../Optimal dispatch/output/TESBES_sizing_boston_TOU.csv",
+    "WD_filename": "./weather_demand_input_boston.csv",
+    "fmu_name": "./ASHRAE901_OfficeLarge_STD2019_Boston.fmu"
+}
