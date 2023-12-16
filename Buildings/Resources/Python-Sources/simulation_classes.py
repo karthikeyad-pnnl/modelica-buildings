@@ -539,8 +539,8 @@ class Modelica_simulation():
         power_price = 0
         pass
 
-def test_Modelica_python(inputs, simulation):
-    current_time = inputs[0]
+def test_Modelica_python(input, simulation):
+    current_time = input
 
     if simulation == None:
         simulation = Modelica_simulation()
@@ -594,7 +594,7 @@ def test_Modelica_python(inputs, simulation):
     simulation.soc += new_tes_chg_rate*60/simulation.tess_capacity
     output = simulation.soc
     
-    return output
+    return output, simulation
     
 
 def test_Modelica_fmu_windows(fmu_path: os.PathLike = os.path.join(os.getcwd(), "ASHRAE901_SchoolSecondary_STD2019_Buffalo.fmu")):
@@ -673,7 +673,7 @@ def test_Modelica_fmu_windows(fmu_path: os.PathLike = os.path.join(os.getcwd(), 
     soc_df.to_excel(f"./TES_parameters_{os.path.basename(fmu_path).replace('.fmu', '')}.xlsx")
 
     
-if __name__=='__main__':
+# if __name__=='__main__':
     # try:
     #     argument = sys.argv[1]
     #     if sys.argv[1] == 'validation_1':
@@ -702,5 +702,5 @@ if __name__=='__main__':
     #         shutil.copy(f"./TES_parameters_{fmu.replace('.fmu', '')}.xlsx", target_folder_path)
 
     # test_setup(os.path.join(os.getcwd(), 'ASHRAE901_OfficeLarge_STD2019_Boston.fmu'))
-    test_Modelica_fmu_windows()
+    # test_Modelica_fmu_windows()
     

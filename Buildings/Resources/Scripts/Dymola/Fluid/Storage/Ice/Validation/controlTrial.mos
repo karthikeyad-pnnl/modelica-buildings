@@ -1,0 +1,9 @@
+openModel("/home/developer/models/Buildings/package.mo");
+
+experimentSetupOutput(events=false, equidistant=true);
+simulateModel("Buildings.Fluid.Storage.Ice.Validation.controlTrial", startTime=0, stopTime=86400, tolerance=1e-06, method="cvode", resultFile="controlTrial");
+getLastError();
+
+savelog("/home/developer/models/log_custom.txt");
+
+exit();
