@@ -5,8 +5,8 @@ model controlTrial
 
   Buildings.Utilities.IO.Python_3_8.Real_Real pyt(
     samplePeriod=60,
-    moduleName=simulation_classes,
-    functionName=test_Modelica_python,
+    moduleName="simulation_classes",
+    functionName="test_Modelica_python",
     nDblWri=1,
     nDblRea=1,
     passPythonObject=true)
