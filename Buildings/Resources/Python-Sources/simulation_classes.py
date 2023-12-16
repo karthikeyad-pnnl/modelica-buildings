@@ -514,7 +514,8 @@ class Modelica_simulation():
         self.next_hour = 0
         self.tes_chg_rate = 0
         self.bes_chg_rate = 0
-        self.url = "http://127.0.0.1:5000"
+        #self.url = "http://127.0.0.1:5000"
+        self.url = "host.docker.internal:5000"
 
         self.inputs = {}
         self.inputs['input_param_filename'] = input_param_filename
