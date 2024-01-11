@@ -8,7 +8,7 @@ block TrueDelay
     "Set to true to delay initial true input";
 
   Interfaces.BooleanInput u "Connector of Boolean input signal"
-    annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
+   annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
 
   Interfaces.BooleanOutput y "Connector of Boolean output signal"
     annotation (Placement(transformation(extent={{100,-20},{140,20}})));
