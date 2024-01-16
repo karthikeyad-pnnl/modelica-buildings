@@ -1,46 +1,104 @@
 within Buildings.Controls.OBC.FDE.DOAS;
 
 block CoolingCoil "This block commands the cooling coil."
-  parameter Real cctPIk = 0.0000001 "Cooling coil CCT PI gain value k.";
-  parameter Real cctPITi = 0.000025 "Cooling coil CCT PI time constant value Ti.";
-  parameter Real SAccPIk = 0.0000001 "Cooling coil SAT PI gain value k.";
-  parameter Real SAccPITi = 0.000025 "Cooling coil SAT PI time constant value Ti.";
-  parameter Real erwDPadj(final unit = "K", final displayUnit = "degC", final quantity = "ThermodynamicTemperature") = 5 "Value subtracted from ERW supply air dewpoint.";
+
+  parameter Real cctPIk = 0.0000001 
+  "Cooling coil CCT PI gain value k.";
+  
+  parameter Real cctPITi = 0.000025 
+  "Cooling coil CCT PI time constant value Ti.";
+  
+  parameter Real SAccPIk = 0.0000001 
+  "Cooling coil SAT PI gain value k.";
+  
+  parameter Real SAccPITi = 0.000025 
+  "Cooling coil SAT PI time constant value Ti.";
+  
+  parameter Real erwDPadj(
+  final unit = "K", 
+  final displayUnit = "degC", 
+  final quantity = "ThermodynamicTemperature") = 5 
+  "Value subtracted from ERW supply air dewpoint.";
+  
   // ---inputs---
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput saT(final unit = "K", final displayUnit = "degC", final quantity = "ThermodynamicTemperature") "Supply air temperature sensor." annotation(
-    Placement(transformation(extent = {{-142, -56}, {-102, -16}}), iconTransformation(extent = {{-142, 36}, {-102, 76}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput supCooSP(final unit = "K", final displayUnit = "degC", final quantity = "ThermodynamicTemperature") "Supply air temperature cooling set point." annotation(
-    Placement(transformation(extent = {{-142, -86}, {-102, -46}}), iconTransformation(extent = {{-142, 8}, {-102, 48}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput supFanProof "True when supply fan is proven on." annotation(
-    Placement(transformation(extent = {{-142, -116}, {-102, -76}}), iconTransformation(extent = {{-142, 64}, {-102, 104}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput erwHum(final min = 0, final max = 1, unit = "1") "ERW relative humidity sensor" annotation(
-    Placement(transformation(extent = {{-142, 34}, {-102, 74}}), iconTransformation(extent = {{-142, -78}, {-102, -38}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput erwT(final unit = "K", final displayUnit = "degC", final quantity = "ThermodynamicTemperature") "ERW dry bulb temperature sensor." annotation(
-    Placement(transformation(extent = {{-142, 4}, {-102, 44}}), iconTransformation(extent = {{-142, -104}, {-102, -64}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput ccT(final unit = "K", final displayUnit = "degC", final quantity = "ThermodynamicTemperature") "Cooling coil discharge air temperature sensor." annotation(
-    Placement(transformation(extent = {{-142, 64}, {-102, 104}}), iconTransformation(extent = {{-142, -52}, {-102, -12}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput dehumMode "True when dehumidification mode is on." annotation(
-    Placement(transformation(extent = {{-142, -24}, {-102, 16}}), iconTransformation(extent = {{-142, -26}, {-102, 14}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput saT(
+  final unit = "K", 
+  final displayUnit = "degC",
+   final quantity = "ThermodynamicTemperature") 
+   "Supply air temperature sensor." 
+   annotation(Placement(transformation(extent = {{-142, -56}, {-102, -16}}), iconTransformation(extent = {{-142, 36}, {-102, 76}})));
+   
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput supCooSP(
+  final unit = "K", 
+  final displayUnit = "degC", 
+  final quantity = "ThermodynamicTemperature") 
+  "Supply air temperature cooling set point." 
+  annotation(Placement(transformation(extent = {{-142, -86}, {-102, -46}}), iconTransformation(extent = {{-142, 8}, {-102, 48}})));
+  
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput supFanProof
+   "True when supply fan is proven on." 
+   annotation(Placement(transformation(extent = {{-142, -116}, {-102, -76}}), iconTransformation(extent = {{-142, 64}, {-102, 104}})));
+   
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput erwHum(
+  final min = 0,
+   final max = 1, 
+   unit = "1") 
+   "ERW relative humidity sensor" 
+   annotation(Placement(transformation(extent = {{-142, 34}, {-102, 74}}), iconTransformation(extent = {{-142, -78}, {-102, -38}})));
+   
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput erwT(
+  final unit = "K",
+  final displayUnit = "degC",
+  final quantity = "ThermodynamicTemperature")
+  "ERW dry bulb temperature sensor." 
+  annotation(Placement(transformation(extent = {{-142, 4}, {-102, 44}}), iconTransformation(extent = {{-142, -104}, {-102, -64}})));
+  
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput ccT(
+  final unit = "K",
+  final displayUnit = "degC",
+  final quantity = "ThermodynamicTemperature")
+  "Cooling coil discharge air temperature sensor." 
+  annotation(Placement(transformation(extent = {{-142, 64}, {-102, 104}}), iconTransformation(extent = {{-142, -52}, {-102, -12}})));
+  
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput dehumMode
+  "True when dehumidification mode is on."
+   annotation(Placement(transformation(extent = {{-142, -24}, {-102, 16}}), iconTransformation(extent = {{-142, -26}, {-102, 14}})));
+   
   // ---outputs---
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yCC "Cooling coil control signal" annotation(
-    Placement(transformation(extent = {{102, 56}, {142, 96}}), iconTransformation(extent = {{102, -20}, {142, 20}})));
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con0(final k = 0) "Real constant 0" annotation(
-    Placement(transformation(extent = {{-20, -62}, {0, -42}})));
-  Buildings.Controls.OBC.CDL.Logical.Switch swi "Logical switch outputs supply air PI value when fan is proven on." annotation(
-    Placement(transformation(extent = {{14, -54}, {34, -34}})));
-  Buildings.Controls.OBC.CDL.Logical.Switch swi1 "Logical switch passes different PI calculations to yCC based on dehumidification 
-      mode." annotation(
-    Placement(transformation(extent = {{58, 66}, {78, 86}})));
-  Buildings.Controls.OBC.CDL.Logical.And and2 "Logical AND;true when dehumidification is on and supply fan is proven on." annotation(
-    Placement(transformation(extent = {{-20, -14}, {0, 8}})));
-  Buildings.Controls.OBC.CDL.Continuous.PID conPID2 annotation(
-    Placement(visible = true, transformation(origin = {-62, -42}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Continuous.PID conPID annotation(
-    Placement(visible = true, transformation(origin = {16, 78}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Psychrometrics.DewPoint_TDryBulPhi dewPoi annotation(
-    Placement(visible = true, transformation(origin = {-66, 48}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(k = 1, p = -erwDPadj) annotation(
-    Placement(visible = true, transformation(origin = {-36, 36}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yCC
+   "Cooling coil control signal" 
+   annotation(Placement(transformation(extent = {{102, 56}, {142, 96}}), iconTransformation(extent = {{102, -20}, {142, 20}})));
+   
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con0(
+  final k = 0) 
+  "Real constant 0" 
+  annotation(Placement(transformation(extent = {{-20, -62}, {0, -42}})));
+  
+  Buildings.Controls.OBC.CDL.Logical.Switch swi 
+  "Logical switch outputs supply air PI value when fan is   proven on." 
+  annotation(Placement(transformation(extent = {{14, -54}, {34, -34}})));
+  
+  Buildings.Controls.OBC.CDL.Logical.Switch swi1 
+  "Logical switch passes different PI calculations to yCC based on dehumidification mode." 
+  annotation(Placement(transformation(extent = {{58, 66}, {78, 86}})));
+       
+  Buildings.Controls.OBC.CDL.Logical.And and2 
+  "Logical AND;true when dehumidification is on and supply fan is proven on." 
+  annotation(Placement(transformation(extent = {{-20, -14}, {0, 8}})));
+  
+  Buildings.Controls.OBC.CDL.Continuous.PID conPID2 annotation(Placement(visible = true, transformation(origin = {-62, -42}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  
+  Buildings.Controls.OBC.CDL.Continuous.PID conPID 
+  annotation(Placement(visible = true, transformation(origin = {16, 78}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  
+  Buildings.Controls.OBC.CDL.Psychrometrics.DewPoint_TDryBulPhi dewPoi 
+  annotation(Placement(visible = true, transformation(origin = {-66, 48}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  
+  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
+  k = 1, 
+  p = -erwDPadj) 
+  annotation(Placement(visible = true, transformation(origin = {-36, 36}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  
 equation
   connect(con0.y, swi.u3) annotation(
     Line(points = {{2, -52}, {12, -52}}, color = {0, 0, 127}));

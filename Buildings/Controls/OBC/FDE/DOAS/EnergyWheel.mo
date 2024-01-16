@@ -139,61 +139,87 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
   k = kGain_cool)
    "PID loop if cooling" 
    annotation(Placement(visible = true, transformation(origin = {-80, -82}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+   
   Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(uHigh = recSet, uLow = recSet - Thys)  annotation(
     Placement(visible = true, transformation(origin = {-24, -2}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   connect(not1.u, ecoMode) annotation(
     Line(points = {{-28, 50}, {-122, 50}}, color = {255, 0, 255}));
+    
   connect(not1.y, and3.u2) annotation(
     Line(points = {{-4, 50}, {0, 50}, {0, 20}, {60, 20}}, color = {255, 0, 255}));
+    
   connect(supFanProof, and3.u1) annotation(
     Line(points = {{-122, 80}, {8, 80}, {8, 28}, {60, 28}}, color = {255, 0, 255}));
+    
   connect(and3.y, erwStart) annotation(
     Line(points = {{84, 20}, {122, 20}}, color = {255, 0, 255}));
+    
   connect(max.y, swi.u1) annotation(
     Line(points = {{-40, -68}, {64, -68}}, color = {0, 0, 127}));
+    
   connect(and3.y, swi.u2) annotation(
     Line(points = {{84, 20}, {88, 20}, {88, -58}, {56, -58}, {56, -76}, {64, -76}}, color = {255, 0, 255}));
+    
   connect(con0.y, swi.u3) annotation(
     Line(points = {{52, -84}, {64, -84}}, color = {0, 0, 127}));
+    
   connect(swi.y, erwSpeed) annotation(
     Line(points = {{88, -76}, {122, -76}}, color = {0, 0, 127}));
   connect(ecoMode, and1.u2) annotation(
     Line(points = {{-122, 50}, {-94, 50}, {-94, 58}, {-66, 58}}, color = {255, 0, 255}));
+    
   connect(supFanProof, and1.u1) annotation(
     Line(points = {{-122, 80}, {-94, 80}, {-94, 66}, {-66, 66}}, color = {255, 0, 255}));
+    
   connect(and1.y, or2.u1) annotation(
     Line(points = {{-42, 66}, {60, 66}}, color = {255, 0, 255}));
+    
   connect(not2.y, or2.u2) annotation(
     Line(points = {{56, 50}, {58, 50}, {58, 58}, {60, 58}}, color = {255, 0, 255}));
+    
   connect(and3.y, not2.u) annotation(
     Line(points = {{84, 20}, {88, 20}, {88, 36}, {28, 36}, {28, 50}, {32, 50}}, color = {255, 0, 255}));
+    
   connect(or2.y, bypDam) annotation(
     Line(points = {{84, 66}, {122, 66}}, color = {255, 0, 255}));
+    
   connect(supPrimSP, conPID_cool.u_s) annotation(
     Line(points = {{-122, -86}, {-105, -86}, {-105, -82}, {-92, -82}}, color = {0, 0, 127}));
+    
   connect(supPrimSP, conPID_heat.u_s) annotation(
     Line(points = {{-122, -86}, {-122, -84}, {-94, -84}, {-94, -50}}, color = {0, 0, 127}));
+    
   connect(erwT, conPID_heat.u_m) annotation(
     Line(points = {{-122, -54}, {-102, -54}, {-102, -62}, {-82, -62}}, color = {0, 0, 127}));
+    
   connect(erwT, conPID_cool.u_m) annotation(
     Line(points = {{-122, -54}, {-100, -54}, {-100, -94}, {-80, -94}}, color = {0, 0, 127}));
+    
   connect(conPID_heat.y, max.u1) annotation(
     Line(points = {{-70, -50}, {-70, -58}, {-64, -58}, {-64, -62}}, color = {0, 0, 127}));
+    
   connect(conPID_cool.y, max.u2) annotation(
     Line(points = {{-68, -82}, {-64, -82}, {-64, -74}}, color = {0, 0, 127}));
+    
   connect(raT, difference.u1) annotation(
     Line(points = {{-122, 20}, {-98, 20}, {-98, 12}}, color = {0, 0, 127}));
+    
   connect(oaT, difference.u2) annotation(
     Line(points = {{-122, -18}, {-98, -18}, {-98, 0}}, color = {0, 0, 127}));
+    
   connect(difference.y, abs.u) annotation(
     Line(points = {{-74, 6}, {-71, 6}, {-71, 4}, {-68, 4}}, color = {0, 0, 127}));
+    
   connect(abs.absdiff, hys.u) annotation(
     Line(points = {{-44, 4}, {-36, 4}, {-36, -2}}, color = {0, 0, 127}));
+    
   connect(hys.y, truDel.u) annotation(
     Line(points = {{-12, -2}, {-4, -2}}, color = {255, 0, 255}));
+    
   connect(truDel.y, and3.u3) annotation(
     Line(points = {{20, -2}, {50, -2}, {50, 12}, {60, 12}}, color = {255, 0, 255}));
+    
   annotation(
     defaultComponentName = "ERWcon",
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics = {Rectangle(fillColor = {255, 255, 255},       
