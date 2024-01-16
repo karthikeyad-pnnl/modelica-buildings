@@ -117,8 +117,10 @@ equation
    
   connect(init_delay.y, lat.u) annotation (
    Line(points={{8,0},{20,0}}, color={255,0,255}));
+   
   connect(supFanProof, minimumRun.u) annotation(
     Line(points = {{-122, 38}, {-46, 38}}, color = {255, 0, 255}));
+    
   annotation (defaultComponentName="DehumMod",
   Icon(coordinateSystem(preserveAspectRatio=false), graphics={Text(extent={{-90,180},{90,76}}, lineColor={28,108,200}, textStyle={TextStyle.Bold}, textString="%name"),Rectangle(extent={{-100,100},{100,-100}}, lineColor={179,151,128}, radius=10, fillColor={255,255,255},     
             fillPattern = 
