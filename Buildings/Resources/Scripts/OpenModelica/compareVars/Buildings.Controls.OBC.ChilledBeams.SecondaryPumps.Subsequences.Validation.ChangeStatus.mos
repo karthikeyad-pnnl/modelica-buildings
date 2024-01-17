@@ -1,0 +1,10 @@
+compareVars :=
+  {
+    "chaPumSta.uNexLagPum",
+    "chaPumSta.uLasLagPum",
+    "chaPumSta.uNexLagPumSta",
+    "chaPumSta.uLasLagPumSta",
+    "chaPumSta.yChiWatPum[1]",
+    "chaPumSta.yChiWatPum[2]",
+    "chaPumSta.yChiWatPum[3]"
+  };

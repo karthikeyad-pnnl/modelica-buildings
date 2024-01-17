@@ -4,7 +4,7 @@ model CollectorDistributor
   extends Modelica.Icons.Example;
   package Medium=Buildings.Media.Water
     "Source side medium";
-  parameter Modelica.SIunits.MassFlowRate m_flow_nominal=1
+  parameter Modelica.Units.SI.MassFlowRate m_flow_nominal=1
     "Nominal mass flow rate";
   Fluid.Movers.FlowControlled_m_flow sou1(
     redeclare package Medium=Medium,
@@ -181,7 +181,7 @@ model CollectorDistributor
     m_flow_nominal=m_flow_nominal,
     addPowerToMedium=false,
     nominalValuesDefineDefaultPressureCurve=true,
-    dp_nominal=10000)
+    dp_nominal=50E3)
     "Primary supply"
     annotation (Placement(transformation(extent={{-170,50},{-150,70}})));
   Fluid.Sources.Boundary_pT bou2(
@@ -701,6 +701,10 @@ end of the distribution line.
 </html>",
       revisions="<html>
 <ul>
+<li>
+November 15, 2022, by Michael Wetter:<br/>
+Set pump head.
+</li>
 <li>
 July 31, 2020, by Antoine Gautier:<br/>
 First implementation.

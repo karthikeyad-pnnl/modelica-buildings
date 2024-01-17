@@ -5,18 +5,17 @@ model Carnot_TEva_reverseFlow
  package Medium1 = Buildings.Media.Water "Medium model";
  package Medium2 = Buildings.Media.Water "Medium model";
 
-  parameter Modelica.SIunits.TemperatureDifference dTEva_nominal=-10
+  parameter Modelica.Units.SI.TemperatureDifference dTEva_nominal=-10
     "Temperature difference evaporator inlet-outlet";
-  parameter Modelica.SIunits.TemperatureDifference dTCon_nominal=10
+  parameter Modelica.Units.SI.TemperatureDifference dTCon_nominal=10
     "Temperature difference condenser outlet-inlet";
   parameter Real COPc_nominal = 3 "Chiller COP";
-  parameter Modelica.SIunits.HeatFlowRate QEva_flow_nominal = -100E3
+  parameter Modelica.Units.SI.HeatFlowRate QEva_flow_nominal=-100E3
     "Evaporator heat flow rate";
-  parameter Modelica.SIunits.MassFlowRate m2_flow_nominal=
-    QEva_flow_nominal/dTEva_nominal/4200
-    "Nominal mass flow rate at chilled water side";
-  parameter Modelica.SIunits.MassFlowRate m1_flow_nominal=
-    m2_flow_nominal*(COPc_nominal+1)/COPc_nominal
+  parameter Modelica.Units.SI.MassFlowRate m2_flow_nominal=QEva_flow_nominal/
+      dTEva_nominal/4200 "Nominal mass flow rate at chilled water side";
+  parameter Modelica.Units.SI.MassFlowRate m1_flow_nominal=m2_flow_nominal*(
+      COPc_nominal + 1)/COPc_nominal
     "Nominal mass flow rate at condenser water wide";
 
   Buildings.Fluid.Chillers.Carnot_TEva chi(
@@ -25,7 +24,6 @@ model Carnot_TEva_reverseFlow
     dTEva_nominal=dTEva_nominal,
     dTCon_nominal=dTCon_nominal,
     use_eta_Carnot_nominal=true,
-    etaCarnot_nominal=0.3,
     m1_flow_nominal=m1_flow_nominal,
     m2_flow_nominal=m2_flow_nominal,
     show_T=true,
@@ -71,8 +69,8 @@ model Carnot_TEva_reverseFlow
   Modelica.Blocks.Math.Add QCon_flow(k2=-1) "Condenser heat flow rate"
     annotation (Placement(transformation(extent={{40,-50},{60,-30}})));
 
-  final parameter Modelica.SIunits.SpecificHeatCapacity cp1_default=
-    Medium1.specificHeatCapacityCp(Medium1.setState_pTX(
+  final parameter Modelica.Units.SI.SpecificHeatCapacity cp1_default=
+      Medium1.specificHeatCapacityCp(Medium1.setState_pTX(
       Medium1.p_default,
       Medium1.T_default,
       Medium1.X_default))
@@ -81,7 +79,7 @@ model Carnot_TEva_reverseFlow
     duration=60,
     startTime=1800,
     height=-2*m2_flow_nominal,
-    offset=m2_flow_nominal) "Mass flow rate for evaporater"
+    offset=m2_flow_nominal) "Mass flow rate for evaporator"
     annotation (Placement(transformation(extent={{92,-8},{72,12}})));
 equation
   connect(sou1.ports[1], chi.port_a1)    annotation (Line(
@@ -132,8 +130,14 @@ This example checks the correct behavior if a mass flow rate attains zero.
 revisions="<html>
 <ul>
 <li>
+February 10, 2023, by Michael Wetter:<br/>
+Removed binding of parameter with same value as the default.<br/>
+This is for
+<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1692\">#1692</a>.
+</li>
+<li>
 May 15, 2019, by Jianjun Hu:<br/>
-Replaced fluid source. This is for 
+Replaced fluid source. This is for
 <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1072\"> #1072</a>.
 </li>
 <li>

@@ -7,7 +7,7 @@ block Atan2
   Interfaces.RealInput u2
     "Connector of Real input signal 2"
     annotation (Placement(transformation(extent={{-140,-80},{-100,-40}})));
-  Interfaces.RealOutput y
+  Interfaces.RealOutput y(unit="rad")
     "Connector of Real output signal"
     annotation (Placement(transformation(extent={{100,-20},{140,20}})));
 
@@ -43,6 +43,12 @@ gives a solution in the range
       revisions="<html>
 <ul>
 <li>
+March 7, 2023, by Jianjun Hu:<br/>
+Added unit <code>rad</code> to the output.<br/>
+This is for
+<a href=\"https://github.com/lbl-srg/modelica-buildings/issues/3277\">issue 3277</a>.
+</li>
+<li>
 March 2, 2020, by Michael Wetter:<br/>
 Changed icon to display dynamically the output value.
 </li>
@@ -63,7 +69,7 @@ Modelica Standard Library.
         Text(
           extent={{-150,150},{150,110}},
           textString="%name",
-          lineColor={0,0,255}),
+          textColor={0,0,255}),
         Line(
           points={{0,-80},{0,68}},
           color={192,192,192}),
@@ -86,12 +92,12 @@ Modelica Standard Library.
           smooth=Smooth.Bezier),
         Text(
           extent={{-90,-46},{-18,-94}},
-          lineColor={192,192,192},
+          textColor={192,192,192},
           textString="atan2"),
         Text(
           extent={{-150,150},{150,110}},
           textString="%name",
-          lineColor={0,0,255}),
+          textColor={0,0,255}),
         Polygon(
           points={{0,90},{-8,68},{8,68},{0,90}},
           lineColor={192,192,192},
@@ -99,8 +105,8 @@ Modelica Standard Library.
           fillPattern=FillPattern.Solid),
         Text(
           extent={{226,60},{106,10}},
-          lineColor={0,0,0},
+          textColor={0,0,0},
           textString=DynamicSelect("",String(y,
-            leftjustified=false,
+            leftJustified=false,
             significantDigits=3)))}));
 end Atan2;

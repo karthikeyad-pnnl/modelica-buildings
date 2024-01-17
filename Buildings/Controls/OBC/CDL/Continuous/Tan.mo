@@ -1,7 +1,7 @@
 within Buildings.Controls.OBC.CDL.Continuous;
 block Tan
   "Output the tangent of the input"
-  Interfaces.RealInput u
+  Interfaces.RealInput u(unit="rad")
     "Connector of Real input signal"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
   Interfaces.RealOutput y
@@ -23,12 +23,12 @@ equation
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid),
         Text(
-          lineColor={0,0,255},
+          textColor={0,0,255},
           extent={{-150,110},{150,150}},
           textString="%name"),
         Text(
           extent={{-90,72},{-18,24}},
-          lineColor={192,192,192},
+          textColor={192,192,192},
           textString="tan"),
         Line(
           points={{0,-80},{0,68}},
@@ -51,9 +51,9 @@ equation
           smooth=Smooth.Bezier),
         Text(
           extent={{226,60},{106,10}},
-          lineColor={0,0,0},
+          textColor={0,0,0},
           textString=DynamicSelect("",String(y,
-            leftjustified=false,
+            leftJustified=false,
             significantDigits=3)))}),
     Documentation(
       info="<html>
@@ -71,6 +71,12 @@ where
 </html>",
       revisions="<html>
 <ul>
+<li>
+March 7, 2023, by Jianjun Hu:<br/>
+Added unit <code>rad</code> to the input.<br/>
+This is for
+<a href=\"https://github.com/lbl-srg/modelica-buildings/issues/3277\">issue 3277</a>.
+</li>
 <li>
 March 2, 2020, by Michael Wetter:<br/>
 Changed icon to display dynamically the output value.

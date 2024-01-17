@@ -3,38 +3,34 @@ model Greater
   "Validation model for the Greater block"
   Buildings.Controls.OBC.CDL.Continuous.Greater gre
     "Greater block, without hysteresis"
-    annotation (Placement(transformation(extent={{-10,20},{10,40}})));
-  Buildings.Controls.OBC.CDL.Continuous.Greater greHys(
-    h=0.2)
+    annotation (Placement(transformation(extent={{40,20},{60,40}})));
+  Buildings.Controls.OBC.CDL.Continuous.Greater greHys(h=1)
     "Greater block, with hysteresis"
-    annotation (Placement(transformation(extent={{-10,-30},{10,-10}})));
-  Sources.TimeTable ram(
-    table=[
-      0,0;
-      1,0;
-      2,1;
-      3,1;
-      4,0;
-      5,0])
-    "Ramp signal"
-    annotation (Placement(transformation(extent={{-60,20},{-40,40}})));
-  Sources.Constant con(
-    k=0.5)
-    "Constant signal"
-    annotation (Placement(transformation(extent={{-60,-20},{-40,0}})));
-
+    annotation (Placement(transformation(extent={{40,-40},{60,-20}})));
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Ramp ram1(
+    height=5,
+    duration=10,
+    offset=-1.5) "Ramp source"
+    annotation (Placement(transformation(extent={{-40,-40},{-20,-20}})));
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin sin(
+    amplitude=3,
+    freqHz=1/10,
+    offset=-2,
+    startTime=1)
+    "Sine source"
+    annotation (Placement(transformation(extent={{-40,20},{-20,40}})));
 equation
-  connect(con.y,greHys.u2)
-    annotation (Line(points={{-38,-10},{-26,-10},{-26,-28},{-12,-28}},color={0,0,127}));
-  connect(con.y,gre.u2)
-    annotation (Line(points={{-38,-10},{-26,-10},{-26,22},{-12,22}},color={0,0,127}));
-  connect(ram.y[1],gre.u1)
-    annotation (Line(points={{-38,30},{-12,30}},color={0,0,127}));
-  connect(ram.y[1],greHys.u1)
-    annotation (Line(points={{-38,30},{-20,30},{-20,-20},{-12,-20}},color={0,0,127}));
+  connect(ram1.y, gre.u2) annotation (Line(points={{-18,-30},{20,-30},{20,22},{38,
+          22}}, color={0,0,127}));
+  connect(ram1.y, greHys.u2) annotation (Line(points={{-18,-30},{20,-30},{20,-38},
+          {38,-38}}, color={0,0,127}));
+  connect(sin.y, gre.u1)
+    annotation (Line(points={{-18,30},{38,30}}, color={0,0,127}));
+  connect(sin.y, greHys.u1) annotation (Line(points={{-18,30},{30,30},{30,-30},{
+          38,-30}}, color={0,0,127}));
   annotation (
     experiment(
-      StopTime=5.0,
+      StopTime=10.0,
       Tolerance=1e-06),
     __Dymola_Commands(
       file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/CDL/Continuous/Validation/Greater.mos" "Simulate and plot"),
@@ -48,8 +44,15 @@ The instance <code>gre</code> has no hysteresis, and the
 instance <code>greHys</code> has a hysteresis.
 </p>
 </html>",
-      revisions="<html>
+revisions="<html>
 <ul>
+<li>
+March 14, 2023, by Jianjun Hu:<br/>
+Changed the greater block input to avoid near zero crossing.<br/>
+This is for
+<a href=\"https://github.com/lbl-srg/modelica-buildings/issues/3294\">
+issue 3294</a>.
+</li>
 <li>
 August 5, 2020, by Michael Wetter:<br/>
 Updated model to add a test case with hysteresis.
