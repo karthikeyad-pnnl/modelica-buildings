@@ -1,7 +1,4 @@
 compareVars :=
   {
-    "booPul.y",
-    "booPul1.y",
-    "booPul2.y",
-    "booPul3.y"
+    "booPul.y"
   };

@@ -79,8 +79,7 @@ model VAVBranch "Supply branch of a VAV system"
     nPorts=1) "Sink for terminal box "
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},rotation=180,
       origin={132,24})));
-  Buildings.Examples.VAVReheat.Controls.RoomVAV con
-    "Room temperature controller"
+  Buildings.Examples.VAVReheat.Controls.RoomVAV con "Room temperature controller"
     annotation (Placement(transformation(extent={{0,-10},{20,10}})));
   Buildings.Fluid.Sensors.MassFlowRate senMasFlo(
     redeclare package Medium =  MediumA) "Sensor for mass flow rate"
@@ -117,6 +116,9 @@ equation
    connect(fraMasFlo.u, senMasFlo.m_flow)
       annotation (Line(points={{100,144},{80,144},{80,134},{61,134}},
         color={0,0,127}, smooth=Smooth.None, pattern=LinePattern.Dash));
+   connect(TSup.T,con.TDis)
+      annotation (Line(points={{39,74},{-20,74},{-20,-8},{-2,-8}},
+        color={0,0,127}));
    connect(con.yDam, vav.y)
       annotation (Line(points={{21,4.8},{32,4.8},{32,104},{38,104}},
         color={0,0,127}, smooth=Smooth.None,  pattern=LinePattern.Dash));
@@ -151,13 +153,13 @@ equation
       annotation (Line(points={{50,144},{50,200}},
         color={0,127,255}, smooth=Smooth.None, thickness=0.5));
    connect(con.TRoo, TRoo)
-      annotation (Line(points={{-1,-7},{-60,-7},{-60,-40},{-120,-40}},
+      annotation (Line(points={{-2,-4},{-60,-4},{-60,-40},{-120,-40}},
         color={0,0,127}));
 
-  connect(con.TRooHeaSet, TRooHeaSet) annotation (Line(points={{-2,7},{-40,7},{-40,
-          80},{-120,80}},     color={0,0,127}));
-  connect(TRooCooSet, con.TRooCooSet) annotation (Line(points={{-120,40},{-44,40},
-          {-44,0},{-2,0}},     color={0,0,127}));
+  connect(con.TRooHeaSet, TRooHeaSet) annotation (Line(points={{-2,8},{-40,8},{
+          -40,80},{-120,80}}, color={0,0,127}));
+  connect(TRooCooSet, con.TRooCooSet) annotation (Line(points={{-120,40},{-44,
+          40},{-44,4},{-2,4}}, color={0,0,127}));
   connect(vav.y_actual, yDam) annotation (Line(
       points={{43,109},{43,120},{180,120},{180,0},{210,0}},
       color={0,0,127},
@@ -255,11 +257,15 @@ annotation (Diagram(coordinateSystem(preserveAspectRatio=true, extent={{-100,
           textString="TRooAir")}),
      Documentation(info="<html>
 <p>
-Model for a VAV supply branch. 
-The terminal VAV box has a pressure independent damper and a water reheat coil. 
-The pressure independent damper model includes an idealized flow rate controller 
-and requires a discharge air flow rate set-point (normalized to the nominal value) 
-as a control signal.
+Model for a VAV branch.
+</p>
+<p>
+The model has been developed based on
+<a href=\"modelica://Buildings.Examples.VAVReheat.ThermalZones.VAVBranch\">
+Buildings.Examples.VAVReheat.ThermalZones.VAVBranch</a>, but using different VAV
+box model
+<a href=\"modelica://Buildings.Fluid.Actuators.Dampers.PressureIndependent\">
+Buildings.Fluid.Actuators.Dampers.PressureIndependent</a>.
 </p>
 </html>", revisions="<html>
 <ul>
