@@ -8,11 +8,11 @@ block AddParameter "Output the sum of an input plus a parameter"
   Interfaces.RealInput u "Connector of Real input signal"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}})));
 
-  Interfaces.RealOutput y "Connector of Real output signal"
+  Interfaces.RealOutput lowsupCooSP "Connector of Real output signal"
     annotation (Placement(transformation(extent={{100,-20},{140,20}})));
 
 equation
-  y = k*u + p;
+  lowsupCooSP = k*u + p;
 
 annotation (
   defaultComponentName="addPar",
