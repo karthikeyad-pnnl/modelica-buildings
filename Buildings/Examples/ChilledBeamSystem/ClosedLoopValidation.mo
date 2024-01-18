@@ -1,5 +1,6 @@
 within Buildings.Examples.ChilledBeamSystem;
 block ClosedLoopValidation
+  extends Modelica.Icons.Example;
   parameter Real schTab[5,2]=[0,0; 8,1; 18,1; 21,0; 24,0]
     "Table defining schedule for enabling plant";
 
@@ -148,8 +149,8 @@ equation
   connect(loads.y, chiBeaTesBed.QFlo) annotation (Line(points={{-39,-50},{-30,
           -50},{-30,14},{-16,14},{-16,28},{46,28},{46,30},{86,30}}, color={0,0,
           127}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,-100},
-            {160,100}})),                                        Diagram(
+  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
+            {100,100}})),                                        Diagram(
         coordinateSystem(preserveAspectRatio=false, extent={{-160,-100},{160,100}})),
     experiment(
       StartTime=16848000,
