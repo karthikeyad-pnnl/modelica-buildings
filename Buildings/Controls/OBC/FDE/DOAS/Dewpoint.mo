@@ -40,7 +40,7 @@ block Dewpoint
     "Real constant 100"
     annotation (Placement(transformation(extent={{-92,46},{-72,66}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Product pro
+  Buildings.Controls.OBC.CDL.Continuous.Multiply pro
     "Calculate the product of dry bulb temperature (degC) and 17.27"
     annotation (Placement(transformation(extent={{-30,16},{-10,36}})));
     
@@ -70,7 +70,7 @@ block Dewpoint
     "Output first input divided by second input"
     annotation (Placement(transformation(extent={{62,10},{82,30}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Product pro1
+  Buildings.Controls.OBC.CDL.Continuous.Multiply pro1
     "Output product of two inputs"
     annotation (Placement(transformation(extent={{4,-46},{24,-26}})));
     

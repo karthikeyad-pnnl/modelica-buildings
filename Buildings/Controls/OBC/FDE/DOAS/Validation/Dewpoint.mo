@@ -4,14 +4,14 @@ model Dewpoint "This model simulates Dewpoint calculations."
   Buildings.Controls.OBC.FDE.DOAS.Dewpoint Dewpt
   annotation (Placement(transformation(extent={{-4,-10},{16,10}})));
   
-   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine                        ralHumGen(
+   Buildings.Controls.OBC.CDL.Continuous.Sources.Sin                        ralHumGen(
     amplitude=10,
     freqHz=1/3600,
     offset=60,
     startTime=0)
     annotation (Placement(transformation(extent={{-48,8},{-28,28}})));
     
-   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine raTGen(
+   Buildings.Controls.OBC.CDL.Continuous.Sources.Sin raTGen(
     amplitude=3,
     freqHz=1/4800,
     phase=0.78539816339745,

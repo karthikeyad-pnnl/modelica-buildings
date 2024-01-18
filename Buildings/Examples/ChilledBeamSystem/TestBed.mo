@@ -519,7 +519,7 @@ block TestBed
     "Convert pump enable signal to Real signal"
     annotation (Placement(transformation(extent={{-320,-120},{-300,-100}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Product pro
+  Buildings.Controls.OBC.CDL.Continuous.Multiply pro
     "Find pump flow signal by multiplying enable signal with speed signal"
     annotation (Placement(transformation(extent={{-280,-140},{-260,-120}})));
 
@@ -537,7 +537,7 @@ block TestBed
     "Convert fan enable signal to Real signal"
     annotation (Placement(transformation(extent={{-320,30},{-300,50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Product pro1
+  Buildings.Controls.OBC.CDL.Continuous.Multiply pro1
     "Find fan flow signal by multiplying enable signal with speed signal"
     annotation (Placement(transformation(extent={{-280,10},{-260,30}})));
 

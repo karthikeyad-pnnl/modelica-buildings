@@ -73,11 +73,11 @@ block CoolingCoil "This block commands the cooling coil."
   "Real constant 0"
   annotation(Placement(transformation(extent = {{-20, -62}, {0, -42}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch swi
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi
   "Logical switch outputs supply air PI value when fan is   proven on."
   annotation(Placement(transformation(extent = {{14, -54}, {34, -34}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch swi1
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi1
   "Logical switch passes different PI calculations to yCC based on dehumidification mode."
   annotation(Placement(transformation(extent = {{58, 66}, {78, 86}})));
 
@@ -94,7 +94,6 @@ block CoolingCoil "This block commands the cooling coil."
   annotation(Placement(visible = true, transformation(origin = {-66, 48}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
-  k = 1,
   p = -erwDPadj)
   annotation(Placement(visible = true, transformation(origin = {-36, 36}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 

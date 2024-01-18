@@ -75,7 +75,7 @@ block SupplyFanController "This block manages start, stop, status, and speed of 
   final k = cvDDSPset) if not vvUnit 
   "DDSP set point for constant volume systems." annotation(Placement(transformation(extent = {{-72, -64}, {-52, -44}})));
   
-  CDL.Logical.Switch swi 
+  CDL.Continuous.Switch swi 
   "Swtich passes fan speed set point when true; 0 when false." 
   annotation(Placement(transformation(extent = {{14, -40}, {34, -20}})));
   

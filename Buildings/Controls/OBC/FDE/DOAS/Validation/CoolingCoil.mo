@@ -17,7 +17,7 @@ model CoolingCoil "This model simulates CoolingCoil"
     startTime=300)
     annotation (Placement(transformation(extent={{-62,60},{-42,80}})));
     
-   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine saTGen(
+   Buildings.Controls.OBC.CDL.Continuous.Sources.Sin saTGen(
     amplitude=3,
     freqHz=1/4800,
     phase=0.87266462599716,
@@ -25,7 +25,7 @@ model CoolingCoil "This model simulates CoolingCoil"
     startTime=0)
     annotation (Placement(transformation(extent={{-26,40},{-6,60}})));
     
-   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine ccTGen(
+   Buildings.Controls.OBC.CDL.Continuous.Sources.Sin ccTGen(
     amplitude=3,
     freqHz=1/4800,
     phase=0,
@@ -39,14 +39,14 @@ model CoolingCoil "This model simulates CoolingCoil"
     startTime=1000)
     annotation (Placement(transformation(extent={{-26,-6},{-6,14}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine supCooGen(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin supCooGen(
     amplitude=2,
     freqHz=1/3100,
     offset=293,
     startTime=12)
     annotation (Placement(transformation(extent={{-62,16},{-42,36}})));
     
-   Buildings.Controls.OBC.CDL.Continuous.Sources.Sine erwTGen(
+   Buildings.Controls.OBC.CDL.Continuous.Sources.Sin erwTGen(
     amplitude=3,
     freqHz=1/4800,
     phase=0,
@@ -54,7 +54,7 @@ model CoolingCoil "This model simulates CoolingCoil"
     startTime=0)
     annotation (Placement(transformation(extent={{-60,-66},{-40,-46}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine erwHumGen(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin erwHumGen(
     amplitude=10,
     freqHz=1/3600,
     offset=60,

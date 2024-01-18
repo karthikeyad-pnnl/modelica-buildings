@@ -21,7 +21,7 @@ model ExhaustFanController
     period=5760)
       annotation (Placement(transformation(extent={{-34,8},{-14,28}})));
       
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine bldgSP(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin bldgSP(
     amplitude=3,
     freqHz=1/3280,
     offset=15)

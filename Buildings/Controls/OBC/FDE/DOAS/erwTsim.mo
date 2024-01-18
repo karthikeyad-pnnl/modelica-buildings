@@ -42,8 +42,7 @@ block erwTsim "ERW supply temperature simulator"
       then pass OAT as the erwT value."
       annotation (Placement(transformation(extent={{14,56},{34,76}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Add sub1(
-    final k2=-1)
+  CDL.Continuous.Subtract                   sub1
     "Subtract outside air temperature from return air temperature."
       annotation (Placement(transformation(extent={{-88,-42},{-68,-22}})));
 
@@ -51,7 +50,7 @@ block erwTsim "ERW supply temperature simulator"
     "Absolute value of RAT-OAT"
       annotation (Placement(transformation(extent={{-50,-42},{-30,-22}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Product pro
+  Buildings.Controls.OBC.CDL.Continuous.Multiply pro
     "RAT/OAT delta x erwEff"
       annotation (Placement(transformation(extent={{-18,-48},{2,-28}})));
 
@@ -76,18 +75,18 @@ block erwTsim "ERW supply temperature simulator"
       "True if RAT > OAT"
         annotation (Placement(transformation(extent={{-50,-14},{-30,6}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch swi
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi
     "Logical switch selects OAT or calculated ERW value."
       annotation (Placement(transformation(extent={{76,56},{96,76}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch swi1
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi1
     annotation (Placement(transformation(extent={{44,-86},{64,-66}})));
 
   Buildings.Controls.OBC.CDL.Continuous.Add add1
     "OAT+(|RAT-OAT|*erwEff)"
       annotation (Placement(transformation(extent={{10,-78},{30,-58}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Add sub2(k2=-1)
+  CDL.Continuous.Subtract                   sub2
     "OAT - (|RAT-OAT|*erwEff)"
       annotation (Placement(transformation(extent={{10,-104},{30,-84}})));
 

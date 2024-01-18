@@ -78,8 +78,7 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
   annotation(Placement(transformation(extent = {{102, 46}, {142, 86}}),
     iconTransformation(extent = {{102, 40}, {142, 80}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Add difference(
-  final k2 = -1)
+  CDL.Continuous.Subtract                   difference
   "Subtract outside air temperature from return air temperature."
   annotation(Placement(visible = true, transformation(origin = {-6, 6}, extent = {{-90, -10}, {-70, 10}}, rotation = 0)));
 
@@ -107,7 +106,7 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
   annotation (
     Placement(transformation(extent = {{-62, -78}, {-42, -58}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch swi
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi
   "Logical switch outputs ERW temperature PI maximum output 
    when erwStart command is true."
    annotation(Placement(transformation(extent = {{66, -86}, {86, -66}})));

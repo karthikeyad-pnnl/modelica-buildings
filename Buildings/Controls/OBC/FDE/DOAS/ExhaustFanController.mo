@@ -41,7 +41,7 @@ block ExhaustFanController "This block manages start, stop, and speed of the exh
   "Building static pressure set point." 
   annotation(Placement(transformation(extent = {{-40, 2}, {-20, 22}})));
   
-  Buildings.Controls.OBC.CDL.Logical.Switch swi 
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi 
   "Logical switch is true when fan status is proven." 
   annotation(Placement(transformation(extent = {{38, -6}, {58, 14}})));
   
