@@ -1,10 +1,10 @@
-within Buildings.Fluid.Movers.Data.Pumps.Wilo;
-record chilledBeamFanCurve "Fan data for chilled beam model"
-  extends Generic(
+within Buildings.Examples.ChilledBeamSystem.Data;
+record chilledBeamPumpCurve "Pump data for chilled beam model"
+  extends Fluid.Movers.Data.Generic(
     speed_rpm_nominal=2900,
     use_powerCharacteristic=true,
-    power(V_flow={0,0.676,1.352}, P={0,200,400}),
-    pressure(V_flow={0,0.676,1.352}, dp={2000,1000,0}),
+    power(V_flow={0,0.001514,0.003028}, P={0,200,400}),
+    pressure(V_flow={0,0.001514,0.003028}, dp={60000,30000,0}),
     motorCooledByFluid=true);
   annotation (
 defaultComponentPrefixes="parameter",
@@ -35,4 +35,4 @@ Added <code>defaultComponentPrefixes</code> and
 </li>
 </ul>
 </html>"));
-end chilledBeamFanCurve;
+end chilledBeamPumpCurve;

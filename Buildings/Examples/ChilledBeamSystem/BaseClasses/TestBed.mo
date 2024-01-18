@@ -11,10 +11,10 @@ block TestBed
   parameter Real hRoo=2.74
     "Height of room";
 
-  parameter Modelica.SIunits.PressureDifference dpValve_nominal=6000
+  parameter Modelica.Units.SI.PressureDifference dpValve_nominal=6000
     "Nominal pressure drop of fully open valve, used if CvData=Buildings.Fluid.Types.CvTypes.OpPoint";
 
-  parameter Modelica.SIunits.PressureDifference dpFixed_nominal=0
+  parameter Modelica.Units.SI.PressureDifference dpFixed_nominal=0
     "Pressure drop of pipe and other resistances that are in series";
 
   parameter Real TChiWatSup_nominal = 273.15 + 15.56
@@ -318,12 +318,12 @@ block TestBed
 
   Buildings.Fluid.Movers.SpeedControlled_y pum(
     redeclare package Medium = MediumW,
-    redeclare Fluid.Movers.Data.Pumps.Wilo.chilledBeamPumpCurve per,
-    final addPowerToMedium=false)
-    "Chilled water pump"
-    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
-      rotation=90,
-      origin={100,-130})));
+    redeclare Data.chilledBeamPumpCurve per,
+    final addPowerToMedium=false) "Chilled water pump" annotation (Placement(
+        transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=90,
+        origin={100,-130})));
 
   Buildings.Fluid.FixedResistances.Junction jun(
     redeclare package Medium = MediumW,
@@ -444,7 +444,6 @@ block TestBed
   Buildings.Examples.VAVReheat.BaseClasses.VAVReheatBox souCAVTer(
     redeclare package MediumA = MediumA,
     redeclare package MediumW = MediumW,
-    final m_flow_nominal=mAirSou_flow_nominal,
     final VRoo=VRooSou,
     final allowFlowReversal=false)
     "CAV terminal for south zone"
@@ -487,9 +486,8 @@ block TestBed
 
   Buildings.Fluid.Movers.SpeedControlled_y fan(
     redeclare package Medium = MediumA,
-    redeclare Fluid.Movers.Data.Pumps.Wilo.chilledBeamFanCurve per,
-    final addPowerToMedium=false)
-    "DOAS fan"
+    redeclare Data.chilledBeamFanCurve per,
+    final addPowerToMedium=false) "DOAS fan"
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
 
   Buildings.Fluid.Sensors.RelativePressure senRelPre(
@@ -523,12 +521,12 @@ block TestBed
     "Find pump flow signal by multiplying enable signal with speed signal"
     annotation (Placement(transformation(extent={{-280,-140},{-260,-120}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Gain gai(
+  Buildings.Controls.OBC.CDL.Continuous.MultiplyByParameter gai(
     final k=mHotWatCoi_nominal)
     "Multiply control signal by nominal flowrate"
     annotation (Placement(transformation(extent={{-320,-60},{-300,-40}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Gain gai1(
+  Buildings.Controls.OBC.CDL.Continuous.MultiplyByParameter gai1(
     final k=mChiWatCoi_nominal)
     "Multiply control signal by nominal flowrate"
     annotation (Placement(transformation(extent={{-320,-90},{-300,-70}})));
@@ -576,7 +574,6 @@ block TestBed
       layers={conIntWal,conIntWal,conIntWal},
       A={6.47,40.76,6.47}*hRoo,
       til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
-
     redeclare package MediumA = MediumA,
     redeclare package MediumW = MediumW,
     Q_flow_nominal=QNor_flow_nominal,
@@ -599,7 +596,6 @@ block TestBed
       layers={conIntWal,conIntWal,conIntWal},
       A={6.47,40.76,6.47}*hRoo,
       til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
-
     redeclare package MediumA = MediumA,
     redeclare package MediumW = MediumW,
     Q_flow_nominal=QWes_flow_nominal,
@@ -622,7 +618,6 @@ block TestBed
       layers={conIntWal,conIntWal,conIntWal},
       A={6.47,40.76,6.47}*hRoo,
       til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
-
     redeclare package MediumA = MediumA,
     redeclare package MediumW = MediumW,
     Q_flow_nominal=QCor_flow_nominal,
@@ -645,7 +640,6 @@ block TestBed
       layers={conIntWal,conIntWal,conIntWal},
       A={6.47,40.76,6.47}*hRoo,
       til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
-
     redeclare package MediumA = MediumA,
     redeclare package MediumW = MediumW,
     Q_flow_nominal=QEas_flow_nominal,
@@ -668,7 +662,6 @@ block TestBed
       layers={conIntWal,conIntWal,conIntWal},
       A={6.47,40.76,6.47}*hRoo,
       til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
-
     redeclare package MediumA = MediumA,
     redeclare package MediumW = MediumW,
     Q_flow_nominal=QSou_flow_nominal,
@@ -810,7 +803,6 @@ block TestBed
   Buildings.Examples.VAVReheat.BaseClasses.VAVReheatBox easCAVTer(
     redeclare package MediumA = MediumA,
     redeclare package MediumW = MediumW,
-    m_flow_nominal=mAirEas_flow_nominal,
     VRoo=VRooEas,
     allowFlowReversal=false) "CAV terminal for east zone"
     annotation (Placement(transformation(extent={{390,-70},{430,-30}})));
@@ -824,7 +816,6 @@ block TestBed
   Buildings.Examples.VAVReheat.BaseClasses.VAVReheatBox norCAVTer(
     redeclare package MediumA = MediumA,
     redeclare package MediumW = MediumW,
-    m_flow_nominal=mAirNor_flow_nominal,
     VRoo=VRooNor,
     allowFlowReversal=false) "CAV terminal for north zone"
     annotation (Placement(transformation(extent={{390,-10},{430,30}})));
@@ -838,7 +829,6 @@ block TestBed
   Buildings.Examples.VAVReheat.BaseClasses.VAVReheatBox wesCAVTer(
     redeclare package MediumA = MediumA,
     redeclare package MediumW = MediumW,
-    m_flow_nominal=mAirWes_flow_nominal,
     VRoo=VRooWes,
     allowFlowReversal=false) "CAV terminal for west zone"
     annotation (Placement(transformation(extent={{390,50},{430,90}})));
@@ -852,7 +842,8 @@ block TestBed
   Buildings.Examples.VAVReheat.BaseClasses.VAVReheatBox corCAVTer(
     redeclare package MediumA = MediumA,
     redeclare package MediumW = MediumW,
-    m_flow_nominal=mAirCor_flow_nominal,
+    mCooAir_flow_nominal=mAirCor_flow_nominal,
+    mHeaAir_flow_nominal=mAirCor_flow_nominal,
     VRoo=VRooCor,
     allowFlowReversal=false) "CAV terminal for core zone"
     annotation (Placement(transformation(extent={{390,110},{430,150}})));
@@ -902,7 +893,8 @@ block TestBed
     dp_nominal={0,0,0}) "Hot water mixer"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation = -90,
         origin={480,-90})));
-  Controls.OBC.CDL.Continuous.Gain           gaiM_flow(final k=
+  Controls.OBC.CDL.Continuous.MultiplyByParameter
+                                             gaiM_flow(final k=
         mAirTot_flow_nominal*1000*15/4200/10)
     "Calculate hot water mass flowrate based on reheat signal"
     annotation (Placement(transformation(extent={{140,-290},{160,-270}})));

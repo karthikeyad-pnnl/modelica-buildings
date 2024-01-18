@@ -1,5 +1,5 @@
 within Buildings.Examples.ChilledBeamSystem;
-block ClosedLoopValidation
+model ClosedLoopValidation
   extends Modelica.Icons.Example;
   parameter Real schTab[5,2]=[0,0; 8,1; 18,1; 21,0; 24,0]
     "Table defining schedule for enabling plant";
