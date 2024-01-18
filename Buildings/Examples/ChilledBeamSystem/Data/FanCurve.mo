@@ -1,8 +1,9 @@
 within Buildings.Examples.ChilledBeamSystem.Data;
-record chilledBeamFanCurve "Fan data for chilled beam model"
+record FanCurve "Fan data for chilled beam example model"
   extends Fluid.Movers.Data.Generic(
-    speed_rpm_nominal=2900,
-    use_powerCharacteristic=true,
+    speed_nominal=(2900*2*3.14)/60,
+    etaHydMet=Buildings.Fluid.Movers.BaseClasses.Types.HydraulicEfficiencyMethod.Power_VolumeFlowRate,
+    etaMotMet=Buildings.Fluid.Movers.BaseClasses.Types.MotorEfficiencyMethod.NotProvided,
     power(V_flow={0,0.676,1.352}, P={0,200,400}),
     pressure(V_flow={0,0.676,1.352}, dp={2000,1000,0}),
     motorCooledByFluid=true);
@@ -35,4 +36,4 @@ Added <code>defaultComponentPrefixes</code> and
 </li>
 </ul>
 </html>"));
-end chilledBeamFanCurve;
+end FanCurve;

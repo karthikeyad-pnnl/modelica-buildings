@@ -1,8 +1,9 @@
 within Buildings.Examples.ChilledBeamSystem.Data;
-record chilledBeamPumpCurve "Pump data for chilled beam model"
+record PumpCurve "Pump data for chilled beam example model"
   extends Fluid.Movers.Data.Generic(
-    speed_rpm_nominal=2900,
-    use_powerCharacteristic=true,
+    speed_nominal=2900,
+    etaHydMet=Buildings.Fluid.Movers.BaseClasses.Types.HydraulicEfficiencyMethod.Power_VolumeFlowRate,
+    etaMotMet=Buildings.Fluid.Movers.BaseClasses.Types.MotorEfficiencyMethod.NotProvided,
     power(V_flow={0,0.001514,0.003028}, P={0,200,400}),
     pressure(V_flow={0,0.001514,0.003028}, dp={60000,30000,0}),
     motorCooledByFluid=true);
@@ -35,4 +36,4 @@ Added <code>defaultComponentPrefixes</code> and
 </li>
 </ul>
 </html>"));
-end chilledBeamPumpCurve;
+end PumpCurve;
