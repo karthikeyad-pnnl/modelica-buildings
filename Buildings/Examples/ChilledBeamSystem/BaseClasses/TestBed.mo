@@ -318,7 +318,7 @@ block TestBed
 
   Buildings.Fluid.Movers.SpeedControlled_y pum(
     redeclare package Medium = MediumW,
-    redeclare Data.chilledBeamPumpCurve per,
+    redeclare Data.PumpCurve per,
     final addPowerToMedium=false) "Chilled water pump" annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
@@ -486,7 +486,7 @@ block TestBed
 
   Buildings.Fluid.Movers.SpeedControlled_y fan(
     redeclare package Medium = MediumA,
-    redeclare Data.chilledBeamFanCurve per,
+    redeclare Data.FanCurve per,
     final addPowerToMedium=false) "DOAS fan"
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
 
