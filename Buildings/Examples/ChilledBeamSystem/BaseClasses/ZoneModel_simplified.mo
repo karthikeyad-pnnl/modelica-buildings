@@ -1,4 +1,4 @@
-within Buildings.Examples.ChilledBeamSystem;
+within Buildings.Examples.ChilledBeamSystem.BaseClasses;
 block ZoneModel_simplified
   "Zone model containing components for zone mixed air volume, thermal capacitance and a chilled beam manifold with air circulation fan"
   extends Buildings.ThermalZones.Detailed.BaseClasses.ConstructionRecords;
@@ -8,7 +8,6 @@ block ZoneModel_simplified
 
   replaceable package MediumW =Buildings.Media.Water
     "Water medium model";
-
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput QFlo "Power gained by zone"
     annotation (Placement(transformation(extent={{-240,-20},{-200,20}}),
@@ -90,11 +89,11 @@ block ZoneModel_simplified
     "Nominal mass flow rate"
     annotation(dialog(group="Zone parameters"));
 
-  Modelica.Fluid.Interfaces.FluidPort_a portChiWat_a(redeclare package Medium =
-        MediumW) "CHW inlet port" annotation (Placement(transformation(extent={{
+  Modelica.Fluid.Interfaces.FluidPort_a portChiWat_a(redeclare package Medium
+      = MediumW) "CHW inlet port" annotation (Placement(transformation(extent={{
             -50,-210},{-30,-190}}), iconTransformation(extent={{-50,-110},{-30,-90}})));
-  Modelica.Fluid.Interfaces.FluidPort_b portChiWat_b(redeclare package Medium =
-        MediumW) "CHW outlet port" annotation (Placement(transformation(extent={
+  Modelica.Fluid.Interfaces.FluidPort_b portChiWat_b(redeclare package Medium
+      = MediumW) "CHW outlet port" annotation (Placement(transformation(extent={
             {30,-210},{50,-190}}), iconTransformation(extent={{30,-110},{50,-90}})));
   Modelica.Fluid.Interfaces.FluidPort_a portAir_a(redeclare package Medium =
         MediumA) "Air inlet port" annotation (Placement(transformation(extent={{

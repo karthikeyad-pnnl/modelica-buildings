@@ -1,4 +1,4 @@
-within Buildings.Examples.ChilledBeamSystem;
+within Buildings.Examples.ChilledBeamSystem.BaseClasses;
 block TestBed
   "Testbed consisting of a 5-zone building model paired with DOAS and chilled water supply system"
 
@@ -559,14 +559,14 @@ block TestBed
     "Multiplexer for CAV terminal damper position measurements"
     annotation (Placement(transformation(extent={{490,-20},{510,0}})));
 
-  Buildings.Fluid.Sensors.RelativeHumidityTwoPort senRelHum(redeclare package Medium =
+  Buildings.Fluid.Sensors.RelativeHumidityTwoPort senRelHum(redeclare package
+      Medium =
         MediumA, m_flow_nominal=mAirTot_flow_nominal)
     "Relative humidity sensor"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}}, rotation=180,
         origin={-90,160})));
 
-
-  Buildings.Examples.ChilledBeamSystem.ZoneModel_simplified nor(
+  Buildings.Examples.ChilledBeamSystem.BaseClasses.ZoneModel_simplified nor(
     nConExt=0,
     nConExtWin=0,
     nConPar=0,
@@ -576,6 +576,7 @@ block TestBed
       layers={conIntWal,conIntWal,conIntWal},
       A={6.47,40.76,6.47}*hRoo,
       til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
+
     redeclare package MediumA = MediumA,
     redeclare package MediumW = MediumW,
     Q_flow_nominal=QNor_flow_nominal,
@@ -588,7 +589,7 @@ block TestBed
     mAChiBea_flow_nominal=mAChiBeaNor_flow_nominal) "North zone"
     annotation (Placement(transformation(extent={{180,300},{200,320}})));
 
-  Buildings.Examples.ChilledBeamSystem.ZoneModel_simplified wes(
+  Buildings.Examples.ChilledBeamSystem.BaseClasses.ZoneModel_simplified wes(
     nConExt=0,
     nConExtWin=0,
     nConPar=0,
@@ -598,6 +599,7 @@ block TestBed
       layers={conIntWal,conIntWal,conIntWal},
       A={6.47,40.76,6.47}*hRoo,
       til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
+
     redeclare package MediumA = MediumA,
     redeclare package MediumW = MediumW,
     Q_flow_nominal=QWes_flow_nominal,
@@ -610,7 +612,7 @@ block TestBed
     mAChiBea_flow_nominal=mAChiBeaWes_flow_nominal) "West zone"
     annotation (Placement(transformation(extent={{120,240},{140,260}})));
 
-  Buildings.Examples.ChilledBeamSystem.ZoneModel_simplified cor(
+  Buildings.Examples.ChilledBeamSystem.BaseClasses.ZoneModel_simplified cor(
     nConExt=0,
     nConExtWin=0,
     nConPar=0,
@@ -620,6 +622,7 @@ block TestBed
       layers={conIntWal,conIntWal,conIntWal},
       A={6.47,40.76,6.47}*hRoo,
       til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
+
     redeclare package MediumA = MediumA,
     redeclare package MediumW = MediumW,
     Q_flow_nominal=QCor_flow_nominal,
@@ -632,7 +635,7 @@ block TestBed
     mAChiBea_flow_nominal=mAChiBeaCor_flow_nominal) "Core zone"
     annotation (Placement(transformation(extent={{180,240},{200,260}})));
 
-  Buildings.Examples.ChilledBeamSystem.ZoneModel_simplified eas(
+  Buildings.Examples.ChilledBeamSystem.BaseClasses.ZoneModel_simplified eas(
     nConExt=0,
     nConExtWin=0,
     nConPar=0,
@@ -642,6 +645,7 @@ block TestBed
       layers={conIntWal,conIntWal,conIntWal},
       A={6.47,40.76,6.47}*hRoo,
       til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
+
     redeclare package MediumA = MediumA,
     redeclare package MediumW = MediumW,
     Q_flow_nominal=QEas_flow_nominal,
@@ -654,7 +658,7 @@ block TestBed
     mAChiBea_flow_nominal=mAChiBeaEas_flow_nominal) "East zone"
     annotation (Placement(transformation(extent={{240,240},{260,260}})));
 
-  Buildings.Examples.ChilledBeamSystem.ZoneModel_simplified sou(
+  Buildings.Examples.ChilledBeamSystem.BaseClasses.ZoneModel_simplified sou(
     nConExt=0,
     nConExtWin=0,
     nConPar=0,
@@ -664,6 +668,7 @@ block TestBed
       layers={conIntWal,conIntWal,conIntWal},
       A={6.47,40.76,6.47}*hRoo,
       til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
+
     redeclare package MediumA = MediumA,
     redeclare package MediumW = MediumW,
     Q_flow_nominal=QSou_flow_nominal,
