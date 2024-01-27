@@ -7,14 +7,6 @@ model DirectCalculations
     "Area of the rigid media evaporative pad";
   parameter Modelica.Units.SI.Length dep = 0.2
     "Depth of the rigid media evaporative pad";
-  parameter Modelica.Units.SI.Length pAtm = 101325
-    "Atmospheric pressure";
-  parameter Modelica.Units.SI.ThermodynamicTemperature TDryBulSup_nominal = 296.15
-    "Nominal supply air drybulb temperature";
-  parameter Modelica.Units.SI.ThermodynamicTemperature TWetBulSup_nominal = 289.3
-    "Nominal supply air wetbulb temperature";
-  parameter Modelica.Units.SI.VolumeFlowRate V_flow_nominal = 1
-    "Nominal supply air volume flowrate";
 
   Buildings.Fluid.Humidifiers.EvaporativeCoolers.Baseclasses.DirectCalculations
     dirEvaCoo(
@@ -32,8 +24,8 @@ model DirectCalculations
     redeclare package Medium = Buildings.Media.Air,
     padAre=padAre,
     dep=dep)
-    "Instance with time-varying wetbulb temperature signal"    annotation (
-      Placement(visible=true, transformation(
+    "Instance with time-varying wetbulb temperature signal"
+    annotation (Placement(visible=true, transformation(
         origin={30,0},
         extent={{-10,-10},{10,10}},
         rotation=0)));
@@ -43,22 +35,27 @@ model DirectCalculations
     redeclare package Medium = Buildings.Media.Air,
     padAre=padAre,
     dep=dep)
-    "Instance with time-varying drybulb temperature signal"    annotation (
+    "Instance with time-varying drybulb temperature signal"
+    annotation (
       Placement(visible=true, transformation(
         origin={30,-50},
         extent={{-10,-10},{10,10}},
         rotation=0)));
 
 protected
-  Modelica.Blocks.Sources.Constant TWetBulSupCon(k=TWetBulSup_nominal)
-    "Constant wet bulb temperature signal" annotation (Placement(visible=true,
+  Modelica.Blocks.Sources.Constant TWetBulSupCon(
+    k=289.3)
+    "Constant wet bulb temperature signal"
+    annotation (Placement(visible=true,
         transformation(
         origin={-80,80},
         extent={{-10,-10},{10,10}},
         rotation=0)));
 
-  Modelica.Blocks.Sources.Constant TDryBulSupCon(k=TDryBulSup_nominal)
-    "Constant drybulb temperature signal" annotation (Placement(visible=true,
+  Modelica.Blocks.Sources.Constant TDryBulSupCon(
+    k=296.15)
+    "Constant drybulb temperature signal"
+    annotation (Placement(visible=true,
         transformation(
         origin={-80,30},
         extent={{-10,-10},{10,10}},
@@ -67,8 +64,10 @@ protected
   Modelica.Blocks.Sources.Ramp TWetBulSupRam(
     duration=60,
     height=5,
-    offset=TWetBulSup_nominal,
-    startTime=0) "Ramp signal for wet-bulb temperature" annotation (Placement(
+    offset=289.3,
+    startTime=0)
+    "Ramp signal for wet-bulb temperature"
+    annotation (Placement(
         visible=true, transformation(
         origin={-10,20},
         extent={{-10,-10},{10,10}},
@@ -77,15 +76,19 @@ protected
   Modelica.Blocks.Sources.Ramp TDryBulSupRam(
     duration=60,
     height=15,
-    offset=TDryBulSup_nominal,
-    startTime=0) "Ramp signal for drybulb temperature" annotation (Placement(
+    offset=296.15,
+    startTime=0)
+    "Ramp signal for drybulb temperature"
+    annotation (Placement(
         visible=true, transformation(
         origin={-10,-26},
         extent={{-10,-10},{10,10}},
         rotation=0)));
 
-  Modelica.Blocks.Sources.Constant V_flowCon(k=V_flow_nominal)
-    "Constant volume flowrate signal" annotation (Placement(visible=true,
+  Modelica.Blocks.Sources.Constant V_flowCon(
+    k=1)
+    "Constant volume flowrate signal"
+    annotation (Placement(visible=true,
         transformation(
         origin={-80,-30},
         extent={{-10,-10},{10,10}},
@@ -94,14 +97,18 @@ protected
   Modelica.Blocks.Sources.Ramp V_flowRam(
     duration=60,
     height=0.5,
-    offset=V_flow_nominal,
-    startTime=0) "Ramp signal for volume flowrate" annotation (Placement(
+    offset=1,
+    startTime=0)
+    "Ramp signal for volume flowrate"
+    annotation (Placement(
         visible=true, transformation(
         origin={-10,80},
         extent={{-10,-10},{10,10}},
         rotation=0)));
 
-  Modelica.Blocks.Sources.Constant pCon(k=pAtm) "Constant pressure signal"
+  Modelica.Blocks.Sources.Constant pCon(
+    k=101325)
+    "Constant pressure signal"
     annotation (Placement(visible=true, transformation(
         origin={-80,-80},
         extent={{-10,-10},{10,10}},
