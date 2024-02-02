@@ -3,10 +3,6 @@ partial model PartialParallelDXCoiInterface
   "Partial model for parallel DX coils"
   extends Buildings.Fluid.Interfaces.PartialTwoPortInterface;
 
-  replaceable package MediumA = Buildings.Media.Air
-    constrainedby Modelica.Media.Interfaces.PartialCondensingGases
-      "Medium model for air";
-
   parameter Modelica.Units.SI.PressureDifference dpDamper_nominal=5
     "Pressure drop at mAir_flow_nominal for damper";
 
@@ -17,7 +13,7 @@ partial model PartialParallelDXCoiInterface
     "Nominal mass flow rate";
 
   Buildings.Fluid.FixedResistances.Junction splRetOut(
-    redeclare package Medium = MediumA,
+    redeclare package Medium = Medium,
     tau=15,
     m_flow_nominal=mAir_flow_nominal*{1,1,1},
     energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
@@ -33,7 +29,7 @@ partial model PartialParallelDXCoiInterface
     annotation (Placement(transformation(extent={{-10,10},{10,-10}}, rotation=0, origin={-70,0})));
 
   Buildings.Fluid.FixedResistances.Junction splRetOut1(
-    redeclare package Medium = MediumA,
+    redeclare package Medium = Medium,
     tau=15,
     m_flow_nominal=mAir_flow_nominal*{1,1,1},
     energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
@@ -49,7 +45,7 @@ partial model PartialParallelDXCoiInterface
     annotation (Placement(transformation(extent={{-10,10},{10,-10}}, rotation=0, origin={70,0})));
 
   Buildings.Fluid.Actuators.Dampers.PressureIndependent damPreInd1(
-    redeclare package Medium = MediumA,
+    redeclare package Medium = Medium,
     m_flow_nominal=mAir_flow_nominal,
     dpDamper_nominal=dpDamper_nominal,
     dpFixed_nominal=dpFixed_nominal)

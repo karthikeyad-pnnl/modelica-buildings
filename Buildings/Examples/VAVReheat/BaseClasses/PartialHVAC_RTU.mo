@@ -179,16 +179,20 @@ partial model PartialHVAC_RTU
     annotation (Placement(transformation(extent={{-136,-56},{-114,-34}})));
 
   replaceable Buildings.Examples.VAVReheat.BaseClasses.ParallelDXCoilHea ParDXCoiHea(
+    redeclare package Medium = MediumA,
     final m_flow_nominal=mAir_flow_nominal,
     final show_T=true,
-    final nCoiHea=nCoiHea)
+    final nCoiHea=nCoiHea,
+    final datHeaCoi=datHeaCoi)
     "Parallel DX heating coil"
     annotation (Placement(transformation(extent={{100,-30},{120,-50}})));
 
   replaceable Buildings.Examples.VAVReheat.BaseClasses.ParallelDXCoilCoo ParDXCoiCoo(
+    redeclare package Medium = MediumA,
     final m_flow_nominal=mAir_flow_nominal,
     final nCoiCoo=nCoiCoo,
-    final minSpeRat=datCooCoi.minSpeRat)
+    final minSpeRat=datCooCoi.minSpeRat,
+    final datCooCoi=datCooCoi)
     "Parallel DX cooling coil"
     annotation (Placement(transformation(extent={{240,-50},{260,-30}})));
 

@@ -1,7 +1,6 @@
 within Buildings.Examples.VAVReheat.BaseClasses;
 model ParallelDXCoilHea "Model for parallel DX coils"
-  extends Buildings.Fluid.Interfaces.PartialTwoPortInterface;
-  extends PartialParallelDXCoiInterface;
+  extends Buildings.Examples.VAVReheat.BaseClasses.PartialParallelDXCoiInterface;
 
   parameter Integer nCoiHea(min=1) = 3
     "Number of DX heating coils"
@@ -15,7 +14,7 @@ model ParallelDXCoilHea "Model for parallel DX coils"
     annotation (Placement(transformation(extent={{58,72},{78,92}})));
 
   Buildings.Fluid.DXSystems.Heating.AirSource.SingleSpeed HeaCoi[nCoiHea](
-    redeclare each final package Medium = MediumA,
+    redeclare each final package Medium = Medium,
     each final dp_nominal=dpDXCoi_nominal,
     each final datCoi=datHeaCoi,
     each final T_start=datHeaCoi.sta[1].nomVal.TConIn_nominal,
@@ -63,7 +62,7 @@ model ParallelDXCoilHea "Model for parallel DX coils"
       iconTransformation(extent={{100,-50},{120,-30}})));
 
   Fluid.Sensors.TemperatureTwoPort TSupHeaCoi[nCoiHea](
-    redeclare package Medium = MediumA,
+    redeclare package Medium = Medium,
     each m_flow_nominal=mAir_flow_nominal,
     each allowFlowReversal=allowFlowReversal)
     "Coil outlet air temperature sensor"
@@ -77,7 +76,7 @@ model ParallelDXCoilHea "Model for parallel DX coils"
     annotation (Placement(transformation(extent={{100,50},{120,70}}),
       iconTransformation(extent={{100,40},{140,80}})));
   Buildings.Fluid.Actuators.Dampers.PressureIndependent damPreInd[nCoiHea](
-    redeclare package Medium = MediumA,
+    redeclare package Medium = Medium,
     each final m_flow_nominal=mAir_flow_nominal,
     each final dpDamper_nominal=dpDamper_nominal,
     each final dpFixed_nominal=dpFixed_nominal)
