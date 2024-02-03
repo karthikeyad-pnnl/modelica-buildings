@@ -102,8 +102,6 @@ model ASHRAE2006_RTU
   Buildings.Controls.OBC.RooftopUnits.Controller RTUCon(
     final nCoiHea=nCoiHea,
     final nCoiCoo=nCoiCoo,
-    final uThrCoi1=0.4,
-    final minComSpe=0.25,
     final dUHys=0.2)
     "Controller for rooftop units"
     annotation (Placement(transformation(extent={{1010,232},{1030,260}})));
@@ -201,13 +199,12 @@ model ASHRAE2006_RTU
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea5
     "Convert Boolean to Real number"
     annotation (Placement(transformation(extent={{520,-140},{540,-120}})));
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con3(k=0)
-    annotation (Placement(transformation(extent={{548,16},{568,36}})));
   Buildings.Controls.OBC.CDL.Continuous.Multiply mul2
     annotation (Placement(transformation(extent={{556,-126},{576,-106}})));
   Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys2(each final uLow=0.5,
       each final uHigh=1) "Check if DXs are on"
     annotation (Placement(transformation(extent={{480,-140},{500,-120}})));
+
 equation
   connect(controlBus, modeSelector.cb) annotation (Line(
       points={{-240,-340},{-152,-340},{-152,-303.182},{-196.818,-303.182}},
@@ -321,7 +318,7 @@ equation
       points={{-400,320},{-360,320},{-360,304},{48,304},{48,96},{548,96},{548,47},
           {578,47}}, color={0,0,127}));
   connect(controlBus.TRooSetHea, TRooHeaSet.u) annotation (Line(
-      points={{-240,-340},{-230,-340},{-230,64},{478,64}},
+      points={{-240,-340},{-176,-340},{-176,64},{478,64}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
@@ -361,9 +358,7 @@ equation
   connect(RTUCon.yComSpeCoo,mul. u2) annotation (Line(points={{1032,248.333},{
           1080,248.333},{1080,234},{1128,234}},
                                          color={0,0,127}));
-  connect(mul.y, CooCoi.speRat) annotation (Line(points={{1152,240},{1160,240},
-          {1160,-200},{230,-200},{230,-48},{239,-48}}, color={0,0,127}));
-  connect(RTUCon.yDXHeaCoi, ParDXHeaCoiCom.on) annotation (Line(points={{1032,
+  connect(RTUCon.yDXHeaCoi, ParDXCoiHea.on) annotation (Line(points={{1032,
           251.95},{1052,251.95},{1052,252},{1070,252},{1070,-180},{90,-180},{90,
           -48},{99,-48}}, color={255,0,255}));
   connect(timDXSta1.passed,RTUCon. uDXCooCoi) annotation (Line(points={{340,
@@ -376,19 +371,16 @@ equation
           color={255,0,255}));
   connect(hys.y,timDXSta. u) annotation (Line(points={{162,-150},{178,-150}},
           color={255,0,255}));
-  connect(CooCoi.P,hys1. u) annotation (Line(points={{261,-49},{261,-50},{270,
-          -50},{270,-140},{278,-140}}, color={0,0,127}));
-  connect(ParDXHeaCoiCom.P, hys.u) annotation (Line(points={{121,-49},{130,-49},
-          {130,-150},{138,-150}}, color={0,0,127}));
+  connect(ParDXCoiCoo.P,hys1. u) annotation (Line(points={{261,-48},{270,-48},{
+          270,-140},{278,-140}},       color={0,0,127}));
+  connect(ParDXCoiHea.P, hys.u) annotation (Line(points={{121,-32},{130,-32},{130,
+          -150},{138,-150}},      color={0,0,127}));
   for i in 1:nCoiCoo loop
-  connect(CooCoi[i].TOut, TOut.y) annotation (Line(points={{239,-43},{234,-43},
-            {234,80},{-220,80},{-220,180},{-279,180}},
-                                                    color={0,0,127}));
   end for;
   for i in 1:nCoiHea loop
-    connect(ParDXHeaCoiCom[i].TOut, TOut.y) annotation (Line(points={{99,-36},{
+    connect(ParDXCoiHea.TOut, TOut.y) annotation (Line(points={{99,-36},{
             80,-36},{80,70},{-220,70},{-220,180},{-279,180}}, color={0,0,127}));
-    connect(ParDXHeaCoiCom[i].phi, Phi.y) annotation (Line(points={{99,-32},{90,
+    connect(ParDXCoiHea.phi, Phi.y) annotation (Line(points={{99,-32},{90,
             -32},{90,60},{-260,60},{-260,140},{-279,140}}, color={0,0,127}));
   end for;
   connect(RTUCon.uCooCoi, conTSup.yCoo) annotation (Line(points={{1008,246.117},
@@ -403,8 +395,6 @@ equation
                                                    color={255,0,255}));
   connect(mulOr.y, not1.u)
     annotation (Line(points={{124,-100},{138,-100}}, color={255,0,255}));
-  connect(booToRea2.y, damPreInd.y) annotation (Line(points={{192,-100},{200,-100},
-          {200,12},{110,12}}, color={0,0,127}));
   connect(RTUCon.yDXHeaCoi[1:nCoiHea], mulOr.u[1:nCoiHea]) annotation (Line(points={{1032,
           251.95},{1070,251.95},{1070,-180},{90,-180},{90,-100},{100,-100}},
                                                                       color={255,
@@ -413,18 +403,11 @@ equation
     annotation (Line(points={{332,-90},{338,-90}}, color={255,0,255}));
   connect(mulOr1.y, not2.u)
     annotation (Line(points={{302,-90},{308,-90}}, color={255,0,255}));
-  connect(booToRea3.y, damPreInd1.y) annotation (Line(points={{362,-90},{374,-90},
-          {374,12},{250,12}}, color={0,0,127}));
   connect(RTUCon.yDXCooCoi[1:nCoiCoo], mulOr1.u[1:nCoiCoo]) annotation (Line(points={{1032,
           256.5},{1060,256.5},{1060,-170},{260,-170},{260,-90},{278,-90}},color={255,0,255}));
   connect(TSupSet.TSet, RTUCon.TSupCoiSet) annotation (Line(points={{-178,-220},
           {1000,-220},{1000,234},{1008,234},{1008,233.75}},
                                        color={0,0,127}));
-  connect(RTUCon.TSupCoiHea, THeaCoi.T) annotation (Line(points={{1008,237.25},
-          {140,237.25},{140,-29}},                      color={0,0,127}));
-  connect(TCooCoi.T, RTUCon.TSupCoiCoo) annotation (Line(points={{280,-29},{284,
-          -29},{284,-8},{990,-8},{990,236},{1008,236},{1008,235.5}},   color={0,
-          0,127}));
   connect(RTUCon.uDemLimLev,demLimLev1. y) annotation (Line(points={{1008,
           248.333},{1008,248},{940,248},{940,260},{932,260}},
                                          color={255,127,0}));
@@ -455,194 +438,59 @@ equation
   connect(modeSelector.yFan, booToRea4.u) annotation (Line(points={{-179.091,
           -305.455},{-174,-305.455},{-174,-306},{-170,-306},{-170,44},{98,44}},
         color={255,0,255}));
-  connect(con3.y, damPreInd2.y) annotation (Line(points={{570,26},{584,26},{584,
-          0},{528,0},{528,12},{490,12}}, color={0,0,127}));
-  connect(booToRea5.y, mul2.u2) annotation (Line(points={{542,-130},{542,-122},
-          {554,-122}}, color={0,0,127}));
+  connect(booToRea5.y, mul2.u2) annotation (Line(points={{542,-130},{550,-130},
+          {550,-122},{554,-122}},
+                       color={0,0,127}));
   connect(mul2.u1, RTUCon.yAuxHea) annotation (Line(points={{554,-110},{550,
           -110},{550,-94},{1032,-94},{1032,240.283}}, color={0,0,127}));
-  connect(mul2.y, AuxHeaCoi.u) annotation (Line(points={{578,-116},{584,-116},{
-          584,-56},{478,-56},{478,-34}}, color={0,0,127}));
+  connect(mul2.y, AuxHeaCoi.u) annotation (Line(points={{578,-116},{586,-116},{
+          586,-60},{470,-60},{470,-34},{478,-34}},
+                                         color={0,0,127}));
   connect(hys2.y, booToRea5.u)
     annotation (Line(points={{502,-130},{518,-130}}, color={255,0,255}));
-  connect(fanSup.y_actual, hys2.u) annotation (Line(points={{407,-33},{407,-130},
-          {478,-130}}, color={0,0,127}));
+  connect(fanSup.y_actual, hys2.u) annotation (Line(points={{407,-33},{407,-34},
+          {412,-34},{412,-130},{478,-130}},
+                       color={0,0,127}));
   connect(conEco.yRet, damRet.y) annotation (Line(points={{-58.6667,146.667},{
           -12,146.667},{-12,-10}}, color={0,0,127}));
   connect(conEco.yOA, damExh.y) annotation (Line(points={{-58.6667,152},{-40,
           152},{-40,2}}, color={0,0,127}));
   connect(conEco.yOA, damOut.y) annotation (Line(points={{-58.6667,152},{-40,
           152},{-40,20},{-20,20},{-20,-20},{-40,-20},{-40,-28}}, color={0,0,127}));
+  connect(ParDXCoiHea.uDam, booToRea2.y) annotation (Line(points={{98,-44},{80,-44},
+          {80,-80},{200,-80},{200,-100},{192,-100}}, color={0,0,127}));
+  connect(RTUCon.TSupCoiHea, ParDXCoiHea.TAirSupCoi) annotation (Line(points={{
+          1008,237.25},{1008,238},{134,238},{134,-46},{122,-46}}, color={0,0,
+          127}));
+  connect(ParDXCoiCoo.TOut, TOut.y) annotation (Line(points={{239,-44},{224,-44},
+          {224,70},{-220,70},{-220,180},{-279,180}}, color={0,0,127}));
+  connect(RTUCon.TSupCoiCoo, ParDXCoiCoo.TAirSupCoi) annotation (Line(points={{1008,
+          235.5},{990,235.5},{990,-14},{270,-14},{270,-34},{262,-34}}, color={0,
+          0,127}));
+  connect(booToRea3.y, ParDXCoiCoo.uDam) annotation (Line(points={{362,-90},{
+          372,-90},{372,-6},{228,-6},{228,-36},{238,-36}}, color={0,0,127}));
+  connect(mul.y, ParDXCoiCoo.speRat) annotation (Line(points={{1152,240},{1160,
+          240},{1160,-20},{232,-20},{232,-32},{239,-32}}, color={0,0,127}));
   annotation (
   defaultComponentName="hvac",
     Diagram(coordinateSystem(preserveAspectRatio=false,extent={{-380,-400},{1420,
             660}})),
     Documentation(info="<html>
-<p>
-This model consist of an HVAC system is a variable air volume (VAV) flow system with economizer
-and a heating and cooling coil in the air handler unit. There is also a
-reheat coil and an air damper in each of the five zone inlet branches.
-The figure below shows the schematic diagram of an HVAC system that supplies 5 zones:
-</p>
-<p>
-<img alt=\"image\" src=\"modelica://Buildings/Resources/Images/Examples/VAVReheat/vavSchematics.png\" border=\"1\"/>
-</p>
-<p>
-See the model
-<a href=\"modelica://Buildings.Examples.VAVReheat.BaseClasses.PartialHVAC\">
-Buildings.Examples.VAVReheat.BaseClasses.PartialHVAC</a>
-for a description of the HVAC system.
-</p>
-<p>
-The control is an implementation of the control sequence
-<i>VAV 2A2-21232</i> of the Sequences of Operation for
-Common HVAC Systems (ASHRAE, 2006). In this control sequence, the
-supply fan speed is modulated based on the duct static pressure.
-The return fan controller tracks the supply fan air flow rate.
-The duct static pressure set point is adjusted so that at least one
-VAV damper is 90% open.
-The heating coil valve, outside air damper, and cooling coil valve are
-modulated in sequence to maintain the supply air temperature set point.
-The economizer control provides the following functions:
-freeze protection, minimum outside air requirement, and supply air cooling,
-see
-<a href=\"modelica://Buildings.Examples.VAVReheat.BaseClasses.Controls.Economizer\">
-Buildings.Examples.VAVReheat.BaseClasses.Controls.Economizer</a>.
-The controller of the terminal units tracks the room air temperature set point
-based on a \"dual maximum with constant volume heating\" logic, see
-<a href=\"modelica://Buildings.Examples.VAVReheat.BaseClasses.Controls.RoomVAV\">
-Buildings.Examples.VAVReheat.BaseClasses.Controls.RoomVAV</a>.
-</p>
-<p>
-There is also a finite state machine that transitions the mode of operation
-of the HVAC system between the modes
-<i>occupied</i>, <i>unoccupied off</i>, <i>unoccupied night set back</i>,
-<i>unoccupied warm-up</i> and <i>unoccupied pre-cool</i>.
-In the VAV model, all air flows are computed based on the
-duct static pressure distribution and the performance curves of the fans.
-Local loop control is implemented using proportional and proportional-integral
-controllers, while the supervisory control is implemented
-using a finite state machine.
-</p>
-<p>
-A similar model but with a different control sequence can be found in
-<a href=\"modelica://Buildings.Examples.VAVReheat.BaseClasses.Guideline36\">
-Buildings.Examples.VAVReheat.BaseClasses.Guideline36</a>.
-</p>
-<h4>References</h4>
-<p>
-ASHRAE.
-<i>Sequences of Operation for Common HVAC Systems</i>.
-ASHRAE, Atlanta, GA, 2006.
-</p>
-</html>", revisions="<html>
-<ul>
-<li>
-December 20, 2021, by Michael Wetter:<br/>
-Changed parameter declarations for
-<a href=\"https://github.com/lbl-srg/modelica-buildings/issues/2829\">issue #2829</a>.
-</li>
-<li>
-November 9, 2021, by Baptiste:<br/>
-Vectorized the terminal boxes to be expanded to any number of zones.<br/>
-This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/2735\">issue #2735</a>.
-</li>
-<li>
-October 4, 2021, by Michael Wetter:<br/>
-Refactored <a href=\"modelica://Buildings.Examples.VAVReheat\">Buildings.Examples.VAVReheat</a>
-and its base classes to separate building from HVAC model.<br/>
-This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/2652\">issue #2652</a>.
-</li>
-<li>
-September 16, 2021, by Michael Wetter:<br/>
-Removed assignment of parameter <code>lat</code> as this is now obtained from the weather data reader.<br/>
-This is for
-<a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/1477\">IBPSA, #1477</a>.
-</li>
-<li>
-September 3, 2021, by Michael Wetter:<br/>
-Updated documentation.<br/>
-This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/2600\">issue #2600</a>.
-</li>
-<li>
-August 24, 2021, by Michael Wetter:<br/>
-Changed model to include the hydraulic configurations of the cooling coil,
-heating coil and VAV terminal box.<br/>
-This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/2594\">issue #2594</a>.
-</li>
-<li>
-May 6, 2021, by David Blum:<br/>
-Change to <code>from_dp=false</code> for exhaust air damper.<br/>
-This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/2485\">issue #2485</a>.
-</li>
-<li>
-April 30, 2021, by Michael Wetter:<br/>
-Reformulated replaceable class and introduced floor areas in base class
-to avoid access of components that are not in the constraining type.<br/>
-This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/2471\">issue #2471</a>.
-</li>
-<li>
-April 16, 2021, by Michael Wetter:<br/>
-Refactored model to implement the economizer dampers directly in
-<code>Buildings.Examples.VAVReheat.BaseClasses.PartialHVAC</code> rather than through the
-model of a mixing box. Since the version of the Guideline 36 model has no exhaust air damper,
-this leads to simpler equations.<br/>
-This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/2454\">issue #2454</a>.
-</li>
-<li>
-March 15, 2021, by David Blum:<br/>
-Update documentation graphic to include relief damper.<br/>
-This is for
-<a href=\"https://github.com/lbl-srg/modelica-buildings/issues/2399\">#2399</a>.
-</li>
-<li>
-October 27, 2020, by Antoine Gautier:<br/>
-Refactored the supply air temperature control sequence.<br/>
-This is for
-<a href=\"https://github.com/lbl-srg/modelica-buildings/issues/2024\">#2024</a>.
-</li>
-<li>
-July 10, 2020, by Antoine Gautier:<br/>
-Changed design and control parameters for outdoor air flow.<br/>
-This is for
-<a href=\"https://github.com/lbl-srg/modelica-buildings/issues/2019\">#2019</a>.
-</li>
-<li>
-April 20, 2020, by Jianjun Hu:<br/>
-Exported actual VAV damper position as the measured input data for
-defining duct static pressure setpoint.<br/>
-This is
-for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/1873\">#1873</a>.
-</li>
-<li>
-May 19, 2016, by Michael Wetter:<br/>
-Changed chilled water supply temperature to <i>6&deg;C</i>.
-This is
-for <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/509\">#509</a>.
-</li>
-<li>
-April 26, 2016, by Michael Wetter:<br/>
-Changed controller for freeze protection as the old implementation closed
-the outdoor air damper during summer.
-This is
-for <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/511\">#511</a>.
-</li>
-<li>
-January 22, 2016, by Michael Wetter:<br/>
-Corrected type declaration of pressure difference.
-This is
-for <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/404\">#404</a>.
-</li>
-<li>
-September 24, 2015 by Michael Wetter:<br/>
-Set default temperature for medium to avoid conflicting
-start values for alias variables of the temperature
-of the building and the ambient air.
-This is for
-<a href=\"https://github.com/lbl-srg/modelica-buildings/issues/426\">issue 426</a>.
-</li>
-</ul>
-</html>"),
+  <p>
+  This model replaced an air handler unit (AHU) within a variable air flow (VAV) system,
+  as introduced in 
+  <a href=\"modelica://Buildings.Examples.VAVReheat.BaseClasses.ASHRAE2006\">
+  Buildings.Examples.VAVReheat.BaseClasses.ASHRAE2006</a>, 
+  with a rooftop unit (RTU). 
+  </p>
+  </html>", revisions="<html>
+  <ul>
+  <li>
+  August 28, 2023, by Junke Wang and Karthik Devaprasad:<br/>
+  First implementation.
+  </li>
+  </ul>
+  </html>"),
     Icon(graphics={
         Rectangle(
           extent={{240,172},{220,100}},
