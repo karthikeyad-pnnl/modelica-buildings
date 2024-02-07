@@ -8,6 +8,9 @@ Guideline36_RTU
 HVACBuilding
 HVACBuilding_RTU
 PartialFloor
+PartialParallelDXCoiInterface
+ParallelDXCoilHea
+ParallelDXCoilCoo
 PartialHVAC
 PartialHVAC_RTU
 RoomLeakage
