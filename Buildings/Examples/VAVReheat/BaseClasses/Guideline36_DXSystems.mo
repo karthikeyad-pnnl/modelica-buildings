@@ -1,11 +1,7 @@
 within Buildings.Examples.VAVReheat.BaseClasses;
-model Guideline36_RTU
+model Guideline36_DXSystems
   "Variable air volume flow system with terminal reheat and Guideline 36 control sequence serving five thermal zones"
-  extends Buildings.Examples.VAVReheat.BaseClasses.PartialHVAC_RTU(
-    damOut(
-      dpDamper_nominal=10,
-      dpFixed_nominal=10),
-    amb(nPorts=3));
+  extends Buildings.Examples.VAVReheat.BaseClasses.PartialHVAC_DXSystems;
 
 //   parameter Modelica.Units.SI.VolumeFlowRate minZonPriFlo[numZon]=conVAV.VDisSetMin_flow
 //     "Minimum expected zone primary flow rate";
@@ -465,7 +461,7 @@ equation
           points={{262,586},{372,586},{372,588},{456,588}}, color={0,0,127}));
   connect(sumZon.uOutAirFra_max, conAHU.uOutAirFra_max) annotation (Line(
           points={{262,582},{456,582}}, color={0,0,127}));
-  connect(dpDisSupFan.p_rel, conAHU.dpDuc) annotation (Line(points={{397,0},{
+  connect(dpDisSupFan.p_rel, conAHU.dpDuc) annotation (Line(points={{311,0},{
           400,0},{400,22},{190,22},{190,624},{456,624}}, color={0,0,127}));
   connect(TOut.y, conAHU.TOut) annotation (Line(points={{-279,180},{140,180},{140,
           620},{456,620}}, color={0,0,127}));
@@ -478,7 +474,7 @@ equation
   connect(conAHU.yOutDam, damOut.y) annotation (Line(points={{544,562},{560,562},
           {560,50},{-40,50},{-40,-28}}, color={0,0,127}));
   connect(conAHU.ySupFan, fanSup.y) annotation (Line(points={{544,543.6},{554,
-          543.6},{554,-20},{396,-20},{396,-28}}, color={0,0,127}));
+          543.6},{554,-20},{310,-20},{310,-28}}, color={0,0,127}));
   connect(hotWatPla.y, conVAV.u1HotPla) annotation (Line(points={{522,170},{608,
           170},{608,183.2},{616,183.2}}, color={255,0,255}));
   connect(conAHU.y1SupFan, conAHU.u1SupFan) annotation (Line(points={{544,548},{
@@ -505,9 +501,9 @@ equation
           -160,530},{-160,389},{-122,389}}, color={0,0,127}));
   connect(TUnoHeaSet.y, groSta.THeaSetOff) annotation (Line(points={{-318,570},{
           -152,570},{-152,397},{-122,397}}, color={0,0,127}));
-  connect(TSup.T, conAHU.TAirSup) annotation (Line(points={{570,-29},{570,32},{
+  connect(TSup.T, conAHU.TAirSup) annotation (Line(points={{340,-29},{340,32},{
           340,32},{340,80},{286,80},{286,604},{456,604}}, color={0,0,127}));
-  connect(TSup.T, TSupAHU.u) annotation (Line(points={{570,-29},{570,32},{340,
+  connect(TSup.T, TSupAHU.u) annotation (Line(points={{340,-29},{340,32},{340,
           32},{340,80},{378,80}}, color={0,0,127}));
   connect(conAHU.yCooCoi, RTUCon.uCooCoi) annotation (Line(points={{544,518},{
           900,518},{900,534.117},{978,534.117}},
@@ -576,14 +572,15 @@ equation
           -108},{494,-90},{1010,-90},{1010,528},{1002,528},{1002,528.283}},
                                                       color={0,0,127}));
   connect(mul2.y, AuxHeaCoi.u) annotation (Line(points={{522,-114},{528,-114},{
-          528,-54},{478,-54},{478,-34}}, color={0,0,127}));
+          528,-54},{212,-54},{212,-34}}, color={0,0,127}));
   connect(hys2.y, booToRea5.u)
     annotation (Line(points={{454,-128},{462,-128}}, color={255,0,255}));
-  connect(fanSup.y_actual, hys2.u) annotation (Line(points={{407,-33},{407,-34},
+  connect(fanSup.y_actual, hys2.u) annotation (Line(points={{321,-33},{321,-34},
           {420,-34},{420,-128},{430,-128}}, color={0,0,127}));
-  connect(booToRea3.y, ParDXCoiCoo.uDam) annotation (Line(points={{342,-100},{376,
-          -100},{376,-26},{218,-26},{218,-36},{238,-36}}, color={0,0,127}));
-  connect(ParDXCoiCoo.TOut, TOut.y) annotation (Line(points={{239,-44},{212,-44},
+  connect(booToRea3.y, ParDXCoiCoo.uDam) annotation (Line(points={{342,-100},{
+          376,-100},{376,-26},{218,-26},{218,-36},{178,-36}},
+                                                          color={0,0,127}));
+  connect(ParDXCoiCoo.TOut, TOut.y) annotation (Line(points={{179,-44},{212,-44},
           {212,180},{-279,180}}, color={0,0,127}));
   connect(Phi.y, ParDXCoiHea.phi) annotation (Line(points={{-279,140},{-260,140},
           {-260,120},{90,120},{90,-32},{99,-32}}, color={0,0,127}));
@@ -596,15 +593,17 @@ equation
           -48}}, color={255,0,255}));
   connect(ParDXCoiHea.P, hys.u) annotation (Line(points={{121,-32},{130,-32},{130,
           -160},{138,-160}}, color={0,0,127}));
-  connect(ParDXCoiCoo.P, hys1.u) annotation (Line(points={{261,-48},{270,-48},{270,
-          -150},{278,-150}}, color={0,0,127}));
-  connect(mul.y, ParDXCoiCoo.speRat) annotation (Line(points={{1132,520},{1140,520},
-          {1140,-70},{230,-70},{230,-32},{239,-32}}, color={0,0,127}));
+  connect(ParDXCoiCoo.P, hys1.u) annotation (Line(points={{201,-48},{270,-48},{
+          270,-150},{278,-150}},
+                             color={0,0,127}));
+  connect(mul.y, ParDXCoiCoo.speRat) annotation (Line(points={{1132,520},{1140,
+          520},{1140,-70},{230,-70},{230,-32},{179,-32}},
+                                                     color={0,0,127}));
   connect(RTUCon.TSupCoiHea, ParDXCoiHea.TAirSupCoi) annotation (Line(points={{978,
           525.25},{940,525.25},{940,402},{312,402},{312,396},{144,396},{144,-46},
           {122,-46}}, color={0,0,127}));
   connect(RTUCon.TSupCoiCoo, ParDXCoiCoo.TAirSupCoi) annotation (Line(points={{978,
-          523.5},{946,523.5},{946,384},{270,384},{270,-34},{262,-34}}, color={0,
+          523.5},{946,523.5},{946,384},{270,384},{270,-34},{202,-34}}, color={0,
           0,127}));
   annotation (
   defaultComponentName="hvac",
@@ -844,4 +843,4 @@ equation
           fillPattern=FillPattern.Backward,
           origin={230,153},
           rotation=90)}));
-end Guideline36_RTU;
+end Guideline36_DXSystems;

@@ -1,8 +1,8 @@
 within Buildings.Examples.VAVReheat.BaseClasses;
 model ASHRAE2006_RTU
   "Variable air volume flow system with terminal reheat and ASHRAE 2006 control sequence serving five thermal zones"
-  extends Buildings.Examples.VAVReheat.BaseClasses.PartialHVAC_RTU(amb(nPorts=3),
-    yFanMin=0);
+  extends Buildings.Examples.VAVReheat.BaseClasses.PartialHVAC_DXSystems(
+      yFanMin=0);
 
   parameter Real ratVMinVAV_flow[numZon](each final unit="1") = {max(1.5*
     VZonOA_flow_nominal[i]/mCooVAV_flow_nominal[i]/1.2, 0.15) for i in 1:numZon}

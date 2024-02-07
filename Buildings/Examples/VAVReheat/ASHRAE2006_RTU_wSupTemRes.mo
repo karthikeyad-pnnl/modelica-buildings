@@ -2,7 +2,7 @@ within Buildings.Examples.VAVReheat;
 model ASHRAE2006_RTU_wSupTemRes
   "Variable air volume flow system with terminal reheat and five thermal zones"
   extends Modelica.Icons.Example;
-  extends Buildings.Examples.VAVReheat.BaseClasses.HVACBuilding_RTU(
+  extends Buildings.Examples.VAVReheat.BaseClasses.HVACBuilding(
     mCor_flow_nominal=ACHCor*VRooCor*conv,
     mSou_flow_nominal=ACHSou*VRooSou*conv,
     mEas_flow_nominal=ACHEas*VRooEas*conv,

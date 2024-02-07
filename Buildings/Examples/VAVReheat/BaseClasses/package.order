@@ -4,7 +4,7 @@ ASHRAE2006_RTU_wSupTemRes
 ASHRAE2006_RTU_wSupTemRes_G36
 Floor
 Guideline36
-Guideline36_RTU
+Guideline36_DXSystems
 HVACBuilding
 HVACBuilding_RTU
 PartialFloor
@@ -12,7 +12,8 @@ PartialParallelDXCoiInterface
 ParallelDXCoilHea
 ParallelDXCoilCoo
 PartialHVAC
-PartialHVAC_RTU
+PartialHVAC_DXSystems
 RoomLeakage
 VAVReheatBox
 Controls
+HVAC_Interface

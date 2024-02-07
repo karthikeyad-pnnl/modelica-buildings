@@ -1,14 +1,15 @@
 within Buildings.Examples.VAVReheat;
-model Guideline36_RTU
+model Guideline36_DXSystems
   "Variable air volume flow system with terminal reheat and five thermal zones"
   extends Modelica.Icons.Example;
-  extends Buildings.Examples.VAVReheat.BaseClasses.HVACBuilding_RTU(
+  extends Buildings.Examples.VAVReheat.BaseClasses.HVACBuilding(
     mCor_flow_nominal=ACHCor*VRooCor*conv,
     mSou_flow_nominal=ACHSou*VRooSou*conv,
     mEas_flow_nominal=ACHEas*VRooEas*conv,
     mNor_flow_nominal=ACHNor*VRooNor*conv,
     mWes_flow_nominal=ACHWes*VRooWes*conv,
-    redeclare Buildings.Examples.VAVReheat.BaseClasses.Guideline36_RTU hvac(
+    redeclare Buildings.Examples.VAVReheat.BaseClasses.Guideline36_DXSystems
+      hvac(
       nCoiCoo=nCoiCoo,
       nCoiHea=nCoiHea,
       datHeaCoi=datHeaCoi,
@@ -143,4 +144,4 @@ model Guideline36_RTU
       Tolerance=1e-06,
       __Dymola_Algorithm="Cvode"),
     Icon(coordinateSystem(extent={{-100,-100},{100,100}})));
-end Guideline36_RTU;
+end Guideline36_DXSystems;

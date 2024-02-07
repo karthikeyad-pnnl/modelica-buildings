@@ -1,9 +1,8 @@
 within Buildings.Examples.VAVReheat.BaseClasses;
 model ASHRAE2006_RTU_wSupTemRes_G36
   "Variable air volume flow system with terminal reheat and ASHRAE 2006 control sequence serving five thermal zones"
-  extends Buildings.Examples.VAVReheat.BaseClasses.PartialHVAC_RTU(
-    yFanMin=0,
-    amb(nPorts=3));
+  extends Buildings.Examples.VAVReheat.BaseClasses.PartialHVAC_DXSystems(
+      yFanMin=0);
 
   parameter Integer nCoiCoo(min=1) = 3
     "Number of DX cooling coils"

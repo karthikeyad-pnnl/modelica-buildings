@@ -1,11 +1,7 @@
 within Buildings.Examples.VAVReheat.BaseClasses;
 model Guideline36
   "Variable air volume flow system with terminal reheat and Guideline 36 control sequence serving five thermal zones"
-  extends Buildings.Examples.VAVReheat.BaseClasses.PartialHVAC(
-    damOut(
-      dpDamper_nominal=10,
-      dpFixed_nominal=10),
-    amb(nPorts=3));
+  extends Buildings.Examples.VAVReheat.BaseClasses.PartialHVAC;
 
 //   parameter Modelica.Units.SI.VolumeFlowRate minZonPriFlo[numZon]=conVAV.VDisSetMin_flow
 //     "Minimum expected zone primary flow rate";
@@ -169,6 +165,7 @@ model Guideline36
     final nGro=1)
     "AHU operating mode"
     annotation (Placement(transformation(extent={{240,630},{260,650}})));
+
 equation
   connect(yFreHeaCoi.y, swiFreStaPum.u1) annotation (Line(points={{-18,-90},{10,
           -90},{10,-102},{18,-102}}, color={0,0,127}));
