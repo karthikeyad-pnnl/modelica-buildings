@@ -32,7 +32,7 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
   parameter Real conTi_cool(
   final unit = "s") = 0.00025 "PID cooling loop time constant of integrator.";
 
-  // ---inputs---
+// ---inputs---
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput supFanProof "True when the supply fan is proven on."
   annotation(Placement(transformation(extent = {{-142, 60}, {-102, 100}}),
      iconTransformation(extent = {{-142, 58}, {-102, 98}})));
@@ -60,7 +60,7 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
   annotation(Placement(transformation(extent = {{-142, -106}, {-102, -66}}),
     iconTransformation(extent = {{-142, -98}, {-102, -58}})));
 
-  // ---outputs---
+// ---outputs---
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput erwStart "Command to start the energy recovery wheel."
   annotation(Placement(transformation(extent = {{102, 0}, {142, 40}}),
     iconTransformation(extent = {{102, -20}, {142, 20}})));
@@ -78,19 +78,19 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
   annotation(Placement(transformation(extent = {{102, 46}, {142, 86}}),
     iconTransformation(extent = {{102, 40}, {142, 80}})));
 
-  CDL.Continuous.Subtract                   difference
+  Buildings.Controls.OBC.CDL.Continuous.Subtract                   difference
   "Subtract outside air temperature from return air temperature."
-  annotation(Placement(visible = true, transformation(origin = {-6, 6}, extent = {{-90, -10}, {-70, 10}}, rotation = 0)));
+  annotation(Placement(visible = true, transformation(origin = {24, 2}, extent = {{-90, -10}, {-70, 10}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Continuous.Abs abs
   "Absolute value of OAT-RAT difference."
-  annotation(Placement(visible = true, transformation(origin = {-4, 4}, extent = {{-62, -10}, {-42, 10}}, rotation = 0)));
+  annotation(Placement(visible = true, transformation(origin = {26, 2}, extent = {{-62, -10}, {-42, 10}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(
   delayTime = recSetDelay,
   delayOnInit = true)
   "Recovery set point delay before disabling energy wheel."
-  annotation(Placement(visible = true, transformation(origin = {-4, 26}, extent = {{2, -38}, {22, -18}}, rotation = 0)));
+  annotation(Placement(visible = true, transformation(origin = {30, 28}, extent = {{2, -38}, {22, -18}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Logical.And3 and3
   "Logical AND; true when fan is proven, economizer mode is off, and ERW 
@@ -139,7 +139,7 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
    annotation(Placement(visible = true, transformation(origin = {-80, -82}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(uHigh = recSet, uLow = recSet - Thys)  annotation (
-    Placement(visible = true, transformation(origin={-22,4},     extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin={8,2},     extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   connect(not1.u, ecoMode) annotation (
     Line(points = {{-28, 50}, {-122, 50}}, color = {255, 0, 255}));
@@ -201,23 +201,23 @@ equation
     Line(points = {{-68, -82}, {-64, -82}, {-64, -74}}, color = {0, 0, 127}));
 
   connect(raT, difference.u1) annotation (
-    Line(points = {{-122, 20}, {-98, 20}, {-98, 12}}, color = {0, 0, 127}));
+    Line(points = {{-122, 20}, {-122, 8}, {-68, 8}}, color = {0, 0, 127}));
 
   connect(oaT, difference.u2) annotation (
-    Line(points = {{-122, -18}, {-98, -18}, {-98, 0}}, color = {0, 0, 127}));
+    Line(points = {{-122, -18}, {-122, -4}, {-68, -4}}, color = {0, 0, 127}));
 
   connect(difference.y, abs.u) annotation (
-    Line(points = {{-74, 6}, {-71, 6}, {-71, 4}, {-68, 4}}, color = {0, 0, 127}));
+    Line(points = {{-44, 2}, {-38, 2}}, color = {0, 0, 127}));
 
   connect(hys.y, truDel.u) annotation (
-    Line(points={{-10,4},{-8,4},{-8,-2},{-4,-2}},
+    Line(points={{20,2},{25,2},{25,0},{30,0}},
                                          color = {255, 0, 255}));
 
   connect(truDel.y, and3.u3) annotation (
-    Line(points = {{20, -2}, {50, -2}, {50, 12}, {60, 12}}, color = {255, 0, 255}));
+    Line(points = {{54, 0}, {54, 12}, {60, 12}}, color = {255, 0, 255}));
 
   connect(abs.y, hys.u)
-    annotation (Line(points={{-44,4},{-34,4}}, color={0,0,127}));
+    annotation (Line(points={{-14, 2}, {-4, 2}}, color={0,0,127}));
   annotation (
     defaultComponentName = "ERWcon",
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics={  Rectangle(fillColor = {255, 255, 255},

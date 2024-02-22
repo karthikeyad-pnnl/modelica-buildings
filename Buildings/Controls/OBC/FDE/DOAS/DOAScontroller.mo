@@ -160,7 +160,7 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
     "Supply air temperature heating set point offset."
     annotation(Dialog(tab = "Temperature", group = "Set Point"));
 
-  // ---inputs---
+// ---inputs---
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput occ
     "True when occupied mode is active"
     annotation(Placement(transformation(extent = {{-142, 56}, {-102, 96}}),
@@ -259,7 +259,7 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
     annotation(Placement(transformation(extent = {{-140, -50}, {-100, -10}}),
       iconTransformation(extent = {{-140, -46}, {-100, -6}})));
 
-  // ---outputs---
+// ---outputs---
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput supFanStart
     "Command supply fan to start when true."
     annotation(Placement(transformation(extent = {{102, 54}, {142, 94}}),
@@ -337,137 +337,97 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
     "This block calculates when economizer mode is active."
     annotation(Placement(visible = true, transformation(origin = {2, 0},
       extent = {{26, -42}, {46, -22}}, rotation = 0)));
-
 equation
-  connect(SFcon.occ, occ) annotation (
+  connect(SFcon.occ, occ) annotation(
     Line(points = {{-86, 75}, {-96, 75}, {-96, 76}, {-122, 76}}, color = {255, 0, 255}));
-
-  connect(SFcon.mostOpenDam, mostOpenDam) annotation (
+  connect(SFcon.mostOpenDam, mostOpenDam) annotation(
     Line(points = {{-86, 71.4}, {-98, 71.4}, {-98, 50}, {-122, 50}}, color = {0, 0, 127}));
-
-  connect(SFcon.DDSP, DDSP) annotation (
+  connect(SFcon.DDSP, DDSP) annotation(
     Line(points = {{-86, 60.8}, {-94, 60.8}, {-94, -2}, {-120, -2}}, color = {0, 0, 127}));
-
-  connect(SFcon.supFanStart, supFanStart) annotation (
+  connect(SFcon.supFanStart, supFanStart) annotation(
     Line(points = {{-62, 73.2}, {122, 73.2}, {122, 74}}, color = {255, 0, 255}));
-
-  connect(SFcon.supFanSpeed, supFanSpeed) annotation (
+  connect(SFcon.supFanSpeed, supFanSpeed) annotation(
     Line(points = {{-62, 63.6}, {84, 63.6}, {84, 48}, {122, 48}}, color = {0, 0, 127}));
-
 //connect(SFcon.supFanProof, DehumMod.supFanProof) annotation (
 // Line(points={{-62,68},{-56,68},{-56,25.2},{-50.2,25.2}},color={255,0,255}));
 //connect(SFcon.supFanProof, Cooling.supFanProof) annotation (
 // Line(points={{-62,68},{-56,68},{-56,36.4},{55.8,36.4}},color={255,0,255}));
-  connect(DehumMod.dehumMode, Cooling.dehumMode) annotation (
+  connect(DehumMod.dehumMode, Cooling.dehumMode) annotation(
     Line(points = {{-25.8, 18}, {-22, 18}, {-22, 27.4}, {55.8, 27.4}}, color = {255, 0, 255}));
-
-  connect(DehumMod.retHum, retHum) annotation (
+  connect(DehumMod.retHum, retHum) annotation(
     Line(points = {{-50.2, 18}, {-92, 18}, {-92, -60}, {-120, -60}}, color = {0, 0, 127}));
-
-  connect(Cooling.saT, saT) annotation (
+  connect(Cooling.saT, saT) annotation(
     Line(points = {{55.8, 33.6}, {-90, 33.6}, {-90, -86}, {-120, -86}}, color = {0, 0, 127}));
-
-  connect(Cooling.ccT, ccT) annotation (
+  connect(Cooling.ccT, ccT) annotation(
     Line(points = {{55.8, 24.8}, {-20, 24.8}, {-20, -164}, {-120, -164}}, color = {0, 0, 127}));
-
-  connect(Cooling.erwHum, erwHum) annotation (
+  connect(Cooling.erwHum, erwHum) annotation(
     Line(points = {{55.8, 22.2}, {-18, 22.2}, {-18, -190}, {-120, -190}}, color = {0, 0, 127}));
-
-  connect(Cooling.erwT, erwT) annotation (
+  connect(Cooling.erwT, erwT) annotation(
     Line(points = {{55.8, 19.6}, {-16, 19.6}, {-16, -216}, {-120, -216}}, color = {0, 0, 127}));
-
-  connect(Cooling.yCC, yCC) annotation (
+  connect(Cooling.yCC, yCC) annotation(
     Line(points = {{80.2, 28}, {92, 28}, {92, 22}, {122, 22}}, color = {0, 0, 127}));
-
 //connect(SFcon.supFanProof, Heating.supFanProof) annotation (
 //Line(points={{-62,68},{-56,68},{-56,-8},{55.8,-8}},color={255,0,255}));
-  connect(saT, Heating.saT) annotation (
+  connect(saT, Heating.saT) annotation(
     Line(points = {{-120, -86}, {-90, -86}, {-90, -13}, {55.8, -13}}, color = {0, 0, 127}));
-
-  connect(Heating.yRHC, yRHC) annotation (
+  connect(Heating.yRHC, yRHC) annotation(
     Line(points = {{80.2, -8}, {90, -8}, {90, -4}, {122, -4}}, color = {0, 0, 127}));
-
-  connect(ERWcon.erwStart, erwStart) annotation (
+  connect(ERWcon.erwStart, erwStart) annotation(
     Line(points = {{80.2, -54}, {122, -54}}, color = {255, 0, 255}));
-
-  connect(ERWcon.erwSpeed, erwSpeed) annotation (
+  connect(ERWcon.erwSpeed, erwSpeed) annotation(
     Line(points = {{80.2, -60}, {92, -60}, {92, -80}, {122, -80}}, color = {0, 0, 127}));
-
-  connect(DehumMod.dehumMode, TSupSetpt.dehumMode) annotation (
+  connect(DehumMod.dehumMode, TSupSetpt.dehumMode) annotation(
     Line(points = {{-25.8, 18}, {-22, 18}, {-22, 9}, {-10, 9}}, color = {255, 0, 255}));
-
-  connect(TSupSetpt.supCooSP, Cooling.supCooSP) annotation (
+  connect(TSupSetpt.supCooSP, Cooling.supCooSP) annotation(
     Line(points = {{14.2, 8}, {20, 8}, {20, 30.8}, {55.8, 30.8}}, color = {0, 0, 127}));
-
-  connect(TSupSetpt.supHeaSP, Heating.supHeaSP) annotation (
+  connect(TSupSetpt.supHeaSP, Heating.supHeaSP) annotation(
     Line(points = {{14.2, 0}, {22, 0}, {22, -3.2}, {55.8, -3.2}}, color = {0, 0, 127}));
-
 // connect(SFcon.supFanProof, ERWcon.supFanProof) annotation (
 //Line(points={{-62,68},{-56,68},{-56,-46.2},{55.8,-46.2}},color={255,0,255}));
-  connect(ERWcon.bypDam, bypDam) annotation (
+  connect(ERWcon.bypDam, bypDam) annotation(
     Line(points = {{80.2, -48}, {92, -48}, {92, -30}, {122, -30}}, color = {255, 0, 255}));
-
-  connect(EconMod.ecoMode, ERWcon.ecoMode) annotation (
-    Line(points={{50.2,-32},{50.2,-49.2},{55.8,-49.2}},    color = {255, 0, 255}));
-
+  connect(EconMod.ecoMode, ERWcon.ecoMode) annotation(
+    Line(points = {{50.2, -32}, {50.2, -49.2}, {55.8, -49.2}}, color = {255, 0, 255}));
 //connect(SFcon.supFanProof, EconMod.supFanProof) annotation (
 //Line(points={{-62,68},{-56,68},{-56,-25},{23.8,-25}}, color={255,0,255}));
-  connect(TSupSetpt.supCooSP, EconMod.supCooSP) annotation (
-    Line(points={{14.2,8},{20,8},{20,-39},{25.8,-39}},        color = {0, 0, 127}));
-
-  connect(EconMod.oaT, oaT) annotation (
-    Line(points={{25.8,-32},{-22,-32},{-22,-138},{-120,-138}},        color = {0, 0, 127}));
-
-  connect(oaT, ERWcon.oaT) annotation (
+  connect(TSupSetpt.supCooSP, EconMod.supCooSP) annotation(
+    Line(points = {{14.2, 8}, {20, 8}, {20, -39}, {25.8, -39}}, color = {0, 0, 127}));
+  connect(EconMod.oaT, oaT) annotation(
+    Line(points = {{25.8, -32}, {-22, -32}, {-22, -138}, {-120, -138}}, color = {0, 0, 127}));
+  connect(oaT, ERWcon.oaT) annotation(
     Line(points = {{-120, -138}, {-22, -138}, {-22, -55.8}, {55.8, -55.8}}, color = {0, 0, 127}));
-
-  connect(erwT, ERWcon.erwT) annotation (
+  connect(erwT, ERWcon.erwT) annotation(
     Line(points = {{-120, -216}, {-16, -216}, {-16, -58.8}, {55.8, -58.8}}, color = {0, 0, 127}));
-
-  connect(ERWcon.raT, raT) annotation (
-    Line(points = {{55.8, -52.2}, {-88, -52.2}, {-88, -112}, {-120, -112}}, color = {0, 0, 127}));
-
-  connect(TSupSetpt.supPrimSP, ERWcon.supPrimSP) annotation (
+  connect(TSupSetpt.supPrimSP, ERWcon.supPrimSP) annotation(
     Line(points = {{14.2, 4}, {18, 4}, {18, -61.8}, {55.8, -61.8}}, color = {0, 0, 127}));
-
-  connect(EFcon.exhFanStart, exhFanStart) annotation (
+  connect(EFcon.exhFanStart, exhFanStart) annotation(
     Line(points = {{80, -90}, {94, -90}, {94, -108}, {122, -108}}, color = {255, 0, 255}));
-
-  connect(EFcon.exhFanSpeed, exhFanSpeed) annotation (
+  connect(EFcon.exhFanSpeed, exhFanSpeed) annotation(
     Line(points = {{80, -102}, {92, -102}, {92, -136}, {122, -136}}, color = {0, 0, 127}));
-
 // connect(SFcon.supFanProof, EFcon.supFanProof) annotation (
 //Line(points={{-62,68},{-56,68},{-56,-90},{56,-90}}, color={255,0,255}));
-  connect(EFcon.exhFanProof, exhFanProof) annotation (
+  connect(EFcon.exhFanProof, exhFanProof) annotation(
     Line(points = {{56, -96}, {-14, -96}, {-14, -242}, {-120, -242}}, color = {255, 0, 255}));
-
-  connect(EFcon.bldgSP, bldgSP) annotation (
+  connect(EFcon.bldgSP, bldgSP) annotation(
     Line(points = {{56, -102.4}, {-12, -102.4}, {-12, -270}, {-120, -270}}, color = {0, 0, 127}));
-
-  connect(TSupSetpt.highSpaceT, highSpaceT) annotation (
+  connect(TSupSetpt.highSpaceT, highSpaceT) annotation(
     Line(points = {{-10, -1}, {-88, -1}, {-88, -30}, {-120, -30}}, color = {0, 0, 127}));
-
-  connect(supFanStatus, SFcon.supFanStatus) annotation (
-    Line(points={{-120,24},{-96,24},{-96,64.4},{-86,64.4}},      color = {255, 0, 255}));
-
-  connect(supFanStatus, DehumMod.supFanProof) annotation (
-    Line(points={{-120,24},{-50.2,24},{-50.2,25.2}},  color = {255, 0, 255}));
-
-  connect(supFanStatus, Cooling.supFanProof) annotation (
-    Line(points={{-120,24},{-56,24},{-56,36.4},{55.8,36.4}},    color = {255, 0, 255}));
-
-  connect(supFanStatus, Heating.supFanProof) annotation (
-    Line(points={{-120,24},{24,24},{24,-8},{55.8,-8}},        color = {255, 0, 255}));
-
-  connect(supFanStatus, ERWcon.supFanProof) annotation (
-    Line(points={{-120,24},{44,24},{44,-46.2},{55.8,-46.2}},    color = {255, 0, 255}));
-
-  connect(supFanStatus, EFcon.supFanProof) annotation (
+  connect(supFanStatus, SFcon.supFanStatus) annotation(
+    Line(points = {{-120, 24}, {-96, 24}, {-96, 64.4}, {-86, 64.4}}, color = {255, 0, 255}));
+  connect(supFanStatus, DehumMod.supFanProof) annotation(
+    Line(points = {{-120, 24}, {-50.2, 24}, {-50.2, 25.2}}, color = {255, 0, 255}));
+  connect(supFanStatus, Cooling.supFanProof) annotation(
+    Line(points = {{-120, 24}, {-56, 24}, {-56, 36.4}, {55.8, 36.4}}, color = {255, 0, 255}));
+  connect(supFanStatus, Heating.supFanProof) annotation(
+    Line(points = {{-120, 24}, {24, 24}, {24, -8}, {55.8, -8}}, color = {255, 0, 255}));
+  connect(supFanStatus, ERWcon.supFanProof) annotation(
+    Line(points = {{-120, 24}, {44, 24}, {44, -46.2}, {55.8, -46.2}}, color = {255, 0, 255}));
+  connect(supFanStatus, EFcon.supFanProof) annotation(
     Line(points = {{-120, 24}, {24, 24}, {24, -90}, {56, -90}}, color = {255, 0, 255}));
-
-  connect(supFanStatus, EconMod.supFanProof) annotation (
-    Line(points={{-120,24},{6,24},{6,-25},{25.8,-25}},        color = {255, 0, 255}));
-
+  connect(supFanStatus, EconMod.supFanProof) annotation(
+    Line(points = {{-120, 24}, {6, 24}, {6, -25}, {25.8, -25}}, color = {255, 0, 255}));
+  connect(ERWcon.raT, raT) annotation(
+    Line(points = {{55.8, -52.2}, {-88, -52.2}, {-88, -112}, {-120, -112}}, color = {0, 0, 127}));
   annotation (
     defaultComponentName = "DOAScon",
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -240}, {100, 100}}), graphics={  Text(textColor = {28, 108, 200}, extent = {{-90, 180}, {90, 76}}, textString = "%name", textStyle = {TextStyle.Bold}), Rectangle(lineColor = {179, 151, 128}, fillColor = {255, 255, 255},

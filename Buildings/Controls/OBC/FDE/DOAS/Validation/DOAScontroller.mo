@@ -171,7 +171,7 @@ model DOAScontroller "DOAS controller"
   cctPITi = 0.025,
   SAccPIk = 0.001,
   SAccPITi = 0.025)
-  annotation(Placement(transformation(extent = {{64, -18}, {84, 16}})));
+  annotation(Placement(visible = true, transformation(origin = {6, 12}, extent = {{64, -18}, {84, 16}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse OccGen(
   width = 0.8,
@@ -198,7 +198,7 @@ model DOAScontroller "DOAS controller"
   freqHz = 1/10800,
   phase = 3.9269908169872,
   offset = 400)
-  annotation(Placement(transformation(extent = {{-92, -18}, {-72, 2}})));
+  annotation(Placement(visible = true, transformation(origin = {-6, 0}, extent = {{-92, -18}, {-72, 2}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Continuous.Switch swi
   "Logic switch selects DDSP generator when fan is proven otherwise selects 0."
@@ -207,7 +207,7 @@ model DOAScontroller "DOAS controller"
   Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con0(
   final k = 0)
   "Real constant 0"
-  annotation(Placement(transformation(extent = {{-92, -48}, {-72, -28}})));
+  annotation(Placement(visible = true, transformation(origin = {2, -10}, extent = {{-92, -48}, {-72, -28}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sin ralHumGen(
   amplitude = 10,
@@ -225,7 +225,7 @@ model DOAScontroller "DOAS controller"
   offset = 60,
   startTime = 0)
   "ERW humidity sensor simulator."
-  annotation(Placement(transformation(extent = {{32, -30}, {52, -10}})));
+  annotation(Placement(visible = true, transformation(origin = {-4, -4}, extent = {{32, -30}, {52, -10}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel1(
   final delayTime = 10,
@@ -262,7 +262,7 @@ model DOAScontroller "DOAS controller"
   phase = 0.34906585039887,
   offset = 294, startTime = 0)
   "Return air temperature simulator."
-  annotation(Placement(transformation(extent = {{-52, -30}, {-32, -10}})));
+  annotation(Placement(visible = true, transformation(origin = {-2, -8}, extent = {{-52, -30}, {-32, -10}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Continuous.Sources.Sin highSpaceTGen(
   amplitude = 3,
@@ -290,73 +290,73 @@ model DOAScontroller "DOAS controller"
 
 equation
   connect(OccGen.y, DOAScon.occ) annotation (
-    Line(points = {{-20, 86}, {58, 86}, {58, 15.6}, {62, 15.6}}, color = {255, 0, 255}));
+    Line(points = {{-20, 86}, {58, 86}, {58, 28}, {68, 28}}, color = {255, 0, 255}));
 
   connect(mostOpenDamGen.y, DOAScon.mostOpenDam) annotation (
-    Line(points = {{-20, 56}, {54, 56}, {54, 13.2}, {62, 13.2}}, color = {0, 0, 127}));
+    Line(points = {{-20, 56}, {54, 56}, {54, 25}, {68, 25}}, color = {0, 0, 127}));
 
   connect(truDel.y, DOAScon.supFanStatus) annotation (
-    Line(points = {{-24, 32}, {50, 32}, {50, 10.8}, {62, 10.8}}, color = {255, 0, 255}));
+    Line(points = {{-24, 32}, {50, 32}, {50, 23}, {68, 23}}, color = {255, 0, 255}));
 
   connect(truDel.y, swi.u2) annotation (
     Line(points = {{-24, 32}, {-24, 18}, {-54, 18}, {-54, 8}}, color = {255, 0, 255}));
 
   connect(sensorDDSP.y, swi.u1) annotation (
-    Line(points = {{-70, -8}, {-66, -8}, {-66, 16}, {-54, 16}}, color = {0, 0, 127}));
+    Line(points = {{-76, -8}, {-66, -8}, {-66, 16}, {-54, 16}}, color = {0, 0, 127}));
 
   connect(con0.y, swi.u3) annotation (
-    Line(points = {{-70, -38}, {-60, -38}, {-60, 0}, {-54, 0}}, color = {0, 0, 127}));
+    Line(points = {{-68, -48}, {-60, -48}, {-60, 0}, {-54, 0}}, color = {0, 0, 127}));
 
   connect(ralHumGen.y, DOAScon.retHum) annotation (
-    Line(points = {{24, -6}, {28, -6}, {28, 6}, {62, 6}}, color = {0, 0, 127}));
+    Line(points = {{24, -6}, {28, -6}, {28, 18}, {68, 18}}, color = {0, 0, 127}));
 
   connect(highSpaceTGen.y, DOAScon.highSpaceT) annotation (
-    Line(points = {{-2, -18}, {30, -18}, {30, 3.4}, {62, 3.4}}, color = {0, 0, 127}));
+    Line(points = {{-2, -18}, {30, -18}, {30, 15}, {68, 15}}, color = {0, 0, 127}));
 
   connect(raTGen.y, DOAScon.raT) annotation (
-    Line(points = {{-30, -20}, {-28, -20}, {-28, -1.6}, {62, -1.6}}, color = {0, 0, 127}));
+    Line(points = {{-32, -28}, {-28, -28}, {-28, 10}, {68, 10}}, color = {0, 0, 127}));
 
   connect(erwHumGen.y, DOAScon.erwHum) annotation (
-    Line(points = {{54, -20}, {56, -20}, {56, -9.2}, {62, -9.2}}, color = {0, 0, 127}));
+    Line(points = {{50, -24}, {56, -24}, {56, 3}, {68, 3}}, color = {0, 0, 127}));
 
   connect(DOAScon.bypDam, ERWtemp.bypDam) annotation (
-    Line(points = {{86.2, -1}, {97.1, -1}, {97.1, -12}, {107.6, -12}}, color = {255, 0, 255}));
+    Line(points = {{92, 11}, {97.1, 11}, {97.1, -12}, {107.6, -12}}, color = {255, 0, 255}));
 
   connect(DOAScon.erwStart, ERWtemp.erwStart) annotation (
-    Line(points = {{86.2, -4}, {98, -4}, {98, -16}, {107.6, -16}}, color = {255, 0, 255}));
+    Line(points = {{92, 8}, {98, 8}, {98, -16}, {107.6, -16}}, color = {255, 0, 255}));
 
   connect(raTGen.y, ERWtemp.raT) annotation (
-    Line(points = {{-30, -20}, {107.6, -20}}, color = {0, 0, 127}));
+    Line(points = {{-32, -28}, {38.8, -28}, {38.8, -20}, {107.6, -20}}, color = {0, 0, 127}));
 
   connect(ERWtemp.erwTsim, DOAScon.erwT) annotation (
-    Line(points = {{132.4, -18}, {134, -18}, {134, -38}, {60, -38}, {60, -11.6}, {62, -11.6}}, color = {0, 0, 127}));
+    Line(points = {{132.4, -18}, {134, -18}, {134, -38}, {60, -38}, {60, 0}, {68, 0}}, color = {0, 0, 127}));
 
   connect(DOAScon.exhFanStart, truDel1.u) annotation (
-    Line(points = {{86.2, -10.4}, {96, -10.4}, {96, -56}, {106, -56}}, color = {255, 0, 255}));
+    Line(points = {{92, 2}, {96, 2}, {96, -56}, {106, -56}}, color = {255, 0, 255}));
 
   connect(truDel1.y, DOAScon.exhFanProof) annotation (
-    Line(points = {{130, -56}, {134, -56}, {134, -74}, {58, -74}, {58, -14}, {62, -14}}, color = {255, 0, 255}));
+    Line(points = {{130, -56}, {134, -56}, {134, -74}, {58, -74}, {58, -2}, {68, -2}}, color = {255, 0, 255}));
 
   connect(bldgSP.y, DOAScon.bldgSP) annotation (
-    Line(points = {{52, -82}, {54, -82}, {54, -16.4}, {62, -16.4}}, color = {0, 0, 127}));
+    Line(points = {{52, -82}, {54, -82}, {54, -4}, {68, -4}}, color = {0, 0, 127}));
 
   connect(oaTgen.y, DOAScon.oaT) annotation (
-    Line(points = {{26, -36}, {32, -36}, {32, -4.2}, {62, -4.2}}, color = {0, 0, 127}));
+    Line(points = {{26, -36}, {32, -36}, {32, 8}, {68, 8}}, color = {0, 0, 127}));
 
   connect(oaTgen.y, ERWtemp.oaT) annotation (
     Line(points = {{26, -36}, {62, -36}, {62, -24}, {107.6, -24}}, color = {0, 0, 127}));
 
   connect(swi.y, DOAScon.DDSP) annotation (
-    Line(points = {{-30, 8}, {16, 8}, {16, 8.4}, {62, 8.4}}, color = {0, 0, 127}));
+    Line(points = {{-30, 8}, {16, 8}, {16, 20}, {68, 20}}, color = {0, 0, 127}));
 
   connect(saTGen.y, DOAScon.saT) annotation (
-    Line(points = {{-2, -52}, {26, -52}, {26, 0.8}, {62, 0.8}}, color = {0, 0, 127}));
+    Line(points = {{-2, -52}, {26, -52}, {26, 13}, {68, 13}}, color = {0, 0, 127}));
 
   connect(ccTGen.y, DOAScon.ccT) annotation (
-    Line(points = {{-2, -82}, {28, -82}, {28, -6.6}, {62, -6.6}}, color = {0, 0, 127}));
+    Line(points = {{-2, -82}, {28, -82}, {28, 5}, {68, 5}}, color = {0, 0, 127}));
 
   connect(DOAScon.supFanStart, pre.u) annotation (
-    Line(points={{86.2,11.4},{-86,11.4},{-86,52},{-80,52}},    color = {255, 0, 255}));
+    Line(points={{92,23},{-86,23},{-86,52},{-80,52}},    color = {255, 0, 255}));
 
   connect(pre.y, truDel.u) annotation (
     Line(points = {{-56, 52}, {-56, 41}, {-48, 41}, {-48, 32}}, color = {255, 0, 255}));
