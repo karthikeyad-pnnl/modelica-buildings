@@ -39,8 +39,15 @@ model ClosedLoopValidation
     Placement(visible = true, transformation(origin={2,14},    extent = {{-90, 30}, {-70, 50}}, rotation = 0)));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant chiWatSupTem(k = 273.15 + 7.22) "Chilled water supply temperature" annotation (
     Placement(transformation(extent={{-148,-26},{-128,-6}})));
-  Modelica.Blocks.Sources.CombiTimeTable loads(tableOnFile = true, tableName = "tab1", fileName = "C:/buildings_library/buildings_library_pnnl/VM_script/inputTable_constantSetpoint.txt", columns = {2, 3, 4, 5, 6}, timeScale = 60) "Table defining thermal loads for zone" annotation (
-    Placement(transformation(extent={{-46,-66},{-26,-46}})));
+  Modelica.Blocks.Sources.CombiTimeTable loads(
+    tableOnFile = true,
+    tableName = "tab1",
+    fileName=ModelicaServices.ExternalReferences.loadResource(
+        "modelica://Buildings/Resources/Data/Examples/ChilledBeamSystem/zoneLoads.txt"),
+    columns = {2, 3, 4, 5, 6},
+    timeScale = 60)
+    "Table defining thermal loads for zone"
+    annotation (Placement(transformation(extent={{-160,-60},{-140,-40}})));
   Buildings.Controls.SetPoints.OccupancySchedule occSch(occupancy = 3600*{8, 18}) annotation (
     Placement(visible = true, transformation(origin={-6,74},   extent = {{-152, -44}, {-132, -24}}, rotation = 0)));
   Buildings.Controls.OBC.CDL.Reals.Sources.TimeTable TSetRooHea(extrapolation = Buildings.Controls.OBC.CDL.Types.Extrapolation.Periodic, smoothness = Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments, table = [0, 15 + 273.15; 8*3600, 20 + 273.15; 18*3600, 15 + 273.15; 24*3600, 15 + 273.15]) annotation (
@@ -180,15 +187,15 @@ equation
   connect(terCon.yDam, chiBeaTesBed.uCAVDam) annotation (Line(points={{64,64},{
           72,64},{72,62},{78,62},{78,36},{-20,36},{-20,-6},{-12,-6}}, color={0,
           0,127}));
-  connect(loads.y, chiBeaTesBed.QFlo) annotation (Line(points={{-25,-56},{-14,
-          -56},{-14,6},{-12,6}}, color={0,0,127}));
+  connect(loads.y, chiBeaTesBed.QFlo) annotation (Line(points={{-139,-50},{-14,-50},
+          {-14,6},{-12,6}},      color={0,0,127}));
   connect(sub.y, chiBeaTesBed.deltaT) annotation (Line(points={{18,-82},{20,-82},
           {20,-98},{-136,-98},{-136,-38},{-104,-38},{-104,6},{-68,6},{-68,10},{
           -24,10},{-24,-2},{-18,-2},{-18,-4},{-12,-4}}, color={0,0,127}));
   connect(DOAScon.supFanStart, chiBeaTesBed.uFanSta) annotation (Line(points={{
           -23.14,-4.6},{-17.57,-4.6},{-17.57,-14},{-12,-14}}, color={255,0,255}));
-  connect(reaScaRep.y, terCon.TZonHeaSet) annotation (Line(points={{-14,98},{0,
-          98},{0,68},{20,68},{20,67.75},{40,67.75}}, color={0,0,127}));
+  connect(reaScaRep.y, terCon.TZonHeaSet) annotation (Line(points={{-14,98},{0,98},
+          {0,68},{20,68},{20,67.75},{40,67.75}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}})),
     Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-160, -100}, {160, 100}})),
