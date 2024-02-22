@@ -63,48 +63,48 @@ iconTransformation(extent={{-140,-70},{-100,-30}})));
       annotation(Placement(transformation(extent={{102,-52},{142,-12}}),
         iconTransformation(extent={{102,-60},{142,-20}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Line lin
+  Buildings.Controls.OBC.CDL.Reals.Line lin
     "Linear converter resets primary supply set point."
     annotation(Placement(transformation(extent={{-42,-8},{-22,12}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant lowPriT(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant lowPriT(
     final k=loPriT)
    "Low primary supply temperature set point reset value."
     annotation(Placement(transformation(extent={{-90,-60},{-70,-40}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant highPriT(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant highPriT(
     final k=hiPriT)
     "High primary supply temperature set point reset value."
     annotation(Placement(transformation(extent={{-90,10},{-70,30}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant highZoneT(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant highZoneT(
    final k=hiZonT)
    "High zone temperature set point reset value."
     annotation(Placement(transformation(extent={{-90,-28},{-70,-8}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant lowZoneT(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant lowZoneT(
     final k=loZonT)
     "Low zone temperature set point reset value."
      annotation(Placement(transformation(extent={{-90,42},{-70,62}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Add add2
+  Buildings.Controls.OBC.CDL.Reals.Add add2
     "Adds the cooling set point adjustment to the primary set point."
     annotation(Placement(transformation(extent={{22,26},{42,46}})));
 
-  CDL.Continuous.Subtract                   add1
+  Buildings.Controls.OBC.CDL.Reals.Subtract                   add1
     "Subtracts the heating set point adjustment from the primary set point."
       annotation(Placement(transformation(extent={{22,-50},{42,-30}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant coolAdj(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant coolAdj(
     final k=coAdj)
     "Supply air temperature cooling set point offset."
     annotation(Placement(transformation(extent={{-14,44},{6,64}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant heatAdj(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant heatAdj(
     final k=heAdj)
     "Supply air temperature heating set point offset."
      annotation(Placement(transformation(extent={{-14,-66},{6,-46}})));
-  Buildings.Controls.OBC.CDL.Continuous.Switch dehumSwi
+  Buildings.Controls.OBC.CDL.Reals.Switch dehumSwi
     "Logical switch changes heating set point based on dehumidification mode."
     annotation (Placement(transformation(extent={{66,-42},{86,-22}})));
 

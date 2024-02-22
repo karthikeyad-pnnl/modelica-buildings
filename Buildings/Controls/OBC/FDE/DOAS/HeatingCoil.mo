@@ -22,15 +22,15 @@ block HeatingCoil "This block commands the heating coil."
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yRHC "Reheat coil valve command." 
   annotation(Placement(transformation(extent = {{102, -20}, {142, 20}}), iconTransformation(extent = {{102, -20}, {142, 20}})));
   
-  Buildings.Controls.OBC.CDL.Continuous.Switch swi 
+  Buildings.Controls.OBC.CDL.Reals.Switch swi 
   "Logical switch passes supply air heating set point when supply fan is proven otherwise sends 0 set point." annotation(Placement(transformation(extent = {{-20, -10}, {0, 10}})));
   
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con0(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con0(
   final k = 0) 
   "Real constant 0" 
   annotation(Placement(transformation(extent = {{-52, -28}, {-32, -8}})));
   
-  Buildings.Controls.OBC.CDL.Continuous.PID conPID1(
+  Buildings.Controls.OBC.CDL.Reals.PID conPID1(
   Ti = SArhcPITi, 
   k = SArhcPIk)  
   annotation(Placement(visible = true, transformation(origin = {32, 0}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));

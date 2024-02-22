@@ -180,7 +180,7 @@ model DOAScontroller "DOAS controller"
   "Simulates occupancy mode schedule."
   annotation(Placement(transformation(extent = {{-42, 76}, {-22, 96}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin mostOpenDamGen(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sin mostOpenDamGen(
   amplitude = 4,
   freqHz = 1/5670,
   offset = 90)
@@ -193,23 +193,23 @@ model DOAScontroller "DOAS controller"
   "Simulates delay from initial fan start command to fan status proof."
   annotation(Placement(visible = true, transformation(origin = {48, 8}, extent = {{-94, 14}, {-74, 34}}, rotation = 0)));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin sensorDDSP(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sin sensorDDSP(
   amplitude = 300,
   freqHz = 1/10800,
   phase = 3.9269908169872,
   offset = 400)
   annotation(Placement(visible = true, transformation(origin = {-6, 0}, extent = {{-92, -18}, {-72, 2}}, rotation = 0)));
 
-  Buildings.Controls.OBC.CDL.Continuous.Switch swi
+  Buildings.Controls.OBC.CDL.Reals.Switch swi
   "Logic switch selects DDSP generator when fan is proven otherwise selects 0."
   annotation(Placement(transformation(extent = {{-52, -2}, {-32, 18}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con0(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con0(
   final k = 0)
   "Real constant 0"
   annotation(Placement(visible = true, transformation(origin = {2, -10}, extent = {{-92, -48}, {-72, -28}}, rotation = 0)));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin ralHumGen(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sin ralHumGen(
   amplitude = 10,
   freqHz = 1/10800,
   phase = 1.5707963267949,
@@ -218,7 +218,7 @@ model DOAScontroller "DOAS controller"
   "Return humidity sensor simulator."
   annotation(Placement(transformation(extent = {{2, -16}, {22, 4}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin erwHumGen(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sin erwHumGen(
   amplitude = 5,
   freqHz = 1/7200,
   phase = 1.5707963267949,
@@ -233,13 +233,13 @@ model DOAScontroller "DOAS controller"
   "Simulates delay from initial fan start command to fan status proof."
   annotation(Placement(transformation(extent = {{108, -66}, {128, -46}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin bldgSP(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sin bldgSP(
   amplitude = 3,
   freqHz = 1/10800,
   offset = 15)
   annotation(Placement(transformation(extent = {{30, -92}, {50, -72}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin ccTGen(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sin ccTGen(
   amplitude = 7,
   freqHz = 1/21600,
   phase = 1.0471975511966,
@@ -248,7 +248,7 @@ model DOAScontroller "DOAS controller"
   "Cooling coil discharge temperature simulator."
   annotation(Placement(transformation(extent = {{-24, -92}, {-4, -72}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Ramp oaTgen(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Ramp oaTgen(
   height = 26,
   duration = 8500,
   offset = 275,
@@ -256,7 +256,7 @@ model DOAScontroller "DOAS controller"
   "Outside air temperature generator."
   annotation(Placement(transformation(extent = {{4, -46}, {24, -26}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin raTGen(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sin raTGen(
   amplitude = 5,
   freqHz = 1/20600,
   phase = 0.34906585039887,
@@ -264,7 +264,7 @@ model DOAScontroller "DOAS controller"
   "Return air temperature simulator."
   annotation(Placement(visible = true, transformation(origin = {-2, -8}, extent = {{-52, -30}, {-32, -10}}, rotation = 0)));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin highSpaceTGen(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sin highSpaceTGen(
   amplitude = 3,
   freqHz = 1/3600,
   offset = 296,
@@ -272,7 +272,7 @@ model DOAScontroller "DOAS controller"
   "Terminal unit high space temperature simulator."
   annotation(Placement(transformation(extent = {{-24, -28}, {-4, -8}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin saTGen(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sin saTGen(
   amplitude = 15,
   freqHz = 1/21600,
   phase = 1.0471975511966,
@@ -285,7 +285,7 @@ model DOAScontroller "DOAS controller"
   "Energy recovery wheel supply temperature simulator."
   annotation(Placement(transformation(extent = {{110, -28}, {130, -8}})));
 
-  CDL.Logical.Pre pre
+  Buildings.Controls.OBC.CDL.Logical.Pre pre
   annotation(Placement(visible = true, transformation(origin = {-68, 52}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
 equation

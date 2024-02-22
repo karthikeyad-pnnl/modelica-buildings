@@ -40,7 +40,7 @@ model TSupSet "This model simulates TSupSet"
 
   Buildings.Controls.OBC.FDE.DOAS.TSupSet tSupSet
     annotation (Placement(transformation(extent={{22,-10},{42,10}})));
-  CDL.Continuous.Sources.Sine
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine
   highSpaceTGen(
     amplitude=3,
     freqHz=1/3600,
@@ -48,7 +48,7 @@ model TSupSet "This model simulates TSupSet"
     startTime=1250)
     annotation (Placement(transformation(extent={{-44,10},{-24,30}})));
     
-  CDL.Logical.Sources.Pulse dehumMode(
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse dehumMode(
   width=0.5, 
   period=2880)
   annotation (Placement(transformation(extent={{-44,-32},{-24,-12}})));

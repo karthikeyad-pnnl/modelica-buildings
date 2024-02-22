@@ -27,77 +27,77 @@ block Dewpoint
    annotation (Placement(transformation(extent={{102,-96},{142,-56}}),
        iconTransformation(extent={{102,-20},{142,20}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Log log
+  Buildings.Controls.OBC.CDL.Reals.Log log
     "Calculate natural log of input value."
     annotation (Placement(transformation(extent={{-32,56},{-12,76}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Division div
+  Buildings.Controls.OBC.CDL.Reals.Division div
     "Divide relHum by 100."
     annotation (Placement(transformation(extent={{-62,56},{-42,76}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con100(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con100(
     final k=100)
     "Real constant 100"
     annotation (Placement(transformation(extent={{-92,46},{-72,66}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Multiply pro
+  Buildings.Controls.OBC.CDL.Reals.Multiply pro
     "Calculate the product of dry bulb temperature (degC) and 17.27"
     annotation (Placement(transformation(extent={{-30,16},{-10,36}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con1727(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con1727(
     final k=17.27)
     "Real constant 17.27"
     annotation (Placement(transformation(extent={{-62,-10},{-42,10}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Add add2
+  Buildings.Controls.OBC.CDL.Reals.Add add2
     "Add dry bulb temperature (degC) and 237.3"
     annotation (Placement(transformation(extent={{-30,-34},{-10,-14}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con2373(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con2373(
     final k=237.3)
     "Real constant 237.3"
       annotation (Placement(transformation(extent={{-62,-52},{-42,-32}})));
       
-  Buildings.Controls.OBC.CDL.Continuous.Division div1
+  Buildings.Controls.OBC.CDL.Reals.Division div1
     "Output first input divided by second input."
     annotation (Placement(transformation(extent={{0,10},{20,30}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Add add1
+  Buildings.Controls.OBC.CDL.Reals.Add add1
     "Add two values."
     annotation (Placement(transformation(extent={{30,16},{50,36}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Division div2
+  Buildings.Controls.OBC.CDL.Reals.Division div2
     "Output first input divided by second input"
     annotation (Placement(transformation(extent={{62,10},{82,30}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Multiply pro1
+  Buildings.Controls.OBC.CDL.Reals.Multiply pro1
     "Output product of two inputs"
     annotation (Placement(transformation(extent={{4,-46},{24,-26}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Division div3
+  Buildings.Controls.OBC.CDL.Reals.Division div3
     "Output first input divided by second input"
     annotation (Placement(transformation(extent={{60,-52},{80,-32}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Add add3
+  Buildings.Controls.OBC.CDL.Reals.Add add3
     "Output the sum of two inputs"
     annotation (Placement(transformation(extent={{32,-80},{52,-60}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con1(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con1(
     final k=1)
     "Real constant 1"
       annotation (Placement(transformation(extent={{4,-72},{24,-52}})));
       
-  Buildings.Controls.OBC.CDL.Continuous.Add add4(
+  Buildings.Controls.OBC.CDL.Reals.Add add4(
     final k2=-1)
     "Subtract 273.15 from dry bulb temperature."
     annotation (Placement(transformation(extent={{-92,16},{-72,36}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con27315(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con27315(
     final k=273.15)
     "Real constant 273.15"
     annotation (Placement(transformation(extent={{-92,-14},{-72,6}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Add add5
+  Buildings.Controls.OBC.CDL.Reals.Add add5
     "Add 273.15 to the final value to output dew point temperature in K"
     annotation (Placement(transformation(extent={{70,-86},{90,-66}})));
     

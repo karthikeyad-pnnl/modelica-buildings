@@ -78,11 +78,11 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
   annotation(Placement(transformation(extent = {{102, 46}, {142, 86}}),
     iconTransformation(extent = {{102, 40}, {142, 80}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Subtract                   difference
+  Buildings.Controls.OBC.CDL.Reals.Subtract                   difference
   "Subtract outside air temperature from return air temperature."
   annotation(Placement(visible = true, transformation(origin = {24, 2}, extent = {{-90, -10}, {-70, 10}}, rotation = 0)));
 
-  Buildings.Controls.OBC.CDL.Continuous.Abs abs
+  Buildings.Controls.OBC.CDL.Reals.Abs abs
   "Absolute value of OAT-RAT difference."
   annotation(Placement(visible = true, transformation(origin = {26, 2}, extent = {{-62, -10}, {-42, 10}}, rotation = 0)));
 
@@ -92,26 +92,25 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
   "Recovery set point delay before disabling energy wheel."
   annotation(Placement(visible = true, transformation(origin = {30, 28}, extent = {{2, -38}, {22, -18}}, rotation = 0)));
 
-  Buildings.Controls.OBC.CDL.Logical.And3 and3
-  "Logical AND; true when fan is proven, economizer mode is off, and ERW 
+  Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd(nin=3) "Logical AND; true when fan is proven, economizer mode is off, and ERW 
    temperature start conditions are met."
-  annotation(Placement(transformation(extent = {{62, 10}, {82, 30}})));
+    annotation (Placement(transformation(extent={{62,10},{82,30}})));
 
   Buildings.Controls.OBC.CDL.Logical.Not not1
   "Logical NOT; true when economizer mode is off."
   annotation(Placement(transformation(extent = {{-26, 40}, {-6, 60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Max max
+  Buildings.Controls.OBC.CDL.Reals.Max max
   "Outputs maximum value of two ERW temperature PI loops."
   annotation (
     Placement(transformation(extent = {{-62, -78}, {-42, -58}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Switch swi
+  Buildings.Controls.OBC.CDL.Reals.Switch swi
   "Logical switch outputs ERW temperature PI maximum output 
    when erwStart command is true."
    annotation(Placement(transformation(extent = {{66, -86}, {86, -66}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con0(final k = 0) "Real constant 0."
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con0(final k = 0) "Real constant 0."
   annotation(Placement(transformation(extent = {{30, -94}, {50, -74}})));
 
   Buildings.Controls.OBC.CDL.Logical.And and1
@@ -126,38 +125,32 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
   "Logical NOT; true when ERW start command is off."
   annotation(Placement(transformation(extent = {{34, 40}, {54, 60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.PID conPID_heat(
+  Buildings.Controls.OBC.CDL.Reals.PID conPID_heat(
   Ti = conTi_heat,
   k = kGain_heat)
   "PID loop if heating"
   annotation(Placement(visible = true, transformation(origin = {-82, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
-  Buildings.Controls.OBC.CDL.Continuous.PID conPID_cool(
+  Buildings.Controls.OBC.CDL.Reals.PID conPID_cool(
   Ti = conTi_cool,
   k = kGain_cool)
    "PID loop if cooling"
    annotation(Placement(visible = true, transformation(origin = {-80, -82}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(uHigh = recSet, uLow = recSet - Thys)  annotation (
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(uHigh = recSet, uLow = recSet - Thys)  annotation (
     Placement(visible = true, transformation(origin={8,2},     extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
   connect(not1.u, ecoMode) annotation (
     Line(points = {{-28, 50}, {-122, 50}}, color = {255, 0, 255}));
 
-  connect(not1.y, and3.u2) annotation (
-    Line(points = {{-4, 50}, {0, 50}, {0, 20}, {60, 20}}, color = {255, 0, 255}));
-
-  connect(supFanProof, and3.u1) annotation (
-    Line(points = {{-122, 80}, {8, 80}, {8, 28}, {60, 28}}, color = {255, 0, 255}));
-
-  connect(and3.y, erwStart) annotation (
-    Line(points = {{84, 20}, {122, 20}}, color = {255, 0, 255}));
+  connect(mulAnd.y, erwStart)
+    annotation (Line(points={{84,20},{122,20}}, color={255,0,255}));
 
   connect(max.y, swi.u1) annotation (
     Line(points = {{-40, -68}, {64, -68}}, color = {0, 0, 127}));
 
-  connect(and3.y, swi.u2) annotation (
-    Line(points = {{84, 20}, {88, 20}, {88, -58}, {56, -58}, {56, -76}, {64, -76}}, color = {255, 0, 255}));
+  connect(mulAnd.y, swi.u2) annotation (Line(points={{84,20},{88,20},{88,-58},{
+          56,-58},{56,-76},{64,-76}}, color={255,0,255}));
 
   connect(con0.y, swi.u3) annotation (
     Line(points = {{52, -84}, {64, -84}}, color = {0, 0, 127}));
@@ -176,8 +169,8 @@ equation
   connect(not2.y, or2.u2) annotation (
     Line(points = {{56, 50}, {58, 50}, {58, 58}, {60, 58}}, color = {255, 0, 255}));
 
-  connect(and3.y, not2.u) annotation (
-    Line(points = {{84, 20}, {88, 20}, {88, 36}, {28, 36}, {28, 50}, {32, 50}}, color = {255, 0, 255}));
+  connect(mulAnd.y, not2.u) annotation (Line(points={{84,20},{88,20},{88,36},{
+          28,36},{28,50},{32,50}}, color={255,0,255}));
 
   connect(or2.y, bypDam) annotation (
     Line(points = {{84, 66}, {122, 66}}, color = {255, 0, 255}));
@@ -213,11 +206,14 @@ equation
     Line(points={{20,2},{25,2},{25,0},{30,0}},
                                          color = {255, 0, 255}));
 
-  connect(truDel.y, and3.u3) annotation (
-    Line(points = {{54, 0}, {54, 12}, {60, 12}}, color = {255, 0, 255}));
-
   connect(abs.y, hys.u)
     annotation (Line(points={{-14, 2}, {-4, 2}}, color={0,0,127}));
+  connect(supFanProof, mulAnd.u[1]) annotation (Line(points={{-122,80},{-70,80},
+          {-70,88},{20,88},{20,24.6667},{60,24.6667}}, color={255,0,255}));
+  connect(not1.y, mulAnd.u[2]) annotation (Line(points={{-4,50},{10,50},{10,20},
+          {60,20}}, color={255,0,255}));
+  connect(truDel.y, mulAnd.u[3]) annotation (Line(points={{54,0},{56,0},{56,
+          15.3333},{60,15.3333}}, color={255,0,255}));
   annotation (
     defaultComponentName = "ERWcon",
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics={  Rectangle(fillColor = {255, 255, 255},

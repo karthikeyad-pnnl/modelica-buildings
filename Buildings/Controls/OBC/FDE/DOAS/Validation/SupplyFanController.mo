@@ -15,14 +15,14 @@ annotation (Placement(transformation(extent={{40,-6},{60,14}})));
   OccGen(width=0.6, period=2880)
   annotation (Placement(transformation(extent={{-66,32},{-46,52}})));
   
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sin
   mostOpenDamGen(
     amplitude=4,
     freqHz=1/5670,
     offset=90)
     annotation (Placement(transformation(extent={{-66,-2},{-46,18}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin sensorDDSP(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sin sensorDDSP(
     amplitude=9,
     freqHz=1/6780,
     offset=180)

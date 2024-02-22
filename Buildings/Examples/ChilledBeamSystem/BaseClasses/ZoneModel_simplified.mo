@@ -134,7 +134,7 @@ block ZoneModel_simplified
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uVal "Chilled water valve signal" annotation (
       Placement(transformation(extent={{-240,-100},{-200,-60}}),
         iconTransformation(extent={{-140,-20},{-100,20}})));
-  Buildings.Controls.OBC.CDL.Continuous.MultiplyByParameter gai(k=mA_flow_nominal) "Gain"
+  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter gai(k=mA_flow_nominal) "Gain"
     annotation (Placement(transformation(extent={{-180,-90},{-160,-70}})));
   ThermalZones.Detailed.Constructions.Construction conBou[nConBou](
     A=datConBou.A,

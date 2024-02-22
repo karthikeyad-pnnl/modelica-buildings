@@ -208,19 +208,19 @@ block TestBed "Testbed consisting of a 5-zone building model paired with DOAS an
     Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = 90, origin={-50,32})));
   Modelica.Blocks.Routing.DeMultiplex demux(final n = 5) "Demultiplexer for chilled water valve signals" annotation (
     Placement(transformation(extent={{42,-30},{62,-10}})));
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(final uLow = 0.04, final uHigh = 0.05) "Block for generating pump proven on signal" annotation (
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(final uLow = 0.04, final uHigh = 0.05) "Block for generating pump proven on signal" annotation (
     Placement(transformation(extent = {{140, -120}, {160, -100}})));
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea "Convert pump enable signal to Real signal" annotation (
     Placement(transformation(extent = {{-320, -120}, {-300, -100}})));
-  Buildings.Controls.OBC.CDL.Continuous.Multiply pro "Find pump flow signal by multiplying enable signal with speed signal" annotation (
+  Buildings.Controls.OBC.CDL.Reals.Multiply pro "Find pump flow signal by multiplying enable signal with speed signal" annotation (
     Placement(transformation(extent = {{-280, -140}, {-260, -120}})));
-  Buildings.Controls.OBC.CDL.Continuous.MultiplyByParameter gai(final k = mHotWatCoi_nominal) "Multiply control signal by nominal flowrate" annotation (
+  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter gai(final k = mHotWatCoi_nominal) "Multiply control signal by nominal flowrate" annotation (
     Placement(transformation(extent = {{-320, -60}, {-300, -40}})));
-  Buildings.Controls.OBC.CDL.Continuous.MultiplyByParameter gai1(final k = mChiWatCoi_nominal) "Multiply control signal by nominal flowrate" annotation (
+  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter gai1(final k = mChiWatCoi_nominal) "Multiply control signal by nominal flowrate" annotation (
     Placement(transformation(extent = {{-320, -90}, {-300, -70}})));
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea1 "Convert fan enable signal to Real signal" annotation (
     Placement(visible = true, transformation(origin = {-8, -2}, extent = {{-320, 30}, {-300, 50}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Continuous.Multiply pro1 "Find fan flow signal by multiplying enable signal with speed signal" annotation (
+  Buildings.Controls.OBC.CDL.Reals.Multiply pro1 "Find fan flow signal by multiplying enable signal with speed signal" annotation (
     Placement(visible = true, transformation(origin={-18,10},   extent = {{-280, 10}, {-260, 30}}, rotation = 0)));
   Modelica.Blocks.Routing.Multiplex mux1(final n = 5) "Multiplexer for chilled water valve position measurements" annotation (
     Placement(transformation(extent = {{160, 70}, {180, 90}})));
@@ -357,11 +357,11 @@ block TestBed "Testbed consisting of a 5-zone building model paired with DOAS an
     Placement(visible = true, transformation(origin = {480, -50}, extent = {{-10, -10}, {10, 10}}, rotation = -90)));
   Fluid.FixedResistances.Junction jun25(redeclare package Medium = MediumW, m_flow_nominal = {mChiWatTot_flow_nominal, -mChiWatTot_flow_nominal, mChiWatTot_flow_nominal}, dp_nominal = {0, 0, 0}) "Hot water mixer" annotation (
     Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = -90, origin = {480, -90})));
-  Controls.OBC.CDL.Continuous.MultiplyByParameter gaiM_flow(final k = mAirTot_flow_nominal*1000*15/4200/10) "Calculate hot water mass flowrate based on reheat signal" annotation (
+  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter gaiM_flow(final k = mAirTot_flow_nominal*1000*15/4200/10) "Calculate hot water mass flowrate based on reheat signal" annotation (
     Placement(transformation(extent = {{140, -290}, {160, -270}})));
   Fluid.Sources.MassFlowSource_T souTer(redeclare package Medium = MediumW, nPorts = 1, use_m_flow_in = true, T = 323.15) "Hot water source for terminal boxes " annotation (
     Placement(transformation(extent = {{180, -290}, {200, -270}})));
-  Controls.OBC.CDL.Continuous.MultiMax mulMax(nin = 5) "Find maximum reheat signal for generating hot water" annotation (
+  Buildings.Controls.OBC.CDL.Reals.MultiMax mulMax(nin = 5) "Find maximum reheat signal for generating hot water" annotation (
     Placement(transformation(extent = {{100, -290}, {120, -270}})));
   Fluid.Sources.Boundary_pT sinTer(redeclare package Medium = MediumW, p(displayUnit = "Pa") = 3E5, nPorts = 1) "Hot water sink for terminal boxes" annotation (
     Placement(transformation(extent = {{450, -260}, {470, -240}})));
@@ -392,9 +392,9 @@ block TestBed "Testbed consisting of a 5-zone building model paired with DOAS an
     Placement(visible = true, transformation(origin = {-236, -8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput deltaT annotation (
     Placement(visible = true, transformation(origin = {-360, -16}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-120, 120}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Continuous.Multiply mul annotation (
+  Buildings.Controls.OBC.CDL.Reals.Multiply mul annotation (
     Placement(visible = true, transformation(origin = {-256, 18}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Controls.OBC.CDL.Continuous.MultiplyByParameter gai2(k = 1006) annotation (
+  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter gai2(k = 1006) annotation (
     Placement(visible = true, transformation(origin = {-312, -2}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput rAT annotation (
     Placement(visible = true, transformation(origin = {0, -94}, extent = {{580, -200}, {620, -160}}, rotation = 0), iconTransformation(origin={0,36},   extent = {{100, -240}, {140, -200}}, rotation = 0)));
