@@ -100,12 +100,12 @@ protected
     annotation (Placement(transformation(extent={{20,50},{40,70}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(
-    final k=0)
+    final k=0.0)
     "Constant real zero source"
     annotation (Placement(transformation(extent={{-20,70},{0,90}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant con1(
-    final k=1)
+    final k=1.0)
     "Constant real one source"
     annotation (Placement(transformation(extent={{-20,20},{0,40}})));
 
