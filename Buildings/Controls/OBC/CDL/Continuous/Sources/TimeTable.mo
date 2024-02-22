@@ -40,13 +40,37 @@ protected
   // than the Modelica Standard Library. Hence, we cast the CDL
   // enumeration to the MSL enumaration.
   Modelica.Blocks.Sources.CombiTimeTable tab(
-     tableOnFile = false, table = table,columns = 2:size(tab.table, 2), smoothness = if smoothness == CDL.Types.Smoothness.LinearSegments then Modelica.Blocks.Types.Smoothness.LinearSegments else Modelica.Blocks.Types.Smoothness.ConstantSegments, extrapolation = if extrapolation == CDL.Types.Extrapolation.HoldLastPoint then Modelica.Blocks.Types.Extrapolation.HoldLastPoint elseif extrapolation == CDL.Types.Extrapolation.LastTwoPoints then Modelica.Blocks.Types.Extrapolation.LastTwoPoints else Modelica.Blocks.Types.Extrapolation.Periodic, offset = offset, startTime = if (extrapolation == Types.Extrapolation.Periodic) then t0 else 0, timeScale = timeScale, verboseRead = false)
+    final tableOnFile=false,
+    final table=table,
+    final columns=2:size(
+      tab.table,
+      2),
+    final smoothness=
+      if smoothness == CDL.Types.Smoothness.LinearSegments then
+        Modelica.Blocks.Types.Smoothness.LinearSegments
+      else
+        Modelica.Blocks.Types.Smoothness.ConstantSegments,
+    final extrapolation=
+      if extrapolation == CDL.Types.Extrapolation.HoldLastPoint then
+        Modelica.Blocks.Types.Extrapolation.HoldLastPoint
+      elseif extrapolation == CDL.Types.Extrapolation.LastTwoPoints then
+        Modelica.Blocks.Types.Extrapolation.LastTwoPoints
+      else
+        Modelica.Blocks.Types.Extrapolation.Periodic,
+    final offset=offset,
+    final startTime=
+      if
+        (extrapolation == Types.Extrapolation.Periodic) then
+        t0
+      else
+        0,
+    final timeScale=timeScale)
     "Time table"
     annotation (Placement(transformation(extent={{-12,-10},{8,10}})));
 
 initial equation
-// If the table has only one time stamp, then timeRange is zero.
-// We can then set t0 to be equal to the start of the simulation.
+  // If the table has only one time stamp, then timeRange is zero.
+  // We can then set t0 to be equal to the start of the simulation.
   t0=
     if nT == 1 then
       time
