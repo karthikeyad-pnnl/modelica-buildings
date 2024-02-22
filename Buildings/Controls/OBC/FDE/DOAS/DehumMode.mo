@@ -42,15 +42,15 @@ block DehumMode
      retHum < dehumSet for dehumDelay time"
     annotation (Placement(transformation(extent={{22,-10},{42,10}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Greater gre
+  Buildings.Controls.OBC.CDL.Reals.Greater gre
     "True when return humidity > set point"
     annotation (Placement(transformation(extent={{-44,-10},{-24,10}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Less les
+  Buildings.Controls.OBC.CDL.Reals.Less les
     "True when return humidity < set point"
     annotation (Placement(transformation(extent={{-44,-42},{-24,-22}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant conDset(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant conDset(
     final k=dehumSet)
     "Dehumidification set point"
     annotation (Placement(transformation(extent={{-88,-50},{-68,-30}})));

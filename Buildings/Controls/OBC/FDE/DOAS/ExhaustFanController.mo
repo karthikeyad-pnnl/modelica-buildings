@@ -36,27 +36,27 @@ block ExhaustFanController "This block manages start, stop, and speed of the exh
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput exhFanSpeed "Exhaust fan speed command" 
   annotation(Placement(transformation(extent = {{102, -16}, {142, 24}}), iconTransformation(extent = {{100, -80}, {140, -40}})));
   
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant bldgStaticSP(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant bldgStaticSP(
   final k = bldgSPset) 
   "Building static pressure set point." 
   annotation(Placement(transformation(extent = {{-40, 2}, {-20, 22}})));
   
-  Buildings.Controls.OBC.CDL.Continuous.Switch swi 
+  Buildings.Controls.OBC.CDL.Reals.Switch swi 
   "Logical switch is true when fan status is proven." 
   annotation(Placement(transformation(extent = {{38, -6}, {58, 14}})));
   
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con0(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con0(
   final k = 0) 
   "Real constant 0." 
   annotation(Placement(transformation(extent = {{-4, -74}, {16, -54}})));
   
-  Buildings.Controls.OBC.CDL.Continuous.PID conPID1(
+  Buildings.Controls.OBC.CDL.Reals.PID conPID1(
   Ti = spPITi, 
   k = spPIk)
   "Continuous PID for static pressure and setpoint"  
   annotation(Placement(visible = true, transformation(origin = {-2, 4}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   
-  CDL.Logical.TrueDelay truDel(
+  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(
   delayTime = 5)
   "True Delay of 5s"  
   annotation(Placement(visible = true, transformation(origin = {0, 54}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));

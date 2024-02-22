@@ -11,7 +11,7 @@ model HeatingCoil "This model simulates HeatingCoil"
     startTime=300)
     annotation (Placement(transformation(extent={{-42,-10},{-22,10}})));
       
-   Buildings.Controls.OBC.CDL.Continuous.Sources.Sin saTGen(
+   Buildings.Controls.OBC.CDL.Reals.Sources.Sin saTGen(
     amplitude=3,
     freqHz=1/4800,
     phase=0.87266462599716,
@@ -19,7 +19,7 @@ model HeatingCoil "This model simulates HeatingCoil"
     startTime=0)
     annotation (Placement(transformation(extent={{-12,-40},{8,-20}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin supHeaGen(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sin supHeaGen(
     amplitude=2,
     freqHz=1/3100,
     offset=295,

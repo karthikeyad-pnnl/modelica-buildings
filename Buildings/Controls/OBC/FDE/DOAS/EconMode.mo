@@ -26,7 +26,7 @@ block EconMode "This block calculates when economizer mode is active."
   annotation(
     Placement(visible = true, transformation(origin = {2, -34}, extent = {{-142, -30}, {-102, 10}}, rotation = 0), iconTransformation(origin = {0, 0}, extent = {{-142, -90}, {-102, -50}}, rotation = 0)));
     
-  Buildings.Controls.OBC.CDL.Continuous.Greater gre(h = econCooAdj) 
+  Buildings.Controls.OBC.CDL.Reals.Greater gre(h = econCooAdj) 
   "True if OAT > supCooSP." 
   annotation(
     Placement(visible = true, transformation(origin = {-24, 34}, extent = {{-20, -46}, {0, -26}}, rotation = 0)));

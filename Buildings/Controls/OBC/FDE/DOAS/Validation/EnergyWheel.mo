@@ -34,28 +34,28 @@ model EnergyWheel "This model simulates EnergyWheel."
     period=2880)
     annotation (Placement(transformation(extent={{-62,40},{-42,60}})));
     
-  CDL.Continuous.Sources.Sine                        oaTGen(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine                        oaTGen(
     amplitude=2,
     freqHz=1/4800,
     offset=288,
     startTime=0)
     annotation (Placement(transformation(extent={{-62,-26},{-42,-6}})));
     
-  CDL.Continuous.Sources.Sine raTGen(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine raTGen(
     amplitude=2,
     freqHz=1/4800,
     offset=297,
     startTime=0)
     annotation (Placement(transformation(extent={{-62,8},{-42,28}})));
     
-  CDL.Continuous.Sources.Sine                        erwTGen(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine                        erwTGen(
     amplitude=6,
     freqHz=1/2100,
     offset=294,
     startTime=12)
     annotation (Placement(transformation(extent={{-62,-58},{-42,-38}})));
     
-  CDL.Continuous.Sources.Sine supPrimGen(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine supPrimGen(
     amplitude=2,
     freqHz=1/3100,
     offset=295,

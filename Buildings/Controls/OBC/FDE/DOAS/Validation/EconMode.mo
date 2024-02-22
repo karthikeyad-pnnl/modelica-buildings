@@ -15,14 +15,14 @@ model EconMode "This model simulates EconMode."
   period=5760)
   annotation (Placement(transformation(extent={{-30,32},{-10,52}})));
   
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin oaTGen(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sin oaTGen(
     amplitude=5,
     freqHz=1/4800,
     offset=296,
     startTime=202)
     annotation (Placement(transformation(extent={{-28,-10},{-8,10}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin supCooSPgen(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sin supCooSPgen(
     amplitude=5,
     freqHz=1/3600,
     offset=297,

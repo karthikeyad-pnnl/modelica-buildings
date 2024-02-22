@@ -37,24 +37,23 @@ block erwTsim "ERW supply temperature simulator"
     "False when erwStart is true."
       annotation (Placement(transformation(extent={{-78,72},{-58,92}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Or3 or3
-    "If ERW has not started, bypass dampers are open, or RAT=OAT 
+  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(nin=3) "If ERW has not started, bypass dampers are open, or RAT=OAT 
       then pass OAT as the erwT value."
-      annotation (Placement(transformation(extent={{14,56},{34,76}})));
+    annotation (Placement(transformation(extent={{14,56},{34,76}})));
 
-  CDL.Continuous.Subtract                   sub1
+  Buildings.Controls.OBC.CDL.Reals.Subtract                   sub1
     "Subtract outside air temperature from return air temperature."
       annotation (Placement(transformation(extent={{-88,-42},{-68,-22}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Abs abs
+  Buildings.Controls.OBC.CDL.Reals.Abs abs
     "Absolute value of RAT-OAT"
       annotation (Placement(transformation(extent={{-50,-42},{-30,-22}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Multiply pro
+  Buildings.Controls.OBC.CDL.Reals.Multiply pro
     "RAT/OAT delta x erwEff"
       annotation (Placement(transformation(extent={{-18,-48},{2,-28}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(
     final k=erwEff)
       "ERW decimal efficiency"
         annotation (Placement(transformation(extent={{-50,-68},{-30,-48}})));
@@ -70,35 +69,29 @@ block erwTsim "ERW supply temperature simulator"
     "Integer constant 0"
      annotation (Placement(transformation(extent={{-50,16},{-30,36}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr(
     t = 0)
       "True if RAT > OAT"
         annotation (Placement(transformation(extent={{-50,-14},{-30,6}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Switch swi
+  Buildings.Controls.OBC.CDL.Reals.Switch swi
     "Logical switch selects OAT or calculated ERW value."
       annotation (Placement(transformation(extent={{76,56},{96,76}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Switch swi1
+  Buildings.Controls.OBC.CDL.Reals.Switch swi1
     annotation (Placement(transformation(extent={{44,-86},{64,-66}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Add add1
+  Buildings.Controls.OBC.CDL.Reals.Add add1
     "OAT+(|RAT-OAT|*erwEff)"
       annotation (Placement(transformation(extent={{10,-78},{30,-58}})));
 
-  CDL.Continuous.Subtract                   sub2
+  Buildings.Controls.OBC.CDL.Reals.Subtract                   sub2
     "OAT - (|RAT-OAT|*erwEff)"
       annotation (Placement(transformation(extent={{10,-104},{30,-84}})));
 
 equation
   connect(not1.u, erwStart) annotation (
     Line(points={{-80,82},{-122,82}}, color={255,0,255}));
-
-  connect(not1.y, or3.u1) annotation (
-    Line(points={{-56,82},{-36,82},{-36,74},{12,74}}, color={255,0,255}));
-
-  connect(or3.u2, bypDam) annotation (
-    Line(points={{12,66},{-90,66},{-90,48},{-122,48}}, color={255,0,255}));
 
   connect(sub1.u1, raT) annotation (
     Line(points={{-90,-26},{-122,-26}}, color={0,0,127}));
@@ -122,17 +115,13 @@ equation
   connect(con0.y, intEqu.u2) annotation (
     Line(points={{-28,26},{-24,26},{-24,42},{-20,42}}, color={255,127,0}));
 
-  connect(intEqu.y, or3.u3) annotation (
-    Line(points={{4,50},{8,50},{8,58},{12,58}},color={255,0,255}));
-
   connect(sub1.y, greThr.u) annotation (
   Line(points={{-66,-32},{-60,-32},{-60,-4},{-52,-4}}, color={0,0,127}));
 
   connect(oaT, swi.u1) annotation (Line(points={{-122,-58},{-96,-58},{-96,98},{56,98},{56,74},{74,74}}, color={0,0,127}));
 
-  connect(or3.y, swi.u2)
-                        annotation (
-    Line(points={{36,66},{74,66}}, color={255,0,255}));
+  connect(mulOr.y, swi.u2)
+    annotation (Line(points={{36,66},{74,66}}, color={255,0,255}));
 
   connect(pro.y, add1.u1) annotation (
     Line(points={{4,-38},{6,-38},{6,-62},{8,-62}},color={0,0,127}));
@@ -163,6 +152,12 @@ equation
 
   connect(abs.y, pro.u1)
     annotation (Line(points={{-28,-32},{-20,-32}}, color={0,0,127}));
+  connect(not1.y, mulOr.u[1]) annotation (Line(points={{-56,82},{0,82},{0,
+          70.6667},{12,70.6667}}, color={255,0,255}));
+  connect(bypDam, mulOr.u[2]) annotation (Line(points={{-122,48},{-80,48},{-80,
+          66},{12,66}}, color={255,0,255}));
+  connect(intEqu.y, mulOr.u[3]) annotation (Line(points={{4,50},{6,50},{6,
+          61.3333},{12,61.3333}}, color={255,0,255}));
   annotation (defaultComponentName="ERWtemp",
   Icon(coordinateSystem(preserveAspectRatio=false), graphics={Rectangle(extent={{-100,100},{100,-100}},lineColor={179,151,128},radius=10,fillColor={255,255,255},
             fillPattern=

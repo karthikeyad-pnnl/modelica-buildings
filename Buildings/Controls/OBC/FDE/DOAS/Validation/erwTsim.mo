@@ -4,25 +4,25 @@ model erwTsim "This model simulates erwTsim"
   Buildings.Controls.OBC.FDE.DOAS.erwTsim ERWtemp
     annotation (Placement(transformation(extent={{44,-10},{64,10}})));
     
-  CDL.Continuous.Sources.Sine raTGen(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine raTGen(
     amplitude=2,
     freqHz=1/4800,
     offset=297,
     startTime=0) "Return air temperature simulator."
     annotation (Placement(transformation(extent={{-58,-24},{-38,-4}})));
     
-  CDL.Continuous.Sources.Sine                        oaTGen(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine                        oaTGen(
     amplitude=2,
     freqHz=1/4800,
     offset=288,
     startTime=0) "Outside air temperature simulator."
     annotation (Placement(transformation(extent={{-58,-58},{-38,-38}})));
     
-  CDL.Logical.Sources.Pulse erwStartgen(width=0.6, period=2880)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse erwStartgen(width=0.6, period=2880)
     "Simulates ERW start command."
     annotation (Placement(transformation(extent={{-58,36},{-38,56}})));
     
-  CDL.Logical.Sources.Pulse bypDamsim(width=0.5, period=2880)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse bypDamsim(width=0.5, period=2880)
     "Simulates bypass damper signal"
     annotation (Placement(transformation(extent={{-58,6},{-38,26}})));
     

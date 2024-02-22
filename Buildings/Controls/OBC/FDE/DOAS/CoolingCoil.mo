@@ -68,16 +68,16 @@ block CoolingCoil "This block commands the cooling coil."
    "Cooling coil control signal"
    annotation(Placement(transformation(extent = {{102, 56}, {142, 96}}), iconTransformation(extent = {{102, -20}, {142, 20}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con0(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con0(
   final k = 0)
   "Real constant 0"
   annotation(Placement(transformation(extent = {{-20, -62}, {0, -42}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Switch swi
+  Buildings.Controls.OBC.CDL.Reals.Switch swi
   "Logical switch outputs supply air PI value when fan is   proven on."
   annotation(Placement(transformation(extent = {{14, -54}, {34, -34}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Switch swi1
+  Buildings.Controls.OBC.CDL.Reals.Switch swi1
   "Logical switch passes different PI calculations to yCC based on dehumidification mode."
   annotation(Placement(transformation(extent = {{58, 66}, {78, 86}})));
 
@@ -85,15 +85,15 @@ block CoolingCoil "This block commands the cooling coil."
   "Logical AND;true when dehumidification is on and supply fan is proven on."
   annotation(Placement(transformation(extent = {{-20, -14}, {0, 8}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.PID conPID2 annotation(Placement(visible = true, transformation(origin = {-62, -42}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Buildings.Controls.OBC.CDL.Reals.PID conPID2 annotation(Placement(visible = true, transformation(origin = {-62, -42}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
-  Buildings.Controls.OBC.CDL.Continuous.PID conPID
+  Buildings.Controls.OBC.CDL.Reals.PID conPID
   annotation(Placement(visible = true, transformation(origin = {16, 78}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Psychrometrics.DewPoint_TDryBulPhi dewPoi
   annotation(Placement(visible = true, transformation(origin = {-66, 48}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
-  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(
   p = -erwDPadj)
   annotation(Placement(visible = true, transformation(origin = {-36, 36}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 

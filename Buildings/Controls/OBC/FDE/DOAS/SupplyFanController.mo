@@ -66,30 +66,30 @@ block SupplyFanController "This block manages start, stop, status, and speed of 
   "Supply fan speed command" 
   annotation(Placement(transformation(extent = {{102, -50}, {142, -10}}), iconTransformation(extent = {{100, -64}, {140, -24}})));
   
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant dampSet(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant dampSet(
    k = damSet) if vvUnit 
    "Most open damper position set point." 
    annotation(Placement(transformation(extent = {{-98, 4}, {-78, 24}})));
   
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant cvDDSPsetpt(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant cvDDSPsetpt(
   final k = cvDDSPset) if not vvUnit 
   "DDSP set point for constant volume systems." annotation(Placement(transformation(extent = {{-72, -64}, {-52, -44}})));
   
-  CDL.Continuous.Switch swi 
+  Buildings.Controls.OBC.CDL.Reals.Switch swi 
   "Swtich passes fan speed set point when true; 0 when false." 
   annotation(Placement(transformation(extent = {{14, -40}, {34, -20}})));
   
-  CDL.Continuous.Sources.Constant con0(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con0(
   k = MinFS) 
   "Real constant 0" 
   annotation(Placement(transformation(extent = {{-26, -64}, {-6, -44}})));
   
-  Buildings.Controls.OBC.CDL.Continuous.PID DamperSPPI(
+  Buildings.Controls.OBC.CDL.Reals.PID DamperSPPI(
   Ti = DampspPITi, 
   k = DampspPIk) if vvUnit  
   annotation(Placement(visible = true, transformation(origin = {-38, 22}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   
-  Buildings.Controls.OBC.CDL.Continuous.PID FanSpeedSPPI(
+  Buildings.Controls.OBC.CDL.Reals.PID FanSpeedSPPI(
   Ti = FSspPITi, 
   k = FSspPIk)  
   annotation(Placement(visible = true, transformation(origin = {62, -30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));

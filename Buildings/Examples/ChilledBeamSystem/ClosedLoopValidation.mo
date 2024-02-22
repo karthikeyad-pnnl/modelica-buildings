@@ -25,35 +25,35 @@ model ClosedLoopValidation
     Placement(visible = true, transformation(origin={112,-20},   extent = {{10, -70}, {30, -50}}, rotation = 0)));
   Buildings.Controls.OBC.FDE.DOAS.DOAScontroller DOAScon(minDDSPset = 400, maxDDSPset = 500, cvDDSPset = 450) annotation (
     Placement(visible = true, transformation(origin={-39,-10},  extent = {{-13, -24}, {13, 10}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Continuous.MultiMax TZonMax(nin=5)   annotation (
+  Buildings.Controls.OBC.CDL.Reals.MultiMax TZonMax(nin=5)   annotation (
     Placement(transformation(extent={{-40,52},{-20,72}})));
-  Buildings.Controls.OBC.CDL.Continuous.MultiMax yDamPosMax(nin=5)   annotation (
+  Buildings.Controls.OBC.CDL.Reals.MultiMax yDamPosMax(nin=5)   annotation (
     Placement(transformation(extent={{-58,20},{-38,40}})));
-  Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable enaSch(final table = schTab, final smoothness = Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments, final timeScale = 3600) "Table defining when occupancy is expected" annotation (
+  Buildings.Controls.OBC.CDL.Reals.Sources.TimeTable enaSch(final table = schTab, final smoothness = Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments, final timeScale = 3600) "Table defining when occupancy is expected" annotation (
     Placement(transformation(extent = {{-150, 70}, {-130, 90}})));
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(uLow = 0.45, uHigh = 0.5) annotation (
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(uLow = 0.45, uHigh = 0.5) annotation (
     Placement(transformation(extent = {{-120, 70}, {-100, 90}})));
   Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(nout = 5) annotation (
     Placement(transformation(extent = {{-90, 70}, {-70, 90}})));
   Buildings.Controls.OBC.CDL.Logical.Sources.Constant uConSig[5](k = fill(false, 5)) "Constant Boolean source" annotation (
     Placement(visible = true, transformation(origin={2,14},    extent = {{-90, 30}, {-70, 50}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant chiWatSupTem(k = 273.15 + 7.22) "Chilled water supply temperature" annotation (
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant chiWatSupTem(k = 273.15 + 7.22) "Chilled water supply temperature" annotation (
     Placement(transformation(extent={{-148,-26},{-128,-6}})));
   Modelica.Blocks.Sources.CombiTimeTable loads(tableOnFile = true, tableName = "tab1", fileName = "C:/buildings_library/buildings_library_pnnl/VM_script/inputTable_constantSetpoint.txt", columns = {2, 3, 4, 5, 6}, timeScale = 60) "Table defining thermal loads for zone" annotation (
     Placement(transformation(extent={{-46,-66},{-26,-46}})));
   Buildings.Controls.SetPoints.OccupancySchedule occSch(occupancy = 3600*{8, 18}) annotation (
     Placement(visible = true, transformation(origin={-6,74},   extent = {{-152, -44}, {-132, -24}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable TSetRooHea(extrapolation = Buildings.Controls.OBC.CDL.Types.Extrapolation.Periodic, smoothness = Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments, table = [0, 15 + 273.15; 8*3600, 20 + 273.15; 18*3600, 15 + 273.15; 24*3600, 15 + 273.15]) annotation (
+  Buildings.Controls.OBC.CDL.Reals.Sources.TimeTable TSetRooHea(extrapolation = Buildings.Controls.OBC.CDL.Types.Extrapolation.Periodic, smoothness = Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments, table = [0, 15 + 273.15; 8*3600, 20 + 273.15; 18*3600, 15 + 273.15; 24*3600, 15 + 273.15]) annotation (
     Placement(visible = true, transformation(origin = {72, 64}, extent = {{-152, 40}, {-132, 60}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable TSetRooCoo(extrapolation = Buildings.Controls.OBC.CDL.Types.Extrapolation.Periodic, smoothness = Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments, table = [0, 30 + 273.15; 8*3600, 25 + 273.15; 18*3600, 30 + 273.15; 24*3600, 30 + 273.15]) annotation (
+  Buildings.Controls.OBC.CDL.Reals.Sources.TimeTable TSetRooCoo(extrapolation = Buildings.Controls.OBC.CDL.Types.Extrapolation.Periodic, smoothness = Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments, table = [0, 30 + 273.15; 8*3600, 25 + 273.15; 18*3600, 30 + 273.15; 24*3600, 30 + 273.15]) annotation (
     Placement(visible = true, transformation(origin = {74, 122}, extent = {{-152, 10}, {-132, 30}}, rotation = 0)));
   Buildings.Controls.OBC.FDE.DOAS.erwTsim eRWtemp annotation (
     Placement(visible = true, transformation(origin={-82,-78},     extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Controls.OBC.CDL.Continuous.Subtract sub annotation (
+  Buildings.Controls.OBC.CDL.Reals.Subtract sub annotation (
     Placement(visible = true, transformation(origin={6,-82},      extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booleanScalarReplicator(nout = 5) annotation (
     Placement(visible = true, transformation(origin={-36,-42},    extent = {{-90, 70}, {-70, 90}}, rotation = 0)));
-  Controls.OBC.CDL.Routing.RealScalarReplicator reaScaRep(nout = 5)  annotation (
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaScaRep(nout = 5)  annotation (
     Placement(visible = true, transformation(origin = {-26, 98}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator realScalarReplicator(nout = 5) annotation (
     Placement(visible = true, transformation(origin = {-30, 142}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
@@ -79,8 +79,6 @@ equation
     Line(points={{-68,80},{-8,80},{-8,70.25},{40,70.25}},    color = {255, 0, 255}, thickness = 0.5));
   connect(TSetRooHea.y[1], reaScaRep.u) annotation (
     Line(points = {{-58, 114}, {-50, 114}, {-50, 98}, {-38, 98}}, color = {0, 0, 127}));
-  connect(reaScaRep.y, terCon.TZonHeaSet) annotation (
-    Line(points={{-14,98},{12,98},{12,67.75},{40,67.75}},    color = {0, 0, 127}, thickness = 0.5));
   connect(TSetRooCoo.y[1], realScalarReplicator.u) annotation (
     Line(points = {{-56, 142}, {-42, 142}}, color = {0, 0, 127}));
   connect(realScalarReplicator.y, terCon.TZonCooSet) annotation (
@@ -189,6 +187,8 @@ equation
           -24,10},{-24,-2},{-18,-2},{-18,-4},{-12,-4}}, color={0,0,127}));
   connect(DOAScon.supFanStart, chiBeaTesBed.uFanSta) annotation (Line(points={{
           -23.14,-4.6},{-17.57,-4.6},{-17.57,-14},{-12,-14}}, color={255,0,255}));
+  connect(reaScaRep.y, terCon.TZonHeaSet) annotation (Line(points={{-14,98},{0,
+          98},{0,68},{20,68},{20,67.75},{40,67.75}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}})),
     Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-160, -100}, {160, 100}})),

@@ -25,7 +25,7 @@ model DehumMode "This model simulates DehumMode."
     period=5760)
     annotation (Placement(transformation(extent={{-28,-36},{-8,-16}})));
     
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sin relHumGen(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sin relHumGen(
     amplitude=10,
     freqHz=1/3600,
     offset=60,
