@@ -85,9 +85,10 @@ block CoolingCoil "This block commands the cooling coil."
   "Logical AND;true when dehumidification is on and supply fan is proven on."
   annotation(Placement(transformation(extent = {{-20, -14}, {0, 8}})));
 
-  Buildings.Controls.OBC.CDL.Reals.PID conPID2 annotation(Placement(visible = true, transformation(origin = {-62, -42}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Buildings.Controls.OBC.CDL.Reals.PID conPID2(reverseActing=false)
+                                               annotation(Placement(visible = true, transformation(origin = {-62, -42}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
-  Buildings.Controls.OBC.CDL.Reals.PID conPID
+  Buildings.Controls.OBC.CDL.Reals.PID conPID(reverseActing=false)
   annotation(Placement(visible = true, transformation(origin = {16, 78}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Psychrometrics.DewPoint_TDryBulPhi dewPoi
