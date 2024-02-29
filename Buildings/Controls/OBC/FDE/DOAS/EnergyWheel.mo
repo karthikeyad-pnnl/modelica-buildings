@@ -94,7 +94,7 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
 
   Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd(nin=3) "Logical AND; true when fan is proven, economizer mode is off, and ERW 
    temperature start conditions are met."
-    annotation (Placement(transformation(extent={{62,10},{82,30}})));
+    annotation (Placement(transformation(extent={{66,8},{86,28}})));
 
   Buildings.Controls.OBC.CDL.Logical.Not not1
   "Logical NOT; true when economizer mode is off."
@@ -144,13 +144,15 @@ equation
     Line(points = {{-28, 50}, {-122, 50}}, color = {255, 0, 255}));
 
   connect(mulAnd.y, erwStart)
-    annotation (Line(points={{84,20},{122,20}}, color={255,0,255}));
+    annotation (Line(points={{88,18},{104,18},{104,20},{122,20}},
+                                                color={255,0,255}));
 
   connect(max.y, swi.u1) annotation (
     Line(points = {{-40, -68}, {64, -68}}, color = {0, 0, 127}));
 
-  connect(mulAnd.y, swi.u2) annotation (Line(points={{84,20},{88,20},{88,-58},{
-          56,-58},{56,-76},{64,-76}}, color={255,0,255}));
+  connect(mulAnd.y, swi.u2) annotation (Line(points={{88,18},{88,-20},{92,-20},
+          {92,-58},{58,-58},{58,-76},{64,-76}},
+                                      color={255,0,255}));
 
   connect(con0.y, swi.u3) annotation (
     Line(points = {{52, -84}, {64, -84}}, color = {0, 0, 127}));
@@ -169,8 +171,9 @@ equation
   connect(not2.y, or2.u2) annotation (
     Line(points = {{56, 50}, {58, 50}, {58, 58}, {60, 58}}, color = {255, 0, 255}));
 
-  connect(mulAnd.y, not2.u) annotation (Line(points={{84,20},{88,20},{88,36},{
-          28,36},{28,50},{32,50}}, color={255,0,255}));
+  connect(mulAnd.y, not2.u) annotation (Line(points={{88,18},{88,20},{98,20},{
+          98,36},{28,36},{28,50},{32,50}},
+                                   color={255,0,255}));
 
   connect(or2.y, bypDam) annotation (
     Line(points = {{84, 66}, {122, 66}}, color = {255, 0, 255}));
@@ -209,11 +212,11 @@ equation
   connect(abs.y, hys.u)
     annotation (Line(points={{-14, 2}, {-4, 2}}, color={0,0,127}));
   connect(supFanProof, mulAnd.u[1]) annotation (Line(points={{-122,80},{-70,80},
-          {-70,88},{20,88},{20,24.6667},{60,24.6667}}, color={255,0,255}));
-  connect(not1.y, mulAnd.u[2]) annotation (Line(points={{-4,50},{10,50},{10,20},
-          {60,20}}, color={255,0,255}));
+          {-70,88},{20,88},{20,22.6667},{64,22.6667}}, color={255,0,255}));
+  connect(not1.y, mulAnd.u[2]) annotation (Line(points={{-4,50},{10,50},{10,18},
+          {64,18}}, color={255,0,255}));
   connect(truDel.y, mulAnd.u[3]) annotation (Line(points={{54,0},{56,0},{56,
-          15.3333},{60,15.3333}}, color={255,0,255}));
+          13.3333},{64,13.3333}}, color={255,0,255}));
   annotation (
     defaultComponentName = "ERWcon",
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics={  Rectangle(fillColor = {255, 255, 255},
