@@ -3,7 +3,7 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
   parameter Real recSet(
   final unit = "K",
   final displayUnit = "degC",
-  final quantity = "ThermodynamicTemperature") = 7 +273.15
+  final quantity = "ThermodynamicTemperature") = 7
   "Energy recovery set point.";
 
    parameter Real Thys(
@@ -150,8 +150,8 @@ equation
   connect(max.y, swi.u1) annotation (
     Line(points = {{-40, -68}, {64, -68}}, color = {0, 0, 127}));
 
-  connect(mulAnd.y, swi.u2) annotation (Line(points={{88,18},{88,-20},{92,-20},
-          {92,-58},{58,-58},{58,-76},{64,-76}},
+  connect(mulAnd.y, swi.u2) annotation (Line(points={{88,18},{88,-20},{92,-20},{
+          92,-58},{58,-58},{58,-76},{64,-76}},
                                       color={255,0,255}));
 
   connect(con0.y, swi.u3) annotation (
@@ -171,8 +171,8 @@ equation
   connect(not2.y, or2.u2) annotation (
     Line(points = {{56, 50}, {58, 50}, {58, 58}, {60, 58}}, color = {255, 0, 255}));
 
-  connect(mulAnd.y, not2.u) annotation (Line(points={{88,18},{88,20},{98,20},{
-          98,36},{28,36},{28,50},{32,50}},
+  connect(mulAnd.y, not2.u) annotation (Line(points={{88,18},{88,20},{98,20},{98,
+          36},{28,36},{28,50},{32,50}},
                                    color={255,0,255}));
 
   connect(or2.y, bypDam) annotation (

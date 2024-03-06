@@ -80,5 +80,6 @@ This example simulates
 <a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.TSupSet\">
 Buildings.Controls.OBC.FDE.DOAS.TSupSet</a>.
 </p>
-</html>"));
+</html>"),__Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Validation/TSupSet.mos"
+    "Simulate and plot"));
 end TSupSet;

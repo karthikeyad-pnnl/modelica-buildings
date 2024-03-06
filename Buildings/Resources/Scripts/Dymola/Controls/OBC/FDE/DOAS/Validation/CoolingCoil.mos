@@ -1,6 +1,6 @@
 simulateModel("Buildings.Controls.OBC.FDE.DOAS.Validation.CoolingCoil", method="Cvode", stopTime=7200, tolerance=1e-06, resultFile="CoolingCoil");
 
 createPlot(id=1, position={0, 362, 792, 308}, y={"Cooling.supFanProof"}, range={0.0, 6000.0, 0.0, 2.0}, autoscale=false, grid=true, colors={{28,108,200}});
-createPlot(id=2, position={808, 0, 790, 309}, y={"Cooling.saT", "Cooling.supCooSP"}, range={0.0, 6000.0, 16.0, 26.0}, autoscale=false, grid=true, colors={{28,108,200}, {238,46,47}}, displayUnits={"degC", "degC"});
-createPlot(id=3, position={0, 0, 792, 309}, y={"Cooling.yCC"}, range={0.0, 6000.0, -0.4, 1.2000000000000002}, grid=true, colors={{28,108,200}});
+createPlot(id=1, position={808, 0, 790, 309}, y={"Cooling.saT", "Cooling.supCooSP"}, range={0.0, 6000.0, 16.0, 26.0}, autoscale=false, grid=true, colors={{28,108,200}, {238,46,47}}, displayUnits={"degC", "degC"}, subplot = 2);
+createPlot(id=1, position={0, 0, 792, 309}, y={"Cooling.yCC"}, range={0.0, 6000.0, -0.4, 1.2000000000000002}, grid=true, colors={{28,108,200}},subplot = 3);
 

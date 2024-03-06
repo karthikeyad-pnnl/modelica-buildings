@@ -2,7 +2,8 @@ within Buildings.Controls.OBC.FDE.DOAS.Validation;
 model SupplyFanController
   "This model simulates SupplyFanController"
 
-  Buildings.Controls.OBC.FDE.DOAS.SupplyFanController SFcon
+  Buildings.Controls.OBC.FDE.DOAS.SupplyFanController SFcon(DampspPIk=100,
+      DampspPITi=60)
 annotation (Placement(transformation(extent={{40,-6},{60,14}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(
@@ -12,14 +13,14 @@ annotation (Placement(transformation(extent={{40,-6},{60,14}})));
     annotation (Placement(transformation(extent={{8,-34},{28,-14}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse
-  OccGen(width=0.6, period=2880)
+  OccGen(width=0.6, period=2*2880)
   annotation (Placement(transformation(extent={{-66,32},{-46,52}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Sin
   mostOpenDamGen(
-    amplitude=4,
+    amplitude=0.5,
     freqHz=1/5670,
-    offset=90)
+    offset=0.5)
     annotation (Placement(transformation(extent={{-66,-2},{-46,18}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Sin sensorDDSP(
@@ -61,5 +62,6 @@ This example simulates
 <a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.SupplyFanController\">
 Buildings.Controls.OBC.FDE.DOAS.SupplyFanController</a>.
 </p>
-</html>"));
+</html>"),__Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Validation/SupplyFanController.mos"
+    "Simulate and plot"));
 end SupplyFanController;
