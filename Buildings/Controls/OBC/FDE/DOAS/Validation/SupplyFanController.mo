@@ -2,8 +2,11 @@ within Buildings.Controls.OBC.FDE.DOAS.Validation;
 model SupplyFanController
   "This model simulates SupplyFanController"
 
-  Buildings.Controls.OBC.FDE.DOAS.SupplyFanController SFcon(DampspPIk=100,
-      DampspPITi=60)
+  Buildings.Controls.OBC.FDE.DOAS.SupplyFanController SFcon(
+    DampspPIk=100,
+    DampspPITi=60,
+    FSspPIk=0.5,
+    FSspPITi=60)
 annotation (Placement(transformation(extent={{40,-6},{60,14}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(

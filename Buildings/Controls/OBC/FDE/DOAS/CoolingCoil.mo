@@ -15,9 +15,9 @@ block CoolingCoil "This block commands the cooling coil."
 
   parameter Real erwDPadj(
   final unit = "K",
-  final displayUnit = "degC",
-  final quantity = "ThermodynamicTemperature") = 5
+  final quantity = "TemperatureDifference") = 5
   "Value subtracted from ERW supply air dewpoint.";
+
 
   // ---inputs---
   Buildings.Controls.OBC.CDL.Interfaces.RealInput saT(
@@ -75,7 +75,7 @@ block CoolingCoil "This block commands the cooling coil."
 
   Buildings.Controls.OBC.CDL.Reals.Switch swi
   "Logical switch outputs supply air PI value when fan is   proven on."
-  annotation(Placement(transformation(extent = {{14, -54}, {34, -34}})));
+  annotation(Placement(transformation(extent={{22,-50},{42,-30}})));
 
   Buildings.Controls.OBC.CDL.Reals.Switch swi1
   "Logical switch passes different PI calculations to yCC based on dehumidification mode."
@@ -92,18 +92,20 @@ block CoolingCoil "This block commands the cooling coil."
   annotation(Placement(visible = true, transformation(origin = {16, 78}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Psychrometrics.DewPoint_TDryBulPhi dewPoi
+    "Calculates dewpoint temperature for ERW return air"
   annotation(Placement(visible = true, transformation(origin = {-66, 48}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(
-  p = -erwDPadj)
+  p = -erwDPadj) "Ensures setpoint is below calculated dewpoint"
   annotation(Placement(visible = true, transformation(origin = {-36, 36}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
 equation
   connect(con0.y, swi.u3) annotation (
-    Line(points = {{2, -52}, {12, -52}}, color = {0, 0, 127}));
+    Line(points={{2,-52},{18,-52},{18,-48},{20,-48}},
+                                         color = {0, 0, 127}));
 
   connect(swi.u2, supFanProof) annotation (
-    Line(points = {{12, -44}, {6, -44}, {6, -96}, {-122, -96}}, color = {255, 0, 255}));
+    Line(points={{20,-40},{6,-40},{6,-96},{-122,-96}},          color = {255, 0, 255}));
 
   connect(and2.u1, dehumMode) annotation (
     Line(points = {{-22, -3}, {-78, -3}, {-78, -4}, {-122, -4}}, color = {255, 0, 255}));
@@ -118,7 +120,7 @@ equation
     Line(points = {{80, 76}, {122, 76}}, color = {0, 0, 127}));
 
   connect(swi.y, swi1.u3) annotation (
-    Line(points = {{36, -44}, {46, -44}, {46, 68}, {56, 68}}, color = {0, 0, 127}));
+    Line(points={{44,-40},{46,-40},{46,68},{56,68}},          color = {0, 0, 127}));
 
   connect(saT, conPID2.u_m) annotation (
     Line(points = {{-122, -36}, {-90, -36}, {-90, -54}, {-62, -54}}, color = {0, 0, 127}));
@@ -127,7 +129,7 @@ equation
     Line(points = {{-122, -66}, {-80, -66}, {-80, -42}, {-74, -42}}, color = {0, 0, 127}));
 
   connect(conPID2.y, swi.u1) annotation (
-    Line(points = {{-50, -42}, {-17, -42}, {-17, -36}, {12, -36}}, color = {0, 0, 127}));
+    Line(points={{-50,-42},{-17,-42},{-17,-32},{20,-32}},          color = {0, 0, 127}));
 
   connect(ccT, conPID.u_m) annotation (
     Line(points = {{-122, 84}, {-22, 84}, {-22, 66}, {16, 66}}, color = {0, 0, 127}));

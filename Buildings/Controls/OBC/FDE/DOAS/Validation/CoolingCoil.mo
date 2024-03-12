@@ -7,8 +7,8 @@ model CoolingCoil "This model simulates CoolingCoil"
    final quantity="ThermodynamicTemperature")=5
    "Value subtracted from ERW supply air dewpoint.";
 
-  Buildings.Controls.OBC.FDE.DOAS.CoolingCoil Cooling(
-  erwDPadj=278.15)
+  Buildings.Controls.OBC.FDE.DOAS.CoolingCoil Cooling(erwDPadj(displayUnit="K")
+       = 5)
   annotation (Placement(transformation(extent={{48,-24},{68,-4}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse SFproof(
