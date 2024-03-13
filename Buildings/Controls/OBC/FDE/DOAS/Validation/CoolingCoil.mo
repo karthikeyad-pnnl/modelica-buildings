@@ -55,9 +55,9 @@ model CoolingCoil "This model simulates CoolingCoil"
     annotation (Placement(transformation(extent={{-60,-66},{-40,-46}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Sin erwHumGen(
-    amplitude=10,
+    amplitude=0.25,
     freqHz=1/3600,
-    offset=60,
+    offset=0.5,
     startTime=1250)
     annotation (Placement(transformation(extent={{-26,-48},{-6,-28}})));
 
