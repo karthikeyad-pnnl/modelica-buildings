@@ -7,8 +7,8 @@ model CoolingCoil "This model simulates CoolingCoil"
    final quantity="ThermodynamicTemperature")=5
    "Value subtracted from ERW supply air dewpoint.";
 
-  Buildings.Controls.OBC.FDE.DOAS.CoolingCoil Cooling(erwDPadj(displayUnit="K")
-       = 5)
+  Buildings.Controls.OBC.FDE.DOAS.CoolingCoil Cooling(erwDPadj(displayUnit="K")=
+         5)
   annotation (Placement(transformation(extent={{48,-24},{68,-4}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse SFproof(
@@ -62,27 +62,26 @@ model CoolingCoil "This model simulates CoolingCoil"
     annotation (Placement(transformation(extent={{-26,-48},{-6,-28}})));
 
 equation
-  connect(SFproof.y, Cooling.supFanProof) annotation (
-  Line(points={{-40,70},{18,70},{18,-5.6},{45.8,-5.6}}, color={255,0,255}));
+  connect(SFproof.y, Cooling.uFanSupPro) annotation (Line(points={{-40,70},{18,
+          70},{18,-5.6},{45.8,-5.6}}, color={255,0,255}));
 
-  connect(saTGen.y, Cooling.saT) annotation (
-  Line(points={{-4,50},{12,50},{12,-8.4},{45.8,-8.4}},
-  color={0,0,127}));
+  connect(saTGen.y, Cooling.TAirSup) annotation (Line(points={{-4,50},{12,50},{
+          12,-8.4},{45.8,-8.4}}, color={0,0,127}));
 
-  connect(ccTGen.y, Cooling.ccT) annotation (
-  Line(points={{-38,-18},{14,-18},{14,-17.2},{45.8,-17.2}}, color={0,0,127}));
+  connect(ccTGen.y, Cooling.TCoiCoo) annotation (Line(points={{-38,-18},{14,-18},
+          {14,-17.2},{45.8,-17.2}}, color={0,0,127}));
 
-  connect(dehumMode.y, Cooling.dehumMode) annotation (
-  Line(points={{-4,4},{0,4},{0,-14.6},{45.8,-14.6}}, color={255,0,255}));
+  connect(dehumMode.y, Cooling.uDeh) annotation (Line(points={{-4,4},{0,4},{0,-14.6},
+          {45.8,-14.6}}, color={255,0,255}));
 
-  connect(supCooGen.y, Cooling.supCooSP) annotation (
-  Line(points={{-40,26},{6,26},{6,-11.2},{45.8,-11.2}}, color={0,0,127}));
+  connect(supCooGen.y, Cooling.TAirSupSetCoo) annotation (Line(points={{-40,26},
+          {6,26},{6,-11.2},{45.8,-11.2}}, color={0,0,127}));
 
-  connect(erwHumGen.y, Cooling.erwHum) annotation (
-  Line(points={{-4,-38},{14,-38},{14,-19.8},{45.8,-19.8}},color={0,0,127}));
+  connect(erwHumGen.y, Cooling.phiAirEneRecWhe) annotation (Line(points={{-4,-38},
+          {14,-38},{14,-19.8},{45.8,-19.8}}, color={0,0,127}));
 
-  connect(erwTGen.y, Cooling.erwT) annotation (
-  Line(points={{-38,-56},{18,-56},{18,-22.4},{45.8,-22.4}}, color={0,0,127}));
+  connect(erwTGen.y, Cooling.TAirEneRecWhe) annotation (Line(points={{-38,-56},
+          {18,-56},{18,-22.4},{45.8,-22.4}}, color={0,0,127}));
 
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false), graphics={Ellipse(lineColor = {75,138,73},
