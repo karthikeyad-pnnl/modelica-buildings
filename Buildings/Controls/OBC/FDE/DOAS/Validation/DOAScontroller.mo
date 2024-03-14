@@ -290,13 +290,13 @@ model DOAScontroller "DOAS controller"
 
 equation
   connect(OccGen.y, DOAScon.occ) annotation (
-    Line(points = {{-20, 86}, {58, 86}, {58, 28}, {68, 28}}, color = {255, 0, 255}));
+    Line(points={{-20,86},{58,86},{58,27.6},{68,27.6}},      color = {255, 0, 255}));
 
   connect(mostOpenDamGen.y, DOAScon.mostOpenDam) annotation (
-    Line(points = {{-20, 56}, {54, 56}, {54, 25}, {68, 25}}, color = {0, 0, 127}));
+    Line(points={{-20,56},{54,56},{54,25.2},{68,25.2}},      color = {0, 0, 127}));
 
   connect(truDel.y, DOAScon.supFanStatus) annotation (
-    Line(points = {{-24, 32}, {50, 32}, {50, 23}, {68, 23}}, color = {255, 0, 255}));
+    Line(points={{-24,32},{50,32},{50,22.8},{68,22.8}},      color = {255, 0, 255}));
 
   connect(truDel.y, swi.u2) annotation (
     Line(points = {{-24, 32}, {-24, 18}, {-54, 18}, {-54, 8}}, color = {255, 0, 255}));
@@ -311,52 +311,53 @@ equation
     Line(points = {{24, -6}, {28, -6}, {28, 18}, {68, 18}}, color = {0, 0, 127}));
 
   connect(highSpaceTGen.y, DOAScon.highSpaceT) annotation (
-    Line(points = {{-2, -18}, {30, -18}, {30, 15}, {68, 15}}, color = {0, 0, 127}));
+    Line(points={{-2,-18},{30,-18},{30,15.4},{68,15.4}},      color = {0, 0, 127}));
 
   connect(raTGen.y, DOAScon.raT) annotation (
-    Line(points = {{-32, -28}, {-28, -28}, {-28, 10}, {68, 10}}, color = {0, 0, 127}));
+    Line(points={{-32,-28},{-28,-28},{-28,10.4},{68,10.4}},      color = {0, 0, 127}));
 
   connect(erwHumGen.y, DOAScon.erwHum) annotation (
-    Line(points = {{50, -24}, {56, -24}, {56, 3}, {68, 3}}, color = {0, 0, 127}));
+    Line(points={{50,-24},{56,-24},{56,2.8},{68,2.8}},      color = {0, 0, 127}));
 
   connect(DOAScon.bypDam, ERWtemp.bypDam) annotation (
-    Line(points = {{92, 11}, {97.1, 11}, {97.1, -12}, {107.6, -12}}, color = {255, 0, 255}));
+    Line(points={{92.2,11},{97.1,11},{97.1,-12},{107.6,-12}},        color = {255, 0, 255}));
 
   connect(DOAScon.erwStart, ERWtemp.erwStart) annotation (
-    Line(points = {{92, 8}, {98, 8}, {98, -16}, {107.6, -16}}, color = {255, 0, 255}));
+    Line(points={{92.2,8},{98,8},{98,-16},{107.6,-16}},        color = {255, 0, 255}));
 
   connect(raTGen.y, ERWtemp.raT) annotation (
     Line(points = {{-32, -28}, {38.8, -28}, {38.8, -20}, {107.6, -20}}, color = {0, 0, 127}));
 
   connect(ERWtemp.erwTsim, DOAScon.erwT) annotation (
-    Line(points = {{132.4, -18}, {134, -18}, {134, -38}, {60, -38}, {60, 0}, {68, 0}}, color = {0, 0, 127}));
+    Line(points={{132.4,-18},{134,-18},{134,-38},{60,-38},{60,0.4},{68,0.4}},          color = {0, 0, 127}));
 
   connect(DOAScon.exhFanStart, truDel1.u) annotation (
-    Line(points = {{92, 2}, {96, 2}, {96, -56}, {106, -56}}, color = {255, 0, 255}));
+    Line(points={{92.2,1.6},{96,1.6},{96,-56},{106,-56}},    color = {255, 0, 255}));
 
   connect(truDel1.y, DOAScon.exhFanProof) annotation (
     Line(points = {{130, -56}, {134, -56}, {134, -74}, {58, -74}, {58, -2}, {68, -2}}, color = {255, 0, 255}));
 
   connect(bldgSP.y, DOAScon.bldgSP) annotation (
-    Line(points = {{52, -82}, {54, -82}, {54, -4}, {68, -4}}, color = {0, 0, 127}));
+    Line(points={{52,-82},{54,-82},{54,-4.4},{68,-4.4}},      color = {0, 0, 127}));
 
   connect(oaTgen.y, DOAScon.oaT) annotation (
-    Line(points = {{26, -36}, {32, -36}, {32, 8}, {68, 8}}, color = {0, 0, 127}));
+    Line(points={{26,-36},{32,-36},{32,7.8},{68,7.8}},      color = {0, 0, 127}));
 
   connect(oaTgen.y, ERWtemp.oaT) annotation (
     Line(points = {{26, -36}, {62, -36}, {62, -24}, {107.6, -24}}, color = {0, 0, 127}));
 
   connect(swi.y, DOAScon.DDSP) annotation (
-    Line(points = {{-30, 8}, {16, 8}, {16, 20}, {68, 20}}, color = {0, 0, 127}));
+    Line(points={{-30,8},{16,8},{16,20.4},{68,20.4}},      color = {0, 0, 127}));
 
   connect(saTGen.y, DOAScon.saT) annotation (
-    Line(points = {{-2, -52}, {26, -52}, {26, 13}, {68, 13}}, color = {0, 0, 127}));
+    Line(points={{-2,-52},{26,-52},{26,12.8},{68,12.8}},      color = {0, 0, 127}));
 
   connect(ccTGen.y, DOAScon.ccT) annotation (
-    Line(points = {{-2, -82}, {28, -82}, {28, 5}, {68, 5}}, color = {0, 0, 127}));
+    Line(points={{-2,-82},{28,-82},{28,5.4},{68,5.4}},      color = {0, 0, 127}));
 
   connect(DOAScon.supFanStart, pre.u) annotation (
-    Line(points={{92,23},{-86,23},{-86,52},{-80,52}},    color = {255, 0, 255}));
+    Line(points={{92.2,23.4},{-86,23.4},{-86,52},{-80,52}},
+                                                         color = {255, 0, 255}));
 
   connect(pre.y, truDel.u) annotation (
     Line(points = {{-56, 52}, {-56, 41}, {-48, 41}, {-48, 32}}, color = {255, 0, 255}));
