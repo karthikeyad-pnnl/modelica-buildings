@@ -68,7 +68,7 @@ equation
   connect(saTGen.y, Cooling.TAirSup) annotation (Line(points={{-4,50},{12,50},{
           12,-8.4},{45.8,-8.4}}, color={0,0,127}));
 
-  connect(ccTGen.y, Cooling.TCoiCoo) annotation (Line(points={{-38,-18},{14,-18},
+  connect(ccTGen.y, Cooling.TAirDis) annotation (Line(points={{-38,-18},{14,-18},
           {14,-17.2},{45.8,-17.2}}, color={0,0,127}));
 
   connect(dehumMode.y, Cooling.uDeh) annotation (Line(points={{-4,4},{0,4},{0,-14.6},

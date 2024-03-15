@@ -64,11 +64,11 @@ block CoolingCoil "This block commands the cooling coil."
     annotation (Placement(transformation(extent={{-142,4},{-102,44}}),
         iconTransformation(extent={{-142,-104},{-102,-64}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput TCoiCoo(
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirDis(
     final unit="K",
     final displayUnit="degC",
     final quantity="ThermodynamicTemperature")
-    "Cooling coil discharge air temperature sensor." annotation (Placement(
+    "Measured discharge air temperature"             annotation (Placement(
         transformation(extent={{-142,64},{-102,104}}), iconTransformation(
           extent={{-142,-52},{-102,-12}})));
 
@@ -98,7 +98,10 @@ block CoolingCoil "This block commands the cooling coil."
     "Enable dehumidification mode only when supply fan is proven on"
     annotation (Placement(transformation(extent={{-20,-14},{0,8}})));
 
-  Buildings.Controls.OBC.CDL.Reals.PID conPIDRegOpe(reverseActing=false)
+  Buildings.Controls.OBC.CDL.Reals.PID conPIDRegOpe(
+    controllerType=controllerTypeRegOpe,
+    k=kRegOpe,
+    Ti=TiRegOpe,                                    reverseActing=false)
     "PID controller for regular cooling coil operation mode" annotation (
       Placement(visible=true, transformation(
         origin={-62,-42},
@@ -130,6 +133,10 @@ block CoolingCoil "This block commands the cooling coil."
         extent={{-10,-10},{10,10}},
         rotation=0)));
 
+  parameter CDL.Types.SimpleController controllerTypeRegOpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "Type of controller";
+  parameter Real kRegOpe=1 "Gain of controller";
+  parameter Real TiRegOpe=0.5 "Time constant of integrator block";
 equation
   connect(conZer.y, swiFanSupPro.u3) annotation (Line(points={{-8,-70},{18,-70},
           {18,-48},{20,-48}}, color={0,0,127}));
@@ -161,7 +168,7 @@ equation
   connect(conPIDRegOpe.y, swiFanSupPro.u1) annotation (Line(points={{-50,-42},{-17,
           -42},{-17,-32},{20,-32}}, color={0,0,127}));
 
-  connect(TCoiCoo, conPIDDeh.u_m) annotation (Line(points={{-122,84},{-22,84},{-22,
+  connect(TAirDis, conPIDDeh.u_m) annotation (Line(points={{-122,84},{-22,84},{-22,
           68},{10,68}}, color={0,0,127}));
 
   connect(conPIDDeh.y, swiTSetCoo.u1)

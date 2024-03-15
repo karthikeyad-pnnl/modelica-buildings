@@ -33,8 +33,8 @@ annotation (Placement(transformation(extent={{40,-6},{60,14}})));
     annotation (Placement(transformation(extent={{-66,-38},{-46,-18}})));
 
 equation
-  connect(SFcon.supFanStart, truDel.u) annotation (
-  Line(points={{62,9.2},{66,9.2},{66,-46},{0,-46},{0,-24},{6,-24}}, color={255,0,255}));
+  connect(SFcon.yFanSup, truDel.u) annotation (Line(points={{62,9.2},{66,9.2},{
+          66,-46},{0,-46},{0,-24},{6,-24}}, color={255,0,255}));
 
   connect(truDel.y, SFcon.supFanStatus) annotation (
   Line(points={{30,-24},{34,-24},{34,0.4},{38,0.4}}, color={255,0,255}));

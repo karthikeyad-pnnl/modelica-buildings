@@ -57,13 +57,13 @@ block SupplyFanController "This block manages start, stop, status, and speed of 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput DDSP "Down duct static pressure measurement."
   annotation(Placement(transformation(extent = {{-142, -106}, {-102, -66}}), iconTransformation(extent = {{-140, -92}, {-100, -52}})));
   // ---outputs---
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput supFanStart
-  "Command supply fan to start when true."
-  annotation(Placement(transformation(extent = {{102, 60}, {142, 100}}), iconTransformation(extent = {{100, 32}, {140, 72}})));
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yFanSup
+    "Supply fan enable signal" annotation (Placement(transformation(extent={{
+            102,60},{142,100}}), iconTransformation(extent={{100,32},{140,72}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput supFanSpeed
-  "Supply fan speed command"
-  annotation(Placement(transformation(extent = {{102, -50}, {142, -10}}), iconTransformation(extent = {{100, -64}, {140, -24}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yFanSupSpe
+    "Supply fan speed signal" annotation (Placement(transformation(extent={{102,
+            -50},{142,-10}}), iconTransformation(extent={{100,-64},{140,-24}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant dampSet(
    k = damSet) if vvUnit
@@ -126,14 +126,14 @@ equation
   connect(DDSP, FanSpeedSPPI.u_m) annotation (
     Line(points = {{-122, -86}, {62, -86}, {62, -42}}, color = {0, 0, 127}));
 
-  connect(FanSpeedSPPI.y, supFanSpeed) annotation (
-    Line(points = {{74, -30}, {122, -30}}, color = {0, 0, 127}));
+  connect(FanSpeedSPPI.y, yFanSupSpe)
+    annotation (Line(points={{74,-30},{122,-30}}, color={0,0,127}));
 
   connect(occ, tim.u) annotation (
     Line(points = {{-122, 80}, {-69, 80}, {-69, 88}, {-20, 88}}, color = {255, 0, 255}));
 
-  connect(tim.passed, supFanStart) annotation (
-    Line(points = {{4, 80}, {122, 80}}, color = {255, 0, 255}));
+  connect(tim.passed, yFanSup)
+    annotation (Line(points={{4,80},{122,80}}, color={255,0,255}));
 
   annotation (
     defaultComponentName = "SFcon",

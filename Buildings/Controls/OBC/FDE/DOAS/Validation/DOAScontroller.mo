@@ -355,9 +355,8 @@ equation
   connect(ccTGen.y, DOAScon.ccT) annotation (
     Line(points={{-2,-82},{28,-82},{28,5.4},{68,5.4}},      color = {0, 0, 127}));
 
-  connect(DOAScon.supFanStart, pre.u) annotation (
-    Line(points={{92.2,23.4},{-86,23.4},{-86,52},{-80,52}},
-                                                         color = {255, 0, 255}));
+  connect(DOAScon.yFanSup, pre.u) annotation (Line(points={{92.2,23.4},{-86,
+          23.4},{-86,52},{-80,52}}, color={255,0,255}));
 
   connect(pre.y, truDel.u) annotation (
     Line(points = {{-56, 52}, {-56, 41}, {-48, 41}, {-48, 32}}, color = {255, 0, 255}));
