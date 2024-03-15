@@ -260,10 +260,10 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
       iconTransformation(extent = {{-140, -46}, {-100, -6}})));
 
 // ---outputs---
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput supFanStart
-    "Command supply fan to start when true."
-    annotation(Placement(transformation(extent = {{102, 54}, {142, 94}}),
-      iconTransformation(extent = {{102, 34}, {142, 74}})));
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yFanSup
+    "Command supply fan to start when true." annotation (Placement(
+        transformation(extent={{102,54},{142,94}}), iconTransformation(extent={
+            {102,34},{142,74}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput supFanSpeed
     "Supply fan speed command"
@@ -344,10 +344,10 @@ equation
     Line(points = {{-86, 71.4}, {-98, 71.4}, {-98, 50}, {-122, 50}}, color = {0, 0, 127}));
   connect(SFcon.DDSP, DDSP) annotation (
     Line(points = {{-86, 60.8}, {-94, 60.8}, {-94, -2}, {-120, -2}}, color = {0, 0, 127}));
-  connect(SFcon.supFanStart, supFanStart) annotation (
-    Line(points = {{-62, 73.2}, {122, 73.2}, {122, 74}}, color = {255, 0, 255}));
-  connect(SFcon.supFanSpeed, supFanSpeed) annotation (
-    Line(points = {{-62, 63.6}, {84, 63.6}, {84, 48}, {122, 48}}, color = {0, 0, 127}));
+  connect(SFcon.yFanSup, yFanSup) annotation (Line(points={{-62,73.2},{122,73.2},
+          {122,74}}, color={255,0,255}));
+  connect(SFcon.yFanSupSpe, supFanSpeed) annotation (Line(points={{-62,63.6},{
+          84,63.6},{84,48},{122,48}}, color={0,0,127}));
 //connect(SFcon.supFanProof, DehumMod.supFanProof) annotation (
 // Line(points={{-62,68},{-56,68},{-56,25.2},{-50.2,25.2}},color={255,0,255}));
 //connect(SFcon.supFanProof, Cooling.supFanProof) annotation (
@@ -358,7 +358,7 @@ equation
     Line(points = {{-50.2, 18}, {-92, 18}, {-92, -60}, {-120, -60}}, color = {0, 0, 127}));
   connect(Cooling.TAirSup, saT) annotation (Line(points={{55.8,33.6},{-90,33.6},
           {-90,-86},{-120,-86}}, color={0,0,127}));
-  connect(Cooling.TCoiCoo, ccT) annotation (Line(points={{55.8,24.8},{-20,24.8},
+  connect(Cooling.TAirDis, ccT) annotation (Line(points={{55.8,24.8},{-20,24.8},
           {-20,-164},{-120,-164}}, color={0,0,127}));
   connect(Cooling.phiAirEneRecWhe, erwHum) annotation (Line(points={{55.8,22.2},
           {-18,22.2},{-18,-190},{-120,-190}}, color={0,0,127}));

@@ -192,8 +192,8 @@ equation
   connect(sub.y, chiBeaTesBed.deltaT) annotation (Line(points={{18,-82},{20,-82},
           {20,-98},{-136,-98},{-136,-38},{-104,-38},{-104,6},{-68,6},{-68,10},{
           -24,10},{-24,-2},{-18,-2},{-18,-4},{-12,-4}}, color={0,0,127}));
-  connect(DOAScon.supFanStart, chiBeaTesBed.uFanSta) annotation (Line(points={{
-          -23.14,-4.6},{-17.57,-4.6},{-17.57,-14},{-12,-14}}, color={255,0,255}));
+  connect(DOAScon.yFanSup, chiBeaTesBed.uFanSta) annotation (Line(points={{-23.14,
+          -4.6},{-17.57,-4.6},{-17.57,-14},{-12,-14}}, color={255,0,255}));
   connect(reaScaRep.y, terCon.TZonHeaSet) annotation (Line(points={{-14,98},{0,98},
           {0,68},{20,68},{20,67.75},{40,67.75}}, color={0,0,127}));
   annotation (
