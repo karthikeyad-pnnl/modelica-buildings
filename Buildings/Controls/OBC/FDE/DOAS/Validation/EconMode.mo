@@ -30,15 +30,14 @@ model EconMode "This model simulates EconMode."
     annotation (Placement(transformation(extent={{-28,-50},{-8,-30}})));
 
 equation
-  connect(SFproof.y, EconMod.supFanProof) annotation (
-  Line(points={{-8,42},{18,42},{18,7},{41.8,7}}, color={255,0,255}));
+  connect(SFproof.y, EconMod.uFanSupPro) annotation (Line(points={{-8,42},{18,
+          42},{18,7},{41.8,7}}, color={255,0,255}));
 
-  connect(oaTGen.y, EconMod.oaT)
-                                annotation (
-  Line(points={{-6,0},{41.8,0}}, color={0,0,127}));
+  connect(oaTGen.y, EconMod.TAirOut)
+    annotation (Line(points={{-6,0},{41.8,0}}, color={0,0,127}));
 
-  connect(supCooSPgen.y, EconMod.supCooSP) annotation (
-  Line(points={{-6,-40},{18,-40},{18,-7},{41.8,-7}}, color={0,0,127}));
+  connect(supCooSPgen.y, EconMod.TAirSupSetCoo) annotation (Line(points={{-6,-40},
+          {18,-40},{18,-7},{41.8,-7}}, color={0,0,127}));
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Ellipse(lineColor = {75,138,73},

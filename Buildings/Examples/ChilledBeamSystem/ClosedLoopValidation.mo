@@ -80,8 +80,8 @@ equation
     Line(points={{-98,80},{-96,80},{-96,-0.4},{-54.6,-0.4}},color = {255, 0, 255}));
   connect(chiBeaTesBed.TZon, terCon.TZon) annotation (
     Line(points={{12,4.8},{20,4.8},{20,60.25},{40,60.25}},  color = {0, 0, 127}, thickness = 0.5));
-  connect(eRWtemp.erwTsim, sub.u2) annotation (
-    Line(points={{-69.6,-78},{-30,-78},{-30,-88},{-6,-88}},       color = {0, 0, 127}));
+  connect(eRWtemp.yTSimEneRecWhe, sub.u2) annotation (Line(points={{-69.6,-78},
+          {-30,-78},{-30,-88},{-6,-88}}, color={0,0,127}));
   connect(booRep.y, terCon.uOccExp) annotation (
     Line(points={{-68,80},{-8,80},{-8,70.25},{40,70.25}},    color = {255, 0, 255}, thickness = 0.5));
   connect(TSetRooHea.y[1], reaScaRep.u) annotation (
@@ -111,15 +111,15 @@ equation
   connect(chiBeaTesBed.yPumSta, sysCon.uPumSta[1]) annotation (Line(points={{12,
           -23.2},{50,-23.2},{50,-30},{98,-30},{98,-74},{120,-74}}, color={255,0,
           255}));
-  connect(DOAScon.bypDam, eRWtemp.bypDam) annotation (Line(points={{-23.14,-17},
+  connect(DOAScon.bypDam, eRWtemp.uBypDam) annotation (Line(points={{-23.14,-17},
           {-20,-17},{-20,-42},{-102,-42},{-102,-72},{-94.4,-72}}, color={255,0,
           255}));
-  connect(chiBeaTesBed.relHumDOASRet, eRWtemp.raT) annotation (Line(points={{12,
-          -31},{24,-31},{24,-36},{38,-36},{38,-94},{-108,-94},{-108,-80},{-94.4,
-          -80}}, color={0,0,127}));
-  connect(chiBeaTesBed.OutdoorAirTemp, eRWtemp.oaT) annotation (Line(points={{
-          12,-37.6},{20,-37.6},{20,-40},{26,-40},{26,-96},{-98,-96},{-98,-84},{
-          -94.4,-84}}, color={0,0,127}));
+  connect(chiBeaTesBed.relHumDOASRet, eRWtemp.TAirRet) annotation (Line(points=
+          {{12,-31},{24,-31},{24,-36},{38,-36},{38,-94},{-108,-94},{-108,-80},{
+          -94.4,-80}}, color={0,0,127}));
+  connect(chiBeaTesBed.OutdoorAirTemp, eRWtemp.TAirOut) annotation (Line(points
+        ={{12,-37.6},{20,-37.6},{20,-40},{26,-40},{26,-96},{-98,-96},{-98,-84},
+          {-94.4,-84}}, color={0,0,127}));
   connect(chiBeaTesBed.OutdoorAirTemp, sub.u1) annotation (Line(points={{12,
           -37.6},{14,-37.6},{14,-64},{-10,-64},{-10,-76},{-6,-76}}, color={0,0,
           127}));
@@ -133,8 +133,8 @@ equation
   connect(chiBeaTesBed.TDOASDis, DOAScon.ccT) annotation (Line(points={{12,-26},
           {22,-26},{22,-50},{-24,-50},{-24,-34},{-74,-34},{-74,-22.6},{-54.6,
           -22.6}}, color={0,0,127}));
-  connect(DOAScon.retHum, eRWtemp.raT) annotation (Line(points={{-54.6,-10},{
-          -86,-10},{-86,-12},{-118,-12},{-118,-90},{-108,-90},{-108,-80},{-94.4,
+  connect(DOAScon.retHum, eRWtemp.TAirRet) annotation (Line(points={{-54.6,-10},
+          {-86,-10},{-86,-12},{-118,-12},{-118,-90},{-108,-90},{-108,-80},{-94.4,
           -80}}, color={0,0,127}));
   connect(chiBeaTesBed.dPDOASAir, DOAScon.DDSP) annotation (Line(points={{12,
           -10.8},{30,-10.8},{30,-10},{50,-10},{50,24},{-28,24},{-28,6},{-62,6},
@@ -142,8 +142,8 @@ equation
   connect(chiBeaTesBed.erwsuphum, DOAScon.erwHum) annotation (Line(points={{12,
           -28.6},{16,-28.6},{16,-66},{-70,-66},{-70,-25.2},{-54.6,-25.2}},
         color={0,0,127}));
-  connect(eRWtemp.erwTsim, DOAScon.erwT) annotation (Line(points={{-69.6,-78},{
-          -64,-78},{-64,-27.6},{-54.6,-27.6}}, color={0,0,127}));
+  connect(eRWtemp.yTSimEneRecWhe, DOAScon.erwT) annotation (Line(points={{-69.6,
+          -78},{-64,-78},{-64,-27.6},{-54.6,-27.6}}, color={0,0,127}));
   connect(DOAScon.saT, DOAScon.ccT) annotation (Line(points={{-54.6,-15.2},{-72,
           -15.2},{-72,-22.6},{-54.6,-22.6}}, color={0,0,127}));
   connect(chiBeaTesBed.rAT, DOAScon.raT) annotation (Line(points={{12,-34.4},{
@@ -171,9 +171,9 @@ equation
         color={0,0,127}));
   connect(DOAScon.yCC, chiBeaTesBed.uCooCoi) annotation (Line(points={{-23.14,
           -11},{-18,-11},{-18,-26},{-12,-26}}, color={0,0,127}));
-  connect(DOAScon.erwStart, eRWtemp.erwStart) annotation (Line(points={{-23.14,
-          -20},{-22,-20},{-22,-76},{-62,-76},{-62,-50},{-112,-50},{-112,-78},{
-          -94.4,-78},{-94.4,-76}}, color={255,0,255}));
+  connect(DOAScon.erwStart, eRWtemp.uEneRecWheStart) annotation (Line(points={{
+          -23.14,-20},{-22,-20},{-22,-76},{-62,-76},{-62,-50},{-112,-50},{-112,
+          -78},{-94.4,-78},{-94.4,-76}}, color={255,0,255}));
   connect(DOAScon.yRHC, chiBeaTesBed.uHeaCoi) annotation (Line(points={{-23.14,
           -14},{-18,-14},{-18,-22},{-12,-22}}, color={0,0,127}));
   connect(chiBeaTesBed.uPumSta, sysCon.yChiWatPum[1]) annotation (Line(points={

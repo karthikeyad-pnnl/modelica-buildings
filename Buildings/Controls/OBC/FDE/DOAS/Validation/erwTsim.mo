@@ -26,16 +26,16 @@ model erwTsim "This model simulates erwTsim"
     annotation (Placement(transformation(extent={{-60,-58},{-40,-38}})));
 equation
 
-  connect(bypDamsim.y, ERWtemp.bypDam) annotation (
-    Line(points={{-36,16},{0,16},{0,6},{41.6,6}}, color={255,0,255}));
+  connect(bypDamsim.y, ERWtemp.uBypDam) annotation (Line(points={{-36,16},{0,16},
+          {0,6},{41.6,6}}, color={255,0,255}));
 
-  connect(erwStartgen.y, ERWtemp.erwStart) annotation (
-    Line(points={{-36,46},{4,46},{4,2},{41.6,2}}, color={255,0,255}));
+  connect(erwStartgen.y, ERWtemp.uEneRecWheStart) annotation (Line(points={{-36,
+          46},{4,46},{4,2},{41.6,2}}, color={255,0,255}));
 
-  connect(raTGen.y, ERWtemp.raT) annotation (Line(points={{-36,-16},{4,-16},{4,
-          -2},{41.6,-2}}, color={0,0,127}));
-  connect(oaTGen.y, ERWtemp.oaT) annotation (Line(points={{-38,-48},{-12,-48},{
-          -12,-34},{16,-34},{16,-6},{41.6,-6}}, color={0,0,127}));
+  connect(raTGen.y, ERWtemp.TAirRet) annotation (Line(points={{-36,-16},{4,-16},
+          {4,-2},{41.6,-2}}, color={0,0,127}));
+  connect(oaTGen.y, ERWtemp.TAirOut) annotation (Line(points={{-38,-48},{-12,-48},
+          {-12,-34},{16,-34},{16,-6},{41.6,-6}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false), graphics={Ellipse(lineColor = {75,138,73},
 fillColor={255,255,255},

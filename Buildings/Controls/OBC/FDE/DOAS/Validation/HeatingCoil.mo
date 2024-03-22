@@ -28,14 +28,13 @@ model HeatingCoil "This model simulates HeatingCoil"
     annotation (Placement(transformation(extent={{-14,14},{6,34}})));
 
 equation
-  connect(SFproof.y, Heating.supFanProof) annotation (
-    Line(points={{-20,0},{39.8,0}}, color={255,0,255}));
+  connect(SFproof.y, Heating.uFanSupPro)
+    annotation (Line(points={{-20,0},{39.8,0}}, color={255,0,255}));
 
-  connect(saTGen.y, Heating.saT)
-                                annotation (
-    Line(points={{10,-30},{26,-30},{26,-5},{39.8,-5}}, color={0,0,127}));
-  connect(supHeaGen.y, Heating.supHeaSP) annotation (
-  Line(points={{8,24},{24,24},{24,4.8},{39.8,4.8}},color={0,0,127}));
+  connect(saTGen.y, Heating.TAirSup) annotation (Line(points={{10,-30},{26,-30},
+          {26,-5},{39.8,-5}}, color={0,0,127}));
+  connect(supHeaGen.y, Heating.TAirSupSetHea) annotation (Line(points={{8,24},{
+          24,24},{24,4.8},{39.8,4.8}}, color={0,0,127}));
 
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false), graphics={Ellipse(lineColor = {75,138,73},fillColor={255,255,255},

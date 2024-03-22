@@ -1,17 +1,6 @@
 within Buildings.Controls.OBC.FDE.DOAS;
 block CoolingCoil "This block commands the cooling coil."
 
-  parameter Real cctPIk = 0.0000001
-  "Cooling coil CCT PI gain value k.";
-
-  parameter Real cctPITi = 0.000025
-  "Cooling coil CCT PI time constant value Ti.";
-
-  parameter Real SAccPIk = 0.0000001
-  "Cooling coil SAT PI gain value k.";
-
-  parameter Real SAccPITi = 0.000025
-  "Cooling coil SAT PI time constant value Ti.";
 
   parameter Real erwDPadj(
   final unit = "K",
@@ -24,6 +13,11 @@ block CoolingCoil "This block commands the cooling coil."
     "Gain of controller";
   parameter Real TiDeh=0.5
     "Time constant of integrator block";
+
+  parameter CDL.Types.SimpleController controllerTypeRegOpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "Type of controller";
+  parameter Real kRegOpe=1 "Gain of controller";
+  parameter Real TiRegOpe=0.5 "Time constant of integrator block";
 
 
   // ---inputs---
@@ -133,10 +127,6 @@ block CoolingCoil "This block commands the cooling coil."
         extent={{-10,-10},{10,10}},
         rotation=0)));
 
-  parameter CDL.Types.SimpleController controllerTypeRegOpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
-    "Type of controller";
-  parameter Real kRegOpe=1 "Gain of controller";
-  parameter Real TiRegOpe=0.5 "Time constant of integrator block";
 equation
   connect(conZer.y, swiFanSupPro.u3) annotation (Line(points={{-8,-70},{18,-70},
           {18,-48},{20,-48}}, color={0,0,127}));
@@ -207,27 +197,10 @@ equation
 September 17, 2020, by Henry Nickels:</br>
 First implementation.</li>
 </ul>
-</html>", info = "<html>
+</html>", info="<html>
 <h4>Normal Operation</h4>
-<p>When the DOAS is energized 
-(<code>supFanProof</code>) the cooling coil will
-be commanded 
-(<code>yCC</code>) to maintain the 
-supply air temperature 
-(<code>saT</code>) at the supply air temperature cooling set point 
-(<code>supCooSP</code>). 
-
+<p>When the DOAS is energized (<span style=\"font-family: Courier New;\">uFanSupPro</span>) the cooling coil will be commanded (<span style=\"font-family: Courier New;\">yCoiCoo</span>) to maintain the supply air temperature (<span style=\"font-family: Courier New;\">TAirSup</span>) at the supply air temperature cooling set point (<span style=\"font-family: Courier New;\">TAirSupSetCoo</span>). </p>
 <h4>Dehumidification Operation</h4>
-<p>When the DOAS is energized 
-(<code>supFanProof</code>) and in dehumidification mode 
-(<code>dehumMode</code>) the cooling coil will
-be commanded 
-(<code>yCC</code>) to maintain the cooling coil temperature 
-(<code>ccT</code>) at an adjustable value 
-(<code>erwDPadj</code>) below the energy recovery supply
-dewpoint (<code>Dewpt.dpT</code>). The dewpoint value is calculated 
-from the energy recovery supply relative humidity 
-(<code>erwHum</code>) and temperature 
-(<code>erwT</code>).</p>
+<p>When the DOAS is energized (<span style=\"font-family: Courier New;\">uFanSupPro</span>) and in dehumidification mode (<span style=\"font-family: Courier New;\">uDeh</span>) the cooling coil will be commanded (<span style=\"font-family: Courier New;\">yCoiCoo</span>) to maintain the cooling coil temperature (<span style=\"font-family: Courier New;\">ccT</span>) at an adjustable value (<span style=\"font-family: Courier New;\">erwDPadj</span>) below the energy recovery supply dewpoint (TDewPoi). The dewpoint value is calculated from the energy recovery supply relative humidity <span style=\"font-family: Courier New;\">(phiAirEneRecWhe</span>) and temperature <span style=\"font-family: Courier New;\">(TAirEneRecWhe</span>).</p>
 </html>"));
 end CoolingCoil;
