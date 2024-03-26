@@ -34,13 +34,11 @@ model DehumMode "This model simulates DehumMode."
 
 equation
 
-  connect(SFproof.y, DehumMod.supFanProof) annotation (
-    Line(points={{-6,-26},{8,-26},{8,7.2},{19.8,7.2}},
-                                                 color={255,0,255}));
+  connect(SFproof.y, DehumMod.uFanSupPro) annotation (Line(points={{-6,-26},{8,
+          -26},{8,7.2},{19.8,7.2}}, color={255,0,255}));
 
-  connect(relHumGen.y, DehumMod.retHum) annotation (
-    Line(points={{-6,12},{8,12},{8,0},{19.8,0}},
-                                               color={0,0,127}));
+  connect(relHumGen.y, DehumMod.phiAirRet)
+    annotation (Line(points={{-6,12},{8,12},{8,0},{19.8,0}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Ellipse(lineColor = {75,138,73},
                 fillColor={255,255,255},

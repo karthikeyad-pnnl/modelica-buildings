@@ -54,11 +54,11 @@ model TSupSet "This model simulates TSupSet"
     annotation (Placement(transformation(extent={{-44,6},{-24,26}})));
 equation
 
-  connect(dehumMode.y, tSupSet.dehumMode) annotation (
-  Line(points={{-22,-22},{-2,-22},{-2,5},{20,5}},   color={255,0,255}));
+  connect(dehumMode.y, tSupSet.uDehMod) annotation (Line(points={{-22,-22},{-2,
+          -22},{-2,5},{20,5}}, color={255,0,255}));
 
-  connect(highSpaceTGen.y, tSupSet.highSpaceT) annotation (Line(points={{-22,16},
-          {-6,16},{-6,14},{12,14},{12,-5},{20,-5}}, color={0,0,127}));
+  connect(highSpaceTGen.y, tSupSet.TAirHig) annotation (Line(points={{-22,16},{
+          -6,16},{-6,14},{12,14},{12,-5},{20,-5}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={Ellipse(lineColor = {75,138,73},
 fillColor={255,255,255},
             fillPattern=

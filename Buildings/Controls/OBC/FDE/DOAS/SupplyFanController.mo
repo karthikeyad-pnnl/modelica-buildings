@@ -1,19 +1,19 @@
 within Buildings.Controls.OBC.FDE.DOAS;
 block SupplyFanController "This block manages start, stop, status, and speed of the supply fan."
 
-  parameter Real minDDSPset(
+  parameter Real yMinDamSet(
   min = 0,
   final unit = "Pa",
   final quantity = "PressureDifference") = 125
   "Minimum down duct static pressure reset value" annotation(Dialog(group = "DDSP range"));
 
-  parameter Real maxDDSPset(
+  parameter Real yMaxDamSet(
   min = 0,
   final unit = "Pa",
   final quantity = "PressureDifference") = 500
   "Maximum down duct static pressure reset value" annotation(Dialog(group = "DDSP range"));
 
-  parameter Real cvDDSPset(
+  parameter Real kPDucSetCV(
   min = 0,
   final unit = "Pa",
   final quantity = "PressureDifference") = 250 "Constant volume down duct static pressure set point";
@@ -27,22 +27,29 @@ block SupplyFanController "This block manages start, stop, status, and speed of 
   parameter Boolean vvUnit = true
   "Set true when unit serves variable volume system.";
 
-  parameter Real DampspPIk = 0.0000001
+  parameter Real kDam = 0.0000001
   "Damper position setpoint PI gain value k.";
 
-  parameter Real DampspPITi = 0.000025
+  parameter Real TiDam = 0.000025
   "Damper position setpoint PI time constant value Ti.";
 
-  parameter Real FSspPIk = 0.0000001 "
+  parameter Real kFanSpe = 0.0000001 "
   Fan speed set point SAT PI gain value k.";
 
-  parameter Real MinFS = 0.0000001
+  parameter Real FanSpeMin = 0.0000001
   "Minimum Fan Speed";
 
-  parameter Real FSspPITi = 0.000025
+  parameter Real TiFanSpe = 0.000025
   "Fan speed set point SAT PI time constant value Ti.";
+
+  parameter CDL.Types.SimpleController controllerTypeDam=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+  "Type of controller";
+
+  parameter CDL.Types.SimpleController controllerTypeFanSpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "Type of controller";
+
   // ---inputs---
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput occ
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput Occ
   "True when occupied mode is active"
   annotation(Placement(transformation(extent = {{-142, 60}, {-102, 100}}), iconTransformation(extent = {{-140, 50}, {-100, 90}})));
 
@@ -50,12 +57,15 @@ block SupplyFanController "This block manages start, stop, status, and speed of 
   "Most open damper position from all terminal units served."
   annotation(Placement(transformation(extent = {{-142, -24}, {-102, 16}}), iconTransformation(extent = {{-140, 14}, {-100, 54}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput supFanStatus
-  "True when supply fan is proven on."
-  annotation(Placement(transformation(extent = {{-142, 22}, {-102, 62}}), iconTransformation(extent = {{-140, -56}, {-100, -16}})));
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uFanSupPro
+    "True when supply fan is proven on." annotation (Placement(transformation(
+          extent={{-142,22},{-102,62}}), iconTransformation(extent={{-140,-56},
+            {-100,-16}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput DDSP "Down duct static pressure measurement."
-  annotation(Placement(transformation(extent = {{-142, -106}, {-102, -66}}), iconTransformation(extent = {{-140, -92}, {-100, -52}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput dPAirDucSta
+    "Down duct static pressure measurement." annotation (Placement(
+        transformation(extent={{-142,-106},{-102,-66}}), iconTransformation(
+          extent={{-140,-92},{-100,-52}})));
   // ---outputs---
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yFanSup
     "Supply fan enable signal" annotation (Placement(transformation(extent={{
@@ -65,71 +75,77 @@ block SupplyFanController "This block manages start, stop, status, and speed of 
     "Supply fan speed signal" annotation (Placement(transformation(extent={{102,
             -50},{142,-10}}), iconTransformation(extent={{100,-64},{140,-24}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant dampSet(
-   k = damSet) if vvUnit
-   "Most open damper position set point."
-   annotation(Placement(transformation(extent = {{-98, 4}, {-78, 24}})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant DamSet(k=damSet) if
+                  vvUnit "Most open damper position set point."
+    annotation (Placement(transformation(extent={{-98,4},{-78,24}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant cvDDSPsetpt(
-  final k = cvDDSPset) if not vvUnit
-  "DDSP set point for constant volume systems." annotation(Placement(transformation(extent = {{-72, -64}, {-52, -44}})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant conPDucSetCV(final k=
+        dPDucSetCV) if    not vvUnit
+    "DDSP set point for constant volume systems."
+    annotation (Placement(transformation(extent={{-72,-64},{-52,-44}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Switch swi
-  "Swtich passes fan speed set point when true; 0 when false."
-  annotation(Placement(transformation(extent = {{14, -40}, {34, -20}})));
+  Buildings.Controls.OBC.CDL.Reals.Switch swiFanSpe
+    "Swtich passes fan speed set point when true; 0 when false."
+    annotation (Placement(transformation(extent={{14,-40},{34,-20}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con0(
-  k = MinFS)
-  "Real constant 0"
-  annotation(Placement(transformation(extent = {{-26, -64}, {-6, -44}})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant conFanMinSpe(k=FanSpeMin)
+    "Minimum fan speed"
+    annotation (Placement(transformation(extent={{-26,-64},{-6,-44}})));
 
-  Buildings.Controls.OBC.CDL.Reals.PID DamperSPPI(
-  Ti = DampspPITi,
-  k = DampspPIk,
-    yMax=maxDDSPset,
-    yMin=minDDSPset,
+  Buildings.Controls.OBC.CDL.Reals.PID conPIDDam(
+    controllerType=controllerTypeDam,
+    Ti=TiDam,
+    k=kDam,
+    yMax=yMaxDamSet,
+    yMin=yMinDamSet,
     reverseActing=false) if
-                    vvUnit
-  annotation(Placement(visible = true, transformation(origin = {-38, 22}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+                    vvUnit "PID for most open damper" annotation (Placement(
+        visible=true, transformation(
+        origin={-38,22},
+        extent={{-10,-10},{10,10}},
+        rotation=0)));
 
-  Buildings.Controls.OBC.CDL.Reals.PID FanSpeedSPPI(
-  Ti = FSspPITi,
-  k = FSspPIk)
+  Buildings.Controls.OBC.CDL.Reals.PID conPIDFanSpe(
+    controllerType=controllerTypeFanSpe,
+    Ti=TiFanSpe,
+    k=kFanSpe)
   annotation(Placement(visible = true, transformation(origin = {62, -30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Logical.Timer
   tim(t = 300)
   annotation(Placement(visible = true, transformation(origin = {-8, 88}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
+
+
 equation
-  connect(con0.y, swi.u3) annotation (
-  Line(points = {{-4, -54}, {4, -54}, {4, -38}, {12, -38}}, color = {0, 0, 127}));
+  connect(conFanMinSpe.y, swiFanSpe.u3) annotation (Line(points={{-4,-54},{4,-54},
+          {4,-38},{12,-38}}, color={0,0,127}));
 
-  connect(supFanStatus, swi.u2) annotation (
-    Line(points = {{-122, 42}, {0, 42}, {0, -30}, {12, -30}}, color = {255, 0, 255}));
+  connect(uFanSupPro, swiFanSpe.u2) annotation (Line(points={{-122,42},{0,42},{
+          0,-30},{12,-30}}, color={255,0,255}));
 
-  connect(cvDDSPsetpt.y, swi.u1) annotation (
-  Line(points = {{-50, -54}, {-34, -54}, {-34, -22}, {12, -22}}, color = {0, 0, 127}));
+  connect(conPDucSetCV.y, swiFanSpe.u1) annotation (Line(points={{-50,-54},{-34,
+          -54},{-34,-22},{12,-22}}, color={0,0,127}));
 
-  connect(dampSet.y, DamperSPPI.u_s) annotation (
-  Line(points = {{-76, 14}, {-71, 14}, {-71, 22}, {-50, 22}}, color = {0, 0, 127}));
+  connect(DamSet.y, conPIDDam.u_s) annotation (Line(points={{-76,14},{-71,14},{
+          -71,22},{-50,22}}, color={0,0,127}));
 
-  connect(mostOpenDam, DamperSPPI.u_m) annotation (
-  Line(points = {{-122, -4}, {-38, -4}, {-38, 10}}, color = {0, 0, 127}));
+  connect(mostOpenDam, conPIDDam.u_m)
+    annotation (Line(points={{-122,-4},{-38,-4},{-38,10}}, color={0,0,127}));
 
-  connect(DamperSPPI.y, swi.u1) annotation (
-  Line(points = {{-26, 22}, {-26, -22}, {12, -22}}, color = {0, 0, 127}));
+  connect(conPIDDam.y, swiFanSpe.u1)
+    annotation (Line(points={{-26,22},{-26,-22},{12,-22}}, color={0,0,127}));
 
-  connect(swi.y, FanSpeedSPPI.u_s) annotation (
-  Line(points = {{36, -30}, {50, -30}}, color = {0, 0, 127}));
+  connect(swiFanSpe.y, conPIDFanSpe.u_s)
+    annotation (Line(points={{36,-30},{50,-30}}, color={0,0,127}));
 
-  connect(DDSP, FanSpeedSPPI.u_m) annotation (
-    Line(points = {{-122, -86}, {62, -86}, {62, -42}}, color = {0, 0, 127}));
+  connect(dPAirDucSta, conPIDFanSpe.u_m)
+    annotation (Line(points={{-122,-86},{62,-86},{62,-42}}, color={0,0,127}));
 
-  connect(FanSpeedSPPI.y, yFanSupSpe)
+  connect(conPIDFanSpe.y, yFanSupSpe)
     annotation (Line(points={{74,-30},{122,-30}}, color={0,0,127}));
 
-  connect(occ, tim.u) annotation (
+  connect(Occ, tim.u) annotation (
     Line(points = {{-122, 80}, {-69, 80}, {-69, 88}, {-20, 88}}, color = {255, 0, 255}));
 
   connect(tim.passed, yFanSup)
@@ -153,28 +169,11 @@ FillPattern.Solid, extent = {{-24, 12}, {0, -12}}), Text(textColor = {28, 108, 2
 September 11, 2020, by Henry Nickels:</br>
 First implementation.</li>
 </ul>
-</html>", info = "<html>
+</html>", info="<html>
 <h4>Supply Fan Start/Stop.</h4>
-<p>This block commands the supply fan to start 
-(<code>supFanStart</code>) when the unit enters occupied
-(<code>occ</code>) mode. When supply fan status
-(<code>SupFanStatus</code>) is proven, fan speed control
-(<code>SupFanSpeed</code>) is enabled and the
-supply fan proof (<code>supFanProof</code>) is turned on.</p>
+<p>This block commands the supply fan to start (<span style=\"font-family: Courier New;\">yFanSup</span>) when the unit enters occupied (<span style=\"font-family: Courier New;\">Occ</span>) mode. When supply fan status (<span style=\"font-family: Courier New;\">uFanSupPro</span>) is proven, fan speed control <span style=\"font-family: Courier New;\">(yFanSupSpe</span>) is enabled and the supply fan proof (<span style=\"font-family: Courier New;\">uFanSupPro</span>) is turned on.</p>
 <h4>Down Duct Static Pressure Control</h4>
-<p>The supply fan speed 
-(<code>supFanSpeed</code>) is modulated to  maintain
-the down duct static pressure (<code>DDSP</code>) at
-set point. The down duct set point is reset between minimum 
-(<code>minDDSPset</code>) and maximum 
-(<code>maxDDSPset</code>) values determined by TAB. The reset is
-based on the most open damper
-(<code>mostOpenDam</code>) remaining at a specific position
-(<code>damSet</code>) (i.e. The terminal unit air flow set point is satisfied
- with its primary air damper 90% open).</p>
-<p>There is also an option for a fixed down duct static pressure set point
-(<code>cvDDSPset</code>) when the variable volume parameter
-<code>vvUnit</code> is false.
-</p>
+<p>The supply fan speed (<span style=\"font-family: Courier New;\">yFanSupSpe</span>) is modulated to maintain the down duct static pressure (<span style=\"font-family: Courier New;\">conPDucSetCV</span>) at set point. The down duct set point is reset between minimum (<span style=\"font-family: Courier New;\">yMinDamSet</span>) and maximum (<span style=\"font-family: Courier New;\">yMaxDamSet</span>) values determined by TAB. The reset is based on the most open damper (<span style=\"font-family: Courier New;\">mostOpenDam</span>) remaining at a specific position (<span style=\"font-family: Courier New;\">DamSet</span>) (i.e. The terminal unit air flow set point is satisfied with its primary air damper 90&percnt; open).</p>
+<p>There is also an option for a fixed down duct static pressure set point (<span style=\"font-family: Courier New;\">PDucSetVV</span>) when the variable volume parameter <span style=\"font-family: Courier New;\">vvUnit</span> is false. </p>
 </html>"));
 end SupplyFanController;

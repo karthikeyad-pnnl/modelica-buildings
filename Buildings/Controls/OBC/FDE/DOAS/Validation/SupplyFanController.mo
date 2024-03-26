@@ -36,16 +36,16 @@ equation
   connect(SFcon.yFanSup, truDel.u) annotation (Line(points={{62,9.2},{66,9.2},{
           66,-46},{0,-46},{0,-24},{6,-24}}, color={255,0,255}));
 
-  connect(truDel.y, SFcon.supFanStatus) annotation (
-  Line(points={{30,-24},{34,-24},{34,0.4},{38,0.4}}, color={255,0,255}));
+  connect(truDel.y, SFcon.uFanSupPro) annotation (Line(points={{30,-24},{34,-24},
+          {34,0.4},{38,0.4}}, color={255,0,255}));
 
-  connect(OccGen.y, SFcon.occ) annotation (
+  connect(OccGen.y,SFcon.Occ)  annotation (
   Line(points={{-44,42},{-10,42},{-10,11},{38,11}}, color={255,0,255}));
 
   connect(mostOpenDamGen.y, SFcon.mostOpenDam) annotation (
   Line(points={{-44,8},{-10,8},{-10,7.4},{38,7.4}}, color={0,0,127}));
-  connect(sensorDDSP.y, SFcon.DDSP) annotation (
-  Line(points={{-44,-28},{-10,-28},{-10,-3.2},{38,-3.2}}, color={0,0,127}));
+  connect(sensorDDSP.y, SFcon.dPAirDucSta) annotation (Line(points={{-44,-28},{
+          -10,-28},{-10,-3.2},{38,-3.2}}, color={0,0,127}));
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={Ellipse(lineColor = {75,138,73},fillColor={255,255,255},
             fillPattern=

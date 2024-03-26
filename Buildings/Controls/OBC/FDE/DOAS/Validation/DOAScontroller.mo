@@ -319,17 +319,17 @@ equation
   connect(erwHumGen.y, DOAScon.erwHum) annotation (
     Line(points={{50,-24},{56,-24},{56,2.8},{68,2.8}},      color = {0, 0, 127}));
 
-  connect(DOAScon.bypDam, ERWtemp.bypDam) annotation (
-    Line(points={{92.2,11},{97.1,11},{97.1,-12},{107.6,-12}},        color = {255, 0, 255}));
+  connect(DOAScon.bypDam, ERWtemp.uBypDam) annotation (Line(points={{92.2,11},{
+          97.1,11},{97.1,-12},{107.6,-12}}, color={255,0,255}));
 
-  connect(DOAScon.erwStart, ERWtemp.erwStart) annotation (
-    Line(points={{92.2,8},{98,8},{98,-16},{107.6,-16}},        color = {255, 0, 255}));
+  connect(DOAScon.erwStart, ERWtemp.uEneRecWheStart) annotation (Line(points={{
+          92.2,8},{98,8},{98,-16},{107.6,-16}}, color={255,0,255}));
 
-  connect(raTGen.y, ERWtemp.raT) annotation (
-    Line(points = {{-32, -28}, {38.8, -28}, {38.8, -20}, {107.6, -20}}, color = {0, 0, 127}));
+  connect(raTGen.y, ERWtemp.TAirRet) annotation (Line(points={{-32,-28},{38.8,-28},
+          {38.8,-20},{107.6,-20}}, color={0,0,127}));
 
-  connect(ERWtemp.erwTsim, DOAScon.erwT) annotation (
-    Line(points={{132.4,-18},{134,-18},{134,-38},{60,-38},{60,0.4},{68,0.4}},          color = {0, 0, 127}));
+  connect(ERWtemp.yTSimEneRecWhe, DOAScon.erwT) annotation (Line(points={{132.4,
+          -18},{134,-18},{134,-38},{60,-38},{60,0.4},{68,0.4}}, color={0,0,127}));
 
   connect(DOAScon.exhFanStart, truDel1.u) annotation (
     Line(points={{92.2,1.6},{96,1.6},{96,-56},{106,-56}},    color = {255, 0, 255}));
@@ -343,8 +343,8 @@ equation
   connect(oaTgen.y, DOAScon.oaT) annotation (
     Line(points={{26,-36},{32,-36},{32,7.8},{68,7.8}},      color = {0, 0, 127}));
 
-  connect(oaTgen.y, ERWtemp.oaT) annotation (
-    Line(points = {{26, -36}, {62, -36}, {62, -24}, {107.6, -24}}, color = {0, 0, 127}));
+  connect(oaTgen.y, ERWtemp.TAirOut) annotation (Line(points={{26,-36},{62,-36},
+          {62,-24},{107.6,-24}}, color={0,0,127}));
 
   connect(swi.y, DOAScon.DDSP) annotation (
     Line(points={{-30,8},{16,8},{16,20.4},{68,20.4}},      color = {0, 0, 127}));

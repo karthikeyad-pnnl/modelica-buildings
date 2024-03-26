@@ -28,20 +28,17 @@ model ExhaustFanController
     annotation (Placement(transformation(extent={{-34,-26},{-14,-6}})));
 
 equation
-  connect(SFproof.y, EFcon.supFanProof) annotation (
-  Line(points={{-12,18},{4,18},
+  connect(SFproof.y, EFcon.uFanSupPro) annotation (Line(points={{-12,18},{4,18},
           {4,6},{44,6}}, color={255,0,255}));
 
-  connect(bldgSP.y, EFcon.bldgSP) annotation (
-  Line(points={{-12,-16},{4,-16},{4,
-          -6.4},{44,-6.4}}, color={0,0,127}));
+  connect(bldgSP.y, EFcon.PAirStaBui) annotation (Line(points={{-12,-16},{4,-16},
+          {4,-6.4},{44,-6.4}}, color={0,0,127}));
 
-  connect(truDel.y, EFcon.exhFanProof) annotation (
-  Line(points={{36,-30},{40,
-          -30},{40,0},{44,0}}, color={255,0,255}));
+  connect(truDel.y, EFcon.uFanExhPro) annotation (Line(points={{36,-30},{40,-30},
+          {40,0},{44,0}}, color={255,0,255}));
 
-  connect(EFcon.exhFanStart, truDel.u) annotation (
-  Line(points={{68,6},{74,6},{74,-48},{4,-48},{4,-30},{12,-30}}, color={255,0,255}));
+  connect(EFcon.yExhFanSta, truDel.u) annotation (Line(points={{68,6},{74,6},{
+          74,-48},{4,-48},{4,-30},{12,-30}}, color={255,0,255}));
 
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false), graphics={Ellipse(lineColor = {75,138,73},fillColor={255,255,255},

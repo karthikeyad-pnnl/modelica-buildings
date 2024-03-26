@@ -25,12 +25,12 @@ model CoolingCoil "This model simulates CoolingCoil"
     startTime=0)
     annotation (Placement(transformation(extent={{-26,40},{-6,60}})));
 
-   Buildings.Controls.OBC.CDL.Reals.Sources.Sin ccTGen(
+   Buildings.Controls.OBC.CDL.Reals.Sources.Sin TCoiCoo(
     amplitude=3,
     freqHz=1/4800,
     phase=0,
     offset=293,
-    startTime=0)
+    startTime=0) "Cooling coil temperature signal"
     annotation (Placement(transformation(extent={{-60,-28},{-40,-8}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse dehumMode(
@@ -68,7 +68,7 @@ equation
   connect(saTGen.y, Cooling.TAirSup) annotation (Line(points={{-4,50},{12,50},{
           12,-8.4},{45.8,-8.4}}, color={0,0,127}));
 
-  connect(ccTGen.y, Cooling.TAirDis) annotation (Line(points={{-38,-18},{14,-18},
+  connect(TCoiCoo.y, Cooling.TAirDis) annotation (Line(points={{-38,-18},{14,-18},
           {14,-17.2},{45.8,-17.2}}, color={0,0,127}));
 
   connect(dehumMode.y, Cooling.uDeh) annotation (Line(points={{-4,4},{0,4},{0,-14.6},

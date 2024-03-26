@@ -4,79 +4,87 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
   final unit = "K",
   final displayUnit = "degC",
   final quantity = "ThermodynamicTemperature") = 7
-  "Energy recovery set point.";
+  "Energy recovery temerature difference set point.";
 
    parameter Real Thys(
   final unit = "K",
   final displayUnit = "degC",
   final quantity = "ThermodynamicTemperature") = 0.5
-  "Energy recovery set point.";
+  "Temperature Difference for hysteresis.";
 
   parameter Real recSetDelay(
   final unit = "s",
   final quantity = "Time") = 300
   "Minimum delay after OAT/RAT delta falls below set point.";
 
-  parameter Real kGain_heat(
+  parameter Real kEneWheHea(
   final unit = "1") = 0.00001
   "PID heating loop gain value.";
 
-  parameter Real conTi_heat(
+  parameter Real TiEneWheHea(
   final unit = "s") = 0.00025
   "PID  heating loop time constant of integrator.";
 
-  parameter Real kGain_cool(
+  parameter Real kEneWheCoo(
   final unit = "1") = 0.00001
   "PID cooling loop gain value.";
 
-  parameter Real conTi_cool(
+  parameter Real TiEneWheCoo(
   final unit = "s") = 0.00025 "PID cooling loop time constant of integrator.";
 
+  parameter CDL.Types.SimpleController controllerTypeEneWheHea=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+  "PI controller for heating loop";
+
+  parameter CDL.Types.SimpleController controllerTypeEneWheCoo=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+  "PI controller for cooling loop";
+
 // ---inputs---
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput supFanProof "True when the supply fan is proven on."
-  annotation(Placement(transformation(extent = {{-142, 60}, {-102, 100}}),
-     iconTransformation(extent = {{-142, 58}, {-102, 98}})));
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uFanSupPro
+    "True when the supply fan is proven on." annotation (Placement(
+        transformation(extent={{-142,60},{-102,100}}), iconTransformation(
+          extent={{-142,58},{-102,98}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput oaT
-  "Outside air temperature sensor."
-  annotation(Placement(transformation(extent = {{-142, -38}, {-102, 2}}),
-    iconTransformation(extent = {{-142, -38}, {-102, 2}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirOut
+    "Outside air temperature sensor." annotation (Placement(transformation(
+          extent={{-142,-38},{-102,2}}), iconTransformation(extent={{-142,-38},{
+            -102,2}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput raT
-  "Return air temperature sensor."
-  annotation(Placement(transformation(extent = {{-142, 0}, {-102, 40}}),
-    iconTransformation(extent = {{-142, -2}, {-102, 38}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirRet
+    "Return air temperature sensor." annotation (Placement(transformation(
+          extent={{-142,0},{-102,40}}), iconTransformation(extent={{-142,-2},{-102,
+            38}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput ecoMode "True when economizer mode is active."
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uEcoMod "True when economizer mode is active."
   annotation(Placement(transformation(extent = {{-142, 30}, {-102, 70}}),
     iconTransformation(extent = {{-142, 28}, {-102, 68}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput erwT
-  "Energy recovery wheel supply air temperature."
-  annotation(Placement(transformation(extent = {{-142, -74}, {-102, -34}}),
-    iconTransformation(extent = {{-142, -68}, {-102, -28}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirSupEneWhe
+    "Energy recovery wheel supply air temperature." annotation (Placement(
+        transformation(extent={{-142,-74},{-102,-34}}), iconTransformation(
+          extent={{-142,-68},{-102,-28}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput supPrimSP "Primary supply air temperature set point."
-  annotation(Placement(transformation(extent = {{-142, -106}, {-102, -66}}),
-    iconTransformation(extent = {{-142, -98}, {-102, -58}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirSupSetEneWhe
+    "Primary supply air temperature set point." annotation (Placement(
+        transformation(extent={{-142,-106},{-102,-66}}), iconTransformation(
+          extent={{-142,-98},{-102,-58}})));
 
 // ---outputs---
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput erwStart "Command to start the energy recovery wheel."
-  annotation(Placement(transformation(extent = {{102, 0}, {142, 40}}),
-    iconTransformation(extent = {{102, -20}, {142, 20}})));
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yEneRecWheStart
+    "Command to start the energy recovery wheel." annotation (Placement(
+        transformation(extent={{102,0},{142,40}}), iconTransformation(extent={{
+            102,-20},{142,20}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput erwSpeed(
-  final unit = "1",
-  final min = 0,
-  final max = 1)
-  "Energy recovery wheel speed command."
-  annotation (Placement(transformation(extent = {{102, -96}, {142, -56}}),
-    iconTransformation(extent = {{102, -80}, {142, -40}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput yEneRecWheSpe(
+    final unit="1",
+    final min=0,
+    final max=1) "Energy recovery wheel speed command." annotation (Placement(
+        transformation(extent={{102,-96},{142,-56}}), iconTransformation(extent=
+           {{102,-80},{142,-40}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput bypDam
-  "Bypass damper command; true when commanded full open."
-  annotation(Placement(transformation(extent = {{102, 46}, {142, 86}}),
-    iconTransformation(extent = {{102, 40}, {142, 80}})));
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yBypDam
+    "Bypass damper command; true when commanded full open." annotation (
+      Placement(transformation(extent={{102,46},{142,86}}), iconTransformation(
+          extent={{102,40},{142,80}})));
 
   Buildings.Controls.OBC.CDL.Reals.Subtract                   difference
   "Subtract outside air temperature from return air temperature."
@@ -86,13 +94,13 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
   "Absolute value of OAT-RAT difference."
   annotation(Placement(visible = true, transformation(origin = {26, 2}, extent = {{-62, -10}, {-42, 10}}, rotation = 0)));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(
+  Buildings.Controls.OBC.CDL.Logical.TrueDelay EneWhe(
   delayTime = recSetDelay,
   delayOnInit = true)
   "Recovery set point delay before disabling energy wheel."
   annotation(Placement(visible = true, transformation(origin = {30, 28}, extent = {{2, -38}, {22, -18}}, rotation = 0)));
 
-  Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd(nin=3) "Logical AND; true when fan is proven, economizer mode is off, and ERW 
+  Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAndEneRecRegOpe(nin=3) "Logical AND; true when fan is proven, economizer mode is off, and ERW 
    temperature start conditions are met."
     annotation (Placement(transformation(extent={{66,8},{86,28}})));
 
@@ -103,15 +111,15 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
   Buildings.Controls.OBC.CDL.Reals.Max max
   "Outputs maximum value of two ERW temperature PI loops."
   annotation (
-    Placement(transformation(extent = {{-62, -78}, {-42, -58}})));
+    Placement(transformation(extent={{-24,-72},{-4,-52}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Switch swi
-  "Logical switch outputs ERW temperature PI maximum output 
-   when erwStart command is true."
-   annotation(Placement(transformation(extent = {{66, -86}, {86, -66}})));
+  Buildings.Controls.OBC.CDL.Reals.Switch swiTEneRec
+    "Logical switch outputs ERW temperature PI maximum output  when erwStart command is true."
+    annotation (Placement(transformation(extent={{66,-86},{86,-66}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con0(final k = 0) "Real constant 0."
-  annotation(Placement(transformation(extent = {{30, -94}, {50, -74}})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant conZer(final k=0)
+    "Real constant 0."
+    annotation (Placement(transformation(extent={{30,-94},{50,-74}})));
 
   Buildings.Controls.OBC.CDL.Logical.And and1
   "Logical AND; true when fan is proven and unit is in economizer mode."
@@ -125,45 +133,50 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
   "Logical NOT; true when ERW start command is off."
   annotation(Placement(transformation(extent = {{34, 40}, {54, 60}})));
 
-  Buildings.Controls.OBC.CDL.Reals.PID conPID_heat(
-  Ti = conTi_heat,
-  k = kGain_heat)
-  "PID loop if heating"
-  annotation(Placement(visible = true, transformation(origin = {-82, -50}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Buildings.Controls.OBC.CDL.Reals.PID conPIDEneWheHea(
+    controllerType=controllerTypeEneWheHea,
+    Ti=TiEneWheHea,
+    k=kEneWheHea) "PID loop if heating" annotation (Placement(visible=true,
+        transformation(
+        origin={-70,-38},
+        extent={{-10,-10},{10,10}},
+        rotation=0)));
 
-  Buildings.Controls.OBC.CDL.Reals.PID conPID_cool(
-  Ti = conTi_cool,
-  k = kGain_cool)
-   "PID loop if cooling"
-   annotation(Placement(visible = true, transformation(origin = {-80, -82}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Buildings.Controls.OBC.CDL.Reals.PID conPIDEneWheCoo(
+    controllerType=controllerTypeEneWheCoo,
+    Ti=TiEneWheCoo,
+    k=kEneWheCoo) "PID loop if cooling" annotation (Placement(visible=true,
+        transformation(
+        origin={-66,-78},
+        extent={{-10,-10},{10,10}},
+        rotation=0)));
 
   Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(uHigh = recSet, uLow = recSet - Thys)  annotation (
     Placement(visible = true, transformation(origin={8,2},     extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+
 equation
-  connect(not1.u, ecoMode) annotation (
+  connect(not1.u,uEcoMod)  annotation (
     Line(points = {{-28, 50}, {-122, 50}}, color = {255, 0, 255}));
 
-  connect(mulAnd.y, erwStart)
-    annotation (Line(points={{88,18},{104,18},{104,20},{122,20}},
-                                                color={255,0,255}));
+  connect(mulAndEneRecRegOpe.y, yEneRecWheStart) annotation (Line(points={{88,
+          18},{104,18},{104,20},{122,20}}, color={255,0,255}));
 
-  connect(max.y, swi.u1) annotation (
-    Line(points = {{-40, -68}, {64, -68}}, color = {0, 0, 127}));
+  connect(max.y, swiTEneRec.u1) annotation (Line(points={{-2,-62},{14,-62},{14,-68},
+          {64,-68}}, color={0,0,127}));
 
-  connect(mulAnd.y, swi.u2) annotation (Line(points={{88,18},{88,-20},{92,-20},{
-          92,-58},{58,-58},{58,-76},{64,-76}},
-                                      color={255,0,255}));
+  connect(mulAndEneRecRegOpe.y, swiTEneRec.u2) annotation (Line(points={{88,18},
+          {88,-20},{92,-20},{92,-58},{58,-58},{58,-76},{64,-76}}, color={255,0,255}));
 
-  connect(con0.y, swi.u3) annotation (
-    Line(points = {{52, -84}, {64, -84}}, color = {0, 0, 127}));
+  connect(conZer.y, swiTEneRec.u3)
+    annotation (Line(points={{52,-84},{64,-84}}, color={0,0,127}));
 
-  connect(swi.y, erwSpeed) annotation (
-    Line(points = {{88, -76}, {122, -76}}, color = {0, 0, 127}));
-  connect(ecoMode, and1.u2) annotation (
+  connect(swiTEneRec.y, yEneRecWheSpe)
+    annotation (Line(points={{88,-76},{122,-76}}, color={0,0,127}));
+  connect(uEcoMod, and1.u2) annotation (
     Line(points = {{-122, 50}, {-94, 50}, {-94, 58}, {-66, 58}}, color = {255, 0, 255}));
 
-  connect(supFanProof, and1.u1) annotation (
-    Line(points = {{-122, 80}, {-94, 80}, {-94, 66}, {-66, 66}}, color = {255, 0, 255}));
+  connect(uFanSupPro, and1.u1) annotation (Line(points={{-122,80},{-94,80},{-94,
+          66},{-66,66}}, color={255,0,255}));
 
   connect(and1.y, or2.u1) annotation (
     Line(points = {{-42, 66}, {60, 66}}, color = {255, 0, 255}));
@@ -171,52 +184,54 @@ equation
   connect(not2.y, or2.u2) annotation (
     Line(points = {{56, 50}, {58, 50}, {58, 58}, {60, 58}}, color = {255, 0, 255}));
 
-  connect(mulAnd.y, not2.u) annotation (Line(points={{88,18},{88,20},{98,20},{98,
-          36},{28,36},{28,50},{32,50}},
-                                   color={255,0,255}));
+  connect(mulAndEneRecRegOpe.y, not2.u) annotation (Line(points={{88,18},{88,20},
+          {98,20},{98,36},{28,36},{28,50},{32,50}}, color={255,0,255}));
 
-  connect(or2.y, bypDam) annotation (
-    Line(points = {{84, 66}, {122, 66}}, color = {255, 0, 255}));
+  connect(or2.y, yBypDam)
+    annotation (Line(points={{84,66},{122,66}}, color={255,0,255}));
 
-  connect(supPrimSP, conPID_cool.u_s) annotation (
-    Line(points = {{-122, -86}, {-105, -86}, {-105, -82}, {-92, -82}}, color = {0, 0, 127}));
+  connect(TAirSupSetEneWhe, conPIDEneWheCoo.u_s) annotation (Line(points={{-122,
+          -86},{-105,-86},{-105,-78},{-78,-78}}, color={0,0,127}));
 
-  connect(supPrimSP, conPID_heat.u_s) annotation (
-    Line(points = {{-122, -86}, {-122, -84}, {-94, -84}, {-94, -50}}, color = {0, 0, 127}));
+  connect(TAirSupSetEneWhe, conPIDEneWheHea.u_s) annotation (Line(points={{-122,
+          -86},{-122,-84},{-82,-84},{-82,-38}}, color={0,0,127}));
 
-  connect(erwT, conPID_heat.u_m) annotation (
-    Line(points = {{-122, -54}, {-102, -54}, {-102, -62}, {-82, -62}}, color = {0, 0, 127}));
+  connect(TAirSupEneWhe, conPIDEneWheHea.u_m) annotation (Line(points={{-122,-54},
+          {-102,-54},{-102,-50},{-70,-50}}, color={0,0,127}));
 
-  connect(erwT, conPID_cool.u_m) annotation (
-    Line(points = {{-122, -54}, {-100, -54}, {-100, -94}, {-80, -94}}, color = {0, 0, 127}));
+  connect(TAirSupEneWhe, conPIDEneWheCoo.u_m) annotation (Line(points={{-122,-54},
+          {-100,-54},{-100,-90},{-66,-90}}, color={0,0,127}));
 
-  connect(conPID_heat.y, max.u1) annotation (
-    Line(points = {{-70, -50}, {-70, -58}, {-64, -58}, {-64, -62}}, color = {0, 0, 127}));
+  connect(conPIDEneWheHea.y, max.u1)
+    annotation (Line(points={{-58,-38},{-58,-56},{-26,-56}}, color={0,0,127}));
 
-  connect(conPID_cool.y, max.u2) annotation (
-    Line(points = {{-68, -82}, {-64, -82}, {-64, -74}}, color = {0, 0, 127}));
+  connect(conPIDEneWheCoo.y, max.u2)
+    annotation (Line(points={{-54,-78},{-54,-68},{-26,-68}}, color={0,0,127}));
 
-  connect(raT, difference.u1) annotation (
-    Line(points = {{-122, 20}, {-122, 8}, {-68, 8}}, color = {0, 0, 127}));
+  connect(TAirRet, difference.u1)
+    annotation (Line(points={{-122,20},{-122,8},{-68,8}}, color={0,0,127}));
 
-  connect(oaT, difference.u2) annotation (
-    Line(points = {{-122, -18}, {-122, -4}, {-68, -4}}, color = {0, 0, 127}));
+  connect(TAirOut, difference.u2)
+    annotation (Line(points={{-122,-18},{-122,-4},{-68,-4}}, color={0,0,127}));
 
   connect(difference.y, abs.u) annotation (
     Line(points = {{-44, 2}, {-38, 2}}, color = {0, 0, 127}));
 
-  connect(hys.y, truDel.u) annotation (
+  connect(hys.y,EneWhe. u) annotation (
     Line(points={{20,2},{25,2},{25,0},{30,0}},
                                          color = {255, 0, 255}));
 
   connect(abs.y, hys.u)
     annotation (Line(points={{-14, 2}, {-4, 2}}, color={0,0,127}));
-  connect(supFanProof, mulAnd.u[1]) annotation (Line(points={{-122,80},{-70,80},
-          {-70,88},{20,88},{20,22.6667},{64,22.6667}}, color={255,0,255}));
-  connect(not1.y, mulAnd.u[2]) annotation (Line(points={{-4,50},{10,50},{10,18},
-          {64,18}}, color={255,0,255}));
-  connect(truDel.y, mulAnd.u[3]) annotation (Line(points={{54,0},{56,0},{56,
-          13.3333},{64,13.3333}}, color={255,0,255}));
+  connect(uFanSupPro, mulAndEneRecRegOpe.u[1]) annotation (Line(points={{-122,80},
+          {-70,80},{-70,88},{20,88},{20,22.6667},{64,22.6667}}, color={255,0,255}));
+  connect(not1.y, mulAndEneRecRegOpe.u[2]) annotation (Line(points={{-4,50},{10,
+          50},{10,18},{64,18}}, color={255,0,255}));
+  connect(EneWhe.y, mulAndEneRecRegOpe.u[3]) annotation (Line(points={{54,0},{
+          56,0},{56,13.3333},{64,13.3333}},
+                                         color={255,0,255}));
+  connect(max.u1, conPIDEneWheHea.u_m) annotation (Line(points={{-26,-56},{-66,-56},
+          {-66,-50},{-70,-50}}, color={0,0,127}));
   annotation (
     defaultComponentName = "ERWcon",
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics={  Rectangle(fillColor = {255, 255, 255},
@@ -250,28 +265,12 @@ FillPattern.Solid, extent = {{30, 30}, {70, 28}})}),
 September 15, 2020, by Henry Nickels:</br>
 First implementation.</li>
 </ul>
-</html>", info = "<html>
+</html>", info="<html>
 <h4>Energy Recovery Wheel Start/Stop.</h4>
-<p>This block commands the ERW to start 
-(<code>erwStart</code>) when the DOAS is energized
-(<code>supFanProof</code>) and the absolute difference between 
-return air temperature (<code>raT</code>) and outside air temperature
-(<code>oaT</code>) is greater than the recovery set point 
-(<code>recSet</code>). When the DOAS is not energized, economizer
-mode is enabled 
-(<code>ecoMode</code>), or the RAT/OAT difference falls below the
-recovery set point for longer than the recovery set point delay 
-(<code>recSetDelay</code>) the ERW will be commanded to stop.</p>
+<p>This block commands the ERW to start (<span style=\"font-family: Courier New;\">yEneRecWheStart</span>) when the DOAS is energized (<span style=\"font-family: Courier New;\">uFanSupPro</span>) and the absolute difference between return air temperature (<span style=\"font-family: Courier New;\">TAirRet</span>) and outside air temperature (<span style=\"font-family: Courier New;\">TAirOut</span>) is greater than the recovery set point (<span style=\"font-family: Courier New;\">recSet</span>). When the DOAS is not energized, economizer mode is enabled (uEcoMod), or the TAirRet/TAirOut difference falls below the recovery set point for longer than the recovery set point delay (<span style=\"font-family: Courier New;\">recSetDelay</span>) the ERW will be commanded to stop.</p>
 <h4>ERW Speed Control</h4>
-<p>The ERW speed 
-(<code>erwSpeed</code>) is modulated to  maintain the energy recovery
-supply temperature (<code>erwT</code>) at the primary supply air
- temperature set point (<code>supPrimSP</code>).</p>
+<p>The ERW speed (<span style=\"font-family: Courier New;\">yEneRecWheSpe</span>) is modulated to maintain the energy recovery supply temperature (<span style=\"font-family: Courier New;\">TAirSupEneWhe</span>) at the primary supply air temperature set point (<span style=\"font-family: Courier New;\">TAirSupSetEneWhe</span>).</p>
 <h4>Bypass Damper Control</h4>
-When the DOAS is energized and in economizer mode or the ERW is stopped, 
-the bypass dampers shall be commanded fully open to bypass
-(<code>bypDam</code>). When the DOAS is de-energized or the DOAS is 
-energized and the ERW is started, the bypass dampers shall be 
-commanded closed to bypass.</p>
+<p>When the DOAS is energized and in economizer mode or the ERW is stopped, the bypass dampers shall be commanded fully open to bypass (<span style=\"font-family: Courier New;\">yBypDam</span>). When the DOAS is de-energized or the DOAS is energized and the ERW is started, the bypass dampers shall be commanded closed to bypass. </p>
 </html>"));
 end EnergyWheel;
