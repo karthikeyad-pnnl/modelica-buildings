@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.FDE.DOAS;
+within Buildings.Controls.OBC.FDE.DOAS.Validation.Baseclasses;
 block erwTsim "ERW supply temperature simulator"
 
     parameter Real erwEff(
@@ -9,8 +9,8 @@ block erwTsim "ERW supply temperature simulator"
 // ---inputs---
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uBypDam
     "True when ERW bypass dampers are commanded open." annotation (Placement(
-        transformation(extent={{-142,28},{-102,68}}), iconTransformation(extent
-          ={{-144,40},{-104,80}})));
+        transformation(extent={{-142,28},{-102,68}}), iconTransformation(extent=
+           {{-144,40},{-104,80}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirRet
     "Return air temperature sensor value." annotation (Placement(transformation(

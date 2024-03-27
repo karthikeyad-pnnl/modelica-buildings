@@ -54,8 +54,11 @@ model ClosedLoopValidation
     Placement(visible = true, transformation(origin = {72, 64}, extent = {{-152, 40}, {-132, 60}}, rotation = 0)));
   Buildings.Controls.OBC.CDL.Reals.Sources.TimeTable TSetRooCoo(extrapolation = Buildings.Controls.OBC.CDL.Types.Extrapolation.Periodic, smoothness = Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments, table = [0, 30 + 273.15; 8*3600, 25 + 273.15; 18*3600, 30 + 273.15; 24*3600, 30 + 273.15]) annotation (
     Placement(visible = true, transformation(origin = {74, 122}, extent = {{-152, 10}, {-132, 30}}, rotation = 0)));
-  Buildings.Controls.OBC.FDE.DOAS.erwTsim eRWtemp annotation (
-    Placement(visible = true, transformation(origin={-82,-78},     extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Buildings.Controls.OBC.FDE.DOAS.Validation.Baseclasses.erwTsim eRWtemp
+    annotation (Placement(visible=true, transformation(
+        origin={-82,-78},
+        extent={{-10,-10},{10,10}},
+        rotation=0)));
   Buildings.Controls.OBC.CDL.Reals.Subtract sub annotation (
     Placement(visible = true, transformation(origin={6,-82},      extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booleanScalarReplicator(nout = 5) annotation (
@@ -117,8 +120,8 @@ equation
   connect(chiBeaTesBed.relHumDOASRet, eRWtemp.TAirRet) annotation (Line(points=
           {{12,-31},{24,-31},{24,-36},{38,-36},{38,-94},{-108,-94},{-108,-80},{
           -94.4,-80}}, color={0,0,127}));
-  connect(chiBeaTesBed.OutdoorAirTemp, eRWtemp.TAirOut) annotation (Line(points
-        ={{12,-37.6},{20,-37.6},{20,-40},{26,-40},{26,-96},{-98,-96},{-98,-84},
+  connect(chiBeaTesBed.OutdoorAirTemp, eRWtemp.TAirOut) annotation (Line(points=
+         {{12,-37.6},{20,-37.6},{20,-40},{26,-40},{26,-96},{-98,-96},{-98,-84},
           {-94.4,-84}}, color={0,0,127}));
   connect(chiBeaTesBed.OutdoorAirTemp, sub.u1) annotation (Line(points={{12,
           -37.6},{14,-37.6},{14,-64},{-10,-64},{-10,-76},{-6,-76}}, color={0,0,
