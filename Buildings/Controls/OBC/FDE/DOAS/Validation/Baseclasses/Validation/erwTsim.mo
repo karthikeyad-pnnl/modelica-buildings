@@ -1,7 +1,7 @@
-within Buildings.Controls.OBC.FDE.DOAS.Validation;
+within Buildings.Controls.OBC.FDE.DOAS.Validation.Baseclasses.Validation;
 model erwTsim "This model simulates erwTsim"
 
-  Buildings.Controls.OBC.FDE.DOAS.erwTsim ERWtemp
+  Buildings.Controls.OBC.FDE.DOAS.Validation.Baseclasses.erwTsim ERWtemp
     annotation (Placement(transformation(extent={{44,-10},{64,10}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse erwStartgen(width=0.6, period=2880)

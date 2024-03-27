@@ -281,9 +281,9 @@ model DOAScontroller "DOAS controller"
   "Supply air temperature simulator."
   annotation(Placement(transformation(extent = {{-24, -62}, {-4, -42}})));
 
-  Buildings.Controls.OBC.FDE.DOAS.erwTsim ERWtemp
-  "Energy recovery wheel supply temperature simulator."
-  annotation(Placement(transformation(extent = {{110, -28}, {130, -8}})));
+  Buildings.Controls.OBC.FDE.DOAS.Validation.Baseclasses.erwTsim ERWtemp
+    "Energy recovery wheel supply temperature simulator."
+    annotation (Placement(transformation(extent={{110,-28},{130,-8}})));
 
   Buildings.Controls.OBC.CDL.Logical.Pre pre
   annotation(Placement(visible = true, transformation(origin = {-68, 52}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
