@@ -42,8 +42,8 @@ equation
   connect(OccGen.y,SFcon.Occ)  annotation (
   Line(points={{-44,42},{-10,42},{-10,11},{38,11}}, color={255,0,255}));
 
-  connect(mostOpenDamGen.y, SFcon.mostOpenDam) annotation (
-  Line(points={{-44,8},{-10,8},{-10,7.4},{38,7.4}}, color={0,0,127}));
+  connect(mostOpenDamGen.y, SFcon.uDamMaxOpe) annotation (Line(points={{-44,8},
+          {-10,8},{-10,7.4},{38,7.4}}, color={0,0,127}));
   connect(sensorDDSP.y, SFcon.dPAirDucSta) annotation (Line(points={{-44,-28},{
           -10,-28},{-10,-3.2},{38,-3.2}}, color={0,0,127}));
 

@@ -289,14 +289,14 @@ model DOAScontroller "DOAS controller"
   annotation(Placement(visible = true, transformation(origin = {-68, 52}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
 equation
-  connect(OccGen.y, DOAScon.occ) annotation (
+  connect(OccGen.y,DOAScon.Occ)  annotation (
     Line(points={{-20,86},{58,86},{58,27.6},{68,27.6}},      color = {255, 0, 255}));
 
-  connect(mostOpenDamGen.y, DOAScon.mostOpenDam) annotation (
-    Line(points={{-20,56},{54,56},{54,25.2},{68,25.2}},      color = {0, 0, 127}));
+  connect(mostOpenDamGen.y, DOAScon.uDamMaxOpe) annotation (Line(points={{-20,
+          56},{54,56},{54,25.2},{68,25.2}}, color={0,0,127}));
 
-  connect(truDel.y, DOAScon.supFanStatus) annotation (
-    Line(points={{-24,32},{50,32},{50,22.8},{68,22.8}},      color = {255, 0, 255}));
+  connect(truDel.y, DOAScon.uFanSupPro) annotation (Line(points={{-24,32},{50,
+          32},{50,22.8},{68,22.8}}, color={255,0,255}));
 
   connect(truDel.y, swi.u2) annotation (
     Line(points = {{-24, 32}, {-24, 18}, {-54, 18}, {-54, 8}}, color = {255, 0, 255}));
@@ -307,53 +307,54 @@ equation
   connect(con0.y, swi.u3) annotation (
     Line(points = {{-68, -48}, {-60, -48}, {-60, 0}, {-54, 0}}, color = {0, 0, 127}));
 
-  connect(ralHumGen.y, DOAScon.retHum) annotation (
-    Line(points = {{24, -6}, {28, -6}, {28, 18}, {68, 18}}, color = {0, 0, 127}));
+  connect(ralHumGen.y, DOAScon.phiAirRet) annotation (Line(points={{24,-6},{28,
+          -6},{28,18},{68,18}}, color={0,0,127}));
 
-  connect(highSpaceTGen.y, DOAScon.highSpaceT) annotation (
-    Line(points={{-2,-18},{30,-18},{30,15.4},{68,15.4}},      color = {0, 0, 127}));
+  connect(highSpaceTGen.y, DOAScon.TAirHig) annotation (Line(points={{-2,-18},{
+          30,-18},{30,15.4},{68,15.4}}, color={0,0,127}));
 
-  connect(raTGen.y, DOAScon.raT) annotation (
-    Line(points={{-32,-28},{-28,-28},{-28,10.4},{68,10.4}},      color = {0, 0, 127}));
+  connect(raTGen.y, DOAScon.TAirRet) annotation (Line(points={{-32,-28},{-28,-28},
+          {-28,10.4},{68,10.4}}, color={0,0,127}));
 
-  connect(erwHumGen.y, DOAScon.erwHum) annotation (
-    Line(points={{50,-24},{56,-24},{56,2.8},{68,2.8}},      color = {0, 0, 127}));
+  connect(erwHumGen.y, DOAScon.phiAirEneRecWhe) annotation (Line(points={{50,-24},
+          {56,-24},{56,2.8},{68,2.8}}, color={0,0,127}));
 
-  connect(DOAScon.bypDam, ERWtemp.uBypDam) annotation (Line(points={{92.2,11},{
-          97.1,11},{97.1,-12},{107.6,-12}}, color={255,0,255}));
+  connect(DOAScon.yBypDam, ERWtemp.uBypDam) annotation (Line(points={{92.2,11},
+          {97.1,11},{97.1,-12},{107.6,-12}}, color={255,0,255}));
 
-  connect(DOAScon.erwStart, ERWtemp.uEneRecWheStart) annotation (Line(points={{
-          92.2,8},{98,8},{98,-16},{107.6,-16}}, color={255,0,255}));
+  connect(DOAScon.yEneRecWheEna, ERWtemp.uEneRecWheStart) annotation (Line(
+        points={{92.2,8},{98,8},{98,-16},{107.6,-16}}, color={255,0,255}));
 
   connect(raTGen.y, ERWtemp.TAirRet) annotation (Line(points={{-32,-28},{38.8,-28},
           {38.8,-20},{107.6,-20}}, color={0,0,127}));
 
-  connect(ERWtemp.yTSimEneRecWhe, DOAScon.erwT) annotation (Line(points={{132.4,
-          -18},{134,-18},{134,-38},{60,-38},{60,0.4},{68,0.4}}, color={0,0,127}));
+  connect(ERWtemp.yTSimEneRecWhe, DOAScon.TAirSupEneWhe) annotation (Line(
+        points={{132.4,-18},{134,-18},{134,-38},{60,-38},{60,0.4},{68,0.4}},
+        color={0,0,127}));
 
-  connect(DOAScon.exhFanStart, truDel1.u) annotation (
-    Line(points={{92.2,1.6},{96,1.6},{96,-56},{106,-56}},    color = {255, 0, 255}));
+  connect(DOAScon.yExhFanSta, truDel1.u) annotation (Line(points={{92.2,1.6},{
+          96,1.6},{96,-56},{106,-56}}, color={255,0,255}));
 
-  connect(truDel1.y, DOAScon.exhFanProof) annotation (
-    Line(points = {{130, -56}, {134, -56}, {134, -74}, {58, -74}, {58, -2}, {68, -2}}, color = {255, 0, 255}));
+  connect(truDel1.y, DOAScon.uFanExhPro) annotation (Line(points={{130,-56},{
+          134,-56},{134,-74},{58,-74},{58,-2},{68,-2}}, color={255,0,255}));
 
-  connect(bldgSP.y, DOAScon.bldgSP) annotation (
-    Line(points={{52,-82},{54,-82},{54,-4.4},{68,-4.4}},      color = {0, 0, 127}));
+  connect(bldgSP.y, DOAScon.dPAirStaBui) annotation (Line(points={{52,-82},{54,
+          -82},{54,-4.4},{68,-4.4}}, color={0,0,127}));
 
-  connect(oaTgen.y, DOAScon.oaT) annotation (
-    Line(points={{26,-36},{32,-36},{32,7.8},{68,7.8}},      color = {0, 0, 127}));
+  connect(oaTgen.y, DOAScon.TAirOut) annotation (Line(points={{26,-36},{32,-36},
+          {32,7.8},{68,7.8}}, color={0,0,127}));
 
   connect(oaTgen.y, ERWtemp.TAirOut) annotation (Line(points={{26,-36},{62,-36},
           {62,-24},{107.6,-24}}, color={0,0,127}));
 
-  connect(swi.y, DOAScon.DDSP) annotation (
-    Line(points={{-30,8},{16,8},{16,20.4},{68,20.4}},      color = {0, 0, 127}));
+  connect(swi.y, DOAScon.dPAirDucSta) annotation (Line(points={{-30,8},{16,8},{
+          16,20.4},{68,20.4}}, color={0,0,127}));
 
-  connect(saTGen.y, DOAScon.saT) annotation (
-    Line(points={{-2,-52},{26,-52},{26,12.8},{68,12.8}},      color = {0, 0, 127}));
+  connect(saTGen.y, DOAScon.TAirSup) annotation (Line(points={{-2,-52},{26,-52},
+          {26,12.8},{68,12.8}}, color={0,0,127}));
 
-  connect(ccTGen.y, DOAScon.ccT) annotation (
-    Line(points={{-2,-82},{28,-82},{28,5.4},{68,5.4}},      color = {0, 0, 127}));
+  connect(ccTGen.y, DOAScon.TAirDisCoiCoo) annotation (Line(points={{-2,-82},{
+          28,-82},{28,5.4},{68,5.4}}, color={0,0,127}));
 
   connect(DOAScon.yFanSup, pre.u) annotation (Line(points={{92.2,23.4},{-86,
           23.4},{-86,52},{-80,52}}, color={255,0,255}));

@@ -1,6 +1,6 @@
 within Buildings.Controls.OBC.FDE.DOAS.Validation.Baseclasses;
 package Validation
-  
+
 annotation (Icon(graphics={
         Rectangle(
           lineColor={200,200,200},

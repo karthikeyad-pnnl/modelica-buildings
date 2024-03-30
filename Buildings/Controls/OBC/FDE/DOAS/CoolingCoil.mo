@@ -1,26 +1,44 @@
 within Buildings.Controls.OBC.FDE.DOAS;
 block CoolingCoil "This block commands the cooling coil."
 
-
   parameter Real erwDPadj(
   final unit = "K",
   final quantity = "TemperatureDifference") = 5
   "Value subtracted from ERW supply air dewpoint.";
 
   parameter CDL.Types.SimpleController controllerTypeDeh=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
-    "Type of controller";
+    "PID controller for cooling air in dehumidification mode";
+
   parameter Real kDeh=1
-    "Gain of controller";
+    "Gain of conPIDDeh controller";
+
   parameter Real TiDeh=0.5
-    "Time constant of integrator block";
+    "Time constant of integrator block for conPIDDeh controller";
+
+  parameter Real TdDeh=0.1 "Time constant of derivative block for conPIDDeh controller";
 
   parameter CDL.Types.SimpleController controllerTypeRegOpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
-    "Type of controller";
-  parameter Real kRegOpe=1 "Gain of controller";
-  parameter Real TiRegOpe=0.5 "Time constant of integrator block";
+    "PID controller for regular cooling coil operation mode";
+
+  parameter Real kRegOpe=1 "Gain of conPIDRegOpe controller";
+
+  parameter Real TiRegOpe=0.5 "Time constant of integrator block for conPIDRegOpe controller";
+
+  parameter Real TdRegOpe=0.1 "Time constant of derivative block for conPIDRegOpe controller";
 
 
   // ---inputs---
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uFanSupPro
+    "Supply fan proven on signal" annotation (Placement(transformation(extent={{
+            -142,-116},{-102,-76}}), iconTransformation(extent={{-142,64},{-102,
+            104}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uDeh
+    "Dehumidification mode enable signal" annotation (Placement(transformation(
+          extent={{-142,-24},{-102,16}}), iconTransformation(extent={{-142,-26},
+            {-102,14}})));
+
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirSup(
     final unit="K",
     final displayUnit="degC",
@@ -37,10 +55,6 @@ block CoolingCoil "This block commands the cooling coil."
         transformation(extent={{-142,-86},{-102,-46}}), iconTransformation(
           extent={{-142,8},{-102,48}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uFanSupPro
-    "Supply fan proven on signal" annotation (Placement(transformation(extent={{
-            -142,-116},{-102,-76}}), iconTransformation(extent={{-142,64},{-102,
-            104}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput phiAirEneRecWhe(
     final min=0,
@@ -66,16 +80,13 @@ block CoolingCoil "This block commands the cooling coil."
         transformation(extent={{-142,64},{-102,104}}), iconTransformation(
           extent={{-142,-52},{-102,-12}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uDeh
-    "Dehumidification mode enable signal" annotation (Placement(transformation(
-          extent={{-142,-24},{-102,16}}), iconTransformation(extent={{-142,-26},
-            {-102,14}})));
+
 
   // ---outputs---
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yCoiCoo
     "Cooling coil control signal" annotation (Placement(transformation(extent={{
             102,56},{142,96}}), iconTransformation(extent={{102,-20},{142,20}})));
-
+protected
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant conZer(final k=0)
     "Real constant zero"
     annotation (Placement(transformation(extent={{-30,-80},{-10,-60}})));
@@ -95,7 +106,8 @@ block CoolingCoil "This block commands the cooling coil."
   Buildings.Controls.OBC.CDL.Reals.PID conPIDRegOpe(
     controllerType=controllerTypeRegOpe,
     k=kRegOpe,
-    Ti=TiRegOpe,                                    reverseActing=false)
+    Ti=TiRegOpe,
+    Td=TdRegOpe,                                    reverseActing=false)
     "PID controller for regular cooling coil operation mode" annotation (
       Placement(visible=true, transformation(
         origin={-62,-42},
@@ -106,6 +118,7 @@ block CoolingCoil "This block commands the cooling coil."
     controllerType=controllerTypeDeh,
     k=kDeh,
     Ti=TiDeh,
+    Td=TdDeh,
     reverseActing=false)
     "PID controller for cooling air in dehumidification mode" annotation (
       Placement(visible=true, transformation(

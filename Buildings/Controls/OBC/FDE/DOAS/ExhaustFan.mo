@@ -1,10 +1,10 @@
 within Buildings.Controls.OBC.FDE.DOAS;
-block ExhaustFanController "This block manages start, stop, and speed of the exhaust fan."
+block ExhaustFan "This block manages start, stop, and speed of the exhaust fan."
 
-  parameter Real PSetBui(
+  parameter Real dPSetBui(
   final unit = "Pa",
   final quantity = "PressureDifference") = 15
-  "Building static pressure set point";
+  "Building static pressure difference set point";
 
   parameter Real kExhFan(
   final unit = "1") = 0.00001
@@ -13,6 +13,8 @@ block ExhaustFanController "This block manages start, stop, and speed of the exh
   parameter Real TiExhFan(
   final unit = "s") = 0.00025
   "PID loop time constant of integrator.";
+
+  parameter Real TdExhFan=0.1 "Time constant of derivative block";
 
    parameter CDL.Types.SimpleController controllerTypeExhFan=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "Type of controller";
@@ -24,14 +26,16 @@ block ExhaustFanController "This block manages start, stop, and speed of the exh
           extent={{-142,34},{-102,74}}), iconTransformation(extent={{-140,40},{
             -100,80}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput PAirStaBui
-    "Building static pressure" annotation (Placement(transformation(extent={{-142,
-            -28},{-102,12}}), iconTransformation(extent={{-140,-84},{-100,-44}})));
-
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uFanExhPro
     "True when exhaust fan is proven on." annotation (Placement(transformation(
           extent={{-142,-62},{-102,-22}}), iconTransformation(extent={{-140,-20},
             {-100,20}})));
+
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput dPAirStaBui
+    "Building static pressure difference from outdoor air" annotation (Placement(transformation(extent={{-142,
+            -28},{-102,12}}), iconTransformation(extent={{-140,-84},{-100,-44}})));
+
+
 
   // ---outputs---
 
@@ -44,8 +48,8 @@ block ExhaustFanController "This block manages start, stop, and speed of the exh
     "Exhaust fan speed command" annotation (Placement(transformation(extent={{
             102,-16},{142,24}}), iconTransformation(extent={{100,-80},{140,-40}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant PAirSetBui(final k=
-        PAirSetBui)
+protected
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant PAirSetBui(final k=dPSetBui)
                    "Building static pressure set point."
     annotation (Placement(transformation(extent={{-40,2},{-20,22}})));
 
@@ -60,7 +64,9 @@ block ExhaustFanController "This block manages start, stop, and speed of the exh
   Buildings.Controls.OBC.CDL.Reals.PID conPIDExhFan(
     controllerType=controllerTypeExhFan,
     Ti=TiExhFan,
-    k=kExhFan) "Continuous PID for static pressure and setpoint" annotation (
+    k=kExhFan,
+    Td=TdExhFan)
+               "Continuous PID for static pressure and setpoint" annotation (
       Placement(visible=true, transformation(
         origin={-2,4},
         extent={{-10,-10},{10,10}},
@@ -71,6 +77,7 @@ block ExhaustFanController "This block manages start, stop, and speed of the exh
         origin={0,54},
         extent={{-10,-10},{10,10}},
         rotation=0)));
+
 
 
 equation
@@ -120,6 +127,6 @@ First implementation.</li>
 <h4>Exhuast Fan Start/Stop.</h4>
 <p>This block commands the exhaust fan to start (<span style=\"font-family: Courier New;\">yExhFanSta</span>) when the supply fan is proven (<span style=\"font-family: Courier New;\">uFanSupPro</span>) on.</p>
 <h4>Building Static Pressure Control</h4>
-<p>The exhaust fan speed (<span style=\"font-family: Courier New;\">yExhFanSpe</span>) is modulated to maintain the building static pressure (<span style=\"font-family: Courier New;\">PAirStaBui</span>) at set point (<span style=\"font-family: Courier New;\">PAirSetStaBui</span>) when the exhaust fan is proven on (<span style=\"font-family: Courier New;\">yExhFanPro</span>). </p>
+<p>The exhaust fan speed (<span style=\"font-family: Courier New;\">yExhFanSpe</span>) is modulated to maintain the building static pressure difference from outdoor air (<span style=\"font-family: Courier New;\">dPAirStaBui</span>) at set point (<span style=\"font-family: Courier New;\">dPSetBui</span>) when the exhaust fan is proven on (<span style=\"font-family: Courier New;\">yExhFanPro</span>). </p>
 </html>"));
-end ExhaustFanController;
+end ExhaustFan;
