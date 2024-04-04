@@ -1,7 +1,7 @@
 simulateModel("Buildings.Controls.OBC.FDE.DOAS.Validation.CoolingCoil", method="Cvode", stopTime=7200, tolerance=1e-06, resultFile="CoolingCoil");
+createPlot(id=1, position={0, 0, 1616, 641}, y={"Cooling.uFanSupPro", "Cooling.uDeh"}, range={0.0, 6000.0, 0.0, 3.0}, autoscale=false, grid=true, colors={{28,108,200}, {28,108,200}});
+createPlot(id=1, position={0, 0, 1616, 156}, y={"Cooling.TAirSup", "Cooling.TAirSupSetCoo"}, range={0.0, 7200.0, 290.0, 300.0}, autoscale=false, grid=true, subPlot=2, colors={{217,67,180}, {28,108,200}}, displayUnits={"degC", "degC"});
+createPlot(id=1, position={0, 0, 1616, 157}, y={"Cooling.yCoiCoo"}, range={0.0, 7600.0, -1.0, 2.0}, autoscale=false, grid=true, subPlot=3, colors={{238,46,47}});
+createPlot(id=1, position={0, 0, 1616, 156}, y={"Cooling.TAirDis"}, range={0.0, 7600.0, -200.0, 400.0}, autoscale=false, grid=true, subPlot=4, colors={{28,108,200}}, displayUnits={"degC"});
 
-createPlot(id=1, position={0, 0, 1117, 726}, y={"Cooling.supFanProof", "Cooling.dehumMode"}, range={0.0, 6000.0, 0.0, 3.0}, autoscale=false, grid=true, colors={{28,108,200}, {28,108,200}});
-createPlot(id=1, position={0, 0, 1117, 178}, y={"Cooling.saT", "Cooling.supCooSP"}, range={0.0, 7500.0, 15.0, 30.0}, autoscale=false, grid=true, subPlot=2, colors={{28,108,200}, {238,46,47}}, displayUnits={"degC", "degC"});
-createPlot(id=1, position={0, 0, 1117, 177}, y={"Cooling.yCC"}, range={0.0, 7500.0, -1.0, 2.0}, autoscale=false, grid=true, subPlot=3, colors={{28,108,200}});
-createPlot(id=1, position={0, 0, 1117, 178}, y={"Cooling.erwDPadj", "Cooling.ccT"}, range={0.0, 7500.0, 270.0, 300.0}, autoscale=false, grid=true, subPlot=4, colors={{238,46,47}, {0,140,72}});
 

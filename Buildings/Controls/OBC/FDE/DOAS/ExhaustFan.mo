@@ -49,8 +49,8 @@ block ExhaustFan "This block manages start, stop, and speed of the exhaust fan."
             102,-16},{142,24}}), iconTransformation(extent={{100,-80},{140,-40}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant PAirSetBui(final k=dPSetBui)
-                   "Building static pressure set point."
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant dPAirSetBui(final k=
+        dPSetBui) "Building static pressure set point."
     annotation (Placement(transformation(extent={{-40,2},{-20,22}})));
 
   Buildings.Controls.OBC.CDL.Reals.Switch swiExhFanSpe
@@ -90,10 +90,10 @@ equation
   connect(swiExhFanSpe.u2, uFanExhPro) annotation (Line(points={{36,4},{20,4},{
           20,-42},{-122,-42}}, color={255,0,255}));
 
-  connect(PAirStaBui, conPIDExhFan.u_m)
+  connect(dPAirStaBui, conPIDExhFan.u_m)
     annotation (Line(points={{-122,-8},{-2,-8}}, color={0,0,127}));
 
-  connect(PAirSetBui.y, conPIDExhFan.u_s)
+  connect(dPAirSetBui.y, conPIDExhFan.u_s)
     annotation (Line(points={{-18,12},{-14,12},{-14,4}}, color={0,0,127}));
 
   connect(conPIDExhFan.y, swiExhFanSpe.u1)

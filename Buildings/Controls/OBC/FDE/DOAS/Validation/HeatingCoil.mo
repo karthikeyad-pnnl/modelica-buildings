@@ -1,8 +1,21 @@
 within Buildings.Controls.OBC.FDE.DOAS.Validation;
 model HeatingCoil "This model simulates HeatingCoil"
 
-  Buildings.Controls.OBC.FDE.DOAS.HeatingCoil Heating(SArhcPIk=0.1, SArhcPITi=
-        60)
+  parameter CDL.Types.SimpleController controllerTypeCoiHea=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+   "Type of controller";
+
+  parameter Real kCoiHea = 0.0000001
+  "Heating coil SAT PI gain value k.";
+
+  parameter Real TiCoiHea = 0.000025
+  "Heating coil SAT PI time constant value Ti.";
+
+  parameter Real TdCoiHea=0.1 "Time constant of derivative block";
+  Buildings.Controls.OBC.FDE.DOAS.HeatingCoil Heating(
+    controllerTypeCoiHea=controllerTypeCoiHea,
+    kCoiHea=kCoiHea,
+    TiCoiHea=TiCoiHea,
+    TdCoiHea=TdCoiHea)
     "This block commands the heating coil."
     annotation (Placement(transformation(extent={{42,-10},{62,10}})));
 

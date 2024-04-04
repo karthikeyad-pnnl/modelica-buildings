@@ -64,7 +64,7 @@ block SupplyFanController "This block manages start, stop, status, and speed of 
           extent={{-142,22},{-102,62}}), iconTransformation(extent={{-140,-56},
             {-100,-16}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uDamMaxOpe if  vvUnit
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uDamMaxOpe if  is_vav
     "Maximum damper opening position from all terminal units served"
     annotation (Placement(transformation(extent={{-142,-24},{-102,16}}),
         iconTransformation(extent={{-140,14},{-100,54}})));
@@ -84,16 +84,16 @@ block SupplyFanController "This block manages start, stop, status, and speed of 
             -50},{142,-10}}), iconTransformation(extent={{100,-64},{140,-24}})));
 protected
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant DamSet(k=damSet) if
-                  vvUnit "Most open damper position set point."
+                  is_vav "Most open damper position set point."
     annotation (Placement(transformation(extent={{-98,4},{-78,24}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant conPDucSetCV(final k=
-        dPDucSetCV) if    not vvUnit
+        dPDucSetCV) if    not is_vav
     "DDSP set point for constant volume systems."
     annotation (Placement(transformation(extent={{-72,-64},{-52,-44}})));
   Buildings.Controls.OBC.CDL.Reals.Switch swiFanSpe
     "Swtich passes fan speed set point when true; 0 when false."
-    annotation (Placement(transformation(extent={{14,-40},{34,-20}})));
+    annotation (Placement(transformation(extent={{60,-42},{80,-22}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant conFanMinSpe(k=fanSpeMin)
     "Minimum fan speed"
@@ -107,7 +107,7 @@ protected
     yMax=yMaxDamSet,
     yMin=yMinDamSet,
     reverseActing=false) if
-                    vvUnit "PID for most open damper" annotation (Placement(
+                    is_vav "PID for most open damper" annotation (Placement(
         visible=true, transformation(
         origin={-38,22},
         extent={{-10,-10},{10,10}},
@@ -118,7 +118,7 @@ protected
     Ti=TiFanSpe,
     k=kFanSpe,
     Td=TdFanSpe)
-  annotation(Placement(visible = true, transformation(origin = {62, -30}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  annotation(Placement(visible = true, transformation(origin={20,-10},    extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Logical.Timer
   tim(t = 300)
@@ -127,13 +127,10 @@ protected
 
 equation
   connect(conFanMinSpe.y, swiFanSpe.u3) annotation (Line(points={{-4,-54},{4,-54},
-          {4,-38},{12,-38}}, color={0,0,127}));
+          {4,-40},{58,-40}}, color={0,0,127}));
 
-  connect(uFanSupPro, swiFanSpe.u2) annotation (Line(points={{-122,42},{0,42},{
-          0,-30},{12,-30}}, color={255,0,255}));
-
-  connect(conPDucSetCV.y, swiFanSpe.u1) annotation (Line(points={{-50,-54},{-34,
-          -54},{-34,-22},{12,-22}}, color={0,0,127}));
+  connect(uFanSupPro, swiFanSpe.u2) annotation (Line(points={{-122,42},{0,42},{0,
+          -32},{58,-32}},   color={255,0,255}));
 
   connect(DamSet.y, conPIDDam.u_s) annotation (Line(points={{-76,14},{-71,14},{
           -71,22},{-50,22}}, color={0,0,127}));
@@ -141,17 +138,8 @@ equation
   connect(uDamMaxOpe, conPIDDam.u_m)
     annotation (Line(points={{-122,-4},{-38,-4},{-38,10}}, color={0,0,127}));
 
-  connect(conPIDDam.y, swiFanSpe.u1)
-    annotation (Line(points={{-26,22},{-26,-22},{12,-22}}, color={0,0,127}));
-
-  connect(swiFanSpe.y, conPIDFanSpe.u_s)
-    annotation (Line(points={{36,-30},{50,-30}}, color={0,0,127}));
-
   connect(dPAirDucSta, conPIDFanSpe.u_m)
-    annotation (Line(points={{-122,-86},{62,-86},{62,-42}}, color={0,0,127}));
-
-  connect(conPIDFanSpe.y, yFanSupSpe)
-    annotation (Line(points={{74,-30},{122,-30}}, color={0,0,127}));
+    annotation (Line(points={{-122,-86},{20,-86},{20,-22}}, color={0,0,127}));
 
   connect(Occ, tim.u) annotation (
     Line(points = {{-122, 80}, {-69, 80}, {-69, 88}, {-20, 88}}, color = {255, 0, 255}));
@@ -159,6 +147,14 @@ equation
   connect(tim.passed, yFanSup)
     annotation (Line(points={{4,80},{122,80}}, color={255,0,255}));
 
+  connect(conPDucSetCV.y, conPIDFanSpe.u_s) annotation (Line(points={{-50,-54},{
+          -44,-54},{-44,-10},{8,-10}}, color={0,0,127}));
+  connect(conPIDDam.y, conPIDFanSpe.u_s) annotation (Line(points={{-26,22},{-12,
+          22},{-12,-10},{8,-10}}, color={0,0,127}));
+  connect(conPIDFanSpe.y, swiFanSpe.u1) annotation (Line(points={{32,-10},{30,-10},
+          {30,-24},{58,-24}}, color={0,0,127}));
+  connect(swiFanSpe.y, yFanSupSpe) annotation (Line(points={{82,-32},{88,-32},{88,
+          -30},{122,-30}}, color={0,0,127}));
   annotation (
     defaultComponentName = "SFcon",
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics={  Rectangle(lineColor = {179, 151, 128}, fillColor = {255, 255, 255},
@@ -182,6 +178,6 @@ First implementation.</li>
 <p>This block commands the supply fan to start (<span style=\"font-family: Courier New;\">yFanSup</span>) when the unit enters occupied (<span style=\"font-family: Courier New;\">Occ</span>) mode. When supply fan status (<span style=\"font-family: Courier New;\">uFanSupPro</span>) is proven, fan speed control <span style=\"font-family: Courier New;\">(yFanSupSpe</span>) is enabled and the supply fan proof (<span style=\"font-family: Courier New;\">uFanSupPro</span>) is turned on.</p>
 <h4>Down Duct Static Pressure Control</h4>
 <p>The supply fan speed (<span style=\"font-family: Courier New;\">yFanSupSpe</span>) is modulated to maintain the down duct static pressure (<span style=\"font-family: Courier New;\">conPDucSetCV</span>) at set point. The down duct set point is reset between minimum (<span style=\"font-family: Courier New;\">yMinDamSet</span>) and maximum (<span style=\"font-family: Courier New;\">yMaxDamSet</span>) values determined by TAB. The reset is based on the most open damper (<span style=\"font-family: Courier New;\">uDamMaxOpe</span>) remaining at a specific position (<span style=\"font-family: Courier New;\">DamSet</span>) (i.e. The terminal unit air flow set point is satisfied with its primary air damper 90&percnt; open).</p>
-<p>There is also an option for a fixed down duct static pressure set point (<span style=\"font-family: Courier New;\">PDucSetVV</span>) when the variable volume parameter <span style=\"font-family: Courier New;\">vvUnit</span> is false. </p>
+<p>There is also an option for a fixed down duct static pressure set point (<span style=\"font-family: Courier New;\">PDucSetVV</span>) when the variable volume parameter <span style=\"font-family: Courier New;\">is_vav</span> is false. </p>
 </html>"));
 end SupplyFanController;

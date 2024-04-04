@@ -1,14 +1,13 @@
 within Buildings.Controls.OBC.FDE.DOAS.Validation;
-model EconMode "This model simulates EconMode."
+model EconomizerMode "This model simulates EconMode."
 
-  parameter Real econCooAdj(
-   final unit="K",
-   final displayUnit="degC",
-   final quantity="ThermodynamicTemperature")=2
-   "Value subtracted from supply air temperature cooling set point.";
+  parameter Real dTEcoThr(
+  final unit = "K",
+  final displayUnit = "degC",
+  final quantity = "ThermodynamicTemperature") = 2
+  "Threshold temperature difference between return air and outdoor air temperature above which economizer mode is enabled";
 
-  Buildings.Controls.OBC.FDE.DOAS.EconMode EconMod
-  annotation (Placement(transformation(extent={{44,-10},{64,10}})));
+
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse                        SFproof(
   width=0.75,
@@ -29,16 +28,16 @@ model EconMode "This model simulates EconMode."
     startTime=960)
     annotation (Placement(transformation(extent={{-28,-50},{-8,-30}})));
 
+  Buildings.Controls.OBC.FDE.DOAS.EconomizerMode EconMod1(dTEcoThr=dTEcoThr)
+    annotation (Placement(transformation(extent={{42,-14},{62,6}})));
 equation
-  connect(SFproof.y, EconMod.uFanSupPro) annotation (Line(points={{-8,42},{18,
-          42},{18,7},{41.8,7}}, color={255,0,255}));
 
-  connect(oaTGen.y, EconMod.TAirOut)
-    annotation (Line(points={{-6,0},{41.8,0}}, color={0,0,127}));
-
-  connect(supCooSPgen.y, EconMod.TAirSupSetCoo) annotation (Line(points={{-6,-40},
-          {18,-40},{18,-7},{41.8,-7}}, color={0,0,127}));
-
+  connect(SFproof.y, EconMod1.uFanSupPro) annotation (Line(points={{-8,42},{6,
+          42},{6,28},{24,28},{24,3},{39.8,3}}, color={255,0,255}));
+  connect(oaTGen.y, EconMod1.TAirOut) annotation (Line(points={{-6,0},{18,0},{
+          18,-4},{39.8,-4}}, color={0,0,127}));
+  connect(supCooSPgen.y, EconMod1.TAirSupSetCoo) annotation (Line(points={{-6,
+          -40},{10,-40},{10,-16},{30,-16},{30,-11},{39.8,-11}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
         Ellipse(lineColor = {75,138,73},
                 fillColor={255,255,255},
@@ -60,10 +59,10 @@ First implementation.</li>
 <p>
 This example simulates
 <a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.EconMode\">
-Buildings.Controls.OBC.FDE.DOAS.EconMode</a>.
+Buildings.Controls.OBC.FDE.DOAS.EconimizerMode</a>.
 </p>
 </html>"),
     experiment(StopTime=5760, __Dymola_Algorithm="Dassl"),
-    __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Validation/EconMode.mos"
+    __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Validation/EconomizerMode.mos"
     "Simulate and plot"));
-end EconMode;
+end EconomizerMode;

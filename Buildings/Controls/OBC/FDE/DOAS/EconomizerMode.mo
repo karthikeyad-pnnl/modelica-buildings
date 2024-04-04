@@ -1,10 +1,7 @@
 within Buildings.Controls.OBC.FDE.DOAS;
 block EconomizerMode "This block calculates when economizer mode is active."
 
-  parameter Real dTEcoThr(
-  final unit = "K",
-  final displayUnit = "degC",
-  final quantity = "ThermodynamicTemperature") = 2
+  parameter Real dTEcoThr=2
   "Threshold temperature difference between return air and outdoor air temperature above which economizer mode is enabled";
 
 
@@ -53,7 +50,7 @@ block EconomizerMode "This block calculates when economizer mode is active."
     Placement(transformation(extent = {{104, -20}, {144, 20}}), iconTransformation(extent = {{102, -20}, {142, 20}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Reals.Greater gre(h=dtEcoThr)
+  Buildings.Controls.OBC.CDL.Reals.Greater gre(h=dTEcoThr)
   "True if OAT > supCooSP."
   annotation (
     Placement(visible = true, transformation(origin = {-24, 34}, extent = {{-20, -46}, {0, -26}}, rotation = 0)));

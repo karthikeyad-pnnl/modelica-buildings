@@ -1,27 +1,64 @@
 within Buildings.Controls.OBC.FDE.DOAS.Validation;
 model EnergyWheel "This model simulates EnergyWheel."
 
+parameter Real dTThrEneRec(
+  final unit = "K",
+  final displayUnit = "degC",
+  final quantity = "ThermodynamicTemperature") = 7
+  "Absolute temperature difference threshold between outdoor air and return air temperature above which energy recovery is enabled";
 
-  parameter Real recSet(
-   final unit="K",
-   final displayUnit="degC",
-   final quantity="ThermodynamicTemperature")=7
-   "Energy recovery set point.";
+   parameter Real dThys(
+  final unit = "K",
+  final displayUnit = "degC",
+  final quantity = "ThermodynamicTemperature") = 0.5
+  "Delay time period after temperature difference threshold is crossed for enabling energy recovery mode";
 
-  parameter Real recSetDelay(
-    final unit="s",
-    final quantity="Time")=300
-    "Minimum delay after OAT/RAT delta falls below set point.";
+  parameter Real timDelEneRec(
+  final unit = "s",
+  final quantity = "Time") = 300
+  "Minimum delay after OAT/RAT delta falls below set point.";
 
-  parameter Real kGain(
-    final unit="1")=0.00001
-    "PID loop gain value.";
+  parameter CDL.Types.SimpleController controllerTypeEneWheHea=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+  "PI controller for heating loop";
 
-  parameter Real conTi(
-    final unit="s")=0.00025
-    "PID time constant of integrator.";
+  parameter Real kEneWheHea(
+  final unit = "1") = 0.00001
+  "PID heating loop gain value.";
 
-  Buildings.Controls.OBC.FDE.DOAS.EnergyWheel ERWcon
+  parameter Real TiEneWheHea(
+  final unit = "s") = 0.00025
+  "PID  heating loop time constant of integrator.";
+
+  parameter Real TdEneWheHea(
+  final unit = "s") = 0.1
+  "PID heatig loop time constant of derivative block";
+
+  parameter Real kEneWheCoo(
+  final unit = "1") = 0.00001
+  "PID cooling loop gain value.";
+
+  parameter Real TiEneWheCoo(
+  final unit = "s") = 0.00025 "PID cooling loop time constant of integrator.";
+
+  parameter CDL.Types.SimpleController controllerTypeEneWheCoo=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+  "PI controller for cooling loop";
+
+  parameter Real TdEneWheCoo(
+  final unit = "s") = 0.1
+  "PID cooling loop time constant of derivative block";
+
+  Buildings.Controls.OBC.FDE.DOAS.EnergyWheel ERWcon(
+    dTThrEneRec=dTThrEneRec,
+    dThys=dThys,
+    timDelEneRec=timDelEneRec,
+    controllerTypeEneWheHea=controllerTypeEneWheHea,
+    kEneWheHea=kEneWheHea,
+    TiEneWheHea=TiEneWheHea,
+    TdEneWheHea=TdEneWheHea,
+    kEneWheCoo=kEneWheCoo,
+    TiEneWheCoo=TiEneWheCoo,
+    controllerTypeEneWheCoo=controllerTypeEneWheCoo,
+    TdEneWheCoo=TdEneWheCoo)
     annotation (Placement(transformation(extent={{50,-10},{70,10}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse SFproof(
@@ -60,19 +97,19 @@ model EnergyWheel "This model simulates EnergyWheel."
     startTime=12)
     annotation (Placement(transformation(extent={{-62,-94},{-42,-74}})));
 equation
-  connect(SFproof.y, ERWcon.supFanProof) annotation (
+  connect(SFproof.y, ERWcon.uFanSupPro) annotation (
   Line(points={{-40,82},{4,82},{4,7.8},{47.8,7.8}}, color={255,0,255}));
 
-  connect(ecoMode.y, ERWcon.ecoMode) annotation (
+  connect(ecoMode.y, ERWcon.uEcoMod) annotation (
     Line(points={{-40,50},{0,50},{0,4.8},{47.8,4.8}}, color={255,0,255}));
 
-  connect(raTGen.y, ERWcon.raT) annotation (Line(points={{-40,14},{-20,14},{-20,
+  connect(raTGen.y, ERWcon.TAirRet) annotation (Line(points={{-40,14},{-20,14},{-20,
           1.8},{47.8,1.8}}, color={0,0,127}));
-  connect(oaTGen.y, ERWcon.oaT) annotation (Line(points={{-40,-20},{-18,-20},{
+  connect(oaTGen.y, ERWcon.TAirOut) annotation (Line(points={{-40,-20},{-18,-20},{
           -18,-2},{47.8,-2},{47.8,-1.8}}, color={0,0,127}));
-  connect(erwTGen.y, ERWcon.erwT) annotation (Line(points={{-40,-52},{-22,-52},
+  connect(erwTGen.y, ERWcon.TAirSupEneWhe) annotation (Line(points={{-40,-52},{-22,-52},
           {-22,-32},{-6,-32},{-6,-4.8},{47.8,-4.8}}, color={0,0,127}));
-  connect(supPrimGen.y, ERWcon.supPrimSP) annotation (Line(points={{-40,-84},{
+  connect(supPrimGen.y, ERWcon.TAirSupSetEneWhe) annotation (Line(points={{-40,-84},{
           -10,-84},{-10,-52},{10,-52},{10,-7.8},{47.8,-7.8}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={Ellipse(lineColor = {75,138,73},
 fillColor={255,255,255},

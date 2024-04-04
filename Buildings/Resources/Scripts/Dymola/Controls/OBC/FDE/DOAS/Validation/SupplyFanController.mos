@@ -1,18 +1,9 @@
 simulateModel("Buildings.Controls.OBC.FDE.DOAS.Validation.SupplyFanController", method="Cvode", stopTime=5760, tolerance=1e-06, resultFile="SupplyFanController");
 
-createPlot(id=6, position={1018, 380, 490, 326}, y={"SFcon.supFanStart", "OccGen.y"}, range={0.0, 5000.0, -0.2, 1.2000000000000002}, grid=true, colors={{28,108,200}, {28,108,200}});
-createPlot(id=7, position={509, 380, 493, 326}, y={"SFcon.supFanSpeed", "SFcon.FanSpeedSPPI.y"}, range={0.0, 5000.0, -0.2, 1.2000000000000002}, grid=true, colors={{28,108,200}, {238,46,47}});
-createPlot(id=8, position={1018, 0, 490, 327}, y={"SFcon.DDSP", "SFcon.minDDSPset", "SFcon.maxDDSPset"}, range={0.0, 5000.0, 100.0, 600.0}, grid=true, colors={{28,108,200}, {238,46,47}, {0,140,72}});
-createPlot(id=9, position={509, 0, 493, 327}, y={"SFcon.mostOpenDam", "SFcon.dampSet.y"}, range={0.0, 5000.0, -0.2, 1.2000000000000002}, grid=true, colors={{28,108,200}, {238,46,47}});
-createPlot(id=10, position={0, 0, 493, 706}, y={"SFcon.DamperSPPI.y", "SFcon.minDDSPset"}, range={0.0, 5000.0, 100.0, 300.0}, grid=true, colors={{28,108,200}, {238,46,47}});
-createPlot(id=10, position={0, 0, 493, 137}, y={"SFcon.mostOpenDam", "SFcon.damSet"}, range={0.0, 5000.0, -1.0, 2.0}, grid=true, subPlot=2, colors={{28,108,200}, {238,46,47}});
-createPlot(id=10, position={0, 0, 493, 138}, y={"SFcon.DamperSPPI.y", "SFcon.DDSP"}, range={0.0, 5000.0, 100.0, 300.0}, grid=true, subPlot=3, colors={{28,108,200}, {238,46,47}});
-createPlot(id=10, position={0, 0, 493, 137}, y={"SFcon.supFanStart", "SFcon.occ"}, range={0.0, 5000.0, -1.0, 2.0}, grid=true, subPlot=4, colors={{28,108,200}, {28,108,200}});
-createPlot(id=10, position={0, 0, 493, 137}, y={"SFcon.supFanSpeed"}, range={0.0, 5000.0, -1.0, 2.0}, grid=true, subPlot=5, colors={{28,108,200}});
-
-
-
-
+createPlot(id=3, position={0, 0, 1524, 708}, y={"conFanSup.Occ", "conFanSup.uFanSupPro", "conFanSup.yFanSup"}, range={0.0, 5800.0, -0.5, 1.5}, grid=true, colors={{28,108,200}, {28,108,200}, {28,108,200}});
+createPlot(id=3, position={0, 0, 1524, 174}, y={"conFanSup.yFanSupSpe"}, range={0.0, 6000.0, -0.05, 0.15000000000000002}, grid=true, subPlot=2, colors={{28,108,200}});
+createPlot(id=3, position={0, 0, 1524, 173}, y={"conFanSup.yMaxDamSet", "conFanSup.yMinDamSet", "conFanSup.dPAirDucSta"}, range={0.0, 5800.0, 100.0, 600.0}, grid=true, subPlot=3, colors={{28,108,200}, {238,46,47}, {0,140,72}});
+createPlot(id=3, position={0, 0, 1524, 173}, y={"conFanSup.damSet", "conFanSup.uDamMaxOpe"}, range={0.0, 5800.0, -0.5, 1.5}, grid=true, subPlot=4, colors={{28,108,200}, {238,46,47}});
 
 
 

@@ -95,6 +95,7 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
         transformation(extent={{102,-96},{142,-56}}), iconTransformation(extent=
            {{102,-80},{142,-40}})));
 
+  parameter Real Ti=TiEneWheCoo "Time constant of integrator block";
 protected
   Buildings.Controls.OBC.CDL.Reals.Subtract                   difference
   "Subtract outside air temperature from return air temperature."
@@ -104,8 +105,7 @@ protected
   "Absolute value of OAT-RAT difference."
   annotation(Placement(visible = true, transformation(origin = {26, 2}, extent = {{-62, -10}, {-42, 10}}, rotation = 0)));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueDelay EneWhe(
-  delayTime = recSetDelay,
+  Buildings.Controls.OBC.CDL.Logical.TrueDelay EneWhe(delayTime=timDelEneRec,
   delayOnInit = true)
   "Recovery set point delay before disabling energy wheel."
   annotation(Placement(visible = true, transformation(origin = {30, 28}, extent = {{2, -38}, {22, -18}}, rotation = 0)));
@@ -173,7 +173,7 @@ equation
   connect(not1.u,uEcoMod)  annotation (
     Line(points = {{-28, 50}, {-122, 50}}, color = {255, 0, 255}));
 
-  connect(mulAndEneRecRegOpe.y, yEneRecWheStart) annotation (Line(points={{88,
+  connect(mulAndEneRecRegOpe.y, yEneRecWheEna) annotation (Line(points={{88,
           18},{104,18},{104,20},{122,20}}, color={255,0,255}));
 
   connect(max.y, swiTEneRec.u1) annotation (Line(points={{-2,-62},{14,-62},{14,-68},
@@ -245,8 +245,6 @@ equation
   connect(EneWhe.y, mulAndEneRecRegOpe.u[3]) annotation (Line(points={{54,0},{
           56,0},{56,13.3333},{64,13.3333}},
                                          color={255,0,255}));
-  connect(max.u1, conPIDEneWheHea.u_m) annotation (Line(points={{-26,-56},{-66,-56},
-          {-66,-50},{-70,-50}}, color={0,0,127}));
   annotation (
     defaultComponentName = "ERWcon",
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics={  Rectangle(fillColor = {255, 255, 255},
@@ -281,11 +279,11 @@ September 15, 2020, by Henry Nickels:</br>
 First implementation.</li>
 </ul>
 </html>", info="<html>
-<h4>Energy Recovery Wheel Start/Stop.</h4>
-<p>This block commands the ERW to start (<span style=\"font-family: Courier New;\">yEneRecWheStart</span>) when the DOAS is energized (<span style=\"font-family: Courier New;\">uFanSupPro</span>) and the absolute difference between return air temperature (<span style=\"font-family: Courier New;\">TAirRet</span>) and outside air temperature (<span style=\"font-family: Courier New;\">TAirOut</span>) is greater than the recovery set point (<span style=\"font-family: Courier New;\">dTThrEneRec</span>). When the DOAS is not energized, economizer mode is enabled (<span style=\"font-family: Courier New;\">uEcoMod)</span>, or the TAirRet/TAirOut difference falls below the recovery set point for longer than the recovery set point delay (<span style=\"font-family: Courier New;\">timDelEneRec</span>) the ERW will be commanded to stop.</p>
-<h4>ERW Speed Control</h4>
+<p><b>Energy Recovery Wheel Start/Stop.</b></p>
+<p>This block commands the ERW to start (<span style=\"font-family: Courier New;\">yEneRecWheEna</span>) when the DOAS is energized (<span style=\"font-family: Courier New;\">uFanSupPro</span>) and the absolute difference between return air temperature (<span style=\"font-family: Courier New;\">TAirRet</span>) and outside air temperature (<span style=\"font-family: Courier New;\">TAirOut</span>) is greater than the recovery set point (<span style=\"font-family: Courier New;\">dTThrEneRec</span>). When the DOAS is not energized, economizer mode is enabled (<span style=\"font-family: Courier New;\">uEcoMod)</span>, or the TAirRet/TAirOut difference falls below the recovery set point for longer than the recovery set point delay (<span style=\"font-family: Courier New;\">timDelEneRec</span>) the ERW will be commanded to stop.</p>
+<p><b>ERW Speed Control</b></p>
 <p>The ERW speed (<span style=\"font-family: Courier New;\">yEneRecWheSpe</span>) is modulated to maintain the energy recovery supply temperature (<span style=\"font-family: Courier New;\">TAirSupEneWhe</span>) at the primary supply air temperature set point (<span style=\"font-family: Courier New;\">TAirSupSetEneWhe</span>).</p>
-<h4>Bypass Damper Control</h4>
+<p><b>Bypass Damper Control</b></p>
 <p>When the DOAS is energized and in economizer mode or the ERW is stopped, the bypass dampers shall be commanded fully open to bypass (<span style=\"font-family: Courier New;\">yBypDam</span>). When the DOAS is de-energized or the DOAS is energized and the ERW is started, the bypass dampers shall be commanded closed to bypass. </p>
 </html>"));
 end EnergyWheel;

@@ -101,7 +101,7 @@ protected
     annotation (Placement(transformation(extent={{-14,44},{6,64}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant TAirSupHeaSetOff(final k=
-        TSupHeaSetOff)
+        TSupHeaOff)
                "Supply air temperature heating set point offset."
     annotation (Placement(transformation(extent={{-14,-66},{6,-46}})));
   Buildings.Controls.OBC.CDL.Reals.Switch swiDeh

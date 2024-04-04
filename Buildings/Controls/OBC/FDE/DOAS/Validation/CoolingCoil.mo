@@ -2,13 +2,66 @@ within Buildings.Controls.OBC.FDE.DOAS.Validation;
 model CoolingCoil "This model simulates CoolingCoil"
 
   parameter Real erwDPadj(
-   final unit="K",
-   final displayUnit="degC",
-   final quantity="ThermodynamicTemperature")=5
-   "Value subtracted from ERW supply air dewpoint.";
+    final unit = "K",
+    final quantity = "TemperatureDifference") = 5
+    "Value subtracted from ERW supply air dewpoint.";
 
-  Buildings.Controls.OBC.FDE.DOAS.CoolingCoil Cooling(erwDPadj(displayUnit="K")=
-         5)
+  parameter CDL.Types.SimpleController controllerTypeDeh=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "PID controller for cooling air in dehumidification mode";
+
+  parameter Real kDeh=1
+    "Gain of conPIDDeh controller";
+
+  parameter Real TiDeh=0.5
+    "Time constant of integrator block for conPIDDeh controller";
+
+  parameter Real TdDeh=0.1 "Time constant of derivative block for conPIDDeh controller";
+
+  parameter CDL.Types.SimpleController controllerTypeRegOpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "PID controller for regular cooling coil operation mode";
+
+  parameter Real kRegOpe=1
+    "Gain of conPIDRegOpe controller";
+
+  parameter Real TiRegOpe=0.5
+    "Time constant of integrator block for conPIDRegOpe controller";
+
+  parameter Real TdRegOpe=0.1
+    "Time constant of derivative block for conPIDRegOpe controller";
+
+  parameter Real dehumSet(
+    final min=0,
+    final max=100)=60
+    "Dehumidification set point.";
+
+  parameter Real timThrDehDis(
+    final unit="s",
+    final quantity="Time")=600
+    "Continuous time period for which measured relative humidity needs to fall below relative humidity threshold before dehumidification mode is disabled";
+
+  parameter Real timDelDehEna(
+    final unit="s",
+    final quantity="Time")=120
+    "Continuous time period for which supply fan needs to be on before enabling dehumidifaction mode";
+
+  parameter Real timThrDehEna(
+    final unit="s",
+    final quantity="Time")=5
+    "Continuous time period for which relative humidity rises above set point before dehumidifcation mode is enabled";
+  Buildings.Controls.OBC.FDE.DOAS.CoolingCoil Cooling(
+    erwDPadj(displayUnit="K") = erwDPadj,
+    controllerTypeDeh=controllerTypeDeh,
+    kDeh=kDeh,
+    TiDeh=TiDeh,
+    TdDeh=TdDeh,
+    controllerTypeRegOpe=controllerTypeRegOpe,
+    kRegOpe=kRegOpe,
+    TiRegOpe=TiRegOpe,
+    TdRegOpe=TdRegOpe,
+    dehumSet=dehumSet,
+    timThrDehDis=timThrDehDis,
+    timDelDehEna=timDelDehEna,
+    timThrDehEna=timThrDehEna)
   annotation (Placement(transformation(extent={{48,-24},{68,-4}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse SFproof(

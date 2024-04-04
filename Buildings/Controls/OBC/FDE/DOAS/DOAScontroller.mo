@@ -1,164 +1,199 @@
 within Buildings.Controls.OBC.FDE.DOAS;
 block DOAScontroller "DOAS controller built from DOAS blocks."
 
-  parameter Boolean vvUnit = true
-    "Set true when unit serves variable volume system."
-    annotation(Dialog(tab = "DOAS", group = "General"));
+  parameter Real erwDPadj(
+  final unit = "K",
+  final quantity = "TemperatureDifference") = 5
+  "Value subtracted from ERW supply air dewpoint.";
+
+  parameter CDL.Types.SimpleController controllerTypeDeh=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "PID controller for cooling air in dehumidification mode";
+
+  parameter Real kDeh=1
+    "Gain of conPIDDeh controller";
+
+  parameter Real TiDeh=0.5
+    "Time constant of integrator block for conPIDDeh controller";
+
+  parameter Real TdDeh=0.1 "Time constant of derivative block for conPIDDeh controller";
+
+  parameter CDL.Types.SimpleController controllerTypeRegOpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "PID controller for regular cooling coil operation mode";
+
+  parameter Real kRegOpe=1 "Gain of conPIDRegOpe controller";
+
+  parameter Real TiRegOpe=0.5 "Time constant of integrator block for conPIDRegOpe controller";
+
+  parameter Real TdRegOpe=0.1 "Time constant of derivative block for conPIDRegOpe controller";
+
+  parameter Real dTEcoThr(
+  final unit = "K",
+  final displayUnit = "degC",
+  final quantity = "ThermodynamicTemperature") = 2
+  "Threshold temperature difference between return air and outdoor air temperature above which economizer mode is enabled";
+
+    parameter Real dTThrEneRec(
+  final unit = "K",
+  final displayUnit = "degC",
+  final quantity = "ThermodynamicTemperature") = 7
+  "Absolute temperature difference threshold between outdoor air and return air temperature above which energy recovery is enabled";
+
+   parameter Real dThys(
+  final unit = "K",
+  final displayUnit = "degC",
+  final quantity = "ThermodynamicTemperature") = 0.5
+  "Delay time period after temperature difference threshold is crossed for enabling energy recovery mode";
+
+  parameter Real timDelEneRec(
+  final unit = "s",
+  final quantity = "Time") = 300
+  "Minimum delay after OAT/RAT delta falls below set point.";
+
+  parameter CDL.Types.SimpleController controllerTypeEneWheHea=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+  "PI controller for heating loop";
+
+  parameter Real kEneWheHea(
+  final unit = "1") = 0.00001
+  "PID heating loop gain value.";
+
+  parameter Real TiEneWheHea(
+  final unit = "s") = 0.00025
+  "PID  heating loop time constant of integrator.";
+
+  parameter Real TdEneWheHea(
+  final unit = "s") = 0.1
+  "PID heatig loop time constant of derivative block";
+
+  parameter Real kEneWheCoo(
+  final unit = "1") = 0.00001
+  "PID cooling loop gain value.";
+
+  parameter Real TiEneWheCoo(
+  final unit = "s") = 0.00025 "PID cooling loop time constant of integrator.";
+
+  parameter CDL.Types.SimpleController controllerTypeEneWheCoo=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+  "PI controller for cooling loop";
+
+  parameter Real TdEneWheCoo(
+  final unit = "s") = 0.1
+  "PID cooling loop time constant of derivative block";
+
+   parameter Real dPSetBui(
+  final unit = "Pa",
+  final quantity = "PressureDifference") = 15
+  "Building static pressure difference set point";
+
+  parameter Real kExhFan(
+  final unit = "1") = 0.00001
+  "PID heating loop gain value.";
+
+  parameter Real TiExhFan(
+  final unit = "s") = 0.00025
+  "PID loop time constant of integrator.";
+
+  parameter Real TdExhFan=0.1 "Time constant of derivative block";
+
+  parameter CDL.Types.SimpleController controllerTypeExhFan=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "Type of controller";
+
+  parameter CDL.Types.SimpleController controllerTypeCoiHea=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+   "Type of controller";
+
+  parameter Real kCoiHea = 0.0000001
+  "Heating coil SAT PI gain value k.";
+
+  parameter Real TiCoiHea = 0.000025
+  "Heating coil SAT PI time constant value Ti.";
+
+  parameter Real TdCoiHea=0.1 "Time constant of derivative block";
+
+     parameter Boolean is_vav = true
+  "True: System has zone terminals with variable damper position. False: System has zone terminals with constant damper position.";
+
+  parameter Real yMinDamSet(
+  min = 0,
+  final unit = "Pa",
+  final quantity = "PressureDifference") = 125
+  "Minimum down duct static pressure reset value" annotation(Dialog(group = "DDSP range"));
+
+  parameter Real yMaxDamSet(
+  min = 0,
+  final unit = "Pa",
+  final quantity = "PressureDifference") = 500
+  "Maximum down duct static pressure reset value" annotation(Dialog(group = "DDSP range"));
 
   parameter Real damSet(
-    min = 0,
-    max = 1,
-    final unit = "1") = 0.9
-    "DDSP terminal damper percent open set point"
-    annotation(Dialog(tab = "DOAS", group = "General"));
+  min = 0,
+  max = 1,
+  final unit = "1") = 0.9
+  "DDSP terminal damper percent open set point";
 
-  parameter Real cctPIk = 0.0000001
-    "Cooling coil CCT PI gain value k."
-    annotation(Dialog(tab = "Cooling Coil", group = "PI Parameters"));
+  parameter Real kDam = 0.0000001
+  "Damper position setpoint PI gain value k.";
 
-  parameter Real cctPITi = 0.000025
-    "Cooling coil CCT PI time constant value Ti."
-    annotation(Dialog(tab = "Cooling Coil", group = "PI Parameters"));
+  parameter Real TiDam = 0.000025
+  "Damper position setpoint PI time constant value Ti.";
 
-  parameter Real SAccPIk = 0.0000001
-    "Cooling coil SAT PI gain value k."
-    annotation(Dialog(tab = "Cooling Coil", group = "PI Parameters"));
+  parameter Real TdDam = 0.1 "Time constant of derivative block for conPIDDam";
 
-  parameter Real SAccPITi = 0.000025
-    "Cooling coil SAT PI time constant value Ti."
-    annotation(Dialog(tab = "Cooling Coil", group = "PI Parameters"));
+  parameter CDL.Types.SimpleController controllerTypeDam=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+  "Type of controller";
 
-  parameter Real dehumSet(
-    final min = 0,
-    final max = 100,
-    final displayUnit = "rh") = 60
-    "Dehumidification set point."
-    annotation(Dialog(tab = "Dehumidification", group = "Set Point"));
+  parameter Real dPDucSetCV(
+  min = 0,
+  final unit = "Pa",
+  final quantity = "PressureDifference") = 250 "Constant volume down duct static pressure set point";
 
-  parameter Real dehumDelay(
-    final unit = "s",
-    final quantity = "Time") = 600
-    "Minimum delay after RH falls below set point before turning dehum off."
-    annotation(Dialog(tab = "Dehumidification", group = "Timer"));
+  parameter Real fanSpeMin = 0.0000001
+  "Minimum Fan Speed";
 
-  parameter Real minRun(
-    final unit = "s",
-    final quantity = "Time") = 120
-    "Minimum supply fan proof delay before allowing dehum mode."
-    annotation(Dialog(tab = "Dehumidification", group = "Timer"));
+  parameter Real kFanSpe = 0.0000001 "
+  Fan speed set point SAT PI gain value k.";
 
-  parameter Real econCooAdj(
-    final unit = "K",
-    final displayUnit = "degC",
-    final quantity = "ThermodynamicTemperature") = 2
-    "Value subtracted from supply air temperature cooling set point."
-    annotation(Dialog(tab = "Economizer", group = "Set Point"));
+  parameter Real TdFanSpe = 0.1 "Time constant of derivative block for conPIDFanSpe";
 
-  parameter Real erwDPadj(
-    final unit = "K",
-    final displayUnit = "degC",
-    final quantity = "ThermodynamicTemperature") = 5
-    "Value subtracted from ERW supply air dewpoint."
-    annotation(Dialog(tab = "Energy Recovery Wheel", group = "Set Point"));
+  parameter Real TiFanSpe = 0.000025
+  "Fan speed set point SAT PI time constant value Ti.";
 
-  parameter Real recSet(
-    final unit = "K",
-    final displayUnit = "degC",
-    final quantity = "ThermodynamicTemperature") = 7
-    "Energy recovery set point."
-    annotation(Dialog(tab = "Energy Recovery Wheel", group = "Set Point"));
+  parameter CDL.Types.SimpleController controllerTypeFanSpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "Type of controller";
 
-  parameter Real recSetDelay(
-    final unit = "s",
-    final quantity = "Time") = 300
-    "Minimum delay after OAT/RAT delta falls below set point."
-    annotation(Dialog(tab = "Energy Recovery Wheel", group = "Timer"));
+  parameter Real TSupLowSet(
+   final unit="K",
+   final displayUnit="degC",
+   final quantity="ThermodynamicTemperature")=273.15+20
+   "Minimum primary supply air temperature reset value";
 
-  parameter Real kGain(final unit = "1") = 0.00001
-    "PID loop gain value."
-    annotation(Dialog(tab = "Energy Recovery Wheel", group = "PI Parameters"));
+  parameter Real TSupHigSet(
+   final unit="K",
+   final displayUnit="degC",
+   final quantity="ThermodynamicTemperature")=273.15+24
+   "Maximum primary supply air temperature reset value";
 
-  parameter Real conTi(
-    final unit = "s") = 0.00025
-    "PID time constant of integrator."
-    annotation(Dialog(tab = "Energy Recovery Wheel", group = "PI Parameters"));
+  parameter Real THigZon(
+   final unit="K",
+   final displayUnit="degC",
+   final quantity="ThermodynamicTemperature")=273.15+25
+   "Maximum zone temperature reset value";
 
-  parameter Real SArhcPIk = 0.0000001
-     "Heating coil SAT PI gain value k."
-     annotation(Dialog(tab = "Heating Coil", group = "PI Parameters"));
+  parameter Real TLowZon(
+   final unit="K",
+   final displayUnit="degC",
+   final quantity="ThermodynamicTemperature")=273.15+21
+   "Minimum zone temperature reset value";
 
-  parameter Real SArhcPITi = 0.000025
-    "Heating coil SAT PI time constant value Ti."
-    annotation(Dialog(tab = "Heating Coil", group = "PI Parameters"));
+  parameter Real TSupCooOff(
+   final unit="K",
+   final displayUnit="degC",
+   final quantity="ThermodynamicTemperature")=2
+   "Supply air temperature cooling set point offset.";
 
-  parameter Real minDDSPset(
-    min = 0,
-    final unit = "Pa",
-    final quantity = "PressureDifference") = 125
-    "Minimum down duct static pressure reset value"
-    annotation(Dialog(tab = "Pressure", group = "DDSP range"));
+  parameter Real TSupHeaOff(
+   final unit="K",
+   final displayUnit="degC",
+   final quantity="ThermodynamicTemperature")=2
+   "Supply air temperature heating set point offset.";
 
-  parameter Real maxDDSPset(
-    min = 0,
-    final unit = "Pa",
-    final quantity = "PressureDifference") = 500
-    "Maximum down duct static pressure reset value"
-    annotation(Dialog(tab = "Pressure", group = "DDSP range"));
-
-  parameter Real cvDDSPset(
-    min = 0,
-    final unit = "Pa",
-    final quantity = "PressureDifference") = 250
-    "Constant volume down duct static pressure set point"
-    annotation(Dialog(tab = "Pressure", group = "CV DDSP"));
-
-  parameter Real bldgSPset(
-    final unit = "Pa",
-    final quantity = "PressureDifference") = 15
-    "Building static pressure set point"
-    annotation(Dialog(tab = "Pressure", group = "Building"));
-
-  parameter Real loPriT(
-    final unit = "K",
-    final displayUnit = "degC",
-    final quantity = "ThermodynamicTemperature") = 273.15 + 20
-    "Minimum primary supply air temperature reset value"
-    annotation(Dialog(tab = "Temperature", group = "Set Point"));
-
-  parameter Real hiPriT(
-    final unit = "K",
-    final displayUnit = "degC",
-    final quantity = "ThermodynamicTemperature") = 273.15 + 24
-    "Maximum primary supply air temperature reset value"
-    annotation(Dialog(tab = "Temperature", group = "Set Point"));
-
-  parameter Real hiZonT(
-    final unit = "K",
-    final displayUnit = "degC",
-    final quantity = "ThermodynamicTemperature") = 273.15 + 25
-    "Maximum zone temperature reset value"
-    annotation(Dialog(tab = "Temperature", group = "Set Point"));
-
-  parameter Real loZonT(
-    final unit = "K",
-    final displayUnit = "degC",
-    final quantity = "ThermodynamicTemperature") = 273.15 + 21
-    "Minimum zone temperature reset value"
-    annotation(Dialog(tab = "Temperature", group = "Set Point"));
-
-  parameter Real coAdj(
-    final unit = "K",
-    final displayUnit = "degC",
-    final quantity = "ThermodynamicTemperature") = 2
-    "Supply air temperature cooling set point offset."
-    annotation(Dialog(tab = "Temperature", group = "Set Point"));
-
-  parameter Real heAdj(
-    final unit = "K",
-    final displayUnit = "degC",
-    final quantity = "ThermodynamicTemperature") = 2
-    "Supply air temperature heating set point offset."
-    annotation(Dialog(tab = "Temperature", group = "Set Point"));
 
 // ---inputs---
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput Occ
@@ -276,8 +311,8 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yEneRecWheEna
     "Command to start the energy recovery wheel." annotation (Placement(
-        transformation(extent={{102,-74},{142,-34}}), iconTransformation(extent
-          ={{102,-120},{142,-80}})));
+        transformation(extent={{102,-74},{142,-34}}), iconTransformation(extent=
+           {{102,-120},{142,-80}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yEneRecWheSpe
     "Energy recovery wheel speed command." annotation (Placement(transformation(
@@ -336,7 +371,11 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
     controllerTypeRegOpe=controllerTypeRegOpe,
     kRegOpe=kRegOpe,
     TiRegOpe=TiRepOpe,
-    TdRegOpe=TdRegOpe)
+    TdRegOpe=TdRegOpe,
+    dehumSet=dehumSet,
+    timThrDehDis=timThrDehDis,
+    timDelDehEna=timDelDehEna,
+    timThrDehEna=timThrDehEna)
     "This block commands the cooling coil."
      annotation(Placement(transformation(extent = {{58, 18}, {78, 38}})));
 
@@ -453,8 +492,8 @@ equation
           {{22,-1.8},{40,-1.8},{40,-3.2},{55.8,-3.2}}, color={0,0,127}));
   connect(TAirOut, EconMod1.TAirOut) annotation (Line(points={{-120,-138},{-78,
           -138},{-78,-140},{-34,-140},{-34,-32},{29.8,-32}}, color={0,0,127}));
-  connect(TSupSetpt.ySupCooSet, EconMod1.TAirSupSetCoo) annotation (Line(points
-        ={{22,6.8},{26,6.8},{26,-39},{29.8,-39}}, color={0,0,127}));
+  connect(TSupSetpt.ySupCooSet, EconMod1.TAirSupSetCoo) annotation (Line(points=
+         {{22,6.8},{26,6.8},{26,-39},{29.8,-39}}, color={0,0,127}));
   connect(uFanSupPro, EconMod1.uFanSupPro) annotation (Line(points={{-120,24},{
           -46,24},{-46,-25},{29.8,-25}}, color={255,0,255}));
   connect(uFanSupPro, EFcon1.uFanSupPro) annotation (Line(points={{-120,24},{

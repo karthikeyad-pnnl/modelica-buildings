@@ -1,8 +1,0 @@
-simulateModel("Buildings.Controls.OBC.FDE.DOAS.Validation.ExhaustFanController", method="Cvode", stopTime=7200, tolerance=1e-06, resultFile="ExhaustFanController");
-
-createPlot(id=1, position={0, 334, 685, 293}, y={"SFproof.y", "EFcon.exhFanProof"}, range={0.0, 6000.0, -0.2, 1.2000000000000002}, grid=true, colors={{28,108,200}, {28,108,200}});
-createPlot(id=2, position={701, 0, 683, 295}, y={"EFcon.bldgSPset", "EFcon.bldgSP"}, range={0.0, 6000.0, 11.0, 19.0}, grid=true, colors={{28,108,200}, {238,46,47}});
-createPlot(id=3, position={0, 0, 685, 295}, y={"EFcon.exhFanSpeed"}, range={0.0, 6000.0, -0.2, 1.2000000000000002}, grid=true, colors={{28,108,200}});
-
-
-

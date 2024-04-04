@@ -1,10 +1,10 @@
 DOAScontroller
 CoolingCoil
 DehumMode
-EconMode
+EconomizerMode
 EnergyWheel
-ExhaustFanController
+ExhaustFan
 HeatingCoil
-TSupSet
+SupplyTemperatureSetpoint
 SupplyFanController
 Baseclasses
