@@ -1,32 +1,39 @@
 within Buildings.Controls.OBC.FDE.DOAS.Validation;
 model CoolingCoil "This model simulates CoolingCoil"
 
-  parameter Real erwDPadj(
-    final unit = "K",
-    final quantity = "TemperatureDifference") = 5
-    "Value subtracted from ERW supply air dewpoint.";
+   parameter Real erwDPadj(
+  final unit = "K",
+  final quantity = "TemperatureDifference") = 5
+  "Value subtracted from ERW supply air dewpoint.";
 
   parameter CDL.Types.SimpleController controllerTypeDeh=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "PID controller for cooling air in dehumidification mode";
 
-  parameter Real kDeh=1
+  parameter Real kDeh(
+  final unit="1") = 1
     "Gain of conPIDDeh controller";
 
-  parameter Real TiDeh=0.5
+  parameter Real TiDeh(
+  final unit="s") = 60
     "Time constant of integrator block for conPIDDeh controller";
 
-  parameter Real TdDeh=0.1 "Time constant of derivative block for conPIDDeh controller";
+  parameter Real TdDeh(
+  final unit="s") = 0.1
+    "Time constant of derivative block for conPIDDeh controller";
 
   parameter CDL.Types.SimpleController controllerTypeRegOpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "PID controller for regular cooling coil operation mode";
 
-  parameter Real kRegOpe=1
+  parameter Real kRegOpe(
+  final unit="1") = 1
     "Gain of conPIDRegOpe controller";
 
-  parameter Real TiRegOpe=0.5
+  parameter Real TiRegOpe(
+  final unit="s")=60
     "Time constant of integrator block for conPIDRegOpe controller";
 
-  parameter Real TdRegOpe=0.1
+  parameter Real TdRegOpe(
+  final unit="s")=0.1
     "Time constant of derivative block for conPIDRegOpe controller";
 
   parameter Real dehumSet(
@@ -48,7 +55,7 @@ model CoolingCoil "This model simulates CoolingCoil"
     final unit="s",
     final quantity="Time")=5
     "Continuous time period for which relative humidity rises above set point before dehumidifcation mode is enabled";
-  Buildings.Controls.OBC.FDE.DOAS.CoolingCoil Cooling(
+  Buildings.Controls.OBC.FDE.DOAS.CoolingCoil CoiCoo(
     erwDPadj(displayUnit="K") = erwDPadj,
     controllerTypeDeh=controllerTypeDeh,
     kDeh=kDeh,
@@ -62,7 +69,7 @@ model CoolingCoil "This model simulates CoolingCoil"
     timThrDehDis=timThrDehDis,
     timDelDehEna=timDelDehEna,
     timThrDehEna=timThrDehEna)
-  annotation (Placement(transformation(extent={{48,-24},{68,-4}})));
+    annotation (Placement(transformation(extent={{48,-24},{68,-4}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse SFproof(
     width=0.8,
@@ -115,26 +122,26 @@ model CoolingCoil "This model simulates CoolingCoil"
     annotation (Placement(transformation(extent={{-26,-48},{-6,-28}})));
 
 equation
-  connect(SFproof.y, Cooling.uFanSupPro) annotation (Line(points={{-40,70},{18,
-          70},{18,-5.6},{45.8,-5.6}}, color={255,0,255}));
+  connect(SFproof.y, CoiCoo.uFanSupPro) annotation (Line(points={{-40,70},{18,70},
+          {18,-5.6},{45.8,-5.6}}, color={255,0,255}));
 
-  connect(saTGen.y, Cooling.TAirSup) annotation (Line(points={{-4,50},{12,50},{
-          12,-8.4},{45.8,-8.4}}, color={0,0,127}));
+  connect(saTGen.y, CoiCoo.TAirSup) annotation (Line(points={{-4,50},{12,50},{12,
+          -8.4},{45.8,-8.4}}, color={0,0,127}));
 
-  connect(TCoiCoo.y, Cooling.TAirDis) annotation (Line(points={{-38,-18},{14,-18},
+  connect(TCoiCoo.y, CoiCoo.TAirDis) annotation (Line(points={{-38,-18},{14,-18},
           {14,-17.2},{45.8,-17.2}}, color={0,0,127}));
 
-  connect(dehumMode.y, Cooling.uDeh) annotation (Line(points={{-4,4},{0,4},{0,-14.6},
+  connect(dehumMode.y, CoiCoo.uDeh) annotation (Line(points={{-4,4},{0,4},{0,-14.6},
           {45.8,-14.6}}, color={255,0,255}));
 
-  connect(supCooGen.y, Cooling.TAirSupSetCoo) annotation (Line(points={{-40,26},
-          {6,26},{6,-11.2},{45.8,-11.2}}, color={0,0,127}));
+  connect(supCooGen.y, CoiCoo.TAirSupSetCoo) annotation (Line(points={{-40,26},{
+          6,26},{6,-11.2},{45.8,-11.2}}, color={0,0,127}));
 
-  connect(erwHumGen.y, Cooling.phiAirEneRecWhe) annotation (Line(points={{-4,-38},
+  connect(erwHumGen.y, CoiCoo.phiAirEneRecWhe) annotation (Line(points={{-4,-38},
           {14,-38},{14,-19.8},{45.8,-19.8}}, color={0,0,127}));
 
-  connect(erwTGen.y, Cooling.TAirEneRecWhe) annotation (Line(points={{-38,-56},
-          {18,-56},{18,-22.4},{45.8,-22.4}}, color={0,0,127}));
+  connect(erwTGen.y, CoiCoo.TAirEneRecWhe) annotation (Line(points={{-38,-56},{18,
+          -56},{18,-22.4},{45.8,-22.4}}, color={0,0,127}));
 
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false), graphics={Ellipse(lineColor = {75,138,73},

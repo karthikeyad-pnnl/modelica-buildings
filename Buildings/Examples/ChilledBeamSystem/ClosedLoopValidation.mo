@@ -23,7 +23,7 @@ model ClosedLoopValidation
     samPerVal=1,
     delTimVal=60)                                                                                                                                   annotation (
     Placement(visible = true, transformation(origin={112,-20},   extent = {{10, -70}, {30, -50}}, rotation = 0)));
-  Buildings.Controls.OBC.FDE.DOAS.DOAScontroller DOAScon(minDDSPset = 400, maxDDSPset = 500, cvDDSPset = 450) annotation (
+  Buildings.Controls.OBC.FDE.DOAS.DOAScontroller DOAScon   annotation (
     Placement(visible = true, transformation(origin={-39,-10},  extent = {{-13, -24}, {13, 10}}, rotation = 0)));
   Buildings.Controls.OBC.CDL.Reals.MultiMax TZonMax(nin=5)   annotation (
     Placement(transformation(extent={{-40,52},{-20,72}})));

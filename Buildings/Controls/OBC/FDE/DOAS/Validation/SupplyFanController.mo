@@ -22,13 +22,16 @@ model SupplyFanController
   final unit = "1") = 0.9
   "DDSP terminal damper percent open set point";
 
-  parameter Real kDam = 0.5
+ parameter Real kDam(
+   final unit= "1") = 0.5
   "Damper position setpoint PI gain value k.";
 
-  parameter Real TiDam = 60
+  parameter Real TiDam(
+   final unit= "s") = 60
   "Damper position setpoint PI time constant value Ti.";
 
-  parameter Real TdDam = 0.1 "Time constant of derivative block for conPIDDam";
+  parameter Real TdDam(
+   final unit= "s") = 0.1 "Time constant of derivative block for conPIDDam";
 
   parameter CDL.Types.SimpleController controllerTypeDam=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
   "Type of controller";
@@ -38,21 +41,25 @@ model SupplyFanController
   final unit = "Pa",
   final quantity = "PressureDifference") = 250 "Constant volume down duct static pressure set point";
 
-  parameter Real fanSpeMin = 0.1
+  parameter Real fanSpeMin(
+   final unit= "m/s") = 0.0000001
   "Minimum Fan Speed";
 
-  parameter Real kFanSpe = 0.5 "
+  parameter Real kFanSpe(
+   final unit= "1") = 0.5 "
   Fan speed set point SAT PI gain value k.";
 
-  parameter Real TdFanSpe = 0.1 "Time constant of derivative block for conPIDFanSpe";
+  parameter Real TdFanSpe(
+   final unit= "s") = 60 "Time constant of derivative block for conPIDFanSpe";
 
-  parameter Real TiFanSpe = 60
+  parameter Real TiFanSpe(
+   final unit= "s") = 0.000025
   "Fan speed set point SAT PI time constant value Ti.";
 
   parameter CDL.Types.SimpleController controllerTypeFanSpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "Type of controller";
 
-  Buildings.Controls.OBC.FDE.DOAS.SupplyFanController conFanSup(
+  Buildings.Controls.OBC.FDE.DOAS.SupplyFanController SFcon(
     is_vav=is_vav,
     yMinDamSet=yMinDamSet,
     yMaxDamSet=yMaxDamSet,
@@ -93,19 +100,19 @@ model SupplyFanController
     annotation (Placement(transformation(extent={{-66,-38},{-46,-18}})));
 
 equation
-  connect(conFanSup.yFanSup, truDel.u) annotation (Line(points={{62,9.2},{66,
-          9.2},{66,-46},{0,-46},{0,-24},{6,-24}}, color={255,0,255}));
+  connect(SFcon.yFanSup, truDel.u) annotation (Line(points={{62,9.2},{66,9.2},{66,
+          -46},{0,-46},{0,-24},{6,-24}}, color={255,0,255}));
 
-  connect(truDel.y, conFanSup.uFanSupPro) annotation (Line(points={{30,-24},{34,
-          -24},{34,0.4},{38,0.4}}, color={255,0,255}));
+  connect(truDel.y, SFcon.uFanSupPro) annotation (Line(points={{30,-24},{34,-24},
+          {34,0.4},{38,0.4}}, color={255,0,255}));
 
-  connect(OccGen.y, conFanSup.Occ) annotation (Line(points={{-44,42},{-10,42},{
-          -10,11},{38,11}}, color={255,0,255}));
+  connect(OccGen.y, SFcon.Occ) annotation (Line(points={{-44,42},{-10,42},{-10,11},
+          {38,11}}, color={255,0,255}));
 
-  connect(mostOpenDamGen.y, conFanSup.uDamMaxOpe) annotation (Line(points={{-44,
-          8},{-10,8},{-10,7.4},{38,7.4}}, color={0,0,127}));
-  connect(sensorDDSP.y, conFanSup.dPAirDucSta) annotation (Line(points={{-44,-28},
-          {-10,-28},{-10,-3.2},{38,-3.2}}, color={0,0,127}));
+  connect(mostOpenDamGen.y, SFcon.uDamMaxOpe) annotation (Line(points={{-44,8},{
+          -10,8},{-10,7.4},{38,7.4}}, color={0,0,127}));
+  connect(sensorDDSP.y, SFcon.dPAirDucSta) annotation (Line(points={{-44,-28},{-10,
+          -28},{-10,-3.2},{38,-3.2}}, color={0,0,127}));
 
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={Ellipse(lineColor = {75,138,73},fillColor={255,255,255},
             fillPattern=

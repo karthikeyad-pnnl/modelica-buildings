@@ -1,6 +1,6 @@
 simulateModel("Buildings.Controls.OBC.FDE.DOAS.Validation.ExhaustFan", method="Cvode", stopTime=7200, tolerance=1e-06, resultFile="ExhaustFanController");
 
-createPlot(id=1, position={0, 0, 1568, 711}, y={"EFcon1.uFanSupPro", "EFcon1.uFanExhPro"}, range={0.0, 6000.0, -0.5, 1.5}, grid=true, colors={{28,108,200}, {28,108,200}});
-createPlot(id=1, position={0, 0, 1568, 233}, y={"EFcon1.dPAirStaBui", "EFcon1.dPSetBui"}, range={0.0, 6000.0, 10.0, 20.0}, grid=true, subPlot=2, colors={{28,108,200}, {238,46,47}});
-createPlot(id=1, position={0, 0, 1568, 234}, y={"EFcon1.yExhFanSpe"}, range={0.0, 6000.0, -0.5, 1.5}, grid=true, subPlot=3, colors={{28,108,200}});
+createPlot(id=1, position={0, 0, 1568, 711}, y={"EFcon.uFanSupPro", "EFcon.uFanExhPro"}, range={0.0, 6000.0, -0.5, 1.5}, grid=true, colors={{28,108,200}, {28,108,200}});
+createPlot(id=1, position={0, 0, 1568, 233}, y={"EFcon.dPAirStaBui", "EFcon.dPSetBui"}, range={0.0, 6000.0, 10.0, 20.0}, grid=true, subPlot=2, colors={{28,108,200}, {238,46,47}});
+createPlot(id=1, position={0, 0, 1568, 234}, y={"EFcon.yExhFanSpe"}, range={0.0, 6000.0, -0.5, 1.5}, grid=true, subPlot=3, colors={{28,108,200}});
 

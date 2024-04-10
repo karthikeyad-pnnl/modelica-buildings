@@ -22,23 +22,23 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
   "PI controller for heating loop";
 
   parameter Real kEneWheHea(
-  final unit = "1") = 0.00001
+  final unit = "1") = 0.5
   "PID heating loop gain value.";
 
   parameter Real TiEneWheHea(
-  final unit = "s") = 0.00025
+  final unit = "s") = 60
   "PID  heating loop time constant of integrator.";
 
   parameter Real TdEneWheHea(
   final unit = "s") = 0.1
-  "PID heatig loop time constant of derivative block";
+  "PID heating loop time constant of derivative block";
 
   parameter Real kEneWheCoo(
-  final unit = "1") = 0.00001
+  final unit = "1") = 0.5
   "PID cooling loop gain value.";
 
   parameter Real TiEneWheCoo(
-  final unit = "s") = 0.00025 "PID cooling loop time constant of integrator.";
+  final unit = "s") = 60 "PID cooling loop time constant of integrator.";
 
   parameter CDL.Types.SimpleController controllerTypeEneWheCoo=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
   "PI controller for cooling loop";
@@ -95,7 +95,6 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
         transformation(extent={{102,-96},{142,-56}}), iconTransformation(extent=
            {{102,-80},{142,-40}})));
 
-  parameter Real Ti=TiEneWheCoo "Time constant of integrator block";
 protected
   Buildings.Controls.OBC.CDL.Reals.Subtract                   difference
   "Subtract outside air temperature from return air temperature."

@@ -22,13 +22,16 @@ block SupplyFanController "This block manages start, stop, status, and speed of 
   final unit = "1") = 0.9
   "DDSP terminal damper percent open set point";
 
-  parameter Real kDam = 0.0000001
+  parameter Real kDam(
+   final unit= "1") = 0.5
   "Damper position setpoint PI gain value k.";
 
-  parameter Real TiDam = 0.000025
+  parameter Real TiDam(
+   final unit= "s") = 60
   "Damper position setpoint PI time constant value Ti.";
 
-  parameter Real TdDam = 0.1 "Time constant of derivative block for conPIDDam";
+  parameter Real TdDam(
+   final unit= "s") = 0.1 "Time constant of derivative block for conPIDDam";
 
   parameter CDL.Types.SimpleController controllerTypeDam=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
   "Type of controller";
@@ -38,15 +41,19 @@ block SupplyFanController "This block manages start, stop, status, and speed of 
   final unit = "Pa",
   final quantity = "PressureDifference") = 250 "Constant volume down duct static pressure set point";
 
-  parameter Real fanSpeMin = 0.0000001
+  parameter Real fanSpeMin(
+   final unit= "m/s") = 0.0000001
   "Minimum Fan Speed";
 
-  parameter Real kFanSpe = 0.0000001 "
+  parameter Real kFanSpe(
+   final unit= "1") = 0.5 "
   Fan speed set point SAT PI gain value k.";
 
-  parameter Real TdFanSpe = 0.1 "Time constant of derivative block for conPIDFanSpe";
+  parameter Real TdFanSpe(
+   final unit= "s") = 60 "Time constant of derivative block for conPIDFanSpe";
 
-  parameter Real TiFanSpe = 0.000025
+  parameter Real TiFanSpe(
+   final unit= "s") = 0.000025
   "Fan speed set point SAT PI time constant value Ti.";
 
   parameter CDL.Types.SimpleController controllerTypeFanSpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI

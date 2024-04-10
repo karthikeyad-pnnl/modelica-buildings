@@ -1,9 +1,10 @@
 within Buildings.Controls.OBC.FDE.DOAS;
 block EconomizerMode "This block calculates when economizer mode is active."
-
-  parameter Real dTEcoThr=2
+  parameter Real dTEcoThr(
+  final unit = "K",
+  final displayUnit = "degC",
+  final quantity = "ThermodynamicTemperature") = 2
   "Threshold temperature difference between return air and outdoor air temperature above which economizer mode is enabled";
-
 
   // ---inputs---
 

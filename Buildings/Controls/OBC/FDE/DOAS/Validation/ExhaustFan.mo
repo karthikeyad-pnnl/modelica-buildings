@@ -7,14 +7,15 @@ model ExhaustFan "This model simulates ExhaustFanController"
   "Building static pressure difference set point";
 
   parameter Real kExhFan(
-  final unit = "1") = 0.00001
+  final unit = "1") = 0.5
   "PID heating loop gain value.";
 
   parameter Real TiExhFan(
-  final unit = "s") = 0.00025
+  final unit = "s") = 60
   "PID loop time constant of integrator.";
 
-  parameter Real TdExhFan=0.1 "Time constant of derivative block";
+  parameter Real TdExhFan(
+  final unit= "s") = 0.1 "Time constant of derivative block";
 
    parameter CDL.Types.SimpleController controllerTypeExhFan=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "Type of controller";
@@ -36,7 +37,7 @@ model ExhaustFan "This model simulates ExhaustFanController"
     offset=15)
     annotation (Placement(transformation(extent={{-34,-26},{-14,-6}})));
 
-  Buildings.Controls.OBC.FDE.DOAS.ExhaustFan EFcon1(
+  Buildings.Controls.OBC.FDE.DOAS.ExhaustFan EFcon(
     dPSetBui=dPSetBui,
     kExhFan=kExhFan,
     TiExhFan=TiExhFan,
@@ -45,14 +46,14 @@ model ExhaustFan "This model simulates ExhaustFanController"
     annotation (Placement(transformation(extent={{44,-12},{64,8}})));
 equation
 
-  connect(SFproof.y, EFcon1.uFanSupPro) annotation (Line(points={{-12,18},{16,
-          18},{16,4},{42,4}}, color={255,0,255}));
-  connect(bldgSP.y, EFcon1.dPAirStaBui) annotation (Line(points={{-12,-16},{16,
-          -16},{16,-8.4},{42,-8.4}}, color={0,0,127}));
-  connect(truDel.y, EFcon1.uFanExhPro) annotation (Line(points={{36,-30},{38,
-          -30},{38,-2},{42,-2}}, color={255,0,255}));
-  connect(EFcon1.yExhFanSta, truDel.u) annotation (Line(points={{66,4},{74,4},{
-          74,-64},{-2,-64},{-2,-30},{12,-30}}, color={255,0,255}));
+  connect(SFproof.y, EFcon.uFanSupPro) annotation (Line(points={{-12,18},{16,18},
+          {16,4},{42,4}}, color={255,0,255}));
+  connect(bldgSP.y, EFcon.dPAirStaBui) annotation (Line(points={{-12,-16},{16,-16},
+          {16,-8.4},{42,-8.4}}, color={0,0,127}));
+  connect(truDel.y, EFcon.uFanExhPro) annotation (Line(points={{36,-30},{38,-30},
+          {38,-2},{42,-2}}, color={255,0,255}));
+  connect(EFcon.yExhFanSta, truDel.u) annotation (Line(points={{66,4},{74,4},{74,
+          -64},{-2,-64},{-2,-30},{12,-30}}, color={255,0,255}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false), graphics={Ellipse(lineColor = {75,138,73},fillColor={255,255,255},
             fillPattern=

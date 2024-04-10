@@ -7,14 +7,15 @@ block ExhaustFan "This block manages start, stop, and speed of the exhaust fan."
   "Building static pressure difference set point";
 
   parameter Real kExhFan(
-  final unit = "1") = 0.00001
+  final unit = "1") = 0.5
   "PID heating loop gain value.";
 
   parameter Real TiExhFan(
-  final unit = "s") = 0.00025
+  final unit = "s") = 0.60
   "PID loop time constant of integrator.";
 
-  parameter Real TdExhFan=0.1 "Time constant of derivative block";
+  parameter Real TdExhFan(
+  final unit= "s") = 0.1 "Time constant of derivative block";
 
    parameter CDL.Types.SimpleController controllerTypeExhFan=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "Type of controller";

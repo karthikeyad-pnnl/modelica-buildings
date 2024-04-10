@@ -9,24 +9,31 @@ block CoolingCoil "This block commands the cooling coil."
   parameter CDL.Types.SimpleController controllerTypeDeh=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "PID controller for cooling air in dehumidification mode";
 
-  parameter Real kDeh=1
+  parameter Real kDeh(
+  final unit="1") = 1
     "Gain of conPIDDeh controller";
 
-  parameter Real TiDeh=0.5
+  parameter Real TiDeh(
+  final unit="s") = 60
     "Time constant of integrator block for conPIDDeh controller";
 
-  parameter Real TdDeh=0.1 "Time constant of derivative block for conPIDDeh controller";
+  parameter Real TdDeh(
+  final unit="s") = 0.1
+    "Time constant of derivative block for conPIDDeh controller";
 
   parameter CDL.Types.SimpleController controllerTypeRegOpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "PID controller for regular cooling coil operation mode";
 
-  parameter Real kRegOpe=1
+  parameter Real kRegOpe(
+  final unit="1") = 1
     "Gain of conPIDRegOpe controller";
 
-  parameter Real TiRegOpe=0.5
+  parameter Real TiRegOpe(
+  final unit="s")=60
     "Time constant of integrator block for conPIDRegOpe controller";
 
-  parameter Real TdRegOpe=0.1
+  parameter Real TdRegOpe(
+  final unit="s")=0.1
     "Time constant of derivative block for conPIDRegOpe controller";
 
   parameter Real dehumSet(

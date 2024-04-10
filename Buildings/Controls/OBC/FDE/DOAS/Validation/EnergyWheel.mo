@@ -22,11 +22,11 @@ parameter Real dTThrEneRec(
   "PI controller for heating loop";
 
   parameter Real kEneWheHea(
-  final unit = "1") = 0.00001
+  final unit = "1") = 0.5
   "PID heating loop gain value.";
 
   parameter Real TiEneWheHea(
-  final unit = "s") = 0.00025
+  final unit = "s") = 60
   "PID  heating loop time constant of integrator.";
 
   parameter Real TdEneWheHea(
@@ -34,11 +34,11 @@ parameter Real dTThrEneRec(
   "PID heatig loop time constant of derivative block";
 
   parameter Real kEneWheCoo(
-  final unit = "1") = 0.00001
+  final unit = "1") = 0.5
   "PID cooling loop gain value.";
 
   parameter Real TiEneWheCoo(
-  final unit = "s") = 0.00025 "PID cooling loop time constant of integrator.";
+  final unit = "s") = 60 "PID cooling loop time constant of integrator.";
 
   parameter CDL.Types.SimpleController controllerTypeEneWheCoo=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
   "PI controller for cooling loop";

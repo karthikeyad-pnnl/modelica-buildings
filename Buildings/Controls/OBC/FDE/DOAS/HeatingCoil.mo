@@ -4,13 +4,16 @@ block HeatingCoil "This block commands the heating coil."
   parameter CDL.Types.SimpleController controllerTypeCoiHea=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
    "Type of controller";
 
-  parameter Real kCoiHea = 0.0000001
+  parameter Real kCoiHea(
+   final unit= "1") = 0.5
   "Heating coil SAT PI gain value k.";
 
-  parameter Real TiCoiHea = 0.000025
+  parameter Real TiCoiHea(
+   final unit= "s") = 60
   "Heating coil SAT PI time constant value Ti.";
 
-  parameter Real TdCoiHea=0.1 "Time constant of derivative block";
+  parameter Real TdCoiHea(
+  final unit= "s") = 0.1 "Time constant of derivative block";
 
   // ---inputs---
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uFanSupPro

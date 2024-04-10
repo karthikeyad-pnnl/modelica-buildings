@@ -1,7 +1,7 @@
 within Buildings.Controls.OBC.FDE.DOAS;
 block DOAScontroller "DOAS controller built from DOAS blocks."
 
-  parameter Real erwDPadj(
+ parameter Real erwDPadj(
   final unit = "K",
   final quantity = "TemperatureDifference") = 5
   "Value subtracted from ERW supply air dewpoint.";
@@ -9,22 +9,52 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
   parameter CDL.Types.SimpleController controllerTypeDeh=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "PID controller for cooling air in dehumidification mode";
 
-  parameter Real kDeh=1
+  parameter Real kDeh(
+  final unit="1") = 1
     "Gain of conPIDDeh controller";
 
-  parameter Real TiDeh=0.5
+  parameter Real TiDeh(
+  final unit="s") = 60
     "Time constant of integrator block for conPIDDeh controller";
 
-  parameter Real TdDeh=0.1 "Time constant of derivative block for conPIDDeh controller";
+  parameter Real TdDeh(
+  final unit="s") = 0.1
+    "Time constant of derivative block for conPIDDeh controller";
 
   parameter CDL.Types.SimpleController controllerTypeRegOpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "PID controller for regular cooling coil operation mode";
 
-  parameter Real kRegOpe=1 "Gain of conPIDRegOpe controller";
+  parameter Real kRegOpe(
+  final unit="1") = 1
+    "Gain of conPIDRegOpe controller";
 
-  parameter Real TiRegOpe=0.5 "Time constant of integrator block for conPIDRegOpe controller";
+  parameter Real TiRegOpe(
+  final unit="s")=60
+    "Time constant of integrator block for conPIDRegOpe controller";
 
-  parameter Real TdRegOpe=0.1 "Time constant of derivative block for conPIDRegOpe controller";
+  parameter Real TdRegOpe(
+  final unit="s")=0.1
+    "Time constant of derivative block for conPIDRegOpe controller";
+
+  parameter Real dehumSet(
+    final min=0,
+    final max=100)=60
+    "Dehumidification set point.";
+
+  parameter Real timThrDehDis(
+    final unit="s",
+    final quantity="Time")=600
+    "Continuous time period for which measured relative humidity needs to fall below relative humidity threshold before dehumidification mode is disabled";
+
+  parameter Real timDelDehEna(
+    final unit="s",
+    final quantity="Time")=120
+    "Continuous time period for which supply fan needs to be on before enabling dehumidifaction mode";
+
+  parameter Real timThrDehEna(
+    final unit="s",
+    final quantity="Time")=5
+    "Continuous time period for which relative humidity rises above set point before dehumidifcation mode is enabled";
 
   parameter Real dTEcoThr(
   final unit = "K",
@@ -53,11 +83,11 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
   "PI controller for heating loop";
 
   parameter Real kEneWheHea(
-  final unit = "1") = 0.00001
+  final unit = "1") = 0.5
   "PID heating loop gain value.";
 
   parameter Real TiEneWheHea(
-  final unit = "s") = 0.00025
+  final unit = "s") = 60
   "PID  heating loop time constant of integrator.";
 
   parameter Real TdEneWheHea(
@@ -65,11 +95,11 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
   "PID heatig loop time constant of derivative block";
 
   parameter Real kEneWheCoo(
-  final unit = "1") = 0.00001
+  final unit = "1") = 0.5
   "PID cooling loop gain value.";
 
   parameter Real TiEneWheCoo(
-  final unit = "s") = 0.00025 "PID cooling loop time constant of integrator.";
+  final unit = "s") = 60 "PID cooling loop time constant of integrator.";
 
   parameter CDL.Types.SimpleController controllerTypeEneWheCoo=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
   "PI controller for cooling loop";
@@ -84,14 +114,15 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
   "Building static pressure difference set point";
 
   parameter Real kExhFan(
-  final unit = "1") = 0.00001
+  final unit = "1") = 0.5
   "PID heating loop gain value.";
 
   parameter Real TiExhFan(
-  final unit = "s") = 0.00025
+  final unit = "s") = 60
   "PID loop time constant of integrator.";
 
-  parameter Real TdExhFan=0.1 "Time constant of derivative block";
+  parameter Real TdExhFan(
+  final unit= "s") = 0.1 "Time constant of derivative block";
 
   parameter CDL.Types.SimpleController controllerTypeExhFan=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "Type of controller";
@@ -99,13 +130,16 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
   parameter CDL.Types.SimpleController controllerTypeCoiHea=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
    "Type of controller";
 
-  parameter Real kCoiHea = 0.0000001
+  parameter Real kCoiHea(
+   final unit= "1") = 0.5
   "Heating coil SAT PI gain value k.";
 
-  parameter Real TiCoiHea = 0.000025
+  parameter Real TiCoiHea(
+   final unit= "s") = 60
   "Heating coil SAT PI time constant value Ti.";
 
-  parameter Real TdCoiHea=0.1 "Time constant of derivative block";
+  parameter Real TdCoiHea(
+  final unit= "s") = 0.1 "Time constant of derivative block";
 
      parameter Boolean is_vav = true
   "True: System has zone terminals with variable damper position. False: System has zone terminals with constant damper position.";
@@ -128,13 +162,16 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
   final unit = "1") = 0.9
   "DDSP terminal damper percent open set point";
 
-  parameter Real kDam = 0.0000001
+  parameter Real kDam(
+   final unit= "1") = 0.5
   "Damper position setpoint PI gain value k.";
 
-  parameter Real TiDam = 0.000025
+  parameter Real TiDam(
+   final unit= "s") = 60
   "Damper position setpoint PI time constant value Ti.";
 
-  parameter Real TdDam = 0.1 "Time constant of derivative block for conPIDDam";
+  parameter Real TdDam(
+   final unit= "s") = 0.1 "Time constant of derivative block for conPIDDam";
 
   parameter CDL.Types.SimpleController controllerTypeDam=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
   "Type of controller";
@@ -144,15 +181,20 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
   final unit = "Pa",
   final quantity = "PressureDifference") = 250 "Constant volume down duct static pressure set point";
 
-  parameter Real fanSpeMin = 0.0000001
+  parameter Real fanSpeMin(
+   final unit= "m/s") = 0.0000001
   "Minimum Fan Speed";
 
-  parameter Real kFanSpe = 0.0000001 "
+  parameter Real kFanSpe(
+   final unit= "1") = 0.5 "
   Fan speed set point SAT PI gain value k.";
 
-  parameter Real TdFanSpe = 0.1 "Time constant of derivative block for conPIDFanSpe";
+  parameter Real TdFanSpe(
+   final unit= "s") = 60
+                        "Time constant of derivative block for conPIDFanSpe";
 
-  parameter Real TiFanSpe = 0.000025
+  parameter Real TiFanSpe(
+   final unit= "s") = 0.000025
   "Fan speed set point SAT PI time constant value Ti.";
 
   parameter CDL.Types.SimpleController controllerTypeFanSpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
@@ -350,7 +392,7 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
   Buildings.Controls.OBC.FDE.DOAS.EnergyWheel ERWcon(
     dTThrEneRec=dTThrEneRec,
     dThys=dThys,
-    timDelEneRec=timdelEneRec,
+    timDelEneRec=timDelEneRec,
     controllerTypeEneWheHea=controllerTypeEneWheHea,
     kEneWheHea=kEneWheHea,
     TiEneWheHea=TiEneWheHea,
@@ -370,7 +412,7 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
     TdDeh=TdDeh,
     controllerTypeRegOpe=controllerTypeRegOpe,
     kRegOpe=kRegOpe,
-    TiRegOpe=TiRepOpe,
+    TiRegOpe=TiRegOpe,
     TdRegOpe=TdRegOpe,
     dehumSet=dehumSet,
     timThrDehDis=timThrDehDis,
@@ -447,7 +489,7 @@ equation
           {-90,-13},{55.8,-13}}, color={0,0,127}));
   connect(Heating.yCoiHea, yCoiHea) annotation (Line(points={{80.2,-8},{90,-8},
           {90,-4},{122,-4}}, color={0,0,127}));
-  connect(ERWcon.yEneRecWheStart, yEneRecWheEna)
+  connect(ERWcon.yEneRecWheEna, yEneRecWheEna)
     annotation (Line(points={{80.2,-54},{122,-54}}, color={255,0,255}));
   connect(ERWcon.yEneRecWheSpe, yEneRecWheSpe) annotation (Line(points={{80.2,
           -60},{92,-60},{92,-88},{122,-88}}, color={0,0,127}));
