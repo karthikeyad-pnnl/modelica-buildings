@@ -1,5 +1,4 @@
 simulateModel("Buildings.Controls.OBC.FDE.DOAS.Validation.DehumMode", method="Cvode", stopTime=7200, tolerance=1e-06, resultFile="DehumMode");
+createPlot(id=1, position={103, 9, 611, 427}, y={"EconMod.uFanSupPro", "EconMod.yEcoMod"}, range={0.0, 7200.0, -0.1, 1.1}, grid=true, colors={{28,108,200}, {28,108,200}});
+createPlot(id=1, position={103, 9, 611, 211}, y={"EconMod.TAirSupSetCoo", "EconMod.TAirOut"}, range={0.0, 7600.0, 290.0, 304.0}, grid=true, subPlot=2, colors={{28,108,200}, {238,46,47}});
 
-createPlot(id=1, position={780, 265, 762, 211}, y={"DehumMod.supFanProof"}, range={2680.0, 3060.0, 0.0, 2.0}, autoscale=false, grid=true, colors={{28,108,200}});
-createPlot(id=2, position={780, 0, 762, 212}, y={"relHumGen.y", "DehumMod.dehumSet"}, range={0.0, 6000.0, 40.0, 80.0}, grid=true, colors={{28,108,200}, {238,46,47}});
-createPlot(id=4, position={0, 0, 764, 476}, y={"DehumMod.dehumMode"}, range={0.0, 6000.0, -0.6000000000000001, 1.6}, grid=true, colors={{28,108,200}});

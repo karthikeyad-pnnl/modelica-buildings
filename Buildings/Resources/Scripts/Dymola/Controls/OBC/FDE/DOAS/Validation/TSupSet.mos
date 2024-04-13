@@ -1,9 +1,10 @@
-simulateModel("Buildings.Controls.OBC.FDE.DOAS.Validation.TSupSet", method="Cvode", stopTime=5760, tolerance=1e-06, resultFile="TSupSet");
+simulateModel("Buildings.Controls.OBC.FDE.DOAS.Validation.SupplyTemperatureSetpoint", method="Cvode", stopTime=5760, tolerance=1e-06, resultFile="TSupSet");
+createPlot(id=1, position={0, 0, 1568, 724}, y={"TSupSetpt.uDehMod"}, range={0.0, 5800.0, -0.2, 1.2000000000000002}, grid=true, colors={{28,108,200}});
+createPlot(id=1, position={0, 0, 1568, 238}, y={"TSupSetpt.TSupLowSet", "TSupSetpt.TSupHigSet", "TSupSetpt.ySupSet"}, range={0.0, 6000.0, 19.0, 25.0}, grid=true, subPlot=2, colors={{28,108,200}, {238,46,47}, {0,140,72}}, displayUnits={"degC", "degC", "degC"});
+createPlot(id=1, position={0, 0, 1568, 238}, y={"TSupSetpt.THigZon", "TSupSetpt.TLowZon", "TSupSetpt.TAirHig"}, range={0.0, 6000.0, 18.0, 26.0}, grid=true, subPlot=3, colors={{28,108,200}, {238,46,47}, {0,140,72}}, displayUnits={"degC", "degC", "degC"});
 
-createPlot(id=1, position={647, -5, 626, 308}, y={"tSupSet.dehumMode"}, range={0.0, 6000.0, -0.2, 1.2000000000000002}, grid=true, colors={{28,108,200}});
-createPlot(id=2, position={0, 362, 627, 308}, y={"tSupSet.loPriT", "tSupSet.hiPriT", "tSupSet.supPrimSP"}, range={0.0, 6000.0, 19.0, 25.0}, grid=true, colors={{28,108,200}, {238,46,47}, {0,140,72}}, displayUnits={"degC", "degC", "degC"});
-createPlot(id=3, position={644, 356, 626, 309}, y={"tSupSet.supCooSP", "tSupSet.supHeaSP"}, range={0.0, 6000.0, 290.0, 300.0}, grid=true, colors={{28,108,200}, {238,46,47}});
-createPlot(id=4, position={0, 0, 627, 309}, y={"highSpaceTGen.y", "loZonT", "hiZonT"}, range={0.0, 6000.0, 292.0, 300.0}, grid=true, colors={{28,108,200}, {238,46,47}, {0,140,72}});
+
+
 
 
 

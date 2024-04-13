@@ -1,17 +1,10 @@
 within Buildings.Controls.OBC.FDE.DOAS;
-block EconMode "This block calculates when economizer mode is active."
-  parameter Real econCooAdj(
+block EconomizerMode "This block calculates when economizer mode is active."
+  parameter Real dTEcoThr(
   final unit = "K",
   final displayUnit = "degC",
   final quantity = "ThermodynamicTemperature") = 2
-  "Value subtracted from supply air temperature cooling set point.";
-
-  parameter Real delayTimeEcoMod(
-  final unit= "s",
-  final quantity="Time")=10
-  "Delay added to compensate for CDL not processing latch correctly.";
-
-
+  "Threshold temperature difference between return air and outdoor air temperature above which economizer mode is enabled";
 
   // ---inputs---
 
@@ -39,10 +32,6 @@ block EconMode "This block calculates when economizer mode is active."
         extent={{-142,-20},{-102,20}},
         rotation=0)));
 
-  // ---outputs---
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yEcoMod "True when economizer mode is active."
-  annotation (
-    Placement(transformation(extent = {{104, -20}, {144, 20}}), iconTransformation(extent = {{102, -20}, {142, 20}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirSupSetCoo
     "Supply air temperature cooling set point." annotation (Placement(
@@ -56,7 +45,13 @@ block EconMode "This block calculates when economizer mode is active."
         extent={{-142,-90},{-102,-50}},
         rotation=0)));
 
-  Buildings.Controls.OBC.CDL.Reals.Greater gre(h = econCooAdj)
+  // ---outputs---
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yEcoMod "True when economizer mode is active."
+  annotation (
+    Placement(transformation(extent = {{104, -20}, {144, 20}}), iconTransformation(extent = {{102, -20}, {142, 20}})));
+
+protected
+  Buildings.Controls.OBC.CDL.Reals.Greater gre(h=dTEcoThr)
   "True if OAT > supCooSP."
   annotation (
     Placement(visible = true, transformation(origin = {-24, 34}, extent = {{-20, -46}, {0, -26}}, rotation = 0)));
@@ -64,14 +59,6 @@ block EconMode "This block calculates when economizer mode is active."
   Buildings.Controls.OBC.CDL.Logical.And andEcoModEna
     "Logical AND; true when fan is proven on and temperature set point conditions are met."
     annotation (Placement(transformation(extent={{74,-10},{94,10}})));
-
-  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDelEcoMod(final delayTime=
-        delayTimeEcoMod, final delayOnInit=true)
-    "Delay added to compensate for CDL not processing latch correctly."
-    annotation (Placement(visible=true, transformation(
-        origin={12,6},
-        extent={{10,-18},{30,2}},
-        rotation=0)));
 
   Buildings.Controls.OBC.CDL.Logical.Not not1
   annotation (
@@ -94,12 +81,8 @@ equation
   connect(gre.y, not1.u) annotation (
     Line(points = {{-22, -2}, {-16, -2}}, color = {255, 0, 255}));
 
-  connect(not1.y, truDelEcoMod.u)
-    annotation (Line(points={{8,-2},{20,-2}}, color={255,0,255}));
-
-  connect(truDelEcoMod.y, andEcoModEna.u2) annotation (Line(points={{44,-2},{60,
-          -2},{60,-8},{72,-8}}, color={255,0,255}));
-
+  connect(not1.y, andEcoModEna.u2) annotation (Line(points={{8,-2},{40,-2},{40,-8},
+          {72,-8}}, color={255,0,255}));
   annotation (
     defaultComponentName = "EconMod",
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics={  Rectangle(fillColor = {255, 255, 255},
@@ -116,7 +99,7 @@ FillPattern.Solid, extent = {{-16, -36}, {-12, -40}}), Line(points = {{-36, -52}
     Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}})),
     Documentation(info="<html>
 <h4>Economizer Mode</h4>
-<p>This block enables economizer mode (<span style=\"font-family: Courier New;\">yEcoMod</span>) when the supply air fan is proven (<span style=\"font-family: Courier New;\">uFanSupPro</span>) and outside air temperature (<span style=\"font-family: Courier New;\">TAirOut</span>) is below the supply air temperature cooling set point (<span style=\"font-family: Courier New;\">TAirSupSetCoo</span>) minus an offset (<span style=\"font-family: Courier New;\">econCooAdj</span>). Economizer mode is disabled when outside air temperature rises above the supply air temperature cooling set point. </p>
+<p>This block enables economizer mode (<span style=\"font-family: Courier New;\">yEcoMod</span>) when the supply air fan is proven (<span style=\"font-family: Courier New;\">uFanSupPro</span>) and outside air temperature (<span style=\"font-family: Courier New;\">TAirOut</span>) is below the supply air temperature cooling set point (<span style=\"font-family: Courier New;\">TAirSupSetCoo</span>) minus an offset (<span style=\"font-family: Courier New;\">dTEcoThr</span>). Economizer mode is disabled when outside air temperature rises above the supply air temperature cooling set point. </p>
 </html>", revisions = "<html>
 <ul>
 <li>
@@ -124,4 +107,4 @@ September 15, 2020, by Henry Nickels:</br>
 First implementation.</li>
 </ul>
 </html>"));
-end EconMode;
+end EconomizerMode;

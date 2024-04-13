@@ -1,13 +1,19 @@
 within Buildings.Controls.OBC.FDE.DOAS;
 block HeatingCoil "This block commands the heating coil."
-  parameter Real kCoiHea = 0.0000001
-  "Heating coil SAT PI gain value k.";
-
-  parameter Real TiCoiHea = 0.000025
-  "Heating coil SAT PI time constant value Ti.";
 
   parameter CDL.Types.SimpleController controllerTypeCoiHea=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
-    "Type of controller";
+   "Type of controller";
+
+  parameter Real kCoiHea(
+   final unit= "1") = 0.5
+  "Heating coil SAT PI gain value k.";
+
+  parameter Real TiCoiHea(
+   final unit= "s") = 60
+  "Heating coil SAT PI time constant value Ti.";
+
+  parameter Real TdCoiHea(
+  final unit= "s") = 0.1 "Time constant of derivative block";
 
   // ---inputs---
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uFanSupPro
@@ -16,7 +22,7 @@ block HeatingCoil "This block commands the heating coil."
             {-102,20}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirSup
-    "Supply air temperature sensor value." annotation (Placement(transformation(
+    "Measured Supply air temperature" annotation (Placement(transformation(
           extent={{-142,-60},{-102,-20}}), iconTransformation(extent={{-142,-70},
             {-102,-30}})));
 
@@ -27,9 +33,11 @@ block HeatingCoil "This block commands the heating coil."
 
   // ---outputs---
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yCoiHea
-    "Reheat coil valve command." annotation (Placement(transformation(extent={{102,
+    "Heating coil command." annotation (Placement(transformation(extent={{102,
             -20},{142,20}}), iconTransformation(extent={{102,-20},{142,20}})));
 
+
+protected
   Buildings.Controls.OBC.CDL.Reals.Switch swiCoiHea
     "Passes supply air heating coil control signal when supply fan is proven on"
     annotation (Placement(transformation(extent={{36,-12},{56,8}})));
@@ -39,9 +47,11 @@ block HeatingCoil "This block commands the heating coil."
     annotation (Placement(transformation(extent={{-20,-38},{0,-18}})));
 
   Buildings.Controls.OBC.CDL.Reals.PID conPIDCoiHea(
-    controllerType=controllerTypeCoiHea,
+    controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
     Ti=TiCoiHea,
-    k=kCoiHea) "PID controller for regular heating coil operation"
+    k=kCoiHea,
+    Td=TdCoiHea)
+               "PID controller for regular heating coil operation"
                annotation (Placement(visible=true, transformation(
         origin={-30,24},
         extent={{-10,-10},{10,10}},

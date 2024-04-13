@@ -7,22 +7,29 @@ block DehumMode
     final max=100)=60
    "Dehumidification set point.";
 
-  parameter Real delayTimeDehFal(
+  parameter Real timThrDehDis(
     final unit="s",
     final quantity="Time")=600
-    "Minimum delay after RH falls below set point before turning dehum off.";
+    "Continuous time period for which measured relative humidity needs to fall below relative humidity threshold before dehumidification mode is disabled";
 
-  parameter Real delayTimeDeh(
+  parameter Real timDelDehEna(
     final unit="s",
     final quantity="Time")=120
-    "Minimum supply fan proof delay before allowing dehum mode.";
+    "Continuous time period for which supply fan needs to be on before enabling dehumidifaction mode";
 
-  parameter Real delayTimeDehTru(
+  parameter Real timThrDehEna(
     final unit="s",
     final quantity="Time")=5
-    "Minimum delay after RH rises above set point before turning dehum on.";
+    "Continuous time period for which relative humidity rises above set point before dehumidifcation mode is enabled";
+
 
 // ---inputs---
+
+ Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uFanSupPro
+    "True when supply fan is proven on" annotation (Placement(transformation(
+          extent={{-142,18},{-102,58}}), iconTransformation(extent={{-142,52},{-102,
+            92}})));
+
   Buildings.Controls.OBC.CDL.Interfaces.RealInput phiAirRet(
     final unit="1",
     final min=0,
@@ -30,36 +37,32 @@ block DehumMode
         transformation(extent={{-142,-20},{-102,20}}), iconTransformation(
           extent={{-142,-20},{-102,20}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uFanSupPro
-    "True when supply fan is proven on" annotation (Placement(transformation(
-          extent={{-142,18},{-102,58}}), iconTransformation(extent={{-142,52},{-102,
-            92}})));
-
 // ---outputs---
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yDehMod
     "True when dehumidification mode is active." annotation (Placement(
         transformation(extent={{102,-12},{142,28}}), iconTransformation(extent={
             {102,-20},{142,20}})));
 
+protected
   Buildings.Controls.OBC.CDL.Logical.Latch lat
     "Latches true when retHum > dehumSet; resets when 
      retHum < dehumSet for dehumDelay time"
     annotation (Placement(transformation(extent={{22,-10},{42,10}})));
 
   Buildings.Controls.OBC.CDL.Reals.Greater gre
-    "True when return humidity > set point"
+    "True when return humidity is greater than set point"
     annotation (Placement(transformation(extent={{-44,-10},{-24,10}})));
 
   Buildings.Controls.OBC.CDL.Reals.Less les
-    "True when return humidity < set point"
+    "True when return humidity is less than set point"
     annotation (Placement(transformation(extent={{-44,-42},{-24,-22}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant phiAirDehSet(final k=
         dehumSet) "Dehumidification set point"
     annotation (Placement(transformation(extent={{-88,-50},{-68,-30}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDelDehFal(delayTime=
-        delayTimeDehFal)
+  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDelDehDis(delayTime=
+        timThrDehDis)
     "Minimum dehumidification time before disable when below set point."
     annotation (Placement(transformation(extent={{-14,-42},{6,-22}})));
 
@@ -68,12 +71,12 @@ block DehumMode
     annotation (Placement(transformation(extent={{58,-2},{78,18}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueDelay minimumRunDeh(delayTime=
-        delayTimeDeh, delayOnInit=true)
+        timDelDehEna, delayOnInit=true)
     "Minimum supply fan runtime before enabling dehum mode."
     annotation (Placement(transformation(extent={{-44,28},{-24,48}})));
 
-  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDelDehTru(final delayTime=
-        delayTimeDehTru, final delayOnInit=true) "Delays the initial trigger for latch to correctly capture true state 
+  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDelDehEna(final delayTime=
+        timThrDehEna,    final delayOnInit=true) "Delays the initial trigger for latch to correctly capture true state 
       when CDL starts with humidity above set point."
     annotation (Placement(transformation(extent={{-14,-10},{6,10}})));
 
@@ -91,10 +94,10 @@ equation
   connect(phiAirDehSet.y, gre.u2) annotation (Line(points={{-66,-40},{-60,-40},{
           -60,-8},{-46,-8}}, color={0,0,127}));
 
-  connect(les.y, truDelDehFal.u)
+  connect(les.y,truDelDehDis. u)
     annotation (Line(points={{-22,-32},{-16,-32}}, color={255,0,255}));
 
-  connect(truDelDehFal.y, lat.clr) annotation (Line(points={{8,-32},{14,-32},{14,
+  connect(truDelDehDis.y, lat.clr) annotation (Line(points={{8,-32},{14,-32},{14,
           -6},{20,-6}}, color={255,0,255}));
 
   connect(lat.y, andDehOpe.u2)
@@ -112,10 +115,10 @@ equation
   connect(minimumRunDeh.y, andDehOpe.u1) annotation (Line(points={{-22,38},{48,38},
           {48,8},{56,8}}, color={255,0,255}));
 
-  connect(gre.y, truDelDehTru.u)
+  connect(gre.y,truDelDehEna. u)
     annotation (Line(points={{-22,0},{-16,0}}, color={255,0,255}));
 
-  connect(truDelDehTru.y, lat.u)
+  connect(truDelDehEna.y, lat.u)
     annotation (Line(points={{8,0},{20,0}}, color={255,0,255}));
 
   connect(uFanSupPro, minimumRunDeh.u)

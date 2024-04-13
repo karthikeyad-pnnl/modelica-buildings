@@ -2,21 +2,30 @@ within Buildings.Controls.OBC.FDE.DOAS.Validation;
 model DehumMode "This model simulates DehumMode."
 
   parameter Real dehumSet(
-    min=0,
-    max=100)=60
+    final min=0,
+    final max=100)=60
    "Dehumidification set point.";
 
-  parameter Real dehumDelay(
+  parameter Real timThrDehDis(
     final unit="s",
     final quantity="Time")=600
-    "Minimum delay after RH falls below set point before turning dehum off.";
+    "Continuous time period for which measured relative humidity needs to fall below relative humidity threshold before dehumidification mode is disabled";
 
-  parameter Real minRun(
+  parameter Real timDelDehEna(
     final unit="s",
     final quantity="Time")=120
-    "Minimum supply fan proof delay before allowing dehum mode.";
+    "Continuous time period for which supply fan needs to be on before enabling dehumidifaction mode";
 
-  Buildings.Controls.OBC.FDE.DOAS.DehumMode DehumMod
+  parameter Real timThrDehEna(
+    final unit="s",
+    final quantity="Time")=5
+    "Continuous time period for which relative humidity rises above set point before dehumidifcation mode is enabled";
+
+  Buildings.Controls.OBC.FDE.DOAS.DehumMode DehumMod(
+    dehumSet=dehumSet,
+    timThrDehDis=timThrDehDis,
+    timDelDehEna=timDelDehEna,
+    timThrDehEna=timThrDehEna)
     annotation (Placement(visible = true, transformation(origin = {-2, 0}, extent = {{24, -10}, {44, 10}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse SFproof(

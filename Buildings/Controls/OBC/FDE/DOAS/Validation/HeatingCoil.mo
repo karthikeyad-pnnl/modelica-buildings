@@ -1,9 +1,24 @@
 within Buildings.Controls.OBC.FDE.DOAS.Validation;
 model HeatingCoil "This model simulates HeatingCoil"
 
-  Buildings.Controls.OBC.FDE.DOAS.HeatingCoil Heating(SArhcPIk=0.1, SArhcPITi=
-        60)
-    "This block commands the heating coil."
+  parameter CDL.Types.SimpleController controllerTypeCoiHea=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+   "Type of controller";
+
+  parameter Real kCoiHea(
+   final unit= "1") = 0.5
+  "Heating coil SAT PI gain value k.";
+
+  parameter Real TiCoiHea(
+   final unit= "s") = 60
+  "Heating coil SAT PI time constant value Ti.";
+
+  parameter Real TdCoiHea(
+   final unit= "s")=0.1 "Time constant of derivative block";
+  Buildings.Controls.OBC.FDE.DOAS.HeatingCoil CoiHea(
+    controllerTypeCoiHea=controllerTypeCoiHea,
+    kCoiHea=kCoiHea,
+    TiCoiHea=TiCoiHea,
+    TdCoiHea=TdCoiHea) "This block commands the heating coil."
     annotation (Placement(transformation(extent={{42,-10},{62,10}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse SFproof(
@@ -28,13 +43,13 @@ model HeatingCoil "This model simulates HeatingCoil"
     annotation (Placement(transformation(extent={{-14,14},{6,34}})));
 
 equation
-  connect(SFproof.y, Heating.uFanSupPro)
+  connect(SFproof.y, CoiHea.uFanSupPro)
     annotation (Line(points={{-20,0},{39.8,0}}, color={255,0,255}));
 
-  connect(saTGen.y, Heating.TAirSup) annotation (Line(points={{10,-30},{26,-30},
-          {26,-5},{39.8,-5}}, color={0,0,127}));
-  connect(supHeaGen.y, Heating.TAirSupSetHea) annotation (Line(points={{8,24},{
-          24,24},{24,4.8},{39.8,4.8}}, color={0,0,127}));
+  connect(saTGen.y, CoiHea.TAirSup) annotation (Line(points={{10,-30},{26,-30},{
+          26,-5},{39.8,-5}}, color={0,0,127}));
+  connect(supHeaGen.y, CoiHea.TAirSupSetHea) annotation (Line(points={{8,24},{24,
+          24},{24,4.8},{39.8,4.8}}, color={0,0,127}));
 
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false), graphics={Ellipse(lineColor = {75,138,73},fillColor={255,255,255},

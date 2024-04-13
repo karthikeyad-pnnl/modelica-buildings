@@ -1,5 +1,5 @@
 within Buildings.Controls.OBC.FDE.DOAS;
-block TSupSet
+block SupplyTemperatureSetpoint
   "This block caclulates the DOAS supply air temperature set point."
 
   parameter Real TSupLowSet(
@@ -39,6 +39,11 @@ block TSupSet
    "Supply air temperature heating set point offset.";
 
   // ---inputs---
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uDehMod
+    "True when dehumidification mode is active." annotation (Placement(
+        transformation(extent={{-142,-102},{-102,-62}}), iconTransformation(
+          extent={{-140,30},{-100,70}})));
+
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirHig(
     final unit="K",
     final displayUnit="degC",
@@ -47,22 +52,21 @@ block TSupSet
       Placement(transformation(extent={{-142,-18},{-102,22}}),
         iconTransformation(extent={{-140,-70},{-100,-30}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uDehMod
-    "True when dehumidification mode is active." annotation (Placement(
-        transformation(extent={{-142,-102},{-102,-62}}), iconTransformation(
-          extent={{-140,30},{-100,70}})));
 
   // ---outputs---
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput ySupCooSet
     "Supply air temperature cooling set point." annotation (Placement(
-        transformation(extent={{102,16},{142,56}}), iconTransformation(extent={{
-            102,20},{142,60}})));
+        transformation(extent={{100,28},{140,68}}), iconTransformation(extent={{100,28},
+            {140,68}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput ySupHeaSet
     "Supply air temperature heating set point" annotation (Placement(
-        transformation(extent={{102,-52},{142,-12}}), iconTransformation(extent=
-           {{102,-60},{142,-20}})));
+        transformation(extent={{100,-58},{140,-18}}), iconTransformation(extent={{100,-58},
+            {140,-18}})));
 
+  CDL.Interfaces.RealOutput ySupSet
+    annotation (Placement(transformation(extent={{100,-6},{140,34}})));
+protected
   Buildings.Controls.OBC.CDL.Reals.Line lin
     "Linear converter resets primary supply set point."
     annotation(Placement(transformation(extent={{-42,-8},{-22,12}})));
@@ -97,17 +101,12 @@ block TSupSet
     annotation (Placement(transformation(extent={{-14,44},{6,64}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant TAirSupHeaSetOff(final k=
-        TSupHeaSetOff)
+        TSupHeaOff)
                "Supply air temperature heating set point offset."
     annotation (Placement(transformation(extent={{-14,-66},{6,-46}})));
   Buildings.Controls.OBC.CDL.Reals.Switch swiDeh
     "Logical switch changes heating set point based on dehumidification mode."
     annotation (Placement(transformation(extent={{66,-42},{86,-22}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput ySupSet
-    "Supply air primary temperature set point." annotation (Placement(
-        transformation(extent={{102,-18},{142,22}}), iconTransformation(extent={
-            {102,-20},{142,20}})));
 
 
 equation
@@ -130,10 +129,12 @@ equation
     annotation (Line(points={{44,-40},{64,-40}}, color={0,0,127}));
 
   connect(addCooSet.y, ySupCooSet)
-    annotation (Line(points={{44,36},{122,36}}, color={0,0,127}));
+    annotation (Line(points={{44,36},{82,36},{82,48},{120,48}},
+                                                color={0,0,127}));
 
   connect(swiDeh.y, ySupHeaSet)
-    annotation (Line(points={{88,-32},{122,-32}}, color={0,0,127}));
+    annotation (Line(points={{88,-32},{106,-32},{106,-38},{120,-38}},
+                                                  color={0,0,127}));
 
   connect(addCooSet.y, swiDeh.u1) annotation (Line(points={{44,36},{54,36},{54,-24},
           {64,-24}}, color={0,0,127}));
@@ -153,12 +154,12 @@ equation
   connect(TAirSupLowSet.y, lin.f2) annotation (Line(points={{-68,-50},{-52,-50},
           {-52,-6},{-44,-6}}, color={0,0,127}));
 
-  connect(lin.y, ySupSet)
-    annotation (Line(points={{-20,2},{122,2}}, color={0,0,127}));
-
+  connect(lin.y, ySupSet) annotation (Line(points={{-20,2},{42,2},{42,14},{120,
+          14}}, color={0,0,127}));
   annotation (defaultComponentName="TSupSetpt",
     Icon(coordinateSystem(preserveAspectRatio=false), graphics={Text(extent={{-90,180},{90,76}},lineColor={28,108,200},textStyle={TextStyle.Bold},textString
-            =                                                                                                                                                "%name"),Rectangle(extent={{-100,100},{100,-100}},lineColor={179,151,128},radius=10,fillColor={255,255,255},
+            =                                                                                                                                                "%name"),Rectangle(extent={{
+              -100,98},{100,-102}},                                                                                                                                                                            lineColor={179,151,128},radius=10,fillColor={255,255,255},
             fillPattern=
 FillPattern.Solid),Text(extent={{-94,-40},{-40,-58}},lineColor={28,108,200},textString
             =                                                                          "highSpaceT"),Text(extent={{-94,60},{-40,42}},lineColor={28,108,200},textString
@@ -175,7 +176,8 @@ FillPattern.Solid),Rectangle(extent={{-40,-4},{6,-6}},lineColor={162,29,33},fill
 FillPattern.Solid),Polygon(points={{6,-4},{-8,6},{-12,-4},{6,-4}},lineColor={162,29,33},fillColor={162,29,33},
             fillPattern=
 FillPattern.Solid),
-Text(extent={{42,8},{96,-10}},lineColor={28,108,200},textString="supPrimSP")}),
+Text(extent={{40,8},{94,-10}},lineColor={28,108,200},
+          textString="supPrimSP")}),
     Diagram(coordinateSystem(preserveAspectRatio=false)),
     Documentation(revisions="<html>
 <ul>
@@ -185,9 +187,9 @@ First implementation.</li>
 </ul>
 </html>", info="<html>
 <h4>Supply Temperature Set Points</h4>
-<p>This block calculates the primary, cooling (ySupCooSet), and heating (ySupHeaSet) supply air temperature set points. The primary supply air temperature set point is reset from <span style=\"font-family: Courier New;\">TSupLowSet</span> to<span style=\"font-family: Courier New;\"> TSupHigSet</span> as the highest space temperature falls from <span style=\"font-family: Courier New;\">THigZon</span> to<span style=\"font-family: Courier New;\"> TLowZon</span>.</p>
+<p>This block calculates the primary, cooling (<span style=\"font-family: Courier New;\">ySupCooSet</span>), and heating (<span style=\"font-family: Courier New;\">ySupHeaSet</span>) supply air temperature set points. The primary supply air temperature set point is reset from <span style=\"font-family: Courier New;\">TSupLowSet</span> to<span style=\"font-family: Courier New;\"> TSupHigSet</span> as the highest space temperature falls from <span style=\"font-family: Courier New;\">THigZon</span> to<span style=\"font-family: Courier New;\"> TLowZon</span>.</p>
 <p>The supply air cooling set point is equal to the primary air temperature set point plus <span style=\"font-family: Courier New;\">TAirSupCooOff</span>. The supply air heating set point is equal to the primary air temperature set point minus<span style=\"font-family: Courier New;\"> TAirSupHeaOff</span>. </p>
 <h4>Dehumidification Set Point</h4>
 <p>When dehumidification mode (<span style=\"font-family: Courier New;\">dehumMode</span>) is active the supply air temperature heating set point is changed to equal the supply air temperature cooling set point. </p>
 </html>"));
-end TSupSet;
+end SupplyTemperatureSetpoint;
