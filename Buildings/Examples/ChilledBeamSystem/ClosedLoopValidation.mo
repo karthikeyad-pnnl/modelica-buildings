@@ -116,9 +116,6 @@ equation
   connect(DOAScon.yBypDam, eRWtemp.uBypDam) annotation (Line(points={{-23.14,-17},
           {-20,-17},{-20,-42},{-102,-42},{-102,-72},{-94.4,-72}}, color={255,0,
           255}));
-  connect(chiBeaTesBed.relHumDOASRet, eRWtemp.TAirRet) annotation (Line(points=
-          {{12,-31},{24,-31},{24,-36},{38,-36},{38,-94},{-108,-94},{-108,-80},{
-          -94.4,-80}}, color={0,0,127}));
   connect(chiBeaTesBed.OutdoorAirTemp, eRWtemp.TAirOut) annotation (Line(points=
          {{12,-37.6},{20,-37.6},{20,-40},{26,-40},{26,-96},{-98,-96},{-98,-84},
           {-94.4,-84}}, color={0,0,127}));
@@ -135,9 +132,6 @@ equation
   connect(chiBeaTesBed.TDOASDis, DOAScon.TAirDisCoiCoo) annotation (Line(points=
          {{12,-26},{22,-26},{22,-50},{-24,-50},{-24,-34},{-74,-34},{-74,-22.6},
           {-54.6,-22.6}}, color={0,0,127}));
-  connect(DOAScon.phiAirRet, eRWtemp.TAirRet) annotation (Line(points={{-54.6,-10},
-          {-86,-10},{-86,-12},{-118,-12},{-118,-90},{-108,-90},{-108,-80},{-94.4,
-          -80}}, color={0,0,127}));
   connect(chiBeaTesBed.dPDOASAir, DOAScon.dPAirDucSta) annotation (Line(points=
           {{12,-10.8},{30,-10.8},{30,-10},{50,-10},{50,24},{-28,24},{-28,6},{-62,
           6},{-62,-7.6},{-54.6,-7.6}}, color={0,0,127}));
@@ -150,8 +144,8 @@ equation
   connect(DOAScon.TAirSup, DOAScon.TAirDisCoiCoo) annotation (Line(points={{-54.6,
           -15.2},{-72,-15.2},{-72,-22.6},{-54.6,-22.6}}, color={0,0,127}));
   connect(chiBeaTesBed.rAT, DOAScon.TAirRet) annotation (Line(points={{12,-34.4},
-          {28,-34.4},{28,-34},{46,-34},{46,-68},{-72,-68},{-72,-46},{-80,-46},{
-          -80,-17.6},{-54.6,-17.6}}, color={0,0,127}));
+          {36,-34.4},{36,-34},{46,-34},{46,-94},{-106,-94},{-106,-17.6},{-54.6,
+          -17.6}},                   color={0,0,127}));
   connect(DOAScon.TAirOut, chiBeaTesBed.OutdoorAirTemp) annotation (Line(points=
          {{-54.6,-20.2},{-92,-20.2},{-92,-56},{-52,-56},{-52,-72},{-12,-72},{-12,
           -48},{18,-48},{18,-37.6},{12,-37.6}}, color={0,0,127}));
@@ -199,6 +193,12 @@ equation
           -4.6},{-17.57,-4.6},{-17.57,-14},{-12,-14}}, color={255,0,255}));
   connect(reaScaRep.y, terCon.TZonHeaSet) annotation (Line(points={{-14,98},{0,98},
           {0,68},{20,68},{20,67.75},{40,67.75}}, color={0,0,127}));
+  connect(chiBeaTesBed.rAT, eRWtemp.TAirRet) annotation (Line(points={{12,-34.4},
+          {36,-34.4},{36,-34},{46,-34},{46,-94},{-106,-94},{-106,-80},{-94.4,
+          -80}}, color={0,0,127}));
+  connect(chiBeaTesBed.relHumDOASRet, DOAScon.phiAirRet) annotation (Line(
+        points={{12,-31},{30,-31},{30,-52},{-76,-52},{-76,-10},{-54.6,-10}},
+        color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}})),
     Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-160, -100}, {160, 100}})),
