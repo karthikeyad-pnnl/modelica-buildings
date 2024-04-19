@@ -160,7 +160,10 @@ block TestBed "Testbed consisting of a 5-zone building model paired with DOAS an
     Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = -90, origin = {250, -40})));
   Buildings.Fluid.Actuators.Valves.TwoWayLinear val(redeclare package Medium = MediumW, final m_flow_nominal = mChiWatSou_flow_nominal, final dpValve_nominal = dpValve_nominal, final dpFixed_nominal = dpFixed_nominal) "Chilled beam control valve for south zone" annotation (
     Placement(transformation(extent = {{120, -50}, {140, -30}})));
-  Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaDat(final filNam = ModelicaServices.ExternalReferences.loadResource("modelica://Buildings/Resources/weatherdata/USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.mos")) "Weather data" annotation (
+  Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaDat(final filNam=
+        ModelicaServices.ExternalReferences.loadResource(
+        "./Buildings/Resources/weatherdata/USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.mos"))
+                                                                                                                                                                                                            "Weather data" annotation (
     Placement(visible = true, transformation(origin = {-14, -14}, extent = {{-310, -20}, {-290, 0}}, rotation = 0)));
   Buildings.BoundaryConditions.WeatherData.Bus weaBus "Weather Data Bus" annotation (
     Placement(visible = true, transformation(origin = {-16, -6}, extent = {{-280, -20}, {-260, 0}}, rotation = 0), iconTransformation(origin = {0, 0}, extent = {{0, 0}, {0, 0}}, rotation = 0)));
@@ -200,11 +203,9 @@ block TestBed "Testbed consisting of a 5-zone building model paired with DOAS an
     Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = 90, origin = {100, -174})));
   Buildings.Fluid.Sensors.TemperatureTwoPort senTem(redeclare package Medium = MediumA, final m_flow_nominal = mAirTot_flow_nominal) "AHU discharge air temperature sensor" annotation (
     Placement(transformation(extent = {{-40, -10}, {-20, 10}})));
-  Buildings.Fluid.Sensors.RelativePressure senRelPre(redeclare package Medium
-      =                                                                         MediumW) "Differential pressure sensor between chilled water supply and return" annotation (
+  Buildings.Fluid.Sensors.RelativePressure senRelPre(redeclare package Medium = MediumW) "Differential pressure sensor between chilled water supply and return" annotation (
     Placement(transformation(extent = {{150, -80}, {170, -60}})));
-  Buildings.Fluid.Sensors.RelativePressure senRelPre1(redeclare package Medium
-      =                                                                          MediumA) "Differential pressure sensor between AHU discharge and outdoor air" annotation (
+  Buildings.Fluid.Sensors.RelativePressure senRelPre1(redeclare package Medium = MediumA) "Differential pressure sensor between AHU discharge and outdoor air" annotation (
     Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = 90, origin={-50,32})));
   Modelica.Blocks.Routing.DeMultiplex demux(final n = 5) "Demultiplexer for chilled water valve signals" annotation (
     Placement(transformation(extent={{42,-30},{62,-10}})));
@@ -688,7 +689,8 @@ equation
   connect(wesCAVTer.port_bAir, wes.portAir_a) annotation (
     Line(points = {{410, 90}, {440, 90}, {440, 180}, {220, 180}, {220, 224}, {146, 224}, {146, 246}, {140, 246}}, color = {0, 127, 255}));
   connect(corCAVTer.port_bAir, cor.portAir_a) annotation (
-    Line(points = {{410, 148}, {440, 148}, {440, 180}, {220, 180}, {220, 224}, {206, 224}, {206, 246}, {200, 246}}, color = {0, 127, 255}));
+    Line(points={{410,148},{440,148},{440,128},{220,128},{220,172},{206,172},{
+          206,246},{200,246}},                                                                                      color = {0, 127, 255}));
   connect(val2.y_actual, yBypValPos) annotation (
     Line(points = {{175, 147}, {360, 147}, {360, 170}, {520, 170}, {520, 120}, {600, 120}}, color = {0, 0, 127}));
   connect(senRelPre1.p_rel, dPDOASAir) annotation (
@@ -805,8 +807,8 @@ equation
   connect(pro.y, mov1.y) annotation (
     Line(points = {{-258, -130}, {36, -130}, {36, -116}, {62, -116}}, color = {0, 0, 127}));
   connect(weaBus.TDryBul, OutdoorAirTemp) annotation (Line(
-      points={{-286,-16},{-258,-16},{-258,-60},{-244,-60},{-244,-224},{574,-224},
-          {574,-232},{608,-232}},
+      points={{-285.95,-15.95},{-258,-15.95},{-258,-60},{-244,-60},{-244,-224},
+          {574,-224},{574,-232},{608,-232}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",

@@ -43,7 +43,7 @@ model ClosedLoopValidation
     tableOnFile = true,
     tableName = "tab1",
     fileName=ModelicaServices.ExternalReferences.loadResource(
-        "modelica://Buildings/Resources/Data/Examples/ChilledBeamSystem/zoneLoads.txt"),
+        "./Buildings/Resources/Data/Examples/ChilledBeamSystem/zoneLoads.txt"),
     columns = {2, 3, 4, 5, 6},
     timeScale = 60)
     "Table defining thermal loads for zone"
@@ -116,9 +116,6 @@ equation
   connect(DOAScon.yBypDam, eRWtemp.uBypDam) annotation (Line(points={{-23.14,-17},
           {-20,-17},{-20,-42},{-102,-42},{-102,-72},{-94.4,-72}}, color={255,0,
           255}));
-  connect(chiBeaTesBed.relHumDOASRet, eRWtemp.TAirRet) annotation (Line(points=
-          {{12,-31},{24,-31},{24,-36},{38,-36},{38,-94},{-108,-94},{-108,-80},{
-          -94.4,-80}}, color={0,0,127}));
   connect(chiBeaTesBed.OutdoorAirTemp, eRWtemp.TAirOut) annotation (Line(points=
          {{12,-37.6},{20,-37.6},{20,-40},{26,-40},{26,-96},{-98,-96},{-98,-84},
           {-94.4,-84}}, color={0,0,127}));
@@ -135,9 +132,6 @@ equation
   connect(chiBeaTesBed.TDOASDis, DOAScon.TAirDisCoiCoo) annotation (Line(points=
          {{12,-26},{22,-26},{22,-50},{-24,-50},{-24,-34},{-74,-34},{-74,-22.6},
           {-54.6,-22.6}}, color={0,0,127}));
-  connect(DOAScon.phiAirRet, eRWtemp.TAirRet) annotation (Line(points={{-54.6,-10},
-          {-86,-10},{-86,-12},{-118,-12},{-118,-90},{-108,-90},{-108,-80},{-94.4,
-          -80}}, color={0,0,127}));
   connect(chiBeaTesBed.dPDOASAir, DOAScon.dPAirDucSta) annotation (Line(points=
           {{12,-10.8},{30,-10.8},{30,-10},{50,-10},{50,24},{-28,24},{-28,6},{-62,
           6},{-62,-7.6},{-54.6,-7.6}}, color={0,0,127}));
@@ -199,6 +193,12 @@ equation
           -4.6},{-17.57,-4.6},{-17.57,-14},{-12,-14}}, color={255,0,255}));
   connect(reaScaRep.y, terCon.TZonHeaSet) annotation (Line(points={{-14,98},{0,98},
           {0,68},{20,68},{20,67.75},{40,67.75}}, color={0,0,127}));
+  connect(chiBeaTesBed.relHumDOASRet, DOAScon.phiAirRet) annotation (Line(
+        points={{12,-31},{38,-31},{38,-32},{56,-32},{56,-58},{-94,-58},{-94,-10},
+          {-54.6,-10}}, color={0,0,127}));
+  connect(chiBeaTesBed.rAT, eRWtemp.TAirRet) annotation (Line(points={{12,-34.4},
+          {60,-34.4},{60,-92},{-108,-92},{-108,-80},{-94.4,-80}}, color={0,0,
+          127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}})),
     Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-160, -100}, {160, 100}})),
