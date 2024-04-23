@@ -14,7 +14,7 @@ block VariablePulse "Generate boolean pulse with the width specified by input"
   parameter Real minTruFalHol(
     final quantity="Time",
     final unit="s",
-    final min=Constants.small)=0.01*period
+    final min=ASHRAE.Constants.small) = 0.01*period
     "Minimum time to hold true or false";
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput u(
@@ -71,13 +71,11 @@ protected
     parameter Real period(
       final quantity="Time",
       final unit="s",
-      final min=Constants.small)
-      "Time for one pulse period";
+      final min=ASHRAE.Constants.small) "Time for one pulse period";
     parameter Real minTruFalHol(
       final quantity="Time",
       final unit="s",
-      final min=Constants.small)
-      "Minimum time to hold true or false";
+      final min=ASHRAE.Constants.small) "Minimum time to hold true or false";
 
     Buildings.Controls.OBC.CDL.Interfaces.BooleanInput go
       "True: cycle the output"

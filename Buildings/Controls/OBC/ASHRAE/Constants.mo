@@ -1,6 +1,5 @@
-within Buildings.Controls.OBC.CDL;
-package Constants
-  "Package with constants"
+within Buildings.Controls.OBC.ASHRAE;
+package Constants "Package with constants"
   // Machine dependent constants
   final constant Real eps=1E-15
     "Biggest number such that 1.0 + eps = 1.0";

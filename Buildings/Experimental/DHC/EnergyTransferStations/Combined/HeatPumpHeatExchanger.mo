@@ -26,8 +26,8 @@ model HeatPumpHeatExchanger
     "Source for cold water"
     annotation (Placement(transformation(extent={{-48,-50},{-28,-30}})));
   Buildings.Fluid.Sources.Boundary_pT sinSHW(redeclare final package Medium = MediumBui,
-      nPorts=1)
-               if have_hotWat
+      nPorts=1) if
+                  have_hotWat
     "Sink for service hot water" annotation (Placement(
       transformation(
       extent={{10,-10},{-10,10}},

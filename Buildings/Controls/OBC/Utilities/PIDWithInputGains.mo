@@ -3,8 +3,7 @@ block PIDWithInputGains
   "P, PI, PD, and PID controller with output reset and input gains"
   parameter Buildings.Controls.OBC.CDL.Types.SimpleController controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "Type of controller";
-  parameter Real r(
-    min=100*CDL.Constants.eps)=1
+  parameter Real r(min=100*ASHRAE.Constants.eps) = 1
     "Typical range of control error, used for scaling the control error";
   parameter Real yMax=1
     "Upper limit of output"
@@ -12,14 +11,18 @@ block PIDWithInputGains
   parameter Real yMin=0
     "Lower limit of output"
     annotation (Dialog(group="Limits"));
-  parameter Real Ni(
-    min=100*CDL.Constants.eps)=0.9
-    "Ni*Ti is time constant of anti-windup compensation"
-    annotation (Dialog(tab="Advanced",group="Integrator anti-windup",enable=controllerType == CDL.Types.SimpleController.PI or controllerType ==CDL.Types.SimpleController.PID));
-  parameter Real Nd(
-    min=100*CDL.Constants.eps)=10
-    "The higher Nd, the more ideal the derivative block"
-    annotation (Dialog(tab="Advanced",group="Derivative block",enable=controllerType == CDL.Types.SimpleController.PD or controllerType ==CDL.Types.SimpleController.PID));
+  parameter Real Ni(min=100*ASHRAE.Constants.eps) = 0.9
+    "Ni*Ti is time constant of anti-windup compensation" annotation (Dialog(
+      tab="Advanced",
+      group="Integrator anti-windup",
+      enable=controllerType == CDL.Types.SimpleController.PI or controllerType
+           == CDL.Types.SimpleController.PID));
+  parameter Real Nd(min=100*ASHRAE.Constants.eps) = 10
+    "The higher Nd, the more ideal the derivative block" annotation (Dialog(
+      tab="Advanced",
+      group="Derivative block",
+      enable=controllerType == CDL.Types.SimpleController.PD or controllerType
+           == CDL.Types.SimpleController.PID));
   parameter Real xi_start=0
     "Initial value of integrator state"
     annotation (Dialog(tab="Advanced",group="Initialization",enable=controllerType == CDL.Types.SimpleController.PI or controllerType == CDL.Types.SimpleController.PID));
@@ -37,25 +40,24 @@ block PIDWithInputGains
   Buildings.Controls.OBC.CDL.Interfaces.RealInput u_m
     "Connector for measurement input signal"
     annotation (Placement(transformation(origin={0,-220},extent={{20,-20},{-20,20}},rotation=270),iconTransformation(extent={{20,-20},{-20,20}},rotation=270,origin={0,-120})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput k(
-    min=100*Buildings.Controls.OBC.CDL.Constants.eps)
-    "Connector for control gain signal"
-    annotation (Placement(transformation(extent={{-260,160},{-220,200}}),iconTransformation(extent={{-140,60},{-100,100}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput k(min=100*Buildings.Controls.OBC.ASHRAE.Constants.eps)
+    "Connector for control gain signal" annotation (Placement(transformation(
+          extent={{-260,160},{-220,200}}), iconTransformation(extent={{-140,60},
+            {-100,100}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput Ti(
     quantity="Time",
     unit="s",
-    min=100*Buildings.Controls.OBC.CDL.Constants.eps)
-    if with_I
-    "Connector for time constant signal for the integral term"
-    annotation (Placement(transformation(extent={{-260,100},{-220,140}}),
-    iconTransformation(extent={{-140,20},{-100,60}})));
+    min=100*Buildings.Controls.OBC.ASHRAE.Constants.eps) if with_I
+    "Connector for time constant signal for the integral term" annotation (
+      Placement(transformation(extent={{-260,100},{-220,140}}),
+        iconTransformation(extent={{-140,20},{-100,60}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput Td(
     quantity="Time",
     unit="s",
-    min=100*Buildings.Controls.OBC.CDL.Constants.eps)
-    if with_D
-    "Connector for time constant signal for the derivative term"
-    annotation (Placement(transformation(extent={{-260,40},{-220,80}}),   iconTransformation(extent={{-140,-60},{-100,-20}})));
+    min=100*Buildings.Controls.OBC.ASHRAE.Constants.eps) if with_D
+    "Connector for time constant signal for the derivative term" annotation (
+      Placement(transformation(extent={{-260,40},{-220,80}}),
+        iconTransformation(extent={{-140,-60},{-100,-20}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput y
     "Connector for actuator output signal"
     annotation (Placement(transformation(extent={{220,-20},{260,20}}),iconTransformation(extent={{100,-20},{140,20}})));
@@ -107,8 +109,8 @@ block PIDWithInputGains
     annotation (Placement(transformation(extent={{-200,150},{-180,170}})));
   Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThrkTd(
     t=1E-6,
-    h=1E-6/2)
-    if with_D
+    h=1E-6/2) if
+       with_D
     "Check if k*Td is larger than 0"
     annotation (Placement(transformation(extent={{140,160},{160,180}})));
 
@@ -150,8 +152,8 @@ protected
   Buildings.Controls.OBC.CDL.Reals.Subtract antWinErr if with_I
     "Error for anti-windup compensation"
     annotation (Placement(transformation(extent={{160,50},{180,70}})));
-  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter antWinGai1(k=1/Ni)
-    if with_I "Gain for anti-windup compensation without the proportional gain"
+  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter antWinGai1(k=1/Ni) if
+       with_I "Gain for anti-windup compensation without the proportional gain"
     annotation (Placement(transformation(extent={{180,-30},{160,-10}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant yResSig(
     final k=y_reset) if with_I
@@ -167,8 +169,8 @@ protected
     message="LimPID: Limits must be yMin < yMax") "Assertion on yMin and yMax"
     annotation (Placement(transformation(extent={{180,120},{200,140}})));
   Buildings.Controls.OBC.CDL.Utilities.Assert assMeskTd(
-    message="LimPIDWithInputGains: Limits must be k*Td > 0")
-    if with_D
+    message="LimPIDWithInputGains: Limits must be k*Td > 0") if
+       with_D
     "Assertion on k and Td"
     annotation (Placement(transformation(extent={{180,160},{200,180}})));
   Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter gaiT(final k=1/Nd) if with_D

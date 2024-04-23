@@ -4,8 +4,7 @@ block SampleTrigger
   parameter Real period(
     final quantity="Time",
     final unit="s",
-    final min=Constants.small)
-    "Sample period";
+    final min=ASHRAE.Constants.small) "Sample period";
   parameter Real shift(
     final quantity="Time",
     final unit="s")=0

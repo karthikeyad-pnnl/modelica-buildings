@@ -33,11 +33,8 @@ protected
     each final quantity="Time",
     each final unit="s")=timeScale*table[1:end,1]
     "Time stamps";
-  final parameter Integer val[:,:]=integer(
-    table[1:end,2:end]+ones(
-      nT,
-      nout)*Constants.small)
-    "Table values as Integer";
+  final parameter Integer val[:,:]=integer(table[1:end, 2:end] + ones(nT, nout)
+      *ASHRAE.Constants.small) "Table values as Integer";
   Integer idx(
     fixed=false)
     "Index for table lookup";
@@ -91,21 +88,17 @@ initial equation
     for j in 2:size(
       table,
       2) loop
-      assert(
-        abs(
-          table[i,j]-integer(
-            table[i,j])) < Constants.small,
-        "In "+getInstanceName()+": Table value table["+String(i)+", "+String(j)+"] = "+String(
-          table[i,j])+" is not an Integer.");
+      assert(abs(table[i, j] - integer(table[i, j])) < ASHRAE.Constants.small,
+        "In " + getInstanceName() + ": Table value table[" + String(i) + ", "
+         + String(j) + "] = " + String(table[i, j]) + " is not an Integer.");
     end for;
   end for;
-  assert(
-    abs(
-      table[1,1]) < Constants.small,
-    "In "+getInstanceName()+": First time stamp must be zero as otherwise no data is defined for the start of the table.");
-  assert(
-    period-table[1,end] > Constants.small,
-    "In "+getInstanceName()+": Last time stamp in table must be smaller than period.");
+  assert(abs(table[1, 1]) < ASHRAE.Constants.small, "In " + getInstanceName()
+     +
+    ": First time stamp must be zero as otherwise no data is defined for the start of the table.");
+  assert(period - table[1, end] > ASHRAE.Constants.small, "In " +
+    getInstanceName() +
+    ": Last time stamp in table must be smaller than period.");
   idx=getIndex(
     time,
     period,

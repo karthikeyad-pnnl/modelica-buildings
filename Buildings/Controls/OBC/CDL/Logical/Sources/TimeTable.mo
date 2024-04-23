@@ -40,13 +40,10 @@ initial equation
     for j in 2:size(
       table,
       2) loop
-      assert(
-        (abs(
-          table[i,j]) < Constants.small) or
-                                           (abs(
-          table[i,j]-1.0) < Constants.small),
-        "Table value table["+String(i)+", "+String(j)+"] = "+String(
-          table[i,j])+" does not equal either 0 or 1.");
+      assert((abs(table[i, j]) < ASHRAE.Constants.small) or (abs(table[i, j] -
+        1.0) < ASHRAE.Constants.small), "Table value table[" + String(i) + ", "
+         + String(j) + "] = " + String(table[i, j]) +
+        " does not equal either 0 or 1.");
     end for;
   end for;
 

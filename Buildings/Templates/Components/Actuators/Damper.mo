@@ -52,8 +52,8 @@ model Damper "Multiple-configuration damper"
     "True to flip text horizontally in icon layer"
     annotation(Dialog(tab="Graphics", enable=false));
 
-  Buildings.Templates.Components.Interfaces.Bus bus
-    if typ <> Buildings.Templates.Components.Types.Damper.None
+  Buildings.Templates.Components.Interfaces.Bus bus if
+       typ <> Buildings.Templates.Components.Types.Damper.None
     "Control bus"
     annotation (Placement(
       transformation(
@@ -75,8 +75,8 @@ model Damper "Multiple-configuration damper"
     final init=init,
     final y_start=y_start,
     final allowFlowReversal=allowFlowReversal,
-    final show_T=show_T)
-    if typ==Buildings.Templates.Components.Types.Damper.Modulating or
+    final show_T=show_T) if
+       typ==Buildings.Templates.Components.Types.Damper.Modulating or
        typ==Buildings.Templates.Components.Types.Damper.TwoPosition
     "Damper with exponential characteristic"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
@@ -90,18 +90,18 @@ model Damper "Multiple-configuration damper"
     final init=init,
     final y_start=y_start,
     final allowFlowReversal=allowFlowReversal,
-    final show_T=show_T)
-    if typ==Buildings.Templates.Components.Types.Damper.PressureIndependent
+    final show_T=show_T) if
+       typ==Buildings.Templates.Components.Types.Damper.PressureIndependent
     "Pressure independent damper"
     annotation (Placement(transformation(extent={{50,-10},{70,10}})));
   Buildings.Templates.Components.Routing.PassThroughFluid non(
-    redeclare final package Medium = Medium)
-    if typ==Buildings.Templates.Components.Types.Damper.None
+    redeclare final package Medium = Medium) if
+       typ==Buildings.Templates.Components.Types.Damper.None
     "No damper"
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal y1(final realTrue=1,
-      final realFalse=0)
-    if typ == Buildings.Templates.Components.Types.Damper.TwoPosition
+      final realFalse=0) if
+       typ == Buildings.Templates.Components.Types.Damper.TwoPosition
     "Two-position signal" annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
@@ -112,14 +112,14 @@ model Damper "Multiple-configuration damper"
         extent={{-10,-10},{10,10}},
         rotation=-90,
         origin={-40,40})));
-  Buildings.Controls.OBC.CDL.Reals.LessThreshold y0_actual(t=0.01, h=0.5E-2)
-    if typ == Buildings.Templates.Components.Types.Damper.TwoPosition
+  Buildings.Controls.OBC.CDL.Reals.LessThreshold y0_actual(t=0.01, h=0.5E-2) if
+       typ == Buildings.Templates.Components.Types.Damper.TwoPosition
     "Closed end switch status" annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=-90,
         origin={40,40})));
-  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold y1_actual(t=0.99, h=0.5E-2)
-    if typ == Buildings.Templates.Components.Types.Damper.TwoPosition
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold y1_actual(t=0.99, h=0.5E-2) if
+       typ == Buildings.Templates.Components.Types.Damper.TwoPosition
     "Open end switch status" annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=-90,

@@ -7,7 +7,7 @@ block PIDWithEnable
   parameter Real k(
     min=0)=1
     "Gain of controller";
-  parameter Modelica.Units.SI.Time Ti(min=Buildings.Controls.OBC.CDL.Constants.small)
+  parameter Modelica.Units.SI.Time Ti(min=Buildings.Controls.OBC.ASHRAE.Constants.small)
      = 0.5 "Time constant of integrator block" annotation (Dialog(enable=
           controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PI
            or controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));

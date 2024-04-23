@@ -87,8 +87,8 @@ block ControllerG36VAVBox "Guideline 36 controller for VAV terminal unit"
     final VHeaMax_flow=VAirHeaSet_flow_max,
     final dTDisZonSetMax=dTAirDisHea_max,
     final zonDisEff_cool=effAirDisCoo,
-    final zonDisEff_heat=effAirDisHea)
-    if typ == Buildings.Templates.ZoneEquipment.Types.Controller.G36VAVBoxReheat
+    final zonDisEff_heat=effAirDisHea) if
+       typ == Buildings.Templates.ZoneEquipment.Types.Controller.G36VAVBoxReheat
     "Terminal unit with reheat controller"
     annotation (Placement(transformation(extent={{0,-20},{20,20}})));
 
@@ -104,8 +104,8 @@ block ControllerG36VAVBox "Guideline 36 controller for VAV terminal unit"
     final VMin_flow=VAirSet_flow_min,
     final VCooMax_flow=VAirCooSet_flow_max,
     final zonDisEff_cool=effAirDisCoo,
-    final zonDisEff_heat=effAirDisHea)
-    if typ == Buildings.Templates.ZoneEquipment.Types.Controller.G36VAVBoxCoolingOnly
+    final zonDisEff_heat=effAirDisHea) if
+       typ == Buildings.Templates.ZoneEquipment.Types.Controller.G36VAVBoxCoolingOnly
     "Terminal unit cooling only controller"
     annotation (Placement(transformation(extent={{0,40},{20,80}})));
 

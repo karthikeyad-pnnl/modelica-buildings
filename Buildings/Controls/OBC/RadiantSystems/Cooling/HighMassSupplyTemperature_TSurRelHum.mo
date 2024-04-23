@@ -13,26 +13,24 @@ block HighMassSupplyTemperature_TSurRelHum
   parameter Controls.OBC.CDL.Types.SimpleController controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.P
     "Type of controller" annotation (Dialog(group="Control gains"));
 
-  parameter Real k(
-    min=100*Buildings.Controls.OBC.CDL.Constants.eps)=2
-    "Gain of controller"
-    annotation (Dialog(group="Control gains"));
+  parameter Real k(min=100*Buildings.Controls.OBC.ASHRAE.Constants.eps) = 2
+    "Gain of controller" annotation (Dialog(group="Control gains"));
 
   parameter Real Ti(
     final quantity="Time",
     final unit="s",
-    min=100*Buildings.Controls.OBC.CDL.Constants.eps)=3600
-    "Time constant of integrator block"
-    annotation (Dialog(group="Control gains",
-      enable=controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PI or controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
+    min=100*Buildings.Controls.OBC.ASHRAE.Constants.eps) = 3600
+    "Time constant of integrator block" annotation (Dialog(group=
+          "Control gains", enable=controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+           or controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
 
   parameter Real Td(
     final quantity="Time",
     final unit="s",
-    min=100*Buildings.Controls.OBC.CDL.Constants.eps)=0.1
-    "Time constant of derivative block"
-    annotation (Dialog(group="Control gains",
-      enable=controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PD or controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
+    min=100*Buildings.Controls.OBC.ASHRAE.Constants.eps) = 0.1
+    "Time constant of derivative block" annotation (Dialog(group=
+          "Control gains", enable=controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PD
+           or controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
 
   Controls.OBC.CDL.Interfaces.RealInput TSurSet(
     final unit="K",

@@ -159,14 +159,14 @@ model Valve "Multiple-configuration valve"
     redeclare final package Medium = Medium,
     p(start=Medium.p_default),
     m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0),
-    h_outflow(start=Medium.h_default, nominal=Medium.h_default))
-    if typ==Buildings.Templates.Components.Types.Valve.ThreeWayTwoPosition or
+    h_outflow(start=Medium.h_default, nominal=Medium.h_default)) if
+       typ==Buildings.Templates.Components.Types.Valve.ThreeWayTwoPosition or
       typ==Buildings.Templates.Components.Types.Valve.ThreeWayModulating
     "Fluid connector with bypass line"
     annotation (Placement(transformation(extent={{-10,-170},{10,-150}}),
         iconTransformation(extent={{-10,-110},{10,-90}})));
-  Buildings.Templates.Components.Interfaces.Bus bus
-    if typ<>Buildings.Templates.Components.Types.Valve.None
+  Buildings.Templates.Components.Interfaces.Bus bus if
+       typ<>Buildings.Templates.Components.Types.Valve.None
     "Control bus"
     annotation (Placement(
       transformation(
@@ -179,8 +179,8 @@ model Valve "Multiple-configuration valve"
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal y1(
     final realTrue=1,
-    final realFalse=0)
-    if is_actTwo
+    final realFalse=0) if
+       is_actTwo
     "Two-position signal"
     annotation (Placement(
       transformation(
@@ -199,15 +199,15 @@ model Valve "Multiple-configuration valve"
         extent={{10,-10},{-10,10}},
         rotation=-90,
         origin={0,120})));
-  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold y1_actual(t=0.99, h=0.5E-2)
-    if is_actTwo
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold y1_actual(t=0.99, h=0.5E-2) if
+       is_actTwo
     "Open end switch status"
     annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=-90,
         origin={80,120})));
-  Buildings.Controls.OBC.CDL.Reals.LessThreshold y0_actual(t=0.01, h=0.5E-2)
-    if is_actTwo
+  Buildings.Controls.OBC.CDL.Reals.LessThreshold y0_actual(t=0.01, h=0.5E-2) if
+       is_actTwo
     "Closed end switch status"
     annotation (Placement(transformation(
         extent={{10,-10},{-10,10}},
@@ -215,8 +215,8 @@ model Valve "Multiple-configuration valve"
         origin={40,120})));
 
   Routing.PassThroughFluid non(
-    redeclare final package Medium = Medium)
-    if typ==Buildings.Templates.Components.Types.Valve.None
+    redeclare final package Medium = Medium) if
+       typ==Buildings.Templates.Components.Types.Valve.None
     "No valve"
     annotation (Placement(transformation(extent={{-10,30},{10,50}})));
   Buildings.Fluid.Actuators.Valves.TwoWayEqualPercentage equ(
@@ -230,8 +230,8 @@ model Valve "Multiple-configuration valve"
     final init=init,
     final y_start=y_start,
     final allowFlowReversal=allowFlowReversal,
-    final show_T=show_T)
-    if is_twoWay
+    final show_T=show_T) if
+       is_twoWay
     and chaTwo==Buildings.Templates.Components.Types.ValveCharacteristicTwoWay.EqualPercentage
     "Two-way valve with equal percentage characteristic"
     annotation (
@@ -251,8 +251,8 @@ model Valve "Multiple-configuration valve"
     final init=init,
     final y_start=y_start,
     final allowFlowReversal=allowFlowReversal,
-    final show_T=show_T)
-    if is_twoWay
+    final show_T=show_T) if
+       is_twoWay
     and chaTwo==Buildings.Templates.Components.Types.ValveCharacteristicTwoWay.Linear
     "Two-way valve with linear characteristic"
     annotation (
@@ -272,8 +272,8 @@ model Valve "Multiple-configuration valve"
     final init=init,
     final y_start=y_start,
     final allowFlowReversal=allowFlowReversal,
-    final show_T=show_T)
-    if is_twoWay
+    final show_T=show_T) if
+       is_twoWay
     and chaTwo==Buildings.Templates.Components.Types.ValveCharacteristicTwoWay.PressureIndependent
     "Pressure independent two-way valve"
     annotation (
@@ -294,8 +294,8 @@ model Valve "Multiple-configuration valve"
     final init=init,
     final y_start=y_start,
     final allowFlowReversal=allowFlowReversal,
-    final show_T=show_T)
-    if is_twoWay
+    final show_T=show_T) if
+       is_twoWay
     and chaTwo==Buildings.Templates.Components.Types.ValveCharacteristicTwoWay.Table
     "Pressure independent two-way valve"
     annotation (
@@ -325,8 +325,8 @@ model Valve "Multiple-configuration valve"
       else Modelica.Fluid.Types.PortFlowDirection.Leaving,
     final portFlowDirection_3=if allowFlowReversal then
       Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-    else Modelica.Fluid.Types.PortFlowDirection.Entering)
-    if is_thrWay
+    else Modelica.Fluid.Types.PortFlowDirection.Entering) if
+       is_thrWay
     and chaThr==Buildings.Templates.Components.Types.ValveCharacteristicThreeWay.EqualPercentageLinear
     "Three-way valve with equal percentage and linear characteristics"
     annotation (
@@ -353,8 +353,8 @@ model Valve "Multiple-configuration valve"
     final portFlowDirection_2=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
          else Modelica.Fluid.Types.PortFlowDirection.Leaving,
     final portFlowDirection_3=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Entering)
-    if is_thrWay
+         else Modelica.Fluid.Types.PortFlowDirection.Entering) if
+       is_thrWay
     and chaThr==Buildings.Templates.Components.Types.ValveCharacteristicThreeWay.Linear
     "Three-way valve with linear characteristics"
     annotation (
@@ -383,8 +383,8 @@ model Valve "Multiple-configuration valve"
     final portFlowDirection_2=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
          else Modelica.Fluid.Types.PortFlowDirection.Leaving,
     final portFlowDirection_3=if allowFlowReversal then Modelica.Fluid.Types.PortFlowDirection.Bidirectional
-         else Modelica.Fluid.Types.PortFlowDirection.Entering)
-    if is_thrWay
+         else Modelica.Fluid.Types.PortFlowDirection.Entering) if
+       is_thrWay
     and chaThr==Buildings.Templates.Components.Types.ValveCharacteristicThreeWay.Table
     "Three-way valve with table-specified characteristics"
     annotation (

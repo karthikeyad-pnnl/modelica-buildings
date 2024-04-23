@@ -4,15 +4,13 @@ block Pulse
   parameter Integer amplitude=1
     "Amplitude of pulse";
   parameter Real width(
-    final min=Constants.small,
+    final min=ASHRAE.Constants.small,
     final max=1,
-    final unit="1")=0.5
-    "Width of pulse in fraction of period";
+    final unit="1") = 0.5 "Width of pulse in fraction of period";
   parameter Real period(
     final quantity="Time",
     final unit="s",
-    final min=Constants.small)
-    "Time for one period";
+    final min=ASHRAE.Constants.small) "Time for one period";
   parameter Real shift(
     final quantity="Time",
     final unit="s")=0

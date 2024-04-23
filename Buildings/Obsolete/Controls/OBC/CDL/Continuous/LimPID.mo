@@ -7,8 +7,8 @@ block LimPID
          Buildings.Controls.OBC.CDL.Types.SimpleController.PI "Type of controller";
   parameter Real k(
     min=0) = 1 "Gain of controller";
-  parameter Modelica.Units.SI.Time Ti(min=Buildings.Controls.OBC.CDL.Constants.small)=
-       0.5 "Time constant of integrator block" annotation (Dialog(enable=
+  parameter Modelica.Units.SI.Time Ti(min=Buildings.Controls.OBC.ASHRAE.Constants.small)
+     = 0.5 "Time constant of integrator block" annotation (Dialog(enable=
           controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PI
            or controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
   parameter Modelica.Units.SI.Time Td(min=0) = 0.1
@@ -21,14 +21,14 @@ block LimPID
   parameter Real wd(min=0) = 0 "Set-point weight for Derivative block (0..1)"
        annotation(Dialog(enable=controllerType==Buildings.Controls.OBC.CDL.Types.SimpleController.PD or
                                 controllerType==Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
-  parameter Real Ni(min=100*Buildings.Controls.OBC.CDL.Constants.eps) = 0.9
-    "Ni*Ti is time constant of anti-windup compensation"
-     annotation(Dialog(enable=controllerType==Buildings.Controls.OBC.CDL.Types.SimpleController.PI or
-                              controllerType==Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
-  parameter Real Nd(min=100*Buildings.Controls.OBC.CDL.Constants.eps) = 10
-    "The higher Nd, the more ideal the derivative block"
-       annotation(Dialog(enable=controllerType==Buildings.Controls.OBC.CDL.Types.SimpleController.PD or
-                                controllerType==Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
+  parameter Real Ni(min=100*Buildings.Controls.OBC.ASHRAE.Constants.eps) = 0.9
+    "Ni*Ti is time constant of anti-windup compensation" annotation (Dialog(
+        enable=controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+           or controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
+  parameter Real Nd(min=100*Buildings.Controls.OBC.ASHRAE.Constants.eps) = 10
+    "The higher Nd, the more ideal the derivative block" annotation (Dialog(
+        enable=controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PD
+           or controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
 
   parameter Real xi_start=0
     "Initial value of integrator state"
@@ -73,14 +73,14 @@ block LimPID
     annotation (Placement(transformation(extent={{220,-20},{260,20}}),
         iconTransformation(extent={{100,-20},{140,20}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput y_reset_in
-    if reset == Buildings.Obsolete.Controls.OBC.CDL.Types.Reset.Input
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput y_reset_in if
+       reset == Buildings.Obsolete.Controls.OBC.CDL.Types.Reset.Input
     "Input signal for state to which integrator is reset, enabled if reset = CDL.Types.Reset.Input"
     annotation (Placement(transformation(extent={{-260,-120},{-220,-80}}),
     visible=reset == Buildings.Obsolete.Controls.OBC.CDL.Types.Reset.Input,
       iconTransformation(extent={{-140,-100},{-100,-60}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput trigger
-    if reset <> Buildings.Obsolete.Controls.OBC.CDL.Types.Reset.Disabled
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput trigger if
+       reset <> Buildings.Obsolete.Controls.OBC.CDL.Types.Reset.Disabled
     "Resets the controller output when trigger becomes true"
     annotation (Placement(transformation(extent={{-20,-20},{20,20}},
         rotation=90, origin={-160,-200}),
@@ -99,8 +99,8 @@ block LimPID
   Buildings.Obsolete.Controls.OBC.CDL.Continuous.Derivative D(
     final k=Td,
     final T=Td/Nd,
-    final y_start=yd_start)
-   if with_D "Derivative term"
+    final y_start=yd_start) if
+      with_D "Derivative term"
     annotation (Placement(transformation(extent={{-40,60},{-20,80}})));
 
   Buildings.Obsolete.Controls.OBC.CDL.Continuous.Feedback errP "P error"
@@ -152,8 +152,8 @@ protected
   Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter uMea_revAct(final k=
        revAct) "Set point multiplied by reverse action sign"
     annotation (Placement(transformation(extent={{-180,-50},{-160,-30}})));
-  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter uSetWd(final k=wd)
-    if with_D "Set point multiplied by weight for derivative gain"
+  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter uSetWd(final k=wd) if
+       with_D "Set point multiplied by weight for derivative gain"
     annotation (Placement(transformation(extent={{-160,60},{-140,80}})));
 
   Buildings.Controls.OBC.CDL.Reals.Add addPD
@@ -168,23 +168,23 @@ protected
     "Outputs P, I and D gains added"
     annotation (Placement(transformation(extent={{40,80},{60,100}})));
 
-  Buildings.Obsolete.Controls.OBC.CDL.Continuous.Feedback antWinErr
-    if with_I "Error for anti-windup compensation"
+  Buildings.Obsolete.Controls.OBC.CDL.Continuous.Feedback antWinErr if
+       with_I "Error for anti-windup compensation"
     annotation (Placement(transformation(extent={{162,50},{182,70}})));
-  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter antWinGai(k=1/(k*Ni))
-    if with_I "Gain for anti-windup compensation"
+  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter antWinGai(k=1/(k*Ni)) if
+       with_I "Gain for anti-windup compensation"
     annotation (Placement(transformation(extent={{180,-30},{160,-10}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant yResSig(final k=y_reset)
-   if reset == Buildings.Obsolete.Controls.OBC.CDL.Types.Reset.Parameter
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant yResSig(final k=y_reset) if
+      reset == Buildings.Obsolete.Controls.OBC.CDL.Types.Reset.Parameter
     "Signal for y_reset"
     annotation (Placement(transformation(extent={{-180,-80},{-160,-60}})));
-  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter divK(final k=1/k)
-    if reset <> Buildings.Obsolete.Controls.OBC.CDL.Types.Reset.Disabled
+  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter divK(final k=1/k) if
+       reset <> Buildings.Obsolete.Controls.OBC.CDL.Types.Reset.Disabled
     "Division by k for integrator reset"
     annotation (Placement(transformation(extent={{-120,-80},{-100,-60}})));
-  Buildings.Obsolete.Controls.OBC.CDL.Continuous.Feedback addRes
-   if reset <> Buildings.Obsolete.Controls.OBC.CDL.Types.Reset.Disabled
+  Buildings.Obsolete.Controls.OBC.CDL.Continuous.Feedback addRes if
+      reset <> Buildings.Obsolete.Controls.OBC.CDL.Types.Reset.Disabled
    "Adder for integrator reset"
     annotation (Placement(transformation(extent={{-80,-80},{-60,-60}})));
 
@@ -196,12 +196,12 @@ protected
     message="LimPID: Limits must be yMin < yMax")
     "Assertion on yMin and yMax"
     annotation (Placement(transformation(extent={{160,-160},{180,-140}})));
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant noTri(final k=false)
-    if reset == Buildings.Obsolete.Controls.OBC.CDL.Types.Reset.Disabled
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant noTri(final k=false) if
+       reset == Buildings.Obsolete.Controls.OBC.CDL.Types.Reset.Disabled
     "No trigger when reset is disabled"
     annotation (Placement(transformation(extent={{-120,-130},{-100,-110}})));
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant zer(final k=0)
- if reset == Buildings.Obsolete.Controls.OBC.CDL.Types.Reset.Disabled
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant zer(final k=0) if
+    reset == Buildings.Obsolete.Controls.OBC.CDL.Types.Reset.Disabled
     "Reset input to integrator when the reset is disabled"
     annotation (Placement(transformation(extent={{-100,-50},{-80,-30}})));
 

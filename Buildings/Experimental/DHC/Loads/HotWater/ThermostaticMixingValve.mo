@@ -7,26 +7,22 @@ model ThermostaticMixingValve
 
   parameter Buildings.Controls.OBC.CDL.Types.SimpleController controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "Type of controller";
-  parameter Real k(
-    min=100*Buildings.Controls.OBC.CDL.Constants.eps)=1
-    "Gain of controller"
-    annotation (Dialog(group="Control gains"));
+  parameter Real k(min=100*Buildings.Controls.OBC.ASHRAE.Constants.eps) = 1
+    "Gain of controller" annotation (Dialog(group="Control gains"));
   parameter Real Ti(
     final quantity="Time",
     final unit="s",
-    min=100*Buildings.Controls.OBC.CDL.Constants.eps)=0.5
-    "Time constant of integrator block"
-    annotation (Dialog(group="Control gains",
-      enable=controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PI or
-      controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
+    min=100*Buildings.Controls.OBC.ASHRAE.Constants.eps) = 0.5
+    "Time constant of integrator block" annotation (Dialog(group=
+          "Control gains", enable=controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+           or controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
   parameter Real Td(
     final quantity="Time",
     final unit="s",
-    min=100*Buildings.Controls.OBC.CDL.Constants.eps)=0.1
-    "Time constant of derivative block"
-    annotation (Dialog(group="Control gains",
-      enable=controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PD or
-      controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
+    min=100*Buildings.Controls.OBC.ASHRAE.Constants.eps) = 0.1
+    "Time constant of derivative block" annotation (Dialog(group=
+          "Control gains", enable=controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PD
+           or controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
   parameter Real relTol = 0.005 "Relative tolerance on energy balance, if not met, a warning will be issued at end of simulation"
     annotation(Dialog(tab="Advanced"));
 

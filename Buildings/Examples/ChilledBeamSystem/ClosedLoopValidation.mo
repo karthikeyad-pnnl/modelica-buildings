@@ -43,7 +43,7 @@ model ClosedLoopValidation
     tableOnFile = true,
     tableName = "tab1",
     fileName=ModelicaServices.ExternalReferences.loadResource(
-        "modelica://Buildings/Resources/Data/Examples/ChilledBeamSystem/zoneLoads.txt"),
+        "./Buildings/Resources/Data/Examples/ChilledBeamSystem/zoneLoads.txt"),
     columns = {2, 3, 4, 5, 6},
     timeScale = 60)
     "Table defining thermal loads for zone"
@@ -187,7 +187,7 @@ equation
   connect(loads.y, chiBeaTesBed.QFlo) annotation (Line(points={{-139,-50},{-14,-50},
           {-14,6},{-12,6}},      color={0,0,127}));
   connect(sub.y, chiBeaTesBed.deltaT) annotation (Line(points={{18,-82},{20,-82},
-          {20,-98},{-136,-98},{-136,-38},{-104,-38},{-104,6},{-68,6},{-68,10},{
+          {20,-98},{-136,-98},{-136,-38},{-110,-38},{-110,6},{-68,6},{-68,10},{
           -24,10},{-24,-2},{-18,-2},{-18,-4},{-12,-4}}, color={0,0,127}));
   connect(DOAScon.yFanSup, chiBeaTesBed.uFanSta) annotation (Line(points={{-23.14,
           -4.6},{-17.57,-4.6},{-17.57,-14},{-12,-14}}, color={255,0,255}));

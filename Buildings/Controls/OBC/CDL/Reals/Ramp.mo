@@ -1,18 +1,16 @@
 within Buildings.Controls.OBC.CDL.Reals;
 block Ramp "Limit the changing rate of the input"
 
-  parameter Real raisingSlewRate(
-    min=Constants.small,
-    unit="1/s")
+  parameter Real raisingSlewRate(min=ASHRAE.Constants.small, unit="1/s")
     "Maximum speed with which to increase the output";
   parameter Real fallingSlewRate(
-    max=-Constants.small,
-    unit="1/s")=-raisingSlewRate
+    max=-ASHRAE.Constants.small,
+    unit="1/s") = -raisingSlewRate
     "Maximum speed with which to decrease the output";
   parameter Real Td(
     final quantity="Time",
     final unit="s",
-    min=Constants.eps)=raisingSlewRate*0.001
+    min=ASHRAE.Constants.eps) = raisingSlewRate*0.001
     "Derivative time constant";
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput u

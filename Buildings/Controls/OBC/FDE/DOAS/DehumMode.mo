@@ -125,20 +125,15 @@ equation
     annotation (Line(points={{-122,38},{-46,38}}, color={255,0,255}));
 
   annotation (defaultComponentName="DehumMod",
-  Icon(coordinateSystem(preserveAspectRatio=false), graphics={Text(extent={{-90,180},{90,76}}, lineColor={28,108,200}, textStyle={TextStyle.Bold}, textString
-            =                                                                                                                                                 "%name"),Rectangle(extent={{-100,100},{100,-100}}, lineColor={179,151,128}, radius=10, fillColor={255,255,255},
+  Icon(coordinateSystem(preserveAspectRatio=false), graphics={Text(extent={{-90,180},{90,76}}, lineColor={28,108,200}, textStyle={TextStyle.Bold}, textString="%name"),Rectangle(extent={{-100,100},{100,-100}}, lineColor={179,151,128}, radius=10, fillColor={255,255,255},
             fillPattern=
-FillPattern.Solid),Text(extent={{42,10},{96,-8}},lineColor={28,108,200},textString
-            =                                                                      "dehumMode"),Text(extent={{-100,8},{-56,-6}},lineColor={28,108,200},textString
-            =                                                                                                                                                     "retHum"),Rectangle(extent={{4,60},{8,-2}},lineColor={28,108,200},fillColor={0,0,255},
+FillPattern.Solid),Text(extent={{42,10},{96,-8}},lineColor={28,108,200},textString="dehumMode"),Text(extent={{-100,8},{-56,-6}},lineColor={28,108,200},textString="retHum"),Rectangle(extent={{4,60},{8,-2}},lineColor={28,108,200},fillColor={0,0,255},
             fillPattern=
 FillPattern.Solid),Rectangle(extent={{4,-2},{8,-64}},lineColor={244,125,35},fillColor={244,125,35},
             fillPattern=
-FillPattern.Solid),Text(extent={{-2,42},{36,30}},lineColor={28,108,200},textString
-            =                                                                      "On"),Text(extent={{-2,-38},{36,-50}},lineColor={28,108,200},textString
-            =                                                                                                                                              "Off"),Text(extent={{-36,4},{2,-8}},lineColor={28,108,200},textString
-            =                                                                                                                                                                                                        "%dehumSet"),Text(extent={{-96,80},{-52,66}},lineColor={28,108,200},textString
-            =                                                                                                                                                                                                        "supFanProof")}),
+FillPattern.Solid),Text(extent={{-2,42},{36,30}},lineColor={28,108,200},textString="On"),Text(extent={{-2,-38},{36,-50}},lineColor={28,108,200},textString="Off"),Text(extent={{-36,4},{2,-8}},lineColor={28,108,200},textString=
+                                                                                                                                                                                                        "%dehumSet"),Text(extent={{-96,80},{-52,66}},lineColor={28,108,200},textString=
+                                                                                                                                                                                                        "supFanProof")}),
     Diagram(coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
 <h4>Dehumidification Mode</h4>

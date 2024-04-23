@@ -3,24 +3,21 @@ block PID
   "P, PI, PD, and PID controller"
   parameter Buildings.Controls.OBC.CDL.Types.SimpleController controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "Type of controller";
-  parameter Real k(
-    min=100*Constants.eps)=1
-    "Gain of controller"
+  parameter Real k(min=100*ASHRAE.Constants.eps) = 1 "Gain of controller"
     annotation (Dialog(group="Control gains"));
   parameter Real Ti(
     final quantity="Time",
     final unit="s",
-    min=100*Constants.eps)=0.5
-    "Time constant of integrator block"
-    annotation (Dialog(group="Control gains",enable=controllerType == CDL.Types.SimpleController.PI or controllerType == CDL.Types.SimpleController.PID));
+    min=100*ASHRAE.Constants.eps) = 0.5 "Time constant of integrator block"
+    annotation (Dialog(group="Control gains", enable=controllerType == CDL.Types.SimpleController.PI
+           or controllerType == CDL.Types.SimpleController.PID));
   parameter Real Td(
     final quantity="Time",
     final unit="s",
-    min=100*Constants.eps)=0.1
-    "Time constant of derivative block"
-    annotation (Dialog(group="Control gains",enable=controllerType == CDL.Types.SimpleController.PD or controllerType == CDL.Types.SimpleController.PID));
-  parameter Real r(
-    min=100*Constants.eps)=1
+    min=100*ASHRAE.Constants.eps) = 0.1 "Time constant of derivative block"
+    annotation (Dialog(group="Control gains", enable=controllerType == CDL.Types.SimpleController.PD
+           or controllerType == CDL.Types.SimpleController.PID));
+  parameter Real r(min=100*ASHRAE.Constants.eps) = 1
     "Typical range of control error, used for scaling the control error";
   parameter Real yMax=1
     "Upper limit of output"
@@ -28,14 +25,18 @@ block PID
   parameter Real yMin=0
     "Lower limit of output"
     annotation (Dialog(group="Limits"));
-  parameter Real Ni(
-    min=100*Constants.eps)=0.9
-    "Ni*Ti is time constant of anti-windup compensation"
-    annotation (Dialog(tab="Advanced",group="Integrator anti-windup",enable=controllerType == CDL.Types.SimpleController.PI or controllerType == CDL.Types.SimpleController.PID));
-  parameter Real Nd(
-    min=100*Constants.eps)=10
-    "The higher Nd, the more ideal the derivative block"
-    annotation (Dialog(tab="Advanced",group="Derivative block",enable=controllerType == CDL.Types.SimpleController.PD or controllerType == CDL.Types.SimpleController.PID));
+  parameter Real Ni(min=100*ASHRAE.Constants.eps) = 0.9
+    "Ni*Ti is time constant of anti-windup compensation" annotation (Dialog(
+      tab="Advanced",
+      group="Integrator anti-windup",
+      enable=controllerType == CDL.Types.SimpleController.PI or controllerType
+           == CDL.Types.SimpleController.PID));
+  parameter Real Nd(min=100*ASHRAE.Constants.eps) = 10
+    "The higher Nd, the more ideal the derivative block" annotation (Dialog(
+      tab="Advanced",
+      group="Derivative block",
+      enable=controllerType == CDL.Types.SimpleController.PD or controllerType
+           == CDL.Types.SimpleController.PID));
   parameter Real xi_start=0
     "Initial value of integrator state"
     annotation (Dialog(tab="Advanced",group="Initialization",enable=controllerType == CDL.Types.SimpleController.PI or controllerType == CDL.Types.SimpleController.PID));
@@ -124,8 +125,8 @@ protected
   Buildings.Controls.OBC.CDL.Reals.Subtract antWinErr if with_I
     "Error for anti-windup compensation"
     annotation (Placement(transformation(extent={{160,50},{180,70}})));
-  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter antWinGai(k=1/(k*Ni))
-    if with_I "Gain for anti-windup compensation"
+  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter antWinGai(k=1/(k*Ni)) if
+       with_I "Gain for anti-windup compensation"
     annotation (Placement(transformation(extent={{180,-30},{160,-10}})));
   Buildings.Controls.OBC.CDL.Logical.Sources.Constant cheYMinMax(
     final k=yMin < yMax)

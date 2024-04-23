@@ -157,13 +157,10 @@ equation
   connect(lin.y, ySupSet) annotation (Line(points={{-20,2},{42,2},{42,14},{120,
           14}}, color={0,0,127}));
   annotation (defaultComponentName="TSupSetpt",
-    Icon(coordinateSystem(preserveAspectRatio=false), graphics={Text(extent={{-90,180},{90,76}},lineColor={28,108,200},textStyle={TextStyle.Bold},textString
-            =                                                                                                                                                "%name"),Rectangle(extent={{
+    Icon(coordinateSystem(preserveAspectRatio=false), graphics={Text(extent={{-90,180},{90,76}},lineColor={28,108,200},textStyle={TextStyle.Bold},textString="%name"),Rectangle(extent={{
               -100,98},{100,-102}},                                                                                                                                                                            lineColor={179,151,128},radius=10,fillColor={255,255,255},
             fillPattern=
-FillPattern.Solid),Text(extent={{-94,-40},{-40,-58}},lineColor={28,108,200},textString
-            =                                                                          "highSpaceT"),Text(extent={{-94,60},{-40,42}},lineColor={28,108,200},textString
-            =                                                                                                                                                          "dehumMode"),Text(extent={{40,50},{94,32}},lineColor={28,108,200},
+FillPattern.Solid),Text(extent={{-94,-40},{-40,-58}},lineColor={28,108,200},textString="highSpaceT"),Text(extent={{-94,60},{-40,42}},lineColor={28,108,200},textString="dehumMode"),Text(extent={{40,50},{94,32}},lineColor={28,108,200},
 textString="supCooSP"),Text(extent={{42,-30},{96,-48}},
 lineColor={28,108,200},textString="supHeaSP"),Rectangle(extent={{14,22},{18,-22}},lineColor={0,140,72},fillColor={0,140,72},
             fillPattern=

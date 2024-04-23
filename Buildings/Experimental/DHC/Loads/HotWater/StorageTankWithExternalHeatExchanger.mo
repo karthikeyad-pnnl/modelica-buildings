@@ -15,7 +15,7 @@ model StorageTankWithExternalHeatExchanger
   parameter Modelica.Media.Interfaces.Types.Temperature TTan_start=323.15
     "Start value of tank temperature"
     annotation(Dialog(tab="Initialization"));
-  final parameter Real eps =
+  final parameter Real eps=
     dat.QHex_flow_nominal / CMin_flow_nominal / ( dat.TDom_nominal + dat.dTHexApp_nominal - dat.TCol_nominal)
     "Heat exchanger effectiveness"
     annotation(Dialog(tab="Advanced"));
@@ -113,19 +113,19 @@ model StorageTankWithExternalHeatExchanger
     annotation (Placement(transformation(extent={{100,-100},{140,-60}}),
         iconTransformation(extent={{100,-110},{140,-70}})));
 protected
-  parameter Modelica.Units.SI.SpecificHeatCapacity cpHea_default =
+  parameter Modelica.Units.SI.SpecificHeatCapacity cpHea_default=
     MediumHea.specificHeatCapacityCp(MediumHea.setState_pTX(
       MediumHea.p_default,
       MediumHea.T_default,
       MediumHea.X_default))
     "Specific heat capacity of heating medium at default medium state";
-  parameter Modelica.Units.SI.SpecificHeatCapacity cpDom_default =
+  parameter Modelica.Units.SI.SpecificHeatCapacity cpDom_default=
     MediumDom.specificHeatCapacityCp(MediumDom.setState_pTX(
       MediumDom.p_default,
       MediumDom.T_default,
       MediumDom.X_default))
     "Specific heat capacity of domestic hot water medium at default medium state";
-  parameter Modelica.Units.SI.ThermalConductance CMin_flow_nominal =
+  parameter Modelica.Units.SI.ThermalConductance CMin_flow_nominal=
     min(dat.mHex_flow_nominal*cpHea_default, dat.mDom_flow_nominal*cpDom_default)
     "Minimum heat capacity flow rate";
 initial equation

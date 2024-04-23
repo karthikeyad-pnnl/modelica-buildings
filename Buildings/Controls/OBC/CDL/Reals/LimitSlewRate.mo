@@ -1,18 +1,14 @@
 within Buildings.Controls.OBC.CDL.Reals;
 block LimitSlewRate "Limit the increase or decrease rate of input"
-  parameter Real raisingSlewRate(
-    min=Constants.small,
-    unit="1/s")
+  parameter Real raisingSlewRate(min=ASHRAE.Constants.small, unit="1/s")
     "Speed with which to increase the output";
   parameter Real fallingSlewRate(
-    max=-Constants.small,
-    unit="1/s")=-raisingSlewRate
-    "Speed with which to decrease the output";
+    max=-ASHRAE.Constants.small,
+    unit="1/s") = -raisingSlewRate "Speed with which to decrease the output";
   parameter Real Td(
     final quantity="Time",
     final unit="s",
-    min=Constants.eps)=raisingSlewRate*10
-    "Derivative time constant";
+    min=ASHRAE.Constants.eps) = raisingSlewRate*10 "Derivative time constant";
   parameter Boolean enable=true
     "Set to false to disable rate limiter";
   Interfaces.RealInput u

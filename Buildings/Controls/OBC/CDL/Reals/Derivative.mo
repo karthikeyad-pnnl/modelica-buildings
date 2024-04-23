@@ -11,7 +11,7 @@ block Derivative
   Buildings.Controls.OBC.CDL.Interfaces.RealInput T(
     final quantity="Time",
     final unit="s",
-    min=100*Buildings.Controls.OBC.CDL.Constants.eps)
+    min=100*Buildings.Controls.OBC.ASHRAE.Constants.eps)
     "Time constant (T>0 required; T=0 is ideal derivative block)"
     annotation (Placement(transformation(extent={{-140,20},{-100,60}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput u
@@ -27,10 +27,11 @@ protected
     "State of block";
 
 initial equation
-  x= if abs(k) < Buildings.Controls.OBC.CDL.Constants.eps then u else u - T*y_start/k;
+  x=if abs(k) < Buildings.Controls.OBC.ASHRAE.Constants.eps then u else u - T*
+    y_start/k;
 
 equation
-  T_nonZero = max(T, 100*Buildings.Controls.OBC.CDL.Constants.eps);
+  T_nonZero =max(T, 100*Buildings.Controls.OBC.ASHRAE.Constants.eps);
   der(x) = (u-x)/T_nonZero;
   y = (k/T_nonZero)*(u-x);
 

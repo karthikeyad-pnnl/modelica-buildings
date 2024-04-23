@@ -362,13 +362,13 @@ block Controller "Controller for room VAV box with reheat"
     "Zone static pressure reset requests"
     annotation (Placement(transformation(extent={{200,-50},{240,-10}}),
         iconTransformation(extent={{100,-60},{140,-20}})));
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yHeaValResReq
-    if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yHeaValResReq if
+       heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Hot water reset requests"
     annotation (Placement(transformation(extent={{200,-80},{240,-40}}),
         iconTransformation(extent={{100,-80},{140,-40}})));
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yHotWatPlaReq
-    if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yHotWatPlaReq if
+       heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Request to heating hot-water plant"
     annotation (Placement(transformation(extent={{200,-110},{240,-70}}),
         iconTransformation(extent={{100,-100},{140,-60}})));
@@ -388,8 +388,8 @@ block Controller "Controller for room VAV box with reheat"
     "Leaking valve alarm"
     annotation (Placement(transformation(extent={{200,-230},{240,-190}}),
         iconTransformation(extent={{100,-190},{140,-150}})));
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yLowTemAla
-    if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yLowTemAla if
+       heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Low discharge air temperature alarms"
     annotation (Placement(transformation(extent={{200,-260},{240,-220}}),
         iconTransformation(extent={{100,-210},{140,-170}})));
@@ -498,8 +498,8 @@ protected
     final VOccMin_flow=VOccMin_flow,
     final VAreMin_flow=VAreMin_flow,
     final VMin_flow=VMin_flow,
-    final VCooMax_flow=VCooMax_flow)
-    if venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24
+    final VCooMax_flow=VCooMax_flow) if
+       venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24
     "Output the minimum outdoor airflow rate setpoint, when using Title 24"
     annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
 equation

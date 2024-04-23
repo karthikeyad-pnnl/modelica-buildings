@@ -7,22 +7,22 @@ model IdealHeaterCooler
   parameter Buildings.Controls.OBC.CDL.Types.SimpleController controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "Type of controller"
     annotation (Dialog(group="Controller"));
-  parameter Real k(
-    min=100*Buildings.Controls.OBC.CDL.Constants.eps)=1
-    "Gain of controller"
-    annotation (Dialog(group="Controller"));
+  parameter Real k(min=100*Buildings.Controls.OBC.ASHRAE.Constants.eps) = 1
+    "Gain of controller" annotation (Dialog(group="Controller"));
   parameter Real Ti(
     final quantity="Time",
     final unit="s",
-    min=100*Buildings.Controls.OBC.CDL.Constants.eps)=120
-    "Time constant of integrator block"
-    annotation (Dialog(group="Controller",enable=controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PI or controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
+    min=100*Buildings.Controls.OBC.ASHRAE.Constants.eps) = 120
+    "Time constant of integrator block" annotation (Dialog(group="Controller",
+        enable=controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+           or controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
   parameter Real Td(
     final quantity="Time",
     final unit="s",
-    min=100*Buildings.Controls.OBC.CDL.Constants.eps)=0.1
-    "Time constant of derivative block"
-    annotation (Dialog(group="Controller",enable=controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PD or controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
+    min=100*Buildings.Controls.OBC.ASHRAE.Constants.eps) = 0.1
+    "Time constant of derivative block" annotation (Dialog(group="Controller",
+        enable=controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PD
+           or controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TSet
     "Set point temperature"
     annotation (Placement(transformation(extent={{-140,-20},{-100,20}}),iconTransformation(extent={{-140,-20},{-100,20}})));

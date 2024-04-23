@@ -312,8 +312,8 @@ block Controller
     "Terminal fan status"
     annotation (Placement(transformation(extent={{-280,-320},{-240,-280}}),
         iconTransformation(extent={{-140,-190},{-100,-150}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput u1HotPla
-    if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput u1HotPla if
+       heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Hot water plant status"
     annotation (Placement(transformation(extent={{-280,-350},{-240,-310}}),
         iconTransformation(extent={{-140,-210},{-100,-170}})));
@@ -347,42 +347,42 @@ block Controller
         iconTransformation(extent={{100,100},{140,140}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput VAdjPopBreZon_flow(
     final quantity="VolumeFlowRate",
-    final unit="m3/s")
-    if venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1
+    final unit="m3/s") if
+       venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1
     "Adjusted population component breathing zone flow rate"
     annotation (Placement(transformation(extent={{240,140},{280,180}}),
         iconTransformation(extent={{100,80},{140,120}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput VAdjAreBreZon_flow(
     final quantity="VolumeFlowRate",
-    final unit="m3/s")
-    if venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1
+    final unit="m3/s") if
+       venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1
     "Adjusted area component breathing zone flow rate"
     annotation (Placement(transformation(extent={{240,110},{280,150}}),
         iconTransformation(extent={{100,60},{140,100}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput VMinOA_flow(
     final quantity="VolumeFlowRate",
-    final unit="m3/s")
-    if venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1
+    final unit="m3/s") if
+       venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1
     "Minimum outdoor airflow setpoint"
     annotation (Placement(transformation(extent={{240,80},{280,120}}),
         iconTransformation(extent={{100,40},{140,80}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput VZonAbsMin_flow(
     final quantity="VolumeFlowRate",
-    final unit="m3/s")
-    if venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24
+    final unit="m3/s") if
+       venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24
     "Zone absolute minimum outdoor airflow setpoint"
     annotation (Placement(transformation(extent={{240,50},{280,90}}),
         iconTransformation(extent={{100,20},{140,60}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput VZonDesMin_flow(
     final quantity="VolumeFlowRate",
-    final unit="m3/s")
-    if venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24
+    final unit="m3/s") if
+       venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24
     "Zone design minimum outdoor airflow setpoint"
     annotation (Placement(transformation(extent={{240,20},{280,60}}),
         iconTransformation(extent={{100,0},{140,40}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yCO2(
-    final unit="1")
-    if venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24
+    final unit="1") if
+       venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24
     "CO2 control loop signal"
     annotation (Placement(transformation(extent={{240,-10},{280,30}}),
         iconTransformation(extent={{100,-20},{140,20}})));
@@ -422,8 +422,8 @@ block Controller
     "Leaking valve alarm"
     annotation (Placement(transformation(extent={{240,-310},{280,-270}}),
         iconTransformation(extent={{100,-200},{140,-160}})));
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yLowTemAla
-    if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yLowTemAla if
+       heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Low discharge air temperature alarms"
     annotation (Placement(transformation(extent={{240,-340},{280,-300}}),
         iconTransformation(extent={{100,-220},{140,-180}})));
