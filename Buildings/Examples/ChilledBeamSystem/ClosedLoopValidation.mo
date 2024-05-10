@@ -43,7 +43,7 @@ model ClosedLoopValidation
     tableOnFile = true,
     tableName = "tab1",
     fileName=ModelicaServices.ExternalReferences.loadResource(
-        "modelica://Buildings/Resources/Data/Examples/ChilledBeamSystem/zoneLoads.txt"),
+        "./Buildings/Resources/Data/Examples/ChilledBeamSystem/zoneLoads.txt"),
     columns = {2, 3, 4, 5, 6},
     timeScale = 60)
     "Table defining thermal loads for zone"
@@ -193,12 +193,12 @@ equation
           -4.6},{-17.57,-4.6},{-17.57,-14},{-12,-14}}, color={255,0,255}));
   connect(reaScaRep.y, terCon.TZonHeaSet) annotation (Line(points={{-14,98},{0,98},
           {0,68},{20,68},{20,67.75},{40,67.75}}, color={0,0,127}));
-  connect(chiBeaTesBed.rAT, eRWtemp.TAirRet) annotation (Line(points={{12,-34.4},
-          {36,-34.4},{36,-34},{46,-34},{46,-94},{-106,-94},{-106,-80},{-94.4,
-          -80}}, color={0,0,127}));
   connect(chiBeaTesBed.relHumDOASRet, DOAScon.phiAirRet) annotation (Line(
-        points={{12,-31},{30,-31},{30,-52},{-76,-52},{-76,-10},{-54.6,-10}},
-        color={0,0,127}));
+        points={{12,-31},{38,-31},{38,-32},{56,-32},{56,-58},{-94,-58},{-94,-10},
+          {-54.6,-10}}, color={0,0,127}));
+  connect(chiBeaTesBed.rAT, eRWtemp.TAirRet) annotation (Line(points={{12,-34.4},
+          {60,-34.4},{60,-92},{-108,-92},{-108,-80},{-94.4,-80}}, color={0,0,
+          127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}})),
     Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-160, -100}, {160, 100}})),

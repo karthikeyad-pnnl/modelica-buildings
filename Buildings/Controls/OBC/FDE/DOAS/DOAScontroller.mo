@@ -445,7 +445,7 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
     controllerTypeExhFan=controllerTypeExhFan)
     annotation (Placement(transformation(extent={{44,-124},{64,-104}})));
   EconomizerMode EconMod1(dTEcoThr=dTEcoThr)
-    annotation (Placement(transformation(extent={{32,-42},{52,-22}})));
+    annotation (Placement(transformation(extent={{34,-40},{54,-20}})));
   SupplyTemperatureSetpoint TSupSetpt(
     TSupLowSet=TSupLowSet,
     TSupHigSet=TSupHigSet,
@@ -533,15 +533,15 @@ equation
   connect(TSupSetpt.ySupHeaSet, Heating.TAirSupSetHea) annotation (Line(points=
           {{22,-1.8},{40,-1.8},{40,-3.2},{55.8,-3.2}}, color={0,0,127}));
   connect(TAirOut, EconMod1.TAirOut) annotation (Line(points={{-120,-138},{-78,
-          -138},{-78,-140},{-34,-140},{-34,-32},{29.8,-32}}, color={0,0,127}));
-  connect(TSupSetpt.ySupCooSet, EconMod1.TAirSupSetCoo) annotation (Line(points=
-         {{22,6.8},{26,6.8},{26,-39},{29.8,-39}}, color={0,0,127}));
+          -138},{-78,-140},{-34,-140},{-34,-30},{31.8,-30}}, color={0,0,127}));
+  connect(TSupSetpt.ySupCooSet, EconMod1.TAirSupSetCoo) annotation (Line(points={{22,6.8},
+          {26,6.8},{26,-37},{31.8,-37}},          color={0,0,127}));
   connect(uFanSupPro, EconMod1.uFanSupPro) annotation (Line(points={{-120,24},{
-          -46,24},{-46,-25},{29.8,-25}}, color={255,0,255}));
+          -46,24},{-46,-23},{31.8,-23}}, color={255,0,255}));
   connect(uFanSupPro, EFcon1.uFanSupPro) annotation (Line(points={{-120,24},{
           -40,24},{-40,-108},{42,-108}}, color={255,0,255}));
-  connect(EconMod1.yEcoMod, ERWcon.uEcoMod) annotation (Line(points={{54.2,-32},
-          {42,-32},{42,-50},{32,-50},{32,-49.2},{55.8,-49.2}}, color={255,0,255}));
+  connect(EconMod1.yEcoMod, ERWcon.uEcoMod) annotation (Line(points={{56.2,-30},
+          {42,-30},{42,-50},{32,-50},{32,-49.2},{55.8,-49.2}}, color={255,0,255}));
   connect(TSupSetpt.ySupCooSet, Cooling.TAirSupSetCoo) annotation (Line(points=
           {{22,6.8},{32,6.8},{32,30.8},{55.8,30.8}}, color={0,0,127}));
   connect(TSupSetpt.ySupSet, ERWcon.TAirSupSetEneWhe) annotation (Line(points={
