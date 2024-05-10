@@ -1,0 +1,11 @@
+simulateModel("Buildings.Controls.OBC.FDE.DOAS.Validation.SupplyTemperatureSetpoint", method="Cvode", stopTime=5760, tolerance=1e-06, resultFile="TSupSet");
+createPlot(id=1, position={0, 0, 1568, 724}, y={"TSupSetpt.uDehMod"}, range={0.0, 5800.0, -0.2, 1.2000000000000002}, grid=true, colors={{28,108,200}});
+createPlot(id=1, position={0, 0, 1568, 238}, y={"TSupSetpt.TSupLowSet", "TSupSetpt.TSupHigSet", "TSupSetpt.ySupSet"}, range={0.0, 6000.0, 19.0, 25.0}, grid=true, subPlot=2, colors={{28,108,200}, {238,46,47}, {0,140,72}}, displayUnits={"degC", "degC", "degC"});
+createPlot(id=1, position={0, 0, 1568, 238}, y={"TSupSetpt.THigZon", "TSupSetpt.TLowZon", "TSupSetpt.TAirHig"}, range={0.0, 6000.0, 18.0, 26.0}, grid=true, subPlot=3, colors={{28,108,200}, {238,46,47}, {0,140,72}}, displayUnits={"degC", "degC", "degC"});
+
+
+
+
+
+
+

@@ -1,0 +1,10 @@
+simulateModel("Buildings.Controls.OBC.FDE.DOAS.Validation.SupplyFanController", method="Cvode", stopTime=5760, tolerance=1e-06, resultFile="SupplyFanController");
+
+createPlot(id=3, position={0, 0, 1524, 708}, y={"SFcon.Occ", "SFcon.uFanSupPro", "SFcon.yFanSup"}, range={0.0, 5800.0, -0.5, 1.5}, grid=true, colors={{28,108,200}, {28,108,200}, {28,108,200}});
+createPlot(id=3, position={0, 0, 1524, 174}, y={"SFcon.yFanSupSpe"}, range={0.0, 6000.0, -0.05, 0.15000000000000002}, grid=true, subPlot=2, colors={{28,108,200}});
+createPlot(id=3, position={0, 0, 1524, 173}, y={"SFcon.yMaxDamSet", "SFcon.yMinDamSet", "conFanSup.dPAirDucSta"}, range={0.0, 5800.0, 100.0, 600.0}, grid=true, subPlot=3, colors={{28,108,200}, {238,46,47}, {0,140,72}});
+createPlot(id=3, position={0, 0, 1524, 173}, y={"SFcon.damSet", "SFcon.uDamMaxOpe"}, range={0.0, 5800.0, -0.5, 1.5}, grid=true, subPlot=4, colors={{28,108,200}, {238,46,47}});
+
+
+
+
