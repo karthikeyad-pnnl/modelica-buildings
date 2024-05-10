@@ -111,7 +111,7 @@ protected
 
   Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAndEneRecRegOpe(nin=3) "Logical AND; true when fan is proven, economizer mode is off, and ERW 
    temperature start conditions are met."
-    annotation (Placement(transformation(extent={{66,8},{86,28}})));
+    annotation (Placement(transformation(extent={{62,8},{82,28}})));
 
   Buildings.Controls.OBC.CDL.Logical.Not not1
   "Logical NOT; true when economizer mode is off."
@@ -172,14 +172,14 @@ equation
   connect(not1.u,uEcoMod)  annotation (
     Line(points = {{-28, 50}, {-122, 50}}, color = {255, 0, 255}));
 
-  connect(mulAndEneRecRegOpe.y, yEneRecWheEna) annotation (Line(points={{88,
-          18},{104,18},{104,20},{122,20}}, color={255,0,255}));
+  connect(mulAndEneRecRegOpe.y, yEneRecWheEna) annotation (Line(points={{84,18},
+          {104,18},{104,20},{122,20}},     color={255,0,255}));
 
   connect(max.y, swiTEneRec.u1) annotation (Line(points={{-2,-62},{14,-62},{14,-68},
           {64,-68}}, color={0,0,127}));
 
-  connect(mulAndEneRecRegOpe.y, swiTEneRec.u2) annotation (Line(points={{88,18},
-          {88,-20},{92,-20},{92,-58},{58,-58},{58,-76},{64,-76}}, color={255,0,255}));
+  connect(mulAndEneRecRegOpe.y, swiTEneRec.u2) annotation (Line(points={{84,18},
+          {84,-20},{92,-20},{92,-58},{58,-58},{58,-76},{64,-76}}, color={255,0,255}));
 
   connect(conZer.y, swiTEneRec.u3)
     annotation (Line(points={{52,-84},{64,-84}}, color={0,0,127}));
@@ -198,7 +198,7 @@ equation
   connect(not2.y, or2.u2) annotation (
     Line(points = {{56, 50}, {58, 50}, {58, 58}, {60, 58}}, color = {255, 0, 255}));
 
-  connect(mulAndEneRecRegOpe.y, not2.u) annotation (Line(points={{88,18},{88,20},
+  connect(mulAndEneRecRegOpe.y, not2.u) annotation (Line(points={{84,18},{84,20},
           {98,20},{98,36},{28,36},{28,50},{32,50}}, color={255,0,255}));
 
   connect(or2.y, yBypDam)
@@ -238,11 +238,11 @@ equation
   connect(abs.y, hys.u)
     annotation (Line(points={{-14, 2}, {-4, 2}}, color={0,0,127}));
   connect(uFanSupPro, mulAndEneRecRegOpe.u[1]) annotation (Line(points={{-122,80},
-          {-70,80},{-70,88},{20,88},{20,22.6667},{64,22.6667}}, color={255,0,255}));
+          {-70,80},{-70,88},{20,88},{20,22.6667},{60,22.6667}}, color={255,0,255}));
   connect(not1.y, mulAndEneRecRegOpe.u[2]) annotation (Line(points={{-4,50},{10,
-          50},{10,18},{64,18}}, color={255,0,255}));
+          50},{10,18},{60,18}}, color={255,0,255}));
   connect(EneWhe.y, mulAndEneRecRegOpe.u[3]) annotation (Line(points={{54,0},{
-          56,0},{56,13.3333},{64,13.3333}},
+          56,0},{56,13.3333},{60,13.3333}},
                                          color={255,0,255}));
   annotation (
     defaultComponentName = "ERWcon",
