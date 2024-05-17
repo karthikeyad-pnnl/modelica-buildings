@@ -550,23 +550,23 @@ protected
     "True delay to represent pump turning on"
     annotation (Placement(transformation(extent={{-150,240},{-130,260}})));
 
-  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi
+  Buildings.Controls.OBC.CDL.Integers.Switch intSwi
     "Integer switch"
     annotation (Placement(transformation(extent={{280,-186},{300,-166}})));
 
-  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi1
+  Buildings.Controls.OBC.CDL.Integers.Switch intSwi1
     "Integer switch"
     annotation (Placement(transformation(extent={{-120,-340},{-100,-320}})));
 
-  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi2
+  Buildings.Controls.OBC.CDL.Integers.Switch intSwi2
     "Integer switch"
     annotation (Placement(transformation(extent={{280,-350},{300,-330}})));
 
-  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi3
+  Buildings.Controls.OBC.CDL.Integers.Switch intSwi3
     "Integer switch"
     annotation (Placement(transformation(extent={{-100,-500},{-80,-480}})));
 
-  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi4
+  Buildings.Controls.OBC.CDL.Integers.Switch intSwi4
     "Integer switch"
     annotation (Placement(transformation(extent={{260,-530},{280,-510}})));
 
@@ -585,7 +585,7 @@ protected
     "Logical pre block"
     annotation (Placement(transformation(extent={{-130,390},{-110,410}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin[2](
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin[2](
     final amplitude=fill(0.5, 2),
     final freqHz=fill(1/900, 2),
     phase=fill(0, 2),
@@ -594,7 +594,7 @@ protected
     "Sine signal"
     annotation (Placement(transformation(extent={{-220,360},{-200,380}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin1(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin1(
     final amplitude=0.1,
     final freqHz=1/3600,
     final offset=0.25)
@@ -611,7 +611,7 @@ protected
     "Logical pre block"
     annotation (Placement(transformation(extent={{230,380},{250,400}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin2[2](
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin2[2](
     final amplitude=fill(0.5, 2),
     final freqHz=fill(1/900, 2),
     phase=fill(0, 2),
@@ -620,14 +620,14 @@ protected
     "Sine signal"
     annotation (Placement(transformation(extent={{146,348},{166,368}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin3(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin3(
     final amplitude=0.1,
     final freqHz=1/3600,
     final offset=0.25)
     "Sine signal"
     annotation (Placement(transformation(extent={{80,350},{100,370}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin4(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin4(
     final amplitude=5,
     final freqHz=1/450,
     final offset=7.5)
@@ -644,19 +644,19 @@ protected
     "Logical pre block"
     annotation (Placement(transformation(extent={{-120,240},{-100,260}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con8(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con8(
     final k=0.25)
     "Constant Real source"
     annotation (Placement(transformation(extent={{-310,190},{-290,210}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin5(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin5(
     final amplitude=0.1,
     final freqHz=1/900,
     final offset=0.25)
     "Sine signal"
     annotation (Placement(transformation(extent={{-214,208},{-194,228}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin6(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin6(
     final amplitude=0.1,
     final freqHz=1/3600,
     final offset=0.25)
@@ -684,19 +684,19 @@ protected
     "Logical pre block"
     annotation (Placement(transformation(extent={{260,220},{280,240}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con12(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con12(
     final k=0.25)
     "Constant Real source"
     annotation (Placement(transformation(extent={{50,170},{70,190}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin7(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin7(
     final amplitude=0.1,
     final freqHz=1/900,
     final offset=0)
     "Sine signal"
     annotation (Placement(transformation(extent={{140,188},{160,208}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin8(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin8(
     final amplitude=0.1,
     final freqHz=1/3600,
     final offset=0)
@@ -724,12 +724,12 @@ protected
     "Logical pre block"
     annotation (Placement(transformation(extent={{-120,120},{-100,140}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con16(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con16(
     final k=0.25)
     "Constant Real source"
     annotation (Placement(transformation(extent={{-310,30},{-290,50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin9(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin9(
     final amplitude=1.5,
     final freqHz=1/3600,
     final phase=3.1415926535898,
@@ -737,7 +737,7 @@ protected
     "Sine signal"
     annotation (Placement(transformation(extent={{-214,48},{-194,68}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin10(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin10(
     final amplitude=0.1,
     final freqHz=1/3600,
     final offset=0.25)
@@ -755,7 +755,7 @@ protected
     "Boolean true source"
     annotation (Placement(transformation(extent={{-250,50},{-230,70}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con18(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con18(
     final k=1)
     "Constant Real source"
     annotation (Placement(transformation(extent={{-310,-10},{-290,10}})));
@@ -770,12 +770,12 @@ protected
     "Logical pre block"
     annotation (Placement(transformation(extent={{220,100},{240,120}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con21(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con21(
     final k=0.25)
     "Constant Real source"
     annotation (Placement(transformation(extent={{50,10},{70,30}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin11[2](
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin11[2](
     final amplitude=fill(1.5, 2),
     final freqHz=fill(1/3600, 2),
     final phase=fill(3.14, 2),
@@ -784,7 +784,7 @@ protected
     "Sine signal"
     annotation (Placement(transformation(extent={{150,30},{170,50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin12(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin12(
     final amplitude=0.1,
     final freqHz=1/3600,
     final offset=0.25)
@@ -802,7 +802,7 @@ protected
     "Boolean true source"
     annotation (Placement(transformation(extent={{110,30},{130,50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con23(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con23(
     final k=1)
     "Constant Real source"
     annotation (Placement(transformation(extent={{50,-30},{70,-10}})));
@@ -817,7 +817,7 @@ protected
     "Logical pre block"
     annotation (Placement(transformation(extent={{-150,-60},{-130,-40}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin14(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin14(
     final amplitude=0.1,
     final freqHz=1/3600,
     final offset=0.25)
@@ -845,19 +845,19 @@ protected
     "Logical pre block"
     annotation (Placement(transformation(extent={{240,-80},{260,-60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con29(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con29(
     final k=0.25)
     "Constant Real source"
     annotation (Placement(transformation(extent={{70,-170},{90,-150}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin13(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin13(
     final amplitude=0.5,
     final freqHz=1/900,
     final offset=0.25)
     "Sine signal"
     annotation (Placement(transformation(extent={{166,-152},{186,-132}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin15(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin15(
     final amplitude=0.1,
     final freqHz=1/3600,
     final offset=0.25)
@@ -880,19 +880,19 @@ protected
     "Logical pre block"
     annotation (Placement(transformation(extent={{-150,-240},{-130,-220}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con32(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con32(
     final k=0.25)
     "Constant Real source"
     annotation (Placement(transformation(extent={{-320,-330},{-300,-310}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin16(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin16(
     final amplitude=0.5,
     final freqHz=1/900,
     final offset=0)
     "Sine signal"
     annotation (Placement(transformation(extent={{-230,-312},{-210,-292}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin17(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin17(
     final amplitude=0.1,
     final freqHz=1/3600,
     final offset=0.25)
@@ -915,12 +915,12 @@ protected
     "Logical pre block"
     annotation (Placement(transformation(extent={{240,-240},{260,-220}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con35(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con35(
     final k=0.25)
     "Constant Real source"
     annotation (Placement(transformation(extent={{70,-340},{90,-320}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin18(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin18(
     final amplitude=1.5,
     final freqHz=1/3600,
     final phase(displayUnit="deg") = 3.1415926535898,
@@ -928,7 +928,7 @@ protected
     "Sine signal"
     annotation (Placement(transformation(extent={{166,-322},{186,-302}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin19(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin19(
     final amplitude=0.1,
     final freqHz=1/3600,
     final offset=0.25)
@@ -941,7 +941,7 @@ protected
     "Boolean pulse signal"
     annotation (Placement(transformation(extent={{100,-360},{120,-340}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con37(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con37(
     final k=0.25)
     "Constant Real source"
     annotation (Placement(transformation(extent={{70,-380},{90,-360}})));
@@ -956,12 +956,12 @@ protected
     "Logical pre block"
     annotation (Placement(transformation(extent={{-140,-400},{-120,-380}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con39(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con39(
     final k=0.25)
     "Constant Real source"
     annotation (Placement(transformation(extent={{-310,-490},{-290,-470}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin20[2](
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin20[2](
     final amplitude=fill(1.5, 2),
     final freqHz=fill(1/3600, 2),
     final phase=fill(3.14, 2),
@@ -970,7 +970,7 @@ protected
     "Sine signal"
     annotation (Placement(transformation(extent={{-214,-472},{-194,-452}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin21(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin21(
     final amplitude=0.1,
     final freqHz=1/3600,
     final offset=0.25)
@@ -983,7 +983,7 @@ protected
     "Boolean pulse signal"
     annotation (Placement(transformation(extent={{-280,-510},{-260,-490}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con41(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con41(
     final k=1)
     "Constant Real source"
     annotation (Placement(transformation(extent={{-310,-530},{-290,-510}})));
@@ -998,7 +998,7 @@ protected
     "Logical pre block"
     annotation (Placement(transformation(extent={{220,-420},{240,-400}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin22(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin22(
     final amplitude=0.1,
     final freqHz=1/3600,
     final offset=0.25)
@@ -1071,7 +1071,7 @@ protected
     "Edge detector"
     annotation (Placement(transformation(extent={{160,-540},{180,-520}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul[2](
+  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul[2](
     final amplitude=fill(1, 2),
     final width=fill(0.95, 2),
     final period=fill(3600, 2),
@@ -1079,12 +1079,12 @@ protected
     "Real pulse signal"
     annotation (Placement(transformation(extent={{-336,408},{-316,428}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con1(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con1(
     final k=1)
     "Constant Real source"
     annotation (Placement(transformation(extent={{-270,360},{-250,380}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul1[2](
+  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul1[2](
     final amplitude=fill(1, 2),
     final width=fill(0.95, 2),
     final period=fill(3600, 2),
@@ -1092,12 +1092,12 @@ protected
     "Real pulse signal"
     annotation (Placement(transformation(extent={{0,400},{20,420}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con3(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con3(
     final k=1)
     "Constant Real source"
     annotation (Placement(transformation(extent={{80,380},{100,400}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul2[2](
+  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul2[2](
     final amplitude=fill(1, 2),
     final width=fill(0.95, 2),
     final period=fill(3600, 2),
@@ -1105,7 +1105,7 @@ protected
     "Real pulse signal"
     annotation (Placement(transformation(extent={{-330,260},{-310,280}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul3[2](
+  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul3[2](
     final amplitude=fill(1, 2),
     final width=fill(0.95, 2),
     final period=fill(3600, 2),
@@ -1113,7 +1113,7 @@ protected
     "Real pulse signal"
     annotation (Placement(transformation(extent={{10,240},{30,260}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul4[2](
+  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul4[2](
     final amplitude=fill(1, 2),
     final width=fill(0.95, 2),
     final period=fill(3600, 2),
@@ -1121,7 +1121,7 @@ protected
     "Real pulse signal"
     annotation (Placement(transformation(extent={{-330,100},{-310,120}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul5[2](
+  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul5[2](
     final amplitude=fill(1, 2),
     final width=fill(0.95, 2),
     final period=fill(3600, 2),
@@ -1129,7 +1129,7 @@ protected
     "Real pulse signal"
     annotation (Placement(transformation(extent={{20,80},{40,100}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul6[2](
+  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul6[2](
     final amplitude=fill(1, 2),
     final width=fill(0.95, 2),
     final period=fill(3600, 2),
@@ -1175,72 +1175,72 @@ protected
     "Logical Or"
     annotation (Placement(transformation(extent={{150,-430},{170,-410}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.MultiSum mulSum(
+  Buildings.Controls.OBC.CDL.Reals.MultiSum mulSum(
     final nin=2)
     "Sum of isolation valve positions"
     annotation (Placement(transformation(extent={{-300,440},{-280,460}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold lesThr(
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold lesThr(
     final t=0.05)
     "Check if isolation valves are closed"
     annotation (Placement(transformation(extent={{-260,440},{-240,460}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.MultiSum mulSum1(
+  Buildings.Controls.OBC.CDL.Reals.MultiSum mulSum1(
     final nin=2)
     "Sum of isolation valve positions"
     annotation (Placement(transformation(extent={{30,440},{50,460}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold lesThr1(
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold lesThr1(
     final t=0.05)
     "Check if isolation valves are closed"
     annotation (Placement(transformation(extent={{70,440},{90,460}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.MultiSum mulSum2(
+  Buildings.Controls.OBC.CDL.Reals.MultiSum mulSum2(
     final nin=2)
     "Sum of isolation valve positions"
     annotation (Placement(transformation(extent={{-300,300},{-280,320}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold lesThr2(
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold lesThr2(
     final t=0.05)
     "Check if isolation valves are closed"
     annotation (Placement(transformation(extent={{-270,300},{-250,320}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.MultiSum mulSum3(
+  Buildings.Controls.OBC.CDL.Reals.MultiSum mulSum3(
     final nin=2)
     "Sum of isolation valve positions"
     annotation (Placement(transformation(extent={{50,280},{70,300}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold lesThr3(
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold lesThr3(
     final t=0.05)
     "Check if isolation valves are closed"
     annotation (Placement(transformation(extent={{80,280},{100,300}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.MultiSum mulSum4(
+  Buildings.Controls.OBC.CDL.Reals.MultiSum mulSum4(
     final nin=2)
     "Sum of isolation valve positions"
     annotation (Placement(transformation(extent={{-300,140},{-280,160}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold lesThr4(
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold lesThr4(
     final t=0.05)
     "Check if isolation valves are closed"
     annotation (Placement(transformation(extent={{-270,140},{-250,160}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.MultiSum mulSum5(
+  Buildings.Controls.OBC.CDL.Reals.MultiSum mulSum5(
     final nin=2)
     "Sum of isolation valve positions"
     annotation (Placement(transformation(extent={{60,120},{80,140}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold lesThr5(
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold lesThr5(
     final t=0.05)
     "Check if isolation valves are closed"
     annotation (Placement(transformation(extent={{90,120},{110,140}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.MultiSum mulSum6(
+  Buildings.Controls.OBC.CDL.Reals.MultiSum mulSum6(
     final nin=2)
     "Sum of isolation valve positions"
     annotation (Placement(transformation(extent={{-300,-40},{-280,-20}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold lesThr6(
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold lesThr6(
     final t=0.05)
     "Check if isolation valves are closed"
     annotation (Placement(transformation(extent={{-270,-40},{-250,-20}})));

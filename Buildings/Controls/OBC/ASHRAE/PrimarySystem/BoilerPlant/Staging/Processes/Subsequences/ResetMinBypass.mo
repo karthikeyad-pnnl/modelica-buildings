@@ -48,7 +48,7 @@ block ResetMinBypass
       iconTransformation(extent={{100,-20},{140,20}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(
     final uLow=-relFloDif,
     final uHigh=0)
     "Check if boiler water flow rate is different from its setpoint"
@@ -75,11 +75,11 @@ protected
     "Logical latch"
     annotation (Placement(transformation(extent={{80,30},{100,50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Division div
+  Buildings.Controls.OBC.CDL.Reals.Division div
     "Flow rate error divided by its setpoint"
     annotation (Placement(transformation(extent={{-100,-70},{-80,-50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(
     final p=1e-6,
     final k=1)
     "Add a small positive to avoid zero output"
@@ -97,7 +97,7 @@ protected
     "Rising edge"
     annotation (Placement(transformation(extent={{40,30},{60,50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Add add2(
+  Buildings.Controls.OBC.CDL.Reals.Add add2(
     final k2=-1)
     "Adder"
     annotation (Placement(transformation(extent={{-148,-30},{-128,-10}})));

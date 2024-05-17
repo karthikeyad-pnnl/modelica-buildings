@@ -8,7 +8,7 @@ block ClosedLoopTest_baseline
       Buildings.Media.Water
     "Medium model";
 
-  parameter Modelica.SIunits.MassFlowRate mRad_flow_nominal=144.001
+  parameter Modelica.Units.SI.MassFlowRate mRad_flow_nominal=144.001
     "Radiator nominal mass flow rate"
     annotation(dialog(group="Radiator parameters"));
 
@@ -33,7 +33,7 @@ block ClosedLoopTest_baseline
     timeScale=60) "Boiler thermal load from EnergyPlus simulation"
     annotation (Placement(transformation(extent={{-140,100},{-120,120}})));
 
-  Controls.OBC.CDL.Continuous.Gain gai(k=-1)
+  Buildings.Controls.OBC.CDL.Reals.Gain gai(k=-1)
     annotation (Placement(transformation(extent={{-100,100},{-80,120}})));
   Buildings.Examples.BoilerPlant.PlantModel.BoilerPlant_Fairbanks_NonAdiabaticPipe boiPla(
     boiCap1=(1 - boiCapRat)*boiDesCap,
@@ -97,40 +97,40 @@ block ClosedLoopTest_baseline
     l=10e-10)
     "Isolation valve for radiator"
     annotation (Placement(transformation(extent={{-70,30},{-50,50}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant           con(final k=273.15 + 21.11)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant           con(final k=273.15 + 21.11)
     "Zone temperature setpoint"
     annotation (Placement(transformation(extent={{-50,80},{-30,100}})));
-  Controls.OBC.CDL.Continuous.Hysteresis hys(uLow=0.0001, uHigh=0.0005)
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(uLow=0.0001, uHigh=0.0005)
     "Check if radiator control valve opening is above threshold for enabling boiler plant"
     annotation (Placement(transformation(extent={{10,130},{30,150}})));
-  Controls.OBC.CDL.Logical.Timer tim(t=30) "Timer"
+  Buildings.Controls.OBC.CDL.Logical.Timer tim(t=30) "Timer"
     annotation (Placement(transformation(extent={{40,130},{60,150}})));
-  Controls.OBC.CDL.Conversions.BooleanToInteger booToInt
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt
     annotation (Placement(transformation(extent={{100,80},{120,100}})));
-  Controls.OBC.CDL.Continuous.Hysteresis hys1(uLow=0.001, uHigh=0.0011)
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys1(uLow=0.001, uHigh=0.0011)
     "Check if radiator control valve opening is above threshold for rasing HHW supply temperature"
     annotation (Placement(transformation(extent={{20,50},{40,70}})));
-  Controls.OBC.CDL.Logical.Timer tim1(t=30) "Timer"
+  Buildings.Controls.OBC.CDL.Logical.Timer tim1(t=30) "Timer"
     annotation (Placement(transformation(extent={{50,50},{70,70}})));
-  Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1(integerTrue=3)
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1(integerTrue=3)
     annotation (Placement(transformation(extent={{80,50},{100,70}})));
-  Controls.OBC.CDL.Logical.Latch lat
+  Buildings.Controls.OBC.CDL.Logical.Latch lat
     annotation (Placement(transformation(extent={{70,130},{90,150}})));
-  Controls.OBC.CDL.Logical.Timer tim2(t=60) "Timer"
+  Buildings.Controls.OBC.CDL.Logical.Timer tim2(t=60) "Timer"
     annotation (Placement(transformation(extent={{50,90},{70,110}})));
-  Controls.OBC.CDL.Logical.Not not1
+  Buildings.Controls.OBC.CDL.Logical.Not not1
     annotation (Placement(transformation(extent={{20,90},{40,110}})));
-  Controls.OBC.CDL.Continuous.PID           conPID(
+  Buildings.Controls.OBC.CDL.Reals.PID           conPID(
     final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
     final k=1*10e-4,
     Ti=10000)
     "Radiator isolation valve controller"
     annotation (Placement(transformation(extent={{-20,80},{0,100}})));
-  Controls.OBC.CDL.Discrete.UnitDelay uniDel(samplePeriod=1)
+  Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel(samplePeriod=1)
     annotation (Placement(transformation(extent={{-80,-48},{-60,-28}})));
-  Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(nout=2)
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(nout=2)
     annotation (Placement(transformation(extent={{-40,-48},{-20,-28}})));
-  Controls.OBC.CDL.Logical.Sources.Constant           con3[2](final k=fill(true,
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant           con3[2](final k=fill(true,
         2))
     "Constant boiler availability status"
     annotation (Placement(transformation(extent={{-140,-140},{-120,-120}})));

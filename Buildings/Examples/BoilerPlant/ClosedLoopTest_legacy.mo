@@ -77,16 +77,16 @@ model ClosedLoopTest_legacy "Closed loop testing model"
     speConTypPri=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.remoteDP)
     annotation (Placement(transformation(extent={{-40,-20},{-20,20}})));
 
-  Controls.OBC.CDL.Continuous.PID conPID(controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
+  Buildings.Controls.OBC.CDL.Reals.PID conPID(controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
       k=1) annotation (Placement(transformation(extent={{50,50},{70,70}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant con(k=273.15 + 21.11)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(k=273.15 + 21.11)
     "Zone temperature setpoint"
     annotation (Placement(transformation(extent={{10,50},{30,70}})));
-  Controls.OBC.CDL.Continuous.Add add2(k2=-1)
+  Buildings.Controls.OBC.CDL.Reals.Add add2(k2=-1)
     annotation (Placement(transformation(extent={{40,-60},{60,-40}})));
-  Controls.OBC.CDL.Conversions.RealToInteger reaToInt
+  Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt
     annotation (Placement(transformation(extent={{70,-60},{90,-40}})));
-  Controls.OBC.CDL.Logical.Sources.Constant con3[2](k={true,true})
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con3[2](k={true,true})
     annotation (Placement(transformation(extent={{-60,-60},{-40,-40}})));
   BoundaryConditions.WeatherData.ReaderTMY3 weaDat(filNam=
         Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"))
@@ -95,7 +95,7 @@ model ClosedLoopTest_legacy "Closed loop testing model"
 protected
   BoundaryConditions.WeatherData.Bus weaBus
     annotation (Placement(transformation(extent={{-60,50},{-40,70}})));
-  Controls.OBC.CDL.Continuous.Sources.TimeTable timTab(
+  Buildings.Controls.OBC.CDL.Reals.Sources.TimeTable timTab(
     extrapolation=Buildings.Controls.OBC.CDL.Types.Extrapolation.Periodic,
     smoothness=Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments,
     table=[-6,0; 8,10000; 18,0],

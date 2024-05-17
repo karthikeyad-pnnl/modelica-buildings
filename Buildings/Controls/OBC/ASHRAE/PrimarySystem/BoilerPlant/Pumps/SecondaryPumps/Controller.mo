@@ -337,7 +337,7 @@ protected
     "Unit delay for pump speed"
     annotation (Placement(transformation(extent={{-200,28},{-180,48}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Min min if have_varSecPum
+  Buildings.Controls.OBC.CDL.Reals.Min min if have_varSecPum
     "Ensure pump speed is below maximum speed for condensation control"
     annotation (Placement(transformation(extent={{160,-410},{180,-390}})));
 
@@ -491,7 +491,7 @@ protected
     "Boolean replicator"
     annotation (Placement(transformation(extent={{-66,108},{-46,128}})));
 
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi[nPum]
+  Buildings.Controls.OBC.CDL.Logical.Switch logSwi[nPum]
     "Logical switch"
     annotation (Placement(transformation(extent={{192,-10},{212,10}})));
 

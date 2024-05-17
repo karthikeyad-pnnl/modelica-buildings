@@ -442,12 +442,12 @@ block Controller
   parameter Integer pumInd[nPum]={i for i in 1:nPum}
     "Pump index, {1,2,...,n}";
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(
     final k=0) if have_priOnl
     "Constant Real zero signal"
     annotation (Placement(transformation(extent={{40,-466},{60,-446}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr(
     final t=0,
     final h=0) if not have_heaPriPum
     "Check if the lead boiler is turned on"
@@ -479,7 +479,7 @@ block Controller
     "Logical Or"
     annotation (Placement(transformation(extent={{72,-20},{92,0}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Max max if have_varPriPum
+  Buildings.Controls.OBC.CDL.Reals.Max max if have_varPriPum
     "Pass higher value"
     annotation (Placement(transformation(extent={{134,-556},{154,-536}})));
 
@@ -627,7 +627,7 @@ block Controller
     "Increase number of enabled boilers by one to initiate pump enable"
     annotation (Placement(transformation(extent={{-130,-170},{-110,-150}})));
 
-  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi if have_heaPriPum and (not have_priOnl)
+  Buildings.Controls.OBC.CDL.Integers.Switch intSwi if have_heaPriPum and (not have_priOnl)
     "Integer switch"
     annotation (Placement(transformation(extent={{-96,-200},{-76,-180}})));
 
@@ -711,7 +711,7 @@ block Controller
     "Delay pump disable after boilers have been disabled"
     annotation (Placement(transformation(extent={{-120,30},{-100,50}})));
 
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi[nPum]
+  Buildings.Controls.OBC.CDL.Logical.Switch logSwi[nPum]
     "Logical switch"
     annotation (Placement(transformation(extent={{182,-42},{202,-22}})));
 
@@ -749,11 +749,11 @@ block Controller
     "Logical Not"
     annotation (Placement(transformation(extent={{-20,-400},{0,-380}})));
 
-  CDL.Logical.Sources.Constant con2(k=false) if nPum == 1
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con2(k=false) if nPum == 1
     annotation (Placement(transformation(extent={{-94,10},{-74,30}})));
-  CDL.Logical.Sources.Constant con3(k=true) if nPum == 1
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con3(k=true) if nPum == 1
     annotation (Placement(transformation(extent={{-94,-32},{-74,-12}})));
-  CDL.Routing.BooleanScalarReplicator booScaRep(nout=nPum)
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booScaRep(nout=nPum)
     annotation (Placement(transformation(extent={{-156,-518},{-136,-498}})));
 equation
   connect(enaDedLeaPum.uPlaEna, uPlaEna) annotation (Line(points={{-202,115},{-240,

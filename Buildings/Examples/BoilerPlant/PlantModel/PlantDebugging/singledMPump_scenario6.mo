@@ -1,19 +1,19 @@
 within Buildings.Examples.BoilerPlant.PlantModel.PlantDebugging;
 block singledMPump_scenario6
 
-  parameter Modelica.SIunits.MassFlowRate mA_flow_nominal = V*1.2*6/3600
+  parameter Modelica.Units.SI.MassFlowRate mA_flow_nominal = V*1.2*6/3600
     "Nominal mass flow rate"
     annotation(dialog(group="Zone parameters"));
 
-  parameter Modelica.SIunits.HeatFlowRate Q_flow_nominal = boiEff1[1]*boiCap1 + boiEff2[1]*boiCap2
+  parameter Modelica.Units.SI.HeatFlowRate Q_flow_nominal = boiEff1[1]*boiCap1 + boiEff2[1]*boiCap2
     "Nominal heat flow rate of radiator"
     annotation(dialog(group="Radiator parameters"));
 
-  parameter Modelica.SIunits.HeatFlowRate boiCap1= 2200000
+  parameter Modelica.Units.SI.HeatFlowRate boiCap1= 2200000
     "Boiler capacity for boiler-1"
     annotation(dialog(group="Boiler parameters"));
 
-  parameter Modelica.SIunits.HeatFlowRate boiCap2= 2200000
+  parameter Modelica.Units.SI.HeatFlowRate boiCap2= 2200000
     "Boiler capacity for boiler-2"
     annotation(dialog(group="Boiler parameters"));
 
@@ -25,39 +25,39 @@ block singledMPump_scenario6
     "Efficiency for boiler-2"
     annotation(dialog(group="Boiler parameters"));
 
-  parameter Modelica.SIunits.Temperature TRadSup_nominal = 273.15+70
+  parameter Modelica.Units.SI.Temperature TRadSup_nominal = 273.15+70
     "Radiator nominal supply water temperature"
     annotation(dialog(group="Radiator parameters"));
 
-  parameter Modelica.SIunits.Temperature TRadRet_nominal = 273.15+50
+  parameter Modelica.Units.SI.Temperature TRadRet_nominal = 273.15+50
     "Radiator nominal return water temperature"
     annotation(dialog(group="Radiator parameters"));
 
-  parameter Modelica.SIunits.MassFlowRate mRad_flow_nominal=0.113 * 1000
+  parameter Modelica.Units.SI.MassFlowRate mRad_flow_nominal=0.113 * 1000
     "Radiator nominal mass flow rate"
     annotation(dialog(group="Radiator parameters"));
 
-  parameter Modelica.SIunits.Temperature TBoiSup_nominal = 273.15+70
+  parameter Modelica.Units.SI.Temperature TBoiSup_nominal = 273.15+70
     "Boiler nominal supply water temperature"
     annotation(dialog(group="Boiler parameters"));
 
-  parameter Modelica.SIunits.Temperature TBoiRet_min = 273.15+60
+  parameter Modelica.Units.SI.Temperature TBoiRet_min = 273.15+60
     "Boiler minimum return water temperature"
     annotation(dialog(group="Boiler parameters"));
 
-  parameter Modelica.SIunits.MassFlowRate mBoi_flow_nominal1=mRad_flow_nominal
+  parameter Modelica.Units.SI.MassFlowRate mBoi_flow_nominal1=mRad_flow_nominal
     "Boiler-1 nominal mass flow rate"
     annotation(dialog(group="Boiler parameters"));
 
-  parameter Modelica.SIunits.MassFlowRate mBoi_flow_nominal2=mRad_flow_nominal
+  parameter Modelica.Units.SI.MassFlowRate mBoi_flow_nominal2=mRad_flow_nominal
     "Boiler-2 nominal mass flow rate"
     annotation(dialog(group="Boiler parameters"));
 
-  parameter Modelica.SIunits.Volume V=126016.35
+  parameter Modelica.Units.SI.Volume V=126016.35
     "Room volume"
     annotation(dialog(group="Zone parameters"));
 
-  parameter Modelica.SIunits.Temperature TAir_nominal=273.15 + 23.9
+  parameter Modelica.Units.SI.Temperature TAir_nominal=273.15 + 23.9
     "Air temperature at nominal condition"
     annotation(dialog(group="Zone parameters"));
 
@@ -68,16 +68,16 @@ block singledMPump_scenario6
   BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump boiPla
     annotation (Placement(transformation(extent={{20,-20},{40,0}})));
 
-  Controls.OBC.CDL.Logical.Sources.Constant con(k=true)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con(k=true)
     annotation (Placement(transformation(extent={{-40,0},{-20,20}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant con1(k=273.15 + 21.1)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con1(k=273.15 + 21.1)
     annotation (Placement(transformation(extent={{-80,70},{-60,90}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant con2(k=273.15 + 70)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con2(k=273.15 + 70)
     annotation (Placement(transformation(extent={{-40,-70},{-20,-50}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant con3(k=1)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con3(k=1)
     annotation (Placement(transformation(extent={{-40,-40},{-20,-20}})));
 
-  Controls.OBC.CDL.Continuous.Gain gai(k=-1)
+  Buildings.Controls.OBC.CDL.Reals.Gain gai(k=-1)
     annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
   Fluid.Actuators.Valves.TwoWayLinear           val3(
     redeclare package Medium = Media.Water,
@@ -102,11 +102,11 @@ block singledMPump_scenario6
     heaCap(T(start=10)),
     rad(dp_nominal=40000))
     annotation (Placement(transformation(extent={{20,40},{40,60}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant con4(k=1000000)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con4(k=1000000)
     annotation (Placement(transformation(extent={{-80,40},{-60,60}})));
-  Controls.OBC.CDL.Logical.Sources.Pulse booPul(width=0.9, period=3600)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul(width=0.9, period=3600)
     annotation (Placement(transformation(extent={{-80,-20},{-60,0}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant con5(k=1)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con5(k=1)
     annotation (Placement(transformation(extent={{-80,-80},{-60,-60}})));
   Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.Generic.Speed_remoteDp
     pumSpeRemDp(
@@ -119,22 +119,22 @@ block singledMPump_scenario6
     final Td=10e-9)
     "Hot water pump speed control with remote DP sensor"
     annotation (Placement(transformation(extent={{60,-20},{80,0}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant con6(k=50000)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con6(k=50000)
     annotation (Placement(transformation(extent={{30,-60},{50,-40}})));
-  Controls.OBC.CDL.Continuous.PID           conPID(
+  Buildings.Controls.OBC.CDL.Reals.PID           conPID(
     final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
     final k=10e-2,
     Ti=300,
     yMin=0.0001)
     "Radiator isolation valve controller"
     annotation (Placement(transformation(extent={{-40,70},{-20,90}})));
-  Controls.OBC.CDL.Continuous.AddParameter addPar(p=1, k=-1)
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(p=1, k=-1)
     annotation (Placement(transformation(extent={{-4,-90},{16,-70}})));
-  Controls.OBC.CDL.Continuous.GreaterThreshold greThr(t=0.001)
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr(t=0.001)
     annotation (Placement(transformation(extent={{10,80},{30,100}})));
-  Controls.OBC.CDL.Conversions.BooleanToReal booToRea
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea
     annotation (Placement(transformation(extent={{50,80},{70,100}})));
-  Controls.OBC.CDL.Continuous.Product pro
+  Buildings.Controls.OBC.CDL.Reals.Product pro
     annotation (Placement(transformation(extent={{80,74},{100,94}})));
 equation
   connect(con.y, boiPla.uBoiSta[1]) annotation (Line(points={{-18,10},{0,10},{0,

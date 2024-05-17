@@ -19,13 +19,13 @@ block EnableLead_headered
     annotation (Placement(transformation(extent={{100,-20},{140,20}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr[nBoi](
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr[nBoi](
     final t=fill(0.975,nBoi),
     final h=fill(0.025,nBoi))
     "Determine if the isolation valve is open based on valve position"
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch leaPumSta
+  Buildings.Controls.OBC.CDL.Logical.Switch leaPumSta
     "Lead pump status"
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
 

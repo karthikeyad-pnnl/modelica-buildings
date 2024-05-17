@@ -8,7 +8,7 @@ block StepTest_PumpParameters
       Buildings.Media.Water
     "Medium model";
 
-  parameter Modelica.SIunits.MassFlowRate mRad_flow_nominal=96.323
+  parameter Modelica.Units.SI.MassFlowRate mRad_flow_nominal=96.323
     "Radiator nominal mass flow rate"
     annotation(dialog(group="Radiator parameters"));
 
@@ -142,24 +142,24 @@ block StepTest_PumpParameters
     l=10e-10)
     "Isolation valve for radiator"
     annotation (Placement(transformation(extent={{-20,120},{0,140}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant con(k=0.00025)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(k=0.00025)
     annotation (Placement(transformation(extent={{-100,130},{-80,150}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant con1(k=4000)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con1(k=4000)
     annotation (Placement(transformation(extent={{-100,90},{-80,110}})));
-  Controls.OBC.CDL.Continuous.PID conPID(
+  Buildings.Controls.OBC.CDL.Reals.PID conPID(
     controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
     k=0.25*10e-3,
     Ti=45,
     Td=3,
     yMax=1,
     yMin=0.1) annotation (Placement(transformation(extent={{40,50},{60,70}})));
-  Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(nout=2)
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(nout=2)
     annotation (Placement(transformation(extent={{80,50},{100,70}})));
-  Controls.OBC.CDL.Continuous.Product pro[2]
+  Buildings.Controls.OBC.CDL.Reals.Product pro[2]
     annotation (Placement(transformation(extent={{-110,20},{-90,40}})));
-  Controls.OBC.CDL.Continuous.Sources.Pulse pul[2](period={1800,3600})
+  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul[2](period={1800,3600})
     annotation (Placement(transformation(extent={{-150,80},{-130,100}})));
-  Controls.OBC.CDL.Continuous.Sources.Pulse pul1[2](period={7200,14400})
+  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul1[2](period={7200,14400})
     annotation (Placement(transformation(extent={{-120,-80},{-100,-60}})));
 equation
   connect(pum.port_b,spl3. port_1) annotation (Line(points={{-60,40},{-60,50},{-20,

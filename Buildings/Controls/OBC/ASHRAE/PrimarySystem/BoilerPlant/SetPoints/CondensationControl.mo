@@ -84,11 +84,11 @@ block CondensationControl
       iconTransformation(extent={{100,-80},{140,-40}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Logical.Switch swi
+  Buildings.Controls.OBC.CDL.Reals.Switch swi
     "Pass 0 regulation signal if stage type is not non-condensing"
     annotation (Placement(transformation(extent={{-50,40},{-30,60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(
     final k=0)
     "Zero source"
     annotation (Placement(transformation(extent={{-90,20},{-70,40}})));
@@ -108,7 +108,7 @@ protected
     "Integer to Real conversion"
     annotation (Placement(transformation(extent={{-90,-80},{-70,-60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr(
     final t=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler)
     "Identify if current stage is condensing type or non-condensing type"
     annotation (Placement(transformation(extent={{-10,-80},{10,-60}})));

@@ -49,12 +49,12 @@ block FailsafeCondition
       iconTransformation(extent={{100,-20},{140,20}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Continuous.Add add2(
+  Buildings.Controls.OBC.CDL.Reals.Add add2(
     final k2=-1)
     "Difference between setpoint and measured temperature"
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(
     final uLow=TDif - TDifHys,
     final uHigh=TDif)
     "Hysteresis deadband to prevent cycling"

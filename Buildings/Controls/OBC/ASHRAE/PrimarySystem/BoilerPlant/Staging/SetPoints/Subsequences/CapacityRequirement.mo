@@ -51,45 +51,45 @@ protected
     final quantity="SpecificHeatCapacity") = 4184
     "Specific heat capacity of water";
 
-  Buildings.Controls.OBC.CDL.Continuous.Max max
+  Buildings.Controls.OBC.CDL.Reals.Max max
     "Ensure negative heating requirement calculation is not passed downstream"
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(
     final k=0)
     "Lowest allowed heating requirement"
     annotation (Placement(transformation(extent={{60,24},{80,44}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant density(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant density(
     final k=rhoWat)
     "Water density"
     annotation (Placement(transformation(extent={{-100,-40},{-80,-20}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant speHeaCap(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant speHeaCap(
     final k=cpWat)
     "Specific heat capacity of water"
     annotation (Placement(transformation(extent={{-100,-80},{-80,-60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Add add2(
+  Buildings.Controls.OBC.CDL.Reals.Add add2(
     final k1=1,
     final k2=-1)
     "Adder"
     annotation (Placement(transformation(extent={{-100,30},{-80,50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.MovingMean movMea(
+  Buildings.Controls.OBC.CDL.Reals.MovingMean movMea(
     final delta=avePer)
     "Moving average"
     annotation (Placement(transformation(extent={{60,-16},{80,4}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Product pro
+  Buildings.Controls.OBC.CDL.Reals.Product pro
     "Product"
     annotation (Placement(transformation(extent={{20,-16},{40,4}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Product pro1
+  Buildings.Controls.OBC.CDL.Reals.Product pro1
     "Product"
     annotation (Placement(transformation(extent={{-60,-60},{-40,-40}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Product pro2
+  Buildings.Controls.OBC.CDL.Reals.Product pro2
     "Product"
     annotation (Placement(transformation(extent={{-20,-22},{0,-2}})));
 

@@ -57,27 +57,27 @@ protected
   final parameter Integer boiInd[nBoi]={i for i in 1:nBoi}
     "Boiler index, {1,2,...,nBoi}";
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con7(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con7(
     final k=chaHotWatIsoTim)
     "Time to change hot water isolation valve"
     annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con8(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con8(
     final k=endValPos)
     "Ending valve position"
     annotation (Placement(transformation(extent={{0,40},{20,60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con6(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con6(
     final k=iniValPos)
     "Initial isolation valve position"
     annotation (Placement(transformation(extent={{-40,90},{-20,110}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con9(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con9(
     final k=0)
     "Constant zero"
     annotation (Placement(transformation(extent={{0,90},{20,110}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Line lin1
+  Buildings.Controls.OBC.CDL.Reals.Line lin1
     "Hot water isolation valve setpoint"
     annotation (Placement(transformation(extent={{40,70},{60,90}})));
 
@@ -99,7 +99,7 @@ protected
     "Check if it is time to change isolation valve position"
     annotation (Placement(transformation(extent={{-80,-180},{-60,-160}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch swi[nBoi]
+  Buildings.Controls.OBC.CDL.Reals.Switch swi[nBoi]
     "Logical switch"
     annotation (Placement(transformation(extent={{120,-50},{140,-30}})));
 
@@ -112,11 +112,11 @@ protected
     "Logical not"
     annotation (Placement(transformation(extent={{-20,-90},{0,-70}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch swi1[nBoi]
+  Buildings.Controls.OBC.CDL.Reals.Switch swi1[nBoi]
     "Logical switch"
     annotation (Placement(transformation(extent={{60,-70},{80,-50}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch swi2[nBoi]
+  Buildings.Controls.OBC.CDL.Reals.Switch swi2[nBoi]
     "Logical switch"
     annotation (Placement(transformation(extent={{60,0},{80,20}})));
 
@@ -134,13 +134,13 @@ protected
     "Replicate real input"
     annotation (Placement(transformation(extent={{80,70},{100,90}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys3[nBoi](
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys3[nBoi](
     final uLow=fill(0.025,nBoi),
     final uHigh=fill(0.05, nBoi))
     "Check if isolation valve is enabled"
     annotation (Placement(transformation(extent={{-120,210},{-100,230}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys4[nBoi](
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys4[nBoi](
     final uLow=fill(0.925,nBoi),
     final uHigh=fill(0.975, nBoi))
     "Check if isolation valve is open more than 95%"

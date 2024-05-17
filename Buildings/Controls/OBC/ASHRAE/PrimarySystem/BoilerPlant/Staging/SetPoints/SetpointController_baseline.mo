@@ -282,53 +282,53 @@ block SetpointController_baseline
     annotation (Placement(transformation(extent={{120,40},{160,80}}),
       iconTransformation(extent={{100,80},{140,120}})));
 
-  CDL.Conversions.RealToInteger reaToInt
+  Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt
     annotation (Placement(transformation(extent={{-200,-226},{-180,-206}})));
-  CDL.Conversions.IntegerToReal intToRea
+  Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea
     annotation (Placement(transformation(extent={{-260,-226},{-240,-206}})));
-  CDL.Discrete.UnitDelay uniDel(samplePeriod=1)
+  Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel(samplePeriod=1)
     annotation (Placement(transformation(extent={{-228,-226},{-208,-206}})));
-  CDL.Integers.Add addInt(k2=-1)
+  Buildings.Controls.OBC.CDL.Integers.Add addInt(k2=-1)
     annotation (Placement(transformation(extent={{-160,-226},{-140,-206}})));
-  CDL.Integers.Add addInt1
+  Buildings.Controls.OBC.CDL.Integers.Add addInt1
     annotation (Placement(transformation(extent={{-160,-186},{-140,-166}})));
-  CDL.Integers.Sources.Constant conInt(k=1)
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(k=1)
     annotation (Placement(transformation(extent={{-200,-256},{-180,-236}})));
-  CDL.Continuous.Add add2(k2=-1)
+  Buildings.Controls.OBC.CDL.Reals.Add add2(k2=-1)
     annotation (Placement(transformation(extent={{-260,160},{-240,180}})));
-  CDL.Continuous.Hysteresis hys(uLow=6, uHigh=6.1)
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(uLow=6, uHigh=6.1)
     annotation (Placement(transformation(extent={{-220,160},{-200,180}})));
-  CDL.Continuous.Hysteresis hys1(uLow=0.3, uHigh=0.35)
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys1(uLow=0.3, uHigh=0.35)
     annotation (Placement(transformation(extent={{-220,120},{-200,140}})));
-  CDL.Logical.Not not1
+  Buildings.Controls.OBC.CDL.Logical.Not not1
     annotation (Placement(transformation(extent={{-180,160},{-160,180}})));
-  CDL.Logical.Not not2
+  Buildings.Controls.OBC.CDL.Logical.Not not2
     annotation (Placement(transformation(extent={{-180,120},{-160,140}})));
-  CDL.Logical.Or or2
+  Buildings.Controls.OBC.CDL.Logical.Or or2
     annotation (Placement(transformation(extent={{-140,140},{-120,160}})));
-  CDL.Logical.Timer tim(t=300)
+  Buildings.Controls.OBC.CDL.Logical.Timer tim(t=300)
     annotation (Placement(transformation(extent={{-100,140},{-80,160}})));
-  CDL.Continuous.Add add1(k2=-1)
+  Buildings.Controls.OBC.CDL.Reals.Add add1(k2=-1)
     annotation (Placement(transformation(extent={{-260,280},{-240,300}})));
-  CDL.Continuous.Hysteresis hys2(uLow=1, uHigh=2)
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys2(uLow=1, uHigh=2)
     annotation (Placement(transformation(extent={{-220,280},{-200,300}})));
-  CDL.Logical.Timer tim1(t=600)
+  Buildings.Controls.OBC.CDL.Logical.Timer tim1(t=600)
     annotation (Placement(transformation(extent={{-140,280},{-120,300}})));
-  CDL.Logical.Edge edg
+  Buildings.Controls.OBC.CDL.Logical.Edge edg
     annotation (Placement(transformation(extent={{-100,280},{-80,300}})));
-  CDL.Logical.Edge edg1
+  Buildings.Controls.OBC.CDL.Logical.Edge edg1
     annotation (Placement(transformation(extent={{-70,140},{-50,160}})));
-  CDL.Conversions.IntegerToReal intToRea1[2]
+  Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea1[2]
     annotation (Placement(transformation(extent={{-120,-200},{-100,-180}})));
-  CDL.Continuous.Limiter lim[2](uMax=fill(nSta, 2), uMin=fill(1, 2))
+  Buildings.Controls.OBC.CDL.Reals.Limiter lim[2](uMax=fill(nSta, 2), uMin=fill(1, 2))
     annotation (Placement(transformation(extent={{-90,-200},{-70,-180}})));
-  CDL.Conversions.RealToInteger reaToInt1[2]
+  Buildings.Controls.OBC.CDL.Conversions.RealToInteger reaToInt1[2]
     annotation (Placement(transformation(extent={{-60,-200},{-40,-180}})));
-  CDL.Logical.And and2
+  Buildings.Controls.OBC.CDL.Logical.And and2
     annotation (Placement(transformation(extent={{-180,240},{-160,260}})));
-  CDL.Logical.Not not3
+  Buildings.Controls.OBC.CDL.Logical.Not not3
     annotation (Placement(transformation(extent={{-220,240},{-200,260}})));
-  CDL.Logical.And and1
+  Buildings.Controls.OBC.CDL.Logical.And and1
     annotation (Placement(transformation(extent={{-120,200},{-100,220}})));
 protected
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Change cha(

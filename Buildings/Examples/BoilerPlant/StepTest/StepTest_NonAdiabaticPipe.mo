@@ -7,7 +7,7 @@ block StepTest_NonAdiabaticPipe "Model to test step response of zone model"
       Buildings.Media.Water
     "Medium model";
 
-  parameter Modelica.SIunits.MassFlowRate mRad_flow_nominal=113.45
+  parameter Modelica.Units.SI.MassFlowRate mRad_flow_nominal=113.45
     "Radiator nominal mass flow rate"
     annotation(dialog(group="Radiator parameters"));
 
@@ -56,7 +56,7 @@ block StepTest_NonAdiabaticPipe "Model to test step response of zone model"
     heatTransfer(alpha0=15*1/0.3))
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
 
-  Controls.OBC.CDL.Continuous.Sources.Pulse pul(width=0.001, period=10800)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul(width=0.001, period=10800)
     annotation (Placement(transformation(extent={{-60,20},{-40,40}})));
   BoundaryConditions.WeatherData.ReaderTMY3           weaDat(final filNam=
         ModelicaServices.ExternalReferences.loadResource(

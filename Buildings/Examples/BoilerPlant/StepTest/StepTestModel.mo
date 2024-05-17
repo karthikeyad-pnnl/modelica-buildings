@@ -33,7 +33,7 @@ block StepTestModel "Model to test step response of zone model"
 
   Modelica.Blocks.Sources.Constant const(k=98841.1979) "Constant plug load"
     annotation (Placement(transformation(extent={{-80,30},{-60,50}})));
-  Controls.OBC.CDL.Continuous.Add add2
+  Buildings.Controls.OBC.CDL.Reals.Add add2
     annotation (Placement(transformation(extent={{-50,10},{-30,30}})));
 equation
   connect(weaDat.weaBus, zoneModel.weaBus) annotation (Line(

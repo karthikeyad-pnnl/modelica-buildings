@@ -95,24 +95,24 @@ block EfficiencyCondition
       iconTransformation(extent={{100,-20},{140,20}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Continuous.Division div
+  Buildings.Controls.OBC.CDL.Reals.Division div
     "Divider to get relative value of required heating capacity"
     annotation (Placement(transformation(extent={{-80,20},{-60,40}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(
     final p=1e-6,
     final k=1)
     annotation (Placement(transformation(extent={{-80,-80},{-60,-60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Division div1
+  Buildings.Controls.OBC.CDL.Reals.Division div1
     "Divider to get relative value of required heating capacity"
     annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Division div2
+  Buildings.Controls.OBC.CDL.Reals.Division div2
     "Divider to get relative value of flow-rate"
     annotation (Placement(transformation(extent={{-40,-60},{-20,-40}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(
     final uLow=-sigDif,
     final uHigh=0)
     "Hysteresis loop for flow-rate condition"
@@ -123,13 +123,13 @@ protected
     "Constant boolean source"
     annotation (Placement(transformation(extent={{30,-20},{50,0}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys1(
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys1(
     final uLow=fraNonConBoi - sigDif,
     final uHigh=fraNonConBoi)
     "Hysteresis loop for heating capacity condition of non-condensing boilers"
     annotation (Placement(transformation(extent={{-40,60},{-20,80}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys2(
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys2(
     final uLow=fraConBoi - sigDif,
     final uHigh=fraConBoi)
     "Hysteresis loop for heating capacity condition of condensing boilers"
@@ -144,12 +144,12 @@ protected
     "Pick out stage-type for next stage from vector"
     annotation (Placement(transformation(extent={{-40,-110},{-20,-90}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr(
     final t=1)
     "Check for non-condensing boilers"
     annotation (Placement(transformation(extent={{30,-110},{50,-90}})));
 
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi
+  Buildings.Controls.OBC.CDL.Logical.Switch logSwi
     "Switch for heating capacity condition based on stage type"
     annotation (Placement(transformation(extent={{100,40},{120,60}})));
 
@@ -157,11 +157,11 @@ protected
     "Logical And"
     annotation (Placement(transformation(extent={{130,-10},{150,10}})));
 
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi1
+  Buildings.Controls.OBC.CDL.Logical.Switch logSwi1
     "Switch for flow-rate condition"
     annotation (Placement(transformation(extent={{100,-40},{120,-20}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Add add1(
+  Buildings.Controls.OBC.CDL.Reals.Add add1(
     final k2=-1)
     "Adder"
     annotation (Placement(transformation(extent={{-80,-50},{-60,-30}})));

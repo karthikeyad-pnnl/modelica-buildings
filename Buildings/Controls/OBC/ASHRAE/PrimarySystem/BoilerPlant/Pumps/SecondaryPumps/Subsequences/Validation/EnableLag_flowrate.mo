@@ -28,7 +28,7 @@ protected
     "Constant false"
     annotation (Placement(transformation(extent={{-80,-30},{-60,-10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin(
     final amplitude=0.25,
     final freqHz=1/3600,
     final offset=0.25)

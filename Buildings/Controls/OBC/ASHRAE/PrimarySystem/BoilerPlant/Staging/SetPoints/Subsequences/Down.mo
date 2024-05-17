@@ -238,11 +238,11 @@ protected
     "Logical Not"
     annotation (Placement(transformation(extent={{-120,120},{-100,140}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Division div
+  Buildings.Controls.OBC.CDL.Reals.Division div
     "Thermal capacity ratio"
     annotation (Placement(transformation(extent={{-150,34},{-130,54}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(
     final uLow=fraMinFir,
     final uHigh=fraMinFir + sigDif)
     "Hysteresis loop"
@@ -252,11 +252,11 @@ protected
     "Logical Or"
     annotation (Placement(transformation(extent={{60,8},{80,28}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Division div1
+  Buildings.Controls.OBC.CDL.Reals.Division div1
     "Thermal capacity ratio"
     annotation (Placement(transformation(extent={{-160,-50},{-140,-30}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys1(
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys1(
     final uLow=fraDesCap,
     final uHigh=fraDesCap + sigDif)
     "Hysteresis loop"
@@ -266,12 +266,12 @@ protected
     "Logical And"
     annotation (Placement(transformation(extent={{180,-10},{200,10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Add add4(
+  Buildings.Controls.OBC.CDL.Reals.Add add4(
     final k2=-1) if not have_priOnl
     "Compare primary and secondary circuit return temperature"
     annotation (Placement(transformation(extent={{-162,-190},{-142,-170}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys3(
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys3(
     final uLow=TCirDif - dTemp,
     final uHigh=TCirDif) if not have_priOnl
     "Hysteresis loop"
@@ -285,7 +285,7 @@ protected
     "Logical Or"
     annotation (Placement(transformation(extent={{60,-108},{80,-88}})));
 
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi
+  Buildings.Controls.OBC.CDL.Logical.Switch logSwi
     "Logical switch"
     annotation (Placement(transformation(extent={{100,-50},{120,-30}})));
 
@@ -303,7 +303,7 @@ protected
     "Integer to Real conversion"
     annotation (Placement(transformation(extent={{-60,-180},{-40,-160}})));
 
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi1 if not have_priOnl
+  Buildings.Controls.OBC.CDL.Logical.Switch logSwi1 if not have_priOnl
     "Logical switch"
     annotation (Placement(transformation(extent={{140,-100},{160,-80}})));
 
@@ -315,13 +315,13 @@ protected
     "Logical Not"
     annotation (Placement(transformation(extent={{-90,-50},{-70,-30}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys4(
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys4(
     final uLow=bypValClo,
     final uHigh=bypValClo + sigDif) if have_priOnl
     "Hysteresis loop"
     annotation (Placement(transformation(extent={{-158,-10},{-138,10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys2(
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys2(
     final uLow=sigDif,
     final uHigh=2*sigDif) if not have_priOnl
     "Hysteresis loop"
@@ -365,12 +365,12 @@ protected
     "Identify stage type of current stage"
     annotation (Placement(transformation(extent={{-140,-140},{-120,-120}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con2[nSta](
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con2[nSta](
     final k=boiMinPriPumSpeSta) if not have_priOnl
     "Signal source for minimum primary pump speed for boiler plant stage"
     annotation (Placement(transformation(extent={{-170,-140},{-150,-120}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Add add2(
+  Buildings.Controls.OBC.CDL.Reals.Add add2(
     final k2=-1) if not have_priOnl
     "Compare pump speed signal and minimum pump speed for stage"
     annotation (Placement(transformation(extent={{-174,-90},{-154,-70}})));

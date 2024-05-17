@@ -56,61 +56,61 @@ block PumpSpeedLimits
       iconTransformation(extent={{100,-70},{140,-30}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar2(
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar2(
     final p=-0.5,
     final k=1) if have_varPriPum
     "Extract secondary pump signal from regulation signal"
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Limiter lim1(
+  Buildings.Controls.OBC.CDL.Reals.Limiter lim1(
     final uMax=0.5,
     final uMin=0) if have_varPriPum
     "Limit signal between 0 and 0.5"
     annotation (Placement(transformation(extent={{-30,-10},{-10,10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Gain gai1(
+  Buildings.Controls.OBC.CDL.Reals.Gain gai1(
     final k=2) if have_varPriPum
     "Multiply signal by 2"
     annotation (Placement(transformation(extent={{0,-10},{20,10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar3(
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar3(
     final p=1,
     final k=(minSecPumSpe - 1)) if have_varPriPum
     "Generate secondary pump setpoint signal from regulation signal"
     annotation (Placement(transformation(extent={{30,-10},{50,10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(
     final p=1,
     final k=(minSecPumSpe - 1)) if not have_varPriPum
     "Generate secondary pump setpoint signal from regulation signal"
     annotation (Placement(transformation(extent={{30,-50},{50,-30}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Limiter lim2(
+  Buildings.Controls.OBC.CDL.Reals.Limiter lim2(
     final uMax=1,
     final uMin=0) if not have_varPriPum
     "Limit signal between 0 and 1"
     annotation (Placement(transformation(extent={{-30,-50},{-10,-30}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Limiter lim(
+  Buildings.Controls.OBC.CDL.Reals.Limiter lim(
     final uMax=0.5,
     final uMin=0) if have_varPriPum
     "Limit signal between 0 and 0.5"
     annotation (Placement(transformation(extent={{-60,20},{-40,40}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Gain gai(
+  Buildings.Controls.OBC.CDL.Reals.Gain gai(
     final k=2) if have_varPriPum
     "Multiply signal by 2"
     annotation (Placement(transformation(extent={{-30,20},{-10,40}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Product pro if have_varPriPum
+  Buildings.Controls.OBC.CDL.Reals.Product pro if have_varPriPum
     "Normalize regulation signal in terms of pump speed"
     annotation (Placement(transformation(extent={{0,20},{20,40}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Add add2 if have_varPriPum
+  Buildings.Controls.OBC.CDL.Reals.Add add2 if have_varPriPum
     "Add minimum pump speed value to normalized regulation signal"
     annotation (Placement(transformation(extent={{30,20},{50,40}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar1(
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar1(
     final p=1,
     final k=-1) if have_varPriPum
     "Subtract minimum primary pump speed from 1"
@@ -121,7 +121,7 @@ protected
     "Identify minimum primary pump speed for current stage"
     annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con2[nSta](
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con2[nSta](
     final k=minPriPumSpeSta) if have_varPriPum
     "Source signal for B-MinPriPumpSpdStage"
     annotation (Placement(transformation(extent={{-90,70},{-70,90}})));

@@ -8,19 +8,19 @@ model BoilerPlant_BoilerPITuning "Boiler plant model for closed loop testing"
       Buildings.Media.Water
     "Medium model";
 
-  parameter Modelica.SIunits.MassFlowRate mA_flow_nominal = V*1.2*6/3600
+  parameter Modelica.Units.SI.MassFlowRate mA_flow_nominal = V*1.2*6/3600
     "Nominal mass flow rate"
     annotation(dialog(group="Zone parameters"));
 
-  parameter Modelica.SIunits.HeatFlowRate Q_flow_nominal = boiEff1[1]*boiCap1 + boiEff2[1]*boiCap2
+  parameter Modelica.Units.SI.HeatFlowRate Q_flow_nominal = boiEff1[1]*boiCap1 + boiEff2[1]*boiCap2
     "Nominal heat flow rate of radiator"
     annotation(dialog(group="Radiator parameters"));
 
-  parameter Modelica.SIunits.HeatFlowRate boiCap1= 2200000
+  parameter Modelica.Units.SI.HeatFlowRate boiCap1= 2200000
     "Boiler capacity for boiler-1"
     annotation(dialog(group="Boiler parameters"));
 
-  parameter Modelica.SIunits.HeatFlowRate boiCap2= 2200000
+  parameter Modelica.Units.SI.HeatFlowRate boiCap2= 2200000
     "Boiler capacity for boiler-2"
     annotation(dialog(group="Boiler parameters"));
 
@@ -32,39 +32,39 @@ model BoilerPlant_BoilerPITuning "Boiler plant model for closed loop testing"
     "Efficiency for boiler-2"
     annotation(dialog(group="Boiler parameters"));
 
-  parameter Modelica.SIunits.Temperature TRadSup_nominal = 273.15+70
+  parameter Modelica.Units.SI.Temperature TRadSup_nominal = 273.15+70
     "Radiator nominal supply water temperature"
     annotation(dialog(group="Radiator parameters"));
 
-  parameter Modelica.SIunits.Temperature TRadRet_nominal = 273.15+50
+  parameter Modelica.Units.SI.Temperature TRadRet_nominal = 273.15+50
     "Radiator nominal return water temperature"
     annotation(dialog(group="Radiator parameters"));
 
-  parameter Modelica.SIunits.MassFlowRate mRad_flow_nominal=0.096323 * 1000
+  parameter Modelica.Units.SI.MassFlowRate mRad_flow_nominal=0.096323 * 1000
     "Radiator nominal mass flow rate"
     annotation(dialog(group="Radiator parameters"));
 
-  parameter Modelica.SIunits.Temperature TBoiSup_nominal = 273.15+70
+  parameter Modelica.Units.SI.Temperature TBoiSup_nominal = 273.15+70
     "Boiler nominal supply water temperature"
     annotation(dialog(group="Boiler parameters"));
 
-  parameter Modelica.SIunits.Temperature TBoiRet_min = 273.15+60
+  parameter Modelica.Units.SI.Temperature TBoiRet_min = 273.15+60
     "Boiler minimum return water temperature"
     annotation(dialog(group="Boiler parameters"));
 
-  parameter Modelica.SIunits.MassFlowRate mBoi_flow_nominal1=mRad_flow_nominal
+  parameter Modelica.Units.SI.MassFlowRate mBoi_flow_nominal1=mRad_flow_nominal
     "Boiler-1 nominal mass flow rate"
     annotation(dialog(group="Boiler parameters"));
 
-  parameter Modelica.SIunits.MassFlowRate mBoi_flow_nominal2=mRad_flow_nominal
+  parameter Modelica.Units.SI.MassFlowRate mBoi_flow_nominal2=mRad_flow_nominal
     "Boiler-2 nominal mass flow rate"
     annotation(dialog(group="Boiler parameters"));
 
-  parameter Modelica.SIunits.Volume V=126016.35
+  parameter Modelica.Units.SI.Volume V=126016.35
     "Room volume"
     annotation(dialog(group="Zone parameters"));
 
-  parameter Modelica.SIunits.Temperature TAir_nominal=273.15 + 23.9
+  parameter Modelica.Units.SI.Temperature TAir_nominal=273.15 + 23.9
     "Air temperature at nominal condition"
     annotation(dialog(group="Zone parameters"));
 
@@ -194,7 +194,7 @@ model BoilerPlant_BoilerPITuning "Boiler plant model for closed loop testing"
   Fluid.Sensors.TemperatureTwoPort           senTem3(redeclare package Medium =
         Media.Water, m_flow_nominal=mBoi_flow_nominal2)
     annotation (Placement(transformation(extent={{60,-220},{80,-200}})));
-  Controls.OBC.CDL.Continuous.PID conPID[2](
+  Buildings.Controls.OBC.CDL.Reals.PID conPID[2](
     controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
     k=fill(10e-3, 2),
     Ti={60,60},
@@ -234,7 +234,7 @@ model BoilerPlant_BoilerPITuning "Boiler plant model for closed loop testing"
     timeScale=60) "Boiler thermal load from EnergyPlus simulation"
     annotation (Placement(transformation(extent={{-120,190},{-100,210}})));
 
-  Controls.OBC.CDL.Continuous.Gain gai(k=-1)
+  Buildings.Controls.OBC.CDL.Reals.Gain gai(k=-1)
     annotation (Placement(transformation(extent={{-80,190},{-60,210}})));
   ZoneModel_simplified            zoneModel_simplified(
     Q_flow_nominal=4359751.36,
@@ -244,11 +244,11 @@ model BoilerPlant_BoilerPITuning "Boiler plant model for closed loop testing"
     V=126016.35,
     zonTheCap=6987976290)
     annotation (Placement(transformation(extent={{-20,140},{0,160}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant con(k=0.5)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(k=0.5)
     annotation (Placement(transformation(extent={{-180,-20},{-160,0}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant con1(k=70)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con1(k=70)
     annotation (Placement(transformation(extent={{-300,-20},{-280,0}})));
-  Controls.OBC.CDL.Continuous.AddParameter addPar[2](p=-273.15, k=1)
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar[2](p=-273.15, k=1)
     annotation (Placement(transformation(extent={{-300,-160},{-280,-140}})));
 equation
   connect(spl1.port_2, spl2.port_1)

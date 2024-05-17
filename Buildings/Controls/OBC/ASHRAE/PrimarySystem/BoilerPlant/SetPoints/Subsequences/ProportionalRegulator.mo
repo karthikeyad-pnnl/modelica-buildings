@@ -32,19 +32,19 @@ block ProportionalRegulator
         iconTransformation(extent={{100,-20},{140,20}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(
     final p=TRetSet,
     final k=-1)
     "Compare hot water return temperature and minimum return temperature"
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Limiter lim(
+  Buildings.Controls.OBC.CDL.Reals.Limiter lim(
     final uMax=TRetSet - TRetMinAll,
     final uMin=0)
     "Limit input for calculating control signal"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Gain gai(
+  Buildings.Controls.OBC.CDL.Reals.Gain gai(
     final k=1/(TRetSet - TRetMinAll))
     "Calculate control signal"
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));

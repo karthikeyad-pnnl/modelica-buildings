@@ -45,22 +45,22 @@ protected
     "Sample valve position at start of shutdown process"
     annotation (Placement(transformation(extent={{-70,40},{-50,60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(
     final p=1e-6,
     final k=1/chaHotWatIsoRat)
     "Determine time required to change valve position"
     annotation (Placement(transformation(extent={{-30,40},{-10,60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Greater gre
+  Buildings.Controls.OBC.CDL.Reals.Greater gre
     "Check if time required for changing valve position has elapsed"
     annotation (Placement(transformation(extent={{60,110},{80,130}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con9(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con9(
     final k=0)
     "Constant zero"
     annotation (Placement(transformation(extent={{0,90},{20,110}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Line lin1
+  Buildings.Controls.OBC.CDL.Reals.Line lin1
     "Hot water isolation valve setpoint"
     annotation (Placement(transformation(extent={{40,70},{60,90}})));
 
@@ -72,17 +72,17 @@ protected
     "Check if it is time to change isolation valve position"
     annotation (Placement(transformation(extent={{-80,-180},{-60,-160}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch swi
+  Buildings.Controls.OBC.CDL.Reals.Switch swi
     "Logical switch"
     annotation (Placement(transformation(extent={{140,-50},{160,-30}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys3(
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys3(
     final uLow=0.025,
     final uHigh=0.05)
     "Check if isolation valve is disabled"
     annotation (Placement(transformation(extent={{-120,210},{-100,230}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys4(
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys4(
     final uLow=0.925,
     final uHigh=0.975)
     "Check if isolation valve is open more than 95%"

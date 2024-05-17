@@ -9,7 +9,7 @@ model BoilerPlant
       Buildings.Media.Water
     "Medium model";
 
-  parameter Modelica.SIunits.HeatFlowRate Q_flow_nominal = 20000
+  parameter Modelica.Units.SI.HeatFlowRate Q_flow_nominal = 20000
     "Nominal heat flow rate of radiator";
 
   Buildings.Examples.BoilerPlant.PlantModel.BoilerPlant boilerPlant(
@@ -22,12 +22,12 @@ model BoilerPlant
     "Pump enable status"
     annotation (Placement(transformation(extent={{-110,-10},{-90,10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con2(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con2(
     final k=0)
     "Bypass valve position"
     annotation (Placement(transformation(extent={{-110,-50},{-90,-30}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(
     final uLow=273.15 + 60,
     final uHigh=273.15 + 70)
     "Turn on boiler plants when hot water supply temperature falls below setpoint"
@@ -51,12 +51,12 @@ model BoilerPlant
     "Real replicator"
     annotation (Placement(transformation(extent={{80,-30},{100,-10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con1(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con1(
     final k=-Q_flow_nominal)
     "Internal heat gain of thermal zone"
     annotation (Placement(transformation(extent={{-110,30},{-90,50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys1(
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys1(
     final uLow=273.15 + 21.7,
     final uHigh=273.15 + 23.89)
     "Turn on hot water pumps when the zone temperature falls below the heating setpoint"
@@ -70,7 +70,7 @@ model BoilerPlant
     "Enable boiler plant only when pumps are enabled"
     annotation (Placement(transformation(extent={{50,10},{70,30}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con3(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con3(
     final k=273.15 + 21)
     "Outdoor air temperature"
     annotation (Placement(transformation(extent={{-110,-90},{-90,-70}})));

@@ -36,7 +36,7 @@ model MinimumFlowSetPoint "Validation model for MinimumFlowSetPoint sequence"
     annotation (Placement(transformation(extent={{0,-90},{20,-70}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Ramp ram(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Ramp ram(
     final height=3,
     final duration=45,
     final offset=0,
@@ -48,7 +48,7 @@ protected
     "Real to Integer conversion"
     annotation (Placement(transformation(extent={{-60,10},{-40,30}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con1[3](
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con1[3](
     final k={0,1,0})
     "Last boiler being disabled during stage change"
     annotation (Placement(transformation(extent={{-90,90},{-70,110}})));
@@ -64,7 +64,7 @@ protected
     "Real to Integer conversion"
     annotation (Placement(transformation(extent={{20,90},{40,110}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr
     "Check if current stage setpoint involves boilers being turned on and off"
     annotation (Placement(transformation(extent={{-30,60},{-10,80}})));
 
@@ -76,7 +76,7 @@ protected
     "Generate end of stage change signal at end of hold period"
     annotation (Placement(transformation(extent={{30,30},{50,50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Ramp ram1(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Ramp ram1(
     final height=-3,
     final duration=45,
     final offset=4,
@@ -87,7 +87,7 @@ protected
     "Real to Integer conversion"
     annotation (Placement(transformation(extent={{-60,-110},{-40,-90}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con2[3](
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con2[3](
     final k={2,1,0})
     "Last boiler being disabled during stage change"
     annotation (Placement(transformation(extent={{-90,-30},{-70,-10}})));
@@ -103,7 +103,7 @@ protected
     "Real to Integer conversion"
     annotation (Placement(transformation(extent={{20,-30},{40,-10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr1
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr1
     "Check if current stage setpoint involves boilers being turned on and off"
     annotation (Placement(transformation(extent={{-30,-60},{-10,-40}})));
 
@@ -115,7 +115,7 @@ protected
     "Generate end of stage change signal at end of hold period"
     annotation (Placement(transformation(extent={{30,-90},{50,-70}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con3[3](
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con3[3](
     final k={1,0,0})
     "Vector indicating if stage change involves boilers being turned on and off"
     annotation (Placement(transformation(extent={{-90,-60},{-70,-40}})));

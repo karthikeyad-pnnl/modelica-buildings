@@ -58,7 +58,7 @@ block PlantEnable
     annotation (Placement(transformation(extent={{160,-20},{200,20}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable enaSch(
+  Buildings.Controls.OBC.CDL.Reals.Sources.TimeTable enaSch(
     final table=schTab,
     final smoothness=Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments,
     final timeScale=3600)
@@ -74,7 +74,7 @@ block PlantEnable
     annotation (Placement(transformation(extent={{10,60},{30,80}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr(
     final t=0.5)
     "Check if schedule lets the controller enable the plant or not"
     annotation (Placement(transformation(extent={{-120,-120},{-100,-100}})));
@@ -106,13 +106,13 @@ protected
     "Logical Not"
     annotation (Placement(transformation(extent={{-10,-120},{10,-100}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(
     final p=TOutLoc,
     final k=-1)
     "Compare measured outdoor air temperature to boiler lockout temperature"
     annotation (Placement(transformation(extent={{-150,-60},{-130,-40}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(
     final uLow=-locDt,
     final uHigh=0)
     "Hysteresis loop to prevent cycling caused by measured value"

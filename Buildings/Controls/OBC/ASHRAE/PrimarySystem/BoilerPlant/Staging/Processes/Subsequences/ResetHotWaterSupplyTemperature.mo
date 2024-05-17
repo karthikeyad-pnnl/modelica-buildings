@@ -63,7 +63,7 @@ protected
     "Ensure stage-completion signal is passed only when the stage-up signal is active"
     annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.LessThreshold lesThr(
+  Buildings.Controls.OBC.CDL.Reals.LessThreshold lesThr(
     final t=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.nonCondensingBoiler)
     "Pass True if all preceding stages are condensing boiler type stages"
     annotation (Placement(transformation(extent={{80,-70},{100,-50}})));
@@ -82,7 +82,7 @@ protected
     "Identify stage indices below current setpoint"
     annotation (Placement(transformation(extent={{-80,-70},{-60,-50}})));
 
-  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi[nSta]
+  Buildings.Controls.OBC.CDL.Integers.Switch intSwi[nSta]
     "Pass stage-type values for all stage indices lower than current setpoint"
     annotation (Placement(transformation(extent={{-40,-70},{-20,-50}})));
 
@@ -95,7 +95,7 @@ protected
     "Integer to Real conversion"
     annotation (Placement(transformation(extent={{0,-70},{20,-50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.MultiMax mulMax(
+  Buildings.Controls.OBC.CDL.Reals.MultiMax mulMax(
     final nin=nSta)
     "Detect maximum from stage-type vector"
     annotation (Placement(transformation(extent={{40,-70},{60,-50}})));
@@ -109,7 +109,7 @@ protected
     "Integer to Real conversion"
     annotation (Placement(transformation(extent={{-140,-30},{-120,-10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr1(
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr1(
     final t=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler)
     "Identify if current stage setpoint is a non-condensing boiler stage"
     annotation (Placement(transformation(extent={{-60,-30},{-40,-10}})));
@@ -118,7 +118,7 @@ protected
     "Ensure current stage setpoint is the lead non-condensing boiler stage"
     annotation (Placement(transformation(extent={{120,-40},{140,-20}})));
 
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi
+  Buildings.Controls.OBC.CDL.Logical.Switch logSwi
     "Pass process completion signal based on whether stage setpoint is lead non-condensing stage"
     annotation (Placement(transformation(extent={{120,20},{140,40}})));
 
@@ -132,7 +132,7 @@ protected
     "Pass process completion signal upon temperature reset or process time-out"
     annotation (Placement(transformation(extent={{-100,40},{-80,60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(
     final uLow=TMinSupNonConBoi,
     final uHigh=TMinSupNonConBoi + sigDif)
     "Check if measured hot water supply temperature is greater than minimum

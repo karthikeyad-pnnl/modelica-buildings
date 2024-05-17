@@ -86,19 +86,19 @@ block ZoneModel "Zone model"
     haveExteriorShade=false) "Data record for the glazing system"
     annotation (Placement(transformation(extent={{40,160},{60,180}})));
 
-  parameter Modelica.SIunits.HeatFlowRate Q_flow_nominal = 4359751.36
+  parameter Modelica.Units.SI.HeatFlowRate Q_flow_nominal = 4359751.36
     "Nominal heat flow rate of radiator"
     annotation(dialog(group="Radiator parameters"));
 
-  parameter Modelica.SIunits.Temperature TRadSup_nominal = 273.15+70
+  parameter Modelica.Units.SI.Temperature TRadSup_nominal = 273.15+70
     "Radiator nominal supply water temperature"
     annotation(dialog(group="Radiator parameters"));
 
-  parameter Modelica.SIunits.Temperature TRadRet_nominal = 273.15+50
+  parameter Modelica.Units.SI.Temperature TRadRet_nominal = 273.15+50
     "Radiator nominal return water temperature"
     annotation(dialog(group="Radiator parameters"));
 
-  parameter Modelica.SIunits.MassFlowRate mRad_flow_nominal=0.000604*1000
+  parameter Modelica.Units.SI.MassFlowRate mRad_flow_nominal=0.000604*1000
     "Radiator nominal mass flow rate"
     annotation(dialog(group="Radiator parameters"));
 
@@ -159,22 +159,22 @@ block ZoneModel "Zone model"
     nStaRef=5) "Concrete"
     annotation (Placement(transformation(extent={{-120,120},{-100,140}})));
 
-  parameter Modelica.SIunits.Volume V=1200
+  parameter Modelica.Units.SI.Volume V=1200
     "Room volume"
     annotation(dialog(group="Zone parameters"));
 
-  parameter Modelica.SIunits.Length hRoo=4.545
+  parameter Modelica.Units.SI.Length hRoo=4.545
     "Height of room";
 
   parameter Real zonTheCap = 2*V*1.2*1500
     "Zone thermal capacitance"
     annotation(dialog(group="Zone parameters"));
 
-  parameter Modelica.SIunits.Temperature TAir_nominal=273.15 + 23.9
+  parameter Modelica.Units.SI.Temperature TAir_nominal=273.15 + 23.9
     "Air temperature at nominal condition"
     annotation(dialog(group="Zone parameters"));
 
-  parameter Modelica.SIunits.MassFlowRate mA_flow_nominal = V*1.2*6/3600
+  parameter Modelica.Units.SI.MassFlowRate mA_flow_nominal = V*1.2*6/3600
     "Nominal mass flow rate"
     annotation(dialog(group="Zone parameters"));
 
@@ -182,10 +182,10 @@ block ZoneModel "Zone model"
     min=0.01,
     max=0.99)= 0.5777 "Window to wall ratio for exterior walls";
 
-  Controls.OBC.CDL.Interfaces.RealInput u annotation (Placement(transformation(
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput u annotation (Placement(transformation(
           extent={{-240,-20},{-200,20}}), iconTransformation(extent={{-140,-20},
             {-100,20}})));
-  Controls.OBC.CDL.Interfaces.RealOutput y annotation (Placement(transformation(
+  Buildings.Controls.OBC.CDL.Interfaces.RealOutput y annotation (Placement(transformation(
           extent={{200,-20},{240,20}}), iconTransformation(extent={{100,-20},{140,
             20}})));
   BoundaryConditions.WeatherData.Bus weaBus annotation (Placement(

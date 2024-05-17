@@ -7,7 +7,7 @@ block StepTest "Model to test step response of zone model"
       Buildings.Media.Water
     "Medium model";
 
-  parameter Modelica.SIunits.MassFlowRate mRad_flow_nominal=113.45
+  parameter Modelica.Units.SI.MassFlowRate mRad_flow_nominal=113.45
     "Radiator nominal mass flow rate"
     annotation(dialog(group="Radiator parameters"));
 
@@ -32,7 +32,7 @@ block StepTest "Model to test step response of zone model"
     timeScale=60) "Boiler thermal load from EnergyPlus simulation"
     annotation (Placement(transformation(extent={{-140,100},{-120,120}})));
 
-  Controls.OBC.CDL.Continuous.Gain gai(k=-1)
+  Buildings.Controls.OBC.CDL.Reals.Gain gai(k=-1)
     annotation (Placement(transformation(extent={{-100,100},{-80,120}})));
 
   Fluid.Actuators.Valves.TwoWayLinear           val3(
@@ -43,30 +43,30 @@ block StepTest "Model to test step response of zone model"
     l=10e-10)
     "Isolation valve for radiator"
     annotation (Placement(transformation(extent={{-70,30},{-50,50}})));
-  Controls.OBC.CDL.Continuous.Sources.Constant           con(final k=273.15 + 21.11)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant           con(final k=273.15 + 21.11)
     "Zone temperature setpoint"
     annotation (Placement(transformation(extent={{-50,80},{-30,100}})));
-  Controls.OBC.CDL.Continuous.Hysteresis hys(uLow=0.01, uHigh=0.05)
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(uLow=0.01, uHigh=0.05)
     "Check if radiator control valve opening is above threshold for enabling boiler plant"
     annotation (Placement(transformation(extent={{10,130},{30,150}})));
-  Controls.OBC.CDL.Logical.Timer tim(t=30) "Timer"
+  Buildings.Controls.OBC.CDL.Logical.Timer tim(t=30) "Timer"
     annotation (Placement(transformation(extent={{40,130},{60,150}})));
-  Controls.OBC.CDL.Conversions.BooleanToInteger booToInt
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt
     annotation (Placement(transformation(extent={{100,80},{120,100}})));
-  Controls.OBC.CDL.Continuous.Hysteresis hys1(uLow=0.00045, uHigh=0.00046)
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys1(uLow=0.00045, uHigh=0.00046)
     "Check if radiator control valve opening is above threshold for rasing HHW supply temperature"
     annotation (Placement(transformation(extent={{20,50},{40,70}})));
-  Controls.OBC.CDL.Logical.Timer tim1(t=30) "Timer"
+  Buildings.Controls.OBC.CDL.Logical.Timer tim1(t=30) "Timer"
     annotation (Placement(transformation(extent={{50,50},{70,70}})));
-  Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1(integerTrue=3)
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1(integerTrue=3)
     annotation (Placement(transformation(extent={{80,50},{100,70}})));
-  Controls.OBC.CDL.Logical.Latch lat
+  Buildings.Controls.OBC.CDL.Logical.Latch lat
     annotation (Placement(transformation(extent={{70,130},{90,150}})));
-  Controls.OBC.CDL.Logical.Timer tim2(t=60) "Timer"
+  Buildings.Controls.OBC.CDL.Logical.Timer tim2(t=60) "Timer"
     annotation (Placement(transformation(extent={{50,90},{70,110}})));
-  Controls.OBC.CDL.Logical.Not not1
+  Buildings.Controls.OBC.CDL.Logical.Not not1
     annotation (Placement(transformation(extent={{20,90},{40,110}})));
-  Controls.OBC.CDL.Continuous.PID           conPID(
+  Buildings.Controls.OBC.CDL.Reals.PID           conPID(
     final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
     final k=1*10e-4,
     Ti=10000)
@@ -89,16 +89,16 @@ block StepTest "Model to test step response of zone model"
     p=1500000,
     T=293.15,
     nPorts=2) annotation (Placement(transformation(extent={{-20,-10},{0,10}})));
-  Controls.OBC.CDL.Continuous.Sources.Sine sin(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin(
     amplitude=19,
     freqHz=1/35956,
     offset=324.15)
     annotation (Placement(transformation(extent={{-150,60},{-130,80}})));
-  Controls.OBC.CDL.Integers.Sources.Constant conInt(k=1)
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(k=1)
     annotation (Placement(transformation(extent={{-150,-140},{-130,-120}})));
-  Controls.OBC.CDL.Logical.Sources.Constant con1[2](k=fill(true, 2))
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con1[2](k=fill(true, 2))
     annotation (Placement(transformation(extent={{-160,-70},{-140,-50}})));
-  Controls.OBC.CDL.Logical.Not not2
+  Buildings.Controls.OBC.CDL.Logical.Not not2
     annotation (Placement(transformation(extent={{-130,-90},{-110,-70}})));
 
   Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.HotWaterSupplyTemperatureReset           hotWatSupTemRes(

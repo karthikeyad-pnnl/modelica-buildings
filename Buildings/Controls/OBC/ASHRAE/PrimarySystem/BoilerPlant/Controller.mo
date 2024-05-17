@@ -1128,13 +1128,13 @@ model Controller
     "Minimum flow setpoint for the primary loop"
     annotation (Placement(transformation(extent={{250,310},{270,330}})));
 
-  CDL.Continuous.Max max
+  Buildings.Controls.OBC.CDL.Reals.Max max
     annotation (Placement(transformation(extent={{300,-50},{320,-30}})));
-  CDL.Logical.Switch swi1
+  Buildings.Controls.OBC.CDL.Reals.Switch swi1
     annotation (Placement(transformation(extent={{340,-40},{360,-20}})));
-  CDL.Integers.GreaterThreshold intGreThr
+  Buildings.Controls.OBC.CDL.Integers.GreaterThreshold intGreThr
     annotation (Placement(transformation(extent={{-140,340},{-120,360}})));
-  CDL.Continuous.PID conPID(
+  Buildings.Controls.OBC.CDL.Reals.PID conPID(
     controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
     k=k_priPum,
     Ti=Ti_priPum,
@@ -1169,7 +1169,7 @@ protected
   parameter Integer secPumInd[nPumSec]={i for i in 1:nPumSec}
     "Vector of secondary pump indices up to total number of secondary pumps";
 
-  Buildings.Controls.OBC.CDL.Continuous.MultiMax mulMax(
+  Buildings.Controls.OBC.CDL.Reals.MultiMax mulMax(
     final nin=nPumPri) if not have_priOnl
     "Identify maximum measured pump speed"
     annotation (Placement(transformation(extent={{-380,-570},{-360,-550}})));
@@ -1298,11 +1298,11 @@ protected
     "Latch to identify if process is stage-up or stage-down"
     annotation (Placement(transformation(extent={{-50,350},{-30,370}})));
 
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi
+  Buildings.Controls.OBC.CDL.Logical.Switch logSwi
     "Logical switch"
     annotation (Placement(transformation(extent={{22,320},{42,340}})));
 
-  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi
+  Buildings.Controls.OBC.CDL.Integers.Switch intSwi
     "Integer switch"
     annotation (Placement(transformation(extent={{20,370},{40,390}})));
 
@@ -1353,12 +1353,12 @@ protected
     "Integer to Real converter"
     annotation (Placement(transformation(extent={{-190,-50},{-170,-30}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant dpHotWatSet(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant dpHotWatSet(
     final k=maxLocDpPri) if have_priOnl
     "Differential pressure setpoint for primary circuit"
     annotation (Placement(transformation(extent={{60,-180},{80,-160}})));
 
-  Buildings.Controls.OBC.CDL.Logical.LogicalSwitch logSwi1[nBoi]
+  Buildings.Controls.OBC.CDL.Logical.Switch logSwi1[nBoi]
     "Logical switch"
     annotation (Placement(transformation(extent={{180,260},{200,280}})));
 
@@ -1367,7 +1367,7 @@ protected
     "Boolean replicator"
     annotation (Placement(transformation(extent={{120,260},{140,280}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch swi[nBoi] if have_heaPriPum
+  Buildings.Controls.OBC.CDL.Reals.Switch swi[nBoi] if have_heaPriPum
     "Real switch"
     annotation (Placement(transformation(extent={{180,220},{200,240}})));
 
@@ -1446,7 +1446,7 @@ protected
     "Secondary pump controller"
     annotation (Placement(transformation(extent={{120,-380},{140,-340}})));
 
-  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi1 if not have_priOnl
+  Buildings.Controls.OBC.CDL.Integers.Switch intSwi1 if not have_priOnl
     "Integer switch"
     annotation (Placement(transformation(extent={{64,280},{84,300}})));
 
@@ -1455,7 +1455,7 @@ protected
     "Constant stage Integer source"
     annotation (Placement(transformation(extent={{60,-290},{80,-270}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant dpHotWatSet1(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant dpHotWatSet1(
     final k=maxLocDpSec) if not have_priOnl
     "Differential pressure setpoint for secondary circuit"
     annotation (Placement(transformation(extent={{60,-390},{80,-370}})));

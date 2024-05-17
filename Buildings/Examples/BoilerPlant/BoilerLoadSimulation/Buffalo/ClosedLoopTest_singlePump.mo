@@ -8,7 +8,7 @@ block ClosedLoopTest_singlePump
       Buildings.Media.Water
     "Medium model";
 
-  parameter Modelica.SIunits.MassFlowRate mRad_flow_nominal=113.45
+  parameter Modelica.Units.SI.MassFlowRate mRad_flow_nominal=113.45
     "Radiator nominal mass flow rate"
     annotation(dialog(group="Radiator parameters"));
 
@@ -37,7 +37,7 @@ block ClosedLoopTest_singlePump
     timeScale=60) "Boiler thermal load from EnergyPlus simulation"
     annotation (Placement(transformation(extent={{-140,100},{-120,120}})));
 
-  Controls.OBC.CDL.Continuous.Gain gai(k=-1)
+  Buildings.Controls.OBC.CDL.Reals.Gain gai(k=-1)
     annotation (Placement(transformation(extent={{-100,100},{-80,120}})));
   Buildings.Examples.BoilerPlant.PlantModel.BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump boiPla(
     boiCap1=(1 - boiCapRat)*boiDesCap,
@@ -108,23 +108,23 @@ block ClosedLoopTest_singlePump
     l=0.0001)
     "Isolation valve for radiator"
     annotation (Placement(transformation(extent={{-70,30},{-50,50}})));
-  Controls.OBC.CDL.Continuous.Hysteresis hys(uLow=0.05, uHigh=0.1)
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(uLow=0.05, uHigh=0.1)
     "Check if radiator control valve opening is above threshold for enabling boiler plant"
     annotation (Placement(transformation(extent={{10,130},{30,150}})));
-  Controls.OBC.CDL.Conversions.BooleanToInteger booToInt
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt
     annotation (Placement(transformation(extent={{100,130},{120,150}})));
-  Controls.OBC.CDL.Continuous.Hysteresis hys1(uLow=0.85, uHigh=0.9)
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys1(uLow=0.85, uHigh=0.9)
     "Check if radiator control valve opening is above threshold for rasing HHW supply temperature"
     annotation (Placement(transformation(extent={{20,50},{40,70}})));
-  Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1(integerTrue=3)
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1(integerTrue=3)
     annotation (Placement(transformation(extent={{80,50},{100,70}})));
-  Controls.OBC.CDL.Continuous.PID           conPID(
+  Buildings.Controls.OBC.CDL.Reals.PID           conPID(
     final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
     final k=10e-2,
     Ti=300)
     "Radiator isolation valve controller"
     annotation (Placement(transformation(extent={{-20,80},{0,100}})));
-  Controls.OBC.CDL.Logical.Sources.Constant           con3[2](final k=fill(true,
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant           con3[2](final k=fill(true,
         2))
     "Constant boiler availability status"
     annotation (Placement(transformation(extent={{-140,-140},{-120,-120}})));
@@ -136,7 +136,7 @@ block ClosedLoopTest_singlePump
     "Weather bus"
     annotation (Placement(transformation(extent={{-120,60},{-100,80}}),
         iconTransformation(extent={{-56,104},{-36,124}})));
-  Controls.OBC.CDL.Continuous.AddParameter addPar(p=273.15, k=1)
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(p=273.15, k=1)
     annotation (Placement(transformation(extent={{-60,130},{-40,150}})));
 equation
   connect(controller.yBoi, boiPla.uBoiSta) annotation (Line(points={{-88,0},{

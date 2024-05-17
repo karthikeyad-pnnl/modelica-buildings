@@ -128,17 +128,17 @@ block HotWaterSupplyTemperatureReset_OATemp
     annotation (Placement(transformation(extent={{140,-250},{180,-210}}),
       iconTransformation(extent={{100,-60},{140,-20}})));
 
-  CDL.Interfaces.RealInput TOut "Measured outdoor air temperature" annotation (
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput TOut "Measured outdoor air temperature" annotation (
       Placement(transformation(extent={{-180,30},{-140,70}}),
         iconTransformation(extent={{-140,30},{-100,70}})));
 
-  CDL.Continuous.Hysteresis hys(uLow=12.78, uHigh=25)
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(uLow=12.78, uHigh=25)
     annotation (Placement(transformation(extent={{-100,40},{-80,60}})));
-  CDL.Logical.Switch swi
+  Buildings.Controls.OBC.CDL.Reals.Switch swi
     annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
-  CDL.Continuous.Sources.Constant con1(k=32.22)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con1(k=32.22)
     annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
-  CDL.Continuous.Sources.Constant con2(k=48.89)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con2(k=48.89)
     annotation (Placement(transformation(extent={{-100,0},{-80,20}})));
 protected
   Buildings.Controls.OBC.CDL.Routing.RealExtractor extIndSig(nin=nSta)
@@ -149,7 +149,7 @@ protected
     "Integer to Real conversion"
     annotation (Placement(transformation(extent={{-120,-80},{-100,-60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr(
     final t=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler)
     "Check for non-condensing stage type"
     annotation (Placement(transformation(extent={{-40,-80},{-20,-60}})));
@@ -181,30 +181,30 @@ protected
     "Convert temperature setpoint into vector"
     annotation (Placement(transformation(extent={{10,-200},{30,-180}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Product pro[nBoi]
+  Buildings.Controls.OBC.CDL.Reals.Product pro[nBoi]
     "Element-wise product"
     annotation (Placement(transformation(extent={{60,-200},{80,-180}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch swi2
+  Buildings.Controls.OBC.CDL.Reals.Switch swi2
     "Logical Switch"
     annotation (Placement(transformation(extent={{-40,-200},{-20,-180}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Add add2[nBoi]
+  Buildings.Controls.OBC.CDL.Reals.Add add2[nBoi]
     "Combine setpoint vectors for condensing and non-condensing boilers"
     annotation (Placement(transformation(extent={{100,-240},{120,-220}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(
     final k=TConBoiHotWatSetMax)
     "Design setpoint for condensing boilers"
     annotation (Placement(transformation(extent={{-120,-160},{-100,-140}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(
     final p=TConBoiHotWatSetOff,
     final k=1)
     "Boiler setpoint for condensing boilers in non-condensing type stage"
     annotation (Placement(transformation(extent={{-120,-200},{-100,-180}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Min min
+  Buildings.Controls.OBC.CDL.Reals.Min min
     "Ensure condensing boiler setpoint does not exceed design setpoint"
     annotation (Placement(transformation(extent={{-80,-180},{-60,-160}})));
 
@@ -213,7 +213,7 @@ protected
     "Convert temperature setpoint into vector"
     annotation (Placement(transformation(extent={{10,-310},{30,-290}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Product pro1[nBoi]
+  Buildings.Controls.OBC.CDL.Reals.Product pro1[nBoi]
     "Element-wise product"
     annotation (Placement(transformation(extent={{60,-280},{80,-260}})));
 

@@ -91,7 +91,7 @@ block Speed_flow
       iconTransformation(extent={{100,-20},{140,20}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Continuous.PIDWithReset conPID(
+  Buildings.Controls.OBC.CDL.Reals.PIDWithReset conPID(
     final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
     final k=k,
     final Ti=Ti,
@@ -105,16 +105,16 @@ protected
     "Reset PID loop when it is activated"
     annotation (Placement(transformation(extent={{-40,-30},{-20,-10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Line pumSpe
+  Buildings.Controls.OBC.CDL.Reals.Line pumSpe
     "Pump speed"
     annotation (Placement(transformation(extent={{60,50},{80,70}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Add add2(
+  Buildings.Controls.OBC.CDL.Reals.Add add2(
     final k2=-1) if primarySecondarySensors
     "Compare measured flowrate in primary and secondary circuits"
     annotation (Placement(transformation(extent={{-100,-50},{-80,-30}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Division div if primarySecondarySensors
+  Buildings.Controls.OBC.CDL.Reals.Division div if primarySecondarySensors
     "Normalize flow-rate value"
     annotation (Placement(transformation(extent={{-60,-80},{-40,-60}})));
 
@@ -123,37 +123,37 @@ protected
     "Check if any hot water primary pumps are enabled"
     annotation (Placement(transformation(extent={{-100,-10},{-80,10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant pumSpe_min(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant pumSpe_min(
     final k=minPumSpe)
     "Minimum pump speed"
     annotation (Placement(transformation(extent={{-80,50},{-60,70}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant pumSpe_max(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant pumSpe_max(
     final k=maxPumSpe)
     "Maximum pump speed"
     annotation (Placement(transformation(extent={{-20,30},{0,50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant one(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant one(
     final k=1)
     "Constant one"
     annotation (Placement(transformation(extent={{-80,20},{-60,40}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant zer(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant zer(
     final k=0)
     "Constant zero"
     annotation (Placement(transformation(extent={{-80,80},{-60,100}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch swi
+  Buildings.Controls.OBC.CDL.Reals.Switch swi
     "Logical switch"
     annotation (Placement(transformation(extent={{80,90},{100,110}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(
     final p=1e-6,
     final k=1) if primarySecondarySensors
     "Ensure divisor is non-zero"
     annotation (Placement(transformation(extent={{-100,-80},{-80,-60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Gain gai(
+  Buildings.Controls.OBC.CDL.Reals.Gain gai(
     final k=1/VHotWat_flow_nominal) if not primarySecondarySensors
     "Normalize flowrate"
     annotation (Placement(transformation(extent={{-60,-110},{-40,-90}})));

@@ -139,30 +139,30 @@ block Speed_temperature
     annotation (Placement(transformation(extent={{120,80},{160,120}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
-  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi1
+  Buildings.Controls.OBC.CDL.Integers.Switch intSwi1
     "Integer switch"
     annotation (Placement(transformation(extent={{40,40},{60,60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.MultiSum mulSum1(
+  Buildings.Controls.OBC.CDL.Reals.MultiSum mulSum1(
     final k=fill(1, nBoi),
     final nin=nBoi) if not primarySecondarySensors
     "Weighted average of boiler supply temperatures"
     annotation (Placement(transformation(extent={{80,-90},{100,-70}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(
     final uLow=twoReqLimLow,
     final uHigh=twoReqLimHig)
     "Hysteresis loop for sending two requests"
     annotation (Placement(transformation(extent={{-60,40},{-40,60}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys1(
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys1(
     final uLow=oneReqLimLow,
     final uHigh=oneReqLimHig)
     "Hysteresis loop for sending one request"
     annotation (Placement(transformation(extent={{-60,0},{-40,20}})));
 
-  Buildings.Controls.OBC.CDL.Logical.IntegerSwitch intSwi
+  Buildings.Controls.OBC.CDL.Integers.Switch intSwi
     "Integer switch"
     annotation (Placement(transformation(extent={{10,0},{30,20}})));
 
@@ -199,23 +199,23 @@ protected
     "Boolean to Real converter"
     annotation (Placement(transformation(extent={{-100,-60},{-80,-40}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con[nBoi](
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con[nBoi](
     final k=boiDesFlo) if not primarySecondarySensors
     "Vector of boiler design flowrates"
     annotation (Placement(transformation(extent={{-100,-90},{-80,-70}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Product pro1[nBoi] if not
+  Buildings.Controls.OBC.CDL.Reals.Product pro1[nBoi] if not
     primarySecondarySensors
     "Vector of design flowrates only for enabled boilers; Zero for disabled boilers"
     annotation (Placement(transformation(extent={{-70,-70},{-50,-50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.MultiSum mulSum(
+  Buildings.Controls.OBC.CDL.Reals.MultiSum mulSum(
     final k=fill(1, nBoi),
     final nin=nBoi) if not primarySecondarySensors
     "Sum of flowrates of all enabled boilers"
     annotation (Placement(transformation(extent={{-40,-100},{-20,-80}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Add add2(
+  Buildings.Controls.OBC.CDL.Reals.Add add2(
     final k2=-1)
     "Compare measured flowrate in primary and secondary circuits"
     annotation (Placement(transformation(extent={{-100,20},{-80,40}})));
@@ -225,12 +225,12 @@ protected
     "Check if any hot water primary pumps are enabled"
     annotation (Placement(transformation(extent={{-100,90},{-80,110}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant zer(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant zer(
     final k=0)
     "Constant zero"
     annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Switch swi
+  Buildings.Controls.OBC.CDL.Reals.Switch swi
     "Logical switch"
     annotation (Placement(transformation(extent={{80,90},{100,110}})));
 
@@ -239,15 +239,15 @@ protected
     "Real replicator"
     annotation (Placement(transformation(extent={{20,-100},{40,-80}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Division div[nBoi] if not primarySecondarySensors
+  Buildings.Controls.OBC.CDL.Reals.Division div[nBoi] if not primarySecondarySensors
     "Calculate weights for average based on design flowrate"
     annotation (Placement(transformation(extent={{20,-70},{40,-50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Product pro[nBoi] if not primarySecondarySensors
+  Buildings.Controls.OBC.CDL.Reals.Product pro[nBoi] if not primarySecondarySensors
     "Calculate weighted boiler supply temperatures"
     annotation (Placement(transformation(extent={{50,-90},{70,-70}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(
     final p=1e-6,
     final k=1) if not primarySecondarySensors
     "Pass non-zero divisor in case sum is zero"

@@ -30,7 +30,7 @@ model PlantEnable "Validation model for PlantEnable sequence"
     annotation (Placement(transformation(extent={{80,-50},{100,-30}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin(
     final amplitude=2,
     final freqHz=1/(6*60),
     final offset=2,
@@ -42,7 +42,7 @@ protected
     "Rounding real input to nearest integer"
     annotation (Placement(transformation(extent={{-60,70},{-40,90}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin1(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin1(
     final amplitude=2/1.8,
     final freqHz=1/700,
     final phase=3.1415926535898,
@@ -51,7 +51,7 @@ protected
     "Input for outdoor air temperature"
     annotation (Placement(transformation(extent={{-90,30},{-70,50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin2(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin2(
     final amplitude=2,
     final freqHz=1/(6*60),
     final offset=2,
@@ -67,7 +67,7 @@ protected
     "Rounding real input to nearest integer"
     annotation (Placement(transformation(extent={{40,70},{60,90}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin5(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin5(
     final amplitude=2/1.8,
     final freqHz=1/700,
     final phase=3.1415926535898,
@@ -80,22 +80,22 @@ protected
     "Rounding real input to nearest integer"
     annotation (Placement(transformation(extent={{40,-30},{60,-10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(
     final k=3)
     "Input for number of requests"
     annotation (Placement(transformation(extent={{10,70},{30,90}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con1(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con1(
     final k=297)
     "Input for outdoor air temperature"
     annotation (Placement(transformation(extent={{-90,-70},{-70,-50}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con2(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con2(
     final k=3)
     "Input for number of requests"
     annotation (Placement(transformation(extent={{10,-30},{30,-10}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con3(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con3(
     final k=297)
     "Input for outdoor air temperature"
     annotation (Placement(transformation(extent={{10,-70},{30,-50}})));

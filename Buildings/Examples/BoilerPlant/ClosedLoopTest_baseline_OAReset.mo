@@ -56,40 +56,40 @@ model ClosedLoopTest_baseline_OAReset "Closed loop testing model"
     "Boiler plant controller"
     annotation (Placement(transformation(extent={{-40,-34},{-20,34}})));
 
-  Controls.OBC.CDL.Continuous.Hysteresis hys(uLow=0.01, uHigh=0.05)
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(uLow=0.01, uHigh=0.05)
     "Check if radiator control valve opening is above threshold for enabling boiler plant"
     annotation (Placement(transformation(extent={{80,100},{100,120}})));
-  Controls.OBC.CDL.Logical.Timer tim(t=30) "Timer"
+  Buildings.Controls.OBC.CDL.Logical.Timer tim(t=30) "Timer"
     annotation (Placement(transformation(extent={{110,100},{130,120}})));
-  Controls.OBC.CDL.Conversions.BooleanToInteger booToInt
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt
     annotation (Placement(transformation(extent={{170,50},{190,70}})));
-  Controls.OBC.CDL.Continuous.Hysteresis hys1(uLow=0.85, uHigh=0.9)
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys1(uLow=0.85, uHigh=0.9)
     "Check if radiator control valve opening is above threshold for rasing HHW supply temperature"
     annotation (Placement(transformation(extent={{90,20},{110,40}})));
-  Controls.OBC.CDL.Logical.Timer tim1(t=30) "Timer"
+  Buildings.Controls.OBC.CDL.Logical.Timer tim1(t=30) "Timer"
     annotation (Placement(transformation(extent={{120,20},{140,40}})));
-  Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1(integerTrue=3)
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1(integerTrue=3)
     annotation (Placement(transformation(extent={{150,20},{170,40}})));
-  Controls.OBC.CDL.Logical.Latch lat
+  Buildings.Controls.OBC.CDL.Logical.Latch lat
     annotation (Placement(transformation(extent={{140,100},{160,120}})));
-  Controls.OBC.CDL.Logical.Timer tim2(t=60) "Timer"
+  Buildings.Controls.OBC.CDL.Logical.Timer tim2(t=60) "Timer"
     annotation (Placement(transformation(extent={{120,60},{140,80}})));
-  Controls.OBC.CDL.Logical.Not not1
+  Buildings.Controls.OBC.CDL.Logical.Not not1
     annotation (Placement(transformation(extent={{90,60},{110,80}})));
 
-  Controls.OBC.CDL.Discrete.UnitDelay uniDel(samplePeriod=1)
+  Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel(samplePeriod=1)
     annotation (Placement(transformation(extent={{0,-40},{20,-20}})));
-  Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(nout=2)
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaRep(nout=2)
     annotation (Placement(transformation(extent={{30,-40},{50,-20}})));
 protected
-  Buildings.Controls.OBC.CDL.Continuous.PID conPID(
+  Buildings.Controls.OBC.CDL.Reals.PID conPID(
     final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
     final k=1*10e-4,
     Ti=30)
     "Radiator isolation valve controller"
     annotation (Placement(transformation(extent={{50,50},{70,70}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(
     final k=273.15 + 21.11)
     "Zone temperature setpoint"
     annotation (Placement(transformation(extent={{10,50},{30,70}})));
@@ -108,7 +108,7 @@ protected
     "Weather bus"
     annotation (Placement(transformation(extent={{-60,50},{-40,70}})));
 
-  Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable timTab(
+  Buildings.Controls.OBC.CDL.Reals.Sources.TimeTable timTab(
     final extrapolation=Buildings.Controls.OBC.CDL.Types.Extrapolation.Periodic,
     final smoothness=Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments,
     final table=[-6,0; 8,10000; 18,0],

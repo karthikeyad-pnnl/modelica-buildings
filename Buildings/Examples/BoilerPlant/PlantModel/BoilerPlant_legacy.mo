@@ -6,19 +6,19 @@ model BoilerPlant_legacy "Boiler plant model for closed loop testing"
   replaceable package MediumW =
       Buildings.Media.Water "Medium model";
 
-  parameter Modelica.SIunits.MassFlowRate mA_flow_nominal = V*1.2*6/3600
+  parameter Modelica.Units.SI.MassFlowRate mA_flow_nominal = V*1.2*6/3600
     "Nominal mass flow rate"
     annotation(dialog(group="Zone parameters"));
 
-  parameter Modelica.SIunits.HeatFlowRate Q_flow_nominal = boiEff1[1]*boiCap1 + boiEff2[1]*boiCap2
+  parameter Modelica.Units.SI.HeatFlowRate Q_flow_nominal = boiEff1[1]*boiCap1 + boiEff2[1]*boiCap2
     "Nominal heat flow rate of radiator"
     annotation(dialog(group="Radiator parameters"));
 
-  parameter Modelica.SIunits.HeatFlowRate boiCap1= 15000
+  parameter Modelica.Units.SI.HeatFlowRate boiCap1= 15000
     "Boiler capacity for boiler-1"
     annotation(dialog(group="Boiler parameters"));
 
-  parameter Modelica.SIunits.HeatFlowRate boiCap2= 15000
+  parameter Modelica.Units.SI.HeatFlowRate boiCap2= 15000
     "Boiler capacity for boiler-2"
     annotation(dialog(group="Boiler parameters"));
 
@@ -30,35 +30,35 @@ model BoilerPlant_legacy "Boiler plant model for closed loop testing"
     "Efficiency for boiler-2"
     annotation(dialog(group="Boiler parameters"));
 
-  parameter Modelica.SIunits.Temperature TRadSup_nominal = 273.15+70
+  parameter Modelica.Units.SI.Temperature TRadSup_nominal = 273.15+70
     "Radiator nominal supply water temperature"
     annotation(dialog(group="Radiator parameters"));
-  parameter Modelica.SIunits.Temperature TRadRet_nominal = 273.15+60
+  parameter Modelica.Units.SI.Temperature TRadRet_nominal = 273.15+60
     "Radiator nominal return water temperature"
     annotation(dialog(group="Radiator parameters"));
-  parameter Modelica.SIunits.MassFlowRate mRad_flow_nominal=0.000604*1000
+  parameter Modelica.Units.SI.MassFlowRate mRad_flow_nominal=0.000604*1000
     "Radiator nominal mass flow rate"
     annotation(dialog(group="Radiator parameters"));
 
-  parameter Modelica.SIunits.Temperature TBoiSup_nominal = 273.15+70
+  parameter Modelica.Units.SI.Temperature TBoiSup_nominal = 273.15+70
     "Boiler nominal supply water temperature"
     annotation(dialog(group="Boiler parameters"));
-  parameter Modelica.SIunits.Temperature TBoiRet_min = 273.15+60
+  parameter Modelica.Units.SI.Temperature TBoiRet_min = 273.15+60
     "Boiler minimum return water temperature"
     annotation(dialog(group="Boiler parameters"));
-  parameter Modelica.SIunits.MassFlowRate mBoi_flow_nominal1=boiCap1/4200/(TBoiSup_nominal-TBoiRet_min)
+  parameter Modelica.Units.SI.MassFlowRate mBoi_flow_nominal1=boiCap1/4200/(TBoiSup_nominal-TBoiRet_min)
     "Boiler-1 nominal mass flow rate"
     annotation(dialog(group="Boiler parameters"));
 
-  parameter Modelica.SIunits.MassFlowRate mBoi_flow_nominal2=boiCap2/4200/(TBoiSup_nominal-TBoiRet_min)
+  parameter Modelica.Units.SI.MassFlowRate mBoi_flow_nominal2=boiCap2/4200/(TBoiSup_nominal-TBoiRet_min)
     "Boiler-2 nominal mass flow rate"
     annotation(dialog(group="Boiler parameters"));
 
-  parameter Modelica.SIunits.Volume V=1200
+  parameter Modelica.Units.SI.Volume V=1200
     "Room volume"
     annotation(dialog(group="Zone parameters"));
 
-  parameter Modelica.SIunits.Temperature TAir_nominal=273.15 + 23.9
+  parameter Modelica.Units.SI.Temperature TAir_nominal=273.15 + 23.9
     "Air temperature at nominal condition"
     annotation(dialog(group="Zone parameters"));
 
@@ -237,7 +237,7 @@ model BoilerPlant_legacy "Boiler plant model for closed loop testing"
         iconTransformation(extent={{-140,-20},{-100,20}})));
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea[2] "Boolean to Real conversion"
     annotation (Placement(transformation(extent={{-380,-100},{-360,-80}})));
-  Buildings.Controls.OBC.CDL.Continuous.Product pro[2] "Element-wise product"
+  Buildings.Controls.OBC.CDL.Reals.Product pro[2] "Element-wise product"
     annotation (Placement(transformation(extent={{-320,-120},{-300,-100}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uBypValSig "Bypass valve signal" annotation (
       Placement(transformation(extent={{-440,-190},{-400,-150}}),
