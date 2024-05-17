@@ -1,9 +1,6 @@
-ASHRAE2006
 Floor
-Guideline36
-HVACBuilding
+FreezeStat
 PartialFloor
-PartialHVAC
+PartialOpenLoop
 RoomLeakage
 VAVReheatBox
-Controls

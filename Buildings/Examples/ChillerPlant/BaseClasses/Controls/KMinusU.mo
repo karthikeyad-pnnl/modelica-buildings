@@ -32,8 +32,8 @@ First implementation.
             100}}), graphics={Text(
           extent={{-150,110},{150,150}},
           textString="%name",
-          textColor={0,0,255}), Text(
+          lineColor={0,0,255}), Text(
           extent={{-50,24},{40,-12}},
-          textColor={0,0,255},
+          lineColor={0,0,255},
           textString="y=k-u")}));
 end KMinusU;

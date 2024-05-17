@@ -1,0 +1,3 @@
+within Buildings.Examples.BoilerPlant.PlantModel;
+class BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump_oldSplitterPressures
+end BoilerPlant_Buffalo_NonAdiabaticPipe_singlePump_oldSplitterPressures;

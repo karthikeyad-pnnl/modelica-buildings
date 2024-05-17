@@ -7,28 +7,29 @@ model System4
   replaceable package MediumW =
       Buildings.Media.Water "Medium model";
 
-  parameter Modelica.Units.SI.HeatFlowRate Q_flow_nominal=20000
+  parameter Modelica.SIunits.HeatFlowRate Q_flow_nominal = 20000
     "Nominal heat flow rate of radiator";
-  parameter Modelica.Units.SI.Temperature TRadSup_nominal=273.15 + 50
+  parameter Modelica.SIunits.Temperature TRadSup_nominal = 273.15+50
     "Radiator nominal supply water temperature";
-  parameter Modelica.Units.SI.Temperature TRadRet_nominal=273.15 + 40
+  parameter Modelica.SIunits.Temperature TRadRet_nominal = 273.15+40
     "Radiator nominal return water temperature";
-  parameter Modelica.Units.SI.MassFlowRate mRad_flow_nominal=Q_flow_nominal/
-      4200/(TRadSup_nominal - TRadRet_nominal)
+  parameter Modelica.SIunits.MassFlowRate mRad_flow_nominal=
+    Q_flow_nominal/4200/(TRadSup_nominal-TRadRet_nominal)
     "Radiator nominal mass flow rate";
 
 //-------------------------Step 4: Boiler design values-------------------------//
-  parameter Modelica.Units.SI.Temperature TBoiSup_nominal=273.15 + 70
+  parameter Modelica.SIunits.Temperature TBoiSup_nominal = 273.15+70
     "Boiler nominal supply water temperature";
-  parameter Modelica.Units.SI.Temperature TBoiRet_min=273.15 + 60
+  parameter Modelica.SIunits.Temperature TBoiRet_min = 273.15+60
     "Boiler minimum return water temperature";
-  parameter Modelica.Units.SI.MassFlowRate mBoi_flow_nominal=Q_flow_nominal/
-      4200/(TBoiSup_nominal - TBoiRet_min) "Boiler nominal mass flow rate";
+  parameter Modelica.SIunits.MassFlowRate mBoi_flow_nominal=
+    Q_flow_nominal/4200/(TBoiSup_nominal-TBoiRet_min)
+    "Boiler nominal mass flow rate";
 //------------------------------------------------------------------------------//
 
 //----------------Radiator loop: Three-way valve: mass flow rate----------------//
-  parameter Modelica.Units.SI.MassFlowRate mRadVal_flow_nominal=Q_flow_nominal/
-      4200/(TBoiSup_nominal - TRadRet_nominal)
+  parameter Modelica.SIunits.MassFlowRate mRadVal_flow_nominal=
+    Q_flow_nominal/4200/(TBoiSup_nominal-TRadRet_nominal)
     "Radiator nominal mass flow rate";
 //------------------------------------------------------------------------------//
 
@@ -41,10 +42,10 @@ model System4
   Modelica.Thermal.HeatTransfer.Components.ThermalConductor theCon(G=20000/30)
     "Thermal conductance with the ambient"
     annotation (Placement(transformation(extent={{20,40},{40,60}})));
-  parameter Modelica.Units.SI.Volume V=6*10*3 "Room volume";
-  parameter Modelica.Units.SI.MassFlowRate mA_flow_nominal=V*1.2*6/3600
+  parameter Modelica.SIunits.Volume V=6*10*3 "Room volume";
+  parameter Modelica.SIunits.MassFlowRate mA_flow_nominal = V*1.2*6/3600
     "Nominal mass flow rate";
-  parameter Modelica.Units.SI.HeatFlowRate QRooInt_flow=4000
+  parameter Modelica.SIunits.HeatFlowRate QRooInt_flow = 4000
     "Internal heat gains of the room";
   Modelica.Thermal.HeatTransfer.Sources.FixedTemperature TOut(T=263.15)
     "Outside temperature"
@@ -55,7 +56,7 @@ model System4
   Modelica.Thermal.HeatTransfer.Components.HeatCapacitor heaCap(C=2*V*1.2*1006)
     "Heat capacity for furniture and walls"
     annotation (Placement(transformation(extent={{60,50},{80,70}})));
-  Buildings.Controls.OBC.CDL.Reals.Sources.TimeTable timTab(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.TimeTable timTab(
       extrapolation=Buildings.Controls.OBC.CDL.Types.Extrapolation.Periodic,
       smoothness=Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments,
       table=[-6, 0;
@@ -200,12 +201,12 @@ model System4
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-50,-250})));
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant const(k=1)
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant const(k=1)
     "Constant control signal for valves"
     annotation (Placement(transformation(extent={{-140,-160},{-120,-140}})));
 
 //---------------------Step 2: Outdoor temperature sensor and control------------------//
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hysTOut(uLow=273.15 + 16, uHigh=273.15 + 17)
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hysTOut(uLow=273.15 + 16, uHigh=273.15 + 17)
     "Hysteresis for on/off based on outside temperature"
     annotation (Placement(transformation(extent={{-260,-200},{-240,-180}})));
   Buildings.Controls.OBC.CDL.Logical.Not not2
@@ -217,7 +218,7 @@ model System4
 //------------------------------------------------------------------------------------//
 
 //-------------------------------Step 4: Boiler hysteresis----------------------------//
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hysTBoi(uHigh=273.15 + 90,
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hysTBoi(uHigh=273.15 + 90,
                                              uLow=273.15 + 70)
     "Hysteresis for on/off of boiler"
     annotation (Placement(transformation(extent={{-260,-348},{-240,-328}})));
@@ -241,7 +242,7 @@ model System4
     annotation (Placement(transformation(extent={{-100,-340},{-80,-320}})));
 //------------------------------------------------------------------------------------//
 
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hysPum(
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hysPum(
     uLow=273.15 + 19,
     uHigh=273.15 + 21)
     "Pump hysteresis"
@@ -493,7 +494,7 @@ Next, for the boiler on/off control, we use again a hysteresis block
 (instance <code>hysTBoi</code>), which we configured as
 </p>
 <pre>
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hysTBoi(uLow=273.15 + 70,
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hysTBoi(uLow=273.15 + 70,
                                                            uHigh=273.15 + 90)
     \"Hysteresis for on/off of boiler\";
 </pre>

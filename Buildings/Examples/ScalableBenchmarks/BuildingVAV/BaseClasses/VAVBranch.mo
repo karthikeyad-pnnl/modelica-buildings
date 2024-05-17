@@ -5,12 +5,11 @@ model VAVBranch "Supply branch of a VAV system"
   replaceable package MediumW = Modelica.Media.Interfaces.PartialMedium
     "Medium model for water" annotation (choicesAllMatching=true);
 
-  parameter Modelica.Units.SI.PressureDifference dpFixed_nominal(displayUnit=
-        "Pa") = 0
+  parameter Modelica.SIunits.PressureDifference dpFixed_nominal(displayUnit="Pa")=0
     "Pressure drop of duct and other resistances that are in series";
-  parameter Modelica.Units.SI.MassFlowRate m_flow_nominal
+  parameter Modelica.SIunits.MassFlowRate m_flow_nominal
     "Mass flow rate of this thermal zone";
-  parameter Modelica.Units.SI.Volume VRoo "Room volume";
+  parameter Modelica.SIunits.Volume VRoo "Room volume";
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TRooHeaSet(
     final quantity="ThermodynamicTemperature",
@@ -80,7 +79,7 @@ model VAVBranch "Supply branch of a VAV system"
     nPorts=1) "Sink for terminal box "
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},rotation=180,
       origin={132,24})));
-  Buildings.Examples.VAVReheat.BaseClasses.Controls.RoomVAV con
+  Buildings.Examples.VAVReheat.Controls.RoomVAV con
     "Room temperature controller"
     annotation (Placement(transformation(extent={{0,-10},{20,10}})));
   Buildings.Fluid.Sensors.MassFlowRate senMasFlo(
@@ -234,23 +233,23 @@ annotation (Diagram(coordinateSystem(preserveAspectRatio=true, extent={{-100,
           lineColor={0,0,0}),
         Text(
           extent={{-78,198},{24,156}},
-          textColor={0,0,255},
+          lineColor={0,0,255},
           textString="%name"),
         Text(
           extent={{126,24},{194,-20}},
-          textColor={0,0,0},
+          lineColor={0,0,0},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
           textString="yDam"),
         Text(
           extent={{144,194},{184,168}},
-          textColor={0,0,0},
+          lineColor={0,0,0},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
           textString="p_rel"),
         Text(
           extent={{144,154},{192,122}},
-          textColor={0,0,0},
+          lineColor={0,0,0},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
           textString="TRooAir")}),
