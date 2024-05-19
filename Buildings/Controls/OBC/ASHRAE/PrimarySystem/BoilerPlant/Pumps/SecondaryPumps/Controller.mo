@@ -2,6 +2,10 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPu
 block Controller
     "Sequences to control hot water pumps in boiler plants"
 
+  parameter Buildings.Controls.OBC.CDL.Types.SimpleController controllerType= Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "Type of controller"
+    annotation(Dialog(tab="Pump control parameters", group="PID parameters"));
+
   parameter Boolean have_varSecPum = false
     "True: Variable-speed secondary pumps;
     False: Fixed-speed secondary pumps"
@@ -13,20 +17,20 @@ block Controller
     annotation (Dialog(group="Plant parameters",
       enable=have_varSecPum));
 
-  parameter Integer nPum = 2
+  parameter Integer nPum
     "Total number of secondary hot water pumps"
     annotation (Dialog(group="Plant parameters"));
 
-  parameter Integer nPumPri = 2
+  parameter Integer nPumPri
     "Total number of primary hot water pumps"
     annotation (Dialog(group="Plant parameters",
       enable=not have_varSecPum));
 
-  parameter Integer nBoi = 2
+  parameter Integer nBoi
     "Total number of boilers"
     annotation (Dialog(group="Plant parameters"));
 
-  parameter Integer nSen=2
+  parameter Integer nSen
     "Total number of remote differential pressure sensors"
     annotation (Dialog(group="Plant parameters"));
 
@@ -56,7 +60,7 @@ block Controller
     final min=1e-6,
     final unit="m3/s",
     displayUnit="m3/s",
-    final quantity="VolumeFlowRate") = 0.5
+    final quantity="VolumeFlowRate")
     "Total plant design hot water flow rate"
     annotation (Dialog(group="Plant parameters"));
 
@@ -64,7 +68,7 @@ block Controller
     final unit="Pa",
     displayUnit="Pa",
     final quantity="PressureDifference",
-    final min=1e-6) = 5*6894.75
+    final min=1e-6)
     "Maximum hot water loop local differential pressure setpoint"
     annotation (Dialog(tab="Pump control parameters", group="DP-based speed regulation",
       enable = speConTyp == Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.PrimaryPumpSpeedControlTypes.localDP));
@@ -73,7 +77,7 @@ block Controller
     final unit="Pa",
     displayUnit="Pa",
     final quantity="PressureDifference",
-    final min=1e-6) = 5*6894.75
+    final min=1e-6)
     "Minimum hot water loop local differential pressure setpoint"
     annotation (Dialog(tab="Pump control parameters",
       group="DP-based speed regulation",
@@ -285,7 +289,7 @@ block Controller
     annotation (Placement(transformation(extent={{280,-420},{320,-380}}),
         iconTransformation(extent={{100,-120},{140,-80}})));
 
-  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.SecondaryPumps.Subsequences.EnableLag_flowrate
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.Generic.EnableLag_flowrate
     enaLagHotPum(
     final nPum=nPum,
     final nPum_nominal=nPum_nominal,
@@ -299,6 +303,7 @@ block Controller
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.Generic.Speed_localDp
     pumSpeLocDp(
+    controllerType=controllerType,
     final nSen=nSen,
     final nPum=nPum,
     final minLocDp=minLocDp,
@@ -332,12 +337,22 @@ protected
   parameter Integer pumInd[nPum]={i for i in 1:nPum}
     "Pump index, {1,2,...,n}";
 
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.ZeroIndexCorrection
+    zerStaIndCor
+    "Block to resolve zero index errors"
+    annotation (Placement(transformation(extent={{-102,-84},{-82,-64}})));
+
+  Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.ZeroIndexCorrection
+    zerStaIndCor1
+    "Block to resolve zero index errors"
+    annotation (Placement(transformation(extent={{-114,-134},{-94,-114}})));
+
   Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel(
     final samplePeriod=1) if have_varSecPum and not have_secFloSen
     "Unit delay for pump speed"
     annotation (Placement(transformation(extent={{-200,28},{-180,48}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Min min if have_varSecPum
+  Buildings.Controls.OBC.CDL.Continuous.Min min if have_varSecPum
     "Ensure pump speed is below maximum speed for condensation control"
     annotation (Placement(transformation(extent={{160,-410},{180,-390}})));
 
@@ -347,6 +362,7 @@ protected
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.Generic.Speed_remoteDp
     pumSpeRemDp(
+    controllerType=controllerType,
     final nSen=nSen,
     final nPum=nPum,
     final minPumSpe=minPumSpe,
@@ -376,9 +392,7 @@ protected
     annotation (Placement(transformation(extent={{-40,220},{-20,240}})));
 
   Buildings.Controls.OBC.CDL.Routing.RealExtractor nexLagPum(
-    final allowOutOfRange=true,
-    final nin=nPum,
-    final outOfRangeValue=0)
+    final nin=nPum)
     "Next lag pump"
     annotation (Placement(transformation(extent={{-80,-60},{-60,-40}})));
 
@@ -387,9 +401,7 @@ protected
     annotation (Placement(transformation(extent={{-8,-60},{12,-40}})));
 
   Buildings.Controls.OBC.CDL.Routing.RealExtractor lasLagPum(
-    final allowOutOfRange=true,
-    final nin=nPum,
-    final outOfRangeValue=0)
+    final nin=nPum)
     "Last lag pump"
     annotation (Placement(transformation(extent={{-80,-110},{-60,-90}})));
 
@@ -408,7 +420,7 @@ protected
 
   Buildings.Controls.OBC.CDL.Integers.Add addInt
     "Integer add"
-    annotation (Placement(transformation(extent={{-120,-80},{-100,-60}})));
+    annotation (Placement(transformation(extent={{-132,-80},{-112,-60}})));
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1[nPumPri] if not have_varSecPum
     "Convert boolean to integer"
@@ -556,19 +568,13 @@ equation
   connect(booToInt.y, mulSumInt.u)
     annotation (Line(points={{-228,-120},{-202,-120}}, color={255,127,0}));
 
-  connect(addInt.y, nexLagPum.index)
-    annotation (Line(points={{-98,-70},{-70,-70},{-70,-62}}, color={255,127,0}));
-
   connect(mulSumInt.y, addInt.u2)
-    annotation (Line(points={{-178,-120},{-128,-120},{-128,-76},{-122,-76}},
+    annotation (Line(points={{-178,-120},{-166,-120},{-166,-76},{-134,-76}},
       color={255,127,0}));
 
   connect(conInt.y, addInt.u1)
-    annotation (Line(points={{-252,200},{-140,200},{-140,-64},{-122,-64}},
+    annotation (Line(points={{-252,200},{-140,200},{-140,-64},{-134,-64}},
       color={255,127,0}));
-
-  connect(mulSumInt.y, lasLagPum.index)
-    annotation (Line(points={{-178,-120},{-70,-120},{-70,-112}}, color={255,127,0}));
 
   connect(reaToInt.y, chaPumSta1.uNexLagPum) annotation (Line(points={{-18,230},
           {46,230},{46,74},{56,74}}, color={255,127,0}));
@@ -657,12 +663,6 @@ equation
   connect(or2.y, chaPumSta3.uLasLagPumSta) annotation (Line(points={{56,-218},{58,
           -218},{58,-167},{60,-167}}, color={255,0,255}));
 
-  connect(nexLagPum.y, reaToInt1.u)
-    annotation (Line(points={{-58,-50},{-10,-50}}, color={0,0,127}));
-
-  connect(lasLagPum.y, reaToInt2.u)
-    annotation (Line(points={{-58,-100},{-10,-100}}, color={0,0,127}));
-
   connect(mulSumInt.y, intLesEquThr.u) annotation (Line(points={{-178,-120},{-166,
           -120},{-166,-218},{-160,-218}}, color={255,127,0}));
 
@@ -733,6 +733,22 @@ equation
           -216,-156},{-216,-156},{-202,-156}},     color={255,127,0}));
   connect(min.y, yPumSpe)
     annotation (Line(points={{182,-400},{300,-400}}, color={0,0,127}));
+  connect(addInt.y, zerStaIndCor.uInd)
+    annotation (Line(points={{-110,-70},{-104,-70}}, color={255,127,0}));
+  connect(zerStaIndCor.yIndMod, nexLagPum.index) annotation (Line(points={{-80,-70},
+          {-70,-70},{-70,-62}}, color={255,127,0}));
+  connect(zerStaIndCor.yCapMod, reaToInt1.u) annotation (Line(points={{-80,-78},
+          {-46,-78},{-46,-50},{-10,-50}}, color={0,0,127}));
+  connect(nexLagPum.y, zerStaIndCor.uCap) annotation (Line(points={{-58,-50},{-52,
+          -50},{-52,-32},{-108,-32},{-108,-78},{-104,-78}}, color={0,0,127}));
+  connect(mulSumInt.y, zerStaIndCor1.uInd)
+    annotation (Line(points={{-178,-120},{-116,-120}}, color={255,127,0}));
+  connect(zerStaIndCor1.yIndMod, lasLagPum.index) annotation (Line(points={{-92,
+          -120},{-70,-120},{-70,-112}}, color={255,127,0}));
+  connect(zerStaIndCor1.yCapMod, reaToInt2.u) annotation (Line(points={{-92,-128},
+          {-44,-128},{-44,-100},{-10,-100}}, color={0,0,127}));
+  connect(lasLagPum.y, zerStaIndCor1.uCap) annotation (Line(points={{-58,-100},{
+          -50,-100},{-50,-86},{-122,-86},{-122,-128},{-116,-128}}, color={0,0,127}));
 annotation (defaultComponentName="secPumCon",
   Diagram(coordinateSystem(preserveAspectRatio=false,
           extent={{-280,-440},{280,260}}),
@@ -747,7 +763,7 @@ annotation (defaultComponentName="secPumCon",
           pattern=LinePattern.None,
           fillColor={210,210,210},
           fillPattern=FillPattern.Solid,
-          lineColor={0,0,127},
+          textColor={0,0,127},
           horizontalAlignment=TextAlignment.Right,
           textString="Enable lead pump"),
           Rectangle(
@@ -760,7 +776,7 @@ annotation (defaultComponentName="secPumCon",
           pattern=LinePattern.None,
           fillColor={210,210,210},
           fillPattern=FillPattern.Solid,
-          lineColor={0,0,127},
+          textColor={0,0,127},
           horizontalAlignment=TextAlignment.Right,
           textString="Enable next lag pump"),
           Text(
@@ -768,7 +784,7 @@ annotation (defaultComponentName="secPumCon",
           pattern=LinePattern.None,
           fillColor={210,210,210},
           fillPattern=FillPattern.Solid,
-          lineColor={0,0,127},
+          textColor={0,0,127},
           horizontalAlignment=TextAlignment.Right,
           textString="Disable last lag pump"),
           Rectangle(
@@ -781,7 +797,7 @@ annotation (defaultComponentName="secPumCon",
           pattern=LinePattern.None,
           fillColor={210,210,210},
           fillPattern=FillPattern.Solid,
-          lineColor={0,0,127},
+          textColor={0,0,127},
           horizontalAlignment=TextAlignment.Right,
           textString="Pump speed"),
           Rectangle(
@@ -794,7 +810,7 @@ annotation (defaultComponentName="secPumCon",
           pattern=LinePattern.None,
           fillColor={210,210,210},
           fillPattern=FillPattern.Solid,
-          lineColor={0,0,127},
+          textColor={0,0,127},
           horizontalAlignment=TextAlignment.Right,
           textString="Enable/Disable lag pumps for fixed-speed secondary pumps")}),
  Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-200},{100,200}}),
@@ -806,7 +822,7 @@ annotation (defaultComponentName="secPumCon",
           fillPattern=FillPattern.Solid),
         Text(
           extent={{-100,250},{100,210}},
-          lineColor={0,0,255},
+          textColor={0,0,255},
           textString="%name"),
         Rectangle(
           extent={{-80,60},{82,-60}},
@@ -866,6 +882,7 @@ Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.Generic.Speed_remo
 </ul>
 <p>
 The parameter values for valid pump configurations are as follows:
+</p>
 <br>
   <table summary=\"allowedConfigurations\" border=\"1\">
     <thead>
@@ -905,7 +922,6 @@ The parameter values for valid pump configurations are as follows:
       </tr>
     </tbody>
   </table>
-</p>      
 </html>",
 revisions="<html>
 <ul>

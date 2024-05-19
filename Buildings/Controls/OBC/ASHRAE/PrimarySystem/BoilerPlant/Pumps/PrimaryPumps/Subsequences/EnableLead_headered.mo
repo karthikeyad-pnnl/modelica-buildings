@@ -19,7 +19,7 @@ block EnableLead_headered
     annotation (Placement(transformation(extent={{100,-20},{140,20}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr[nBoi](
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr[nBoi](
     final t=fill(0.975,nBoi),
     final h=fill(0.025,nBoi))
     "Determine if the isolation valve is open based on valve position"
@@ -72,16 +72,16 @@ annotation (
           fillPattern=FillPattern.Solid),
         Text(
           extent={{-100,150},{100,110}},
-          lineColor={0,0,255},
+          textColor={0,0,255},
           textString="%name"),
         Text(
           extent={{-94,12},{-40,-10}},
-          lineColor={255,0,255},
+          textColor={255,0,255},
           pattern=LinePattern.Dash,
           textString="uHotIsoVal"),
         Text(
           extent={{42,12},{96,-10}},
-          lineColor={255,0,255},
+          textColor={255,0,255},
           pattern=LinePattern.Dash,
           textString="yLeaPum")}),
   Diagram(coordinateSystem(preserveAspectRatio=false)),
@@ -91,12 +91,14 @@ Block that enables and disables lead primary hot water pump, for plants
 with headered primary hot water pumps, according to ASHRAE RP-1711, March 2020 draft, 
 section 5.3.6.2.
 </p>
+<ul>
 <li>
 The lead primary hot water pump shall be enabled when any boilers
 hot water isolation valve is commanded open <code>uHotWatIsoVal &gt; 0.975</code>,
 and shall be disabled when all boilers' hot water isolation valves are commanded closed
 <code>uHotWatIsoVal &le; 0.975</code>.
 </li>
+</ul>
 </html>", revisions="<html>
 <ul>
 <li>

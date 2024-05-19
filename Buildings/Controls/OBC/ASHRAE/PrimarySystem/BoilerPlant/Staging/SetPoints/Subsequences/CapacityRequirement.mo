@@ -51,56 +51,54 @@ protected
     final quantity="SpecificHeatCapacity") = 4184
     "Specific heat capacity of water";
 
-  Buildings.Controls.OBC.CDL.Reals.Max max
+  Buildings.Controls.OBC.CDL.Continuous.Max max
     "Ensure negative heating requirement calculation is not passed downstream"
     annotation (Placement(transformation(extent={{90,-10},{110,10}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(
     final k=0)
     "Lowest allowed heating requirement"
     annotation (Placement(transformation(extent={{60,24},{80,44}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant density(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant density(
     final k=rhoWat)
     "Water density"
     annotation (Placement(transformation(extent={{-100,-40},{-80,-20}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant speHeaCap(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant speHeaCap(
     final k=cpWat)
     "Specific heat capacity of water"
     annotation (Placement(transformation(extent={{-100,-80},{-80,-60}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Add add2(
-    final k1=1,
-    final k2=-1)
-    "Adder"
+  Buildings.Controls.OBC.CDL.Continuous.Subtract sub2
+    "Difference between supply temperature setpoint and return temperature"
     annotation (Placement(transformation(extent={{-100,30},{-80,50}})));
 
-  Buildings.Controls.OBC.CDL.Reals.MovingMean movMea(
+  Buildings.Controls.OBC.CDL.Continuous.MovingAverage movMea(
     final delta=avePer)
     "Moving average"
     annotation (Placement(transformation(extent={{60,-16},{80,4}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Product pro
+  Buildings.Controls.OBC.CDL.Continuous.Multiply pro
     "Product"
     annotation (Placement(transformation(extent={{20,-16},{40,4}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Product pro1
+  Buildings.Controls.OBC.CDL.Continuous.Multiply pro1
     "Product"
     annotation (Placement(transformation(extent={{-60,-60},{-40,-40}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Product pro2
+  Buildings.Controls.OBC.CDL.Continuous.Multiply pro2
     "Product"
     annotation (Placement(transformation(extent={{-20,-22},{0,-2}})));
 
 equation
-  connect(TRet, add2.u2)
+  connect(TRet,sub2. u2)
     annotation (Line(points={{-140,0},{-110,0},{-110,34},{-102,34}},
       color={0,0,127}));
-  connect(add2.u1, TSupSet)
+  connect(sub2.u1, TSupSet)
     annotation (Line(points={{-102,46},{-110,46},{-110,70},{-140,70}},
       color={0,0,127}));
-  connect(add2.y, pro.u1)
+  connect(sub2.y, pro.u1)
     annotation (Line(points={{-78,40},{10,40},{10,0},{18,0}},
       color={0,0,127}));
   connect(pro.y, movMea.u)
@@ -141,11 +139,11 @@ equation
           fillPattern=FillPattern.Solid),
         Text(
           extent={{-120,146},{100,108}},
-          lineColor={0,0,255},
+          textColor={0,0,255},
           textString="%name"),
         Text(
           extent={{-62,88},{60,-76}},
-          lineColor={0,0,0},
+          textColor={0,0,0},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid,
           textString="Load")}),
@@ -160,13 +158,6 @@ equation
       <br/> 
       The calculation is according to section 5.3.3.5 and 5.3.3.6. in RP-1711, March
       2020 draft.
-      </p>
-      <p align=\"center\">
-      <img alt=\"Validation plot for CapacityRequirement\"
-      src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/CapacityRequirement.png\"/>
-      <br/>
-      Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.CapacityRequirement\">
-      Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.CapacityRequirement</a>.
       </p>
       </html>",
       revisions="<html>

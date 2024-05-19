@@ -144,7 +144,7 @@ block HotWaterSupplyTemperatureReset
       iconTransformation(extent={{100,-60},{140,-20}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Reals.Switch swi1
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi1
     "Select plant setpoint based on stage type"
     annotation (Placement(transformation(extent={{10,60},{30,80}})));
 
@@ -156,12 +156,12 @@ protected
     "Integer to Real conversion"
     annotation (Placement(transformation(extent={{-120,-80},{-100,-60}})));
 
-  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr(
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr(
     final t=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler)
     "Check for non-condensing stage type"
     annotation (Placement(transformation(extent={{-40,-80},{-20,-60}})));
 
-  Buildings.Controls.OBC.ASHRAE.G36_PR1.Generic.SetPoints.TrimAndRespond triRes(
+  Buildings.Controls.OBC.ASHRAE.G36.Generic.TrimAndRespond triRes(
     final iniSet=TPlaHotWatSetMax,
     final minSet=THotWatSetMinNonConBoi,
     final maxSet=TPlaHotWatSetMax,
@@ -186,7 +186,7 @@ protected
     "Retain last value before stage change initiates"
     annotation (Placement(transformation(extent={{50,40},{70,60}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Switch swi
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi
     "Logical switch"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
 
@@ -195,7 +195,7 @@ protected
     "Check if any pumps are turned on"
     annotation (Placement(transformation(extent={{-120,80},{-100,100}})));
 
-  Buildings.Controls.OBC.ASHRAE.G36_PR1.Generic.SetPoints.TrimAndRespond triRes1(
+  Buildings.Controls.OBC.ASHRAE.G36.Generic.TrimAndRespond triRes1(
     final iniSet=TPlaHotWatSetMax,
     final minSet=THotWatSetMinConBoi,
     final maxSet=TPlaHotWatSetMax,
@@ -235,30 +235,29 @@ protected
     "Convert temperature setpoint into vector"
     annotation (Placement(transformation(extent={{10,-200},{30,-180}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Product pro[nBoi]
+  Buildings.Controls.OBC.CDL.Continuous.Multiply pro[nBoi]
     "Element-wise product"
     annotation (Placement(transformation(extent={{60,-200},{80,-180}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Switch swi2
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi2
     "Logical Switch"
     annotation (Placement(transformation(extent={{-40,-200},{-20,-180}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Add add2[nBoi]
+  Buildings.Controls.OBC.CDL.Continuous.Add add2[nBoi]
     "Combine setpoint vectors for condensing and non-condensing boilers"
     annotation (Placement(transformation(extent={{100,-240},{120,-220}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(
     final k=TConBoiHotWatSetMax)
     "Design setpoint for condensing boilers"
     annotation (Placement(transformation(extent={{-120,-160},{-100,-140}})));
 
-  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(
-    final p=TConBoiHotWatSetOff,
-    final k=1)
+  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
+    final p=TConBoiHotWatSetOff)
     "Boiler setpoint for condensing boilers in non-condensing type stage"
     annotation (Placement(transformation(extent={{-120,-200},{-100,-180}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Min min
+  Buildings.Controls.OBC.CDL.Continuous.Min min
     "Ensure condensing boiler setpoint does not exceed design setpoint"
     annotation (Placement(transformation(extent={{-80,-180},{-60,-160}})));
 
@@ -267,7 +266,7 @@ protected
     "Convert temperature setpoint into vector"
     annotation (Placement(transformation(extent={{10,-310},{30,-290}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Product pro1[nBoi]
+  Buildings.Controls.OBC.CDL.Continuous.Multiply pro1[nBoi]
     "Element-wise product"
     annotation (Placement(transformation(extent={{60,-280},{80,-260}})));
 
@@ -282,7 +281,7 @@ equation
                                                    color={255,0,255}));
   connect(edg.u, uStaCha) annotation (Line(points={{-42,0},{-160,0}},
                       color={255,0,255}));
-  connect(edg.y, triSam.trigger) annotation (Line(points={{-18,0},{60,0},{60,38.2}},
+  connect(edg.y, triSam.trigger) annotation (Line(points={{-18,0},{60,0},{60,38}},
                   color={255,0,255}));
   connect(triSam.y, swi.u1)
     annotation (Line(points={{72,50},{80,50},{80,8},{98,8}}, color={0,0,127}));
@@ -354,10 +353,10 @@ equation
   connect(pro1.y, add2.u2) annotation (Line(points={{82,-270},{90,-270},{90,-236},
           {98,-236}}, color={0,0,127}));
 
-  annotation(defaultComponentName="hotWatSupTemRes",
-    Diagram(coordinateSystem(preserveAspectRatio=false,
+annotation(defaultComponentName="hotWatSupTemRes",
+  Diagram(coordinateSystem(preserveAspectRatio=false,
       extent={{-140,-320},{140,120}})),
-    Icon(coordinateSystem(preserveAspectRatio=false,
+  Icon(coordinateSystem(preserveAspectRatio=false,
       extent={{-100,-100},{100,100}}),
       graphics={Rectangle(
                   extent={{-100,100},{100,-100}},
@@ -366,90 +365,81 @@ equation
                   fillPattern=FillPattern.Solid),
                 Text(
                   extent={{-50,20},{50,-20}},
-                  lineColor={28,108,200},
+                  textColor={28,108,200},
                   fillColor={255,255,255},
                   fillPattern=FillPattern.None,
                   textString="hotWatSupTemRes"),
                 Text(
                   extent={{-100,150},{100,110}},
-                  lineColor={0,0,255},
+                  textColor={0,0,255},
                   textString="%name")}),
-    Documentation(info="<html>
-      <p>
-      Control sequence for hot-water supply temperature setpoint <code>TPlaHotWatSupSet</code>
-      for boiler plant loop as per section 5.3.4 in ASHRAE RP-1711, March 2020 draft.
-      </p>
-      <ul>
-      <li>
-      The setpoint controller is enabled when any of the hot-water supply pumps
-      are proven on <code>uHotWatPumSta = true</code>, and disabled otherwise.
-      </li>
-      <br>
-      <li>
-      When enabled, a Trim-and-Respond logic controller adjusts the supply
-      temperature setpoint <code>TPlaHotWatSupSet</code> according to the following parameters:
-      </li>
-      <table summary=\"summary\" border=\"1\">
-      <tr><th> Variable </th> <th> Value </th> <th> Definition </th> </tr>
-      <tr><td>Device</td><td>Any hot water pump</td> <td>Associated device</td></tr>
-      <tr><td>iniSet</td><td><code>TPlaHotWatSetMax</code></td><td>Initial setpoint</td></tr>
-      <tr><td>minSet</td><td><code>THotWatSetMinConBoi</code> for condensing boilers;<br><code>THotWatSetMinNonConBoi</code> for non-condensing boilers</td><td>Minimum setpoint</td></tr>
-      <tr><td>maxSet</td><td><code>TPlaHotWatSetMax</code></td><td>Maximum setpoint</td></tr>
-      <tr><td>delTim</td><td><code>delTimVal</code></td><td>Delay timer</td></tr>
-      <tr><td>samplePeriod</td><td><code>samPerVal</code></td><td>Time step</td></tr>
-      <tr><td>numIgnReq</td><td><code>nHotWatResReqIgn</code></td><td>Number of ignored requests</td></tr>
-      <tr><td>numOfReq</td><td><code>nHotWatSupResReq</code></td><td>Number of requests</td></tr>
-      <tr><td>triAmo</td><td><code>triAmoVal</code></td><td>Trim amount</td></tr>
-      <tr><td>resAmo</td><td><code>resAmoVal</code></td><td>Respond amount</td></tr>
-      <tr><td>maxRes</td><td><code>maxResVal</code></td><td>Maximum response per time interval</td></tr>
-      </table>
-      <br>
-      <li>
-      When the plant stage change is initiated <code>uStaCha=true</code>, the 
-      temperature reset shall be disabled and value fixed at its last value for 
-      the longer of <code>holTimVal</code> and the time it takes for the plant 
-      to successfully stage.
-      </li>
-      <br>
-      <li>
-      When the current stage type <code>uTyp[uCurStaSet]</code> is condensing type, the
-      condensing boiler setpoint <code>TBoiHotWatSupSet</code> shall be the plant
-      hot water supply setpoint <code>TPlaHotWatSupSet</code>.
-      </li>
-      <br>
-      <li>
-      When <code>uTyp[uCurStaSet]</code> is non-condensing type,
-      <ul>
-      <li>
-      the non-condensing boiler setpoints in <code>TBoiHotWatSupSet</code> shall
-      be <code>TPlaHotWatSupSet</code>.
-      </li>
-      <li>
-      minimum setpoint <code>minSet</code> in the Trim-and-Respond logic is reset to <code>THotWatSetMinNonConBoi</code>.
-      </li>
-      <li>
-      condensing boiler setpoints in <code>TBoiHotWatSupSet</code> shall be
-      lesser of condensing boiler design supply temperature <code>TConBoiHotWatSetMax</code>,
-      and <code>TPlaHotWatSupSet</code> less an offset of <code>TConBoiHotWatSetOff</code>,
-      ie, <code>TPlaHotWatSupSet</code> - <code>TConBoiHotWatSetOff</code>.
-      </li>
-      </ul>
-      </li>
-      </ul>
-      <p align=\"center\">
-      <img alt=\"Validation plot for HotWaterSupplyTemperatureReset\"
-      src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/SetPoints/HotWaterSupplyTemperatureReset.png\"/>
-      <br/>
-      Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.SetPoints.Validation.HotWaterSupplyTemperatureReset\">
-      Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Validation.HotWaterSupplyTemperatureReset</a>.
-      </p>
-      </html>",
-      revisions="<html>
-      <ul>
-      <li>
-      February 23, 2020, by Karthik Devaprasad:<br/>
-      First implementation.
-      </li>
-      </ul>
-      </html>"));
+  Documentation(info="<html>
+<p>
+Control sequence for hot-water supply temperature setpoint <code>TPlaHotWatSupSet</code>
+for boiler plant loop as per section 5.3.4 in ASHRAE RP-1711, March 2020 draft.
+</p>
+<ul>
+<li>
+The setpoint controller is enabled when any of the hot-water supply pumps
+are proven on <code>uHotWatPumSta = true</code>, and disabled otherwise.
+</li>
+<li>
+When enabled, a Trim-and-Respond logic controller adjusts the supply
+temperature setpoint <code>TPlaHotWatSupSet</code> according to the following parameters:
+</li>
+</ul>
+<table summary=\"summary\" border=\"1\">
+<tr><th> Variable </th> <th> Value </th> <th> Definition </th> </tr>
+<tr><td>Device</td><td>Any hot water pump</td> <td>Associated device</td></tr>
+<tr><td>iniSet</td><td><code>TPlaHotWatSetMax</code></td><td>Initial setpoint</td></tr>
+<tr><td>minSet</td><td><code>THotWatSetMinConBoi</code> for condensing boilers;<br><code>THotWatSetMinNonConBoi</code> for non-condensing boilers</td><td>Minimum setpoint</td></tr>
+<tr><td>maxSet</td><td><code>TPlaHotWatSetMax</code></td><td>Maximum setpoint</td></tr>
+<tr><td>delTim</td><td><code>delTimVal</code></td><td>Delay timer</td></tr>
+<tr><td>samplePeriod</td><td><code>samPerVal</code></td><td>Time step</td></tr>
+<tr><td>numIgnReq</td><td><code>nHotWatResReqIgn</code></td><td>Number of ignored requests</td></tr>
+<tr><td>numOfReq</td><td><code>nHotWatSupResReq</code></td><td>Number of requests</td></tr>
+<tr><td>triAmo</td><td><code>triAmoVal</code></td><td>Trim amount</td></tr>
+<tr><td>resAmo</td><td><code>resAmoVal</code></td><td>Respond amount</td></tr>
+<tr><td>maxRes</td><td><code>maxResVal</code></td><td>Maximum response per time interval</td></tr>
+</table>
+<ul>
+<li>
+When the plant stage change is initiated <code>uStaCha=true</code>, the 
+temperature reset shall be disabled and value fixed at its last value for 
+the longer of <code>holTimVal</code> and the time it takes for the plant 
+to successfully stage.
+</li>
+<li>
+When the current stage type <code>uTyp[uCurStaSet]</code> is condensing type, the
+condensing boiler setpoint <code>TBoiHotWatSupSet</code> shall be the plant
+hot water supply setpoint <code>TPlaHotWatSupSet</code>.
+</li>
+<li>
+When <code>uTyp[uCurStaSet]</code> is non-condensing type,
+<ul>
+<li>
+the non-condensing boiler setpoints in <code>TBoiHotWatSupSet</code> shall
+be <code>TPlaHotWatSupSet</code>.
+</li>
+<li>
+minimum setpoint <code>minSet</code> in the Trim-and-Respond logic is reset to <code>THotWatSetMinNonConBoi</code>.
+</li>
+<li>
+condensing boiler setpoints in <code>TBoiHotWatSupSet</code> shall be
+lesser of condensing boiler design supply temperature <code>TConBoiHotWatSetMax</code>,
+and <code>TPlaHotWatSupSet</code> less an offset of <code>TConBoiHotWatSetOff</code>,
+ie, <code>TPlaHotWatSupSet</code> - <code>TConBoiHotWatSetOff</code>.
+</li>
+</ul>
+</li>
+</ul>
+</html>",
+revisions="<html>
+<ul>
+<li>
+February 23, 2020, by Karthik Devaprasad:<br/>
+First implementation.
+</li>
+</ul>
+</html>"));
 end HotWaterSupplyTemperatureReset;

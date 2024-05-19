@@ -77,7 +77,7 @@ protected
   parameter Integer staInd[nSta]={i for i in 1:nSta}
     "Stage index vector";
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(final k=0)
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(final k=0)
     "Zero boiler stage"
     annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
 
@@ -90,7 +90,7 @@ protected
     "Triggered sampler"
     annotation (Placement(transformation(extent={{130,140},{150,160}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Switch switch1
+  Buildings.Controls.OBC.CDL.Continuous.Switch switch1
     "Switch"
     annotation (Placement(transformation(extent={{-200,50},{-180,70}})));
 
@@ -113,10 +113,10 @@ protected
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold holIniSta(
     final trueHoldDuration=delStaCha,
     final falseHoldDuration=0)
-    "Holds stage switched to initial upon plant start"
+    "Holds stage switched to initially upon plant start"
     annotation (Placement(transformation(extent={{-320,150},{-300,170}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Switch switch2
+  Buildings.Controls.OBC.CDL.Continuous.Switch switch2
     "Switch"
     annotation (Placement(transformation(extent={{40,140},{60,160}})));
 
@@ -128,7 +128,7 @@ protected
     "Boolean to Real conversion"
     annotation (Placement(transformation(extent={{200,0},{220,20}})));
 
-  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr1(
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr1(
     final t=0.5)
     "Check if plant is still enabled"
     annotation (Placement(transformation(extent={{280,0},{300,20}})));
@@ -205,7 +205,7 @@ protected
     "Edge detector"
     annotation (Placement(transformation(extent={{60,-90},{80,-70}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Switch switch3
+  Buildings.Controls.OBC.CDL.Continuous.Switch switch3
     "Switch"
     annotation (Placement(transformation(extent={{-40,100},{-20,120}})));
 
@@ -226,7 +226,7 @@ protected
     "Integer to Real conversion"
     annotation (Placement(transformation(extent={{-320,240},{-300,260}})));
 
-  Buildings.Controls.OBC.CDL.Reals.MultiMin mulMin(
+  Buildings.Controls.OBC.CDL.Continuous.MultiMin mulMin(
     final nin=nSta)
     "Find lowest available stage"
     annotation (Placement(transformation(extent={{-280,240},{-260,260}})));
@@ -271,8 +271,8 @@ equation
                                  color={255,0,255}));
   connect(uPla, booToRea.u) annotation (Line(points={{-460,160},{-388,160},{-388,
           130},{-160,130},{-160,10},{198,10}},  color={255,0,255}));
-  connect(or3.y, triSam1.trigger) annotation (Line(points={{242,-50},{250,-50},
-          {250,-1.8}}, color={255,0,255}));
+  connect(or3.y, triSam1.trigger) annotation (Line(points={{242,-50},{250,-50},{
+          250,-2}},    color={255,0,255}));
   connect(uPla, falEdg.u) annotation (Line(points={{-460,160},{-388,160},{-388,130},
           {-160,130},{-160,-30},{-62,-30}},
                                           color={255,0,255}));
@@ -311,7 +311,7 @@ equation
   connect(reaToInt.y, cha.u) annotation (Line(points={{382,150},{400,150},{400,130},
           {330,130},{330,0},{338,0}}, color={255,127,0}));
   connect(or1.y, triSam.trigger) annotation (Line(points={{122,110},{140,110},{140,
-          138.2}}, color={255,0,255}));
+          138}},   color={255,0,255}));
   connect(or2.y, and5.u1)
     annotation (Line(points={{-358,-80},{-322,-80}}, color={255,0,255}));
   connect(and5.y, mulAnd.u[4]) annotation (Line(points={{-298,-80},{-230,-80},{
@@ -375,7 +375,7 @@ equation
         fillPattern=FillPattern.Solid),
       Text(
         extent={{-112,150},{108,112}},
-        lineColor={0,0,255},
+        textColor={0,0,255},
         textString="%name")}),
     Diagram(
       coordinateSystem(preserveAspectRatio=false,
@@ -430,13 +430,6 @@ equation
     <p>
     Per 1711 March 2020 Draft 5.3.3.10.1, each stage shall have a minimum
     runtime of <span style=\"font-family: monospace;\">delStaCha</span>. 
-    </p>
-    <p align=\"center\">
-    <img alt=\"Validation plot for Change\"
-    src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/Change.png\"/>
-    <br/>
-    Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Change\">
-    Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Change</a>.
     </p>
     </html>",
     revisions="<html>

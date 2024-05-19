@@ -2,6 +2,10 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.Generic;
 block Speed_remoteDp
   "Pump speed control for plants where the remote DP sensor(s) is hardwired to the plant controller"
 
+  parameter Buildings.Controls.OBC.CDL.Types.SimpleController controllerType= Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "Type of controller"
+    annotation(Dialog(group="Speed controller"));
+
   parameter Integer nSen = 2
     "Total number of remote differential pressure sensors";
 
@@ -64,24 +68,23 @@ block Speed_remoteDp
     annotation (Placement(transformation(extent={{120,80},{160,120}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
-  Buildings.Controls.OBC.CDL.Reals.MultiMax maxLoo(
+  Buildings.Controls.OBC.CDL.Continuous.MultiMax maxLoo(
     final nin=nSen)
     "Maximum DP loop output"
     annotation (Placement(transformation(extent={{60,-10},{80,10}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Line pumSpe
+  Buildings.Controls.OBC.CDL.Continuous.Line pumSpe
     "Pump speed"
     annotation (Placement(transformation(extent={{60,50},{80,70}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Reals.PIDWithReset conPID[nSen](
-    final controllerType=fill(Buildings.Controls.OBC.CDL.Types.SimpleController.PID,nSen),
+  Buildings.Controls.OBC.CDL.Continuous.PIDWithReset conPID[nSen](
+    final controllerType=fill(controllerType, nSen),
     final k=fill(k, nSen),
     final Ti=fill(Ti, nSen),
     final Td=fill(Td, nSen),
     final yMax=fill(1,nSen),
-    final yMin=fill(0,nSen),
-    y_reset=0.11)
+    final yMin=fill(0,nSen))
     "PID controller for regulating remote differential pressure"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
 
@@ -104,27 +107,27 @@ protected
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{-10,-50},{10,-30}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant pumSpe_min(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant pumSpe_min(
     final k=minPumSpe)
     "Minimum pump speed"
     annotation (Placement(transformation(extent={{-80,70},{-60,90}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant pumSpe_max(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant pumSpe_max(
     final k=maxPumSpe)
     "Maximum pump speed"
     annotation (Placement(transformation(extent={{-20,30},{0,50}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant one(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant one(
     final k=1)
     "Constant one"
     annotation (Placement(transformation(extent={{-80,30},{-60,50}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant zer(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant zer(
     final k=0)
     "Constant zero"
     annotation (Placement(transformation(extent={{-20,70},{0,90}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Division div[nSen]
+  Buildings.Controls.OBC.CDL.Continuous.Divide div[nSen]
     "Normalized pressure difference"
     annotation (Placement(transformation(extent={{-20,-90},{0,-70}})));
 
@@ -133,13 +136,10 @@ protected
     "Replicate real input"
     annotation (Placement(transformation(extent={{-20,-10},{0,10}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Switch swi
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi
     "Logical switch"
     annotation (Placement(transformation(extent={{80,90},{100,110}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant                        zer1(final k=0.5)
-    "Constant zero"
-    annotation (Placement(transformation(extent={{20,82},{40,102}})));
 equation
   connect(dpHotWatSet, reaRep.u)
     annotation (Line(points={{-140,-100},{-102,-100}}, color={0,0,127}));
@@ -195,8 +195,8 @@ equation
     annotation (Line(points={{2,-80},{30,-80},{30,-12}}, color={0,0,127}));
   connect(conPID.y, maxLoo.u[1:nSen])
     annotation (Line(points={{42,0},{50,0},{50,0},{58,0}},   color={0,0,127}));
-  connect(zer1.y, swi.u3)
-    annotation (Line(points={{42,92},{78,92}}, color={0,0,127}));
+  connect(pumSpe_max.y, swi.u3) annotation (Line(points={{2,40},{10,40},{10,92},
+          {78,92}}, color={0,0,127}));
 annotation (
   defaultComponentName="hotPumSpe",
   Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
@@ -208,26 +208,26 @@ annotation (
           fillPattern=FillPattern.Solid),
         Text(
           extent={{-100,150},{100,110}},
-          lineColor={0,0,255},
+          textColor={0,0,255},
           textString="%name"),
         Text(
           extent={{-98,92},{-44,70}},
-          lineColor={255,0,255},
+          textColor={255,0,255},
           pattern=LinePattern.Dash,
           textString="uHotWatPum"),
         Text(
           extent={{-98,10},{-44,-12}},
-          lineColor={0,0,127},
+          textColor={0,0,127},
           pattern=LinePattern.Dash,
           textString="dpHotWat"),
         Text(
           extent={{22,12},{98,-10}},
-          lineColor={0,0,127},
+          textColor={0,0,127},
           pattern=LinePattern.Dash,
           textString="yHotWatPumSpe"),
         Text(
           extent={{-98,-68},{-34,-90}},
-          lineColor={0,0,127},
+          textColor={0,0,127},
           pattern=LinePattern.Dash,
           textString="dpHotWatSet")}),
   Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-120,-120},{120,120}})),

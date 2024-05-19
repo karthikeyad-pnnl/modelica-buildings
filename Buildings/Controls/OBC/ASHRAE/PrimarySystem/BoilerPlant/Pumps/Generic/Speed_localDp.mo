@@ -2,6 +2,10 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.Generic;
 block Speed_localDp
   "Pump speed control plants where the remote DP sensor(s) is not hardwired to the plant controller, but a local DP sensor is hardwired"
 
+  parameter Buildings.Controls.OBC.CDL.Types.SimpleController controllerType= Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "Type of controller"
+    annotation(Dialog(group="Speed controller"));
+
   parameter Integer nSen = 2
     "Total number of remote differential pressure sensors";
 
@@ -90,16 +94,17 @@ block Speed_localDp
     annotation (Placement(transformation(extent={{140,70},{180,110}}),
       iconTransformation(extent={{100,-20},{140,20}})));
 
-  Buildings.Controls.OBC.CDL.Reals.MultiMax maxRemDP(
+  Buildings.Controls.OBC.CDL.Continuous.MultiMax maxRemDP(
     nin=nSen)
     "Highest output from differential pressure control loops"
     annotation (Placement(transformation(extent={{40,-30},{60,-10}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Line locDpSet
+  Buildings.Controls.OBC.CDL.Continuous.Line locDpSet
     "Local differential pressure setpoint"
     annotation (Placement(transformation(extent={{100,-30},{120,-10}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.Generic.Speed_remoteDp hotPumSpe(
+    controllerType=controllerType,
     final nSen=1,
     final nPum=nPum,
     final minPumSpe=minPumSpe,
@@ -111,8 +116,8 @@ block Speed_localDp
     annotation (Placement(transformation(extent={{60,80},{80,100}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Reals.PIDWithReset conPID[nSen](
-    final controllerType=fill(Buildings.Controls.OBC.CDL.Types.SimpleController.PID,nSen),
+  Buildings.Controls.OBC.CDL.Continuous.PIDWithReset conPID[nSen](
+    final controllerType=fill(controllerType, nSen),
     final k=fill(k, nSen),
     final Ti=fill(Ti, nSen),
     final Td=fill(Td, nSen),
@@ -140,27 +145,27 @@ protected
     "Replicate boolean input"
     annotation (Placement(transformation(extent={{-30,-60},{-10,-40}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant zer(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant zer(
     final k=0)
     "Constant zero"
     annotation (Placement(transformation(extent={{60,10},{80,30}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant locDp_min(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant locDp_min(
     final k=minLocDp)
     "Minimum local differential pressure"
     annotation (Placement(transformation(extent={{40,-70},{60,-50}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant one(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant one(
     final k=1)
     "Constant one"
     annotation (Placement(transformation(extent={{-120,10},{-100,30}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant locDp_max(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant locDp_max(
     final k=maxLocDp)
     "Maximum local differential pressure "
     annotation (Placement(transformation(extent={{40,-130},{60,-110}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Division div[nSen]
+  Buildings.Controls.OBC.CDL.Continuous.Divide div[nSen]
     "Normalized pressure difference"
     annotation (Placement(transformation(extent={{-40,-110},{-20,-90}})));
 
@@ -237,31 +242,31 @@ annotation (
           fillPattern=FillPattern.Solid),
         Text(
           extent={{-100,150},{100,110}},
-          lineColor={0,0,255},
+          textColor={0,0,255},
           textString="%name"),
         Text(
           extent={{-98,52},{-44,30}},
-          lineColor={255,0,255},
+          textColor={255,0,255},
           pattern=LinePattern.Dash,
           textString="uHotWatPum"),
         Text(
           extent={{-98,-30},{-30,-52}},
-          lineColor={0,0,127},
+          textColor={0,0,127},
           pattern=LinePattern.Dash,
           textString="dpHotWat_remote"),
         Text(
           extent={{22,12},{98,-10}},
-          lineColor={0,0,127},
+          textColor={0,0,127},
           pattern=LinePattern.Dash,
           textString="yHotWatPumSpe"),
         Text(
           extent={{-98,-68},{-34,-90}},
-          lineColor={0,0,127},
+          textColor={0,0,127},
           pattern=LinePattern.Dash,
           textString="dpHotWatSet"),
         Text(
           extent={{-98,92},{-30,70}},
-          lineColor={0,0,127},
+          textColor={0,0,127},
           pattern=LinePattern.Dash,
           textString="dpHotWat_local")}),
   Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-140,-140},{140,140}})),

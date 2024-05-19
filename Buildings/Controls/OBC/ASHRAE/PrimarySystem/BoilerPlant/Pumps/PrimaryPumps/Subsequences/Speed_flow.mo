@@ -2,9 +2,13 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Pumps.PrimaryPump
 block Speed_flow
   "Pump speed control for primary-secondary plants where flowrate sensors are available in the hot water circuit"
 
-  parameter Boolean primarySecondarySensors = true
-  "True: Flowrate sensors in primary and secondary circuits;
-  False: Flowrate sensor in decoupler";
+  parameter Buildings.Controls.OBC.CDL.Types.SimpleController controllerType= Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "Type of controller"
+    annotation(Dialog(group="Speed controller"));
+
+  parameter Boolean use_priSecSen = true
+    "True: Use flowrate sensor in primary and secondary circuits for regulation;
+    False: Use flowrate sensor in decoupler for regulation";
 
   parameter Integer nPum = 2
     "Total number of hot water pumps";
@@ -60,7 +64,7 @@ block Speed_flow
   Buildings.Controls.OBC.CDL.Interfaces.RealInput VHotWatPri_flow(
     final unit="m3/s",
     displayUnit="m3/s",
-    final quantity="VolumeFlowRate") if primarySecondarySensors
+    final quantity="VolumeFlowRate") if use_priSecSen
     "Measured hot water flow rate through primary circuit"
     annotation (Placement(transformation(extent={{-160,-50},{-120,-10}}),
       iconTransformation(extent={{-140,-20},{-100,20}})));
@@ -68,7 +72,7 @@ block Speed_flow
   Buildings.Controls.OBC.CDL.Interfaces.RealInput VHotWatSec_flow(
     final unit="m3/s",
     displayUnit="m3/s",
-    final quantity="VolumeFlowRate") if primarySecondarySensors
+    final quantity="VolumeFlowRate") if use_priSecSen
     "Measured hot water flow rate through secondary circuit"
     annotation (Placement(transformation(extent={{-160,-80},{-120,-40}}),
       iconTransformation(extent={{-140,-70},{-100,-30}})));
@@ -76,7 +80,7 @@ block Speed_flow
   Buildings.Controls.OBC.CDL.Interfaces.RealInput VHotWatDec_flow(
     final unit="m3/s",
     displayUnit="m3/s",
-    final quantity="VolumeFlowRate") if not primarySecondarySensors
+    final quantity="VolumeFlowRate") if not use_priSecSen
     "Measured hot water flow rate through decoupler"
     annotation (Placement(transformation(extent={{-160,-120},{-120,-80}}),
       iconTransformation(extent={{-140,-70},{-100,-30}})));
@@ -91,8 +95,8 @@ block Speed_flow
       iconTransformation(extent={{100,-20},{140,20}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Reals.PIDWithReset conPID(
-    final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
+  Buildings.Controls.OBC.CDL.Continuous.PIDWithReset conPID(
+    final controllerType=controllerType,
     final k=k,
     final Ti=Ti,
     final Td=Td,
@@ -105,16 +109,15 @@ protected
     "Reset PID loop when it is activated"
     annotation (Placement(transformation(extent={{-40,-30},{-20,-10}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Line pumSpe
+  Buildings.Controls.OBC.CDL.Continuous.Line pumSpe
     "Pump speed"
     annotation (Placement(transformation(extent={{60,50},{80,70}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Add add2(
-    final k2=-1) if primarySecondarySensors
-    "Compare measured flowrate in primary and secondary circuits"
+  Buildings.Controls.OBC.CDL.Continuous.Subtract sub2 if use_priSecSen
+    "Compare measured flowrate in primary and secondary loops"
     annotation (Placement(transformation(extent={{-100,-50},{-80,-30}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Division div if primarySecondarySensors
+  Buildings.Controls.OBC.CDL.Continuous.Divide div if use_priSecSen
     "Normalize flow-rate value"
     annotation (Placement(transformation(extent={{-60,-80},{-40,-60}})));
 
@@ -123,38 +126,37 @@ protected
     "Check if any hot water primary pumps are enabled"
     annotation (Placement(transformation(extent={{-100,-10},{-80,10}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant pumSpe_min(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant pumSpe_min(
     final k=minPumSpe)
     "Minimum pump speed"
     annotation (Placement(transformation(extent={{-80,50},{-60,70}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant pumSpe_max(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant pumSpe_max(
     final k=maxPumSpe)
     "Maximum pump speed"
     annotation (Placement(transformation(extent={{-20,30},{0,50}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant one(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant one(
     final k=1)
     "Constant one"
     annotation (Placement(transformation(extent={{-80,20},{-60,40}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant zer(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant zer(
     final k=0)
     "Constant zero"
     annotation (Placement(transformation(extent={{-80,80},{-60,100}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Switch swi
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi
     "Logical switch"
     annotation (Placement(transformation(extent={{80,90},{100,110}})));
 
-  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(
-    final p=1e-6,
-    final k=1) if primarySecondarySensors
+  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
+    final p=1e-6) if use_priSecSen
     "Ensure divisor is non-zero"
     annotation (Placement(transformation(extent={{-100,-80},{-80,-60}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Gain gai(
-    final k=1/VHotWat_flow_nominal) if not primarySecondarySensors
+  Buildings.Controls.OBC.CDL.Continuous.MultiplyByParameter gai(
+    final k=1/VHotWat_flow_nominal) if not use_priSecSen
     "Normalize flowrate"
     annotation (Placement(transformation(extent={{-60,-110},{-40,-90}})));
 
@@ -187,11 +189,11 @@ equation
           -122,0},{-102,0}},       color={255,0,255}));
   connect(mulOr.y, swi.u2) annotation (Line(points={{-78,0},{-50,0},{-50,100},{78,
           100}}, color={255,0,255}));
-  connect(VHotWatPri_flow, add2.u1) annotation (Line(points={{-140,-30},{-110,-30},
+  connect(VHotWatPri_flow,sub2. u1) annotation (Line(points={{-140,-30},{-110,-30},
           {-110,-34},{-102,-34}}, color={0,0,127}));
-  connect(VHotWatSec_flow, add2.u2) annotation (Line(points={{-140,-60},{-106,-60},
+  connect(VHotWatSec_flow,sub2. u2) annotation (Line(points={{-140,-60},{-106,-60},
           {-106,-46},{-102,-46}}, color={0,0,127}));
-  connect(add2.y, div.u1) annotation (Line(points={{-78,-40},{-70,-40},{-70,-64},
+  connect(sub2.y, div.u1) annotation (Line(points={{-78,-40},{-70,-40},{-70,-64},
           {-62,-64}}, color={0,0,127}));
   connect(addPar.y, div.u2) annotation (Line(points={{-78,-70},{-70,-70},{-70,-76},
           {-62,-76}}, color={0,0,127}));
@@ -223,7 +225,7 @@ annotation (
           fillPattern=FillPattern.Solid),
         Text(
           extent={{-100,150},{100,110}},
-          lineColor={0,0,255},
+          textColor={0,0,255},
           textString="%name")}),
   Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-120,-120},{120,120}})),
 Documentation(info="<html>
@@ -239,21 +241,21 @@ pump speed<code>yHotWatPumSpe</code> will be controlled by a reverse acting PID
 loop maintaining the flowrate through the decoupler at zero. PID loop output 
 shall be mapped from minimum pump speed (<code>minPumSpe</code>) at 0% to maximum
 pump speed(<code>maxPumSpe</code>) at 100%.
+</p>
 <ol>
 <li>
 When the plant has flowrate sensors in the primary and secondary loops,
-<code>primarySecondarySensors = true</code>, the measured flowrate in primary
+<code>use_priSecSen = true</code>, the measured flowrate in primary
 loop <code>VHotWatPri_flow</code> and the measured flowrate in secondary loop
 <code>VHotWatSec_flow</code> is used to calculate the flow through the decoupler
 (<code>VHotWatPri_flow - VHotWatSec_flow</code>) and generate the control signal.
 </li>
 <li>
 When the plant has a flowrate sensor in the decoupler, 
-<code>primarySecondarySensors = false</code>, the measured flowrate through the
+<code>use_priSecSen = false</code>, the measured flowrate through the
 decoupler is used to calculate the control signal.
 </li>
 </ol>
-</p>
 </html>", revisions="<html>
 <ul>
 <li>

@@ -63,7 +63,7 @@ protected
     "Ensure stage-completion signal is passed only when the stage-up signal is active"
     annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
 
-  Buildings.Controls.OBC.CDL.Reals.LessThreshold lesThr(
+  Buildings.Controls.OBC.CDL.Continuous.LessThreshold lesThr(
     final t=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.nonCondensingBoiler)
     "Pass True if all preceding stages are condensing boiler type stages"
     annotation (Placement(transformation(extent={{80,-70},{100,-50}})));
@@ -95,7 +95,7 @@ protected
     "Integer to Real conversion"
     annotation (Placement(transformation(extent={{0,-70},{20,-50}})));
 
-  Buildings.Controls.OBC.CDL.Reals.MultiMax mulMax(
+  Buildings.Controls.OBC.CDL.Continuous.MultiMax mulMax(
     final nin=nSta)
     "Detect maximum from stage-type vector"
     annotation (Placement(transformation(extent={{40,-70},{60,-50}})));
@@ -109,7 +109,7 @@ protected
     "Integer to Real conversion"
     annotation (Placement(transformation(extent={{-140,-30},{-120,-10}})));
 
-  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr1(
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold greThr1(
     final t=Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Types.BoilerTypes.condensingBoiler)
     "Identify if current stage setpoint is a non-condensing boiler stage"
     annotation (Placement(transformation(extent={{-60,-30},{-40,-10}})));
@@ -132,7 +132,7 @@ protected
     "Pass process completion signal upon temperature reset or process time-out"
     annotation (Placement(transformation(extent={{-100,40},{-80,60}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(
     final uLow=TMinSupNonConBoi,
     final uHigh=TMinSupNonConBoi + sigDif)
     "Check if measured hot water supply temperature is greater than minimum
@@ -226,11 +226,11 @@ annotation (
            fillPattern=FillPattern.Solid),
          Text(
            extent={{-120,146},{100,108}},
-           lineColor={0,0,255},
+           textColor={0,0,255},
            textString="%name"),
          Text(
            extent={{-100,100},{100,-100}},
-           lineColor={0,0,0},
+           textColor={0,0,0},
            textString="S")}),
   Diagram(coordinateSystem(preserveAspectRatio=false,
           extent={{-160,-100},{160,100}})),

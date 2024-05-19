@@ -132,7 +132,7 @@ protected
     "Multi Or"
     annotation (Placement(transformation(extent={{-10,-100},{10,-80}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Switch swi[nBoi] if have_heaPriPum
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi[nBoi] if have_heaPriPum
     "Real switch"
     annotation (Placement(transformation(extent={{140,-60},{160,-40}})));
 
@@ -247,7 +247,7 @@ equation
         borderPattern=BorderPattern.Raised),
       Text(
         extent={{-120,146},{100,108}},
-        lineColor={0,0,255},
+        textColor={0,0,255},
         textString="%name"),
       Ellipse(
         extent={{-80,80},{80,-80}},
@@ -264,11 +264,11 @@ equation
         fillPattern=FillPattern.Solid),
       Text(
         extent={{-66,46},{76,10}},
-        lineColor={28,108,200},
+        textColor={28,108,200},
         textString="START"),
       Text(
         extent={{-66,-8},{76,-44}},
-        lineColor={28,108,200},
+        textColor={28,108,200},
         textString="STOP")},
       coordinateSystem(
         preserveAspectRatio=false,

@@ -49,12 +49,11 @@ block FailsafeCondition
       iconTransformation(extent={{100,-20},{140,20}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Reals.Add add2(
-    final k2=-1)
+  Buildings.Controls.OBC.CDL.Continuous.Subtract sub2
     "Difference between setpoint and measured temperature"
     annotation (Placement(transformation(extent={{-80,-10},{-60,10}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(
     final uLow=TDif - TDifHys,
     final uHigh=TDif)
     "Hysteresis deadband to prevent cycling"
@@ -75,13 +74,13 @@ protected
     annotation (Placement(transformation(extent={{0,-10},{20,10}})));
 
 equation
-  connect(add2.u2, TSup)
+  connect(sub2.u2, TSup)
     annotation (Line(points={{-82,-6},{-90,-6},{-90,0},{-140,0}},
       color={0,0,127}));
-  connect(add2.u1, TSupSet)
+  connect(sub2.u1, TSupSet)
     annotation (Line(points={{-82,6},{-90,6},{-90,50},{-140,50}},
       color={0,0,127}));
-  connect(add2.y, hys.u)
+  connect(sub2.y, hys.u)
     annotation (Line(points={{-58,0},{-42,0}},
       color={0,0,127}));
   connect(not1.u, uStaChaProEnd)
@@ -105,7 +104,7 @@ annotation (defaultComponentName = "faiSafCon",
         fillPattern=FillPattern.Solid),
       Text(
         extent={{-120,146},{100,108}},
-        lineColor={0,0,255},
+        textColor={0,0,255},
         textString="%name")}),
   Diagram(coordinateSystem(
     preserveAspectRatio=false,
@@ -122,13 +121,6 @@ annotation (defaultComponentName = "faiSafCon",
     src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/FailsafeCondition_stateMachineChart.png\"/>
     <br/>
     State-machine chart for the sequence defined in RP-1711
-    </p>
-    <p align=\"center\">
-    <img alt=\"Validation plot for FailsafeCondition\"
-    src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/FailsafeCondition.png\"/>
-    <br/>
-    Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.FailsafeCondition\">
-    Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.FailsafeCondition</a>.
     </p>
     </html>",
     revisions="<html>

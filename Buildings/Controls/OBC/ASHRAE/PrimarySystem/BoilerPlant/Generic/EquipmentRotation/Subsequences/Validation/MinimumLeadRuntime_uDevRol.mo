@@ -119,13 +119,13 @@ equation
 
 annotation (
    experiment(StopTime=100000.0, Tolerance=1e-06),
-    __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/ChillerPlant/Generic/EquipmentRotation/Subsequences/Validation/MinimumLeadRuntime_uDevRol.mos"
+    __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Generic/EquipmentRotation/Subsequences/Validation/MinimumLeadRuntime_uDevRol.mos"
     "Simulate and plot"),
   Documentation(info="<html>
 <p>
 This example validates
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Generic.EquipmentRotation.Subsequences.MinimumLeadRuntime\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Generic.EquipmentRotation.Subsequences.MinimumLeadRuntime</a>.
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.EquipmentRotation.Subsequences.MinimumLeadRuntime\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.EquipmentRotation.Subsequences.MinimumLeadRuntime</a>.
 </p>
 </html>", revisions="<html>
 <ul>
@@ -148,7 +148,7 @@ Icon(graphics={
         coordinateSystem(preserveAspectRatio=false, extent={{-120,-120},{120,120}}),
         graphics={Text(
           extent={{-52,-104},{46,-114}},
-          lineColor={0,0,127},
+          textColor={0,0,127},
           textString="For simplicity this test assumes 
 the device ON/OFF status equals its setpoint 
 (there is no delay in starting or stopping devices).")}));

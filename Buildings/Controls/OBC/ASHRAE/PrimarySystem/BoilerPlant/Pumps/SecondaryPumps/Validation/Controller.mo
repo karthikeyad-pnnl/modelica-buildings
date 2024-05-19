@@ -144,7 +144,7 @@ protected
     "Boolean pulse"
     annotation (Placement(transformation(extent={{-260,190},{-240,210}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul(
     final amplitude=2,
     final width=1,
     final period=3500,
@@ -168,7 +168,7 @@ protected
     "Real to Integer conversion"
     annotation (Placement(transformation(extent={{70,160},{90,180}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul1(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul1(
     final amplitude=2,
     final width=1,
     final period=3500,
@@ -178,7 +178,7 @@ protected
     annotation (Placement(transformation(extent={{40,160},{60,180}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul2(
-    final width=1,
+    final width=0.9,
     final period=3600,
     final shift=10)
     "Boolean pulse"
@@ -188,7 +188,7 @@ protected
     "Real to Integer conversion"
     annotation (Placement(transformation(extent={{-220,10},{-200,30}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul2(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul2(
     final amplitude=2,
     final width=1,
     final period=3500,
@@ -198,7 +198,7 @@ protected
     annotation (Placement(transformation(extent={{-260,10},{-240,30}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul3(
-    final width=1,
+    final width=0.9,
     final period=3600,
     final shift=10)
     "Boolean pulse"
@@ -208,7 +208,7 @@ protected
     "Real to Integer conversion"
     annotation (Placement(transformation(extent={{80,-10},{100,10}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul3(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul3(
     final amplitude=2,
     final width=1,
     final period=3500,
@@ -228,7 +228,7 @@ protected
     "Real to Integer conversion"
     annotation (Placement(transformation(extent={{-220,-220},{-200,-200}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul4(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul4(
     final amplitude=2,
     final width=1,
     final period=3500,
@@ -244,7 +244,7 @@ protected
     "Boolean pulse"
     annotation (Placement(transformation(extent={{-240,-260},{-220,-240}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul5(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul5(
     final amplitude=0.6,
     final width=0.5,
     final period=3600,
@@ -253,7 +253,7 @@ protected
     "Real pulse"
     annotation (Placement(transformation(extent={{-260,100},{-240,120}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul6(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul6(
     final amplitude=0.6,
     final width=0.5,
     final period=3600,
@@ -262,7 +262,7 @@ protected
     "Real pulse"
     annotation (Placement(transformation(extent={{60,90},{80,110}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul7(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul7(
     final amplitude=0.6,
     final width=0.5,
     final period=3600,
@@ -271,7 +271,7 @@ protected
     "Real pulse"
     annotation (Placement(transformation(extent={{-260,-110},{-240,-90}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Pulse pul8(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Pulse pul8(
     final amplitude=0.6,
     final width=0.5,
     final period=3600,
@@ -290,14 +290,14 @@ protected
     "Logical pre block"
     annotation (Placement(transformation(extent={{-60,150},{-40,170}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin[2](
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin[2](
     final amplitude=fill(0.5, 2),
     final freqHz=fill(1/1800, 2),
     final offset=fill(1, 2))
     "Sine signal"
     annotation (Placement(transformation(extent={{-200,120},{-180,140}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin1(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin1(
     final amplitude=0.1,
     final freqHz=1/3600,
     final offset=0.25)
@@ -314,21 +314,21 @@ protected
     "Logical pre block"
     annotation (Placement(transformation(extent={{240,140},{260,160}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin2[2](
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin2[2](
     final amplitude=fill(0.5, 2),
     final freqHz=fill(1/1800, 2),
     final offset=fill(1, 2))
     "Sine signal"
     annotation (Placement(transformation(extent={{80,130},{100,150}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin3(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin3(
     final amplitude=0.1,
     final freqHz=1/3600,
     final offset=0.25)
     "Sine signal"
     annotation (Placement(transformation(extent={{40,130},{60,150}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin4(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin4(
     final amplitude=5,
     final freqHz=1/900,
     final offset=7.5)
@@ -343,7 +343,7 @@ protected
   Buildings.Controls.OBC.CDL.Logical.Pre pre3[2](
     final pre_u_start=fill(false, 2))
     "Logical pre block"
-    annotation (Placement(transformation(extent={{-60,-20},{-40,0}})));
+    annotation (Placement(transformation(extent={{-40,-20},{-20,0}})));
 
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt3[2](
     final k={2,1})
@@ -365,43 +365,43 @@ protected
     "Logical pre block"
     annotation (Placement(transformation(extent={{-60,-220},{-40,-200}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con1(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con1(
     final k=1)
     "Constant Real source"
     annotation (Placement(transformation(extent={{-190,200},{-170,220}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con3(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con3(
     final k=1)
     "Constant Real source"
     annotation (Placement(transformation(extent={{120,110},{140,130}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con4(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con4(
     final k=1)
     "Constant Real source"
     annotation (Placement(transformation(extent={{-260,-70},{-240,-50}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin6[2](
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin6[2](
     final amplitude=fill(0.5, 2),
     final freqHz=fill(1/1800, 2),
     final offset=fill(1, 2))
     "Sine signal"
     annotation (Placement(transformation(extent={{-260,-30},{-240,-10}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin5(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin5(
     final amplitude=5,
     final freqHz=1/900,
     final offset=7.5)
     "Sine signal"
     annotation (Placement(transformation(extent={{40,-50},{60,-30}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Sine sin7[2](
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Sine sin7[2](
     final amplitude=fill(0.5, 2),
     final freqHz=fill(1/1800, 2),
     final offset=fill(1, 2))
     "Sine signal"
     annotation (Placement(transformation(extent={{40,-90},{60,-70}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con6(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con6(
     final k=1)
     "Constant Real source"
     annotation (Placement(transformation(extent={{40,-130},{60,-110}})));
@@ -441,9 +441,6 @@ equation
           {-110,30},{-110,8.2},{-102,8.2}},
                                          color={255,127,0}));
 
-  connect(secPumCon2.yHotWatPum,pre3. u)
-    annotation (Line(points={{-78,-10},{-62,-10}}, color={255,0,255}));
-
   connect(conInt3.y,secPumCon3. uPumLeaLag) annotation (Line(points={{172,20},{190,
           20},{190,-11.8},{198,-11.8}},  color={255,127,0}));
 
@@ -471,8 +468,8 @@ equation
   connect(con3.y,secPumCon1. dpHotWatSet) annotation (Line(points={{142,120},{170,
           120},{170,136},{198,136}},     color={0,0,127}));
 
-  connect(pre3.y,secPumCon2. uHotWatPum) annotation (Line(points={{-38,-10},{
-          -30,-10},{-30,60},{-160,60},{-160,4},{-102,4}},       color={255,0,
+  connect(pre3.y,secPumCon2. uHotWatPum) annotation (Line(points={{-18,-10},{
+          -10,-10},{-10,60},{-160,60},{-160,4},{-102,4}},       color={255,0,
           255}));
 
   connect(pre4.y,secPumCon3. uHotWatPum) annotation (Line(points={{262,-30},{270,
@@ -571,12 +568,13 @@ equation
   connect(pul8.y,secPumCon3. uMaxSecPumSpeCon) annotation (Line(points={{62,-160},
           {190,-160},{190,-48},{198,-48}},     color={0,0,127}));
 
+  connect(secPumCon2.yHotWatPum, pre3.u)
+    annotation (Line(points={{-78,-10},{-42,-10}}, color={255,0,255}));
 annotation (
   experiment(
       StopTime=3600,
       Interval=0.5,
-      Tolerance=1e-06,
-      __Dymola_Algorithm="Cvode"),
+      Tolerance=1e-06),
   __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Pumps/SecondaryPumps/Validation/Controller.mos"
     "Simulate and plot"),
   Documentation(info="<html>

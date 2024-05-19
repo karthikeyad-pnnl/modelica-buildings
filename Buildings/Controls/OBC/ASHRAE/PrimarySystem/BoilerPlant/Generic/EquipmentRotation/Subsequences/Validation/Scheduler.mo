@@ -2,17 +2,12 @@ within Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.Equipment
 model Scheduler
   "Validation sequence for the device swap scheduler in case of continuous lead device operation"
 
-  parameter Real aveTWetBul(
-    final unit="K",
-    final quantity="ThermodynamicTemperature",
-    displayUnit="degC")=288.15
-      "Chilled water supply set temperature";
-
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.EquipmentRotation.Subsequences.Scheduler
     rotSch(
     final simTimSta=false,
     final weeInt=false,
-    final dayCou=10) "Equipment rotation happens every 10 days at 2am"
+    final dayCou=10)
+    "Equipment rotation happens every 10 days at 2am"
     annotation (Placement(transformation(extent={{-40,70},{-20,90}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.EquipmentRotation.Subsequences.Scheduler
@@ -20,14 +15,16 @@ model Scheduler
     final simTimSta=false,
     weeInt=true,
     final weeCou=2,
-    final weekday=2) "Equipment rotation happens bi-weekly on Tuesday at 2am"
+    final weekday=2)
+    "Equipment rotation happens bi-weekly on Tuesday at 2am"
     annotation (Placement(transformation(extent={{-40,30},{-20,50}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.EquipmentRotation.Subsequences.Scheduler
     rotSch2(
     final weeInt=false,
     final houOfDay=5,
-    final dayCou=6) "Equipment rotation happens every 5 days at 6am"
+    final dayCou=6)
+    "Equipment rotation happens every 5 days at 6am"
     annotation (Placement(transformation(extent={{-40,-10},{-20,10}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.EquipmentRotation.Subsequences.Scheduler
@@ -53,22 +50,26 @@ model Scheduler
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol(
     final trueHoldDuration=1800,
-    final falseHoldDuration=0) "Holds the signal for visualization purposes"
+    final falseHoldDuration=0)
+    "Holds the signal for visualization purposes"
     annotation (Placement(transformation(extent={{20,70},{40,90}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol1(
     final trueHoldDuration=1800,
-    final falseHoldDuration=0) "Holds the signal for visualization purposes"
+    final falseHoldDuration=0)
+    "Holds the signal for visualization purposes"
     annotation (Placement(transformation(extent={{20,30},{40,50}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol2(
     final trueHoldDuration=1800,
-    final falseHoldDuration=0) "Holds the signal for visualization purposes"
+    final falseHoldDuration=0)
+    "Holds the signal for visualization purposes"
     annotation (Placement(transformation(extent={{20,-10},{40,10}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol3(
     final trueHoldDuration=1800,
-    final falseHoldDuration=0) "Holds the signal for visualization purposes"
+    final falseHoldDuration=0)
+    "Holds the signal for visualization purposes"
     annotation (Placement(transformation(extent={{20,-50},{40,-30}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueFalseHold truFalHol4(
@@ -90,13 +91,13 @@ equation
     annotation (Line(points={{-18,-80},{18,-80}},color={255,0,255}));
 annotation (
   experiment(StopTime=3000000, Tolerance=1e-06),
-  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/ChillerPlant/Generic/EquipmentRotation/Subsequences/Validation/Scheduler.mos"
+  __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Generic/EquipmentRotation/Subsequences/Validation/Scheduler.mos"
     "Simulate and plot"),
   Documentation(info="<html>
 <p>
 This example validates
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Generic.EquipmentRotation.Scheduler\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Generic.EquipmentRotation.Scheduler</a>.
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.EquipmentRotation.Scheduler\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.EquipmentRotation.Scheduler</a>.
 </p>
 </html>", revisions="<html>
 <ul>

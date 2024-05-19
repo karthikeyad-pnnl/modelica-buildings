@@ -74,19 +74,19 @@ block EnableLag_pumpSpeed
     annotation (Placement(transformation(extent={{-50,-100},{-30,-80}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(
     final uLow=speLim - sigDif,
     final uHigh=speLim)
     "Hysteresis for enabling next lag pump at speed limit speLim"
     annotation (Placement(transformation(extent={{-120,50},{-100,70}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys1(
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys1(
     final uLow=speLim1 - sigDif,
     final uHigh=speLim1)
     "Hysteresis for enabling next lag pump at speed limit speLim1"
     annotation (Placement(transformation(extent={{-120,-10},{-100,10}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys2(
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys2(
     final uLow=speLim2,
     final uHigh=speLim2 + sigDif)
     "Hysteresis for disabling last lag pump"
@@ -226,8 +226,8 @@ equation
   connect(tim2.passed, pre2.u) annotation (Line(points={{-28,-98},{0,-98},{0,
           -130},{8,-130}}, color={255,0,255}));
 annotation (
-  defaultComponentName="enaLagSecPum",
-  Icon(coordinateSystem(preserveAspectRatio=false,extent={{-100,-100},{100,100}}),
+defaultComponentName="enaLagSecPum",
+Icon(coordinateSystem(preserveAspectRatio=false,extent={{-100,-100},{100,100}}),
     graphics={
       Rectangle(
         extent={{-100,-100},{100,100}},
@@ -236,34 +236,32 @@ annotation (
         fillPattern=FillPattern.Solid),
       Text(
         extent={{-100,150},{100,110}},
-        lineColor={0,0,255},
+        textColor={0,0,255},
         textString="%name")}),
-  Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-140,-160},{140,160}})),
-  Documentation(info="<html>
-    <p>
-    Block that enables and disables lag secondary hot water pump, for plants with 
-    variable-speed secondary pumps and no flowrate sensor in secondary loop, according
-    to ASHRAE RP-1711, March, 2020 draft, section 5.3.7.4.
-    </p>
-    <p>
-    <ol>
-    <li>
-    Stage up <code>yUp = true</code> when speed <code>uPumSpe</code> exceeds speed limit
-    <code>speLim</code> for time period <code>timPer</code> or <code>speLim1</code>
-    for <code>timPer1</code>.
-    </li>
-    <li>
-    Stage down <code>yDown = false</code> when <code>uPumSpe</code> falls below <code>speLim2</code>
-    for <code>timPer2</code>.
-    </li>
-    </ol>
-    </p>
-    </html>", revisions="<html>
-    <ul>
-    <li>
-    August 25, 2020, by Karthik Devaprasad:<br/>
-    First implementation.
-    </li>
-    </ul>
-    </html>"));
+Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-140,-160},{140,160}})),
+Documentation(info="<html>
+<p>
+Block that enables and disables lag secondary hot water pump, for plants with 
+variable-speed secondary pumps and no flowrate sensor in secondary loop, according
+to ASHRAE RP-1711, March, 2020 draft, section 5.3.7.4.
+</p>
+<ol>
+<li>
+Stage up <code>yUp = true</code> when speed <code>uPumSpe</code> exceeds speed limit
+<code>speLim</code> for time period <code>timPer</code> or <code>speLim1</code>
+for <code>timPer1</code>.
+</li>
+<li>
+Stage down <code>yDown = false</code> when <code>uPumSpe</code> falls below <code>speLim2</code>
+for <code>timPer2</code>.
+</li>
+</ol>
+</html>", revisions="<html>
+<ul>
+<li>
+August 25, 2020, by Karthik Devaprasad:<br/>
+First implementation.
+</li>
+</ul>
+</html>"));
 end EnableLag_pumpSpeed;

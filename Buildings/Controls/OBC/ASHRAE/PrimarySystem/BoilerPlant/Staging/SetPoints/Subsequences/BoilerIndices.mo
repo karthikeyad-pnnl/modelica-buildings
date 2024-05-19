@@ -58,14 +58,14 @@ protected
     "Staging matrix"
     annotation (Placement(transformation(extent={{-60,-40},{-40,-20}})));
 
-  Buildings.Controls.OBC.CDL.Reals.MatrixMax matMax(
+  Buildings.Controls.OBC.CDL.Continuous.MatrixMax matMax(
     final nRow=nSta,
     final nCol=nBoi,
     final rowMax=false)
     "Column-wise matrix maximum"
     annotation (Placement(transformation(extent={{100,-10},{120,10}})));
 
-  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold boiInSta[nBoi](
+  Buildings.Controls.OBC.CDL.Continuous.GreaterThreshold boiInSta[nBoi](
     final t=fill(0.5, nBoi))
     "Identifies boilers designated to operate in a given stage"
     annotation (Placement(transformation(extent={{140,-10},{160,10}})));
@@ -118,7 +118,7 @@ equation
         fillPattern=FillPattern.Solid),
         Text(
           extent={{-120,146},{100,108}},
-          lineColor={0,0,255},
+          textColor={0,0,255},
           textString="%name")}),
         Diagram(coordinateSystem(preserveAspectRatio=false,
           extent={{-200,-60},{200,60}})),
@@ -132,13 +132,6 @@ user.
 <p>
 The subsequence outputs a vector of boiler indices <code>yBoi</code>
 for a stage index input <code>u</code> given a staging matrix <code>staMat</code>.
-</p>
-<p align=\"center\">
-<img alt=\"Validation plot for BoilerIndices\"
-src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/BoilerIndices.png\"/>
-<br/>
-Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.BoilerIndices\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.BoilerIndices</a>.
 </p>
 </html>",
 revisions="<html>

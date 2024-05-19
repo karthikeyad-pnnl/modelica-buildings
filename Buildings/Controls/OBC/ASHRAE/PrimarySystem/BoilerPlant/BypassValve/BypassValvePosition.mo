@@ -5,6 +5,9 @@ block BypassValvePosition
   parameter Integer nPum = 2
     "Number of pumps";
 
+  parameter Buildings.Controls.OBC.CDL.Types.SimpleController controllerType= Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "Type of controller";
+
   parameter Real k(
     final min=0,
     final unit="1",
@@ -63,8 +66,7 @@ block BypassValvePosition
       iconTransformation(extent={{100,-20},{140,20}})));
 
 protected
-  Buildings.Controls.OBC.CDL.Reals.Add add2(
-    final k2=-1)
+  Buildings.Controls.OBC.CDL.Continuous.Subtract sub2
     "Difference between measured flowrate and minimum flow setpoint"
     annotation (Placement(transformation(extent={{-70,30},{-50,50}})));
 
@@ -73,34 +75,33 @@ protected
     "Block to detect if any of the pumps are proved ON"
     annotation (Placement(transformation(extent={{-70,-10},{-50,10}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Division div
+  Buildings.Controls.OBC.CDL.Continuous.Divide div
     "Normalize measured hot water flowrate"
     annotation (Placement(transformation(extent={{-20,30},{0,50}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con(
     final k=0)
     "Constant Real source"
     annotation (Placement(transformation(extent={{-20,60},{0,80}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Max max
+  Buildings.Controls.OBC.CDL.Continuous.Max max
     "Ensure bypass valve position is greater than lower limit for condensation control"
     annotation (Placement(transformation(extent={{70,-40},{90,-20}})));
 
-  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(
-    final p=1e-6,
-    final k=1)
+  Buildings.Controls.OBC.CDL.Continuous.AddParameter addPar(
+    final p=1e-6)
     "Prevent division by zero"
     annotation (Placement(transformation(extent={{-70,70},{-50,90}})));
 
-  Buildings.Controls.OBC.CDL.Reals.PIDWithReset conPID(
-    final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
+  Buildings.Controls.OBC.CDL.Continuous.PIDWithReset conPID(
+    final controllerType=controllerType,
     final k=k,
     final Ti=Ti,
     final Td=Td,
     final yMax=1,
     final yMin=0,
-    reverseActing=false,
-    y_reset=1)
+    xi_start=1,
+    reverseActing=false)
     "PID loop to regulate flow through primary loop using bypass valve"
     annotation (Placement(transformation(extent={{20,60},{40,80}})));
 
@@ -132,11 +133,11 @@ equation
 
   connect(conPID.y, max.u1) annotation (Line(points={{42,70},{50,70},{50,-24},{68,
           -24}}, color={0,0,127}));
-  connect(add2.y, div.u1) annotation (Line(points={{-48,40},{-28,40},{-28,46},{-22,
+  connect(sub2.y, div.u1) annotation (Line(points={{-48,40},{-28,40},{-28,46},{-22,
           46}}, color={0,0,127}));
-  connect(VHotWatMinSet_flow, add2.u1) annotation (Line(points={{-120,80},{-80,80},
+  connect(VHotWatMinSet_flow,sub2. u1) annotation (Line(points={{-120,80},{-80,80},
           {-80,46},{-72,46}}, color={0,0,127}));
-  connect(VHotWat_flow, add2.u2) annotation (Line(points={{-120,40},{-80,40},{-80,
+  connect(VHotWat_flow,sub2. u2) annotation (Line(points={{-120,40},{-80,40},{-80,
           34},{-72,34}}, color={0,0,127}));
 annotation (defaultComponentName="bypValPos",
   Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}}),
@@ -147,13 +148,13 @@ annotation (defaultComponentName="bypValPos",
                 fillPattern=FillPattern.Solid),
               Text(
                 extent={{-70,20},{70,-20}},
-                lineColor={0,0,0},
+                textColor={0,0,0},
                 fillColor={255,255,255},
                 fillPattern=FillPattern.None,
                 textString="bypValPos"),
               Text(
                 extent={{-100,146},{100,108}},
-                lineColor={0,0,255},
+                textColor={0,0,255},
                 textString="%name")}),
   Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},{100,100}})),
   Documentation(info="<html>
@@ -189,11 +190,5 @@ annotation (defaultComponentName="bypValPos",
     First implementation.
     </li>
     </ul>
-    </html>"),
-    experiment(
-      StartTime=-1814400,
-      StopTime=1814400,
-      Interval=1,
-      Tolerance=1e-06,
-      __Dymola_Algorithm="Dassl"));
+    </html>"));
 end BypassValvePosition;

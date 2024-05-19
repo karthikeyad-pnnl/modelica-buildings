@@ -234,44 +234,53 @@ block Down
     annotation (Placement(transformation(extent={{-160,120},{-140,140}})));
 
 protected
+  Buildings.Controls.OBC.CDL.Continuous.AddParameter addParDivZer(
+    final p=1e-6)
+    "Add small value to input signal to prevent divide by zero"
+    annotation (Placement(transformation(extent={{-166,10},{-146,30}})));
+
+  Buildings.Controls.OBC.CDL.Continuous.AddParameter addParDivZer1(
+    final p=1e-6)
+    "Add small value to input signal to prevent divide by zero"
+    annotation (Placement(transformation(extent={{-166,-66},{-146,-46}})));
+
   Buildings.Controls.OBC.CDL.Logical.Not not1
     "Logical Not"
     annotation (Placement(transformation(extent={{-120,120},{-100,140}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Division div
+  Buildings.Controls.OBC.CDL.Continuous.Divide div
     "Thermal capacity ratio"
-    annotation (Placement(transformation(extent={{-150,34},{-130,54}})));
+    annotation (Placement(transformation(extent={{-150,44},{-130,64}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys(
     final uLow=fraMinFir,
     final uHigh=fraMinFir + sigDif)
     "Hysteresis loop"
-    annotation (Placement(transformation(extent={{-120,34},{-100,54}})));
+    annotation (Placement(transformation(extent={{-120,44},{-100,64}})));
 
   Buildings.Controls.OBC.CDL.Logical.Or or2 if have_priOnl
     "Logical Or"
     annotation (Placement(transformation(extent={{60,8},{80,28}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Division div1
+  Buildings.Controls.OBC.CDL.Continuous.Divide div1
     "Thermal capacity ratio"
-    annotation (Placement(transformation(extent={{-160,-50},{-140,-30}})));
+    annotation (Placement(transformation(extent={{-160,-40},{-140,-20}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys1(
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys1(
     final uLow=fraDesCap,
     final uHigh=fraDesCap + sigDif)
     "Hysteresis loop"
-    annotation (Placement(transformation(extent={{-130,-50},{-110,-30}})));
+    annotation (Placement(transformation(extent={{-130,-40},{-110,-20}})));
 
   Buildings.Controls.OBC.CDL.Logical.And3 and3
     "Logical And"
     annotation (Placement(transformation(extent={{180,-10},{200,10}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Add add4(
-    final k2=-1) if not have_priOnl
+  Buildings.Controls.OBC.CDL.Continuous.Subtract sub4 if not have_priOnl
     "Compare primary and secondary circuit return temperature"
     annotation (Placement(transformation(extent={{-162,-190},{-142,-170}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys3(
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys3(
     final uLow=TCirDif - dTemp,
     final uHigh=TCirDif) if not have_priOnl
     "Hysteresis loop"
@@ -309,19 +318,19 @@ protected
 
   Buildings.Controls.OBC.CDL.Logical.Not not2
     "Logical Not"
-    annotation (Placement(transformation(extent={{-90,34},{-70,54}})));
+    annotation (Placement(transformation(extent={{-90,44},{-70,64}})));
 
   Buildings.Controls.OBC.CDL.Logical.Not not3
     "Logical Not"
-    annotation (Placement(transformation(extent={{-90,-50},{-70,-30}})));
+    annotation (Placement(transformation(extent={{-90,-40},{-70,-20}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys4(
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys4(
     final uLow=bypValClo,
     final uHigh=bypValClo + sigDif) if have_priOnl
     "Hysteresis loop"
-    annotation (Placement(transformation(extent={{-158,-10},{-138,10}})));
+    annotation (Placement(transformation(extent={{-140,-10},{-120,10}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys2(
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys2(
     final uLow=sigDif,
     final uHigh=2*sigDif) if not have_priOnl
     "Hysteresis loop"
@@ -365,13 +374,12 @@ protected
     "Identify stage type of current stage"
     annotation (Placement(transformation(extent={{-140,-140},{-120,-120}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con2[nSta](
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con2[nSta](
     final k=boiMinPriPumSpeSta) if not have_priOnl
     "Signal source for minimum primary pump speed for boiler plant stage"
     annotation (Placement(transformation(extent={{-170,-140},{-150,-120}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Add add2(
-    final k2=-1) if not have_priOnl
+  Buildings.Controls.OBC.CDL.Continuous.Subtract sub2 if not have_priOnl
     "Compare pump speed signal and minimum pump speed for stage"
     annotation (Placement(transformation(extent={{-174,-90},{-154,-70}})));
 
@@ -388,7 +396,7 @@ protected
   Buildings.Controls.OBC.CDL.Logical.And and5
     "Turn on timer when hysteresis turns on and reset it when hysteresis turns
     off or stage change process is completed"
-    annotation (Placement(transformation(extent={{-50,-50},{-30,-30}})));
+    annotation (Placement(transformation(extent={{-50,-40},{-30,-20}})));
 
   Buildings.Controls.OBC.CDL.Logical.And and6 if not have_priOnl
     "Turn on timer when hysteresis turns on and reset it when hysteresis turns
@@ -410,15 +418,11 @@ equation
   connect(faiSafCon.TSup, THotWatSup)
     annotation (Line(points={{-162,130},{-170,130},{-170,120},{-200,120}},
                                                      color={0,0,127}));
-  connect(div.u2, uCapMin) annotation (Line(points={{-152,38},{-160,38},{-160,30},
-          {-200,30}}, color={0,0,127}));
   connect(hys.u, div.y)
-    annotation (Line(points={{-122,44},{-128,44}},
+    annotation (Line(points={{-122,54},{-124,54},{-124,54},{-128,54}},
                                                  color={0,0,127}));
-  connect(div1.u2, uCapDowDes) annotation (Line(points={{-162,-46},{-172,-46},{-172,
-          -30},{-200,-30}}, color={0,0,127}));
   connect(hys1.u, div1.y)
-    annotation (Line(points={{-132,-40},{-138,-40}},
+    annotation (Line(points={{-132,-30},{-134,-30},{-134,-30},{-138,-30}},
                                                    color={0,0,127}));
   connect(and3.y, yStaDow)
     annotation (Line(points={{202,0},{240,0}}, color={255,0,255}));
@@ -426,11 +430,11 @@ equation
           130}},     color={255,0,255}));
   connect(and3.u2, or2.y) annotation (Line(points={{178,0},{134,0},{134,18},{82,
           18}}, color={255,0,255}));
-  connect(add4.u1, TPriHotWatRet) annotation (Line(points={{-164,-174},{-170,
+  connect(sub4.u1, TPriHotWatRet) annotation (Line(points={{-164,-174},{-170,
           -174},{-170,-160},{-200,-160}}, color={0,0,127}));
-  connect(add4.u2, TSecHotWatRet) annotation (Line(points={{-164,-186},{-170,
+  connect(sub4.u2, TSecHotWatRet) annotation (Line(points={{-164,-186},{-170,
           -186},{-170,-190},{-200,-190}}, color={0,0,127}));
-  connect(hys3.u, add4.y)
+  connect(hys3.u,sub4. y)
     annotation (Line(points={{-134,-180},{-140,-180}}, color={0,0,127}));
   connect(logSwi.y, and3.u3) annotation (Line(points={{122,-40},{150,-40},{150,-8},
           {178,-8}}, color={255,0,255}));
@@ -446,16 +450,18 @@ equation
                       color={255,0,255}));
   connect(and3.u2, logSwi1.y) annotation (Line(points={{178,0},{134,0},{134,-20},
           {170,-20},{170,-90},{162,-90}}, color={255,0,255}));
-  connect(div.u1, uCapReq) annotation (Line(points={{-152,50},{-160,50},{-160,60},
-          {-200,60}}, color={0,0,127}));
-  connect(div1.u1, uCapReq) annotation (Line(points={{-162,-34},{-166,-34},{-166,
+  connect(div.u1, uCapReq) annotation (Line(points={{-152,60},{-200,60}},
+                      color={0,0,127}));
+  connect(div1.u1, uCapReq) annotation (Line(points={{-162,-24},{-172,-24},{-172,
           60},{-200,60}}, color={0,0,127}));
   connect(not2.u, hys.y)
-    annotation (Line(points={{-92,44},{-98,44}}, color={255,0,255}));
+    annotation (Line(points={{-92,54},{-94,54},{-94,54},{-98,54}},
+                                                 color={255,0,255}));
   connect(hys1.y, not3.u)
-    annotation (Line(points={{-108,-40},{-92,-40}},color={255,0,255}));
+    annotation (Line(points={{-108,-30},{-104,-30},{-104,-30},{-92,-30}},
+                                                   color={255,0,255}));
   connect(hys4.u, uBypValPos)
-    annotation (Line(points={{-160,0},{-200,0}}, color={0,0,127}));
+    annotation (Line(points={{-142,0},{-200,0}}, color={0,0,127}));
   connect(hys2.y, not4.u)
     annotation (Line(points={{-124,-80},{-122,-80}},
                                                    color={255,0,255}));
@@ -482,27 +488,29 @@ equation
     annotation (Line(points={{-148,-130},{-142,-130}}, color={0,0,127}));
   connect(uCur, extIndSig1.index) annotation (Line(points={{-30,-220},{-30,-190},
           {-80,-190},{-80,-160},{-130,-160},{-130,-142}}, color={255,127,0}));
-  connect(hys2.u, add2.y)
+  connect(hys2.u,sub2. y)
     annotation (Line(points={{-148,-80},{-152,-80}}, color={0,0,127}));
-  connect(uPumSpe, add2.u1) annotation (Line(points={{-200,-60},{-176,-60},{
+  connect(uPumSpe,sub2. u1) annotation (Line(points={{-200,-60},{-176,-60},{
           -176,-74}},       color={0,0,127}));
-  connect(extIndSig1.y, add2.u2) annotation (Line(points={{-118,-130},{-112,-130},
+  connect(extIndSig1.y,sub2. u2) annotation (Line(points={{-118,-130},{-112,-130},
           {-112,-110},{-178,-110},{-178,-86},{-176,-86}}, color={0,0,127}));
   connect(tim3.u, and1.y)
     annotation (Line(points={{-22,44},{-28,44}}, color={255,0,255}));
   connect(and1.u1, not2.y)
-    annotation (Line(points={{-52,44},{-68,44}}, color={255,0,255}));
+    annotation (Line(points={{-52,44},{-60,44},{-60,54},{-68,54}},
+                                                 color={255,0,255}));
   connect(tim1.u, and4.y)
     annotation (Line(points={{-22,0},{-28,0}}, color={255,0,255}));
   connect(and5.y, tim.u)
-    annotation (Line(points={{-28,-40},{30,-40},{30,-20},{48,-20}},
+    annotation (Line(points={{-28,-30},{30,-30},{30,-20},{48,-20}},
                                                    color={255,0,255}));
   connect(tim2.u, and6.y)
     annotation (Line(points={{-22,-100},{-28,-100}}, color={255,0,255}));
   connect(hys4.y, and4.u1)
-    annotation (Line(points={{-136,0},{-52,0}}, color={255,0,255}));
+    annotation (Line(points={{-118,0},{-52,0}}, color={255,0,255}));
   connect(not3.y, and5.u1)
-    annotation (Line(points={{-68,-40},{-52,-40}}, color={255,0,255}));
+    annotation (Line(points={{-68,-30},{-64,-30},{-64,-30},{-52,-30}},
+                                                   color={255,0,255}));
   connect(and2.y, and6.u1)
     annotation (Line(points={{-68,-100},{-52,-100}}, color={255,0,255}));
   connect(not5.u, uStaChaProEnd)
@@ -511,8 +519,8 @@ equation
           -52,36}}, color={255,0,255}));
   connect(not5.y, and4.u2) annotation (Line(points={{-98,90},{-60,90},{-60,-8},{
           -52,-8}}, color={255,0,255}));
-  connect(not5.y, and5.u2) annotation (Line(points={{-98,90},{-60,90},{-60,-48},
-          {-52,-48}}, color={255,0,255}));
+  connect(not5.y, and5.u2) annotation (Line(points={{-98,90},{-60,90},{-60,-38},
+          {-52,-38}}, color={255,0,255}));
   connect(not5.y, and6.u2) annotation (Line(points={{-98,90},{-60,90},{-60,-108},
           {-52,-108}}, color={255,0,255}));
 
@@ -522,7 +530,7 @@ equation
           {58,-98}}, color={255,0,255}));
   connect(tim1.passed, or2.u2) annotation (Line(points={{2,-8},{50,-8},{50,10},{
           58,10}}, color={255,0,255}));
-  connect(and5.y, tim4.u) annotation (Line(points={{-28,-40},{30,-40},{30,-60},{
+  connect(and5.y, tim4.u) annotation (Line(points={{-28,-30},{30,-30},{30,-60},{
           48,-60}}, color={255,0,255}));
   connect(tim.passed, logSwi.u1) annotation (Line(points={{72,-28},{90,-28},{90,
           -32},{98,-32}}, color={255,0,255}));
@@ -530,8 +538,16 @@ equation
           -48},{98,-48}}, color={255,0,255}));
   connect(tim2.passed, or1.u2) annotation (Line(points={{2,-108},{40,-108},{40,-106},
           {58,-106}}, color={255,0,255}));
-  annotation(defaultComponentName = "staDow",
-    Icon(coordinateSystem(extent={{-100,-160},{100,190}}),
+  connect(uCapMin, addParDivZer.u) annotation (Line(points={{-200,30},{-176,30},
+          {-176,20},{-168,20}}, color={0,0,127}));
+  connect(addParDivZer.y, div.u2) annotation (Line(points={{-144,20},{-134,20},{
+          -134,40},{-160,40},{-160,48},{-152,48}}, color={0,0,127}));
+  connect(uCapDowDes, addParDivZer1.u) annotation (Line(points={{-200,-30},{-176,
+          -30},{-176,-56},{-168,-56}}, color={0,0,127}));
+  connect(addParDivZer1.y, div1.u2) annotation (Line(points={{-144,-56},{-132,-56},
+          {-132,-42},{-172,-42},{-172,-36},{-162,-36}}, color={0,0,127}));
+annotation(defaultComponentName = "staDow",
+  Icon(coordinateSystem(extent={{-100,-160},{100,190}}),
       graphics={
         Rectangle(
           extent={{-100,-160},{100,190}},
@@ -540,7 +556,7 @@ equation
           fillPattern=FillPattern.Solid),
         Text(
           extent={{-120,244},{100,206}},
-          lineColor={0,0,255},
+          textColor={0,0,255},
           textString="%name"),
         Rectangle(
           extent={{-80,-10},{-20,-22}},
@@ -578,124 +594,97 @@ equation
         Rectangle(
           extent={{-28,18},{-24,12}},
           lineColor={0,0,127})}),
-      Diagram(
-        coordinateSystem(preserveAspectRatio=false,
+  Diagram(coordinateSystem(preserveAspectRatio=false,
         extent={{-180,-200},{220,180}})),
-      Documentation(info="<html>
-        <p>
-        <ol>
-        <li>
-        If the current stage <code>uCur</code> has only condensing boilers, the
-        block outputs a boolean stage down signal <code>yStaDow</code> when all
-        the following are true:
-        <ul>
-        <li>
-        <ul>
-        <li>
-        Required heating capacity <code>uCapReq</code> is lower than <code>fraMinFir</code>
-        times the minimum firing rate <code>uCapMin</code> of the current stage
-        for a time period <code>delMinFir</code>, or
-        </li>
-        <li>
-        Primary circuit pump speed <code>uPumSpe</code> is at the minimum
-        allowed flow rate <code>boiMinPriPumSpeSta</code> and primary circuit hot
-        water return temperature <code>TPriHotWatRet</code>
-        <br>
-        exceeds the secondary circuit hot water return temperature <code>TSecHotWatRet</code> by 
-        <code>TCirDif</code> for a time period <code>delTRetDiff</code>.
-        </li>
-        </ul>
-        </li>
-        <li>
-        Failsafe condition is not <code>true</code>.
-        </li>
-        <li>
-        Required heating capacity <code>uCapReq</code> is less than <code>fraDesCap</code>
-        times the design capacity <code>uCapDowDes</code> of the next available
-        lower stage for a time period <code>delDesCapConBoi</code>.
-        </li>
-        </ul>
-        </li>
-        <br>
-        <li>
-        If the current stage <code>uCur</code> has a non-condensing boiler, the
-        block outputs a boolean stage down signal <code>yStaDow</code> when all
-        the following are true:
-        <ul>
-        <li>
-        Failsafe condition is not <code>true</code>.
-        </li>
-        <li>
-        Required heating capacity <code>uCapReq</code> is less than <code>fraDesCap</code>
-        times the design capacity <code>uCapDowDes</code> of the next available
-        lower stage for a time period <code>delDesCapNonConBoi</code>.
-        </li>
-        </ul>
-        </li>
-        <br>
-        <li>
-        If the plant is a primary-only, condensing type boiler plant,
-        <code>have_priOnl</code> is set to <code>true</code> and the block
-        outputs a boolean stage down signal <code>yStaDow</code>
-        when all the following are true:
-        <ul>
-        <li>
-        <ul>
-        <li>
-        Required heating capacity <code>uCapReq</code> is lower than <code>fraMinFir</code>
-        times the minimum firing rate <code>uCapMin</code> of the current stage
-        for a time period <code>delMinFir</code>, or
-        </li>
-        <li>
-        The minimum flow bypass valve position <code>uBypValPos</code> is greater
-        than <code>bypValClo</code>% open for a time period <code>delBypVal</code>.
-        </li>
-        </ul>
-        </li>
-        <li>
-        Failsafe condition is not <code>true</code>.
-        </li>
-        <li>
-        Required heating capacity <code>uCapReq</code> is less than <code>fraDesCap</code>
-        times the design capacity <code>uCapDowDes</code> of the next available
-        lower stage for a time period <code>delDesCapConBoi</code>.
-        </li>
-        </ul>
-        </li>
-        </ol>
-        </p>
-        <p>
-        The implementation is according to ASHRAE RP1711 March 2020 draft, section 5.3.3.10.
-        Timer reset has been implemented according to 5.3.3.10.2.
-        </p>
-        <p align=\"center\">
-        <img alt=\"Validation plot for EfficiencyCondition1\"
-        src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/Down1.png\"/>
-        <br/>
-        Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Down\">
-        Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Down</a> for a stage with all condensing boilers.
-        </p>
-        <p align=\"center\">
-        <img alt=\"Validation plot for EfficiencyCondition1\"
-        src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/Down2.png\"/>
-        <br/>
-        Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Down\">
-        Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Down</a> for a stage with a non-condensing boiler.
-        </p>
-        <p align=\"center\">
-        <img alt=\"Validation plot for EfficiencyCondition1\"
-        src=\"modelica://Buildings/Resources/Images/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Staging/SetPoints/Subsequences/Down3.png\"/>
-        <br/>
-        Validation plot generated from model <a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Down\">
-        Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.SetPoints.Subsequences.Validation.Down</a> for a primary-only, condensing-type boiler plant.
-        </p>
-        </html>",
-        revisions="<html>
-        <ul>
-        <li>
-        May 27, 2020, by Karthik Devaprasad:<br/>
-        First implementation.
-        </li>
-        </ul>
-        </html>"));
+  Documentation(info="<html>
+<ol>
+<li>
+If the current stage <code>uCur</code> has only condensing boilers, the
+block outputs a boolean stage down signal <code>yStaDow</code> when all
+the following are true:
+<ul>
+<li>
+<ul>
+<li>
+Required heating capacity <code>uCapReq</code> is lower than <code>fraMinFir</code>
+times the minimum firing rate <code>uCapMin</code> of the current stage
+for a time period <code>delMinFir</code>, or
+</li>
+<li>
+Primary circuit pump speed <code>uPumSpe</code> is at the minimum
+allowed flow rate <code>boiMinPriPumSpeSta</code> and primary circuit hot
+water return temperature <code>TPriHotWatRet</code>
+exceeds the secondary circuit hot water return temperature <code>TSecHotWatRet</code> by 
+<code>TCirDif</code> for a time period <code>delTRetDiff</code>.
+</li>
+</ul>
+</li>
+<li>
+Failsafe condition is not <code>true</code>.
+</li>
+<li>
+Required heating capacity <code>uCapReq</code> is less than <code>fraDesCap</code>
+times the design capacity <code>uCapDowDes</code> of the next available
+lower stage for a time period <code>delDesCapConBoi</code>.
+</li>
+</ul>
+</li>
+<li>
+If the current stage <code>uCur</code> has a non-condensing boiler, the
+block outputs a boolean stage down signal <code>yStaDow</code> when all
+the following are true:
+<ul>
+<li>
+Failsafe condition is not <code>true</code>.
+</li>
+<li>
+Required heating capacity <code>uCapReq</code> is less than <code>fraDesCap</code>
+times the design capacity <code>uCapDowDes</code> of the next available
+lower stage for a time period <code>delDesCapNonConBoi</code>.
+</li>
+</ul>
+</li>
+<li>
+If the plant is a primary-only, condensing type boiler plant,
+<code>have_priOnl</code> is set to <code>true</code> and the block
+outputs a boolean stage down signal <code>yStaDow</code>
+when all the following are true:
+<ul>
+<li>
+<ul>
+<li>
+Required heating capacity <code>uCapReq</code> is lower than <code>fraMinFir</code>
+times the minimum firing rate <code>uCapMin</code> of the current stage
+for a time period <code>delMinFir</code>, or
+</li>
+<li>
+The minimum flow bypass valve position <code>uBypValPos</code> is greater
+than <code>bypValClo</code>% open for a time period <code>delBypVal</code>.
+</li>
+</ul>
+</li>
+<li>
+Failsafe condition is not <code>true</code>.
+</li>
+<li>
+Required heating capacity <code>uCapReq</code> is less than <code>fraDesCap</code>
+times the design capacity <code>uCapDowDes</code> of the next available
+lower stage for a time period <code>delDesCapConBoi</code>.
+</li>
+</ul>
+</li>
+</ol>
+<p>
+The implementation is according to ASHRAE RP1711 March 2020 draft, section 5.3.3.10.
+Timer reset has been implemented according to 5.3.3.10.2.
+</p>
+</html>",
+revisions="<html>
+<ul>
+<li>
+May 27, 2020, by Karthik Devaprasad:<br/>
+First implementation.
+</li>
+</ul>
+</html>"));
 end Down;

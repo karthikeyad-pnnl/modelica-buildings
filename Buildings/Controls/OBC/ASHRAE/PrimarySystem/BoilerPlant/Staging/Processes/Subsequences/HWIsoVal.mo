@@ -57,27 +57,27 @@ protected
   final parameter Integer boiInd[nBoi]={i for i in 1:nBoi}
     "Boiler index, {1,2,...,nBoi}";
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con7(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con7(
     final k=chaHotWatIsoTim)
     "Time to change hot water isolation valve"
     annotation (Placement(transformation(extent={{-40,40},{-20,60}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con8(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con8(
     final k=endValPos)
     "Ending valve position"
     annotation (Placement(transformation(extent={{0,40},{20,60}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con6(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con6(
     final k=iniValPos)
     "Initial isolation valve position"
     annotation (Placement(transformation(extent={{-40,90},{-20,110}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con9(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con9(
     final k=0)
     "Constant zero"
     annotation (Placement(transformation(extent={{0,90},{20,110}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Line lin1
+  Buildings.Controls.OBC.CDL.Continuous.Line lin1
     "Hot water isolation valve setpoint"
     annotation (Placement(transformation(extent={{40,70},{60,90}})));
 
@@ -99,7 +99,7 @@ protected
     "Check if it is time to change isolation valve position"
     annotation (Placement(transformation(extent={{-80,-180},{-60,-160}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Switch swi[nBoi]
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi[nBoi]
     "Logical switch"
     annotation (Placement(transformation(extent={{120,-50},{140,-30}})));
 
@@ -112,11 +112,11 @@ protected
     "Logical not"
     annotation (Placement(transformation(extent={{-20,-90},{0,-70}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Switch swi1[nBoi]
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi1[nBoi]
     "Logical switch"
     annotation (Placement(transformation(extent={{60,-70},{80,-50}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Switch swi2[nBoi]
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi2[nBoi]
     "Logical switch"
     annotation (Placement(transformation(extent={{60,0},{80,20}})));
 
@@ -134,13 +134,13 @@ protected
     "Replicate real input"
     annotation (Placement(transformation(extent={{80,70},{100,90}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys3[nBoi](
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys3[nBoi](
     final uLow=fill(0.025,nBoi),
     final uHigh=fill(0.05, nBoi))
     "Check if isolation valve is enabled"
     annotation (Placement(transformation(extent={{-120,210},{-100,230}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys4[nBoi](
+  Buildings.Controls.OBC.CDL.Continuous.Hysteresis hys4[nBoi](
     final uLow=fill(0.925,nBoi),
     final uHigh=fill(0.975, nBoi))
     "Check if isolation valve is open more than 95%"
@@ -217,8 +217,8 @@ equation
     annotation (Line(points={{142,-40},{200,-40}}, color={0,0,127}));
 
   connect(booRep.y, triSam.trigger)
-    annotation (Line(points={{42,-140},{60,-140},{60,-120},{-70,-120},
-      {-70,-111.8}},  color={255,0,255}));
+    annotation (Line(points={{42,-140},{60,-140},{60,-120},{-70,-120},{-70,-112}},
+                      color={255,0,255}));
 
   connect(booRep1.y, not2.u)
     annotation (Line(points={{82,-170},{100,-170},{100,-110},{-40,-110},
@@ -352,7 +352,7 @@ annotation (
         pattern=LinePattern.None,
         fillColor={210,210,210},
         fillPattern=FillPattern.Solid,
-        lineColor={0,0,127},
+        textColor={0,0,127},
         horizontalAlignment=TextAlignment.Right,
         textString="Check if all enabled HW isolation valves 
           have been fully open")}),
@@ -364,31 +364,31 @@ annotation (
         fillPattern=FillPattern.Solid),
       Text(
         extent={{-120,146},{100,108}},
-        lineColor={0,0,255},
+        textColor={0,0,255},
         textString="%name"),
       Text(
         extent={{-96,-74},{-60,-86}},
-        lineColor={255,0,255},
+        textColor={255,0,255},
         pattern=LinePattern.Dash,
         textString="chaPro"),
       Text(
         extent={{-96,-42},{-46,-56}},
-        lineColor={255,0,255},
+        textColor={255,0,255},
         pattern=LinePattern.Dash,
         textString="uUpsDevSta"),
       Text(
         extent={{-96,86},{-48,74}},
-        lineColor={255,127,0},
+        textColor={255,127,0},
         pattern=LinePattern.Dash,
         textString="nexChaBoi"),
       Text(
         extent={{-96,58},{-42,46}},
-        lineColor={0,0,127},
+        textColor={0,0,127},
         pattern=LinePattern.Dash,
         textString="uHotWatIsoVal"),
       Text(
         extent={{32,70},{96,54}},
-        lineColor={255,0,255},
+        textColor={255,0,255},
         pattern=LinePattern.Dash,
         textString="yEnaHotWatIsoVal"),
       Polygon(
@@ -403,7 +403,7 @@ annotation (
         fillPattern=FillPattern.Solid),
       Text(
         extent={{44,-54},{98,-66}},
-        lineColor={0,0,127},
+        textColor={0,0,127},
         pattern=LinePattern.Dash,
         textString="yHotWatIsoVal")}),
   Documentation(info="<html>

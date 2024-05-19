@@ -257,7 +257,7 @@ protected
     "Latch to short valve closing process in dedicated pump configuration plants"
     annotation (Placement(transformation(extent={{150,30},{170,50}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Switch swi[nBoi] if have_heaPriPum
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi[nBoi] if have_heaPriPum
     "Pass valve position signal from valve opening controller once the opening process starts"
     annotation (Placement(transformation(extent={{40,-140},{60,-120}})));
 
@@ -266,7 +266,7 @@ protected
     "Boolean replicator"
     annotation (Placement(transformation(extent={{0,-140},{20,-120}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Switch swi1[nBoi] if have_heaPriPum
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi1[nBoi] if have_heaPriPum
     "Pass valve position signal from valve closing controller once the closing process starts"
     annotation (Placement(transformation(extent={{100,-120},{120,-100}})));
 
@@ -538,7 +538,7 @@ annotation (
           borderPattern=BorderPattern.Raised),
         Text(
           extent={{-120,260},{120,200}},
-          lineColor={0,0,255},
+          textColor={0,0,255},
           textString="%name"),
         Rectangle(
           extent={{-10,120},{10,-140}},
@@ -596,9 +596,11 @@ is changed using the boiler status controller <code>disBoi</code> implemented in
 Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.DisableBoiler</a>.
 </li>
 </ul>
+</li>
 <li>
 If the stage down process does not involve turning on a smaller boiler, start the
 staging down process immediately by changing <code>yBoi</code> using <code>disBoi</code>.
+</li>
 <li>
 Wait for time <code>delBoiEna</code> before closing the isolation valve for the
 disabled boiler using <code>disHotWatIsoVal1</code> and initiating the pump stage

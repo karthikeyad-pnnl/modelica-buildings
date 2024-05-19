@@ -6,45 +6,53 @@ model ControllerTwo_MinimumLeadRuntime
     leaLag(
     final lag=true,
     minLim=true,
-    final minLeaRuntime=43200) "Lead/lag rotation"
+    final minLeaRuntime=43200)
+    "Lead/lag rotation"
     annotation (Placement(transformation(extent={{-20,40},{0,60}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.EquipmentRotation.ControllerTwo
     leaLag1(
     final lag=true,
     minLim=true,
-    final minLeaRuntime=54000) "Lead/lag rotation"
+    final minLeaRuntime=54000)
+    "Lead/lag rotation"
     annotation (Placement(transformation(extent={{-20,0},{0,20}})));
 
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.EquipmentRotation.ControllerTwo
     leaSta(
     final lag=false,
     minLim=true,
-    final minLeaRuntime=43200) "Lead/standby rotation"
+    final minLeaRuntime=43200)
+    "Lead/standby rotation"
     annotation (Placement(transformation(extent={{-20,-40},{0,-20}})));
 
 protected
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel[2](
     final delayTime={600,600},
-    final delayOnInit={true,true}) "Emulates device start-up time"
+    final delayOnInit={true,true})
+    "Emulates device start-up time"
     annotation (Placement(transformation(extent={{20,-40},{40,-20}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Pre pre1[2] "Boolean pre"
+  Buildings.Controls.OBC.CDL.Logical.Pre pre1[2]
+    "Boolean pre"
     annotation (Placement(transformation(extent={{60,-40},{80,-20}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse leadLoad(
     final width=0.8,
-    final period=7200) "Lead device ON/OFF status"
+    final period=7200)
+    "Lead device ON/OFF status"
     annotation (Placement(transformation(extent={{-100,40},{-80,60}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse lagLoad(
     final width=0.2,
-    final period=3600) "Lag device ON/OFF status"
+    final period=3600)
+    "Lag device ON/OFF status"
     annotation (Placement(transformation(extent={{-100,0},{-80,20}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse lagLoad1(
     final width=0.2,
-    final period=5400) "Lag device ON/OFF status"
+    final period=5400)
+    "Lag device ON/OFF status"
     annotation (Placement(transformation(extent={{-100,-40},{-80,-20}})));
 
 equation
@@ -71,13 +79,13 @@ equation
           -50},{-28,-50},{-28,-36},{-22,-36}},    color={255,0,255}));
           annotation (
    experiment(StopTime=100000.0, Tolerance=1e-06),
-    __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/ChillerPlant/Generic/EquipmentRotation/Validation/ControllerTwo_MinimumLeadRuntime.mos"
+    __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/PrimarySystem/BoilerPlant/Generic/EquipmentRotation/Validation/ControllerTwo_MinimumLeadRuntime.mos"
     "Simulate and plot"),
   Documentation(info="<html>
 <p>
 This example validates
-<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Generic.EquipmentRotation.ControllerTwo\">
-Buildings.Controls.OBC.ASHRAE.PrimarySystem.ChillerPlant.Generic.EquipmentRotation.ControllerTwo</a>.
+<a href=\"modelica://Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.EquipmentRotation.ControllerTwo\">
+Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Generic.EquipmentRotation.ControllerTwo</a>.
 </p>
 </html>", revisions="<html>
 <ul>

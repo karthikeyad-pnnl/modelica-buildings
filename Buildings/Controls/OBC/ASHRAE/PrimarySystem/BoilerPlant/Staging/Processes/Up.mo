@@ -151,9 +151,9 @@ block Up
     final unit="K",
     displayUnit="K",
     final quantity="ThermodynamicTemperature") if not have_priOnl
-    "Hot water supply temperature setpoint" annotation (Placement(
-        transformation(extent={{-280,140},{-240,180}}), iconTransformation(
-          extent={{-140,90},{-100,130}})));
+    "Measured hot water supply temperature"
+    annotation (Placement(transformation(extent={{-280,140},{-240,180}}),
+      iconTransformation(extent={{-140,90},{-100,130}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uHotWatIsoVal[nBoi](
     final min=fill(0, nBoi),
@@ -203,7 +203,7 @@ block Up
     annotation (Placement(transformation(extent={{280,-90},{320,-50}}),
       iconTransformation(extent={{100,20},{140,60}})));
 
-// protected
+protected
   Buildings.Controls.OBC.ASHRAE.PrimarySystem.BoilerPlant.Staging.Processes.Subsequences.ResetMinBypass minBypRes(
     final delEna=delEnaMinFloSet,
     final relFloDif=relFloDif) if have_priOnl
@@ -298,7 +298,7 @@ block Up
     "Latch to short valve closing process in dedicated pump configuration plants"
     annotation (Placement(transformation(extent={{150,30},{170,50}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Switch swi[nBoi] if have_heaPriPum
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi[nBoi] if have_heaPriPum
     "Pass valve position signal from valve opening controller once the opening process starts"
     annotation (Placement(transformation(extent={{40,-140},{60,-120}})));
 
@@ -307,7 +307,7 @@ block Up
     "Boolean replicator"
     annotation (Placement(transformation(extent={{0,-140},{20,-120}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Switch swi1[nBoi] if have_heaPriPum
+  Buildings.Controls.OBC.CDL.Continuous.Switch swi1[nBoi] if have_heaPriPum
     "Pass valve position signal from valve closing controller once the closing process starts"
     annotation (Placement(transformation(extent={{100,-120},{120,-100}})));
 
@@ -403,8 +403,8 @@ equation
   connect(VMinHotWatSet_flow, minBypRes.VMinHotWatSet_flow) annotation (Line(
         points={{-260,200},{-180,200},{-180,12},{-172,12}}, color={0,0,127}));
 
-  connect(THotWatSupSet, hotWatSupTemRes.THotWatSup) annotation (Line(points={{
-          -260,160},{-186,160},{-186,-17},{-172,-17}}, color={0,0,127}));
+  connect(THotWatSupSet, hotWatSupTemRes.THotWatSup) annotation (Line(points={{-260,
+          160},{-186,160},{-186,-17},{-172,-17}}, color={0,0,127}));
 
   connect(uHotWatIsoVal, enaHotWatIsoVal.uHotWatIsoVal) annotation (Line(points={{-260,
           120},{-80,120},{-80,5},{-72,5}},       color={0,0,127}));
@@ -588,7 +588,7 @@ annotation (
         borderPattern=BorderPattern.Raised),
         Text(
           extent={{-120,260},{120,200}},
-          lineColor={0,0,255},
+          textColor={0,0,255},
           textString="%name"),
         Rectangle(
           extent={{-10,120},{10,-140}},

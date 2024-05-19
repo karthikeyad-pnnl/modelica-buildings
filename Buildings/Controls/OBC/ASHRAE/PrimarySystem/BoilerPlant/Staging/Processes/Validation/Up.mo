@@ -264,11 +264,11 @@ protected
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul[nBoi](
     final width=fill(0.1/1800, nBoi),
     final period=fill(1800, nBoi),
-    shift=fill(1, nBoi))
+    final shift=fill(1, nBoi))
     "Boolean pulse to start initial stage change"
     annotation (Placement(transformation(extent={{-370,250},{-350,270}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con3(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con3(
     final k=TMinSupNonConBoi + 1)
     "Measured hot water supply temperature signal"
     annotation (Placement(transformation(extent={{-180,280},{-160,300}})));
@@ -361,11 +361,11 @@ protected
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul1[nBoi](
     final width=fill(0.1/1800, nBoi),
     final period=fill(1800, nBoi),
-    shift=fill(1, nBoi))
+    final shift=fill(1, nBoi))
     "Boolean pulse to start initial stage change"
     annotation (Placement(transformation(extent={{0,250},{20,270}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con8(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con8(
     final k=TMinSupNonConBoi - 1)
     "Measured hot water supply temperature signal"
     annotation (Placement(transformation(extent={{190,280},{210,300}})));
@@ -462,11 +462,11 @@ protected
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul2[nBoi](
     final width=fill(0.1/1800, nBoi),
     final period=fill(1800, nBoi),
-    shift=fill(1, nBoi))
+    final shift=fill(1, nBoi))
     "Boolean pulse to start initial stage change"
     annotation (Placement(transformation(extent={{-380,-80},{-360,-60}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con13(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con13(
     final k=TMinSupNonConBoi + 1)
     "Measured hot water supply temperature signal"
     annotation (Placement(transformation(extent={{-340,-60},{-320,-40}})));
@@ -563,11 +563,11 @@ protected
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul3[nBoi](
     final width=fill(0.1/1800, nBoi),
     final period=fill(1800, nBoi),
-    shift=fill(1, nBoi))
+    final shift=fill(1, nBoi))
     "Boolean pulse to start initial stage change"
     annotation (Placement(transformation(extent={{200,-80},{220,-60}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con18(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con18(
     final k=TMinSupNonConBoi - 1)
     "Measured hot water supply temperature signal"
     annotation (Placement(transformation(extent={{240,-60},{260,-40}})));
@@ -660,11 +660,11 @@ protected
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse booPul4[nBoi](
     final width=fill(0.1/1800, nBoi),
     final period=fill(1800, nBoi),
-    shift=fill(1, nBoi))
+    final shift=fill(1, nBoi))
     "Boolean pulse to start initial stage change"
     annotation (Placement(transformation(extent={{390,250},{410,270}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con23(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con23(
     final k=VNom_flow)
     "Calculated minimum flow rate signal"
     annotation (Placement(transformation(extent={{580,280},{600,300}})));
@@ -708,7 +708,7 @@ protected
     "Boolean replicator"
     annotation (Placement(transformation(extent={{650,60},{670,80}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con17(
+  Buildings.Controls.OBC.CDL.Continuous.Sources.Constant con17(
     final k=1.1*VNom_flow)
     "Calculated minimum flow rate signal"
     annotation (Placement(transformation(extent={{540,260},{560,280}})));
@@ -745,9 +745,10 @@ protected
     "Logical pre block"
     annotation (Placement(transformation(extent={{440,-270},{460,-250}})));
 
-  Buildings.Controls.OBC.CDL.Logical.FallingEdge                        falEdg1
+  Buildings.Controls.OBC.CDL.Logical.FallingEdge falEdg1
     "Falling edge detector"
     annotation (Placement(transformation(extent={{-90,210},{-70,230}})));
+
 equation
   connect(con2.y, logSwi1.u1) annotation (Line(points={{-238,130},{-230,130},{
           -230,118},{-222,118}},
