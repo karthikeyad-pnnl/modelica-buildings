@@ -231,13 +231,14 @@ model BoilerPlant
     "Boiler"
     annotation (Placement(transformation(extent={{110,-220},{90,-200}})));
 
-  Buildings.Fluid.Movers.SpeedControlled_y pum(
+  Fluid.Movers.Preconfigured.SpeedControlled_y
+                                           pum(
     redeclare package Medium = Media.Water,
     final allowFlowReversal=true,
-    redeclare Fluid.Movers.Data.Pumps.Wilo.customPumpCurves per,
-    final inputType=Buildings.Fluid.Types.InputType.Continuous,
     final addPowerToMedium=false,
-    final riseTime=300)
+    final riseTime=300,
+    m_flow_nominal=mRad_flow_nominal,
+    dp_nominal=3000000000)
     "Hot water primary pump-1"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,
@@ -253,13 +254,14 @@ model BoilerPlant
       rotation=90,
       origin={-30,-150})));
 
-  Buildings.Fluid.Movers.SpeedControlled_y pum1(
+  Fluid.Movers.Preconfigured.SpeedControlled_y
+                                           pum1(
     redeclare package Medium =Media.Water,
     final allowFlowReversal=true,
-    redeclare Fluid.Movers.Data.Pumps.Wilo.customPumpCurves per,
-    final inputType=Buildings.Fluid.Types.InputType.Continuous,
     final addPowerToMedium=false,
-    final riseTime=300)
+    final riseTime=300,
+    m_flow_nominal=mRad_flow_nominal,
+    dp_nominal=3000000000)
     "Hot water primary pump-2"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,
@@ -332,7 +334,7 @@ model BoilerPlant
     "Boolean to Real conversion"
     annotation (Placement(transformation(extent={{-220,30},{-200,50}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Product pro[2]
+  Buildings.Controls.OBC.CDL.Reals.Multiply pro[2]
     "Element-wise product"
     annotation (Placement(transformation(extent={{-210,-20},{-190,0}})));
 
@@ -448,7 +450,7 @@ model BoilerPlant
     annotation (Placement(transformation(extent={{230,-70},{250,-50}})));
   Buildings.Controls.OBC.CDL.Logical.And and2[2] "Logical And"
     annotation (Placement(transformation(extent={{260,-80},{280,-60}})));
-  Buildings.Controls.OBC.CDL.Reals.Add add2[2](k2=fill(-1, 2))
+  Buildings.Controls.OBC.CDL.Reals.Subtract add2[2]
     "Check difference between return temperature and boiler temperature"
     annotation (Placement(transformation(extent={{160,-100},{180,-80}})));
   Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator           reaRep1(nout=2)
@@ -484,10 +486,10 @@ model BoilerPlant
     xi_start=fill(1, 2))
     "PI controller for regulating hot water supply temperature from boiler"
     annotation (Placement(transformation(extent={{-280,-120},{-260,-100}})));
-  Buildings.Controls.OBC.CDL.Reals.Product pro1[2]
+  Buildings.Controls.OBC.CDL.Reals.Multiply pro1[2]
     "Product of boiler power and current status"
     annotation (Placement(transformation(extent={{-120,-120},{-100,-100}})));
-  Buildings.Controls.OBC.CDL.Reals.Add add1[2](k2=fill(-1, 2))
+  Buildings.Controls.OBC.CDL.Reals.Subtract add1[2]
     "Find difference between setpoint and measured temperature"
     annotation (Placement(transformation(extent={{-260,-170},{-240,-150}})));
   Buildings.Controls.OBC.CDL.Reals.Switch swi[2] "Switch"

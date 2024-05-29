@@ -272,7 +272,7 @@ model BoilerPlant_Atlanta_NonAdiabaticPipe
     "Boolean to Real conversion"
     annotation (Placement(transformation(extent={{-220,30},{-200,50}})));
 
-  Buildings.Controls.OBC.CDL.Reals.Product pro[2]
+  Buildings.Controls.OBC.CDL.Reals.Multiply pro[2]
     "Element-wise product"
     annotation (Placement(transformation(extent={{-210,-20},{-190,0}})));
 
@@ -387,7 +387,7 @@ model BoilerPlant_Atlanta_NonAdiabaticPipe
     xi_start=fill(1, 2))
     "PI controller for regulating hot water supply temperature from boiler"
     annotation (Placement(transformation(extent={{-240,-120},{-220,-100}})));
-  Buildings.Controls.OBC.CDL.Reals.Product pro1[2]
+  Buildings.Controls.OBC.CDL.Reals.Multiply pro1[2]
     "Product of boiler power and current status"
     annotation (Placement(transformation(extent={{-120,-120},{-100,-100}})));
   Buildings.Controls.OBC.CDL.Reals.Add add1[2](k1=fill(-1, 2))
@@ -444,7 +444,7 @@ model BoilerPlant_Atlanta_NonAdiabaticPipe
     annotation (Placement(transformation(extent={{280,-80},{300,-60}})));
   Buildings.Controls.OBC.CDL.Logical.And and2[2] "Logical And"
     annotation (Placement(transformation(extent={{240,-70},{260,-50}})));
-  Buildings.Controls.OBC.CDL.Reals.Product pro2[2]
+  Buildings.Controls.OBC.CDL.Reals.Multiply pro2[2]
     "Product of boiler power and current status"
     annotation (Placement(transformation(extent={{-280,-120},{-260,-100}})));
   Buildings.Controls.OBC.CDL.Logical.Latch lat3

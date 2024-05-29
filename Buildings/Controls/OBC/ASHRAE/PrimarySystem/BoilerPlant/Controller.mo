@@ -1492,34 +1492,33 @@ protected
 
 equation
   connect(staSetCon.yBoi, upProCon.uBoiSet) annotation (Line(points={{-188,
-          -3.375},{64,-3.375},{64,95},{118,95}},
+          -2.76923},{64,-2.76923},{64,95},{118,95}},
                                      color={255,0,255}));
   connect(staSetCon.yBoi, dowProCon.uBoiSet) annotation (Line(points={{-188,
-          -3.375},{86,-3.375},{86,38},{118,38}},
+          -2.76923},{86,-2.76923},{86,38},{118,38}},
                                       color={255,0,255}));
   connect(staSetCon.ySta, upProCon.uStaSet) annotation (Line(points={{-188,
-          5.625},{20,5.625},{20,86},{118,86}},
+          8.30769},{20,8.30769},{20,86},{118,86}},
                                 color={255,127,0}));
   connect(staSetCon.ySta, dowProCon.uStaSet) annotation (Line(points={{-188,
-          5.625},{20,5.625},{20,30},{118,30}},
+          8.30769},{20,8.30769},{20,30},{118,30}},
                                 color={255,127,0}));
   connect(staSetCon.yStaTyp, upProCon.uStaTyp) annotation (Line(points={{-188,
-          7.875},{24,7.875},{24,89},{118,89}},
+          11.0769},{24,11.0769},{24,89},{118,89}},
                                     color={255,127,0}));
   connect(staSetCon.yChaUpEdg, upProCon.uStaUpPro) annotation (Line(points={{-188,
-          3.375},{58,3.375},{58,92},{118,92}},
+          5.53846},{58,5.53846},{58,92},{118,92}},
                                        color={255,0,255}));
   connect(conSet.yMinBypValPos, bypValPos.uMinBypValPos) annotation (Line(
         points={{-38,-98},{110,-98},{110,-46},{118,-46}},color={0,0,127}));
   connect(staSetCon.yStaTyp, conSet.uStaTyp) annotation (Line(points={{-188,
-          7.875},{-90,7.875},{-90,-108},{-62,-108}},
+          11.0769},{-90,11.0769},{-90,-108},{-62,-108}},
                                  color={255,127,0}));
-  connect(staSetCon.yChaUpEdg, lat.u) annotation (Line(points={{-188,3.375},{
-          -64,3.375},{-64,360},{-52,360}},
+  connect(staSetCon.yChaUpEdg, lat.u) annotation (Line(points={{-188,5.53846},{
+          -64,5.53846},{-64,360},{-52,360}},
                              color={255,0,255}));
-  connect(staSetCon.yChaDowEdg, lat.clr) annotation (Line(points={{-188,-1.125},
-          {-60,-1.125},{-60,354},{-52,354}},
-                                  color={255,0,255}));
+  connect(staSetCon.yChaDowEdg, lat.clr) annotation (Line(points={{-188,0},{-60,
+          0},{-60,354},{-52,354}},color={255,0,255}));
   connect(lat.y, logSwi.u2) annotation (Line(points={{-28,360},{10,360},{10,330},
           {20,330}},  color={255,0,255}));
   connect(upProCon.yOnOff, logSwi.u1) annotation (Line(points={{142,96},{150,96},
@@ -1536,9 +1535,9 @@ equation
     annotation (Line(points={{-166,180},{-142,180}},
                                                   color={255,0,255}));
   connect(staSetCon.yStaTyp, hotWatSupTemRes.uTyp) annotation (Line(points={{-188,
-          7.875},{-144,7.875},{-144,176},{-142,176}},        color={255,127,0}));
+          11.0769},{-144,11.0769},{-144,176},{-142,176}},    color={255,127,0}));
   connect(minBoiFloSet1.VHotWatMinSet_flow, staSetCon.VMinSet_flow) annotation (
-     Line(points={{-318,10},{-274,10},{-274,1.125},{-212,1.125}},
+     Line(points={{-318,10},{-274,10},{-274,5.53846},{-212,5.53846}},
         color={0,0,127}));
   connect(conInt.y, minBoiFloSet1.uLasDisBoi) annotation (Line(points={{-368,30},
           {-360,30},{-360,16},{-342,16}},             color={255,127,0}));
@@ -1550,7 +1549,7 @@ equation
           86,-128},{86,-152.933},{118,-152.933}},
                                             color={255,127,0}));
   connect(plaReq, plaEna.supResReq) annotation (Line(points={{-420,350},{-360,
-          350},{-360,336},{-342,336}}, color={255,127,0}));
+          350},{-360,330},{-342,330}}, color={255,127,0}));
   connect(reaToInt.u, triSam.y)
     annotation (Line(points={{-130,-40},{-138,-40}},
                                                    color={0,0,127}));
@@ -1558,19 +1557,19 @@ equation
     annotation (Line(points={{-162,-40},{-168,-40}},
                                                    color={0,0,127}));
   connect(reaToInt.y, staSetCon.u) annotation (Line(points={{-106,-40},{-80,-40},
-          {-80,-60},{-220,-60},{-220,-12.375},{-212,-12.375}},
+          {-80,-60},{-220,-60},{-220,-11.0769},{-212,-11.0769}},
                                                   color={255,127,0}));
   connect(TOut, plaEna.TOut) annotation (Line(points={{-420,310},{-360,310},{
-          -360,332},{-342,332}},
+          -360,324},{-342,324}},
                           color={0,0,127}));
   connect(TSupPri, staSetCon.THotWatSup) annotation (Line(points={{-420,270},{
-          -240,270},{-240,3.375},{-212,3.375}},       color={0,0,127}));
+          -240,270},{-240,8.30769},{-212,8.30769}},   color={0,0,127}));
   connect(TRetPri, staSetCon.THotWatRet) annotation (Line(points={{-420,230},{
-          -260,230},{-260,7.875},{-212,7.875}},         color={0,0,127}));
+          -260,230},{-260,13.8462},{-212,13.8462}},     color={0,0,127}));
   connect(TRetPri, conSet.THotWatRet) annotation (Line(points={{-420,230},{-260,
           230},{-260,-96},{-62,-96}},                   color={0,0,127}));
   connect(VHotWatPri_flow, staSetCon.VHotWat_flow) annotation (Line(points={{-420,
-          190},{-270,190},{-270,5.625},{-212,5.625}},           color={0,0,127}));
+          190},{-270,190},{-270,11.0769},{-212,11.0769}},       color={0,0,127}));
   connect(VHotWatPri_flow, upProCon.VHotWat_flow) annotation (Line(points={{-420,
           190},{-270,190},{-270,110},{114,110},{114,115},{118,115}},
                                                                    color={0,0,127}));
@@ -1611,23 +1610,23 @@ equation
                                             color={0,0,127}));
   connect(bypValPos.yBypValPos, yBypValPos) annotation (Line(points={{142,-40},{
           148,-40},{148,-30},{420,-30}}, color={0,0,127}));
-  connect(staSetCon.ySta, intToRea1.u) annotation (Line(points={{-188,5.625},{
-          20,5.625},{20,300},{-250,300},{-250,370},{-242,370}},
+  connect(staSetCon.ySta, intToRea1.u) annotation (Line(points={{-188,8.30769},
+          {20,8.30769},{20,300},{-250,300},{-250,370},{-242,370}},
                                                     color={255,127,0}));
   connect(reaToInt1.y, minBoiFloSet.uStaSet) annotation (Line(points={{-158,370},
           {-148,370},{-148,314},{248,314}},
                                         color={255,127,0}));
   connect(plaEna.yPla, staSetCon.uPla) annotation (Line(points={{-318,330},{
-          -230,330},{-230,-10.125},{-212,-10.125}},
+          -230,330},{-230,-8.30769},{-212,-8.30769}},
                                             color={255,0,255}));
-  connect(staSetCon.yChaEdg, pre4.u) annotation (Line(points={{-188,1.125},{
-          -180,1.125},{-180,150},{-220,150},{-220,180},{-218,180}},
+  connect(staSetCon.yChaEdg, pre4.u) annotation (Line(points={{-188,2.76923},{
+          -180,2.76923},{-180,150},{-220,150},{-220,180},{-218,180}},
                               color={255,0,255}));
   connect(pre4.y, lat1.u) annotation (Line(points={{-194,180},{-190,180}},
                                     color={255,0,255}));
   connect(hotWatSupTemRes.TPlaHotWatSupSet, staSetCon.THotWatSupSet)
     annotation (Line(points={{-118,184},{-100,184},{-100,90},{-226,90},{-226,
-          10.125},{-212,10.125}},
+          16.6154},{-212,16.6154}},
                 color={0,0,127}));
   connect(reaToInt.y, conSet.uCurSta) annotation (Line(points={{-106,-40},{-80,-40},
           {-80,-102},{-62,-102}},         color={255,127,0}));
@@ -1662,7 +1661,7 @@ equation
           {372,-64},{-150,-64},{-150,-52}},
                                        color={255,0,255}));
   connect(pre1.y, staSetCon.uStaChaProEnd) annotation (Line(points={{322,-10},{
-          372,-10},{372,-64},{-212,-64},{-212,-16.875}},
+          372,-10},{372,-64},{-212,-64},{-212,-16.6154}},
                                               color={255,0,255}));
   connect(pre1.y, minBoiFloSet.uStaChaPro) annotation (Line(points={{322,-10},{372,
           -10},{372,300},{140,300},{140,318},{248,318}},
@@ -1675,7 +1674,7 @@ equation
           color={255,0,255}));
 
   connect(uBoiAva, staSetCon.uBoiAva) annotation (Line(points={{-420,70},{-300,
-          70},{-300,-14.625},{-212,-14.625}},
+          70},{-300,-13.8462},{-212,-13.8462}},
                                        color={255,0,255}));
   connect(plaEna.yPla, upProCon.uPlaEna) annotation (Line(points={{-318,330},{
           -230,330},{-230,83},{118,83}},                             color={255,
@@ -1701,10 +1700,9 @@ equation
   connect(hotWatSupTemRes.TPlaHotWatSupSet, upProCon.THotWatSupSet) annotation (
      Line(points={{-118,184},{-100,184},{-100,107},{118,107}}, color={0,0,127}));
   connect(TRetPri, staSetCon.THotWatRetPri) annotation (Line(points={{-420,230},
-          {-260,230},{-260,-3.375},{-212,-3.375}},
-                                             color={0,0,127}));
+          {-260,230},{-260,0},{-212,0}},     color={0,0,127}));
   connect(TRetSec, staSetCon.THotWatRetSec) annotation (Line(points={{-420,150},
-          {-290,150},{-290,-5.625},{-212,-5.625}},
+          {-290,150},{-290,-2.76923},{-212,-2.76923}},
                                            color={0,0,127}));
   connect(upProCon.yNexEnaBoi, intSwi1.u1) annotation (Line(points={{142,92},{160,
           92},{160,160},{56,160},{56,298},{62,298}}, color={255,127,0}));
@@ -1716,7 +1714,7 @@ equation
           96,290},{96,-178.133},{118,-178.133}},
                                               color={255,127,0}));
   connect(staSetCon.yChaUpEdg, priPumCon.uStaUp) annotation (Line(points={{-188,
-          3.375},{58,3.375},{58,-74},{92,-74},{92,-169.733},{118,-169.733}},
+          5.53846},{58,5.53846},{58,-74},{92,-74},{92,-169.733},{118,-169.733}},
                                                           color={255,0,255}));
   connect(logSwi.y, priPumCon.uOnOff) annotation (Line(points={{44,330},{50,330},
           {50,-76},{98,-76},{98,-172.533},{118,-172.533}},  color={255,0,255}));
@@ -1783,9 +1781,8 @@ equation
   connect(or1.y, priPumCon.uPumChaPro) annotation (Line(points={{80,-210},{100,
           -210},{100,-175.333},{118,-175.333}},
                                           color={255,0,255}));
-  connect(staSetCon.yChaDowEdg, and2.u2) annotation (Line(points={{-188,-1.125},
-          {-40,-1.125},{-40,52},{-30,52}},
-                                  color={255,0,255}));
+  connect(staSetCon.yChaDowEdg, and2.u2) annotation (Line(points={{-188,0},{-40,
+          0},{-40,52},{-30,52}},  color={255,0,255}));
   connect(plaEna.yPla, and2.u1) annotation (Line(points={{-318,330},{-230,330},{
           -230,60},{-30,60}}, color={255,0,255}));
   connect(and2.y, dowProCon.uStaDowPro) annotation (Line(points={{-6,60},{74,60},
@@ -1822,7 +1819,7 @@ equation
   connect(uPriPumSpe, mulMax.u[1:2]) annotation (Line(points={{-420,-560},{-402,
           -560},{-402,-560},{-382,-560}}, color={0,0,127}));
   connect(mulMax.y, staSetCon.uPumSpe) annotation (Line(points={{-358,-560},{
-          -262,-560},{-262,-7.875},{-212,-7.875}},
+          -262,-560},{-262,-5.53846},{-212,-5.53846}},
                                       color={0,0,127}));
   connect(uHotWatIsoVal, upProCon.uHotWatIsoVal) annotation (Line(points={{-420,
           -480},{38,-480},{38,103},{118,103}}, color={0,0,127}));
@@ -1833,7 +1830,7 @@ equation
                                                                          color={
           0,0,127}));
   connect(uBypValPos, staSetCon.uBypValPos) annotation (Line(points={{-420,-520},
-          {-258,-520},{-258,-1.125},{-212,-1.125}},
+          {-258,-520},{-258,2.76923},{-212,2.76923}},
                                           color={0,0,127}));
   connect(secPumCon.yPumSpe, ySecPumSpe) annotation (Line(points={{142,-370},{
           260,-370},{260,-390},{420,-390}}, color={0,0,127}));
@@ -1853,8 +1850,8 @@ equation
           {-100,398},{88,398},{88,380}}, color={0,0,127}));
   connect(cha1.y, intWitRes.trigger) annotation (Line(points={{-198,330},{-190,
           330},{-190,352},{-200,352},{-200,358}}, color={255,0,255}));
-  connect(staSetCon.ySta, cha1.u) annotation (Line(points={{-188,5.625},{20,
-          5.625},{20,300},{-226,300},{-226,330},{-222,330}},
+  connect(staSetCon.ySta, cha1.u) annotation (Line(points={{-188,8.30769},{20,
+          8.30769},{20,300},{-226,300},{-226,330},{-222,330}},
                                                   color={255,127,0}));
   connect(intSwi.y, cha2.u) annotation (Line(points={{42,380},{54,380},{54,354},
           {74,354}}, color={255,127,0}));
@@ -1866,7 +1863,7 @@ equation
           252},{-80,252},{-80,192},{380,192},{380,300},{420,300}}, color={255,0,
           255}));
   connect(uSchEna, plaEna.uSchEna) annotation (Line(points={{-420,420},{-350,
-          420},{-350,328},{-342,328}},
+          420},{-350,336},{-342,336}},
                                   color={255,0,255}));
   annotation (defaultComponentName="boiPlaCon",
     Icon(coordinateSystem(extent={{-100,-360},{100,360}}),

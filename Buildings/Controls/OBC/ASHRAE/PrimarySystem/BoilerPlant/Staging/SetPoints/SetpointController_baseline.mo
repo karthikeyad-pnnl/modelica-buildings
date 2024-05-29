@@ -288,13 +288,13 @@ block SetpointController_baseline
     annotation (Placement(transformation(extent={{-260,-226},{-240,-206}})));
   Buildings.Controls.OBC.CDL.Discrete.UnitDelay uniDel(samplePeriod=1)
     annotation (Placement(transformation(extent={{-228,-226},{-208,-206}})));
-  Buildings.Controls.OBC.CDL.Integers.Add addInt(k2=-1)
+  Buildings.Controls.OBC.CDL.Integers.Subtract addInt
     annotation (Placement(transformation(extent={{-160,-226},{-140,-206}})));
   Buildings.Controls.OBC.CDL.Integers.Add addInt1
     annotation (Placement(transformation(extent={{-160,-186},{-140,-166}})));
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(k=1)
     annotation (Placement(transformation(extent={{-200,-256},{-180,-236}})));
-  Buildings.Controls.OBC.CDL.Reals.Add add2(k2=-1)
+  Buildings.Controls.OBC.CDL.Reals.Subtract add2
     annotation (Placement(transformation(extent={{-260,160},{-240,180}})));
   Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(uLow=6, uHigh=6.1)
     annotation (Placement(transformation(extent={{-220,160},{-200,180}})));
@@ -308,7 +308,7 @@ block SetpointController_baseline
     annotation (Placement(transformation(extent={{-140,140},{-120,160}})));
   Buildings.Controls.OBC.CDL.Logical.Timer tim(t=300)
     annotation (Placement(transformation(extent={{-100,140},{-80,160}})));
-  Buildings.Controls.OBC.CDL.Reals.Add add1(k2=-1)
+  Buildings.Controls.OBC.CDL.Reals.Subtract add1
     annotation (Placement(transformation(extent={{-260,280},{-240,300}})));
   Buildings.Controls.OBC.CDL.Reals.Hysteresis hys2(uLow=1, uHigh=2)
     annotation (Placement(transformation(extent={{-220,280},{-200,300}})));
