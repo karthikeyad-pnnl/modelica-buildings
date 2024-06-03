@@ -188,14 +188,42 @@ package Chilled_Beam_Test
   model ClosedLoopValidation_test2
     extends Modelica.Icons.Example;
     parameter Real schTab[5, 2] = [0, 0; 8, 1; 18, 1; 21, 0; 24, 0] "Table defining schedule for enabling plant";
-    Buildings.Chilled_Beam_Test.TestBed chiBeaTesBed(TChiWatRet_nominal = 273.15 + 25, mChiWatTot_flow_nominal = 2.114, mAirTot_flow_nominal = 1*0.676*1.225, mHotWatCoi_nominal = 0.078, mChiWatCoi_nominal = 0.645,
+    Buildings.Chilled_Beam_Test.TestBed_test2 chiBeaTesBed(
+      TChiWatRet_nominal=273.15 + 25,
+      mChiWatTot_flow_nominal=2.114,
+      mAirTot_flow_nominal=1*0.676*1.225,
+      mHotWatCoi_nominal=0.078,
+      mChiWatCoi_nominal=0.645,
       mCooAir_flow_nominal=1*0.676*1.225,
       mHeaAir_flow_nominal=1*0.676*1.225,
       THeaWatInl_nominal=313.15,
       THeaWatOut_nominal=298.15,
       THeaAirInl_nominal=285.85,
-      THeaAirDis_nominal=308.15,                                                                                                                                                                                                     VRooSou = 239.25, mChiWatSou_flow_nominal = 0.387, mAirSou_flow_nominal = 1*0.143*1.225, mAChiBeaSou_flow_nominal = 0.143*1.225, VRooEas = 103.31, mChiWatEas_flow_nominal = 0.9, mAirEas_flow_nominal = 1*0.065*1.225, mAChiBeaEas_flow_nominal = 1*0.065*1.225, VRooNor = 239.25, mChiWatNor_flow_nominal = 0.253, mAirNor_flow_nominal = 1*0.143*1.225, mAChiBeaNor_flow_nominal = 0.143*1.225, VRooWes = 103.31, mChiWatWes_flow_nominal = 0.262, mAirWes_flow_nominal = 1*0.065*1.225, mAChiBeaWes_flow_nominal = 0.065*1.225, VRooCor = 447.68, mChiWatCor_flow_nominal = 0.27, mAirCor_flow_nominal = 1*0.26*1.225, mAChiBeaCor_flow_nominal = 0.26*1.225) "Chilled beam system test-bed" annotation (
-      Placement(visible = true, transformation(origin={-98,-24},    extent = {{88, -16}, {108, 32}}, rotation = 0)));
+      THeaAirDis_nominal=308.15,
+      VRooSou=239.25,
+      mChiWatSou_flow_nominal=0.387,
+      mAirSou_flow_nominal=1*0.143*1.225,
+      mAChiBeaSou_flow_nominal=0.143*1.225,
+      VRooEas=103.31,
+      mChiWatEas_flow_nominal=0.9,
+      mAirEas_flow_nominal=1*0.065*1.225,
+      mAChiBeaEas_flow_nominal=1*0.065*1.225,
+      VRooNor=239.25,
+      mChiWatNor_flow_nominal=0.253,
+      mAirNor_flow_nominal=1*0.143*1.225,
+      mAChiBeaNor_flow_nominal=0.143*1.225,
+      VRooWes=103.31,
+      mChiWatWes_flow_nominal=0.262,
+      mAirWes_flow_nominal=1*0.065*1.225,
+      mAChiBeaWes_flow_nominal=0.065*1.225,
+      VRooCor=447.68,
+      mChiWatCor_flow_nominal=0.27,
+      mAirCor_flow_nominal=1*0.26*1.225,
+      mAChiBeaCor_flow_nominal=0.26*1.225) "Chilled beam system test-bed"
+      annotation (Placement(visible=true, transformation(
+          origin={-98,-24},
+          extent={{88,-16},{108,32}},
+          rotation=0)));
     Buildings.Controls.OBC.ChilledBeams.Terminal.Controller terCon[5](TdCoo = {0.1, 100, 0.1, 0.1, 0.1}, TiCoo = fill(50, 5), VDes_occ = {0.143, 0.065, 0.143, 0.065, 0.26}, VDes_unoccSch = {0.028, 0.012, 0.028, 0.012, 0.052}, VDes_unoccUnsch = {0.056, 0.024, 0.056, 0.024, 0.104}, controllerTypeCoo = fill(Buildings.Controls.OBC.CDL.Types.SimpleController.PID, 5)) "Terminal controllers" annotation (
       Placement(visible = true, transformation(origin={32,14},   extent = {{10, 40}, {30, 60}}, rotation = 0)));
     Buildings.Controls.OBC.ChilledBeams.System.Controller sysCon(nPum = 1, nVal = 5, minPumSpe = 0.7,
@@ -369,7 +397,7 @@ package Chilled_Beam_Test
       experiment(StartTime = 16848000, StopTime = 16934400, Interval = 600, Tolerance = 1e-06, __Dymola_Algorithm = "Cvode"));
   end ClosedLoopValidation_test2;
 
-  block TestBed
+  block TestBed_test2
     "Testbed consisting of a 5-zone building model paired with DOAS and chilled water supply system"
     replaceable package MediumA = Buildings.Media.Air "Medium model";
     replaceable package MediumW = Buildings.Media.Water "Medium model";
@@ -529,7 +557,8 @@ package Chilled_Beam_Test
       Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = 90, origin = {100, -40})));
     Buildings.Fluid.FixedResistances.Junction jun3(redeclare package Medium = MediumW, final m_flow_nominal = {mChiWatTot_flow_nominal, -mChiWatTot_flow_nominal, mChiWatTot_flow_nominal}, final dp_nominal = {0, 0, 0}) "Chilled water mixer" annotation (
       Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = -90, origin = {250, -40})));
-    Buildings.Fluid.Actuators.Valves.TwoWayLinear val(redeclare package Medium = MediumW, final m_flow_nominal = mChiWatSou_flow_nominal, final dpValve_nominal = dpValve_nominal, final dpFixed_nominal = dpFixed_nominal) "Chilled beam control valve for south zone" annotation (
+    Buildings.Fluid.Actuators.Valves.TwoWayLinear val(redeclare package Medium
+        =                                                                        MediumW, final m_flow_nominal = mChiWatSou_flow_nominal, final dpValve_nominal = dpValve_nominal, final dpFixed_nominal = dpFixed_nominal) "Chilled beam control valve for south zone" annotation (
       Placement(transformation(extent = {{120, -50}, {140, -30}})));
     Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaDat(final filNam=
           ModelicaServices.ExternalReferences.loadResource(
@@ -571,9 +600,11 @@ package Chilled_Beam_Test
       Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = 90, origin = {250, -176})));
     Buildings.Fluid.Sources.Boundary_pT souCoo1(redeclare package Medium = MediumW, final p = 100000, final use_T_in = true, final T = 285.15, final nPorts = 1) "Source for chilled water to chilled beam manifolds" annotation (
       Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = 90, origin = {100, -174})));
-    Buildings.Fluid.Sensors.TemperatureTwoPort senTem(redeclare package Medium = MediumA, final m_flow_nominal = mAirTot_flow_nominal) "AHU discharge air temperature sensor" annotation (
+    Buildings.Fluid.Sensors.TemperatureTwoPort senTem(redeclare package Medium
+        =                                                                        MediumA, final m_flow_nominal = mAirTot_flow_nominal) "AHU discharge air temperature sensor" annotation (
       Placement(transformation(extent = {{-40, -10}, {-20, 10}})));
-    Buildings.Fluid.Sensors.RelativePressure senRelPre(redeclare package Medium = MediumW) "Differential pressure sensor between chilled water supply and return" annotation (
+    Buildings.Fluid.Sensors.RelativePressure senRelPre(redeclare package Medium
+        =                                                                         MediumW) "Differential pressure sensor between chilled water supply and return" annotation (
       Placement(transformation(extent = {{150, -80}, {170, -60}})));
     Buildings.Fluid.Sensors.RelativePressure senRelPre1(redeclare package
         Medium =                                                                   MediumA) "Differential pressure sensor between AHU discharge and outdoor air" annotation (
@@ -1217,16 +1248,16 @@ package Chilled_Beam_Test
       Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -240}, {100, 240}}), graphics={  Text(textColor = {0, 0, 255}, extent = {{-140, 280}, {140, 240}}, textString = "%name"), Rectangle(origin = {-1, -5}, lineColor = {0, 0, 127}, fillColor = {255, 255, 255},
               fillPattern =                                                                                                                                                                                                        FillPattern.Solid, extent = {{-101, -247}, {101, 247}})}),
       Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-340, -320}, {580, 340}})));
-  end TestBed;
+  end TestBed_test2;
 
-  package ChilledBeamSystem
+  package ChilledBeamSystem_ERW
 
     extends Modelica.Icons.ExamplesPackage;
 
     model ClosedLoopValidation
       extends Modelica.Icons.Example;
       parameter Real schTab[5, 2] = [0, 0; 8, 1; 18, 1; 21, 0; 24, 0] "Table defining schedule for enabling plant";
-      Buildings.Chilled_Beam_Test.ChilledBeamSystem.BaseClasses.TestBed chiBeaTesBed(
+      Buildings.Chilled_Beam_Test.ChilledBeamSystem_ERW.BaseClasses.TestBed chiBeaTesBed(
         TChiWatRet_nominal=273.15 + 25,
         mChiWatTot_flow_nominal=2.114,
         mAirTot_flow_nominal=1*0.676*1.225,
@@ -1695,9 +1726,11 @@ Added <code>defaultComponentPrefixes</code> and
         Buildings.Controls.OBC.CDL.Interfaces.RealOutput VDisAir_flow[5] "Measured zone discharge air volume flow rate" annotation (
           Placement(transformation(extent = {{580, 200}, {620, 240}}), iconTransformation(extent={{100,162},
                   {140,202}})));
-        Buildings.Fluid.FixedResistances.Junction jun(redeclare package Medium = MediumW, final m_flow_nominal = {mChiWatTot_flow_nominal, -mChiWatTot_flow_nominal, -mChiWatTot_flow_nominal}, final dp_nominal = {0, 0, 0}) "Chilled water splitter" annotation (
+        Buildings.Fluid.FixedResistances.Junction jun(redeclare package Medium
+            =                                                                    MediumW, final m_flow_nominal = {mChiWatTot_flow_nominal, -mChiWatTot_flow_nominal, -mChiWatTot_flow_nominal}, final dp_nominal = {0, 0, 0}) "Chilled water splitter" annotation (
           Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = 90, origin = {100, -40})));
-        Buildings.Fluid.FixedResistances.Junction jun3(redeclare package Medium = MediumW, final m_flow_nominal = {mChiWatTot_flow_nominal, -mChiWatTot_flow_nominal, mChiWatTot_flow_nominal}, final dp_nominal = {0, 0, 0}) "Chilled water mixer" annotation (
+        Buildings.Fluid.FixedResistances.Junction jun3(redeclare package Medium
+            =                                                                     MediumW, final m_flow_nominal = {mChiWatTot_flow_nominal, -mChiWatTot_flow_nominal, mChiWatTot_flow_nominal}, final dp_nominal = {0, 0, 0}) "Chilled water mixer" annotation (
           Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = -90, origin = {250, -40})));
         Buildings.Fluid.Actuators.Valves.TwoWayLinear val(redeclare package
             Medium =                                                                 MediumW, final m_flow_nominal = mChiWatSou_flow_nominal, final dpValve_nominal = dpValve_nominal, final dpFixed_nominal = dpFixed_nominal) "Chilled beam control valve for south zone" annotation (
@@ -1738,7 +1771,8 @@ Added <code>defaultComponentPrefixes</code> and
           THeaAirInl_nominal=THeaAirInl_nominal,
           THeaAirDis_nominal=THeaAirDis_nominal)                                                                                                                                                         "CAV terminal for south zone" annotation (
           Placement(transformation(extent = {{390, -130}, {430, -90}})));
-        Buildings.Fluid.FixedResistances.Junction jun5(redeclare package Medium = MediumA, final m_flow_nominal = {mAirTot_flow_nominal, -mAirTot_flow_nominal, mAirTot_flow_nominal}, final dp_nominal = {0, 0, 0}) "Return air mixer" annotation (
+        Buildings.Fluid.FixedResistances.Junction jun5(redeclare package Medium
+            =                                                                     MediumA, final m_flow_nominal = {mAirTot_flow_nominal, -mAirTot_flow_nominal, mAirTot_flow_nominal}, final dp_nominal = {0, 0, 0}) "Return air mixer" annotation (
           Placement(transformation(extent = {{-40, 150}, {-20, 170}})));
         Buildings.Fluid.Sources.Boundary_pT sinCoo1(redeclare package Medium = MediumW, final p = 100000, final T = 297.04, final nPorts = 2) "Sink for chillede water" annotation (
           Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = 90, origin = {250, -176})));
@@ -1780,7 +1814,7 @@ Added <code>defaultComponentPrefixes</code> and
         Buildings.Fluid.Sensors.RelativeHumidityTwoPort senRelHum(redeclare
             package Medium =                                                                 MediumA, m_flow_nominal = mAirTot_flow_nominal) "Relative humidity sensor" annotation (
           Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = 180, origin = {-90, 160})));
-        Buildings.Chilled_Beam_Test.ChilledBeamSystem.BaseClasses.ZoneModel_simplified
+        Buildings.Chilled_Beam_Test.ChilledBeamSystem_ERW.BaseClasses.ZoneModel_simplified
           nor(
           nConExt=0,
           nConExtWin=0,
@@ -1791,6 +1825,7 @@ Added <code>defaultComponentPrefixes</code> and
             layers={conIntWal,conIntWal,conIntWal},
             A={6.47,40.76,6.47}*hRoo,
             til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
+
           redeclare package MediumA = MediumA,
           redeclare package MediumW = MediumW,
           Q_flow_nominal=QNor_flow_nominal,
@@ -1803,7 +1838,7 @@ Added <code>defaultComponentPrefixes</code> and
           mAChiBea_flow_nominal=mAChiBeaNor_flow_nominal) "North zone"
           annotation (Placement(transformation(extent={{180,300},{200,320}})));
 
-        Buildings.Chilled_Beam_Test.ChilledBeamSystem.BaseClasses.ZoneModel_simplified
+        Buildings.Chilled_Beam_Test.ChilledBeamSystem_ERW.BaseClasses.ZoneModel_simplified
           wes(
           nConExt=0,
           nConExtWin=0,
@@ -1814,6 +1849,7 @@ Added <code>defaultComponentPrefixes</code> and
             layers={conIntWal,conIntWal,conIntWal},
             A={6.47,40.76,6.47}*hRoo,
             til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
+
           redeclare package MediumA = MediumA,
           redeclare package MediumW = MediumW,
           Q_flow_nominal=QWes_flow_nominal,
@@ -1826,7 +1862,7 @@ Added <code>defaultComponentPrefixes</code> and
           mAChiBea_flow_nominal=mAChiBeaWes_flow_nominal) "West zone"
           annotation (Placement(transformation(extent={{120,240},{140,260}})));
 
-        Buildings.Chilled_Beam_Test.ChilledBeamSystem.BaseClasses.ZoneModel_simplified
+        Buildings.Chilled_Beam_Test.ChilledBeamSystem_ERW.BaseClasses.ZoneModel_simplified
           cor(
           nConExt=0,
           nConExtWin=0,
@@ -1837,6 +1873,7 @@ Added <code>defaultComponentPrefixes</code> and
             layers={conIntWal,conIntWal,conIntWal},
             A={6.47,40.76,6.47}*hRoo,
             til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
+
           redeclare package MediumA = MediumA,
           redeclare package MediumW = MediumW,
           Q_flow_nominal=QCor_flow_nominal,
@@ -1849,7 +1886,7 @@ Added <code>defaultComponentPrefixes</code> and
           mAChiBea_flow_nominal=mAChiBeaCor_flow_nominal) "Core zone"
           annotation (Placement(transformation(extent={{180,240},{200,260}})));
 
-        Buildings.Chilled_Beam_Test.ChilledBeamSystem.BaseClasses.ZoneModel_simplified
+        Buildings.Chilled_Beam_Test.ChilledBeamSystem_ERW.BaseClasses.ZoneModel_simplified
           eas(
           nConExt=0,
           nConExtWin=0,
@@ -1860,6 +1897,7 @@ Added <code>defaultComponentPrefixes</code> and
             layers={conIntWal,conIntWal,conIntWal},
             A={6.47,40.76,6.47}*hRoo,
             til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
+
           redeclare package MediumA = MediumA,
           redeclare package MediumW = MediumW,
           Q_flow_nominal=QEas_flow_nominal,
@@ -1872,7 +1910,7 @@ Added <code>defaultComponentPrefixes</code> and
           mAChiBea_flow_nominal=mAChiBeaEas_flow_nominal) "East zone"
           annotation (Placement(transformation(extent={{240,240},{260,260}})));
 
-        Buildings.Chilled_Beam_Test.ChilledBeamSystem.BaseClasses.ZoneModel_simplified
+        Buildings.Chilled_Beam_Test.ChilledBeamSystem_ERW.BaseClasses.ZoneModel_simplified
           sou(
           nConExt=0,
           nConExtWin=0,
@@ -1883,6 +1921,7 @@ Added <code>defaultComponentPrefixes</code> and
             layers={conIntWal,conIntWal,conIntWal},
             A={6.47,40.76,6.47}*hRoo,
             til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
+
           redeclare package MediumA = MediumA,
           redeclare package MediumW = MediumW,
           Q_flow_nominal=QSou_flow_nominal,
@@ -1903,11 +1942,14 @@ Added <code>defaultComponentPrefixes</code> and
           Placement(transformation(extent = {{300, 290}, {320, 310}})));
         Modelica.Blocks.Routing.Multiplex5 multiplex5_3 "Multiplexer for zone discharge air volume flowrate measurements" annotation (
           Placement(transformation(extent = {{300, 210}, {320, 230}})));
-        Buildings.Fluid.FixedResistances.Junction jun6(redeclare package Medium = MediumA, m_flow_nominal = {mAirTot_flow_nominal, -mAirTot_flow_nominal, mAirTot_flow_nominal}, dp_nominal = {0, 0, 0}) "Return air mixer" annotation (
+        Buildings.Fluid.FixedResistances.Junction jun6(redeclare package Medium
+            =                                                                     MediumA, m_flow_nominal = {mAirTot_flow_nominal, -mAirTot_flow_nominal, mAirTot_flow_nominal}, dp_nominal = {0, 0, 0}) "Return air mixer" annotation (
           Placement(transformation(extent = {{-10, 150}, {10, 170}})));
-        Buildings.Fluid.FixedResistances.Junction jun7(redeclare package Medium = MediumA, m_flow_nominal = {mAirTot_flow_nominal, -mAirTot_flow_nominal, mAirTot_flow_nominal}, dp_nominal = {0, 0, 0}) "Return air mixer" annotation (
+        Buildings.Fluid.FixedResistances.Junction jun7(redeclare package Medium
+            =                                                                     MediumA, m_flow_nominal = {mAirTot_flow_nominal, -mAirTot_flow_nominal, mAirTot_flow_nominal}, dp_nominal = {0, 0, 0}) "Return air mixer" annotation (
           Placement(transformation(extent = {{20, 150}, {40, 170}})));
-        Buildings.Fluid.FixedResistances.Junction jun8(redeclare package Medium = MediumA, m_flow_nominal = {mAirTot_flow_nominal, -mAirTot_flow_nominal, mAirTot_flow_nominal}, dp_nominal = {0, 0, 0}) "Return air mixer" annotation (
+        Buildings.Fluid.FixedResistances.Junction jun8(redeclare package Medium
+            =                                                                     MediumA, m_flow_nominal = {mAirTot_flow_nominal, -mAirTot_flow_nominal, mAirTot_flow_nominal}, dp_nominal = {0, 0, 0}) "Return air mixer" annotation (
           Placement(transformation(extent = {{50, 150}, {70, 170}})));
         Fluid.FixedResistances.Junction jun1(redeclare package Medium = MediumW, m_flow_nominal = {mChiWatTot_flow_nominal, -mChiWatTot_flow_nominal, -mChiWatTot_flow_nominal}, dp_nominal = {0, 0, 0}) "Chilled water splitter" annotation (
           Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = 90, origin = {100, 0})));
@@ -2027,7 +2069,8 @@ Added <code>defaultComponentPrefixes</code> and
           Placement(visible = true, transformation(origin = {-130, 54}, extent = {{-10, -10}, {10, 10}}, rotation = 90)));
         Buildings.Controls.OBC.CDL.Interfaces.RealOutput bldgSP "Building Static Pressure SetPoint" annotation (
           Placement(visible = true, transformation(origin={4,-106},    extent = {{580, -200}, {620, -160}}, rotation = 0), iconTransformation(origin={-480,-44},    extent = {{580, -200}, {620, -160}}, rotation = 0)));
-        Buildings.Fluid.Sensors.MassFlowRate senMasFlo(redeclare package Medium = MediumA) annotation (
+        Buildings.Fluid.Sensors.MassFlowRate senMasFlo(redeclare package Medium
+            =                                                                     MediumA) annotation (
           Placement(visible = true, transformation(origin={-296,6},     extent = {{-10, -10}, {10, 10}}, rotation = 0)));
         Buildings.Controls.OBC.CDL.Interfaces.RealOutput rAT annotation (
           Placement(visible = true, transformation(origin={2,-76},    extent = {{580, -200}, {620, -160}}, rotation = 0), iconTransformation(origin={-2,44},  extent = {{100, -240}, {140, -200}}, rotation = 0)));
@@ -2054,8 +2097,8 @@ Added <code>defaultComponentPrefixes</code> and
           m2_flow_nominal=mAirTot_flow_nominal,
           P_nominal=100)
           annotation (Placement(transformation(extent={{-260,6},{-240,26}})));
-        Fluid.Sensors.TemperatureTwoPort senTemEneWhe(redeclare package Medium =
-              MediumA, m_flow_nominal=mAirTot_flow_nominal) annotation (
+        Fluid.Sensors.TemperatureTwoPort senTemEneWhe(redeclare package Medium
+            = MediumA, m_flow_nominal=mAirTot_flow_nominal) annotation (
             Placement(visible=true, transformation(
               origin={-220,32},
               extent={{-10,-10},{10,10}},
@@ -2765,6 +2808,6 @@ Added <code>defaultComponentPrefixes</code> and
             __Dymola_Algorithm="Cvode"));
       end ZoneModel_simplified;
     end BaseClasses;
-  end ChilledBeamSystem;
+  end ChilledBeamSystem_ERW;
   annotation ();
 end Chilled_Beam_Test;
