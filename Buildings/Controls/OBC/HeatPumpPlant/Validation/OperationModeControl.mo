@@ -430,56 +430,65 @@ Buildings.Controls.OBC.HeatPumpPlant.OperationModeControl</a>
 in both heating and cooling operations. 
 </p>
 <p>
-The following simulations can be observed: 
+The simulations exhibit the following behaviors:
+</p>
+<p>
+During operation, the controller cycles through heating modes 
+(i.e., <code>opeModCon.yOpeMod=-2, -1</code>) when the heating capacity 
+(<code>opeModCon.capReqHea.yCapReq</code>) exceeds the cooling capacity 
+(<code>opeModCon.capReqCoo.yCapReq</code>). Conversely, it cycles through 
+cooling modes (<code>opeModCon.yOpeMod=1, 2, 3</code>) when 
+<code>opeModCon.capReqCoo.yCapReq</code> is higher.
+</p>
+<p>
+<strong>Heating Mode:</strong>
 </p>
 <ul>
 <li>
-The output integer <code>opeModCon.yOpeMod</code> is negative 
-when the heating capacity exceeds than the cooling capacity 
-<code>opeModCon.capReqCoo.yCapReq</code> for a period of 300 secconds. 
+The controller initiates heating-1 (<code>opeModCon.yOpeMod=-1</code>) 
+and remains in this mode while the chilled water return temperature 
+(<code>opeModCon.TChiRet</code>) is above the threshold temperature 
+(<code>opeModCon.T_CHWRetMin</code>).
+</li>
+<li>It switches to heating-2 (<code>opeModCon.yOpeMod=-2</code>) 
+when <code>opeModCon.TChiRet</code> drops below 
+<code>opeModCon.T_CHWRetMin</code> for 300 seconds, activating the 
+AWHP to raise the water temperature returned to the evaporator coil.
 </li>
 <li>
-The output integer <code>opeModCon.yOpeMod</code> is positive 
-when <code>opeModCon.capReqHea.yCapReq</code> is lower than 
-<code>opeModCon.capReqCoo.yCapReq</code> for a period of 300 secconds. 
-</li>
-<li>
-The output integer <code>opeModCon.yOpeMod</code> is zero 
-when <code>opeModCon.capReqHea.yCapReq</code> equals to 
-<code>opeModCon.capReqCoo.yCapReq</code>. 
+After 300 seconds of <code>opeModCon.TChiRet</code> exceeding 
+<code>opeModCon.T_CHWRetMin</code>, the controller reverts to 
+heating-1 (<code>opeModCon.yOpeMod=-1</code>).
 </li>
 </ul>
 <p>
-When <code>opeModCon.capReqHea.yCapReq</code> is larger than 
-<code>opeModCon.capReqCoo.yCapReq</code>: 
+<strong>Cooling Mode:</strong>
 </p>
 <ul>
-<li>
-The value of <code>opeModCon.yOpeMod</code> switches from 0 to -1 
-when <code>opeModCon.TChiRet</code> is higher than 
-<code>opeModCon.T_CHWRetMin</code> for a period of 900 secconds. 
+<li>The controller switches to cooling-1 (<code>opeModCon.yOpeMod=1</code>, 
+water-side economizer) when <code>opeModCon.capReqCoo.yCapReq</code> 
+surpasses <code>opeModCon.capReqHea.yCapReq</code> for 300 seconds.
+</li>
+<li>It transitions to cooling-2 (<code>opeModCon.yOpeMod=2</code>, 
+heat recovery unit) once the chilled water supply temperature 
+(<code>opeModCon.TChiSup</code>) remains above the setpoint temperature 
+(<code>opeModCon.TChiSupSet</code>) for 300 seconds.
 </li>
 <li>
-The value of <code>opeModCon.yOpeMod</code> switches from -1 to -2 
-when <code>opeModCon.TChiRet</code> is lower than 
-<code>opeModCon.T_CHWRetMin</code> for a period of 300 secconds. 
+When the hot water return temperature (<code>opeModCon.THeaRet</code>) 
+to the condenser coil exceeds the temperature threshold 
+(<code>opeModCon.T_HHWRetMax</code>) for 300 seconds, the controller 
+shifts to cooling-3 (<code>opeModCon.yOpeMod=3</code>, heat recovery unit 
+with cooling tower for condenser-side heat rejection).
 </li>
-</ul>
-<p>
-When <code>opeModCon.capReqHea.yCapReq</code> is lower than 
-<code>opeModCon.capReqCoo.yCapReq</code>: 
-</p>
-<ul>
-<li>
-The value of <code>opeModCon.yOpeMod</code> switches from 1 to 2 
-when <code>opeModCon.TChiSup</code> is larger than 
-<code>opeModCon.TChiSupSet</code> for a period of 300 secconds. 
+<li>It returns to cooling-2 (<code>opeModCon.yOpeMod=2</code>) 
+when <code>opeModCon.THeaRet</code> falls below 
+<code>opeModCon.T_HHWRetMax</code> for 300 seconds.
 </li>
-<li>
-The value of 
-<code>opeModCon.yOpeMod</code> switches from 2 to 3 
-when <code>opeModCon.THeaRet</code> is larger than 
-<code>opeModCon.T_HHWRetMax</code> for a period of 300 secconds. 
+<li>Finally, if <code>opeModCon.TChiSup</code> exceeds the allowable 
+threshold (<code>opeModCon.TChiSupSetMax</code>) on the heat recovery unit, 
+resulting in low compressor speeds, the controller reverts to cooling-1 
+(<code>opeModCon.yOpeMod=1</code>).
 </li>
 </ul>
 </html>", revisions="<html>
