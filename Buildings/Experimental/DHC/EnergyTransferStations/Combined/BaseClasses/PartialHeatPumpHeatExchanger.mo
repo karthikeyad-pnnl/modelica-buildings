@@ -387,8 +387,8 @@ model PartialHeatPumpHeatExchanger
   Buildings.Controls.OBC.CDL.Reals.Max priOve if have_varFloCon
     "Ensure primary overflow"
     annotation (Placement(transformation(extent={{-60,270},{-40,290}})));
-  Buildings.Controls.OBC.CDL.Reals.Multiply loaHHW
-    if have_varFloEva or have_varFloCon "Heating load"
+  Buildings.Controls.OBC.CDL.Reals.Multiply loaHHW if
+       have_varFloEva or have_varFloCon "Heating load"
     annotation (Placement(transformation(extent={{-140,270},{-120,290}})));
 
 equation

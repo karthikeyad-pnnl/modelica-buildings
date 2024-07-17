@@ -24,12 +24,9 @@ block Sin
     annotation (Placement(transformation(extent={{100,-20},{140,20}})));
 
 equation
-  y=offset+(
-    if time < startTime then
-      0
-    else
-      amplitude*Modelica.Math.sin(
-        2*Buildings.Controls.OBC.CDL.Constants.pi*freqHz*(time-startTime)+phase));
+  y=offset + (if time < startTime then 0 else amplitude*Modelica.Math.sin(2*
+    Buildings.Controls.OBC.ASHRAE.Constants.pi*freqHz*(time - startTime) +
+    phase));
   annotation (
     defaultComponentName="sin",
     Icon(

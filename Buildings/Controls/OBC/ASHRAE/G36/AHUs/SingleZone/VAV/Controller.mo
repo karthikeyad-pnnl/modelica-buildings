@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.ASHRAE.G36.AHUs.SingleZone.VAV;
+﻿within Buildings.Controls.OBC.ASHRAE.G36.AHUs.SingleZone.VAV;
 block Controller
   "Single Zone AHU controller that composes subsequences for controlling fan speed, economizer, and supply air temperature"
 
@@ -572,18 +572,18 @@ block Controller
     "Zone unoccupied cooling setpoint temperatures"
     annotation (Placement(transformation(extent={{-300,240},{-260,280}}),
         iconTransformation(extent={{-240,160},{-200,200}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput setAdj
-    if have_locAdj and not sepAdj
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput setAdj if
+       have_locAdj and not sepAdj
     "Setpoint adjustment value"
     annotation (Placement(transformation(extent={{-300,210},{-260,250}}),
       iconTransformation(extent={{-240,140},{-200,180}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput cooSetAdj
-    if have_locAdj and sepAdj
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput cooSetAdj if
+       have_locAdj and sepAdj
     "Cooling setpoint adjustment value"
     annotation (Placement(transformation(extent={{-300,180},{-260,220}}),
         iconTransformation(extent={{-240,120},{-200,160}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput heaSetAdj
-    if have_locAdj and sepAdj
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput heaSetAdj if
+       have_locAdj and sepAdj
     "Heating setpoint adjustment value"
     annotation (Placement(transformation(extent={{-300,150},{-260,190}}),
       iconTransformation(extent={{-240,100},{-200,140}})));
@@ -620,16 +620,16 @@ block Controller
         iconTransformation(extent={{-240,-90},{-200,-50}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput hOut(
     final unit="J/kg",
-    final quantity="SpecificEnergy")
-    if (ecoHigLimCon == Buildings.Controls.OBC.ASHRAE.G36.Types.ControlEconomizer.DifferentialEnthalpyWithFixedDryBulb
+    final quantity="SpecificEnergy") if
+       (ecoHigLimCon == Buildings.Controls.OBC.ASHRAE.G36.Types.ControlEconomizer.DifferentialEnthalpyWithFixedDryBulb
      or ecoHigLimCon == Buildings.Controls.OBC.ASHRAE.G36.Types.ControlEconomizer.FixedEnthalpyWithFixedDryBulb)
     "Outdoor air enthalpy"
     annotation (Placement(transformation(extent={{-300,-100},{-260,-60}}),
         iconTransformation(extent={{-240,-120},{-200,-80}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput hAirRet(
     final unit="J/kg",
-    final quantity="SpecificEnergy")
-    if (eneStd == Buildings.Controls.OBC.ASHRAE.G36.Types.EnergyStandard.ASHRAE90_1
+    final quantity="SpecificEnergy") if
+       (eneStd == Buildings.Controls.OBC.ASHRAE.G36.Types.EnergyStandard.ASHRAE90_1
      and ecoHigLimCon == Buildings.Controls.OBC.ASHRAE.G36.Types.ControlEconomizer.DifferentialEnthalpyWithFixedDryBulb)
     "Return air enthalpy"
     annotation (Placement(transformation(extent={{-300,-130},{-260,-90}}),
@@ -637,8 +637,8 @@ block Controller
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirRet(
     final unit="K",
     displayUnit="degC",
-    final quantity="ThermodynamicTemperature")
-    if ecoHigLimCon == Buildings.Controls.OBC.ASHRAE.G36.Types.ControlEconomizer.DifferentialDryBulb
+    final quantity="ThermodynamicTemperature") if
+       ecoHigLimCon == Buildings.Controls.OBC.ASHRAE.G36.Types.ControlEconomizer.DifferentialDryBulb
     "Used only for fixed plus differential dry bulb temperature high limit cutoff"
     annotation (Placement(transformation(extent={{-300,-160},{-260,-120}}),
         iconTransformation(extent={{-240,-160},{-200,-120}})));
@@ -647,8 +647,8 @@ block Controller
     "Freeze protection stat signal. The stat is normally close (the input is normally true), when enabling freeze protection, the input becomes false"
     annotation (Placement(transformation(extent={{-300,-190},{-260,-150}}),
         iconTransformation(extent={{-240,-190},{-200,-150}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput u1SofSwiRes
-    if (freSta == Buildings.Controls.OBC.ASHRAE.G36.Types.FreezeStat.No_freeze_stat
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput u1SofSwiRes if
+       (freSta == Buildings.Controls.OBC.ASHRAE.G36.Types.FreezeStat.No_freeze_stat
      or freSta == Buildings.Controls.OBC.ASHRAE.G36.Types.FreezeStat.Hardwired_to_equipment)
     "Freeze protection reset signal from software switch"
     annotation (Placement(transformation(extent={{-300,-220},{-260,-180}}),
@@ -678,8 +678,8 @@ block Controller
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirMix(
     final unit="K",
     displayUnit="degC",
-    final quantity="ThermodynamicTemperature")
-    if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+    final quantity="ThermodynamicTemperature") if
+       heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Measured mixed air temperature, used for freeze protection"
     annotation (Placement(transformation(extent={{-300,-330},{-260,-290}}),
         iconTransformation(extent={{-240,-310},{-200,-270}})));
@@ -707,8 +707,8 @@ block Controller
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uHeaCoi_actual(
     final min=0,
     final max=1,
-    final unit="1")
-    if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+    final unit="1") if
+       heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Heating coil valve actual position"
     annotation (Placement(transformation(extent={{-300,-470},{-260,-430}}),
         iconTransformation(extent={{-240,-410},{-200,-370}})));
@@ -740,8 +740,8 @@ block Controller
     "Zone cooling setpoint temperature"
     annotation (Placement(transformation(extent={{260,250},{300,290}}),
         iconTransformation(extent={{200,170},{240,210}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y1EneCHWPum
- if have_frePro
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y1EneCHWPum if
+    have_frePro
     "Commanded on to energize chilled water pump"
     annotation (Placement(transformation(extent={{260,160},{300,200}}),
         iconTransformation(extent={{200,130},{240,170}})));
@@ -805,8 +805,8 @@ block Controller
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yHeaCoi(
     final min=0,
     final max=1,
-    final unit="1")
-    if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+    final unit="1") if
+       heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Heating coil valve commanded position"
     annotation (Placement(transformation(extent={{260,-200},{300,-160}}),
         iconTransformation(extent={{200,-160},{240,-120}})));
@@ -836,13 +836,13 @@ block Controller
     "Chiller plant request"
     annotation (Placement(transformation(extent={{260,-410},{300,-370}}),
         iconTransformation(extent={{200,-340},{240,-300}})));
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yHotWatResReq
-    if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yHotWatResReq if
+       heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Hot water reset request"
     annotation (Placement(transformation(extent={{260,-460},{300,-420}}),
         iconTransformation(extent={{200,-370},{240,-330}})));
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yHotWatPlaReq
-    if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yHotWatPlaReq if
+       heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Hot water plant request"
     annotation (Placement(transformation(extent={{260,-500},{300,-460}}),
         iconTransformation(extent={{200,-400},{240,-360}})));
@@ -997,12 +997,12 @@ block Controller
      or buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReturnFanDp)
     "Return fan control"
     annotation (Placement(transformation(extent={{60,-372},{80,-352}})));
-  Buildings.Controls.OBC.CDL.Integers.Switch intSwi
-    if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+  Buildings.Controls.OBC.CDL.Integers.Switch intSwi if
+       heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Hot water plant request"
     annotation (Placement(transformation(extent={{200,-490},{220,-470}})));
-  Buildings.Controls.OBC.CDL.Integers.GreaterThreshold freProMod
-    if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+  Buildings.Controls.OBC.CDL.Integers.GreaterThreshold freProMod if
+       heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Check if it is in freeze protection mode"
     annotation (Placement(transformation(extent={{120,-470},{140,-450}})));
   Buildings.Controls.OBC.ASHRAE.G36.VentilationZones.Title24.Setpoints minFlo(
@@ -1264,8 +1264,7 @@ equation
     annotation (Dialog(enable=have_frePro),
             defaultComponentName="conVAV",
     Icon(coordinateSystem(preserveAspectRatio=false, extent={{-200,-400},{200,400}}),
-        graphics={
-                  Rectangle(
+        graphics={Rectangle(
         extent={{-200,-400},{200,400}},
         lineColor={0,0,127},
         fillColor={255,255,255},

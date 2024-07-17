@@ -573,70 +573,70 @@ block Controller "Multizone VAV air handling unit controller"
   Buildings.Controls.OBC.CDL.Interfaces.RealInput VSumAdjPopBreZon_flow(
     final min=0,
     final unit="m3/s",
-    final quantity="VolumeFlowRate")
-    if venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1
+    final quantity="VolumeFlowRate") if
+       venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1
     "Sum of the adjusted population component breathing zone flow rate"
     annotation (Placement(transformation(extent={{-400,256},{-360,296}}),
         iconTransformation(extent={{-240,230},{-200,270}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput VSumAdjAreBreZon_flow(
     final min=0,
     final unit="m3/s",
-    final quantity="VolumeFlowRate")
-    if venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1
+    final quantity="VolumeFlowRate") if
+       venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1
     "Sum of the adjusted area component breathing zone flow rate"
     annotation (Placement(transformation(extent={{-400,226},{-360,266}}),
         iconTransformation(extent={{-240,210},{-200,250}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput VSumZonPri_flow(
     final min=0,
     final unit="m3/s",
-    final quantity="VolumeFlowRate")
-    if venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1
+    final quantity="VolumeFlowRate") if
+       venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1
     "Sum of the zone primary airflow rates for all zones in all zone groups that are in occupied mode"
     annotation (Placement(transformation(extent={{-400,196},{-360,236}}),
         iconTransformation(extent={{-240,180},{-200,220}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uOutAirFra_max(
     final min=0,
-    final unit="1")
-    if venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1
+    final unit="1") if
+       venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1
     "Maximum zone outdoor air fraction, equals to the maximum of primary outdoor air fraction of all zones"
     annotation (Placement(transformation(extent={{-400,166},{-360,206}}),
         iconTransformation(extent={{-240,150},{-200,190}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput VSumZonAbsMin_flow(
     final min=0,
     final unit="m3/s",
-    final quantity="VolumeFlowRate")
-    if venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24
+    final quantity="VolumeFlowRate") if
+       venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24
     "Sum of the zone absolute minimum outdoor airflow setpoint"
     annotation (Placement(transformation(extent={{-400,138},{-360,178}}),
         iconTransformation(extent={{-240,110},{-200,150}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput VSumZonDesMin_flow(
     final min=0,
     final unit="m3/s",
-    final quantity="VolumeFlowRate")
-    if venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24
+    final quantity="VolumeFlowRate") if
+       venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24
     "Sum of the zone design minimum outdoor airflow setpoint"
     annotation (Placement(transformation(extent={{-400,106},{-360,146}}),
         iconTransformation(extent={{-240,90},{-200,130}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput VAirOut_flow(
     final min=0,
     final unit="m3/s",
-    final quantity="VolumeFlowRate")
-    if (minOADes == Buildings.Controls.OBC.ASHRAE.G36.Types.OutdoorAirSection.DedicatedDampersAirflow
+    final quantity="VolumeFlowRate") if
+       (minOADes == Buildings.Controls.OBC.ASHRAE.G36.Types.OutdoorAirSection.DedicatedDampersAirflow
      or minOADes == Buildings.Controls.OBC.ASHRAE.G36.Types.OutdoorAirSection.SingleDamper)
     "Measured outdoor air volumetric flow rate"
     annotation (Placement(transformation(extent={{-400,76},{-360,116}}),
         iconTransformation(extent={{-240,50},{-200,90}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uCO2Loo_max(
-    final unit="1")
-    if (have_CO2Sen and venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24)
+    final unit="1") if
+       (have_CO2Sen and venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24)
     "Maximum zone CO2 control loop output"
     annotation (Placement(transformation(extent={{-400,-40},{-360,0}}),
         iconTransformation(extent={{-240,-40},{-200,0}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput dpMinOutDam(
     final unit="Pa",
     displayUnit="Pa",
-    final quantity="PressureDifference")
-    if minOADes == Buildings.Controls.OBC.ASHRAE.G36.Types.OutdoorAirSection.DedicatedDampersPressure
+    final quantity="PressureDifference") if
+       minOADes == Buildings.Controls.OBC.ASHRAE.G36.Types.OutdoorAirSection.DedicatedDampersPressure
     "Measured pressure difference across the minimum outdoor air damper"
     annotation (Placement(transformation(extent={{-400,-70},{-360,-30}}),
         iconTransformation(extent={{-240,-70},{-200,-30}})));
@@ -650,22 +650,22 @@ block Controller "Multizone VAV air handling unit controller"
         iconTransformation(extent={{-240,-100},{-200,-60}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput hAirOut(
     final unit="J/kg",
-    final quantity="SpecificEnergy")
-    if (ecoHigLimCon == Buildings.Controls.OBC.ASHRAE.G36.Types.ControlEconomizer.DifferentialEnthalpyWithFixedDryBulb
+    final quantity="SpecificEnergy") if
+       (ecoHigLimCon == Buildings.Controls.OBC.ASHRAE.G36.Types.ControlEconomizer.DifferentialEnthalpyWithFixedDryBulb
      or ecoHigLimCon == Buildings.Controls.OBC.ASHRAE.G36.Types.ControlEconomizer.FixedEnthalpyWithFixedDryBulb)
     "Outdoor air enthalpy"
     annotation (Placement(transformation(extent={{-400,-130},{-360,-90}}),
         iconTransformation(extent={{-240,-120},{-200,-80}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput hAirRet(
     final unit="J/kg",
-    final quantity="SpecificEnergy")
-    if (eneStd == Buildings.Controls.OBC.ASHRAE.G36.Types.EnergyStandard.ASHRAE90_1
+    final quantity="SpecificEnergy") if
+       (eneStd == Buildings.Controls.OBC.ASHRAE.G36.Types.EnergyStandard.ASHRAE90_1
      and ecoHigLimCon == Buildings.Controls.OBC.ASHRAE.G36.Types.ControlEconomizer.DifferentialEnthalpyWithFixedDryBulb)
     "OA enthalpy high limit cutoff. For differential enthalpy use return air enthalpy measurement"
     annotation (Placement(transformation(extent={{-400,-160},{-360,-120}}),
         iconTransformation(extent={{-240,-140},{-200,-100}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput u1FreSta
-    if freSta == Buildings.Controls.OBC.ASHRAE.G36.Types.FreezeStat.Hardwired_to_BAS and
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput u1FreSta if
+       freSta == Buildings.Controls.OBC.ASHRAE.G36.Types.FreezeStat.Hardwired_to_BAS and
     have_frePro
     "Freeze protection stat signal. The stat is normally close (the input is normally true), when enabling freeze protection, the input becomes false"
     annotation (Placement(transformation(extent={{-400,-190},{-360,-150}}),
@@ -685,8 +685,8 @@ block Controller "Multizone VAV air handling unit controller"
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirMix(
     final unit="K",
     displayUnit="degC",
-    final quantity="ThermodynamicTemperature")
-    if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+    final quantity="ThermodynamicTemperature") if
+       heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
        or heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.Electric
     "Measured mixed air temperature"
     annotation (Placement(transformation(extent={{-400,-330},{-360,-290}}),
@@ -694,8 +694,8 @@ block Controller "Multizone VAV air handling unit controller"
   Buildings.Controls.OBC.CDL.Interfaces.RealInput dpBui(
     final unit="Pa",
     displayUnit="Pa",
-    final quantity="PressureDifference")
-    if (buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReliefDamper
+    final quantity="PressureDifference") if
+       (buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReliefDamper
      or buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReliefFan
      or buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReturnFanDp)
     "Measured building static pressure difference, relative to ambient (positive if pressurized)"
@@ -704,16 +704,16 @@ block Controller "Multizone VAV air handling unit controller"
   Buildings.Controls.OBC.CDL.Interfaces.RealInput VAirSup_flow(
     final min=0,
     final unit="m3/s",
-    final quantity="VolumeFlowRate")
-    if buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReturnFanMeasuredAir
+    final quantity="VolumeFlowRate") if
+       buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReturnFanMeasuredAir
     "Measured AHU supply airflow rate"
     annotation (Placement(transformation(extent={{-400,-400},{-360,-360}}),
         iconTransformation(extent={{-240,-360},{-200,-320}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput VAirRet_flow(
     final min=0,
     final unit="m3/s",
-    final quantity="VolumeFlowRate")
-    if buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReturnFanMeasuredAir
+    final quantity="VolumeFlowRate") if
+       buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReturnFanMeasuredAir
     "Measured AHU return airflow rate"
     annotation (Placement(transformation(extent={{-400,-460},{-360,-420}}),
         iconTransformation(extent={{-240,-380},{-200,-340}})));
@@ -727,21 +727,21 @@ block Controller "Multizone VAV air handling unit controller"
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput VEffAirOut_flow_min(
     final min=0,
     final unit="m3/s",
-    final quantity="VolumeFlowRate")
-    if venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1
+    final quantity="VolumeFlowRate") if
+       venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1
     "Effective minimum outdoor airflow setpoint"
     annotation (Placement(transformation(extent={{360,230},{400,270}}),
         iconTransformation(extent={{200,210},{240,250}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yMinOutDam(
     final min=0,
     final max=1,
-    final unit="1")
-    if minOADes == Buildings.Controls.OBC.ASHRAE.G36.Types.OutdoorAirSection.DedicatedDampersAirflow
+    final unit="1") if
+       minOADes == Buildings.Controls.OBC.ASHRAE.G36.Types.OutdoorAirSection.DedicatedDampersAirflow
     "Minimum outdoor air damper commanded position"
     annotation (Placement(transformation(extent={{360,140},{400,180}}),
         iconTransformation(extent={{200,170},{240,210}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y1MinOutDam
-    if minOADes == Buildings.Controls.OBC.ASHRAE.G36.Types.OutdoorAirSection.DedicatedDampersPressure
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y1MinOutDam if
+       minOADes == Buildings.Controls.OBC.ASHRAE.G36.Types.OutdoorAirSection.DedicatedDampersPressure
     "Minimum outdoor air damper command on"
     annotation (Placement(transformation(extent={{360,110},{400,150}}),
         iconTransformation(extent={{200,140},{240,180}})));
@@ -755,8 +755,8 @@ block Controller "Multizone VAV air handling unit controller"
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yRelDam(
     final min=0,
     final max=1,
-    final unit="1")
-    if buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReliefDamper
+    final unit="1") if
+       buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReliefDamper
        or buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReturnFanMeasuredAir
        or buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReturnFanDp
     "Relief air damper commanded position"
@@ -768,8 +768,8 @@ block Controller "Multizone VAV air handling unit controller"
     final unit="1") "Economizer outdoor air damper commanded position"
     annotation (Placement(transformation(extent={{360,10},{400,50}}),
         iconTransformation(extent={{200,50},{240,90}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y1EneCHWPum
- if have_frePro
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y1EneCHWPum if
+    have_frePro
     "Commanded on to energize chilled water pump"
     annotation (Placement(transformation(extent={{360,-30},{400,10}}),
         iconTransformation(extent={{200,20},{240,60}})));
@@ -792,8 +792,8 @@ block Controller "Multizone VAV air handling unit controller"
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yRetFan(
     final min=0,
     final max=1,
-    final unit="1")
-    if (buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReturnFanMeasuredAir
+    final unit="1") if
+       (buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReturnFanMeasuredAir
         or buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReturnFanDp)
     "Return fan commanded speed"
     annotation (Placement(transformation(extent={{360,-152},{400,-112}}),
@@ -806,8 +806,8 @@ block Controller "Multizone VAV air handling unit controller"
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yRelFan(
     final min=0,
     final max=1,
-    final unit="1")
-    if buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReliefFan
+    final unit="1") if
+       buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReliefFan
     "Relief fan commanded speed"
     annotation (Placement(transformation(extent={{360,-210},{400,-170}}),
         iconTransformation(extent={{200,-140},{240,-100}})));
@@ -827,8 +827,8 @@ block Controller "Multizone VAV air handling unit controller"
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yHeaCoi(
     final min=0,
     final max=1,
-    final unit="1")
-    if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+    final unit="1") if
+       heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     or heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.Electric
     "Heating coil valve commanded position"
     annotation (Placement(transformation(extent={{360,-320},{400,-280}}),
@@ -840,8 +840,8 @@ block Controller "Multizone VAV air handling unit controller"
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yDpBui(
     final unit="Pa",
     displayUnit="Pa",
-    final quantity="PressureDifference")
-    if (buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReliefFan
+    final quantity="PressureDifference") if
+       (buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReliefFan
         and have_ahuRelFan) or buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReturnFanDp
     "Building static pressure difference, relative to ambient (positive if pressurized)"
     annotation (Placement(transformation(extent={{360,-400},{400,-360}}),
@@ -849,38 +849,38 @@ block Controller "Multizone VAV air handling unit controller"
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput dpDisSet(
     final unit="Pa",
     displayUnit="Pa",
-    final quantity="PressureDifference")
-    if buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReturnFanDp
+    final quantity="PressureDifference") if
+       buiPreCon == Buildings.Controls.OBC.ASHRAE.G36.Types.PressureControl.ReturnFanDp
     "Return fan discharge static pressure setpoint"
     annotation (Placement(transformation(extent={{360,-440},{400,-400}}),
         iconTransformation(extent={{200,-330},{240,-290}})));
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yChiWatResReq
-    if cooCoi == Buildings.Controls.OBC.ASHRAE.G36.Types.CoolingCoil.WaterBased
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yChiWatResReq if
+       cooCoi == Buildings.Controls.OBC.ASHRAE.G36.Types.CoolingCoil.WaterBased
     "Chilled water reset request"
     annotation (Placement(transformation(extent={{360,-480},{400,-440}}),
         iconTransformation(extent={{200,-360},{240,-320}})));
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yChiPlaReq
-    if cooCoi == Buildings.Controls.OBC.ASHRAE.G36.Types.CoolingCoil.WaterBased
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yChiPlaReq if
+       cooCoi == Buildings.Controls.OBC.ASHRAE.G36.Types.CoolingCoil.WaterBased
     "Chiller plant request"
     annotation (Placement(transformation(extent={{360,-510},{400,-470}}),
         iconTransformation(extent={{200,-390},{240,-350}})));
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yHotWatResReq
-    if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yHotWatResReq if
+       heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Hot water reset request"
     annotation (Placement(transformation(extent={{360,-560},{400,-520}}),
         iconTransformation(extent={{200,-420},{240,-380}})));
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yHotWatPlaReq
-    if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yHotWatPlaReq if
+       heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Hot water plant request"
     annotation (Placement(transformation(extent={{360,-590},{400,-550}}),
         iconTransformation(extent={{200,-450},{240,-410}})));
 
-  Buildings.Controls.OBC.CDL.Integers.GreaterThreshold freProMod
-    if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+  Buildings.Controls.OBC.CDL.Integers.GreaterThreshold freProMod if
+       heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Check if it is in freeze protection mode"
     annotation (Placement(transformation(extent={{180,-570},{200,-550}})));
-  Buildings.Controls.OBC.CDL.Integers.Switch intSwi
-    if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+  Buildings.Controls.OBC.CDL.Integers.Switch intSwi if
+       heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Hot water plant request"
     annotation (Placement(transformation(extent={{300,-580},{320,-560}})));
   Buildings.Controls.OBC.ASHRAE.G36.AHUs.MultiZone.VAV.SetPoints.FreezeProtection frePro(
@@ -987,8 +987,8 @@ block Controller "Multizone VAV air handling unit controller"
   Buildings.Controls.OBC.ASHRAE.G36.AHUs.MultiZone.VAV.SetPoints.OutdoorAirFlow.ASHRAE62_1.AHU ashOutAirSet(
     final minOADes=minOADes,
     final VUncDesOutAir_flow=VUncDesOutAir_flow,
-    final VDesTotOutAir_flow=VDesTotOutAir_flow)
-    if venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1
+    final VDesTotOutAir_flow=VDesTotOutAir_flow) if
+       venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.ASHRAE62_1
     "Minimum outdoor airflow setpoint, when complying with ASHRAE 62.1 requirements"
     annotation (Placement(transformation(extent={{-80,180},{-60,200}})));
   Buildings.Controls.OBC.ASHRAE.G36.AHUs.MultiZone.VAV.SetPoints.ReliefDamper relDam(
@@ -1022,8 +1022,8 @@ block Controller "Multizone VAV air handling unit controller"
     final minOADes=minOADes,
     final have_CO2Sen=have_CO2Sen,
     final VAbsOutAir_flow=VAbsOutAir_flow,
-    final VDesOutAir_flow=VDesOutAir_flow)
-    if venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24
+    final VDesOutAir_flow=VDesOutAir_flow) if
+       venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24
     "Minimum outdoor airflow setpoint, when complying with Title 24 requirements"
     annotation (Placement(transformation(extent={{-80,140},{-60,160}})));
   Buildings.Controls.OBC.ASHRAE.G36.AHUs.MultiZone.VAV.SetPoints.ReliefFan relFanCon(

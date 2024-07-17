@@ -54,8 +54,8 @@ model WatersideEconomizer
     min=0)=1
     "Gain of controller"
     annotation (Dialog(group="Controls"));
-  parameter Modelica.Units.SI.Time Ti(min=Buildings.Controls.OBC.CDL.Constants.small)=
-       60 "Time constant of integrator block"
+  parameter Modelica.Units.SI.Time Ti(min=Buildings.Controls.OBC.ASHRAE.Constants.small)
+     = 60 "Time constant of integrator block"
     annotation (Dialog(group="Controls"));
   // IO CONNECTORS
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput PPum(

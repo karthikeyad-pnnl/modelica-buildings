@@ -8,7 +8,7 @@ model HeatPumpHeatExchangerDHWTank
   Buildings.Fluid.Sources.Boundary_pT souDCW(
     redeclare final package Medium = MediumBui,
     use_T_in=true,
-    nPorts=1)  if have_hotWat "Source for domestic cold water"
+    nPorts=1) if  have_hotWat "Source for domestic cold water"
                                  annotation (Placement(
       transformation(
       extent={{10,-10},{-10,10}},
@@ -34,8 +34,8 @@ model HeatPumpHeatExchangerDHWTank
     annotation (Placement(transformation(extent={{36,48},{48,60}})));
   Buildings.Experimental.DHC.Loads.HotWater.ThermostaticMixingValve theMixVal(
     redeclare package Medium = MediumBui,
-    mMix_flow_nominal=QHotWat_flow_nominal/cpBui_default/(THotWatSup_nominal - TColWat_nominal))
-     if have_hotWat
+    mMix_flow_nominal=QHotWat_flow_nominal/cpBui_default/(THotWatSup_nominal - TColWat_nominal)) if
+        have_hotWat
      "Thermostatic mixing valve"
     annotation (Placement(transformation(extent={{-20,50},{-40,72}})));
   Buildings.Experimental.DHC.EnergyTransferStations.BaseClasses.Junction dcwSpl(

@@ -6,8 +6,7 @@ block Ramp
   parameter Real duration(
     final quantity="Time",
     final unit="s",
-    min=Constants.small)
-    "Duration of ramp (= 0.0 gives a Step)";
+    min=ASHRAE.Constants.small) "Duration of ramp (= 0.0 gives a Step)";
   parameter Real offset=0
     "Offset of output signal";
   parameter Real startTime(
