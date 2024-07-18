@@ -145,7 +145,8 @@ protected
     controllerType=controllerTypeRegOpe,
     k=kRegOpe,
     Ti=TiRegOpe,
-    Td=TdRegOpe,                                    reverseActing=false)
+    Td=TdRegOpe,
+    reverseActing=true)
     "PID controller for regular cooling coil operation mode" annotation (
       Placement(visible=true, transformation(
         origin={-62,-42},
@@ -157,7 +158,7 @@ protected
     k=kDeh,
     Ti=TiDeh,
     Td=TdDeh,
-    reverseActing=false)
+    reverseActing=true)
     "PID controller for cooling air in dehumidification mode" annotation (
       Placement(visible=true, transformation(
         origin={10,80},

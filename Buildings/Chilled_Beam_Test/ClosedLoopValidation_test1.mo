@@ -2,7 +2,7 @@ within Buildings.Chilled_Beam_Test;
 model ClosedLoopValidation_test1
   extends Modelica.Icons.Example;
   parameter Real schTab[5, 2] = [0, 0; 8, 1; 18, 1; 21, 0; 24, 0] "Table defining schedule for enabling plant";
-  Buildings.Examples.ChilledBeamSystem.BaseClasses.TestBed chiBeaTesBed(TChiWatRet_nominal = 273.15 + 25, mChiWatTot_flow_nominal = 2.114, mAirTot_flow_nominal = 1*0.676*1.225, mHotWatCoi_nominal = 0.078, mChiWatCoi_nominal = 0.645,
+  Buildings.Chilled_Beam_Test.ChilledBeamSystem_ERW.BaseClasses.TestBed chiBeaTesBed(TChiWatRet_nominal = 273.15 + 25, mChiWatTot_flow_nominal = 2.114, mAirTot_flow_nominal = 1*0.676*1.225, mHotWatCoi_nominal = 0.078, mChiWatCoi_nominal = 0.645,
     mCooAir_flow_nominal=1*0.676*1.225,
     mHeaAir_flow_nominal=1*0.676*1.225,
     THeaWatInl_nominal=313.15,
@@ -23,7 +23,12 @@ model ClosedLoopValidation_test1
     samPerVal=1,
     delTimVal=60)                                                                                                                                   annotation (
     Placement(visible = true, transformation(origin={112,-20},   extent = {{10, -70}, {30, -50}}, rotation = 0)));
-  Buildings.Controls.OBC.FDE.DOAS.DOAScontroller DOAScon   annotation (
+  Buildings.Controls.OBC.FDE.DOAS.DOAScontroller DOAScon(
+    kFanSpe=0.005,
+    TdFanSpe=0,
+    TiFanSpe=1e3,
+      controllerTypeFanSpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI)
+                                                           annotation (
     Placement(visible = true, transformation(origin={-39,-10},  extent = {{-13, -24}, {13, 10}}, rotation = 0)));
   Buildings.Controls.OBC.CDL.Reals.MultiMax TZonMax(nin=5)   annotation (
     Placement(transformation(extent={{-40,52},{-20,72}})));
@@ -43,7 +48,7 @@ model ClosedLoopValidation_test1
     tableOnFile = true,
     tableName = "tab1",
     fileName=ModelicaServices.ExternalReferences.loadResource(
-        "./Buildings/Resources/Data/Examples/ChilledBeamSystem/zoneLoads.txt"),
+        "modelica://Buildings/Resources/Data/Examples/ChilledBeamSystem/zoneLoads.txt"),
     columns = {2, 3, 4, 5, 6},
     timeScale = 60)
     "Table defining thermal loads for zone"
@@ -60,13 +65,13 @@ model ClosedLoopValidation_test1
     Placement(visible = true, transformation(origin = {-26, 98}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator realScalarReplicator(nout = 5) annotation (
     Placement(visible = true, transformation(origin = {-30, 142}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Controls.OBC.CDL.Reals.Sources.Constant deltaT_constant(k=5)
-    annotation (Placement(transformation(extent={{-144,4},{-130,18}})));
   Controls.OBC.CDL.Reals.Sources.Constant ERW_drybulb_temp(k=295)
     annotation (Placement(transformation(extent={{-126,-46},{-112,-32}})));
+  Controls.OBC.CDL.Reals.Sources.Constant           chiWatSupTem1(k=0)              "Chilled water supply temperature" annotation (
+    Placement(transformation(extent={{-80,-88},{-60,-68}})));
+  Controls.OBC.CDL.Reals.Sources.Constant           chiWatSupTem2(k=1)              "Chilled water supply temperature" annotation (
+    Placement(transformation(extent={{-6,-90},{14,-70}})));
 equation
-  connect(DOAScon.yFanSupSpe, chiBeaTesBed.uFanSpe) annotation (Line(points={{-23.14,
-          -7.8},{-15.5,-7.8},{-15.5,-18},{-12,-18}}, color={0,0,127}));
   connect(enaSch.y[1], hys.u) annotation (
     Line(points = {{-128, 80}, {-122, 80}}, color = {0, 0, 127}));
   connect(hys.y, booRep.u) annotation (
@@ -126,14 +131,14 @@ equation
         color={0,0,127}));
   connect(DOAScon.TAirSup, DOAScon.TAirDisCoiCoo) annotation (Line(points={{-54.6,
           -15.2},{-72,-15.2},{-72,-22.6},{-54.6,-22.6}}, color={0,0,127}));
-  connect(chiBeaTesBed.rAT, DOAScon.TAirRet) annotation (Line(points={{12,-34.4},
-          {36,-34.4},{36,-34},{46,-34},{46,-94},{-106,-94},{-106,-17.6},{-54.6,
-          -17.6}},                   color={0,0,127}));
-  connect(DOAScon.TAirOut, chiBeaTesBed.OutdoorAirTemp) annotation (Line(points=
-         {{-54.6,-20.2},{-92,-20.2},{-92,-56},{-52,-56},{-52,-72},{-12,-72},{-12,
-          -48},{18,-48},{18,-37.6},{12,-37.6}}, color={0,0,127}));
-  connect(chiBeaTesBed.bldgSP, DOAScon.dPAirStaBui) annotation (Line(points={{
-          12,-40},{12,-46},{-14,-46},{-14,-40},{-58,-40},{-58,-32.4},{-54.6,-32.4}},
+  connect(chiBeaTesBed.rAT, DOAScon.TAirRet) annotation (Line(points={{11.8,-33.6},
+          {36,-33.6},{36,-34},{46,-34},{46,-94},{-106,-94},{-106,-17.6},{-54.6,-17.6}},
+                                     color={0,0,127}));
+  connect(DOAScon.TAirOut, chiBeaTesBed.OutdoorAirTemp) annotation (Line(points={{-54.6,
+          -20.2},{-92,-20.2},{-92,-56},{-52,-56},{-52,-72},{-12,-72},{-12,-48},{
+          18,-48},{18,-36.4},{12,-36.4}},       color={0,0,127}));
+  connect(chiBeaTesBed.bldgSP, DOAScon.dPAirStaBui) annotation (Line(points={{12,
+          -38.4},{12,-46},{-14,-46},{-14,-40},{-58,-40},{-58,-32.4},{-54.6,-32.4}},
         color={0,0,127}));
   connect(DOAScon.uFanSupPro, chiBeaTesBed.yFanSta) annotation (Line(points={{-54.6,
           -5.2},{-58,-5.2},{-58,8},{-16,8},{-16,20},{18,20},{18,-16.8},{12,-16.8}},
@@ -149,10 +154,6 @@ equation
   connect(chiBeaTesBed.yChiWatVal, terCon.uChiVal) annotation (Line(points={{12,
           -4},{22,-4},{22,0},{36,0},{36,48},{38,48},{38,55.25},{40,55.25}},
         color={0,0,127}));
-  connect(DOAScon.yCoiCoo, chiBeaTesBed.uCooCoi) annotation (Line(points={{-23.14,
-          -11},{-18,-11},{-18,-26},{-12,-26}}, color={0,0,127}));
-  connect(DOAScon.yCoiHea, chiBeaTesBed.uHeaCoi) annotation (Line(points={{-23.14,
-          -14},{-18,-14},{-18,-22},{-12,-22}}, color={0,0,127}));
   connect(chiBeaTesBed.uPumSta, sysCon.yChiWatPum[1]) annotation (Line(points={
           {-12,-30},{-18,-30},{-18,-62},{76,-62},{76,-40},{144,-40},{144,-74}},
         color={255,0,255}));
@@ -173,11 +174,18 @@ equation
   connect(chiBeaTesBed.relHumDOASRet, DOAScon.phiAirRet) annotation (Line(
         points={{12,-31},{30,-31},{30,-52},{-76,-52},{-76,-10},{-54.6,-10}},
         color={0,0,127}));
-  connect(deltaT_constant.y, chiBeaTesBed.deltaT) annotation (Line(points={{
-          -128.6,11},{-86,11},{-86,24},{-60,24},{-60,14},{-18,14},{-18,-4},{
-          -12,-4}}, color={0,0,127}));
   connect(ERW_drybulb_temp.y, DOAScon.TAirSupEneWhe) annotation (Line(points=
           {{-110.6,-39},{-66,-39},{-66,-27.6},{-54.6,-27.6}}, color={0,0,127}));
+  connect(DOAScon.yEneRecWheSpe, chiBeaTesBed.uEneRecWheSpe) annotation (Line(
+        points={{-23.14,-23.2},{-22,-23.2},{-22,-16.6},{-12.2,-16.6}}, color={0,
+          0,127}));
+  connect(chiBeaTesBed.uFanSpe, DOAScon.yFanSupSpe) annotation (Line(points={{
+          -12.2,-19.2},{-12.2,-20},{-20,-20},{-20,-8},{-23.14,-8},{-23.14,-7.8}},
+        color={0,0,127}));
+  connect(DOAScon.yCoiHea, chiBeaTesBed.uHeaCoi) annotation (Line(points={{
+          -23.14,-14},{-18,-14},{-18,-22},{-12,-22}}, color={0,0,127}));
+  connect(DOAScon.yCoiCoo, chiBeaTesBed.uCooCoi) annotation (Line(points={{
+          -23.14,-11},{-22,-11},{-22,-26},{-12,-26}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}})),
     Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-160, -100}, {160, 100}})),

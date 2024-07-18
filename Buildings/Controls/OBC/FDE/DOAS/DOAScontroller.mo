@@ -203,13 +203,13 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
   parameter Real TSupLowSet(
    final unit="K",
    final displayUnit="degC",
-   final quantity="ThermodynamicTemperature")=273.15+20
+   final quantity="ThermodynamicTemperature")=273.15+25
    "Minimum primary supply air temperature reset value";
 
   parameter Real TSupHigSet(
    final unit="K",
    final displayUnit="degC",
-   final quantity="ThermodynamicTemperature")=273.15+24
+   final quantity="ThermodynamicTemperature")=273.15+28
    "Maximum primary supply air temperature reset value";
 
   parameter Real THigZon(
