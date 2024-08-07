@@ -1,4 +1,4 @@
-﻿within Buildings.Templates.Plants.HeatPumps_PNNL.Validation;
+﻿within Buildings.Templates.Plants.Controls.HeatPumps.Validation;
 model WaterToWater
   final parameter Real capHea_nominal(
     final unit="W")=sum(ctl.capHeaHp_nominal)
@@ -46,7 +46,7 @@ model WaterToWater
     TChiWatSup_nominal - TChiWatRet_nominal)/ctl.cp_default/ctl.rho_default
     "Design CHW volume flow rate"
     annotation (Dialog(group="Nominal condition"));
-  Buildings.Templates.Plants.HeatPumps_PNNL.WaterToWater   ctl(
+  Buildings.Templates.Plants.Controls.HeatPumps.WaterToWater ctl(
     have_heaWat=true,
     have_chiWat=true,
     have_valHpInlIso=true,
