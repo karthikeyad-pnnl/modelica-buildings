@@ -1,4 +1,4 @@
-﻿within Buildings.Templates.Plants.HeatPumps_PNNL;
+﻿within Buildings.Templates.Plants.Controls.HeatPumps;
 block WaterToWater "Controller for WWHP plant"
   parameter Boolean have_heaWat
     "Set to true for plants that provide HW"

@@ -1,5 +1,5 @@
-﻿within Buildings.Templates.Plants.HeatPumps_PNNL.Validation;
-model WaterToWater
+﻿within Buildings.Templates.Plants.Controls.HeatPumps.Validation;
+model WaterToWater_simplified
   final parameter Real capHea_nominal(
     final unit="W")=sum(ctl.capHeaHp_nominal)
     "Installed heating capacity"
@@ -46,7 +46,7 @@ model WaterToWater
     TChiWatSup_nominal - TChiWatRet_nominal)/ctl.cp_default/ctl.rho_default
     "Design CHW volume flow rate"
     annotation (Dialog(group="Nominal condition"));
-  Buildings.Templates.Plants.HeatPumps_PNNL.WaterToWater   ctl(
+  Buildings.Templates.Plants.Controls.HeatPumps.WaterToWater_simplified ctl(
     have_heaWat=true,
     have_chiWat=true,
     have_valHpInlIso=true,
@@ -78,7 +78,7 @@ model WaterToWater
     yPumHeaWatPriSet=0.8,
     yPumChiWatPriSet=0.7,
     dpChiWatRemSet_max={5E4},
-    have_inpSch=true,
+    have_inpSch=false,
     staEqu=[1/3,1/3,1/3; 2/3,2/3,2/3; 1,1,1],
     idxEquAlt={1,2,3}) "Plant controller"
     annotation (Placement(transformation(extent={{6,20},{46,88}})));
@@ -332,7 +332,7 @@ equation
     annotation (Line(points={{-84,100},{-70,100},{-70,80},{-62,80}},
                                                                   color={0,0,127}));
   connect(reqResHeaWat.y,ctl.nReqResHeaWat)
-    annotation (Line(points={{-38,120},{-26,120},{-26,66},{4,66}},
+    annotation (Line(points={{-38,120},{-26,120},{-26,64},{4,64}},
                                                                  color={255,127,0}));
   connect(reqResChiWat.y,ctl.nReqResChiWat)
     annotation (Line(points={{-38,80},{-30,80},{-30,62},{4,62}}, color={255,127,0}));
@@ -355,8 +355,6 @@ equation
                                                                         color={0,0,127}));
   connect(dpChiWatRem.y, resDpChiWatLoc.dpRem)
     annotation (Line(points={{-52,-140},{-48,-140},{-48,-206},{-36,-206}},color={0,0,127}));
-  connect(THeaWatSupSet.y, ctl.THeaWatPriSupSet) annotation (Line(points={{-178,
-          240},{-20,240},{-20,58},{4,58}},    color={0,0,127}));
   connect(VHeaWat_flow.y, ctl.VHeaWatPri_flow) annotation (Line(points={{-78,-40},
           {-34,-40},{-34,54},{4,54}},color={0,0,127}));
   connect(VChiWat_flow.y, ctl.VChiWatPri_flow) annotation (Line(points={{-52,-60},
@@ -407,9 +405,6 @@ equation
   connect(conCooTanCha.y, ctl.uCooTanCha)
     annotation (Line(points={{-38,200},{-12,200},{-12,84},{4,84}},
                                                           color={255,0,255}));
-  connect(booPul.y, ctl.uPlaEna) annotation (Line(points={{-38,160},{-14,160},{
-          -14,80},{4,80}},
-                        color={255,0,255}));
   connect(conIntOpeMod.y,intEquOpeMod. u2) annotation (Line(points={{32,230},{
           40,230},{40,182},{48,182}},
                                     color={255,127,0}));
@@ -522,8 +517,6 @@ equation
           {-168,70},{-168,112},{-152,112}},       color={0,0,127}));
   connect(timTChiWatSupSet.passed, swiTChiWatSupSet.u2) annotation (Line(points={{28,-248},
           {-160,-248},{-160,120},{-152,120}},           color={255,0,255}));
-  connect(swiTChiWatSupSet.y, ctl.TChiWatPriSupSet) annotation (Line(points={{
-          -128,120},{-118,120},{-118,52},{4,52}}, color={0,0,127}));
   connect(swiTChiWatSup.y, ctl.TChiWatPriSup) annotation (Line(points={{-128,62},
           {-122,62},{-122,50},{4,50}}, color={0,0,127}));
   connect(swiTChiWatSup.y, ctl.TChiWatSecSup) annotation (Line(points={{-128,62},
@@ -545,10 +538,14 @@ equation
           -20},{-40,-20},{-40,48},{4,48}}, color={0,0,127}));
   connect(swiTChiWatRet.y, ctl.TChiWatSecRet) annotation (Line(points={{-128,
           -20},{-40,-20},{-40,36},{4,36}}, color={0,0,127}));
+  connect(reqResChiWat.y, ctl.nReqPlaChiWat) annotation (Line(points={{-38,80},{
+          -30,80},{-30,66},{4,66}}, color={255,127,0}));
+  connect(reqResHeaWat.y, ctl.nReqPlaHeaWat) annotation (Line(points={{-38,120},
+          {-26,120},{-26,68},{4,68}}, color={255,127,0}));
   annotation (
     __Dymola_Commands(
       file=
-        "modelica://Buildings/Resources/Scripts/Dymola/Templates/Plants/HeatPumps_PNNL/Validation/WaterToWater.mos"
+        "modelica://Buildings/Resources/Scripts/Dymola/Templates/Plants/Controls/HeatPumps/Validation/WaterToWater_simplified.mos"
         "Simulate and plot"),
     experiment(
       StopTime=86400.0,
@@ -603,4 +600,4 @@ staging the secondary pumps.
 </li>
 </ul>
 </html>"));
-end WaterToWater;
+end WaterToWater_simplified;
