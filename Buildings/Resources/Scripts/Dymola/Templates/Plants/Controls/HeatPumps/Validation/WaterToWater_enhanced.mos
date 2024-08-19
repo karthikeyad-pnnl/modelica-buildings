@@ -1,0 +1,121 @@
+simulateModel("Buildings.Templates.Plants.Controls.HeatPumps.Validation.WaterToWater_enhanced",
+    method="cvode",
+    tolerance=1e-6,
+    stopTime=86400.0,
+    resultFile="WaterToWaterControls");
+createPlot(
+    id=1,
+	subPlot=1,
+    position={5, 5, 300, 500},
+    y={"ctl.chaStaCoo.capReq.y", "ctl.chaStaHea.capReq.y"},
+    autoscale=true,
+    grid=true,
+    timeUnit="h"
+);
+createPlot(
+    id=1,
+	subPlot=2,
+    y={"ctl.yOpeMod"},
+    autoscale=true,
+    grid=true,
+    timeUnit="h"
+);
+createPlot(
+    id=1,
+	subPlot=3,
+    y={"ctl.TOut", "ctl.TOutChiWatLck", "ctl.TOutHeaWatLck"},
+    autoscale=true,
+    grid=true,
+    timeUnit="h"
+);
+createPlot(
+    id=2,
+	subPlot=1,
+    position={300, 5, 300, 500},
+    y={"ctl.nReqPlaHeaWat", "ctl.nReqPlaChiWat", "ctl.PlaEna.y1"},
+    autoscale=true,
+    grid=true,
+    timeUnit="h"
+);
+createPlot(
+    id=2,
+	subPlot=2,
+    y={"ctl.idxSta.y"},
+    autoscale=true,
+    grid=true,
+    timeUnit="h"
+);
+createPlot(
+    id=2,
+    subPlot=3,
+    y={"ctl.y1Hp[1]", "ctl.y1Hp[2]", "ctl.y1Hp[3]"},
+    autoscale=true,
+    grid=true,
+    timeUnit="h"
+);
+createPlot(
+    id=3,
+    subPlot=1,
+	position={600, 5, 300, 600},
+    y={"ctl.y1PumHeaWatPri[1]", "ctl.y1PumHeaWatPri[2]", "ctl.y1PumHeaWatPri[3]"},
+    autoscale=true,
+    grid=true,
+    timeUnit="h"
+);
+createPlot(
+    id=3,
+    subPlot=2,
+    y={"ctl.y1PumHeaWatSec[1]", "ctl.y1PumHeaWatSec[2]", "ctl.y1PumHeaWatSec[3]"},
+    autoscale=true,
+    grid=true,
+    timeUnit="h"
+);
+createPlot(
+    id=3,
+    subPlot=3,
+    y={"ctl.y1PumChiWatPri[1]", "ctl.y1PumChiWatPri[2]", "ctl.y1PumChiWatPri[3]"},
+    autoscale=true,
+    grid=true,
+    timeUnit="h"
+);
+createPlot(
+    id=3,
+    subPlot=4,
+    y={"ctl.y1PumChiWatSec[1]", "ctl.y1PumChiWatSec[2]", "ctl.y1PumChiWatSec[3]"},
+    autoscale=true,
+    grid=true,
+    timeUnit="h"
+);
+createPlot(
+    id=4,
+	subPlot=1,
+    position={900, 5, 300, 600},
+    y={"ctl.nReqResHeaWat", "ctl.nReqResChiWat"},
+    autoscale=true,
+    grid=true,
+    timeUnit="h"
+);
+createPlot(
+    id=4,
+    subPlot=2,
+    y={"ctl.opeModCon.TChiRet", "ctl.opeModCon.T_CHWRetMin", "ctl.opeModCon.THeaRet", "ctl.opeModCon.T_HHWRetMax"},
+    autoscale=true,
+    grid=true,
+    timeUnit="h"
+);
+createPlot(
+    id=4,
+    subPlot=3,
+    y={"ctl.opeModCon.TChiSup", "ctl.opeModCon.TChiSupSet", "ctl.opeModCon.T_CHWSupSetMax"},
+    autoscale=true,
+    grid=true,
+    timeUnit="h"
+);
+createPlot(
+    id=4,
+    subPlot=4,
+    y={"ctl.dpHeaWatRemSet[1]", "ctl.dpChiWatRemSet[1]", "ctl.dpHeaWatRemSet_max[1]", "ctl.dpHeaWatRemSet_min", "ctl.dpChiWatRemSet_max[1]", "ctl.dpChiWatRemSet_min"},
+    autoscale=true,
+    grid=true,
+    timeUnit="h"
+);
