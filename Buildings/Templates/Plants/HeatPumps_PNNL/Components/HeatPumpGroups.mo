@@ -131,12 +131,12 @@ First implementation.
     Fluid.Sensors.MassFlowRate mChiWat_flow(redeclare final package Medium =
           MediumHeaWat) "CHW mass flow rate"
       annotation (Placement(transformation(extent={{-90,-10},{-70,10}})));
-    Fluid.Sensors.TemperatureTwoPort TChiWatEnt(redeclare final package Medium
-        = MediumHeaWat, final m_flow_nominal=max(mChiWat_flow_nominal,
+    Fluid.Sensors.TemperatureTwoPort TChiWatEnt(redeclare final package Medium =
+          MediumHeaWat, final m_flow_nominal=max(mChiWat_flow_nominal,
           mHeaWat_flow_nominal)) "CHW entering temperature"
       annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
-    Fluid.Sensors.TemperatureTwoPort TChiWatLvg(redeclare final package Medium
-        = MediumHeaWat, final m_flow_nominal=max(mChiWat_flow_nominal,
+    Fluid.Sensors.TemperatureTwoPort TChiWatLvg(redeclare final package Medium =
+          MediumHeaWat, final m_flow_nominal=max(mChiWat_flow_nominal,
           mHeaWat_flow_nominal)) "CHW leaving temperature"
       annotation (Placement(transformation(extent={{70,-10},{90,10}})));
     Fluid.Sensors.TemperatureTwoPort THotEnt(

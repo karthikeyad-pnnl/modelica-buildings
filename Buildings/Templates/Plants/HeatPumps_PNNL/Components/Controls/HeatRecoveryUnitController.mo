@@ -41,7 +41,8 @@ block HeatRecoveryUnitController
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yHP
     "Heat pump enable signal" annotation (Placement(transformation(extent={{160,
             40},{200,80}}), iconTransformation(extent={{100,80},{140,120}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uHeaPumPro "Hot Water Pump Enable Signal" annotation (
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uHeaPumPro
+    "Hot Water Pump Enable Signal"                                                             annotation (
       Placement(transformation(extent={{-140,-80},{-100,-40}}),
         iconTransformation(extent={{-140,-40},{-100,0}})));
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uCooPumPro "Chilled Water Pump Enable Signal" annotation (
@@ -87,8 +88,20 @@ block HeatRecoveryUnitController
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uDpCoo annotation (Placement(
         transformation(extent={{-140,-180},{-100,-140}}), iconTransformation(
           extent={{-140,-160},{-100,-120}})));
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant TSet1(k=5000)
-    annotation (Placement(transformation(extent={{60,-120},{80,-100}})));
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uEna "Plant enable signal"
+    annotation (Placement(transformation(extent={{-140,120},{-100,160}}),
+        iconTransformation(extent={{-140,160},{-100,200}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uDpHeaSet annotation (
+      Placement(transformation(extent={{-140,-220},{-100,-180}}),
+        iconTransformation(extent={{-140,-200},{-100,-160}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uDpCooSet annotation (
+      Placement(transformation(extent={{-140,-280},{-100,-240}}),
+        iconTransformation(extent={{-140,-240},{-100,-200}})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant yPumChiWatPriHdr1(k=5000)
+    "Headered primary CHW pump speed signal"
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+        rotation=0,
+        origin={-30,-80})));
 equation
   connect(truDel.y, lat.u)
     annotation (Line(points={{28,50},{38,50}}, color={255,0,255}));
@@ -105,8 +118,6 @@ equation
   connect(truDel1.y, lat.clr) annotation (Line(points={{62,20},{64,20},{64,36},
           {34,36},{34,44},{38,44}},
                    color={255,0,255}));
-  connect(lat.y, seqEve.u1Hea) annotation (Line(points={{62,50},{66,50},{66,46},
-          {72,46}}, color={255,0,255}));
   connect(or1.y, seqEve.u1PumHeaWatPri_actual)
     annotation (Line(points={{62,-10},{72,-10},{72,34}}, color={255,0,255}));
   connect(TSupCoo, gre.u1) annotation (Line(points={{-120,100},{-68,100},{-68,
@@ -143,10 +154,12 @@ equation
           {40,-40},{118,-40}}, color={0,0,127}));
   connect(uDpCoo, ctlDpCoo.dpRem[1]) annotation (Line(points={{-120,-160},{104,-160},
           {104,-80},{118,-80}}, color={0,0,127}));
-  connect(TSet1.y, ctlDpHea.dpRemSet[1]) annotation (Line(points={{82,-110},{90,
-          -110},{90,-36},{118,-36}}, color={0,0,127}));
-  connect(TSet1.y, ctlDpCoo.dpRemSet[1]) annotation (Line(points={{82,-110},{90,
-          -110},{90,-76},{118,-76}}, color={0,0,127}));
+  connect(uEna, seqEve.u1Hea) annotation (Line(points={{-120,140},{68,140},{68,
+          46},{72,46}}, color={255,0,255}));
+  connect(uDpHeaSet, ctlDpHea.dpRemSet[1]) annotation (Line(points={{-120,-200},
+          {-1,-200},{-1,-36},{118,-36}}, color={0,0,127}));
+  connect(uDpCooSet, ctlDpCoo.dpRemSet[1]) annotation (Line(points={{-120,-260},
+          {10,-260},{10,-76},{118,-76}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-160},
             {100,160}}),                                        graphics={
           Rectangle(

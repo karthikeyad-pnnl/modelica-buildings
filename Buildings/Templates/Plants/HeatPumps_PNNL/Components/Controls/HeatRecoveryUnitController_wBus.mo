@@ -1,6 +1,5 @@
 within Buildings.Templates.Plants.HeatPumps_PNNL.Components.Controls;
-block OpenLoopWithHeatRecoveryUnitController
-  "Open-loop controller"
+block HeatRecoveryUnitController_wBus
 
   extends
     Buildings.Templates.Plants.HeatPumps_PNNL.Components.Controls.PartialController(
@@ -121,6 +120,11 @@ block OpenLoopWithHeatRecoveryUnitController
     if cfg.typPumChiWatSec <> Buildings.Templates.Plants.HeatPumps.Types.PumpsSecondary.None
     "Secondary CHW pump speed signal"
     annotation (Placement(transformation(extent={{-140,-250},{-160,-230}})));
+  Buildings.Controls.OBC.CDL.Reals.Switch TSet[nHp](
+    y(each final unit="K",
+      each displayUnit="degC"))
+    "Active supply temperature setpoint"
+    annotation (Placement(transformation(extent={{-140,310},{-160,330}})));
   Buildings.Controls.OBC.CDL.Logical.Sources.Constant tru[nHp](
     each final k=true)
     if not cfg.is_rev
@@ -137,34 +141,19 @@ block OpenLoopWithHeatRecoveryUnitController
     "Headered primary CHW pump speed signal"
     annotation (Placement(transformation(extent={{-140,-210},{-160,-190}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant yPumHeaWatPriDed[cfg.nPumHeaWatPri](
-     each k=1) if cfg.have_heaWat and cfg.have_pumHeaWatPriVar and cfg.typArrPumPri
-     == Buildings.Templates.Components.Types.PumpArrangement.Dedicated
+     each k=1) if cfg.have_heaWat and cfg.have_pumHeaWatPriVar and
+      cfg.typArrPumPri==Buildings.Templates.Components.Types.PumpArrangement.Dedicated
     "Dedicated primary HW pump speed signal"
     annotation (Placement(transformation(extent={{-100,170},{-120,190}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant yPumChiWatPriDed[cfg.nPumChiWatPri](
      each k=1) if cfg.have_pumChiWatPriDed and cfg.have_pumHeaWatPriVar
     "Dedicated primary CHW pump speed signal"
     annotation (Placement(transformation(extent={{-100,-210},{-120,-190}})));
-  HeatRecoveryUnitController heatRecoveryUnitController
+  HeatRecoveryUnitControllerwOperationModeInput
+                             heatRecoveryUnitControllerwOperationModeInput
     annotation (Placement(transformation(extent={{-48,-80},{42,116}})));
   Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booScaRep
     annotation (Placement(transformation(extent={{80,20},{100,40}})));
-  Modelica.Blocks.Routing.RealPassThrough realPassThrough
-    annotation (Placement(transformation(extent={{-140,58},{-120,78}})));
-  Buildings.Controls.OBC.CDL.Reals.Switch TSet[nHp](y(each final unit="K",
-        each displayUnit="degC"))
-    "Active supply temperature setpoint"
-    annotation (Placement(transformation(extent={{-120,300},{-140,320}})));
-  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaScaRep(nout=nHp)
-    annotation (Placement(transformation(extent={{-38,220},{-58,240}})));
-  Modelica.Blocks.Routing.IntegerPassThrough integerPassThrough
-    annotation (Placement(transformation(extent={{-190,80},{-170,100}})));
-  Buildings.Controls.OBC.CDL.Reals.Less les(h=2)
-    annotation (Placement(transformation(extent={{140,320},{160,340}})));
-  Buildings.Controls.OBC.CDL.Logical.And and2
-    annotation (Placement(transformation(extent={{180,300},{200,320}})));
-  HeatingModeTemperatureSetpoint heatingModeTemperatureSetpoint
-    annotation (Placement(transformation(extent={{-32,170},{-12,190}})));
 equation
   /* Control point connection - start */
   connect(y1PumHeaWatPri.y[1], busPumHeaWatPri.y1);
@@ -183,39 +172,46 @@ equation
   connect(y1PumChiWatSec.y[1], busPumChiWatSec.y1);
   //connect(y1Hp.y[1], busHp.y1);
   connect(y1HeaHp.y[1], busHp.y1Hea);
+  connect(TSet.y, busHp.TSet);
   /* Control point connection - stop */
-
-
+  connect(TChiWatSupSet.y, TSet.u3)
+    annotation (Line(points={{-102,300},{-120,300},{-120,312},{-138,312}},color={0,0,127}));
+  connect(THeaWatSupSet.y, TSet.u1)
+    annotation (Line(points={{-102,340},{-120,340},{-120,328},{-138,328}},color={0,0,127}));
+  connect(y1HeaHp.y[1], TSet.u2)
+    annotation (Line(points={{-202,300},{-210,300},{-210,280},{-130,280},{-130,
+          320},{-138,320}},
+      color={255,0,255}));
+  connect(tru.y, TSet.u2)
+    annotation (Line(points={{-102,260},{-130,260},{-130,320},{-138,320}},color={255,0,255}));
 
 // Heat Recovery Unit Control Input Connection
-  connect(bus.TSupCoo, heatRecoveryUnitController.TSupCoo);
-  connect(bus.TSupCoo, les.u2);
-  connect(bus.TSupCooSet, heatRecoveryUnitController.TSupCooSet);
-  connect(bus.TSupHea, heatRecoveryUnitController.TSupHea);
-  connect(bus.TSupHeaSet, heatRecoveryUnitController.TSupHeaSet);
-  connect(bus.uDpHea, heatRecoveryUnitController.uDpHea);
-  connect(bus.uDpCoo, heatRecoveryUnitController.uDpCoo);
-  connect(bus.uDpHeaSet, heatRecoveryUnitController.uDpHeaSet);
-  connect(bus.uDpCooSet, heatRecoveryUnitController.uDpCooSet);
-  connect(bus_HeaPum.y1_actual[1], heatRecoveryUnitController.uHeaPumPro);
-  connect(bus_CooPum.y1_actual[1], heatRecoveryUnitController.uCooPumPro);
+  connect(bus.uDpHea, heatRecoveryUnitControllerwOperationModeInput.uDpHea);
+  connect(bus.uDpCoo, heatRecoveryUnitControllerwOperationModeInput.uDpCoo);
+  connect(bus.uDpHeaSet, heatRecoveryUnitControllerwOperationModeInput.uDpHeaSet);
+  connect(bus.uDpCooSet, heatRecoveryUnitControllerwOperationModeInput.uDpCooSet);
+  connect(bus_HeaPum.y1_actual[1],
+    heatRecoveryUnitControllerwOperationModeInput.uHeaPumPro);
+  connect(bus_CooPum.y1_actual[1],
+    heatRecoveryUnitControllerwOperationModeInput.uCooPumPro);
 // Heat Recovery Unit Control Output Connection
-  connect(and2.y, busHp[1].y1);
-  //connect(realPassThrough.y, busHp[1].TSet);
-    connect(heatRecoveryUnitController.yVal, busValHeaWatHpInlIso[1].y1);
-  connect(heatRecoveryUnitController.yVal, busValHeaWatHpOutIso[1].y1);
-  connect(heatRecoveryUnitController.yVal, busValChiWatHpOutIso[1].y1);
-    connect(heatRecoveryUnitController.yVal, busValChiWatHpInlIso[1].y1);
+  connect(heatRecoveryUnitControllerwOperationModeInput.yHP, busHp[1].y1);
+  connect(heatRecoveryUnitControllerwOperationModeInput.yVal,
+    busValHeaWatHpInlIso[1].y1);
+  connect(heatRecoveryUnitControllerwOperationModeInput.yVal,
+    busValHeaWatHpOutIso[1].y1);
+  connect(heatRecoveryUnitControllerwOperationModeInput.yVal,
+    busValChiWatHpOutIso[1].y1);
+  connect(heatRecoveryUnitControllerwOperationModeInput.yVal,
+    busValChiWatHpInlIso[1].y1);
  // connect(heatRecoveryUnitController.yPum, bus_HeaPum.y1);
- //  connect(heatRecoveryUnitController.yPum, bus_CooPum.y1);
- connect(TSet.y, busHp.TSet);
+//  connect(heatRecoveryUnitController.yPum, bus_CooPum.y1);
 
-
-
-  connect(heatRecoveryUnitController.yPum, booScaRep.u) annotation (Line(points={{51,
-          30.25},{64.5,30.25},{64.5,30},{78,30}},     color={255,0,255}));
-  connect(heatRecoveryUnitController.yPumSpeHea, bus_HeaPum.y) annotation (
-      Line(points={{51,5.75},{68,5.75},{68,-336},{-164,-336},{-164,-372}},
+  connect(heatRecoveryUnitControllerwOperationModeInput.yPum, booScaRep.u)
+    annotation (Line(points={{51,30.25},{64.5,30.25},{64.5,30},{78,30}}, color={
+          255,0,255}));
+  connect(heatRecoveryUnitControllerwOperationModeInput.yPumSpeHea, bus_HeaPum.y)
+    annotation (Line(points={{51,5.75},{68,5.75},{68,-336},{-164,-336},{-164,-372}},
         color={0,0,127}), Text(
       string="%second",
       index=1,
@@ -228,9 +224,9 @@ equation
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(heatRecoveryUnitController.yPumSpeCoo, bus_CooPum.y) annotation (Line(
-        points={{51,-18.75},{51,-16},{70,-16},{70,-358}}, color={0,0,127}),
-      Text(
+  connect(heatRecoveryUnitControllerwOperationModeInput.yPumSpeCoo, bus_CooPum.y)
+    annotation (Line(points={{51,-18.75},{51,-16},{70,-16},{70,-358}}, color={0,
+          0,127}), Text(
       string="%second",
       index=1,
       extent={{-3,-6},{-3,-6}},
@@ -242,45 +238,15 @@ equation
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(bus.uPlaEna, heatRecoveryUnitController.uEna) annotation (Line(
-      points={{-260,0},{-76,0},{-76,128.25},{-57,128.25}},
+  connect(bus.uOpeMod, heatRecoveryUnitControllerwOperationModeInput.uOpeMod)
+    annotation (Line(
+      points={{-260,0},{-76,0},{-76,91.5},{-57,91.5}},
       color={255,204,51},
-      thickness=0.5));
-  connect(bus.TSetHP, realPassThrough.u) annotation (Line(
-      points={{-260,0},{-152,0},{-152,68},{-142,68}},
-      color={255,204,51},
-      thickness=0.5));
-  connect(THeaWatSupSet.y, TSet.u1) annotation (Line(points={{-102,340},{-108,340},
-          {-108,318},{-118,318}}, color={0,0,127}));
-  connect(tru.y, TSet.u2) annotation (Line(points={{-102,260},{-108,260},{-108,310},
-          {-118,310}}, color={255,0,255}));
-  connect(y1HeaHp.y[1], TSet.u2) annotation (Line(points={{-202,300},{-202,316},
-          {-156,316},{-156,292},{-108,292},{-108,310},{-118,310}}, color={255,0,
-          255}));
-  connect(reaScaRep.y, TSet.u3) annotation (Line(points={{-60,230},{-60,228},{
-          -118,228},{-118,302}}, color={0,0,127}));
-  connect(bus.uOpeMod, integerPassThrough.u) annotation (Line(
-      points={{-260,0},{-200,0},{-200,90},{-192,90}},
-      color={255,204,51},
-      thickness=0.5));
-  connect(les.y, and2.u1) annotation (Line(points={{162,330},{162,324},{178,324},
-          {178,310}}, color={255,0,255}));
-  connect(heatRecoveryUnitController.yHP, and2.u2) annotation (Line(points={{51,
-          79.25},{51,76},{178,76},{178,302}}, color={255,0,255}));
-  connect(integerPassThrough.y, heatingModeTemperatureSetpoint.uOpeMod)
-    annotation (Line(points={{-169,90},{-169,88},{-84,88},{-84,184},{-34,184}},
-        color={255,127,0}));
-  connect(realPassThrough.y, heatingModeTemperatureSetpoint.uSetHP) annotation
-    (Line(points={{-119,68},{-84,68},{-84,84},{-80,84},{-80,176},{-34,176}},
-        color={0,0,127}));
-  connect(heatingModeTemperatureSetpoint.TSetHP, reaScaRep.u) annotation (Line(
-        points={{-10,180},{0,180},{0,230},{-36,230}}, color={0,0,127}));
-  connect(bus.TSupHea, heatingModeTemperatureSetpoint.TSupHea) annotation (Line(
-      points={{-260,0},{-72,0},{-72,180},{-34,180}},
-      color={255,204,51},
-      thickness=0.5));
-  connect(heatingModeTemperatureSetpoint.TSetHP, les.u1) annotation (Line(
-        points={{-10,180},{0,180},{0,330},{138,330}}, color={0,0,127}));
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
   annotation (
     defaultComponentName="ctl", Documentation(info="<html>
 <p>
@@ -291,4 +257,4 @@ Buildings.Templates.Plants.HeatPumps.AirToWater</a>.
 It is only used for testing purposes.
 </p>
 </html>"));
-end OpenLoopWithHeatRecoveryUnitController;
+end HeatRecoveryUnitController_wBus;

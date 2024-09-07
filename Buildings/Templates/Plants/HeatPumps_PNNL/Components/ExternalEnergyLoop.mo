@@ -42,7 +42,7 @@ model ExternalEnergyLoop
   Buildings.Templates.Components.Actuators.Valve valve(
     redeclare package Medium = Buildings.Media.Water,  typ=Buildings.Templates.Components.Types.Valve.TwoWayTwoPosition,
     dat(
-      m_flow_nominal=1,
+      m_flow_nominal=datCoolingTowerWHE.mWatCon_flow_nominal,
       dpValve_nominal=1e-6,
       dpFixed_nominal=500))
     annotation (Placement(transformation(
@@ -50,13 +50,16 @@ model ExternalEnergyLoop
         rotation=90,
         origin={-100,-50})));
   Buildings.Templates.Components.Pumps.Single pum(have_var=false, dat(
-        m_flow_nominal=1, dp_nominal(displayUnit="kPa") = 120000))
+        m_flow_nominal=datCoolingTowerWHE.mWatCon_flow_nominal, dp_nominal(
+          displayUnit="Pa") = 5E5,
+    redeclare Buildings.Fluid.Movers.Data.Pumps.Wilo.heatPumpPlant_CoolingTowerPump per))
     annotation (Placement(transformation(extent={{-90,10},{-70,30}})));
   CoolingTowerWHeatExchanger coolingTowerWHeatExchanger(
     redeclare package Medium = Buildings.Media.Water,
     mCooTowAir_flow_nominal=8,
     mChiWat_flow_nominal=0.75,
-    mConWat_flow_nominal=15)                            annotation (Placement(
+    mConWat_flow_nominal=15,
+    dat=datCoolingTowerWHE)                             annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
@@ -76,11 +79,13 @@ model ExternalEnergyLoop
         transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
-        origin={90,-10})));
-  Buildings.Templates.Components.Pumps.Single pum1(have_var=false, dat(
-        m_flow_nominal=hp.mHeaWat_flow_nominal, dp_nominal=hp.dpHeaWat_nominal +
-          15000))
-    annotation (Placement(transformation(extent={{60,10},{80,30}})));
+        origin={90,6})));
+  Buildings.Templates.Components.Pumps.Single pum1(
+    have_var=false,
+    dat(m_flow_nominal=hp.mHeaWat_flow_nominal,
+    dp_nominal(displayUnit="Pa")=500e3,
+    redeclare Buildings.Fluid.Movers.Data.Pumps.Wilo.heatPumpPlant_CondensorPump per))
+    annotation (Placement(transformation(extent={{62,10},{82,30}})));
   BoundaryConditions.WeatherData.Bus           busWea
     "Weather bus"
     annotation (Placement(
@@ -139,13 +144,15 @@ model ExternalEnergyLoop
     annotation (Placement(transformation(extent={{60,80},{80,100}})));
 
   Buildings.Templates.Components.Sensors.Temperature temperature(redeclare
-      package Medium = Buildings.Media.Water, m_flow_nominal=1) annotation (
+      package Medium = Buildings.Media.Water, m_flow_nominal=datCoolingTowerWHE.mWatCon_flow_nominal)
+                                                                annotation (
       Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-100,-76})));
   Buildings.Templates.Components.Sensors.Temperature temperature1(redeclare
-      package Medium = Media.Water, m_flow_nominal=1) annotation (Placement(
+      package Medium = Buildings.Media.Water, m_flow_nominal=datCoolingTowerWHE.mWatCon_flow_nominal)
+                                                      annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
@@ -163,14 +170,16 @@ model ExternalEnergyLoop
         rotation=90,
         origin={50,-78})));
   Buildings.Templates.Components.Sensors.VolumeFlowRate volumeFlowRate(
-      redeclare package Medium = Buildings.Media.Water, m_flow_nominal=1,
+      redeclare package Medium = Buildings.Media.Water,
+    m_flow_nominal=datCoolingTowerWHE.mWatCon_flow_nominal,
       final typ=Buildings.Templates.Components.Types.SensorVolumeFlowRate.FlowMeter)
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-100,-110})));
   Buildings.Templates.Components.Sensors.VolumeFlowRate volumeFlowRate1(
-      redeclare package Medium = Media.Water, m_flow_nominal=1,
+    redeclare package Medium = Buildings.Media.Water,
+    m_flow_nominal=datCoolingTowerWHE.mWatCon_flow_nominal,
       final typ=Buildings.Templates.Components.Types.SensorVolumeFlowRate.FlowMeter) annotation (
       Placement(transformation(
         extent={{-10,-10},{10,10}},
@@ -191,10 +200,10 @@ model ExternalEnergyLoop
         rotation=270,
         origin={90,-110})));
   Buildings.Templates.Components.Actuators.Valve valve2(
-    redeclare package Medium = Media.Water,
+    redeclare package Medium = Buildings.Media.Water,
     typ=Buildings.Templates.Components.Types.Valve.TwoWayTwoPosition,
     dat(
-      m_flow_nominal=1,
+      m_flow_nominal=datCoolingTowerWHE.mWatCon_flow_nominal,
       dpValve_nominal=1e-6,
       dpFixed_nominal=500))
     annotation (Placement(transformation(
@@ -212,38 +221,33 @@ model ExternalEnergyLoop
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={50,-50})));
-  Buildings.Templates.Components.Actuators.Valve valve4(
+  parameter Data.CoolingTowerWHE datCoolingTowerWHE
+    annotation (Placement(transformation(extent={{-110,70},{-90,90}})));
+  Modelica.Blocks.Routing.RealPassThrough realPassThrough
+    annotation (Placement(transformation(extent={{-10,60},{10,80}})));
+  Fluid.HeatExchangers.Heater_T hea(
     redeclare package Medium = Buildings.Media.Water,
-    typ=Buildings.Templates.Components.Types.Valve.TwoWayTwoPosition,
-    dat(
-      m_flow_nominal=1,
-      dpValve_nominal=1e-6,
-      dpFixed_nominal=5000))
-    annotation (Placement(transformation(
+    m_flow_nominal=datHpAwNrv.mHeaWat_flow_nominal,
+    dp_nominal=0,
+    QMax_flow=datHpAwNrv.capHea_nominal) annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
-        rotation=90,
-        origin={-30,-70})));
-  Buildings.Templates.Components.Actuators.Valve valve5(
-    redeclare package Medium = Buildings.Media.Water,
-    typ=Buildings.Templates.Components.Types.Valve.TwoWayTwoPosition,
-    dat(
-      m_flow_nominal=1,
-      dpValve_nominal=1e-6,
-      dpFixed_nominal=5000))
+        rotation=270,
+        origin={90,-20})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(k=273.15 + 20)
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
-        origin={10,-70})));
+        origin={128,10})));
+  Modelica.Blocks.Routing.RealPassThrough realPassThrough1
+    annotation (Placement(transformation(extent={{-10,30},{10,50}})));
 equation
   connect(valve.port_b, pum.port_a)
     annotation (Line(points={{-100,-40},{-100,20},{-90,20}},
                                                            color={0,127,255}));
   connect(pum.port_b, coolingTowerWHeatExchanger.port_a)
     annotation (Line(points={{-70,20},{-60,20},{-60,0}}, color={0,127,255}));
-  connect(hp.port_b, valve1.port_a)
-    annotation (Line(points={{90,-20},{90,-40}}, color={0,127,255}));
   connect(hp.port_a, pum1.port_b)
-    annotation (Line(points={{90,0},{90,20},{80,20}}, color={0,127,255}));
+    annotation (Line(points={{90,16},{90,20},{82,20}},color={0,127,255}));
   connect(coolingTowerWHeatExchanger.busWea, busWea) annotation (Line(
       points={{-50,-6},{-30,-6},{-30,100}},
       color={255,204,51},
@@ -253,7 +257,7 @@ equation
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(hp.busWea, busWea) annotation (Line(
-      points={{100,-4},{100,6},{-30,6},{-30,100}},
+      points={{100,12},{-30,12},{-30,100}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%second",
@@ -269,7 +273,7 @@ equation
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
   connect(bus.heatingPumpBus, pum1.bus) annotation (Line(
-      points={{30.1,100.1},{30.1,38},{70,38},{70,30}},
+      points={{30.1,100.1},{30.1,38},{72,38},{72,30}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
@@ -277,7 +281,7 @@ equation
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(bus.heatPumpBus, hp.bus) annotation (Line(
-      points={{30.1,100.1},{30.1,38},{110,38},{110,-10},{100,-10}},
+      points={{30.1,100.1},{30.1,38},{110,38},{110,6},{100,6}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
@@ -323,7 +327,7 @@ equation
   connect(temperature3.port_b, valve3.port_a)
     annotation (Line(points={{50,-68},{50,-60}}, color={0,127,255}));
   connect(valve3.port_b, pum1.port_a)
-    annotation (Line(points={{50,-40},{50,20},{60,20}}, color={0,127,255}));
+    annotation (Line(points={{50,-40},{50,20},{62,20}}, color={0,127,255}));
   connect(bus.coolingInletValveBus, valve.bus) annotation (Line(
       points={{30.1,100.1},{30.1,25},{-110,25},{-110,-50}},
       color={255,204,51},
@@ -349,40 +353,50 @@ equation
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
   connect(bus.heatingOutletValveBus, valve1.bus) annotation (Line(
-      points={{30.1,100.1},{30.1,-26},{100,-26},{100,-50}},
+      points={{30.1,100.1},{30.1,-34},{100,-34},{100,-50}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
       index=-1,
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
-  connect(valve4.port_b, pum.port_a) annotation (Line(points={{-30,-60},{-30,
-          -32},{-90,-32},{-90,20}}, color={0,127,255}));
-  connect(coolingTowerWHeatExchanger.port_b, valve5.port_a) annotation (Line(
-        points={{-60,-20},{-60,-34},{10,-34},{10,-60}}, color={0,127,255}));
-  connect(valve4.port_a, temperature3.port_b) annotation (Line(points={{-30,-80},
-          {-30,-100},{32,-100},{32,-68},{50,-68}}, color={0,127,255}));
-  connect(valve5.port_b, temperature2.port_a) annotation (Line(points={{10,-80},
-          {28,-80},{28,-64},{90,-64},{90,-68}}, color={0,127,255}));
-  connect(bus.wseInletValveBus, valve4.bus) annotation (Line(
-      points={{30.1,100.1},{30.1,-50},{-40,-50},{-40,-70}},
+  connect(busWea.TDryBul, realPassThrough.u) annotation (Line(
+      points={{-29.9,100.1},{-29.9,70},{-12,70}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
       index=-1,
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
-  connect(bus.wseOutletValveBus, valve5.bus) annotation (Line(
-      points={{30.1,100.1},{30.1,-50},{20,-50},{20,-70}},
+  connect(realPassThrough.y, bus.coolingTowerSystemBus.TOut) annotation (Line(
+        points={{11,70},{30.1,70},{30.1,100.1}},
+                                           color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(hp.port_b, hea.port_a) annotation (Line(points={{90,-4},{90,-10}},
+                                                   color={0,127,255}));
+  connect(valve1.port_a, hea.port_b) annotation (Line(points={{90,-40},{90,-30}},
+                                          color={0,127,255}));
+  connect(con.y, hea.TSet)
+    annotation (Line(points={{128,-2},{128,-8},{98,-8}},    color={0,0,127}));
+  connect(busWea.TWetBul, realPassThrough1.u) annotation (Line(
+      points={{-29.9,100.1},{-29.9,40},{-12,40}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
       index=-1,
-      extent={{-3,6},{-3,6}},
+      extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{100,100}}),
-                         graphics={Rectangle(
+  connect(realPassThrough1.y, bus.coolingTowerSystemBus.TOutWet) annotation (
+      Line(points={{11,40},{30.1,40},{30.1,100.1}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
+            {100,100}}), graphics={Rectangle(
           extent={{-100,100},{100,-100}},
           lineColor={0,0,0},
           fillColor={255,255,255},
@@ -391,6 +405,5 @@ equation
           extent={{-150,20},{150,-20}},
           textString="%name",
           textColor={0,0,255})}),                                Diagram(
-        coordinateSystem(preserveAspectRatio=false, extent={{-120,-140},{120,
-            100}})));
+        coordinateSystem(preserveAspectRatio=false, extent={{-160,-140},{160,100}})));
 end ExternalEnergyLoop;
