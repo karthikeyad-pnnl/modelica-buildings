@@ -37,7 +37,7 @@ block OperationModeControl "Sequences for operation mode control"
     "Default specific heat capacity used to compute required capacity";
 
   parameter Real T_CHWRetMin(
-    final unit="K")= 273.15 + 10
+    final unit="K")= 273.15 + 14
     "Minimum threshold for chilled water return temperature";
 
   parameter Real T_HHWRetMax(
@@ -46,7 +46,7 @@ block OperationModeControl "Sequences for operation mode control"
 
   parameter Real T_CHWSupSetMax(
     final unit="K")= 273.15 + 9
-    "Maximum chilled water supply temperature setpoint allowed by heat-recovery chiller";
+    "Maximum threshold for chilled water supply temperature setpoint allowed by heat-recovery chiller";
 
   parameter Real uLow(
     final min=0,
@@ -449,7 +449,7 @@ block OperationModeControl "Sequences for operation mode control"
     annotation (Placement(transformation(extent={{-60,-10},{-40,10}})));
 
   Buildings.Controls.OBC.CDL.Logical.Or orEnaCoo1
-    "Enable cooling mode-1 when either enable conditios are met"
+    "Enable cooling mode-1 when either enable conditions are met"
     annotation (Placement(transformation(extent={{80,-40},{100,-20}})));
 
 equation
@@ -796,7 +796,7 @@ or if <code>yOpeMod=-2</code> and <code>TChiRet</code> is higher than
 <li>
 The Disabled mode is enabled (i.e., <code>yOpeMod=0</code>)  
 if <code>uPlaEna</code> is disabled or changes from enable to disable, 
-or if <code>yOpeMod=-1</code> (or <code>yOpeMod=-1</code>) and the calculated 
+or if <code>yOpeMod=-1</code> (or <code>yOpeMod=1</code>) and the calculated 
 heating (or cooling) load is less than a specific threshold value. 
 </li>
 <li>
@@ -805,8 +805,9 @@ if <code>uPlaEna</code> is enabled, <code>yOpeMod=-1</code>,
 and the calculated cooling load is greater than the calculated 
 heating load for a period <code>dtMod1</code>, or if 
 <code>yOpeMod=2</code> and the chilled water loop supply temperature 
-<code>TChiSup</code> is lower than its maximum allowed setpoint 
-<code>T_CHWSupSetMax</code> for a period <code>dtMod2</code>.
+setpoint <code>TChiSupSet</code> exceeds the maximum threshold 
+<code>T_CHWSupSetMax</code> allowed by heat-recovery chiller 
+for a period <code>dtMod2</code>.
 </li>
 <li>
 The Cooling-2 mode is enabled (i.e., <code>yOpeMod=2</code>)  

@@ -46,9 +46,7 @@ model OperationModeControl
     "Design CHW volume flow rate"
     annotation (Dialog(group="Nominal condition"));
 
-  Buildings.Controls.OBC.HeatPumpPlant.OperationModeControl opeModCon(
-    T_CHWRetMin(displayUnit="degC") = 287.15,
-    T_CHWSupSetMax(displayUnit="degC")= 282.15)
+  Buildings.Controls.OBC.HeatPumpPlant.OperationModeControl opeModCon
     "Operation mode setpoint controller"
     annotation (Placement(transformation(extent={{-10,58},{10,102}})));
 
