@@ -9,7 +9,7 @@ block ExternalEnergy
     have_valOutIso=true,
     have_pumHeaWatPri=true,
     have_pumHeaWatSec=false)
-    annotation (Placement(transformation(extent={{40,52},{60,80}})));
+    annotation (Placement(transformation(extent={{40,72},{60,100}})));
   Buildings.Templates.Plants.Controls.StagingRotation.EventSequencing seqEveCoo(
     have_heaWat=false,
     have_chiWat=true,
@@ -19,47 +19,46 @@ block ExternalEnergy
     have_pumChiWatPri=true,
     have_pumHeaWatSec=false,
     have_pumChiWatSec=false)
-    annotation (Placement(transformation(extent={{40,-20},{60,8}})));
+    annotation (Placement(transformation(extent={{40,-28},{60,0}})));
   CoolingTowerControl coolingTowerControl
-    annotation (Placement(transformation(extent={{60,20},{80,40}})));
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con2(k=273.15 + 24)
-    annotation (Placement(transformation(extent={{-40,90},{-20,110}})));
+    annotation (Placement(transformation(extent={{-102,80},{-122,100}})));
   Modelica.Blocks.Routing.IntegerPassThrough integerPassThrough
-    annotation (Placement(transformation(extent={{-80,60},{-60,80}})));
+    annotation (Placement(transformation(extent={{-140,60},{-120,80}})));
   Buildings.Controls.OBC.CDL.Integers.Equal intEqu
-    annotation (Placement(transformation(extent={{-50,30},{-30,50}})));
+    annotation (Placement(transformation(extent={{-110,30},{-90,50}})));
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(k=-2)
-    annotation (Placement(transformation(extent={{-80,10},{-60,30}})));
-  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr(nin=3)
-    annotation (Placement(transformation(extent={{-24,60},{-4,80}})));
+    annotation (Placement(transformation(extent={{-140,10},{-120,30}})));
+  Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd(
+                                                   nin=3)
+    annotation (Placement(transformation(extent={{-30,32},{-10,52}})));
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt1(k=1)
-    annotation (Placement(transformation(extent={{-80,-40},{-60,-20}})));
+    annotation (Placement(transformation(extent={{-140,-40},{-120,-20}})));
   Buildings.Controls.OBC.CDL.Integers.Equal intEqu1
-    annotation (Placement(transformation(extent={{-50,-20},{-30,0}})));
-  Buildings.Controls.OBC.CDL.Logical.MultiOr mulOr1(nin=3)
-    annotation (Placement(transformation(extent={{-20,-20},{0,0}})));
-  Buildings.Controls.OBC.CDL.Logical.Not not1
-    annotation (Placement(transformation(extent={{-28,10},{-8,30}})));
+    annotation (Placement(transformation(extent={{-110,-20},{-90,0}})));
+  Buildings.Controls.OBC.CDL.Logical.Or      or2
+    annotation (Placement(transformation(extent={{-30,-30},{-10,-10}})));
   Buildings.Controls.OBC.CDL.Logical.Not not2
-    annotation (Placement(transformation(extent={{-24,-50},{-4,-30}})));
+    annotation (Placement(transformation(extent={{-68,14},{-48,34}})));
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt2(k=3)
-    annotation (Placement(transformation(extent={{-80,-100},{-60,-80}})));
+    annotation (Placement(transformation(extent={{-140,-100},{-120,-80}})));
   Buildings.Controls.OBC.CDL.Integers.Equal intEqu2
-    annotation (Placement(transformation(extent={{-50,-80},{-30,-60}})));
+    annotation (Placement(transformation(extent={{-110,-80},{-90,-60}})));
   Buildings.Controls.OBC.CDL.Logical.Not not3
-    annotation (Placement(transformation(extent={{-20,-100},{0,-80}})));
+    annotation (Placement(transformation(extent={{-70,-100},{-50,-80}})));
   Buildings.Controls.OBC.CDL.Logical.And and2
-    annotation (Placement(transformation(extent={{100,-10},{120,10}})));
+    annotation (Placement(transformation(extent={{100,20},{120,40}})));
   Buildings.Controls.OBC.CDL.Logical.And and1
     annotation (Placement(transformation(extent={{100,-40},{120,-20}})));
   Buildings.Controls.OBC.CDL.Logical.And and3
     annotation (Placement(transformation(extent={{100,-70},{120,-50}})));
   Buildings.Controls.OBC.CDL.Logical.And and4
     annotation (Placement(transformation(extent={{100,-100},{120,-80}})));
+  ASHPControl aSHPControl
+    annotation (Placement(transformation(extent={{-80,100},{-60,120}})));
 equation
   connect(bus.heatingPumpBus.y1_actual, seqEveHea.u1PumHeaWatPri_actual)
     annotation (Line(
-      points={{0.1,140.1},{0.1,56},{30,56},{30,66},{38,66}},
+      points={{0.1,140.1},{0.1,94},{30,94},{30,86},{38,86}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
@@ -68,7 +67,7 @@ equation
       horizontalAlignment=TextAlignment.Right));
   connect(bus.coolingPumpBus.y1_actual, seqEveCoo.u1PumChiWatPri_actual)
     annotation (Line(
-      points={{0.1,140.1},{0.1,4},{32,4},{32,-8},{38,-8}},
+      points={{0.1,140.1},{0.1,4},{32,4},{32,-16},{38,-16}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
@@ -76,110 +75,101 @@ equation
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(coolingTowerControl.bus, bus.coolingTowerSystemBus) annotation (Line(
-      points={{59.2,28.4},{0.1,28.4},{0.1,140.1}},
+      points={{-104.857,90},{0.1,90},{0.1,140.1}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%second",
       index=1,
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
-  connect(seqEveHea.y1, bus.heatPumpBus.y1) annotation (Line(points={{62,78},{70,
-          78},{70,114},{0.1,114},{0.1,140.1}},
-                                         color={255,0,255}), Text(
+  connect(seqEveHea.y1, bus.heatPumpBus.y1) annotation (Line(points={{62,98},{
+          62,110},{0.1,110},{0.1,140.1}},color={255,0,255}), Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(seqEveCoo.y1, bus.coolingTowerSystemBus.uEna) annotation (Line(points={{62,6},{
-          62,16},{0.1,16},{0.1,140.1}},                         color={255,0,255}),
+  connect(seqEveCoo.y1, bus.coolingTowerSystemBus.uEna) annotation (Line(points={{62,-2},
+          {62,16},{0.1,16},{0.1,140.1}},                        color={255,0,255}),
       Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(seqEveHea.y1PumHeaWatPri, bus.heatingPumpBus.y1) annotation (Line(
-        points={{62,58},{68,58},{68,48},{0.1,48},{0.1,140.1}}, color={255,0,255}),
+        points={{62,78},{66,78},{66,116},{26,116},{26,114},{0.1,114},{0.1,140.1}},
+                                                               color={255,0,255}),
       Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(seqEveCoo.y1PumChiWatPri, bus.coolingPumpBus.y1) annotation (Line(
-        points={{62,-16},{84,-16},{84,46},{0.1,46},{0.1,140.1}}, color={255,0,255}),
+        points={{62,-24},{84,-24},{84,46},{0.1,46},{0.1,140.1}}, color={255,0,255}),
       Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(seqEveHea.y1ValHeaWatInlIso, bus.heatingInletValveBus.y1)
-    annotation (Line(points={{62,68},{72,68},{72,118},{24,118},{24,116},{0.1,116},
-          {0.1,140.1}},
+    annotation (Line(points={{62,88},{70,88},{70,120},{24,120},{24,116},{0.1,
+          116},{0.1,140.1}},
         color={255,0,255}), Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(seqEveHea.y1ValHeaWatOutIso, bus.heatingOutletValveBus.y1)
-    annotation (Line(points={{62,66},{66,66},{66,70},{68,70},{68,112},{0.1,112},
+    annotation (Line(points={{62,86},{66,86},{66,90},{68,90},{68,118},{0.1,118},
           {0.1,140.1}},
         color={255,0,255}), Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(con2.y, bus.heatPumpBus.TSet) annotation (Line(points={{-18,100},{0.1,
-          100},{0.1,140.1}},         color={0,0,127}), Text(
-      string="%second",
-      index=1,
-      extent={{6,3},{6,3}},
-      horizontalAlignment=TextAlignment.Left));
   connect(bus.uOpeMod, integerPassThrough.u) annotation (Line(
-      points={{0,140},{0,130},{-90,130},{-90,70},{-82,70}},
+      points={{0,140},{0,128},{-146,128},{-146,70},{-142,70}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
       index=-1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
-  connect(integerPassThrough.y, intEqu.u1) annotation (Line(points={{-59,70},{-54,
-          70},{-54,46},{-58,46},{-58,40},{-52,40}}, color={255,127,0}));
-  connect(conInt.y, intEqu.u2) annotation (Line(points={{-58,20},{-58,24},{-52,24},
-          {-52,32}}, color={255,127,0}));
-  connect(mulOr.y, seqEveHea.u1Hea) annotation (Line(points={{-2,70},{30,70},{30,
-          78},{38,78}}, color={255,0,255}));
-  connect(intEqu.y, mulOr.u[1]) annotation (Line(points={{-28,40},{-22,40},{-22,
-          56},{-32,56},{-32,67.6667},{-26,67.6667}}, color={255,0,255}));
-  connect(conInt1.y, intEqu1.u2) annotation (Line(points={{-58,-30},{-58,-26},{-52,
-          -26},{-52,-18}}, color={255,127,0}));
-  connect(integerPassThrough.y, intEqu1.u1) annotation (Line(points={{-59,70},{-54,
-          70},{-54,46},{-58,46},{-58,34},{-84,34},{-84,-10},{-52,-10}}, color={255,
+  connect(integerPassThrough.y, intEqu.u1) annotation (Line(points={{-119,70},{
+          -114,70},{-114,40},{-112,40}},            color={255,127,0}));
+  connect(conInt.y, intEqu.u2) annotation (Line(points={{-118,20},{-114,20},{
+          -114,32},{-112,32}},
+                     color={255,127,0}));
+  connect(mulAnd.y, seqEveHea.u1Hea) annotation (Line(points={{-8,42},{2,42},{2,
+          98},{38,98}},    color={255,0,255}));
+  connect(intEqu.y, mulAnd.u[1]) annotation (Line(points={{-88,40},{-68,40},{
+          -68,39.6667},{-32,39.6667}},                   color={255,0,255}));
+  connect(conInt1.y, intEqu1.u2) annotation (Line(points={{-118,-30},{-114,-30},
+          {-114,-18},{-112,-18}},
+                           color={255,127,0}));
+  connect(integerPassThrough.y, intEqu1.u1) annotation (Line(points={{-119,70},
+          {-80,70},{-80,10},{-116,10},{-116,-10},{-112,-10}},           color={255,
           127,0}));
-  connect(mulOr1.y, seqEveCoo.u1Coo) annotation (Line(points={{2,-10},{20,-10},{
-          20,2},{38,2}}, color={255,0,255}));
-  connect(intEqu1.y, mulOr1.u[1]) annotation (Line(points={{-28,-10},{-26,-10},
-          {-26,-12.3333},{-22,-12.3333}},color={255,0,255}));
-  connect(intEqu.y, not1.u) annotation (Line(points={{-28,40},{-2,40},{-2,6},{-36,
-          6},{-36,20},{-30,20}}, color={255,0,255}));
-  connect(not1.y, mulOr1.u[2]) annotation (Line(points={{-6,20},{-14,20},{-14,-10},
-          {-22,-10}}, color={255,0,255}));
-  connect(intEqu1.y, not2.u) annotation (Line(points={{-28,-10},{-28,-40},{-26,-40}},
+  connect(or2.y, seqEveCoo.u1Coo) annotation (Line(points={{-8,-20},{30,-20},{
+          30,-6},{38,-6}}, color={255,0,255}));
+  connect(intEqu1.y, not2.u) annotation (Line(points={{-88,-10},{-74,-10},{-74,
+          24},{-70,24}},
         color={255,0,255}));
-  connect(not2.y, mulOr.u[2]) annotation (Line(points={{-2,-40},{8,-40},{8,58},{
-          -2,58},{-2,56},{-32,56},{-32,70},{-26,70}}, color={255,0,255}));
-  connect(conInt2.y, intEqu2.u2) annotation (Line(points={{-58,-90},{-58,-86},{-52,
-          -86},{-52,-78}}, color={255,127,0}));
-  connect(integerPassThrough.y, intEqu2.u1) annotation (Line(points={{-59,70},{-54,
-          70},{-54,46},{-58,46},{-58,34},{-84,34},{-84,-70},{-52,-70}}, color={255,
+  connect(not2.y, mulAnd.u[2]) annotation (Line(points={{-46,24},{-42,24},{-42,
+          42},{-32,42}},                               color={255,0,255}));
+  connect(conInt2.y, intEqu2.u2) annotation (Line(points={{-118,-90},{-114,-90},
+          {-114,-78},{-112,-78}},
+                           color={255,127,0}));
+  connect(integerPassThrough.y, intEqu2.u1) annotation (Line(points={{-119,70},
+          {-80,70},{-80,10},{-116,10},{-116,-10},{-146,-10},{-146,-70},{-112,
+          -70}},                                                        color={255,
           127,0}));
-  connect(intEqu2.y, not3.u) annotation (Line(points={{-28,-70},{-22,-70},{-22,-76},
-          {-24,-76},{-24,-84},{-28,-84},{-28,-90},{-22,-90}}, color={255,0,255}));
-  connect(not3.y, mulOr.u[3]) annotation (Line(points={{2,-90},{8,-90},{8,58},{
-          -2,58},{-2,56},{-32,56},{-32,72.3333},{-26,72.3333}},
-                                                             color={255,0,255}));
-  connect(intEqu2.y, mulOr1.u[3]) annotation (Line(points={{-28,-70},{-22,-70},{
-          -22,-54},{-32,-54},{-32,-28},{-22,-28},{-22,-7.66667}}, color={255,0,255}));
-  connect(and2.y, bus.coolingInletValveBus.y1) annotation (Line(points={{122,
-          0},{128,0},{128,14},{0.1,14},{0.1,140.1}}, color={255,0,255}), Text(
+  connect(intEqu2.y, not3.u) annotation (Line(points={{-88,-70},{-80,-70},{-80,
+          -90},{-72,-90}},                                    color={255,0,255}));
+  connect(not3.y, mulAnd.u[3]) annotation (Line(points={{-48,-90},{-42,-90},{
+          -42,44.3333},{-32,44.3333}},                           color={255,0,
+          255}));
+  connect(and2.y, bus.coolingInletValveBus.y1) annotation (Line(points={{122,30},
+          {128,30},{128,130},{0.1,130},{0.1,140.1}}, color={255,0,255}), Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
@@ -191,47 +181,98 @@ equation
       index=1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
-  connect(and3.y, bus.wseInletValveBus.y1) annotation (Line(points={{122,-60},
-          {128,-60},{128,-46},{26,-46},{26,64},{0.1,64},{0.1,140.1}}, color={255,
+  connect(and3.y, bus.wseInletValveBus.y1) annotation (Line(points={{122,-60},{
+          136,-60},{136,136},{0.1,136},{0.1,140.1}},                  color={255,
           0,255}), Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(and4.y, bus.wseOutletValveBus.y1) annotation (Line(points={{122,-90},
-          {128,-90},{128,-76},{22,-76},{22,62},{0.1,62},{0.1,140.1}}, color={255,
+          {140,-90},{140,138},{0.1,138},{0.1,140.1}},                 color={255,
           0,255}), Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(seqEveCoo.y1ValChiWatInlIso, and2.u1) annotation (Line(points={{62,-8},
-          {90,-8},{90,0},{98,0}}, color={255,0,255}));
-  connect(seqEveCoo.y1ValChiWatInlIso, and3.u1) annotation (Line(points={{62,-8},
-          {90,-8},{90,-60},{98,-60}}, color={255,0,255}));
-  connect(seqEveCoo.y1ValChiWatOutIso, and1.u1) annotation (Line(points={{62,-10},
-          {92,-10},{92,-30},{98,-30}}, color={255,0,255}));
-  connect(seqEveCoo.y1ValChiWatOutIso, and4.u1) annotation (Line(points={{62,-10},
-          {92,-10},{92,-90},{98,-90}}, color={255,0,255}));
-  connect(intEqu1.y, and3.u2) annotation (Line(points={{-28,-10},{-28,-26},{24,-26},
-          {24,-68},{98,-68}}, color={255,0,255}));
-  connect(intEqu1.y, and4.u2) annotation (Line(points={{-28,-10},{-28,-26},{24,-26},
-          {24,-68},{88,-68},{88,-98},{98,-98}}, color={255,0,255}));
-  connect(intEqu2.y, and2.u2) annotation (Line(points={{-28,-70},{-22,-70},{-22,
-          -54},{-32,-54},{-32,-28},{86,-28},{86,-14},{98,-14},{98,-8}}, color={255,
+  connect(seqEveCoo.y1ValChiWatInlIso, and2.u1) annotation (Line(points={{62,-16},
+          {80,-16},{80,30},{98,30}},
+                                  color={255,0,255}));
+  connect(seqEveCoo.y1ValChiWatInlIso, and3.u1) annotation (Line(points={{62,-16},
+          {80,-16},{80,-60},{98,-60}},color={255,0,255}));
+  connect(seqEveCoo.y1ValChiWatOutIso, and1.u1) annotation (Line(points={{62,-18},
+          {96,-18},{96,-30},{98,-30}}, color={255,0,255}));
+  connect(seqEveCoo.y1ValChiWatOutIso, and4.u1) annotation (Line(points={{62,-18},
+          {96,-18},{96,-90},{98,-90}}, color={255,0,255}));
+  connect(intEqu1.y, and3.u2) annotation (Line(points={{-88,-10},{-74,-10},{-74,
+          -26},{-38,-26},{-38,-68},{98,-68}},
+                              color={255,0,255}));
+  connect(intEqu1.y, and4.u2) annotation (Line(points={{-88,-10},{-74,-10},{-74,
+          -26},{-38,-26},{-38,-96},{90,-96},{90,-98},{98,-98}},
+                                                color={255,0,255}));
+  connect(intEqu2.y, and2.u2) annotation (Line(points={{-88,-70},{-80,-70},{-80,
+          -38},{92,-38},{92,22},{98,22}},                               color={255,
           0,255}));
-  connect(intEqu2.y, and1.u2) annotation (Line(points={{-28,-70},{-22,-70},{-22,
-          -54},{-32,-54},{-32,-28},{86,-28},{86,-38},{98,-38}}, color={255,0,255}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
-            {100,100}}),                                        graphics={
+  connect(intEqu2.y, and1.u2) annotation (Line(points={{-88,-70},{-80,-70},{-80,
+          -38},{98,-38}},                                       color={255,0,255}));
+  connect(bus.TCooRet, aSHPControl.TRetCoo) annotation (Line(
+      points={{0,140},{0,94},{-88,94},{-88,110},{-82,110}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(aSHPControl.TSet, bus.heatPumpBus.TSet) annotation (Line(points={{-58,110},
+          {0.1,110},{0.1,140.1}},                        color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(intEqu1.y, or2.u1) annotation (Line(points={{-88,-10},{-74,-10},{-74,
+          -26},{-38,-26},{-38,-20},{-32,-20}}, color={255,0,255}));
+  connect(intEqu2.y, or2.u2) annotation (Line(points={{-88,-70},{-80,-70},{-80,
+          -38},{-32,-38},{-32,-28}}, color={255,0,255}));
+  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,
+            -140},{160,140}}),                                  graphics={
           Rectangle(
           extent={{-100,100},{100,-100}},
           lineColor={0,0,0},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid),
         Text(
-          extent={{-150,20},{150,-20}},
+          extent={{-150,-100},{150,-140}},
           textString="%name",
           textColor={0,0,255})}),           Diagram(coordinateSystem(
-          preserveAspectRatio=false, extent={{-100,-140},{140,140}})));
+          preserveAspectRatio=false, extent={{-160,-140},{160,140}}), graphics
+        ={
+        Rectangle(
+          extent={{-154,82},{-6,-108}},
+          lineColor={28,108,200},
+          pattern=LinePattern.Dash),
+        Rectangle(
+          extent={{6,126},{76,-42}},
+          lineColor={238,46,47},
+          pattern=LinePattern.Dash),
+        Rectangle(
+          extent={{82,54},{130,-106}},
+          lineColor={0,140,72},
+          pattern=LinePattern.Dash),
+        Text(
+          extent={{-146,-108},{-8,-128}},
+          textColor={28,108,200},
+          textString="Identify components to enable based on
+operation mode signal"),
+        Text(
+          extent={{4,-12},{76,-96}},
+          textColor={238,46,47},
+          textString="Safe staging of
+cooling and heating
+components"),
+        Text(
+          extent={{66,-70},{154,-168}},
+          textColor={0,140,72},
+          textString="Enable connection valves
+from external energy loop
+to central heat recovery")}));
 end ExternalEnergy;

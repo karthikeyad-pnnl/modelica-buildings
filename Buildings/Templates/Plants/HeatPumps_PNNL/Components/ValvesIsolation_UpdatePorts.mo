@@ -281,7 +281,7 @@ model ValvesIsolation_UpdatePorts
   Buildings.Templates.Plants.HeatPumps.Interfaces.Bus bus
     "Plant control bus"
     annotation (Placement(transformation(extent={{-1894,40},{-1854,80}}),
-      iconTransformation(extent={{-1894,26},{-1854,66}})));
+      iconTransformation(extent={{-1900,40},{-1860,80}})));
   Buildings.Templates.Components.Actuators.Valve valHeaWatHpOutIso[nHp](
     redeclare each final package Medium=Medium,
     final dat=datValHeaWatHpOutIso,
@@ -551,7 +551,7 @@ equation
         preserveAspectRatio=false,
         extent={{-2080,-340},{-1660,60}}), graphics={
         Line(points={{1820,-508}}, color={0,0,0}), Rectangle(
-          extent={{-2078,58},{-1660,-338}},
+          extent={{-2080,60},{-1660,-338}},
           lineColor={28,108,200},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid),

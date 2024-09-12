@@ -10,3 +10,7 @@ ExternalEnergyLoop
 HeatPumpPlantPrimaryOnly
 ControlBoxTest
 ExternalEnergyLoopIntegration
+PrimaryOnlywLoads
+PrimaryOnlywLoads_debugging
+ExternalEnergyLoopIntegration_Buffalo
+ExternalEnergyLoopIntegration_PlantOnly

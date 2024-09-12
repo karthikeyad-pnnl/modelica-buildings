@@ -212,8 +212,8 @@ model IsolationValveAndHeatPumpGroupWW
     T=298.15,
     nPorts=2) "Boundary condition at HW supply"
     annotation (Placement(transformation(extent={{-296,116},{-276,136}})));
-  Controls.OpenLoop                                                      ctlHeaInl(final cfg
-      =datCtlHeaInl.cfg, final dat=datCtlHeaInl)
+  Controls.OpenLoop                                                      ctlHeaInl(final cfg=
+       datCtlHeaInl.cfg, final dat=datCtlHeaInl)
     "Plant controller"
     annotation (Placement(transformation(extent={{-48,194},{-68,214}})));
   Fluid.Sources.Boundary_pT retChiWat(

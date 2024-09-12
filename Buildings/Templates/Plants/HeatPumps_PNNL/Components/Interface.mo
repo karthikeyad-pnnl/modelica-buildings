@@ -162,7 +162,6 @@ package Interface
     Modelica.Fluid.Interfaces.FluidPorts_b ports_bChiWat[nHp](
       redeclare each final package Medium = MediumHeaWat,
       each m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0),
-
       each h_outflow(start=MediumHeaWat.h_default, nominal=MediumHeaWat.h_default))
       "CHW supply (from heat pumps)" annotation (Placement(transformation(
           extent={{-10,-40},{10,40}},
@@ -171,10 +170,10 @@ package Interface
           extent={{-10,-40},{10,40}},
           rotation=90,
           origin={-500,400})));
+
     Modelica.Fluid.Interfaces.FluidPorts_a ports_aChiWat[nHp](
       redeclare each final package Medium = MediumHeaWat,
       each m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0),
-
       each h_outflow(start=MediumHeaWat.h_default, nominal=MediumHeaWat.h_default))
       "CHW Return (To heat pumps)" annotation (Placement(transformation(
           extent={{-10,-40},{10,40}},
@@ -183,6 +182,7 @@ package Interface
           extent={{-10,-40},{10,40}},
           rotation=90,
           origin={500,400})));
+
     Modelica.Fluid.Interfaces.FluidPorts_b ports_bHotWat[nHp](
       redeclare each final package Medium = MediumSou,
       each m_flow(max=if allowFlowReversalSou then +Modelica.Constants.inf
@@ -190,7 +190,6 @@ package Interface
       each h_outflow(start=MediumSou.h_default, nominal=MediumSou.h_default))
       "HW Supply (from heat pumps)" annotation (Placement(
         iconVisible=typ == Buildings.Templates.Components.Types.HeatPump.WaterToWater,
-
         transformation(
           extent={{-10,-40},{10,40}},
           rotation=90,
@@ -199,6 +198,7 @@ package Interface
           extent={{-10,-40},{10,40}},
           rotation=90,
           origin={500,-398})));
+
     Modelica.Fluid.Interfaces.FluidPorts_a ports_aHotWat[nHp](
       redeclare each final package Medium = MediumSou,
       each m_flow(min=if allowFlowReversalSou then -Modelica.Constants.inf
@@ -206,7 +206,6 @@ package Interface
       each h_outflow(start=MediumSou.h_default, nominal=MediumSou.h_default))
       "HW Return (to heat pumps)" annotation (Placement(
         iconVisible=typ == Buildings.Templates.Components.Types.HeatPump.WaterToWater,
-
         transformation(
           extent={{-10,-40},{10,40}},
           rotation=90,
@@ -215,6 +214,7 @@ package Interface
           extent={{-10,-40},{10,40}},
           rotation=90,
           origin={-500,-400})));
+
     Buildings.Templates.Plants.HeatPumps.Interfaces.Bus bus
       "Plant control bus"
       annotation (Placement(transformation(extent={{-20,180},{20,220}}),

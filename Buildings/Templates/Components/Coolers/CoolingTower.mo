@@ -50,7 +50,7 @@ equation
   connect(sigCon.y, tow.y) annotation (Line(points={{-20,18},{-20,8},{-12,8}},
                color={0,0,127}));
   connect(busWea.TWetBul, tow.TAir) annotation (Line(
-      points={{-60,100},{-60,4},{-12,4}},
+      points={{-59.9,100.1},{-59.9,4},{-12,4}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
@@ -75,6 +75,8 @@ equation
       horizontalAlignment=TextAlignment.Left));
   connect(port_a, tow.port_a)
     annotation (Line(points={{-100,0},{-10,0}}, color={0,127,255}));
+  connect(tow.TLvg, bus.TLvg) annotation (Line(points={{11,-6},{16,-6},{16,68},
+          {0,68},{0,100}}, color={0,0,127}));
   annotation (
   defaultComponentName="coo",
   Icon(coordinateSystem(preserveAspectRatio=false), graphics={
