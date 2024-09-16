@@ -407,12 +407,6 @@ model ExternalEnergyLoopIntegration_PlantOnly "Control Box Test"
     dp2_nominal=5000,
     eps=0.9)
     annotation (Placement(transformation(extent={{76,20},{96,40}})));
-  Fluid.Sources.Boundary_pT bou2(redeclare package Medium = Media.Water, nPorts=
-       1)
-    annotation (Placement(transformation(extent={{-196,108},{-176,128}})));
-  Fluid.Sources.Boundary_pT bou3(redeclare package Medium = Media.Water, nPorts=
-       1)
-    annotation (Placement(transformation(extent={{136,38},{116,58}})));
   Buildings.Templates.Components.Sensors.Temperature TRetHeaCon(redeclare
       package Medium = Buildings.Media.Water, m_flow_nominal=datHpAwNrv.mHeaWatHp_flow_nominal)
     annotation (Placement(transformation(
@@ -598,9 +592,6 @@ equation
           {240,100}},                  color={0,127,255}));
   connect(volumeFlowRate1.port_b, valve3.port_a) annotation (Line(points={{260,100},
           {270,100}},                      color={0,127,255}));
-  connect(bou3.ports[1], hex1.port_b1) annotation (Line(points={{116,48},{108,
-          48},{108,36},{96,36}},
-                             color={0,127,255}));
   connect(valve4.port_a, TRetHea.port_b) annotation (Line(points={{-156,74},{-172,
           74},{-172,98},{-178,98}},        color={0,127,255}));
   connect(valve4.port_b, TRetHeaCon.port_a) annotation (Line(points={{-136,74},{
@@ -621,8 +612,6 @@ equation
   connect(volumeFlowRate3.port_b, hex.port_a1) annotation (Line(points={{-22,140},
           {-22,118},{-130,118},{-130,110},{-136,110}},                  color={
           0,127,255}));
-  connect(bou2.ports[1], hex.port_b1) annotation (Line(points={{-176,118},{-160,
-          118},{-160,110},{-156,110}}, color={0,127,255}));
   connect(volumeFlowRateHeaPri.port_b, TSupHea.port_b)
     annotation (Line(points={{-198,24},{-212,24}}, color={0,127,255}));
   connect(volumeFlowRateHeaPri.port_a, rou2.port_a) annotation (Line(points={{-178,24},

@@ -240,6 +240,12 @@ model ExternalEnergyLoop
         origin={128,10})));
   Modelica.Blocks.Routing.RealPassThrough realPassThrough1
     annotation (Placement(transformation(extent={{-10,30},{10,50}})));
+  Fluid.Sources.Boundary_pT bou2(redeclare package Medium = Media.Water, nPorts
+      =1)
+    annotation (Placement(transformation(extent={{-142,30},{-122,50}})));
+  Fluid.Sources.Boundary_pT bou3(redeclare package Medium = Media.Water, nPorts
+      =1)
+    annotation (Placement(transformation(extent={{120,50},{100,70}})));
 equation
   connect(valve.port_b, pum.port_a)
     annotation (Line(points={{-100,-40},{-100,20},{-90,20}},
@@ -395,6 +401,10 @@ equation
       index=1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
+  connect(bou2.ports[1], pum.port_a) annotation (Line(points={{-122,40},{-108,
+          40},{-108,20},{-90,20}}, color={0,127,255}));
+  connect(bou3.ports[1], pum1.port_a) annotation (Line(points={{100,60},{84,60},
+          {84,34},{54,34},{54,20},{62,20}}, color={0,127,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}}), graphics={Rectangle(
           extent={{-100,100},{100,-100}},
