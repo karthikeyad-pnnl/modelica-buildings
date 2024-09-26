@@ -165,6 +165,14 @@ block OpenLoopWithHeatRecoveryUnitController
     annotation (Placement(transformation(extent={{180,300},{200,320}})));
   HeatingModeTemperatureSetpoint heatingModeTemperatureSetpoint
     annotation (Placement(transformation(extent={{-32,170},{-12,190}})));
+  HHWTankVenting hHWTankVenting
+    annotation (Placement(transformation(extent={{60,200},{80,220}})));
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booScaRep1
+    annotation (Placement(transformation(extent={{140,40},{160,60}})));
+  Buildings.Controls.OBC.CDL.Logical.Or or2
+    annotation (Placement(transformation(extent={{100,90},{120,110}})));
+  Buildings.Controls.OBC.CDL.Logical.Or or1
+    annotation (Placement(transformation(extent={{90,-20},{110,0}})));
 equation
   /* Control point connection - start */
   connect(y1PumHeaWatPri.y[1], busPumHeaWatPri.y1);
@@ -202,8 +210,8 @@ equation
 // Heat Recovery Unit Control Output Connection
   connect(and2.y, busHp[1].y1);
   //connect(realPassThrough.y, busHp[1].TSet);
-    connect(heatRecoveryUnitController.yVal, busValHeaWatHpInlIso[1].y1);
-  connect(heatRecoveryUnitController.yVal, busValHeaWatHpOutIso[1].y1);
+    connect(or1.y, busValHeaWatHpInlIso[1].y1);
+  connect(or1.y, busValHeaWatHpOutIso[1].y1);
   connect(heatRecoveryUnitController.yVal, busValChiWatHpOutIso[1].y1);
     connect(heatRecoveryUnitController.yVal, busValChiWatHpInlIso[1].y1);
  // connect(heatRecoveryUnitController.yPum, bus_HeaPum.y1);
@@ -220,13 +228,6 @@ equation
       string="%second",
       index=1,
       extent={{-3,-6},{-3,-6}},
-      horizontalAlignment=TextAlignment.Right));
-  connect(booScaRep.y[1], bus_HeaPum.y1[1]) annotation (Line(points={{102,30},{
-          136,30},{136,-316},{128,-316},{128,-404},{-164,-404},{-164,-372}},
-        color={255,0,255}), Text(
-      string="%second",
-      index=1,
-      extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(heatRecoveryUnitController.yPumSpeCoo, bus_CooPum.y) annotation (Line(
         points={{51,-18.75},{51,-16},{70,-16},{70,-358}}, color={0,0,127}),
@@ -270,8 +271,8 @@ equation
   connect(integerPassThrough.y, heatingModeTemperatureSetpoint.uOpeMod)
     annotation (Line(points={{-169,90},{-169,88},{-84,88},{-84,184},{-34,184}},
         color={255,127,0}));
-  connect(realPassThrough.y, heatingModeTemperatureSetpoint.uSetHP) annotation
-    (Line(points={{-119,68},{-84,68},{-84,84},{-80,84},{-80,176},{-34,176}},
+  connect(realPassThrough.y, heatingModeTemperatureSetpoint.uSetHP) annotation (
+     Line(points={{-119,68},{-84,68},{-84,84},{-80,84},{-80,176},{-34,176}},
         color={0,0,127}));
   connect(heatingModeTemperatureSetpoint.TSetHP, reaScaRep.u) annotation (Line(
         points={{-10,180},{0,180},{0,230},{-36,230}}, color={0,0,127}));
@@ -281,6 +282,30 @@ equation
       thickness=0.5));
   connect(heatingModeTemperatureSetpoint.TSetHP, les.u1) annotation (Line(
         points={{-10,180},{0,180},{0,330},{138,330}}, color={0,0,127}));
+  connect(integerPassThrough.y, hHWTankVenting.uOpeMod) annotation (Line(points=
+         {{-169,90},{-169,88},{-84,88},{-84,184},{-44,184},{-44,160},{48,160},{48,
+          214},{58,214}}, color={255,127,0}));
+  connect(bus.THotWatTan, hHWTankVenting.THotWatTan) annotation (Line(
+      points={{-260,0},{-72,0},{-72,136},{-68,136},{-68,164},{44,164},{44,206},{
+          58,206}},
+      color={255,204,51},
+      thickness=0.5));
+  connect(or2.y, booScaRep1.u) annotation (Line(points={{122,100},{136,100},{136,
+          68},{124,68},{124,50},{138,50}}, color={255,0,255}));
+  connect(heatRecoveryUnitController.yPum, or2.u2) annotation (Line(points={{51,
+          30.25},{51,28},{68,28},{68,92},{98,92}}, color={255,0,255}));
+  connect(hHWTankVenting.yVen, or2.u1) annotation (Line(points={{82,210},{96,210},
+          {96,116},{84,116},{84,100},{98,100}}, color={255,0,255}));
+  connect(booScaRep1.y[1], bus_HeaPum.y1[1]) annotation (Line(points={{162,50},{
+          172,50},{172,-412},{-164,-412},{-164,-372}}, color={255,0,255}));
+  connect(heatRecoveryUnitController.yVal, or1.u1) annotation (Line(points={{51,
+          54.75},{51,52},{72,52},{72,-10},{88,-10}}, color={255,0,255}));
+  connect(hHWTankVenting.yVen, or1.u2) annotation (Line(points={{82,210},{96,
+          210},{96,116},{84,116},{84,48},{68,48},{68,-18},{88,-18}}, color={255,
+          0,255}));
+  connect(hHWTankVenting.yVen, bus.uVen) annotation (Line(points={{82,210},{96,
+          210},{96,116},{84,116},{84,48},{68,48},{68,0},{-260,0}}, color={255,0,
+          255}));
   annotation (
     defaultComponentName="ctl", Documentation(info="<html>
 <p>

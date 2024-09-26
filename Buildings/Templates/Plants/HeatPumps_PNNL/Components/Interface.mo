@@ -356,6 +356,8 @@ group models.
     Buildings.Templates.Components.Interfaces.Bus condenserPumpBus;
     Buildings.Templates.Components.Interfaces.Bus tempControlValveBus;
     Buildings.Templates.Components.Interfaces.Bus heatExchBus;
+    Buildings.Templates.Components.Interfaces.Bus extEneLooHeaExc;
+    Buildings.Templates.Components.Interfaces.Bus extEneLooHeaExcByp;
     annotation (
       defaultComponentName="bus", Documentation(info="<html>
 <p>
@@ -377,6 +379,8 @@ all control signals of the component models.
     Buildings.Templates.Components.Interfaces.Bus heatPumpBus;
     Buildings.Templates.Components.Interfaces.Bus wseInletValveBus;
     Buildings.Templates.Components.Interfaces.Bus wseOutletValveBus;
+      Buildings.Templates.Components.Interfaces.Bus extEneLooCooExc;
+    Buildings.Templates.Components.Interfaces.Bus extEneLooCooExcByp;
     annotation (
       defaultComponentName="bus", Documentation(info="<html>
 <p>

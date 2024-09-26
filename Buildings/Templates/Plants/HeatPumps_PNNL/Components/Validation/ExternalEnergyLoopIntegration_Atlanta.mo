@@ -330,10 +330,16 @@ model ExternalEnergyLoopIntegration_Atlanta "Control Box Test"
   Buildings.Templates.Plants.HeatPumps_PNNL.Components.ExternalEnergyLoop
     externalEnergyLoop(datHpAwNrv(mHeaWat_flow_nominal=23, capHea_nominal=
           datHpAwNrv.capHeaHp_nominal), datCoolingTowerWHE(
-        CoolingCapacity_nominal=datHpAwNrv.capCooHp_nominal))
+        CoolingCapacity_nominal=2*datHpAwNrv.capCooHp_nominal))
     annotation (Placement(transformation(extent={{-2,210},{18,230}})));
-  Controls.ExternalEnergy         externalEnergyOpenLoop(coolingTowerControl(
-        hys(uLow=273.15 + 2, uHigh=273.15 + 4)))
+  Controls.ExternalEnergy externalEnergyOpenLoop(coolingTowerControl_v2_1(hys(
+          uLow=273.15 + 2, uHigh=273.15 + 4), conPID1(
+        controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
+                                                      k=0.2,
+        Ti=150,
+        Td=1e-3),
+      addPar(p=-4),
+      con4(k=273.15 + 13.5)))
     annotation (Placement(transformation(extent={{48,240},{68,260}})));
   BoundaryConditions.WeatherData.ReaderTMY3           weaDat(filNam=
         Modelica.Utilities.Files.loadResource(
@@ -362,7 +368,7 @@ model ExternalEnergyLoopIntegration_Atlanta "Control Box Test"
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant minFloHea(k=0.1*datHpAwNrv.mHeaWatHp_flow_nominal
         /1000) "Pump speed command"
     annotation (Placement(transformation(extent={{-412,164},{-392,184}})));
-  Buildings.Controls.OBC.CDL.Reals.PID conPID(k=0.2, Ti=150)
+  Buildings.Controls.OBC.CDL.Reals.PID conPID(k=0.2, Ti=1e4)
     annotation (Placement(transformation(extent={{-474,100},{-454,120}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(k=273.15 + 60)
     annotation (Placement(transformation(extent={{-514,100},{-494,120}})));
@@ -420,8 +426,10 @@ model ExternalEnergyLoopIntegration_Atlanta "Control Box Test"
       warnAboutOnePortConnection=false)
     annotation (Placement(transformation(extent={{340,40},{360,60}})));
   Buildings.Controls.OBC.CDL.Reals.PID conPID1(
-    k=0.2,
-    Ti=150,                                            reverseActing=false)
+    controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
+    k=0.1,
+    Ti=6000,
+    Td=0.001,                                          reverseActing=false)
     annotation (Placement(transformation(extent={{378,80},{398,100}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant con2(k=273.15 + 12.7)
     annotation (Placement(transformation(extent={{348,80},{368,100}})));
@@ -517,7 +525,7 @@ model ExternalEnergyLoopIntegration_Atlanta "Control Box Test"
         origin={-70,100})));
   Buildings.Templates.Components.Sensors.Temperature TRetCooCon(redeclare
       package Medium = Buildings.Media.Water, m_flow_nominal=datHpAwNrv.mChiWatHp_flow_nominal)
-    annotation (Placement(transformation(extent={{60,14},{40,34}})));
+    annotation (Placement(transformation(extent={{56,14},{36,34}})));
   Buildings.Templates.Components.Sensors.VolumeFlowRate volumeFlowRate(
     redeclare package Medium = Buildings.Media.Water,
     m_flow_nominal=datHpAwNrv.mHeaWatHp_flow_nominal,
@@ -536,7 +544,7 @@ model ExternalEnergyLoopIntegration_Atlanta "Control Box Test"
         origin={250,100})));
   Buildings.Templates.Components.Actuators.Valve valve4(
     redeclare package Medium = Buildings.Media.Water,
-    typ=Buildings.Templates.Components.Types.Valve.TwoWayTwoPosition,
+    typ=Buildings.Templates.Components.Types.Valve.TwoWayModulating,
     dat(
       m_flow_nominal=datHpAwNrv.mHeaWatHp_flow_nominal,
       dpValve_nominal=50,
@@ -547,7 +555,7 @@ model ExternalEnergyLoopIntegration_Atlanta "Control Box Test"
         origin={-146,74})));
   Buildings.Templates.Components.Actuators.Valve valve5(
     redeclare package Medium = Buildings.Media.Water,
-    typ=Buildings.Templates.Components.Types.Valve.TwoWayTwoPosition,
+    typ=Buildings.Templates.Components.Types.Valve.TwoWayModulating,
     dat(
       m_flow_nominal=datHpAwNrv.mChiWatHp_flow_nominal,
       dpValve_nominal=50,
@@ -562,12 +570,6 @@ model ExternalEnergyLoopIntegration_Atlanta "Control Box Test"
     annotation (Placement(transformation(extent={{60,190},{80,210}})));
   Buildings.Controls.OBC.CDL.Logical.Not not1
     annotation (Placement(transformation(extent={{140,210},{160,230}})));
-  Buildings.Templates.Components.Interfaces.Bus bus_CooHEBypVal
-    "Pump control bus" annotation (Placement(transformation(extent={{92,-50},{132,
-            -10}}),    iconTransformation(extent={{-318,-118},{-278,-78}})));
-  Buildings.Templates.Components.Interfaces.Bus bus_HeaHEBypVal
-    "Pump control bus" annotation (Placement(transformation(extent={{-186,170},{
-            -146,210}}),  iconTransformation(extent={{-318,-118},{-278,-78}})));
   Buildings.Controls.OBC.CDL.Integers.Equal intEqu1
     annotation (Placement(transformation(extent={{-228,220},{-208,240}})));
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt1(k=3)
@@ -627,13 +629,37 @@ model ExternalEnergyLoopIntegration_Atlanta "Control Box Test"
         origin={154,100})));
   Buildings.Controls.OBC.CDL.Reals.Switch swi
     annotation (Placement(transformation(extent={{-550,0},{-530,20}})));
-  Buildings.Controls.OBC.CDL.Reals.Switch swi1
+  Buildings.Controls.OBC.CDL.Reals.Max    max1
     annotation (Placement(transformation(extent={{-400,110},{-380,130}})));
-  Controls.HeatingCoilValveOverride heatingCoilValveOverride
+  Controls.HeatingCoilValveOverride heatingCoilValveOverride(conPID1(Ti=900))
     annotation (Placement(transformation(extent={{-540,160},{-520,180}})));
   Fluid.Sensors.Temperature senTem2(redeclare package Medium = Media.Water,
       warnAboutOnePortConnection=false)
     annotation (Placement(transformation(extent={{-222,34},{-202,54}})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con1(k=0)
+    annotation (Placement(transformation(extent={{-600,0},{-580,20}})));
+  Buildings.Templates.Components.Actuators.Valve valve6(
+    redeclare package Medium = Buildings.Media.Water,
+    typ=Buildings.Templates.Components.Types.Valve.TwoWayModulating,
+    dat(
+      m_flow_nominal=datHpAwNrv.mHeaWatHp_flow_nominal,
+      dpValve_nominal=50,
+      dpFixed_nominal=0))
+    annotation (Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=0,
+        origin={-112,100})));
+  Buildings.Templates.Components.Actuators.Valve valve7(
+    redeclare package Medium = Buildings.Media.Water,
+    typ=Buildings.Templates.Components.Types.Valve.TwoWayModulating,
+    dat(
+      m_flow_nominal=datHpAwNrv.mChiWatHp_flow_nominal,
+      dpValve_nominal=50,
+      dpFixed_nominal=0))
+    annotation (Placement(transformation(
+        extent={{10,-10},{-10,10}},
+        rotation=0,
+        origin={70,16})));
 equation
   connect(ctlHeaInl.bus, valIsoHeaInl.bus) annotation (Line(
       points={{-68,-7.6},{-68,-6},{-24,-6},{-24,60},{-2,60}},
@@ -724,7 +750,7 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
   connect(pum1.ports_b, rou2.ports_b) annotation (Line(points={{-124,24},{-140,24}},
                           color={0,127,255}));
   connect(externalEnergyOpenLoop.bus,bus)  annotation (Line(
-      points={{58,257.143},{58,266},{38,266},{38,290}},
+      points={{58,260},{58,266},{38,266},{38,290}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%second",
@@ -746,8 +772,9 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
   connect(preHeaFlo.port, vol.heatPort)
     annotation (Line(points={{-388,40},{-376,40},{-376,70},{-370,70}},
                                                    color={191,0,0}));
-  connect(senTem.T,conPID. u_m) annotation (Line(points={{-423,70},{-464,70},{
+  connect(senTem.T,conPID.u_m) annotation (Line(points={{-423,70},{-464,70},{
           -464,98}},                color={0,0,127}));
+  connect(senTem.T,bus_sensor.THotWatTan);
   connect(con.y,conPID. u_s)
     annotation (Line(points={{-492,110},{-476,110}},
                                                    color={0,0,127}));
@@ -817,8 +844,7 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
           {408,160},{408,146},{416,146}},
                                     color={255,127,0}));
   connect(extEneOpeMod.yOpeMod, bus.uOpeMod)
-    annotation (Line(points={{-20,237.692},{38,237.692},{38,290}},
-                                                           color={255,127,0}));
+    annotation (Line(points={{-18,240},{38,240},{38,290}}, color={255,127,0}));
   connect(addInt.y, ena.nReqPla) annotation (Line(points={{-420,-4},{-414,-4},{
           -414,-20},{-528,-20},{-528,-80},{-482,-80}},
                             color={255,127,0}));
@@ -856,16 +882,13 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
                              color={0,127,255}));
   connect(hex1.port_b1, externalEnergyLoop.portEva_a) annotation (Line(points={{96,36},
           {102,36},{102,162},{11,162},{11,210}},        color={0,127,255}));
-  connect(hex.port_b2, TRetHeaCon.port_a) annotation (Line(points={{-136,98},{-126,
-          98},{-126,100},{-80,100}},   color={0,127,255}));
   connect(TRetHeaCon.port_b, valIsoHeaInl.port_aHeaWat) annotation (Line(points={{-60,100},
           {-48,100},{-48,54.54},{-22,54.54}},                             color=
          {0,127,255}));
-  connect(hex1.port_b2, TRetCooCon.port_a)
-    annotation (Line(points={{76,24},{60,24}}, color={0,127,255}));
-  connect(TRetCooCon.port_b, valIsoHeaInl.port_aChiWat) annotation (Line(points={{40,24},
+  connect(TRetCooCon.port_b, valIsoHeaInl.port_aChiWat) annotation (Line(points={{36,24},
           {34,24},{34,44.88},{20,44.88}},         color={0,127,255}));
   connect(TRetHeaCon.y, bus.coolingTowerSystemBus.TRetHea);
+  connect(TRetHea.y, heatingCoilValveOverride.TRetHea);
   connect(TRetCooCon.y, bus.TRetCoo);
   connect(volumeFlowRate.port_b, valve2.port_b) annotation (Line(points={{-326,24},
           {-338,24}},                         color={0,127,255}));
@@ -877,12 +900,11 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
           {240,100}},                  color={0,127,255}));
   connect(volumeFlowRate1.port_b, valve3.port_a) annotation (Line(points={{260,100},
           {270,100}},                      color={0,127,255}));
-  connect(reaToInt.y, extEneOpeMod.uReqHea) annotation (Line(points={{-452,10},
-          {-342,10},{-342,8},{-310,8},{-310,108},{-288,108},{-288,242.308},{
-          -41.8182,242.308}},
+  connect(reaToInt.y, extEneOpeMod.uReqHea) annotation (Line(points={{-452,10},{
+          -342,10},{-342,8},{-310,8},{-310,108},{-288,108},{-288,246},{-42,246}},
         color={255,127,0}));
   connect(reaToInt1.y, extEneOpeMod.uReqCoo) annotation (Line(points={{360,160},
-          {360,186},{-48,186},{-48,239.231},{-41.8182,239.231}},
+          {360,186},{-48,186},{-48,242},{-42,242}},
                                          color={255,127,0}));
   connect(bou3.ports[1], hex1.port_b1) annotation (Line(points={{70,70},{104,70},
           {104,36},{96,36}}, color={0,127,255}));
@@ -893,39 +915,25 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
           255}));
   connect(valve5.port_a, TRetCoo.port_b) annotation (Line(points={{96,-12},{102,
           -12},{102,24},{124,24}}, color={0,127,255}));
-  connect(valve5.port_b, TRetCooCon.port_a) annotation (Line(points={{76,-12},{70,
-          -12},{70,24},{60,24}},    color={0,127,255}));
-  connect(extEneOpeMod.yOpeMod, intEqu.u1) annotation (Line(points={{-20,
-          237.692},{38,237.692},{38,220},{98,220}},
-                                      color={255,127,0}));
+  connect(valve5.port_b, TRetCooCon.port_a) annotation (Line(points={{76,-12},{62,
+          -12},{62,24},{56,24}},    color={0,127,255}));
+  connect(extEneOpeMod.yOpeMod, intEqu.u1) annotation (Line(points={{-18,240},{38,
+          240},{38,220},{98,220}},    color={255,127,0}));
   connect(conInt.y, intEqu.u2)
     annotation (Line(points={{82,200},{92,200},{92,212},{98,212}},
                                                           color={255,127,0}));
   connect(not1.u, intEqu.y)
     annotation (Line(points={{138,220},{122,220}},
                                                  color={255,0,255}));
-  connect(bus_CooHEBypVal, valve5.bus) annotation (Line(
-      points={{112,-30},{112,-2},{86,-2}},
-      color={255,204,51},
-      thickness=0.5));
-  connect(not1.y, bus_CooHEBypVal.y1) annotation (Line(points={{162,220},{168,
-          220},{168,156},{112,156},{112,-30}},                 color={255,0,255}));
-  connect(valve4.bus, bus_HeaHEBypVal) annotation (Line(
-      points={{-146,84},{-146,94},{-166,94},{-166,190}},
-      color={255,204,51},
-      thickness=0.5));
   connect(intEqu1.y, not2.u)
     annotation (Line(points={{-206,230},{-200,230}}, color={255,0,255}));
   connect(conInt1.y, intEqu1.u2) annotation (Line(points={{-256,220},{-256,222},
           {-230,222}}, color={255,127,0}));
-  connect(extEneOpeMod.yOpeMod, intEqu1.u1) annotation (Line(points={{-20,
-          237.692},{-14,237.692},{-14,252},{-194,252},{-194,244},{-230,244},{
-          -230,230}},
+  connect(extEneOpeMod.yOpeMod, intEqu1.u1) annotation (Line(points={{-18,240},{
+          -14,240},{-14,252},{-194,252},{-194,244},{-230,244},{-230,230}},
                  color={255,127,0}));
-  connect(not2.y, bus_HeaHEBypVal.y1) annotation (Line(points={{-176,230},{-166,
-          230},{-166,190}},            color={255,0,255}));
-  connect(extEneOpeMod.yOpeMod, bus_sensor.uOpeMod) annotation (Line(points={{-20,
-          237.692},{-2,237.692},{-2,-42}},        color={255,127,0}));
+  connect(extEneOpeMod.yOpeMod, bus_sensor.uOpeMod) annotation (Line(points={{-18,240},
+          {-2,240},{-2,-42}},                     color={255,127,0}));
   connect(volumeFlowRate2.port_a, externalEnergyLoop.portEva_b) annotation (
       Line(points={{14,160},{14,193},{15,193},{15,210}},
                  color={0,127,255}));
@@ -986,54 +994,78 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
           {144,100}},                                        color={0,127,255}));
   connect(volumeFlowRateCooPri.port_b, TSupCoo.port_a) annotation (Line(points={{164,100},
           {174,100}},                               color={0,127,255}));
-  connect(resdPSetCoo.dpSet[1], dPSetCoo.u) annotation (Line(points={{440,146},
-          {440,140},{456,140}},    color={0,0,127}));
-  connect(resdPSetHea.dpSet[1], dPSetHea.u) annotation (Line(points={{-350,-54},
-          {-330,-54},{-330,-66},{-322,-66}},                       color={0,0,
-          127}));
-  connect(resTSetCoo.TSupSet, TSetHP.u) annotation (Line(points={{-384,-38},{
-          -328,-38},{-328,-30},{-320,-30}},                           color={0,
-          0,127}));
   connect(swi.u3, bus_HeaCoiVal.y_actual) annotation (Line(points={{-552,2},{-568,
           2},{-568,140},{-350,140},{-350,120}}, color={0,0,127}), Text(
       string="%second",
       index=1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
-  connect(heatingCoilValveOverride.yHeaCoiValOve, swi1.u2) annotation (Line(
-        points={{-518,174},{-420,174},{-420,120},{-402,120}}, color={255,0,255}));
   connect(heatingCoilValveOverride.yHeaCoiValOve, swi.u2) annotation (Line(
         points={{-518,174},{-500,174},{-500,146},{-528,146},{-528,28},{-560,28},
           {-560,10},{-552,10}}, color={255,0,255}));
-  connect(heatingCoilValveOverride.yHeaCoiVal, swi.u1) annotation (Line(points={
-          {-518,166},{-512,166},{-512,152},{-536,152},{-536,32},{-564,32},{-564,
-          18},{-552,18}}, color={0,0,127}));
-  connect(conPID.y, swi1.u3) annotation (Line(points={{-452,110},{-420,110},{-420,
-          112},{-402,112}}, color={0,0,127}));
-  connect(heatingCoilValveOverride.yHeaCoiVal, swi1.u1) annotation (Line(points=
-         {{-518,166},{-512,166},{-512,128},{-402,128}}, color={0,0,127}));
+  connect(heatingCoilValveOverride.yHeaCoiVal,max1. u1) annotation (Line(points={{-518,
+          166},{-512,166},{-512,126},{-402,126}},       color={0,0,127}));
   connect(TSupHea.port_b, senTem2.port)
     annotation (Line(points={{-212,24},{-212,34}}, color={0,127,255}));
-  connect(senTem2.T, heatingCoilValveOverride.TSupHea) annotation (Line(points={
-          {-205,44},{-230,44},{-230,84},{-552,84},{-552,166},{-542,166}}, color=
+  connect(senTem2.T, heatingCoilValveOverride.TSupHea) annotation (Line(points={{-205,44},
+          {-230,44},{-230,84},{-552,84},{-552,168},{-542,168}},           color=
          {0,0,127}));
-  connect(bus.coolingTowerSystemBus.TOut, heatingCoilValveOverride.TOut)
-    annotation (Line(
-      points={{38.1,290.1},{-552,290.1},{-552,174},{-542,174}},
-      color={255,204,51},
-      thickness=0.5), Text(
-      string="%first",
-      index=-1,
-      extent={{6,3},{6,3}},
-      horizontalAlignment=TextAlignment.Left));
   connect(swi.y, gai.u)
     annotation (Line(points={{-528,10},{-514,10}}, color={0,0,127}));
-  connect(swi1.y, bus_HeaCoiVal.y) annotation (Line(points={{-378,120},{-350,120}},
+  connect(max1.y, bus_HeaCoiVal.y) annotation (Line(points={{-378,120},{-350,120}},
         color={0,0,127}), Text(
       string="%second",
       index=1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
+  connect(bus_sensor.uVen, heatingCoilValveOverride.uVen) annotation (Line(
+      points={{-2,-42},{-228,-42},{-228,-4},{-328,-4},{-328,96},{-424,96},{-424,
+          136},{-542,136},{-542,164}},
+      color={255,204,51},
+      thickness=0.5));
+  connect(con1.y, swi.u1) annotation (Line(points={{-578,10},{-564,10},{-564,18},
+          {-552,18}}, color={0,0,127}));
+  connect(conPID.y, max1.u2) annotation (Line(points={{-452,110},{-452,108},{-412,
+          108},{-412,100},{-402,100},{-402,114}}, color={0,0,127}));
+  connect(hex.port_b2, valve6.port_a) annotation (Line(points={{-136,98},{-129,98},
+          {-129,100},{-122,100}}, color={0,127,255}));
+  connect(valve6.port_b, TRetHeaCon.port_a)
+    annotation (Line(points={{-102,100},{-80,100}}, color={0,127,255}));
+  connect(bus.coolingTowerSystemBus.extEneLooHeaExc, valve6.bus) annotation (
+      Line(
+      points={{38.1,290.1},{36,290.1},{36,176},{-80,176},{-80,120},{-112,120},{-112,
+          110}},
+      color={255,204,51},
+      thickness=0.5));
+  connect(bus.coolingTowerSystemBus.extEneLooHeaExcByp, valve4.bus) annotation (
+     Line(
+      points={{38.1,290.1},{36,290.1},{36,168},{-52,168},{-52,80},{-128,80},{-128,
+          84},{-146,84}},
+      color={255,204,51},
+      thickness=0.5));
+  connect(hex1.port_b2, valve7.port_a)
+    annotation (Line(points={{76,24},{76,16},{80,16}}, color={0,127,255}));
+  connect(valve7.port_b, TRetCooCon.port_a)
+    annotation (Line(points={{60,16},{56,16},{56,24}}, color={0,127,255}));
+  connect(bus.extEneLooCooExc, valve7.bus) annotation (Line(
+      points={{38.1,290.1},{36,290.1},{36,144},{76,144},{76,48},{70,48},{70,26}},
+      color={255,204,51},
+      thickness=0.5));
+
+  connect(bus.extEneLooCooExcByp, valve5.bus) annotation (Line(
+      points={{38.1,290.1},{36,290.1},{36,148},{80,148},{80,80},{112,80},{112,-2},
+          {86,-2}},
+      color={255,204,51},
+      thickness=0.5));
+  connect(conPID.y, heatingCoilValveOverride.uHeaPID) annotation (Line(points={{
+          -452,110},{-452,108},{-440,108},{-440,148},{-556,148},{-556,172},{-542,
+          172}}, color={0,0,127}));
+  connect(condPSet.y, dPSetHea.u) annotation (Line(points={{-348,-100},{-332,
+          -100},{-332,-66},{-322,-66}}, color={0,0,127}));
+  connect(conTSetHP.y, TSetHP.u) annotation (Line(points={{-348,-140},{-332,
+          -140},{-332,-104},{-336,-104},{-336,-30},{-320,-30}}, color={0,0,127}));
+  connect(condPSet1.y, dPSetCoo.u) annotation (Line(points={{440,170},{440,168},
+          {456,168},{456,140}}, color={0,0,127}));
   annotation (
     Diagram(
       coordinateSystem(
@@ -1043,7 +1075,8 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
         "modelica://Buildings/Resources/Scripts/Dymola/Templates/Plants/HeatPumps/Components/Validation/HeatPumpGroupAirToWater.mos"
         "Simulate and plot"),
     experiment(
-      StopTime=2592000,
+      StartTime=23587200,
+      StopTime=26179200,
       Interval=60,
       Tolerance=1e-06,
       __Dymola_Algorithm="Cvode"),

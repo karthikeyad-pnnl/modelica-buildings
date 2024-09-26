@@ -1,19 +1,5 @@
 within Buildings.Templates.Plants.HeatPumps_PNNL.Components.Controls;
 block HeatRecoveryUnitController
-  Buildings.Controls.OBC.CDL.Reals.Greater gre
-    annotation (Placement(transformation(extent={{-60,40},{-40,60}})));
-  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(delayTime=300)
-    annotation (Placement(transformation(extent={{6,40},{26,60}})));
-  Buildings.Controls.OBC.CDL.Logical.Latch lat
-    annotation (Placement(transformation(extent={{40,40},{60,60}})));
-  Buildings.Controls.OBC.CDL.Reals.Less les
-    annotation (Placement(transformation(extent={{-60,-20},{-40,0}})));
-  Buildings.Controls.OBC.CDL.Logical.Or or2
-    annotation (Placement(transformation(extent={{-30,20},{-10,40}})));
-  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel1(delayTime=300)
-    annotation (Placement(transformation(extent={{40,10},{60,30}})));
-  Buildings.Controls.OBC.CDL.Logical.Not not1
-    annotation (Placement(transformation(extent={{8,10},{28,30}})));
   Buildings.Templates.Plants.Controls.StagingRotation.EventSequencing seqEve(
     have_heaWat=true,
     have_chiWat=false,
@@ -97,37 +83,9 @@ block HeatRecoveryUnitController
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uDpCooSet annotation (
       Placement(transformation(extent={{-140,-280},{-100,-240}}),
         iconTransformation(extent={{-140,-240},{-100,-200}})));
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant yPumChiWatPriHdr1(k=5000)
-    "Headered primary CHW pump speed signal"
-    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
-        rotation=0,
-        origin={-30,-80})));
 equation
-  connect(truDel.y, lat.u)
-    annotation (Line(points={{28,50},{38,50}}, color={255,0,255}));
-  connect(gre.y, or2.u1) annotation (Line(points={{-38,50},{-32,50},{-32,44},{-34,
-          44},{-34,36},{-38,36},{-38,30},{-32,30}}, color={255,0,255}));
-  connect(les.y, or2.u2) annotation (Line(points={{-38,-10},{-32,-10},{-32,22}},
-                color={255,0,255}));
-  connect(or2.y, truDel.u) annotation (Line(points={{-8,30},{-2,30},{-2,50},{4,50}},
-        color={255,0,255}));
-  connect(truDel1.u, not1.y)
-    annotation (Line(points={{38,20},{30,20}}, color={255,0,255}));
-  connect(or2.y, not1.u) annotation (Line(points={{-8,30},{-2,30},{-2,20},{6,20}},
-        color={255,0,255}));
-  connect(truDel1.y, lat.clr) annotation (Line(points={{62,20},{64,20},{64,36},
-          {34,36},{34,44},{38,44}},
-                   color={255,0,255}));
   connect(or1.y, seqEve.u1PumHeaWatPri_actual)
     annotation (Line(points={{62,-10},{72,-10},{72,34}}, color={255,0,255}));
-  connect(TSupCoo, gre.u1) annotation (Line(points={{-120,100},{-68,100},{-68,
-          50},{-62,50}}, color={0,0,127}));
-  connect(TSupCooSet, gre.u2) annotation (Line(points={{-120,60},{-68,60},{-68,
-          42},{-62,42}}, color={0,0,127}));
-  connect(TSupHea, les.u1) annotation (Line(points={{-120,20},{-70,20},{-70,-10},
-          {-62,-10}}, color={0,0,127}));
-  connect(TSupHeaSet, les.u2) annotation (Line(points={{-120,-20},{-70,-20},{
-          -70,-18},{-62,-18}}, color={0,0,127}));
   connect(uHeaPumPro, or1.u1) annotation (Line(points={{-120,-60},{20,-60},{20,
           -10},{38,-10}}, color={255,0,255}));
   connect(uCooPumPro, or1.u2) annotation (Line(points={{-120,-100},{30,-100},{

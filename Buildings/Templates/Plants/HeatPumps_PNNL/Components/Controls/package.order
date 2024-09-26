@@ -13,3 +13,6 @@ HeatRecoveryUnitController_wBus
 ExternalEnergyLoopOperationMode
 ASHPControl
 HeatingModeTemperatureSetpoint
+HHWTankVenting
+CoolingTowerControl_v2
+ASHPControl_v2

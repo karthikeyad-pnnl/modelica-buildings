@@ -20,7 +20,8 @@ block ExternalEnergy
     have_pumHeaWatSec=false,
     have_pumChiWatSec=false)
     annotation (Placement(transformation(extent={{40,-28},{60,0}})));
-  CoolingTowerControl coolingTowerControl
+  CoolingTowerControl_v2
+                      coolingTowerControl_v2_1
     annotation (Placement(transformation(extent={{-102,80},{-122,100}})));
   Modelica.Blocks.Routing.IntegerPassThrough integerPassThrough
     annotation (Placement(transformation(extent={{-140,60},{-120,80}})));
@@ -53,8 +54,13 @@ block ExternalEnergy
     annotation (Placement(transformation(extent={{100,-70},{120,-50}})));
   Buildings.Controls.OBC.CDL.Logical.And and4
     annotation (Placement(transformation(extent={{100,-100},{120,-80}})));
-  ASHPControl aSHPControl
+  ASHPControl_v2
+              aSHPControl_v2_1
     annotation (Placement(transformation(extent={{-80,100},{-60,120}})));
+  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter gai(k=-1)
+    annotation (Placement(transformation(extent={{-50,60},{-30,80}})));
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(p=1)
+    annotation (Placement(transformation(extent={{20,50},{40,70}})));
 equation
   connect(bus.heatingPumpBus.y1_actual, seqEveHea.u1PumHeaWatPri_actual)
     annotation (Line(
@@ -74,7 +80,8 @@ equation
       index=-1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(coolingTowerControl.bus, bus.coolingTowerSystemBus) annotation (Line(
+  connect(coolingTowerControl_v2_1.bus, bus.coolingTowerSystemBus) annotation (
+      Line(
       points={{-104.857,90},{0.1,90},{0.1,140.1}},
       color={255,204,51},
       thickness=0.5), Text(
@@ -215,16 +222,16 @@ equation
           0,255}));
   connect(intEqu2.y, and1.u2) annotation (Line(points={{-88,-70},{-80,-70},{-80,
           -38},{98,-38}},                                       color={255,0,255}));
-  connect(bus.TCooRet, aSHPControl.TRetCoo) annotation (Line(
-      points={{0,140},{0,94},{-88,94},{-88,110},{-82,110}},
+  connect(bus.TCooRet, aSHPControl_v2_1.TRetCoo) annotation (Line(
+      points={{0,140},{0,94},{-88,94},{-88,112},{-82,112}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
       index=-1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
-  connect(aSHPControl.TSet, bus.heatPumpBus.TSet) annotation (Line(points={{-58,110},
-          {0.1,110},{0.1,140.1}},                        color={0,0,127}), Text(
+  connect(aSHPControl_v2_1.TSet, bus.heatPumpBus.TSet) annotation (Line(points=
+          {{-58,112},{0.1,112},{0.1,140.1}}, color={0,0,127}), Text(
       string="%second",
       index=1,
       extent={{6,3},{6,3}},
@@ -233,8 +240,21 @@ equation
           -26},{-38,-26},{-38,-20},{-32,-20}}, color={255,0,255}));
   connect(intEqu2.y, or2.u2) annotation (Line(points={{-88,-70},{-80,-70},{-80,
           -38},{-32,-38},{-32,-28}}, color={255,0,255}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,
-            -140},{160,140}}),                                  graphics={
+  connect(bus.coolingTowerSystemBus.TOut, aSHPControl_v2_1.TOut) annotation (
+      Line(
+      points={{0.1,140.1},{0.1,92},{-90,92},{-90,108},{-82,108}},
+      color={255,204,51},
+      thickness=0.5));
+  connect(aSHPControl_v2_1.yCooHeaExc, bus.extEneLooCooExc.y) annotation (Line(
+        points={{-58,108},{0.1,108},{0.1,140.1}}, color={0,0,127}));
+  connect(aSHPControl_v2_1.yCooHeaExc, gai.u) annotation (Line(points={{-58,108},
+          {-52,108},{-52,84},{-58,84},{-58,70},{-52,70}}, color={0,0,127}));
+  connect(gai.y, addPar.u) annotation (Line(points={{-28,70},{10,70},{10,60},{18,
+          60}}, color={0,0,127}));
+  connect(addPar.y, bus.extEneLooCooExcByp.y) annotation (Line(points={{42,60},
+          {48,60},{48,40},{0.1,40},{0.1,140.1}}, color={0,0,127}));
+  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}}),                                  graphics={
           Rectangle(
           extent={{-100,100},{100,-100}},
           lineColor={0,0,0},
@@ -244,8 +264,7 @@ equation
           extent={{-150,-100},{150,-140}},
           textString="%name",
           textColor={0,0,255})}),           Diagram(coordinateSystem(
-          preserveAspectRatio=false, extent={{-160,-140},{160,140}}), graphics
-        ={
+          preserveAspectRatio=false, extent={{-160,-140},{160,140}}), graphics={
         Rectangle(
           extent={{-154,82},{-6,-108}},
           lineColor={28,108,200},
