@@ -49,6 +49,8 @@ This model represents a group of heat pumps.
   equation
     connect(port_aSou,THotEnt.port_a)
       annotation (Line(points={{80,-140},{80,-20},{40,-20}},color={0,127,255}));
+    connect(hp.P, bus.P) annotation (Line(points={{11,-6.2},{16,-6.2},{16,108},
+            {0,108},{0,160}}, color={0,0,127}));
     annotation (
       defaultComponentName="hp",
       Documentation(

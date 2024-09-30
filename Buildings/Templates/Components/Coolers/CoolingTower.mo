@@ -77,6 +77,8 @@ equation
     annotation (Line(points={{-100,0},{-10,0}}, color={0,127,255}));
   connect(tow.TLvg, bus.TLvg) annotation (Line(points={{11,-6},{16,-6},{16,68},
           {0,68},{0,100}}, color={0,0,127}));
+  connect(tow.PFan, bus.P) annotation (Line(points={{11,8},{10,8},{10,66},{0,66},
+          {0,100}}, color={0,0,127}));
   annotation (
   defaultComponentName="coo",
   Icon(coordinateSystem(preserveAspectRatio=false), graphics={
