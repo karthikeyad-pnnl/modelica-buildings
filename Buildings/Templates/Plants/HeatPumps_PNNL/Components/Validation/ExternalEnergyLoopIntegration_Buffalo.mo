@@ -474,7 +474,7 @@ model ExternalEnergyLoopIntegration_Buffalo "Control Box Test"
     annotation (Placement(transformation(extent={{-372,-70},{-352,-50}})));
 
   Modelica.Blocks.Sources.CombiTimeTable datRea(
-    final fileName=ModelicaServices.ExternalReferences.loadResource("modelica://Buildings/Resources/Data/Templates/HeatPumpPlant/loads.dat"),
+    final fileName=ModelicaServices.ExternalReferences.loadResource("modelica://Buildings/Resources/Data/Templates/HeatPumpPlant/Buffalo/loads.dat"),
     final tableOnFile=true,
     final columns=2:3,
     final tableName="EnergyPlus",
@@ -502,12 +502,6 @@ model ExternalEnergyLoopIntegration_Buffalo "Control Box Test"
     dp2_nominal=5000,
     eps=0.9)
     annotation (Placement(transformation(extent={{76,20},{96,40}})));
-  Fluid.Sources.Boundary_pT bou2(redeclare package Medium = Media.Water, nPorts=
-       1)
-    annotation (Placement(transformation(extent={{-196,108},{-176,128}})));
-  Fluid.Sources.Boundary_pT bou3(redeclare package Medium = Media.Water, nPorts=
-       1)
-    annotation (Placement(transformation(extent={{50,60},{70,80}})));
   Buildings.Templates.Components.Sensors.Temperature TRetHeaCon(redeclare
       package Medium = Buildings.Media.Water, m_flow_nominal=datHpAwNrv.mHeaWatHp_flow_nominal)
     annotation (Placement(transformation(
@@ -698,7 +692,7 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(pum1.bus, ctlHeaInl.bus_HeaPum) annotation (Line(
-      points={{-114,34},{-114,40},{-64,40},{-64,-6},{-67.8,-6},{-67.8,-20}},
+      points={{-114,34},{-120,34},{-120,42},{-62,42},{-62,-20},{-67.8,-20}},
       color={255,204,51},
       thickness=0.5));
   connect(pum.bus, ctlHeaInl.bus_CooPum) annotation (Line(
@@ -714,7 +708,7 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
   connect(pum1.ports_b, rou2.ports_b) annotation (Line(points={{-124,24},{-140,24}},
                           color={0,127,255}));
   connect(externalEnergyOpenLoop.bus,bus)  annotation (Line(
-      points={{58,260},{58,266},{38,266},{38,290}},
+      points={{58,257.143},{58,266},{38,266},{38,290}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%second",
@@ -813,7 +807,8 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
           {408,160},{408,146},{416,146}},
                                     color={255,127,0}));
   connect(extEneOpeMod.yOpeMod, bus.uOpeMod)
-    annotation (Line(points={{-18,240},{38,240},{38,290}}, color={255,127,0}));
+    annotation (Line(points={{-20,237.692},{38,237.692},{38,290}},
+                                                           color={255,127,0}));
   connect(addInt.y, ena.nReqPla) annotation (Line(points={{-420,-4},{-414,-4},{
           -414,-20},{-528,-20},{-528,-80},{-482,-80}},
                             color={255,127,0}));
@@ -873,13 +868,12 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
   connect(volumeFlowRate1.port_b, valve3.port_a) annotation (Line(points={{260,100},
           {270,100}},                      color={0,127,255}));
   connect(reaToInt.y, extEneOpeMod.uReqHea) annotation (Line(points={{-452,10},
-          {-342,10},{-342,8},{-310,8},{-310,108},{-288,108},{-288,246},{-42,246}},
+          {-342,10},{-342,8},{-310,8},{-310,108},{-288,108},{-288,242.308},{
+          -41.8182,242.308}},
         color={255,127,0}));
   connect(reaToInt1.y, extEneOpeMod.uReqCoo) annotation (Line(points={{360,160},
-          {360,186},{-48,186},{-48,242},{-42,242}},
+          {360,186},{-48,186},{-48,239.231},{-41.8182,239.231}},
                                          color={255,127,0}));
-  connect(bou3.ports[1], hex1.port_b1) annotation (Line(points={{70,70},{104,70},
-          {104,36},{96,36}}, color={0,127,255}));
   connect(valve4.port_a, TRetHea.port_b) annotation (Line(points={{-156,74},{-172,
           74},{-172,98},{-178,98}},        color={0,127,255}));
   connect(valve4.port_b, TRetHeaCon.port_a) annotation (Line(points={{-136,74},{
@@ -889,8 +883,9 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
           -12},{102,24},{124,24}}, color={0,127,255}));
   connect(valve5.port_b, TRetCooCon.port_a) annotation (Line(points={{76,-12},{70,
           -12},{70,24},{60,24}},    color={0,127,255}));
-  connect(extEneOpeMod.yOpeMod, intEqu.u1) annotation (Line(points={{-18,240},{
-          38,240},{38,220},{98,220}}, color={255,127,0}));
+  connect(extEneOpeMod.yOpeMod, intEqu.u1) annotation (Line(points={{-20,
+          237.692},{38,237.692},{38,220},{98,220}},
+                                      color={255,127,0}));
   connect(conInt.y, intEqu.u2)
     annotation (Line(points={{82,200},{92,200},{92,212},{98,212}},
                                                           color={255,127,0}));
@@ -911,13 +906,14 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
     annotation (Line(points={{-206,230},{-200,230}}, color={255,0,255}));
   connect(conInt1.y, intEqu1.u2) annotation (Line(points={{-256,220},{-256,222},
           {-230,222}}, color={255,127,0}));
-  connect(extEneOpeMod.yOpeMod, intEqu1.u1) annotation (Line(points={{-18,240},{
-          -14,240},{-14,252},{-194,252},{-194,244},{-230,244},{-230,230}},
+  connect(extEneOpeMod.yOpeMod, intEqu1.u1) annotation (Line(points={{-20,
+          237.692},{-14,237.692},{-14,252},{-194,252},{-194,244},{-230,244},{
+          -230,230}},
                  color={255,127,0}));
   connect(not2.y, bus_HeaHEBypVal.y1) annotation (Line(points={{-176,230},{-166,
           230},{-166,190}},            color={255,0,255}));
-  connect(extEneOpeMod.yOpeMod, bus_sensor.uOpeMod) annotation (Line(points={{-18,240},
-          {-2,240},{-2,-42}},                     color={255,127,0}));
+  connect(extEneOpeMod.yOpeMod, bus_sensor.uOpeMod) annotation (Line(points={{-20,
+          237.692},{-2,237.692},{-2,-42}},        color={255,127,0}));
   connect(volumeFlowRate2.port_a, externalEnergyLoop.portEva_b) annotation (
       Line(points={{14,160},{14,193},{15,193},{15,210}},
                  color={0,127,255}));
@@ -929,8 +925,6 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
   connect(volumeFlowRate3.port_b, hex.port_a1) annotation (Line(points={{-22,140},
           {-22,118},{-130,118},{-130,110},{-136,110}},                  color={
           0,127,255}));
-  connect(bou2.ports[1], hex.port_b1) annotation (Line(points={{-176,118},{-160,
-          118},{-160,110},{-156,110}}, color={0,127,255}));
   connect(TSetHP.y, bus_sensor.TSetHP) annotation (Line(points={{-297,-30},{
           -210,-30},{-210,-94},{-106,-94},{-106,-42},{-2,-42}},
                                        color={0,0,127}), Text(
@@ -978,14 +972,12 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
           {144,100}},                                        color={0,127,255}));
   connect(volumeFlowRateCooPri.port_b, TSupCoo.port_a) annotation (Line(points={{164,100},
           {174,100}},                               color={0,127,255}));
-  connect(resdPSetCoo.dpSet[1], dPSetCoo.u) annotation (Line(points={{440,146},
-          {440,140},{456,140}},    color={0,0,127}));
   connect(resdPSetHea.dpSet[1], dPSetHea.u) annotation (Line(points={{-350,-54},
-          {-330,-54},{-330,-66},{-322,-66}},                       color={0,0,
-          127}));
-  connect(resTSetCoo.TSupSet, TSetHP.u) annotation (Line(points={{-384,-38},{
-          -328,-38},{-328,-30},{-320,-30}},                           color={0,
-          0,127}));
+          {-332,-54},{-332,-66},{-322,-66}}, color={0,0,127}));
+  connect(conTSetHP.y, TSetHP.u) annotation (Line(points={{-348,-140},{-332,
+          -140},{-332,-64},{-328,-64},{-328,-30},{-320,-30}}, color={0,0,127}));
+  connect(resdPSetCoo.dpSet[1], dPSetCoo.u) annotation (Line(points={{440,146},
+          {444,146},{444,140},{456,140}}, color={0,0,127}));
   annotation (
     Diagram(
       coordinateSystem(
@@ -995,8 +987,7 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
         "modelica://Buildings/Resources/Scripts/Dymola/Templates/Plants/HeatPumps/Components/Validation/HeatPumpGroupAirToWater.mos"
         "Simulate and plot"),
     experiment(
-      StartTime=23587200,
-      StopTime=26179200,
+      StopTime=2592000,
       Interval=60,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"),
