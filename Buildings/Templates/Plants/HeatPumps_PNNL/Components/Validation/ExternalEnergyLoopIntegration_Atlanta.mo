@@ -332,8 +332,8 @@ model ExternalEnergyLoopIntegration_Atlanta "Control Box Test"
           datHpAwNrv.capHeaHp_nominal), datCoolingTowerWHE(
         CoolingCapacity_nominal=2*datHpAwNrv.capCooHp_nominal))
     annotation (Placement(transformation(extent={{-2,210},{18,230}})));
-  Controls.ExternalEnergy externalEnergyOpenLoop(coolingTowerControl_v2_1(hys(
-          uLow=273.15 + 2, uHigh=273.15 + 4), conPID1(
+  Controls.ExternalEnergy externalEnergyOpenLoop(coolingTowerControl_v2_1(hys(uLow=
+            273.15 + 7.5, uHigh=273.15 + 10), conPID1(
         controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
                                                       k=0.2,
         Ti=150,
@@ -342,8 +342,8 @@ model ExternalEnergyLoopIntegration_Atlanta "Control Box Test"
       con4(k=273.15 + 13.5)))
     annotation (Placement(transformation(extent={{48,240},{68,260}})));
   BoundaryConditions.WeatherData.ReaderTMY3           weaDat(filNam=
-        Modelica.Utilities.Files.loadResource(
-        "modelica://Buildings/Resources/weatherdata/USA_NY_Buffalo-Greater.Buffalo.Intl.AP.725280_TMY3.mos"),
+        ModelicaServices.ExternalReferences.loadResource(
+        "modelica://Buildings/Resources/weatherdata/USA_GA_Atlanta-Hartsfield-Jackson.Intl.AP.722190_TMY3.mos"),
       computeWetBulbTemperature=true)  "Weather data reader"
     annotation (Placement(transformation(extent={{-32,260},{-12,280}})));
   Interface.ExternalEnergyLoop bus annotation (Placement(transformation(extent={{18,270},
@@ -511,12 +511,6 @@ model ExternalEnergyLoopIntegration_Atlanta "Control Box Test"
     dp2_nominal=5000,
     eps=0.9)
     annotation (Placement(transformation(extent={{76,20},{96,40}})));
-  Fluid.Sources.Boundary_pT bou2(redeclare package Medium = Media.Water, nPorts=
-       1)
-    annotation (Placement(transformation(extent={{-196,108},{-176,128}})));
-  Fluid.Sources.Boundary_pT bou3(redeclare package Medium = Media.Water, nPorts=
-       1)
-    annotation (Placement(transformation(extent={{50,60},{70,80}})));
   Buildings.Templates.Components.Sensors.Temperature TRetHeaCon(redeclare
       package Medium = Buildings.Media.Water, m_flow_nominal=datHpAwNrv.mHeaWatHp_flow_nominal)
     annotation (Placement(transformation(
@@ -906,8 +900,6 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
   connect(reaToInt1.y, extEneOpeMod.uReqCoo) annotation (Line(points={{360,160},
           {360,186},{-48,186},{-48,242},{-42,242}},
                                          color={255,127,0}));
-  connect(bou3.ports[1], hex1.port_b1) annotation (Line(points={{70,70},{104,70},
-          {104,36},{96,36}}, color={0,127,255}));
   connect(valve4.port_a, TRetHea.port_b) annotation (Line(points={{-156,74},{-172,
           74},{-172,98},{-178,98}},        color={0,127,255}));
   connect(valve4.port_b, TRetHeaCon.port_a) annotation (Line(points={{-136,74},{
@@ -945,8 +937,6 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
   connect(volumeFlowRate3.port_b, hex.port_a1) annotation (Line(points={{-22,140},
           {-22,118},{-130,118},{-130,110},{-136,110}},                  color={
           0,127,255}));
-  connect(bou2.ports[1], hex.port_b1) annotation (Line(points={{-176,118},{-160,
-          118},{-160,110},{-156,110}}, color={0,127,255}));
   connect(TSetHP.y, bus_sensor.TSetHP) annotation (Line(points={{-297,-30},{
           -210,-30},{-210,-94},{-106,-94},{-106,-42},{-2,-42}},
                                        color={0,0,127}), Text(
@@ -1060,12 +1050,12 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
   connect(conPID.y, heatingCoilValveOverride.uHeaPID) annotation (Line(points={{
           -452,110},{-452,108},{-440,108},{-440,148},{-556,148},{-556,172},{-542,
           172}}, color={0,0,127}));
+  connect(condPSet1.y, dPSetCoo.u) annotation (Line(points={{440,170},{440,168},
+          {456,168},{456,140}}, color={0,0,127}));
   connect(condPSet.y, dPSetHea.u) annotation (Line(points={{-348,-100},{-332,
           -100},{-332,-66},{-322,-66}}, color={0,0,127}));
   connect(conTSetHP.y, TSetHP.u) annotation (Line(points={{-348,-140},{-332,
           -140},{-332,-104},{-336,-104},{-336,-30},{-320,-30}}, color={0,0,127}));
-  connect(condPSet1.y, dPSetCoo.u) annotation (Line(points={{440,170},{440,168},
-          {456,168},{456,140}}, color={0,0,127}));
   annotation (
     Diagram(
       coordinateSystem(
@@ -1075,8 +1065,7 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
         "modelica://Buildings/Resources/Scripts/Dymola/Templates/Plants/HeatPumps/Components/Validation/HeatPumpGroupAirToWater.mos"
         "Simulate and plot"),
     experiment(
-      StartTime=23587200,
-      StopTime=26179200,
+      StopTime=2592000,
       Interval=60,
       Tolerance=1e-06,
       __Dymola_Algorithm="Cvode"),

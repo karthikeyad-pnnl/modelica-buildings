@@ -156,7 +156,7 @@ model ExternalEnergyLoop
         transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
-        origin={-60,-74})));
+        origin={-60,-80})));
   Buildings.Templates.Components.Sensors.Temperature temperature2(redeclare
       package Medium = Buildings.Media.Water, m_flow_nominal=hp.mHeaWat_flow_nominal)
     annotation (Placement(transformation(
@@ -240,6 +240,12 @@ model ExternalEnergyLoop
         origin={128,10})));
   Modelica.Blocks.Routing.RealPassThrough realPassThrough1
     annotation (Placement(transformation(extent={{-10,30},{10,50}})));
+  Fluid.Sources.Boundary_pT bou3(redeclare package Medium = Media.Water, nPorts=
+       1)
+    annotation (Placement(transformation(extent={{6,-40},{26,-20}})));
+  Fluid.Sources.Boundary_pT bou2(redeclare package Medium = Media.Water, nPorts=
+       1)
+    annotation (Placement(transformation(extent={{-140,0},{-120,20}})));
 equation
   connect(valve.port_b, pum.port_a)
     annotation (Line(points={{-100,-40},{-100,20},{-90,20}},
@@ -309,7 +315,7 @@ equation
     annotation (Line(points={{-100,-100},{-100,-86}},
                                                     color={0,127,255}));
   connect(temperature1.port_b, volumeFlowRate1.port_a)
-    annotation (Line(points={{-60,-84},{-60,-100}}, color={0,127,255}));
+    annotation (Line(points={{-60,-90},{-60,-100}}, color={0,127,255}));
   connect(volumeFlowRate1.port_b, portCon_b)
     annotation (Line(points={{-60,-120},{-60,-140}}, color={0,127,255}));
   connect(volumeFlowRate2.port_b, temperature3.port_a)
@@ -323,7 +329,7 @@ equation
   connect(coolingTowerWHeatExchanger.port_b, valve2.port_a)
     annotation (Line(points={{-60,-20},{-60,-40}}, color={0,127,255}));
   connect(valve2.port_b, temperature1.port_a)
-    annotation (Line(points={{-60,-60},{-60,-64}}, color={0,127,255}));
+    annotation (Line(points={{-60,-60},{-60,-70}}, color={0,127,255}));
   connect(temperature3.port_b, valve3.port_a)
     annotation (Line(points={{50,-68},{50,-60}}, color={0,127,255}));
   connect(valve3.port_b, pum1.port_a)
@@ -395,6 +401,11 @@ equation
       index=1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
+  connect(bou3.ports[1], pum1.port_a) annotation (Line(points={{26,-30},{50,-30},
+          {50,20},{62,20}}, color={0,127,255}));
+  connect(bou2.ports[1], pum.port_a) annotation (Line(points={{-120,10},{-100,10},
+          {-100,20},{-90,20}}, color={0,127,255}));
+  connect(temperature1.y,bus.coolingTowerSystemBus.TExtEneCooSup);
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}}), graphics={Rectangle(
           extent={{-100,100},{100,-100}},

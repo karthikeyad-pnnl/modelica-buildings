@@ -30,8 +30,8 @@ block CoolingTowerControl_v2
   Buildings.Controls.OBC.CDL.Logical.MultiAnd
                                          mulAnd(nin=3)
     annotation (Placement(transformation(extent={{-28,80},{-8,100}})));
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(uLow=273.15 + 5, uHigh=273.15
-         + 7.5)
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(uLow=273.15 + 10, uHigh=
+        273.15 + 12.5)
     annotation (Placement(transformation(extent={{-80,120},{-60,140}})));
   Buildings.Controls.OBC.CDL.Reals.Hysteresis hys1(uLow=0.6, uHigh=0.8)
     annotation (Placement(transformation(extent={{60,70},{80,90}})));
@@ -54,6 +54,14 @@ block CoolingTowerControl_v2
     annotation (Placement(transformation(extent={{-74,0},{-54,20}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant con4(k=273.15 + 12.7)
     annotation (Placement(transformation(extent={{-80,30},{-60,50}})));
+  Buildings.Controls.OBC.CDL.Reals.PID conPID3(reverseActing=false)
+    annotation (Placement(transformation(extent={{24,80},{44,100}})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con7(k=273.15 + 9)
+    annotation (Placement(transformation(extent={{-40,34},{-20,54}})));
+  Buildings.Controls.OBC.CDL.Reals.Min min1
+    annotation (Placement(transformation(extent={{150,40},{170,60}})));
+  Buildings.Controls.OBC.CDL.Logical.TrueHold truHol(duration=180)
+    annotation (Placement(transformation(extent={{0,102},{20,122}})));
 equation
   connect(con1.y, logSwi.u1) annotation (Line(points={{-98,110},{-90,110},{-90,
           98},{-82,98}},
@@ -114,15 +122,6 @@ equation
                             color={0,0,127}));
   connect(con6.y, conPID2.u_m) annotation (Line(points={{82,10},{90,10},{90,28}},
                                                     color={0,0,127}));
-  connect(conPID2.y, bus.coolingTowerBus.y) annotation (Line(points={{102,40},{
-          112,40},{112,-110},{0.1,-110},{0.1,-139.9}},
-        color={0,0,127}), Text(
-      string="%second",
-      index=1,
-      extent={{-6,3},{-6,3}},
-      horizontalAlignment=TextAlignment.Right));
-  connect(logSwi.y, and1.u2) annotation (Line(points={{-58,90},{-50,90},{-50,
-          112},{78,112}},                            color={255,0,255}));
   connect(hys.y, and1.u1) annotation (Line(points={{-58,130},{70,130},{70,120},
           {78,120}},
         color={255,0,255}));
@@ -163,6 +162,23 @@ equation
           {-76,4}}, color={0,0,127}));
   connect(con4.y, max1.u1) annotation (Line(points={{-58,40},{-52,40},{-52,24},
           {-82,24},{-82,16},{-76,16}}, color={0,0,127}));
+  connect(conPID3.u_s, con7.y) annotation (Line(points={{22,90},{16,90},{16,44},
+          {-18,44}}, color={0,0,127}));
+  connect(conPID2.y, min1.u2) annotation (Line(points={{102,40},{140,40},{140,44},
+          {148,44}}, color={0,0,127}));
+  connect(conPID3.y, min1.u1) annotation (Line(points={{46,90},{56,90},{56,94},{
+          142,94},{142,56},{148,56}}, color={0,0,127}));
+  connect(min1.y, bus.coolingTowerBus.y) annotation (Line(points={{172,50},{90,
+          50},{90,-139.9},{0.1,-139.9}}, color={0,0,127}));
+  connect(bus.TExtEneCooSup, conPID3.u_m) annotation (Line(
+      points={{0,-140},{0,-54},{12,-54},{12,-44},{14,-44},{14,-42},{16,-42},{16,
+          -26},{12,-26},{12,18},{22,18},{22,70},{34,70},{34,78}},
+      color={255,204,51},
+      thickness=0.5));
+  connect(truHol.y, and1.u2)
+    annotation (Line(points={{22,112},{78,112}}, color={255,0,255}));
+  connect(logSwi.y, truHol.u) annotation (Line(points={{-58,90},{-44,90},{-44,
+          112},{-2,112}}, color={255,0,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-140,
             -140},{140,140}}),                                  graphics={
           Rectangle(
