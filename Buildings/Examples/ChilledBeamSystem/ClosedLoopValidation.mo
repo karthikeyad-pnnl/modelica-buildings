@@ -8,8 +8,29 @@ model ClosedLoopValidation
     THeaWatInl_nominal=313.15,
     THeaWatOut_nominal=298.15,
     THeaAirInl_nominal=285.85,
-    THeaAirDis_nominal=308.15,                                                                                                                                                                                                     VRooSou = 239.25, mChiWatSou_flow_nominal = 0.387, mAirSou_flow_nominal = 1*0.143*1.225, mAChiBeaSou_flow_nominal = 0.143*1.225, VRooEas = 103.31, mChiWatEas_flow_nominal = 0.9, mAirEas_flow_nominal = 1*0.065*1.225, mAChiBeaEas_flow_nominal = 1*0.065*1.225, VRooNor = 239.25, mChiWatNor_flow_nominal = 0.253, mAirNor_flow_nominal = 1*0.143*1.225, mAChiBeaNor_flow_nominal = 0.143*1.225, VRooWes = 103.31, mChiWatWes_flow_nominal = 0.262, mAirWes_flow_nominal = 1*0.065*1.225, mAChiBeaWes_flow_nominal = 0.065*1.225, VRooCor = 447.68, mChiWatCor_flow_nominal = 0.27, mAirCor_flow_nominal = 1*0.26*1.225, mAChiBeaCor_flow_nominal = 0.26*1.225) "Chilled beam system test-bed" annotation (
-    Placement(visible = true, transformation(origin={-98,-24},    extent = {{88, -16}, {108, 32}}, rotation = 0)));
+    THeaAirDis_nominal=308.15,
+    VRooSou = 239.25,
+    mChiWatSou_flow_nominal = 0.387,
+    mAirSou_flow_nominal = 1*0.143*1.225,
+    mAChiBeaSou_flow_nominal = 0.143*1.225,
+    VRooEas = 103.31, mChiWatEas_flow_nominal = 0.9,
+    mAirEas_flow_nominal = 1*0.065*1.225,
+    mAChiBeaEas_flow_nominal = 1*0.065*1.225,
+    VRooNor = 239.25,
+    mChiWatNor_flow_nominal = 0.253,
+    mAirNor_flow_nominal = 1*0.143*1.225,
+    mAChiBeaNor_flow_nominal = 0.143*1.225,
+    VRooWes = 103.31,
+    mChiWatWes_flow_nominal = 0.262,
+    mAirWes_flow_nominal = 1*0.065*1.225,
+    mAChiBeaWes_flow_nominal = 0.065*1.225,
+    VRooCor = 447.68,
+    mChiWatCor_flow_nominal = 0.27,
+    mAirCor_flow_nominal = 1*0.26*1.225,
+    mAChiBeaCor_flow_nominal = 0.26*1.225)
+    "Chilled beam system test-bed"
+    annotation (Placement(visible = true, transformation(extent={{40,-28},{60,
+            20}})));
   Buildings.Controls.OBC.ChilledBeams.Terminal.Controller terCon[5](TdCoo = {0.1, 100, 0.1, 0.1, 0.1}, TiCoo = fill(50, 5), VDes_occ = {0.143, 0.065, 0.143, 0.065, 0.26}, VDes_unoccSch = {0.028, 0.012, 0.028, 0.012, 0.052}, VDes_unoccUnsch = {0.056, 0.024, 0.056, 0.024, 0.104}, controllerTypeCoo = fill(Buildings.Controls.OBC.CDL.Types.SimpleController.PID, 5)) "Terminal controllers" annotation (
     Placement(visible = true, transformation(origin={32,14},   extent = {{10, 40}, {30, 60}}, rotation = 0)));
   Buildings.Controls.OBC.ChilledBeams.System.Controller sysCon(nPum = 1, nVal = 5, minPumSpe = 0.7,
@@ -24,7 +45,7 @@ model ClosedLoopValidation
     delTimVal=60)                                                                                                                                   annotation (
     Placement(visible = true, transformation(origin={112,-20},   extent = {{10, -70}, {30, -50}}, rotation = 0)));
   Buildings.Controls.OBC.FDE.DOAS.DOAScontroller DOAScon   annotation (
-    Placement(visible = true, transformation(origin={-39,-10},  extent = {{-13, -24}, {13, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin={-33,-2},   extent = {{-13, -24}, {13, 10}}, rotation = 0)));
   Buildings.Controls.OBC.CDL.Reals.MultiMax TZonMax(nin=5)   annotation (
     Placement(transformation(extent={{-40,52},{-20,72}})));
   Buildings.Controls.OBC.CDL.Reals.MultiMax yDamPosMax(nin=5)   annotation (
@@ -68,8 +89,8 @@ model ClosedLoopValidation
   Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator realScalarReplicator(nout = 5) annotation (
     Placement(visible = true, transformation(origin = {-30, 142}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 equation
-  connect(DOAScon.yFanSupSpe, chiBeaTesBed.uFanSpe) annotation (Line(points={{-23.14,
-          -7.8},{-15.5,-7.8},{-15.5,-18},{-12,-18}}, color={0,0,127}));
+  connect(DOAScon.yFanSupSpe, chiBeaTesBed.uFanSpe) annotation (Line(points={{-17.4,
+          -1.71429},{-22,-1.71429},{-22,-6},{38,-6}},color={0,0,127}));
   connect(enaSch.y[1], hys.u) annotation (
     Line(points = {{-128, 80}, {-122, 80}}, color = {0, 0, 127}));
   connect(hys.y, booRep.u) annotation (
@@ -79,9 +100,10 @@ equation
   connect(uConSig.y, terCon.uConSen) annotation (
     Line(points={{-66,54},{-66,48},{-4,48},{-4,62.75},{40,62.75}},      color = {255, 0, 255}));
   connect(hys.y,DOAScon.Occ)  annotation (
-    Line(points={{-98,80},{-96,80},{-96,-0.4},{-54.6,-0.4}},color = {255, 0, 255}));
+    Line(points={{-98,80},{-96,80},{-96,6.78571},{-48.6,6.78571}},
+                                                            color = {255, 0, 255}));
   connect(chiBeaTesBed.TZon, terCon.TZon) annotation (
-    Line(points={{12,4.8},{20,4.8},{20,60.25},{40,60.25}},  color = {0, 0, 127}, thickness = 0.5));
+    Line(points={{62,16.8},{16,16.8},{16,60.25},{40,60.25}},color = {0, 0, 127}, thickness = 0.5));
   connect(eRWtemp.yTSimEneRecWhe, sub.u2) annotation (Line(points={{-69.6,-78},
           {-30,-78},{-30,-88},{-6,-88}}, color={0,0,127}));
   connect(booRep.y, terCon.uOccExp) annotation (
@@ -93,111 +115,132 @@ equation
   connect(realScalarReplicator.y, terCon.TZonCooSet) annotation (
     Line(points={{-18,142},{8,142},{8,65.25},{40,65.25}},    color = {0, 0, 127}, thickness = 0.5));
   connect(chiBeaTesBed.VDisAir_flow, terCon.VDis_flow) annotation (
-    Line(points={{12,2.2},{22,2.2},{22,57.75},{40,57.75}},color = {0, 0, 127}, thickness = 0.5));
+    Line(points={{62,14.2},{66,14.2},{66,18},{68,18},{68,50},{40,50},{40,57.75}},
+                                                          color = {0, 0, 127}, thickness = 0.5));
   connect(occSch.occupied, booleanScalarReplicator.u) annotation (Line(points={
           {-137,34},{-134,34},{-134,38},{-128,38}}, color={255,0,255}));
   connect(booleanScalarReplicator.y, terCon.uOccDet) annotation (Line(points={{
           -104,38},{-102,38},{-102,12},{6,12},{6,72.75},{40,72.75}}, color={255,
           0,255}));
-  connect(sysCon.yBypValPos, chiBeaTesBed.uBypValPos) annotation (Line(points={
-          {144,-86},{148,-86},{148,16},{-20,16},{-20,2},{-12,2}}, color={0,0,
+  connect(sysCon.yBypValPos, chiBeaTesBed.uBypValPos) annotation (Line(points={{144,-86},
+          {150,-86},{150,-96},{36,-96},{36,-36},{30,-36},{30,14},{38,14}},
+                                                                  color={0,0,
           127}));
-  connect(chiBeaTesBed.uPumSpe, sysCon.yPumSpe) annotation (Line(points={{-12,
-          -34},{-16,-34},{-16,-60},{156,-60},{156,-80},{144,-80}}, color={0,0,
+  connect(chiBeaTesBed.uPumSpe, sysCon.yPumSpe) annotation (Line(points={{38,-22},
+          {32,-22},{32,-64},{150,-64},{150,-80},{144,-80}},        color={0,0,
           127}));
-  connect(chiBeaTesBed.yChiWatVal, sysCon.uValPos) annotation (Line(points={{12,
-          -4},{106,-4},{106,-86},{120,-86}}, color={0,0,127}));
-  connect(chiBeaTesBed.dPChiWat, sysCon.dPChiWatLoo) annotation (Line(points={{
-          12,-20},{58,-20},{58,-24},{102,-24},{102,-80},{120,-80}}, color={0,0,
+  connect(chiBeaTesBed.yChiWatVal, sysCon.uValPos) annotation (Line(points={{62,8},{
+          74,8},{74,-86},{120,-86}},         color={0,0,127}));
+  connect(chiBeaTesBed.dPChiWat, sysCon.dPChiWatLoo) annotation (Line(points={{62,-8},
+          {78,-8},{78,-80},{120,-80}},                              color={0,0,
           127}));
-  connect(chiBeaTesBed.yPumSta, sysCon.uPumSta[1]) annotation (Line(points={{12,
-          -23.2},{50,-23.2},{50,-30},{98,-30},{98,-74},{120,-74}}, color={255,0,
+  connect(chiBeaTesBed.yPumSta, sysCon.uPumSta[1]) annotation (Line(points={{62,
+          -11.2},{62,-10},{82,-10},{82,-74},{120,-74}},            color={255,0,
           255}));
-  connect(DOAScon.yBypDam, eRWtemp.uBypDam) annotation (Line(points={{-23.14,-17},
-          {-20,-17},{-20,-42},{-102,-42},{-102,-72},{-94.4,-72}}, color={255,0,
+  connect(DOAScon.yBypDam, eRWtemp.uBypDam) annotation (Line(points={{-17.4,-9},
+          {-20,-9},{-20,-42},{-102,-42},{-102,-72},{-94.4,-72}},  color={255,0,
           255}));
-  connect(chiBeaTesBed.OutdoorAirTemp, eRWtemp.TAirOut) annotation (Line(points=
-         {{12,-37.6},{20,-37.6},{20,-40},{26,-40},{26,-96},{-98,-96},{-98,-84},
-          {-94.4,-84}}, color={0,0,127}));
-  connect(chiBeaTesBed.OutdoorAirTemp, sub.u1) annotation (Line(points={{12,
-          -37.6},{14,-37.6},{14,-64},{-10,-64},{-10,-76},{-6,-76}}, color={0,0,
+  connect(chiBeaTesBed.OutdoorAirTemp, eRWtemp.TAirOut) annotation (Line(points={{62,
+          -25.6},{62,-24},{18,-24},{18,-48},{14,-48},{14,-64},{-10,-64},{-10,
+          -72},{-52,-72},{-52,-56},{-104,-56},{-104,-84},{-94.4,-84}},
+                        color={0,0,127}));
+  connect(chiBeaTesBed.OutdoorAirTemp, sub.u1) annotation (Line(points={{62,
+          -25.6},{62,-24},{18,-24},{18,-48},{14,-48},{14,-64},{-10,-64},{-10,
+          -72},{-12,-72},{-12,-76},{-6,-76}},                       color={0,0,
           127}));
   connect(yDamPosMax.y, DOAScon.uDamMaxOpe) annotation (Line(points={{-36,30},{
-          -30,30},{-30,16},{-72,16},{-72,-2.8},{-54.6,-2.8}}, color={0,0,127}));
+          -30,30},{-30,16},{-72,16},{-72,4.35714},{-48.6,4.35714}},
+                                                              color={0,0,127}));
   connect(TZonMax.y, DOAScon.TAirHig) annotation (Line(points={{-18,62},{-16,62},
-          {-16,34},{-26,34},{-26,18},{-80,18},{-80,-12.6},{-54.6,-12.6}}, color=
+          {-16,34},{-26,34},{-26,18},{-80,18},{-80,-5.35714},{-48.6,-5.35714}},
+                                                                          color=
          {0,0,127}));
-  connect(chiWatSupTem.y, chiBeaTesBed.TChiWatSup) annotation (Line(points={{
-          -126,-16},{-86,-16},{-86,-37.1},{-12.1,-37.1}}, color={0,0,127}));
-  connect(chiBeaTesBed.TDOASDis, DOAScon.TAirDisCoiCoo) annotation (Line(points=
-         {{12,-26},{22,-26},{22,-50},{-24,-50},{-24,-34},{-74,-34},{-74,-22.6},
-          {-54.6,-22.6}}, color={0,0,127}));
-  connect(chiBeaTesBed.dPDOASAir, DOAScon.dPAirDucSta) annotation (Line(points=
-          {{12,-10.8},{30,-10.8},{30,-10},{50,-10},{50,24},{-28,24},{-28,6},{-62,
-          6},{-62,-7.6},{-54.6,-7.6}}, color={0,0,127}));
+  connect(chiWatSupTem.y, chiBeaTesBed.TChiWatSup) annotation (Line(points={{-126,
+          -16},{-116,-16},{-116,-52},{26,-52},{26,-25.1},{37.9,-25.1}},
+                                                          color={0,0,127}));
+  connect(chiBeaTesBed.TDOASDis, DOAScon.TAirDisCoiCoo) annotation (Line(points={{62,-14},
+          {68,-14},{68,-34},{44,-34},{44,-40},{30,-40},{30,-48},{-24,-48},{-24,
+          -38},{-60,-38},{-60,-15.0714},{-48.6,-15.0714}},
+                          color={0,0,127}));
+  connect(chiBeaTesBed.dPDOASAir, DOAScon.dPAirDucSta) annotation (Line(points={{62,1.2},
+          {62,0},{68,0},{68,-14},{66,-14},{66,-32},{-24,-32},{-24,-36},{-58,-36},
+          {-58,-0.5},{-48.6,-0.5}},    color={0,0,127}));
   connect(chiBeaTesBed.erwsuphum, DOAScon.phiAirEneRecWhe) annotation (Line(
-        points={{12,-28.6},{16,-28.6},{16,-66},{-70,-66},{-70,-25.2},{-54.6,-25.2}},
+        points={{62,-16.6},{66,-16.6},{66,-32},{24,-32},{24,-34},{-24,-34},{-24,
+          -36},{-58,-36},{-58,-17.5},{-48.6,-17.5}},
         color={0,0,127}));
   connect(eRWtemp.yTSimEneRecWhe, DOAScon.TAirSupEneWhe) annotation (Line(
-        points={{-69.6,-78},{-64,-78},{-64,-27.6},{-54.6,-27.6}}, color={0,0,
+        points={{-69.6,-78},{-64,-78},{-64,-19.9286},{-48.6,-19.9286}},
+                                                                  color={0,0,
           127}));
-  connect(DOAScon.TAirSup, DOAScon.TAirDisCoiCoo) annotation (Line(points={{-54.6,
-          -15.2},{-72,-15.2},{-72,-22.6},{-54.6,-22.6}}, color={0,0,127}));
-  connect(chiBeaTesBed.rAT, DOAScon.TAirRet) annotation (Line(points={{12,-34.4},
-          {36,-34.4},{36,-34},{46,-34},{46,-94},{-106,-94},{-106,-17.6},{-54.6,
-          -17.6}},                   color={0,0,127}));
-  connect(DOAScon.TAirOut, chiBeaTesBed.OutdoorAirTemp) annotation (Line(points=
-         {{-54.6,-20.2},{-92,-20.2},{-92,-56},{-52,-56},{-52,-72},{-12,-72},{-12,
-          -48},{18,-48},{18,-37.6},{12,-37.6}}, color={0,0,127}));
-  connect(chiBeaTesBed.bldgSP, DOAScon.dPAirStaBui) annotation (Line(points={{
-          12,-40},{12,-46},{-14,-46},{-14,-40},{-58,-40},{-58,-32.4},{-54.6,-32.4}},
+  connect(DOAScon.TAirSup, DOAScon.TAirDisCoiCoo) annotation (Line(points={{-48.6,
+          -7.78571},{-72,-7.78571},{-72,-15.0714},{-48.6,-15.0714}},
+                                                         color={0,0,127}));
+  connect(chiBeaTesBed.rAT, DOAScon.TAirRet) annotation (Line(points={{62,-22.4},
+          {66,-22.4},{66,-32},{40,-32},{40,-30},{-16,-30},{-16,-38},{-58,-38},{
+          -58,-10.2143},{-48.6,-10.2143}},
+                                     color={0,0,127}));
+  connect(DOAScon.TAirOut, chiBeaTesBed.OutdoorAirTemp) annotation (Line(points={{-48.6,
+          -12.6429},{-58,-12.6429},{-58,-36},{18,-36},{18,-25.6},{62,-25.6}},
+                                                color={0,0,127}));
+  connect(chiBeaTesBed.bldgSP, DOAScon.dPAirStaBui) annotation (Line(points={{62,-28},
+          {66,-28},{66,-32},{42,-32},{42,-34},{22,-34},{22,-32},{-24,-32},{-24,
+          -40},{-48.6,-40},{-48.6,-24.7857}},
         color={0,0,127}));
-  connect(DOAScon.uFanSupPro, chiBeaTesBed.yFanSta) annotation (Line(points={{-54.6,
-          -5.2},{-58,-5.2},{-58,8},{-16,8},{-16,20},{18,20},{18,-16.8},{12,-16.8}},
+  connect(DOAScon.uFanSupPro, chiBeaTesBed.yFanSta) annotation (Line(points={{-48.6,
+          1.92857},{-48.6,-4},{-58,-4},{-58,14},{28,14},{28,24},{70,24},{70,
+          -4.8},{62,-4.8}},
         color={255,0,255}));
-  connect(chiBeaTesBed.exhFanSta, DOAScon.uFanExhPro) annotation (Line(points={
-          {12,-14},{20,-14},{20,-16},{28,-16},{28,-54},{-22,-54},{-22,-44},{-62,
-          -44},{-62,-30},{-54.6,-30}}, color={255,0,255}));
-  connect(TZonMax.u[1:5], chiBeaTesBed.TZon) annotation (Line(points={{-42,60.4},
-          {-44,60.4},{-44,46},{16,46},{16,4.8},{12,4.8}}, color={0,0,127}));
-  connect(yDamPosMax.u[1:5], chiBeaTesBed.yDamPos) annotation (Line(points={{
-          -60,28.4},{-60,50},{-50,50},{-50,48},{26,48},{26,-7.8},{12,-7.8}},
+  connect(chiBeaTesBed.exhFanSta, DOAScon.uFanExhPro) annotation (Line(points={{62,-2},
+          {66,-2},{66,-32},{-24,-32},{-24,-36},{-62,-36},{-62,-22.3571},{-48.6,
+          -22.3571}},                  color={255,0,255}));
+  connect(TZonMax.u[1:5], chiBeaTesBed.TZon) annotation (Line(points={{-42,62.8},
+          {-48,62.8},{-48,44},{16,44},{16,16.8},{62,16.8}},
+                                                          color={0,0,127}));
+  connect(yDamPosMax.u[1:5], chiBeaTesBed.yDamPos) annotation (Line(points={{-60,
+          30.8},{-66,30.8},{-66,20},{-60,20},{-60,18},{-28,18},{-28,16},{-24,16},
+          {-24,18},{-18,18},{-18,20},{32,20},{32,22},{72,22},{72,4.2},{62,4.2}},
         color={0,0,127}));
-  connect(chiBeaTesBed.yChiWatVal, terCon.uChiVal) annotation (Line(points={{12,
-          -4},{22,-4},{22,0},{36,0},{36,48},{38,48},{38,55.25},{40,55.25}},
+  connect(chiBeaTesBed.yChiWatVal, terCon.uChiVal) annotation (Line(points={{62,8},{
+          74,8},{74,44},{40,44},{40,55.25}},
         color={0,0,127}));
-  connect(DOAScon.yCoiCoo, chiBeaTesBed.uCooCoi) annotation (Line(points={{-23.14,
-          -11},{-18,-11},{-18,-26},{-12,-26}}, color={0,0,127}));
+  connect(DOAScon.yCoiCoo, chiBeaTesBed.uCooCoi) annotation (Line(points={{-17.4,
+          -4.14286},{-22,-4.14286},{-22,0},{32,0},{32,-14},{38,-14}},
+                                               color={0,0,127}));
   connect(DOAScon.yEneRecWheEna, eRWtemp.uEneRecWheStart) annotation (Line(
-        points={{-23.14,-20},{-22,-20},{-22,-76},{-62,-76},{-62,-50},{-112,-50},
-          {-112,-78},{-94.4,-78},{-94.4,-76}}, color={255,0,255}));
-  connect(DOAScon.yCoiHea, chiBeaTesBed.uHeaCoi) annotation (Line(points={{-23.14,
-          -14},{-18,-14},{-18,-22},{-12,-22}}, color={0,0,127}));
-  connect(chiBeaTesBed.uPumSta, sysCon.yChiWatPum[1]) annotation (Line(points={
-          {-12,-30},{-18,-30},{-18,-62},{76,-62},{76,-40},{144,-40},{144,-74}},
+        points={{-17.4,-11.4286},{-22,-11.4286},{-22,-76},{-62,-76},{-62,-50},{
+          -112,-50},{-112,-78},{-94.4,-78},{-94.4,-76}},
+                                               color={255,0,255}));
+  connect(DOAScon.yCoiHea, chiBeaTesBed.uHeaCoi) annotation (Line(points={{-17.4,
+          -6.57143},{26,-6.57143},{26,-10},{38,-10}},
+                                               color={0,0,127}));
+  connect(chiBeaTesBed.uPumSta, sysCon.yChiWatPum[1]) annotation (Line(points={{38,-18},
+          {32,-18},{32,-42},{154,-42},{154,-74},{144,-74}},
         color={255,0,255}));
-  connect(chiBeaTesBed.uCAVReh, terCon.yReh) annotation (Line(points={{-12,-10},
-          {-22,-10},{-22,42},{92,42},{92,69},{64,69}}, color={0,0,127}));
-  connect(terCon.yChiVal, chiBeaTesBed.uChiWatVal) annotation (Line(points={{64,
-          66.5},{76,66.5},{76,66},{84,66},{84,32},{-16,32},{-16,-2},{-12,-2}},
+  connect(chiBeaTesBed.uCAVReh, terCon.yReh) annotation (Line(points={{38,2},{
+          34,2},{34,78},{70,78},{70,69},{64,69}},      color={0,0,127}));
+  connect(terCon.yChiVal, chiBeaTesBed.uChiWatVal) annotation (Line(points={{64,66.5},
+          {68,66.5},{68,62},{70,62},{70,22},{34,22},{34,10},{38,10}},
         color={0,0,127}));
   connect(terCon.yDam, chiBeaTesBed.uCAVDam) annotation (Line(points={{64,64},{
-          72,64},{72,62},{78,62},{78,36},{-20,36},{-20,-6},{-12,-6}}, color={0,
+          68,64},{68,42},{36,42},{36,22},{34,22},{34,6},{38,6}},      color={0,
           0,127}));
-  connect(loads.y, chiBeaTesBed.QFlo) annotation (Line(points={{-139,-50},{-14,-50},
-          {-14,6},{-12,6}},      color={0,0,127}));
-  connect(sub.y, chiBeaTesBed.deltaT) annotation (Line(points={{18,-82},{20,-82},
-          {20,-98},{-136,-98},{-136,-38},{-104,-38},{-104,6},{-68,6},{-68,10},{
-          -24,10},{-24,-2},{-18,-2},{-18,-4},{-12,-4}}, color={0,0,127}));
-  connect(DOAScon.yFanSup, chiBeaTesBed.uFanSta) annotation (Line(points={{-23.14,
-          -4.6},{-17.57,-4.6},{-17.57,-14},{-12,-14}}, color={255,0,255}));
+  connect(loads.y, chiBeaTesBed.QFlo) annotation (Line(points={{-139,-50},{-114,
+          -50},{-114,14},{-22,14},{-22,18},{38,18}},
+                                 color={0,0,127}));
+  connect(sub.y, chiBeaTesBed.deltaT) annotation (Line(points={{18,-82},{34,-82},
+          {34,-28},{32,-28},{32,8},{38,8}},             color={0,0,127}));
+  connect(DOAScon.yFanSup, chiBeaTesBed.uFanSta) annotation (Line(points={{-17.4,
+          0.714286},{28,0.714286},{28,-2},{38,-2}},    color={255,0,255}));
   connect(reaScaRep.y, terCon.TZonHeaSet) annotation (Line(points={{-14,98},{0,98},
           {0,68},{20,68},{20,67.75},{40,67.75}}, color={0,0,127}));
   connect(chiBeaTesBed.relHumDOASRet, DOAScon.phiAirRet) annotation (Line(
-        points={{12,-31},{38,-31},{38,-32},{56,-32},{56,-58},{-94,-58},{-94,-10},
-          {-54.6,-10}}, color={0,0,127}));
-  connect(chiBeaTesBed.rAT, eRWtemp.TAirRet) annotation (Line(points={{12,-34.4},
-          {60,-34.4},{60,-92},{-108,-92},{-108,-80},{-94.4,-80}}, color={0,0,
+        points={{62,-19},{66,-19},{66,-32},{-24,-32},{-24,-36},{-58,-36},{-58,
+          -20},{-60,-20},{-60,-2.92857},{-48.6,-2.92857}},
+                        color={0,0,127}));
+  connect(chiBeaTesBed.rAT, eRWtemp.TAirRet) annotation (Line(points={{62,-22.4},
+          {66,-22.4},{66,-32},{40,-32},{40,-30},{-16,-30},{-16,-38},{-58,-38},{
+          -58,-58},{-100,-58},{-100,-80},{-94.4,-80}},            color={0,0,
           127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}})),

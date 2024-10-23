@@ -4,8 +4,14 @@ block DehumMode
 
   parameter Real dehumSet(
     final min=0,
-    final max=100)=60
+    final max=100)=0.6
    "Dehumidification set point.";
+
+
+  parameter Real dehumOff(
+    final min=0,
+    final max=100)=0.05
+   "Relative humidity offset";
 
   parameter Real timThrDehDis(
     final unit="s",
@@ -14,12 +20,12 @@ block DehumMode
 
   parameter Real timDelDehEna(
     final unit="s",
-    final quantity="Time")=120
+    final quantity="Time")=180
     "Continuous time period for which supply fan needs to be on before enabling dehumidifaction mode";
 
   parameter Real timThrDehEna(
     final unit="s",
-    final quantity="Time")=5
+    final quantity="Time")=300
     "Continuous time period for which relative humidity rises above set point before dehumidifcation mode is enabled";
 
 
@@ -43,29 +49,10 @@ block DehumMode
         transformation(extent={{102,-12},{142,28}}), iconTransformation(extent={
             {102,-20},{142,20}})));
 
+  CDL.Reals.Hysteresis hys(uLow=0.55, uHigh=0.65)
+    annotation (Placement(transformation(extent={{-40,-24},{-20,-4}})));
+
 protected
-  Buildings.Controls.OBC.CDL.Logical.Latch lat
-    "Latches true when retHum > dehumSet; resets when 
-     retHum < dehumSet for dehumDelay time"
-    annotation (Placement(transformation(extent={{22,-10},{42,10}})));
-
-  Buildings.Controls.OBC.CDL.Reals.Greater gre
-    "True when return humidity is greater than set point"
-    annotation (Placement(transformation(extent={{-44,-10},{-24,10}})));
-
-  Buildings.Controls.OBC.CDL.Reals.Less les
-    "True when return humidity is less than set point"
-    annotation (Placement(transformation(extent={{-44,-42},{-24,-22}})));
-
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant phiAirDehSet(final k=
-        dehumSet) "Dehumidification set point"
-    annotation (Placement(transformation(extent={{-88,-50},{-68,-30}})));
-
-  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDelDehDis(delayTime=
-        timThrDehDis)
-    "Minimum dehumidification time before disable when below set point."
-    annotation (Placement(transformation(extent={{-14,-42},{6,-22}})));
-
   Buildings.Controls.OBC.CDL.Logical.And andDehOpe "Logical AND; true when minimum fan runtime is met and 
       return humidity set point conditions are met."
     annotation (Placement(transformation(extent={{58,-2},{78,18}})));
@@ -78,30 +65,10 @@ protected
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDelDehEna(final delayTime=
         timThrDehEna,    final delayOnInit=true) "Delays the initial trigger for latch to correctly capture true state 
       when CDL starts with humidity above set point."
-    annotation (Placement(transformation(extent={{-14,-10},{6,10}})));
+    annotation (Placement(transformation(extent={{20,-14},{40,6}})));
 
 
 equation
-  connect(phiAirRet, gre.u1)
-    annotation (Line(points={{-122,0},{-46,0}}, color={0,0,127}));
-
-  connect(phiAirRet, les.u1) annotation (Line(points={{-122,0},{-56,0},{-56,-32},
-          {-46,-32}}, color={0,0,127}));
-
-  connect(phiAirDehSet.y, les.u2)
-    annotation (Line(points={{-66,-40},{-46,-40}}, color={0,0,127}));
-
-  connect(phiAirDehSet.y, gre.u2) annotation (Line(points={{-66,-40},{-60,-40},{
-          -60,-8},{-46,-8}}, color={0,0,127}));
-
-  connect(les.y,truDelDehDis. u)
-    annotation (Line(points={{-22,-32},{-16,-32}}, color={255,0,255}));
-
-  connect(truDelDehDis.y, lat.clr) annotation (Line(points={{8,-32},{14,-32},{14,
-          -6},{20,-6}}, color={255,0,255}));
-
-  connect(lat.y, andDehOpe.u2)
-    annotation (Line(points={{44,0},{56,0}}, color={255,0,255}));
 
   connect(yDehMod, yDehMod)
     annotation (Line(points={{122,8},{122,8}}, color={255,0,255}));
@@ -115,30 +82,26 @@ equation
   connect(minimumRunDeh.y, andDehOpe.u1) annotation (Line(points={{-22,38},{48,38},
           {48,8},{56,8}}, color={255,0,255}));
 
-  connect(gre.y,truDelDehEna. u)
-    annotation (Line(points={{-22,0},{-16,0}}, color={255,0,255}));
-
-  connect(truDelDehEna.y, lat.u)
-    annotation (Line(points={{8,0},{20,0}}, color={255,0,255}));
-
   connect(uFanSupPro, minimumRunDeh.u)
     annotation (Line(points={{-122,38},{-46,38}}, color={255,0,255}));
 
+  connect(phiAirRet, hys.u) annotation (Line(points={{-122,0},{-50,0},{-50,-14},
+          {-42,-14}},color={0,0,127}));
+  connect(hys.y, truDelDehEna.u) annotation (Line(points={{-18,-14},{10,-14},{
+          10,-4},{18,-4}},
+                        color={255,0,255}));
+  connect(truDelDehEna.y, andDehOpe.u2) annotation (Line(points={{42,-4},{42,
+          -12},{56,-12},{56,0}}, color={255,0,255}));
   annotation (defaultComponentName="DehumMod",
-  Icon(coordinateSystem(preserveAspectRatio=false), graphics={Text(extent={{-90,180},{90,76}}, lineColor={28,108,200}, textStyle={TextStyle.Bold}, textString
-            =                                                                                                                                                 "%name"),Rectangle(extent={{-100,100},{100,-100}}, lineColor={179,151,128}, radius=10, fillColor={255,255,255},
+  Icon(coordinateSystem(preserveAspectRatio=false), graphics={Text(extent={{-90,180},{90,76}}, lineColor={28,108,200}, textStyle={TextStyle.Bold}, textString="%name"),Rectangle(extent={{-100,100},{100,-100}}, lineColor={179,151,128}, radius=10, fillColor={255,255,255},
             fillPattern=
-FillPattern.Solid),Text(extent={{42,10},{96,-8}},lineColor={28,108,200},textString
-            =                                                                      "dehumMode"),Text(extent={{-100,8},{-56,-6}},lineColor={28,108,200},textString
-            =                                                                                                                                                     "retHum"),Rectangle(extent={{4,60},{8,-2}},lineColor={28,108,200},fillColor={0,0,255},
+FillPattern.Solid),Text(extent={{42,10},{96,-8}},lineColor={28,108,200},textString="dehumMode"),Text(extent={{-100,8},{-56,-6}},lineColor={28,108,200},textString="retHum"),Rectangle(extent={{4,60},{8,-2}},lineColor={28,108,200},fillColor={0,0,255},
             fillPattern=
 FillPattern.Solid),Rectangle(extent={{4,-2},{8,-64}},lineColor={244,125,35},fillColor={244,125,35},
             fillPattern=
-FillPattern.Solid),Text(extent={{-2,42},{36,30}},lineColor={28,108,200},textString
-            =                                                                      "On"),Text(extent={{-2,-38},{36,-50}},lineColor={28,108,200},textString
-            =                                                                                                                                              "Off"),Text(extent={{-36,4},{2,-8}},lineColor={28,108,200},textString
-            =                                                                                                                                                                                                        "%dehumSet"),Text(extent={{-96,80},{-52,66}},lineColor={28,108,200},textString
-            =                                                                                                                                                                                                        "supFanProof")}),
+FillPattern.Solid),Text(extent={{-2,42},{36,30}},lineColor={28,108,200},textString="On"),Text(extent={{-2,-38},{36,-50}},lineColor={28,108,200},textString="Off"),Text(extent={{-36,4},{2,-8}},lineColor={28,108,200},textString
+            =                                                                                                                                                                                           "%dehumSet"),Text(extent={{-96,80},{-52,66}},lineColor={28,108,200},textString
+            =                                                                                                                                                                                           "supFanProof")}),
     Diagram(coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
 <h4>Dehumidification Mode</h4>
@@ -149,5 +112,11 @@ FillPattern.Solid),Text(extent={{-2,42},{36,30}},lineColor={28,108,200},textStri
 September 15, 2020, by Henry Nickels:</br>
 First implementation.</li>
 </ul>
-</html>"));
+</html>"),
+    experiment(
+      StartTime=19300000,
+      StopTime=19600000,
+      Interval=600,
+      Tolerance=1e-06,
+      __Dymola_Algorithm="Cvode"));
 end DehumMode;

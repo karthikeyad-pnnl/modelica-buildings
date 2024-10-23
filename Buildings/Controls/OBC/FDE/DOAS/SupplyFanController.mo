@@ -46,14 +46,14 @@ block SupplyFanController "This block manages start, stop, status, and speed of 
   "Minimum Fan Speed";
 
   parameter Real kFanSpe(
-   final unit= "1") = 0.5 "
+   final unit= "1") = 0.005 "
   Fan speed set point SAT PI gain value k.";
 
   parameter Real TdFanSpe(
-   final unit= "s") = 60 "Time constant of derivative block for conPIDFanSpe";
+   final unit= "s") = 0 "Time constant of derivative block for conPIDFanSpe";
 
   parameter Real TiFanSpe(
-   final unit= "s") = 0.000025
+   final unit= "s") = 10
   "Fan speed set point SAT PI time constant value Ti.";
 
   parameter CDL.Types.SimpleController controllerTypeFanSpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
@@ -71,7 +71,7 @@ block SupplyFanController "This block manages start, stop, status, and speed of 
           extent={{-142,22},{-102,62}}), iconTransformation(extent={{-140,-56},
             {-100,-16}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uDamMaxOpe if  is_vav
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uDamMaxOpe  if is_vav
     "Maximum damper opening position from all terminal units served"
     annotation (Placement(transformation(extent={{-142,-24},{-102,16}}),
         iconTransformation(extent={{-140,14},{-100,54}})));
@@ -89,13 +89,13 @@ block SupplyFanController "This block manages start, stop, status, and speed of 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yFanSupSpe
     "Supply fan speed signal" annotation (Placement(transformation(extent={{102,
             -50},{142,-10}}), iconTransformation(extent={{100,-64},{140,-24}})));
-protected
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant DamSet(k=damSet) if
-                  is_vav "Most open damper position set point."
+// protected
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant DamSet(k=damSet)
+               if is_vav "Most open damper position set point."
     annotation (Placement(transformation(extent={{-98,4},{-78,24}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant conPDucSetCV(final k=
-        dPDucSetCV) if    not is_vav
+        dPDucSetCV)    if not is_vav
     "DDSP set point for constant volume systems."
     annotation (Placement(transformation(extent={{-72,-64},{-52,-44}})));
   Buildings.Controls.OBC.CDL.Reals.Switch swiFanSpe
@@ -113,14 +113,14 @@ protected
     Td=TdDam,
     yMax=yMaxDamSet,
     yMin=yMinDamSet,
-    reverseActing=false) if
-                    is_vav "PID for most open damper" annotation (Placement(
+    reverseActing=false)
+                 if is_vav "PID for most open damper" annotation (Placement(
         visible=true, transformation(
         origin={-38,22},
         extent={{-10,-10},{10,10}},
         rotation=0)));
 
-  Buildings.Controls.OBC.CDL.Reals.PID conPIDFanSpe(
+  CDL.Reals.PIDWithReset               conPIDFanSpe(
     controllerType=controllerTypeFanSpe,
     Ti=TiFanSpe,
     k=kFanSpe,
@@ -162,6 +162,8 @@ equation
           {30,-24},{58,-24}}, color={0,0,127}));
   connect(swiFanSpe.y, yFanSupSpe) annotation (Line(points={{82,-32},{88,-32},{88,
           -30},{122,-30}}, color={0,0,127}));
+  connect(uFanSupPro, conPIDFanSpe.trigger) annotation (Line(points={{-122,42},
+          {0,42},{0,-32},{14,-32},{14,-22}}, color={255,0,255}));
   annotation (
     defaultComponentName = "SFcon",
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics={  Rectangle(lineColor = {179, 151, 128}, fillColor = {255, 255, 255},

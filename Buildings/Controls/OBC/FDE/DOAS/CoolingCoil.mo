@@ -36,26 +36,6 @@ block CoolingCoil "This block commands the cooling coil."
   final unit="s")=0.1
     "Time constant of derivative block for conPIDRegOpe controller";
 
-  parameter Real dehumSet(
-    final min=0,
-    final max=100)=60
-    "Dehumidification set point.";
-
-  parameter Real timThrDehDis(
-    final unit="s",
-    final quantity="Time")=600
-    "Continuous time period for which measured relative humidity needs to fall below relative humidity threshold before dehumidification mode is disabled";
-
-  parameter Real timDelDehEna(
-    final unit="s",
-    final quantity="Time")=120
-    "Continuous time period for which supply fan needs to be on before enabling dehumidifaction mode";
-
-  parameter Real timThrDehEna(
-    final unit="s",
-    final quantity="Time")=5
-    "Continuous time period for which relative humidity rises above set point before dehumidifcation mode is enabled";
-
 
 
   // ---inputs---
@@ -124,7 +104,7 @@ block CoolingCoil "This block commands the cooling coil."
         origin={-66,48},
         extent={{-10,-10},{10,10}},
         rotation=0)));
-protected
+//protected
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant conZer(final k=0)
     "Real constant zero"
     annotation (Placement(transformation(extent={{-30,-80},{-10,-60}})));
@@ -141,18 +121,19 @@ protected
     "Enable dehumidification mode only when supply fan is proven on"
     annotation (Placement(transformation(extent={{-20,-14},{0,8}})));
 
-  Buildings.Controls.OBC.CDL.Reals.PID conPIDRegOpe(
+  CDL.Reals.PIDWithReset               conPIDRegOpe(
     controllerType=controllerTypeRegOpe,
     k=kRegOpe,
     Ti=TiRegOpe,
-    Td=TdRegOpe,                                    reverseActing=false)
+    Td=TdRegOpe,
+    reverseActing=false)
     "PID controller for regular cooling coil operation mode" annotation (
       Placement(visible=true, transformation(
         origin={-62,-42},
         extent={{-10,-10},{10,10}},
         rotation=0)));
 
-  Buildings.Controls.OBC.CDL.Reals.PID conPIDDeh(
+  CDL.Reals.PIDWithReset               conPIDDeh(
     controllerType=controllerTypeDeh,
     k=kDeh,
     Ti=TiDeh,
@@ -168,7 +149,7 @@ protected
   Buildings.Controls.OBC.CDL.Reals.AddParameter TSetCooDeh(p=-erwDPadj)
     "Calculate cooling setpoint temperature for air in dehumidification mode"
     annotation (Placement(visible=true, transformation(
-        origin={-36,36},
+        origin={-30,36},
         extent={{-10,-10},{10,10}},
         rotation=0)));
 
@@ -217,10 +198,14 @@ equation
 
 
   connect(TAirDewEneRecWhe.TDewPoi, TSetCooDeh.u)
-    annotation (Line(points={{-54,48},{-48,48},{-48,36}}, color={0,0,127}));
+    annotation (Line(points={{-54,48},{-54,36},{-42,36}}, color={0,0,127}));
 
-  connect(TSetCooDeh.y, conPIDDeh.u_s) annotation (Line(points={{-24,36},{-10,36},
+  connect(TSetCooDeh.y, conPIDDeh.u_s) annotation (Line(points={{-18,36},{-10,36},
           {-10,80},{-2,80}}, color={0,0,127}));
+  connect(uFanSupPro, conPIDRegOpe.trigger) annotation (Line(points={{-122,-96},
+          {-68,-96},{-68,-54}}, color={255,0,255}));
+  connect(uFanSupPro, conPIDDeh.trigger) annotation (Line(points={{-122,-96},{
+          10,-96},{10,54},{4,54},{4,68}}, color={255,0,255}));
   annotation (
     defaultComponentName = "conCoiCoo",
         Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics={  Rectangle(lineColor = {179, 151, 128}, fillColor = {255, 255, 255},
