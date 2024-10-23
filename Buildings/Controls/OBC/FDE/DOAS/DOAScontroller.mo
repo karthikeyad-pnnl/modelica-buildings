@@ -8,7 +8,7 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
   annotation(Dialog(tab="Controller parameters", group = "Energy recovery wheel parameters"));
 
   parameter CDL.Types.SimpleController controllerTypeDeh=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
-    "PID controller for cooling air in dehumidification mode"
+    "PID controller type for cooling air in dehumidification mode"
     annotation(Dialog(tab="Controller parameters", group = "Dehmidification mode parameters"));
 
   parameter Real kDeh(
@@ -310,135 +310,137 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
 // ---inputs---
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput Occ
     "True when occupied mode is active"
-    annotation(Placement(transformation(extent = {{-142, 56}, {-102, 96}}),
-      iconTransformation(extent={{-140,240},{-100,280}})));
+    annotation(Placement(transformation(extent={{-140,150},{-100,190}}),
+      iconTransformation(extent={{-140,200},{-100,240}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uDamMaxOpe
     "Most open damper position from all terminal units served." annotation (
-      Placement(transformation(extent={{-142,30},{-102,70}}),
-        iconTransformation(extent={{-140,200},{-100,240}})));
+      Placement(transformation(extent={{-140,120},{-100,160}}),
+        iconTransformation(extent={{-140,160},{-100,200}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uFanSupPro
     "True when supply fan is proven on." annotation (Placement(transformation(
-          extent={{-140,4},{-100,44}}), iconTransformation(extent={{-140,160},{-100,
-            200}})));
+          extent={{-140,90},{-100,130}}),
+                                        iconTransformation(extent={{-140,120},{-100,
+            160}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput dPAirDucSta(final unit="Pa",
       final quantity="PressureDifference")
     "Down duct static pressure measurement." annotation (Placement(
-        transformation(extent={{-140,-22},{-100,18}}), iconTransformation(
-          extent={{-140,120},{-100,160}})));
+        transformation(extent={{-140,60},{-100,100}}), iconTransformation(
+          extent={{-140,80},{-100,120}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput phiAirRet(
     final min=0,
     final max=100,
     final displayUnit="rh") "Return air relative humidity sensor." annotation (
-      Placement(transformation(extent={{-140,-80},{-100,-40}}),
-        iconTransformation(extent={{-140,80},{-100,120}})));
+      Placement(transformation(extent={{-140,0},{-100,40}}),
+        iconTransformation(extent={{-140,40},{-100,80}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirSup(
     final unit="K",
     final displayUnit="degC",
     final quantity="ThermodynamicTemperature") "Supply air temperature sensor."
-    annotation (Placement(transformation(extent={{-140,-106},{-100,-66}}),
-        iconTransformation(extent={{-140,0},{-100,40}})));
+    annotation (Placement(transformation(extent={{-140,-40},{-100,0}}),
+        iconTransformation(extent={{-140,-40},{-100,0}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirDisCoiCoo(
     final unit="K",
     final displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "Cooling coil discharge air temperature sensor." annotation (Placement(
-        transformation(extent={{-140,-184},{-100,-144}}), iconTransformation(
-          extent={{-140,-120},{-100,-80}})));
+        transformation(extent={{-140,-130},{-100,-90}}),  iconTransformation(
+          extent={{-140,-160},{-100,-120}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput phiAirEneRecWhe(
     final min=0,
     final max=100,
     final displayUnit="rh") "ERW relative humidity sensor" annotation (
-      Placement(transformation(extent={{-140,-210},{-100,-170}}),
-        iconTransformation(extent={{-140,-160},{-100,-120}})));
+      Placement(transformation(extent={{-140,-160},{-100,-120}}),
+        iconTransformation(extent={{-140,-200},{-100,-160}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirSupEneWhe(
     final unit="K",
     final displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "ERW dry bulb temperature sensor." annotation (Placement(transformation(
-          extent={{-140,-236},{-100,-196}}), iconTransformation(extent={{-140,-200},
-            {-100,-160}})));
+          extent={{-140,-190},{-100,-150}}), iconTransformation(extent={{-140,-240},
+            {-100,-200}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirOut(
     final unit="K",
     final displayUnit="degC",
     final quantity="ThermodynamicTemperature") "Outside air temperature"
-    annotation (Placement(transformation(extent={{-140,-158},{-100,-118}}),
-        iconTransformation(extent={{-140,-80},{-100,-40}})));
+    annotation (Placement(transformation(extent={{-140,-100},{-100,-60}}),
+        iconTransformation(extent={{-140,-120},{-100,-80}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirRet(
     final unit="K",
     final displayUnit="degC",
     final quantity="ThermodynamicTemperature") "Return air temperature sensor."
-    annotation (Placement(transformation(extent={{-140,-132},{-100,-92}}),
-        iconTransformation(extent={{-140,-40},{-100,0}})));
+    annotation (Placement(transformation(extent={{-140,-70},{-100,-30}}),
+        iconTransformation(extent={{-140,-80},{-100,-40}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uFanExhPro
     "True when exhaust fan is proven on." annotation (Placement(transformation(
-          extent={{-140,-262},{-100,-222}}), iconTransformation(extent={{-140,-240},
-            {-100,-200}})));
+          extent={{-140,-220},{-100,-180}}), iconTransformation(extent={{-140,-280},
+            {-100,-240}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput dPAirStaBui(final unit="Pa",
       final quantity="PressureDifference") "Building static pressure"
-    annotation (Placement(transformation(extent={{-140,-290},{-100,-250}}),
-        iconTransformation(extent={{-140,-280},{-100,-240}})));
+    annotation (Placement(transformation(extent={{-140,-250},{-100,-210}}),
+        iconTransformation(extent={{-140,-320},{-100,-280}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirHig(
     final unit="K",
     final displayUnit="degC",
     final quantity="ThermodynamicTemperature")
     "Highest space temperature reported from all terminal units." annotation (
-      Placement(transformation(extent={{-140,-50},{-100,-10}}),
-        iconTransformation(extent={{-140,40},{-100,80}})));
+      Placement(transformation(extent={{-140,30},{-100,70}}),
+        iconTransformation(extent={{-140,0},{-100,40}})));
 
 // ---outputs---
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yFanSup
     "Command supply fan to start when true." annotation (Placement(
-        transformation(extent={{100,60},{140,100}}),iconTransformation(extent={{100,140},
+        transformation(extent={{100,100},{140,140}}),
+                                                    iconTransformation(extent={{100,140},
             {140,180}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yFanSupSpe
-    "Supply fan speed command" annotation (Placement(transformation(extent={{
-            102,28},{142,68}}), iconTransformation(extent={{100,100},{140,140}})));
+    "Supply fan speed command" annotation (Placement(transformation(extent={{100,70},
+            {140,110}}),        iconTransformation(extent={{100,100},{140,140}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yCoiCoo
-    "Cooling coil control signal" annotation (Placement(transformation(extent={
-            {102,2},{142,42}}), iconTransformation(extent={{100,60},{140,100}})));
+    "Cooling coil control signal" annotation (Placement(transformation(extent={{100,40},
+            {140,80}}),         iconTransformation(extent={{100,60},{140,100}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yCoiHea
-    "Reheat coil valve command." annotation (Placement(transformation(extent={{
-            102,-24},{142,16}}), iconTransformation(extent={{100,20},{140,60}})));
+    "Reheat coil valve command." annotation (Placement(transformation(extent={{100,10},
+            {140,50}}),          iconTransformation(extent={{100,20},{140,60}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yBypDam
     "Bypass damper command; true when commanded full open." annotation (
-      Placement(transformation(extent={{102,-50},{142,-10}}),
+      Placement(transformation(extent={{100,-20},{140,20}}),
         iconTransformation(extent={{100,-20},{140,20}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yEneRecWheEna
     "Command to start the energy recovery wheel." annotation (Placement(
-        transformation(extent={{102,-74},{142,-34}}), iconTransformation(extent={{100,-60},
+        transformation(extent={{100,-50},{140,-10}}), iconTransformation(extent={{100,-60},
             {140,-20}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yEneRecWheSpe
     "Energy recovery wheel speed command." annotation (Placement(transformation(
-          extent={{102,-108},{142,-68}}), iconTransformation(extent={{100,-100},
+          extent={{100,-80},{140,-40}}),  iconTransformation(extent={{100,-100},
             {140,-60}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yExhFanSta
     "Command exhaust fan to start when true." annotation (Placement(
-        transformation(extent={{100,-140},{140,-100}}), iconTransformation(
+        transformation(extent={{100,-120},{140,-80}}),  iconTransformation(
           extent={{100,-140},{140,-100}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yExhFanSpe
     "Exhaust fan speed command" annotation (Placement(transformation(extent={{100,
-            -200},{140,-160}}),     iconTransformation(extent={{100,-180},{140,-140}})));
+            -150},{140,-110}}),     iconTransformation(extent={{100,-180},{140,-140}})));
 
   Buildings.Controls.OBC.FDE.DOAS.SupplyFanController SFcon(
     is_vav=is_vav,
@@ -456,7 +458,7 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
     TiFanSpe=TiFanSpe,
     controllerTypeFanSpe=controllerTypeFanSpe)
     "This block manages start, stop, status, and speed of the supply fan."
-    annotation(Placement(transformation(extent={{-50,54},{-30,74}})));
+    annotation(Placement(transformation(extent={{-10,140},{10,160}})));
 
   Buildings.Controls.OBC.FDE.DOAS.EnergyWheel ERWcon(
     dTThrEneRec=dTThrEneRec,
@@ -484,7 +486,7 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
     TiRegOpe=TiRegOpe,
     TdRegOpe=TdRegOpe)
     "This block commands the cooling coil."
-     annotation(Placement(transformation(extent = {{58, 18}, {78, 38}})));
+     annotation(Placement(transformation(extent={{52,50},{72,70}})));
 
   Buildings.Controls.OBC.FDE.DOAS.HeatingCoil Heating(
     controllerTypeCoiHea=controllerTypeCoiHea,
@@ -492,7 +494,7 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
     TiCoiHea=TiCoiHea,
     TdCoiHea=TdCoiHea)
     "This block commands the heating coil."
-    annotation(Placement(transformation(extent = {{58, -18}, {78, 2}})));
+    annotation(Placement(transformation(extent={{50,0},{70,20}})));
 
   Buildings.Controls.OBC.FDE.DOAS.DehumMode DehumMod(
     dehumSet=dehumSet,
@@ -500,7 +502,7 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
     timDelDehEna=timDelDehEna,
     timThrDehEna=timThrDehEna)
     "This block calculates when dehumidification mode is active."
-    annotation(Placement(transformation(extent = {{-48, 8}, {-28, 28}})));
+    annotation(Placement(transformation(extent={{-44,30},{-24,50}})));
 
   ExhaustFan EFcon1(
     dPSetBui=dPSetBui,
@@ -508,7 +510,7 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
     TiExhFan=TiExhFan,
     TdExhFan=TdExhFan,
     controllerTypeExhFan=controllerTypeExhFan)
-    annotation (Placement(transformation(extent={{40,-170},{60,-150}})));
+    annotation (Placement(transformation(extent={{30,-130},{50,-110}})));
   EconomizerMode EconMod1(dTEcoThr=dTEcoThr)
     annotation (Placement(transformation(extent={{30,-40},{50,-20}})));
   SupplyTemperatureSetpoint TSupSetpt(
@@ -518,124 +520,140 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
     TLowZon=TLowZon,
     TSupCooOff=TSupCooOff,
     TSupHeaOff=TSupHeaOff)
-    annotation (Placement(transformation(extent={{0,-8},{20,12}})));
+    annotation (Placement(transformation(extent={{-10,8},{10,28}})));
   CDL.Interfaces.RealInput TZonHeaSet(
     final unit="K",
     final displayUnit="degC",
     final quantity="ThermodynamicTemperature") "Zone heating setpoint"
-    annotation (Placement(transformation(extent={{-140,78},{-100,118}}),
-        iconTransformation(extent={{-140,116},{-100,156}})));
+    annotation (Placement(transformation(extent={{-140,180},{-100,220}}),
+        iconTransformation(extent={{-140,240},{-100,280}})));
   CDL.Interfaces.RealInput TZonCooSet(
     final unit="K",
     final displayUnit="degC",
     final quantity="ThermodynamicTemperature") "Zone cooling setpoint"
-    annotation (Placement(transformation(extent={{-140,110},{-100,150}}),
-        iconTransformation(extent={{-140,96},{-100,136}})));
+    annotation (Placement(transformation(extent={{-140,210},{-100,250}}),
+        iconTransformation(extent={{-140,280},{-100,320}})));
 equation
   connect(SFcon.Occ,Occ)  annotation (
-    Line(points={{-52,71},{-96,71},{-96,76},{-122,76}},          color = {255, 0, 255}));
-  connect(SFcon.uDamMaxOpe, uDamMaxOpe) annotation (Line(points={{-52,67.4},{
-          -98,67.4},{-98,50},{-122,50}}, color={0,0,127}));
-  connect(SFcon.dPAirDucSta, dPAirDucSta) annotation (Line(points={{-52,56.8},{
-          -94,56.8},{-94,-2},{-120,-2}}, color={0,0,127}));
-  connect(SFcon.yFanSup, yFanSup) annotation (Line(points={{-28,69.2},{120,69.2},
-          {120,80}}, color={255,0,255}));
-  connect(SFcon.yFanSupSpe, yFanSupSpe) annotation (Line(points={{-28,59.6},{84,
-          59.6},{84,48},{122,48}}, color={0,0,127}));
+    Line(points={{-12,157},{-12,156},{-94,156},{-94,170},{-120,170}},
+                                                                 color = {255, 0, 255}));
+  connect(SFcon.uDamMaxOpe, uDamMaxOpe) annotation (Line(points={{-12,153.4},{-12,
+          152},{-82,152},{-82,140},{-120,140}},
+                                         color={0,0,127}));
+  connect(SFcon.dPAirDucSta, dPAirDucSta) annotation (Line(points={{-12,142.8},{
+          -90,142.8},{-90,80},{-120,80}},color={0,0,127}));
+  connect(SFcon.yFanSup, yFanSup) annotation (Line(points={{12,155.2},{90,155.2},
+          {90,120},{120,120}},
+                     color={255,0,255}));
+  connect(SFcon.yFanSupSpe, yFanSupSpe) annotation (Line(points={{12,145.6},{80,
+          145.6},{80,90},{120,90}},color={0,0,127}));
 //connect(SFcon.supFanProof, DehumMod.supFanProof) annotation (
 // Line(points={{-62,68},{-56,68},{-56,25.2},{-50.2,25.2}},color={255,0,255}));
 //connect(SFcon.supFanProof, Cooling.supFanProof) annotation (
 // Line(points={{-62,68},{-56,68},{-56,36.4},{55.8,36.4}},color={255,0,255}));
-  connect(DehumMod.yDehMod, Cooling.uDeh) annotation (Line(points={{-25.8,18},{
-          -22,18},{-22,27.4},{55.8,27.4}}, color={255,0,255}));
-  connect(DehumMod.phiAirRet, phiAirRet) annotation (Line(points={{-50.2,18},{-92,
-          18},{-92,-60},{-120,-60}}, color={0,0,127}));
-  connect(Cooling.TAirSup, TAirSup) annotation (Line(points={{55.8,33.6},{-90,
-          33.6},{-90,-86},{-120,-86}}, color={0,0,127}));
-  connect(Cooling.TAirDis, TAirDisCoiCoo) annotation (Line(points={{55.8,24.8},
-          {-20,24.8},{-20,-164},{-120,-164}}, color={0,0,127}));
-  connect(Cooling.phiAirEneRecWhe, phiAirEneRecWhe) annotation (Line(points={{
-          55.8,22.2},{-18,22.2},{-18,-190},{-120,-190}}, color={0,0,127}));
-  connect(Cooling.TAirEneRecWhe, TAirSupEneWhe) annotation (Line(points={{55.8,
-          19.6},{-16,19.6},{-16,-216},{-120,-216}}, color={0,0,127}));
-  connect(Cooling.yCoiCoo, yCoiCoo) annotation (Line(points={{80.2,28},{92,28},
-          {92,22},{122,22}}, color={0,0,127}));
+  connect(DehumMod.yDehMod, Cooling.uDeh) annotation (Line(points={{-21.8,40},{36,
+          40},{36,59.4},{49.8,59.4}},      color={255,0,255}));
+  connect(DehumMod.phiAirRet, phiAirRet) annotation (Line(points={{-46.2,40},{-62,
+          40},{-62,28},{-92,28},{-92,20},{-120,20}},
+                                     color={0,0,127}));
+  connect(Cooling.TAirSup, TAirSup) annotation (Line(points={{49.8,65.6},{-84,65.6},
+          {-84,-20},{-120,-20}},       color={0,0,127}));
+  connect(Cooling.TAirDis, TAirDisCoiCoo) annotation (Line(points={{49.8,56.8},{
+          -86,56.8},{-86,-110},{-120,-110}},  color={0,0,127}));
+  connect(Cooling.phiAirEneRecWhe, phiAirEneRecWhe) annotation (Line(points={{49.8,
+          54.2},{-88,54.2},{-88,-140},{-120,-140}},      color={0,0,127}));
+  connect(Cooling.TAirEneRecWhe, TAirSupEneWhe) annotation (Line(points={{49.8,51.6},
+          {40,51.6},{40,36},{-14,36},{-14,-54},{-16,-54},{-16,-170},{-120,-170}},
+                                                    color={0,0,127}));
+  connect(Cooling.yCoiCoo, yCoiCoo) annotation (Line(points={{74.2,60},{120,60}},
+                             color={0,0,127}));
 //connect(SFcon.supFanProof, Heating.supFanProof) annotation (
 //Line(points={{-62,68},{-56,68},{-56,-8},{55.8,-8}},color={255,0,255}));
-  connect(TAirSup, Heating.TAirSup) annotation (Line(points={{-120,-86},{-90,-86},
-          {-90,-13},{55.8,-13}}, color={0,0,127}));
-  connect(Heating.yCoiHea, yCoiHea) annotation (Line(points={{80.2,-8},{90,-8},
-          {90,-4},{122,-4}}, color={0,0,127}));
+  connect(TAirSup, Heating.TAirSup) annotation (Line(points={{-120,-20},{16,-20},
+          {16,5},{47.8,5}},      color={0,0,127}));
+  connect(Heating.yCoiHea, yCoiHea) annotation (Line(points={{72.2,10},{88,10},{
+          88,30},{120,30}},  color={0,0,127}));
   connect(ERWcon.yEneRecWheEna, yEneRecWheEna)
-    annotation (Line(points={{82.2,-50},{102,-50},{102,-54},{122,-54}},
+    annotation (Line(points={{82.2,-50},{96,-50},{96,-30},{120,-30}},
                                                     color={255,0,255}));
-  connect(ERWcon.yEneRecWheSpe, yEneRecWheSpe) annotation (Line(points={{82.2,
-          -56},{92,-56},{92,-88},{122,-88}}, color={0,0,127}));
+  connect(ERWcon.yEneRecWheSpe, yEneRecWheSpe) annotation (Line(points={{82.2,-56},
+          {92,-56},{92,-60},{120,-60}},      color={0,0,127}));
 // connect(SFcon.supFanProof, ERWcon.supFanProof) annotation (
 //Line(points={{-62,68},{-56,68},{-56,-46.2},{55.8,-46.2}},color={255,0,255}));
-  connect(ERWcon.yBypDam, yBypDam) annotation (Line(points={{82.2,-44},{92,-44},
-          {92,-30},{122,-30}}, color={255,0,255}));
+  connect(ERWcon.yBypDam, yBypDam) annotation (Line(points={{82.2,-44},{90,-44},
+          {90,0},{120,0}},     color={255,0,255}));
 //connect(SFcon.supFanProof, EconMod.supFanProof) annotation (
 //Line(points={{-62,68},{-56,68},{-56,-25},{23.8,-25}}, color={255,0,255}));
-  connect(TAirOut, ERWcon.TAirOut) annotation (Line(points={{-120,-138},{-22,
-          -138},{-22,-51.8},{57.8,-51.8}},
-                                     color={0,0,127}));
-  connect(TAirSupEneWhe, ERWcon.TAirSupEneWhe) annotation (Line(points={{-120,
-          -216},{-16,-216},{-16,-54.8},{57.8,-54.8}},
-                                                color={0,0,127}));
+  connect(TAirOut, ERWcon.TAirOut) annotation (Line(points={{-120,-80},{-22,-80},
+          {-22,-51.8},{57.8,-51.8}}, color={0,0,127}));
+  connect(TAirSupEneWhe, ERWcon.TAirSupEneWhe) annotation (Line(points={{-120,-170},
+          {-16,-170},{-16,-54.8},{57.8,-54.8}}, color={0,0,127}));
 // connect(SFcon.supFanProof, EFcon.supFanProof) annotation (
 //Line(points={{-62,68},{-56,68},{-56,-90},{56,-90}}, color={255,0,255}));
-  connect(uFanSupPro, SFcon.uFanSupPro) annotation (Line(points={{-120,24},{-96,
-          24},{-96,60.4},{-52,60.4}}, color={255,0,255}));
-  connect(uFanSupPro, DehumMod.uFanSupPro) annotation (Line(points={{-120,24},{
-          -50.2,24},{-50.2,25.2}}, color={255,0,255}));
-  connect(uFanSupPro, Cooling.uFanSupPro) annotation (Line(points={{-120,24},{-56,
-          24},{-56,36.4},{55.8,36.4}}, color={255,0,255}));
-  connect(uFanSupPro, Heating.uFanSupPro) annotation (Line(points={{-120,24},{
-          24,24},{24,-8},{55.8,-8}}, color={255,0,255}));
-  connect(uFanSupPro, ERWcon.uFanSupPro) annotation (Line(points={{-120,24},{24,
-          24},{24,-42.2},{57.8,-42.2}}, color={255,0,255}));
-  connect(ERWcon.TAirRet, TAirRet) annotation (Line(points={{57.8,-48.2},{-88,
-          -48.2},{-88,-112},{-120,-112}},
-                                   color={0,0,127}));
-  connect(EFcon1.yExhFanSta, yExhFanSta) annotation (Line(points={{62,-154},{94,
-          -154},{94,-120},{120,-120}}, color={255,0,255}));
-  connect(EFcon1.yExhFanSpe, yExhFanSpe) annotation (Line(points={{62,-166},{80,
-          -166},{80,-180},{120,-180}},            color={0,0,127}));
-  connect(uFanExhPro, EFcon1.uFanExhPro) annotation (Line(points={{-120,-242},{
-          -46,-242},{-46,-230},{14,-230},{14,-160},{38,-160}}, color={255,0,255}));
-  connect(dPAirStaBui, EFcon1.dPAirStaBui) annotation (Line(points={{-120,-270},
-          {-40,-270},{-40,-272},{30,-272},{30,-166.4},{38,-166.4}}, color={0,0,
+  connect(uFanSupPro, SFcon.uFanSupPro) annotation (Line(points={{-120,110},{-96,
+          110},{-96,140},{-24,140},{-24,146.4},{-12,146.4}},
+                                      color={255,0,255}));
+  connect(uFanSupPro, DehumMod.uFanSupPro) annotation (Line(points={{-120,110},{
+          -96,110},{-96,140},{-58,140},{-58,47.2},{-46.2,47.2}},
+                                   color={255,0,255}));
+  connect(uFanSupPro, Cooling.uFanSupPro) annotation (Line(points={{-120,110},{-96,
+          110},{-96,60},{-58,60},{-58,112},{48,112},{48,68.4},{49.8,68.4}},
+                                       color={255,0,255}));
+  connect(uFanSupPro, Heating.uFanSupPro) annotation (Line(points={{-120,110},{-96,
+          110},{-96,60},{-58,60},{-58,112},{48,112},{48,22},{42,22},{42,10},{47.8,
+          10}},                      color={255,0,255}));
+  connect(uFanSupPro, ERWcon.uFanSupPro) annotation (Line(points={{-120,110},{24,
+          110},{24,-42.2},{57.8,-42.2}},color={255,0,255}));
+  connect(ERWcon.TAirRet, TAirRet) annotation (Line(points={{57.8,-48.2},{-88,-48.2},
+          {-88,-50},{-120,-50}},   color={0,0,127}));
+  connect(EFcon1.yExhFanSta, yExhFanSta) annotation (Line(points={{52,-114},{94,
+          -114},{94,-100},{120,-100}}, color={255,0,255}));
+  connect(EFcon1.yExhFanSpe, yExhFanSpe) annotation (Line(points={{52,-126},{80,
+          -126},{80,-130},{120,-130}},            color={0,0,127}));
+  connect(uFanExhPro, EFcon1.uFanExhPro) annotation (Line(points={{-120,-200},{22,
+          -200},{22,-120},{28,-120}},                          color={255,0,255}));
+  connect(dPAirStaBui, EFcon1.dPAirStaBui) annotation (Line(points={{-120,-230},
+          {-90,-230},{-90,-172},{20,-172},{20,-126.4},{28,-126.4}}, color={0,0,
           127}));
-  connect(DehumMod.yDehMod, TSupSetpt.uDehMod) annotation (Line(points={{-25.8,
-          18},{-24,18},{-24,7},{-2,7}}, color={255,0,255}));
-  connect(TAirHig, TSupSetpt.TAirHig) annotation (Line(points={{-120,-30},{-30,
-          -30},{-30,-3},{-2,-3}},color={0,0,127}));
-  connect(TSupSetpt.ySupHeaSet, Heating.TAirSupSetHea) annotation (Line(points=
-          {{22,-1.8},{40,-1.8},{40,-3.2},{55.8,-3.2}}, color={0,0,127}));
-  connect(TAirOut, EconMod1.TAirOut) annotation (Line(points={{-120,-138},{-22,
-          -138},{-22,-30},{27.8,-30}},                       color={0,0,127}));
-  connect(TSupSetpt.ySupCooSet, EconMod1.TAirSupSetCoo) annotation (Line(points={{22,6.8},
-          {26,6.8},{26,-37},{27.8,-37}},          color={0,0,127}));
-  connect(uFanSupPro, EconMod1.uFanSupPro) annotation (Line(points={{-120,24},{
-          -46,24},{-46,-23},{27.8,-23}}, color={255,0,255}));
-  connect(uFanSupPro, EFcon1.uFanSupPro) annotation (Line(points={{-120,24},{
-          -40,24},{-40,-154},{38,-154}}, color={255,0,255}));
+  connect(DehumMod.yDehMod, TSupSetpt.uDehMod) annotation (Line(points={{-21.8,40},
+          {-12,40},{-12,23}},           color={255,0,255}));
+  connect(TAirHig, TSupSetpt.TAirHig) annotation (Line(points={{-120,50},{-78,50},
+          {-78,16.4},{-12,16.4}},color={0,0,127}));
+  connect(TSupSetpt.ySupHeaSet, Heating.TAirSupSetHea) annotation (Line(points={{12,14.2},
+          {29.9,14.2},{29.9,14.8},{47.8,14.8}},        color={0,0,127}));
+  connect(TAirOut, EconMod1.TAirOut) annotation (Line(points={{-120,-80},{-22,-80},
+          {-22,-30},{27.8,-30}},                             color={0,0,127}));
+  connect(TSupSetpt.ySupCooSet, EconMod1.TAirSupSetCoo) annotation (Line(points={{12,22.8},
+          {22,22.8},{22,-16},{20,-16},{20,-37},{27.8,-37}},
+                                                  color={0,0,127}));
+  connect(uFanSupPro, EconMod1.uFanSupPro) annotation (Line(points={{-120,110},{
+          -46,110},{-46,-23},{27.8,-23}},color={255,0,255}));
+  connect(uFanSupPro, EFcon1.uFanSupPro) annotation (Line(points={{-120,110},{-96,
+          110},{-96,60},{-58,60},{-58,-114},{28,-114}},
+                                         color={255,0,255}));
   connect(EconMod1.yEcoMod, ERWcon.uEcoMod) annotation (Line(points={{52.2,-30},
           {54,-30},{54,-45.2},{57.8,-45.2}},                   color={255,0,255}));
-  connect(TSupSetpt.ySupCooSet, Cooling.TAirSupSetCoo) annotation (Line(points=
-          {{22,6.8},{32,6.8},{32,30.8},{55.8,30.8}}, color={0,0,127}));
-  connect(TSupSetpt.ySupSet, ERWcon.TAirSupSetEneWhe) annotation (Line(points={{22,3.4},
-          {18,3.4},{18,-57.8},{57.8,-57.8}},          color={0,0,127}));
+  connect(TSupSetpt.ySupCooSet, Cooling.TAirSupSetCoo) annotation (Line(points={{12,22.8},
+          {28,22.8},{28,62.8},{49.8,62.8}},          color={0,0,127}));
+  connect(TSupSetpt.ySupSet, ERWcon.TAirSupSetEneWhe) annotation (Line(points={{12,19.4},
+          {12,18},{20,18},{20,-16},{22,-16},{22,-38},{20,-38},{20,-57.8},{57.8,-57.8}},
+                                                      color={0,0,127}));
+  connect(TZonHeaSet, TSupSetpt.TZonHeaSet) annotation (Line(points={{-120,200},
+          {-98,200},{-98,14},{-12,14}},
+                                     color={0,0,127}));
+  connect(TZonCooSet, TSupSetpt.TZonCooSet) annotation (Line(points={{-120,230},
+          {-88,230},{-88,54},{-80,54},{-80,21},{-12,21}},
+                                     color={0,0,127}));
   annotation (
     defaultComponentName = "DOAScon",
-    Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -280}, {100, 280}}), graphics={
+    Icon(coordinateSystem(preserveAspectRatio = false, extent={{-100,-320},{100,
+            320}}),                                                                          graphics={
         Rectangle(
-          extent={{-100,280},{100,-280}},
+          extent={{-100,320},{100,-320}},
           lineColor={0,0,0},
           fillColor={255,255,255},
           fillPattern=FillPattern.Solid),                                                                Text(textColor = {28, 108, 200}, extent={{-100,
-              360},{100,280}},                                                                                                                                             textString = "%name", textStyle = {TextStyle.Bold}),
+              400},{100,320}},                                                                                                                                             textString = "%name", textStyle = {TextStyle.Bold}),
                                                                       Rectangle(lineColor = {162, 29, 33}, fillColor = {255, 255, 255},
             fillPattern=
 FillPattern.Solid, extent={{-92,130},{-50,104}}),    Ellipse(lineColor = {162, 29, 33}, fillColor = {255, 255, 255},
@@ -667,7 +685,8 @@ FillPattern.Solid, extent={{8,-108},{16,-150}}),      Ellipse(fillColor = {127, 
 FillPattern.Solid, extent={{10,-144},{14,-148}}),      Ellipse(fillColor = {162, 29, 33},
             fillPattern=
 FillPattern.Solid, extent={{10,-112},{14,-116}})}),
-    Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -240}, {100, 100}})),
+    Diagram(coordinateSystem(preserveAspectRatio = false, extent={{-100,-240},{100,
+            240}})),
     Documentation(revisions = "<html>
     <ul>
     <li>
