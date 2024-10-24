@@ -1,5 +1,6 @@
 within Buildings.Examples.ChilledBeamSystem.BaseClasses;
-block TestBed "Testbed consisting of a 5-zone building model paired with DOAS and chilled water supply system"
+block TestBed
+  "Testbed consisting of a 5-zone building model paired with DOAS and chilled water supply system"
   replaceable package MediumA = Buildings.Media.Air "Medium model";
   replaceable package MediumW = Buildings.Media.Water "Medium model";
   parameter Real hRoo = 2.74 "Height of room";
@@ -106,9 +107,11 @@ block TestBed "Testbed consisting of a 5-zone building model paired with DOAS an
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uPumSta "Pump enable signal" annotation (
     Placement(transformation(extent = {{-380, -130}, {-340, -90}}), iconTransformation(extent = {{-140, -160}, {-100, -120}})));
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uFanSta "Supply fan enable signal" annotation (
-    Placement(transformation(extent = {{-380, 20}, {-340, 60}}), iconTransformation(extent = {{-140, 0}, {-100, 40}})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput uFanSpe "Fan speed signal" annotation (
-    Placement(transformation(extent = {{-380, -10}, {-340, 30}}), iconTransformation(extent = {{-140, -40}, {-100, 0}})));
+    Placement(transformation(extent={{-382,48},{-342,88}}),      iconTransformation(extent = {{-140, 0}, {-100, 40}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uFanSpe
+    "Fan speed signal"                                                       annotation (
+    Placement(transformation(extent={{-380,18},{-340,58}}),       iconTransformation(extent={{-142,
+            -52},{-102,-12}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uPumSpe "Pump speed signal" annotation (
     Placement(transformation(extent = {{-380, -160}, {-340, -120}}), iconTransformation(extent = {{-140, -200}, {-100, -160}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TChiWatSup "Chilled water supply temperature" annotation (
@@ -162,13 +165,12 @@ block TestBed "Testbed consisting of a 5-zone building model paired with DOAS an
     Placement(transformation(extent = {{120, -50}, {140, -30}})));
   Buildings.BoundaryConditions.WeatherData.ReaderTMY3 weaDat(final filNam=
         ModelicaServices.ExternalReferences.loadResource(
-        "./Buildings/Resources/weatherdata/USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.mos"))
-                                                                                                                                                                                                            "Weather data" annotation (
-    Placement(visible = true, transformation(origin = {-14, -14}, extent = {{-310, -20}, {-290, 0}}, rotation = 0)));
+        "./Buildings/Resources/weatherdata/USA_AZ_Phoenix-Sky.Harbor.Intl.AP.722780_TMY3.mos"))                                                                                                             "Weather data" annotation (
+    Placement(visible = true, transformation(origin={-40,-12},    extent = {{-310, -20}, {-290, 0}}, rotation = 0)));
   Buildings.BoundaryConditions.WeatherData.Bus weaBus "Weather Data Bus" annotation (
     Placement(visible = true, transformation(origin = {-16, -6}, extent = {{-280, -20}, {-260, 0}}, rotation = 0), iconTransformation(origin = {0, 0}, extent = {{0, 0}, {0, 0}}, rotation = 0)));
-  Buildings.Fluid.Sources.Outside amb(redeclare package Medium = MediumA, final nPorts=4)   "Ambient conditions" annotation (
-    Placement(visible = true, transformation(origin={-44,-26},    extent = {{-250, -20}, {-228, 2}}, rotation = 0)));
+  Buildings.Fluid.Sources.Outside amb(redeclare package Medium = MediumA, final nPorts=6)   "Ambient conditions" annotation (
+    Placement(visible = true, transformation(origin={-62,-22},    extent = {{-250, -20}, {-228, 2}}, rotation = 0)));
   Buildings.Fluid.HeatExchangers.WetCoilCounterFlow cooCoi(final show_T = true, final UA_nominal = 3*mAirTot_flow_nominal*1000*15/Buildings.Fluid.HeatExchangers.BaseClasses.lmtd(T_a1 = 26.2, T_b1 = 12.8, T_a2 = 6, T_b2 = 16), redeclare
       package Medium1 =                                                                                                                                                                                                         MediumW, redeclare
       package Medium2 =                                                                                                                                                                                                         MediumA, final m1_flow_nominal = mAirTot_flow_nominal*1000*15/4200/10, final m2_flow_nominal = mAirTot_flow_nominal, final dp2_nominal = 0, final dp1_nominal = 0, final energyDynamics = Modelica.Fluid.Types.Dynamics.FixedInitial, final allowFlowReversal1 = true, final allowFlowReversal2 = true) "Cooling coil" annotation (
@@ -203,9 +205,11 @@ block TestBed "Testbed consisting of a 5-zone building model paired with DOAS an
     Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = 90, origin = {100, -174})));
   Buildings.Fluid.Sensors.TemperatureTwoPort senTem(redeclare package Medium = MediumA, final m_flow_nominal = mAirTot_flow_nominal) "AHU discharge air temperature sensor" annotation (
     Placement(transformation(extent = {{-40, -10}, {-20, 10}})));
-  Buildings.Fluid.Sensors.RelativePressure senRelPre(redeclare package Medium = MediumW) "Differential pressure sensor between chilled water supply and return" annotation (
+  Buildings.Fluid.Sensors.RelativePressure senRelPre(redeclare package Medium
+      =                                                                         MediumW) "Differential pressure sensor between chilled water supply and return" annotation (
     Placement(transformation(extent = {{150, -80}, {170, -60}})));
-  Buildings.Fluid.Sensors.RelativePressure senRelPre1(redeclare package Medium = MediumA) "Differential pressure sensor between AHU discharge and outdoor air" annotation (
+  Buildings.Fluid.Sensors.RelativePressure senRelPre1(redeclare package Medium
+      =                                                                          MediumA) "Differential pressure sensor between AHU discharge and outdoor air" annotation (
     Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = 90, origin={-50,32})));
   Modelica.Blocks.Routing.DeMultiplex demux(final n = 5) "Demultiplexer for chilled water valve signals" annotation (
     Placement(transformation(extent={{42,-30},{62,-10}})));
@@ -215,12 +219,13 @@ block TestBed "Testbed consisting of a 5-zone building model paired with DOAS an
     Placement(transformation(extent = {{-320, -120}, {-300, -100}})));
   Buildings.Controls.OBC.CDL.Reals.Multiply pro "Find pump flow signal by multiplying enable signal with speed signal" annotation (
     Placement(transformation(extent = {{-280, -140}, {-260, -120}})));
-  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter gai(final k = mHotWatCoi_nominal) "Multiply control signal by nominal flowrate" annotation (
+  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter gai(final k=10*
+        mHotWatCoi_nominal)                                                              "Multiply control signal by nominal flowrate" annotation (
     Placement(transformation(extent = {{-320, -60}, {-300, -40}})));
   Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter gai1(final k = mChiWatCoi_nominal) "Multiply control signal by nominal flowrate" annotation (
     Placement(transformation(extent = {{-320, -90}, {-300, -70}})));
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea1 "Convert fan enable signal to Real signal" annotation (
-    Placement(visible = true, transformation(origin = {-8, -2}, extent = {{-320, 30}, {-300, 50}}, rotation = 0)));
+    Placement(visible = true, transformation(origin={-8,10},    extent = {{-320, 30}, {-300, 50}}, rotation = 0)));
   Buildings.Controls.OBC.CDL.Reals.Multiply pro1 "Find fan flow signal by multiplying enable signal with speed signal" annotation (
     Placement(visible = true, transformation(origin={-18,10},   extent = {{-280, 10}, {-260, 30}}, rotation = 0)));
   Modelica.Blocks.Routing.Multiplex mux1(final n = 5) "Multiplexer for chilled water valve position measurements" annotation (
@@ -234,26 +239,116 @@ block TestBed "Testbed consisting of a 5-zone building model paired with DOAS an
   Buildings.Fluid.Sensors.RelativeHumidityTwoPort senRelHum(redeclare package
       Medium =                                                                         MediumA, m_flow_nominal = mAirTot_flow_nominal) "Relative humidity sensor" annotation (
     Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = 180, origin = {-90, 160})));
-  Buildings.Examples.ChilledBeamSystem.BaseClasses.ZoneModel_simplified nor(nConExt = 0, nConExtWin = 0, nConPar = 0, nConBou = 3, nSurBou = 0, datConBou(layers = {conIntWal, conIntWal, conIntWal}, A = {6.47, 40.76, 6.47}*hRoo, til = {Buildings.Types.Tilt.Wall, Buildings.Types.Tilt.Wall, Buildings.Types.Tilt.Wall}), redeclare
-      package MediumA =                                                                                                                                                                                                         MediumA, redeclare
-      package MediumW =                                                                                                                                                                                                         MediumW, Q_flow_nominal = QNor_flow_nominal, TRadSup_nominal = TChiWatSup_nominal, TRadRet_nominal = TChiWatRet_nominal, mRad_flow_nominal = mChiWatNor_flow_nominal, V = VRooNor, TAir_nominal = 297.04, mA_flow_nominal = mAirNor_flow_nominal, mAChiBea_flow_nominal = mAChiBeaNor_flow_nominal) "North zone" annotation (
-    Placement(transformation(extent = {{180, 300}, {200, 320}})));
-  Buildings.Examples.ChilledBeamSystem.BaseClasses.ZoneModel_simplified wes(nConExt = 0, nConExtWin = 0, nConPar = 0, nConBou = 3, nSurBou = 0, datConBou(layers = {conIntWal, conIntWal, conIntWal}, A = {6.47, 40.76, 6.47}*hRoo, til = {Buildings.Types.Tilt.Wall, Buildings.Types.Tilt.Wall, Buildings.Types.Tilt.Wall}), redeclare
-      package MediumA =                                                                                                                                                                                                         MediumA, redeclare
-      package MediumW =                                                                                                                                                                                                         MediumW, Q_flow_nominal = QWes_flow_nominal, TRadSup_nominal = TChiWatSup_nominal, TRadRet_nominal = TChiWatRet_nominal, mRad_flow_nominal = mChiWatWes_flow_nominal, V = VRooWes, TAir_nominal = 297.04, mA_flow_nominal = mAirWes_flow_nominal, mAChiBea_flow_nominal = mAChiBeaWes_flow_nominal) "West zone" annotation (
-    Placement(transformation(extent = {{120, 240}, {140, 260}})));
-  Buildings.Examples.ChilledBeamSystem.BaseClasses.ZoneModel_simplified cor(nConExt = 0, nConExtWin = 0, nConPar = 0, nConBou = 3, nSurBou = 0, datConBou(layers = {conIntWal, conIntWal, conIntWal}, A = {6.47, 40.76, 6.47}*hRoo, til = {Buildings.Types.Tilt.Wall, Buildings.Types.Tilt.Wall, Buildings.Types.Tilt.Wall}), redeclare
-      package MediumA =                                                                                                                                                                                                         MediumA, redeclare
-      package MediumW =                                                                                                                                                                                                         MediumW, Q_flow_nominal = QCor_flow_nominal, TRadSup_nominal = TChiWatSup_nominal, TRadRet_nominal = TChiWatRet_nominal, mRad_flow_nominal = mChiWatCor_flow_nominal, V = VRooCor, TAir_nominal = 297.04, mA_flow_nominal = mAirCor_flow_nominal, mAChiBea_flow_nominal = mAChiBeaCor_flow_nominal) "Core zone" annotation (
-    Placement(transformation(extent = {{180, 240}, {200, 260}})));
-  Buildings.Examples.ChilledBeamSystem.BaseClasses.ZoneModel_simplified eas(nConExt = 0, nConExtWin = 0, nConPar = 0, nConBou = 3, nSurBou = 0, datConBou(layers = {conIntWal, conIntWal, conIntWal}, A = {6.47, 40.76, 6.47}*hRoo, til = {Buildings.Types.Tilt.Wall, Buildings.Types.Tilt.Wall, Buildings.Types.Tilt.Wall}), redeclare
-      package MediumA =                                                                                                                                                                                                         MediumA, redeclare
-      package MediumW =                                                                                                                                                                                                         MediumW, Q_flow_nominal = QEas_flow_nominal, TRadSup_nominal = TChiWatSup_nominal, TRadRet_nominal = TChiWatRet_nominal, mRad_flow_nominal = mChiWatEas_flow_nominal, V = VRooEas, TAir_nominal = 297.04, mA_flow_nominal = mAirEas_flow_nominal, mAChiBea_flow_nominal = mAChiBeaEas_flow_nominal) "East zone" annotation (
-    Placement(transformation(extent = {{240, 240}, {260, 260}})));
-  Buildings.Examples.ChilledBeamSystem.BaseClasses.ZoneModel_simplified sou(nConExt = 0, nConExtWin = 0, nConPar = 0, nConBou = 3, nSurBou = 0, datConBou(layers = {conIntWal, conIntWal, conIntWal}, A = {6.47, 40.76, 6.47}*hRoo, til = {Buildings.Types.Tilt.Wall, Buildings.Types.Tilt.Wall, Buildings.Types.Tilt.Wall}), redeclare
-      package MediumA =                                                                                                                                                                                                         MediumA, redeclare
-      package MediumW =                                                                                                                                                                                                         MediumW, Q_flow_nominal = QSou_flow_nominal, TRadSup_nominal = TChiWatSup_nominal, TRadRet_nominal = TChiWatRet_nominal, mRad_flow_nominal = mChiWatSou_flow_nominal, V = VRooSou, TAir_nominal = 297.04, mA_flow_nominal = mAirSou_flow_nominal, mAChiBea_flow_nominal = mAChiBeaSou_flow_nominal) "South zone" annotation (
-    Placement(transformation(extent = {{180, 180}, {200, 200}})));
+  Buildings.Examples.ChilledBeamSystem.BaseClasses.ZoneModel_simplified nor(
+    nConExt=0,
+    nConExtWin=0,
+    nConPar=0,
+    nConBou=3,
+    nSurBou=0,
+    datConBou(
+      layers={conIntWal,conIntWal,conIntWal},
+      A={6.47,40.76,6.47}*hRoo,
+      til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
+    redeclare package MediumA = MediumA,
+    redeclare package MediumW = MediumW,
+    Q_flow_nominal=QNor_flow_nominal,
+    TRadSup_nominal=TChiWatSup_nominal,
+    TRadRet_nominal=TChiWatRet_nominal,
+    mRad_flow_nominal=mChiWatNor_flow_nominal,
+    V=VRooNor,
+    TAir_nominal=297.04,
+    mA_flow_nominal=mAirNor_flow_nominal,
+    mAChiBea_flow_nominal=mAChiBeaNor_flow_nominal) "North zone"
+    annotation (Placement(transformation(extent={{180,300},{200,320}})));
+
+  Buildings.Examples.ChilledBeamSystem.BaseClasses.ZoneModel_simplified wes(
+    nConExt=0,
+    nConExtWin=0,
+    nConPar=0,
+    nConBou=3,
+    nSurBou=0,
+    datConBou(
+      layers={conIntWal,conIntWal,conIntWal},
+      A={6.47,40.76,6.47}*hRoo,
+      til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
+    redeclare package MediumA = MediumA,
+    redeclare package MediumW = MediumW,
+    Q_flow_nominal=QWes_flow_nominal,
+    TRadSup_nominal=TChiWatSup_nominal,
+    TRadRet_nominal=TChiWatRet_nominal,
+    mRad_flow_nominal=mChiWatWes_flow_nominal,
+    V=VRooWes,
+    TAir_nominal=297.04,
+    mA_flow_nominal=mAirWes_flow_nominal,
+    mAChiBea_flow_nominal=mAChiBeaWes_flow_nominal) "West zone"
+    annotation (Placement(transformation(extent={{120,240},{140,260}})));
+
+  Buildings.Examples.ChilledBeamSystem.BaseClasses.ZoneModel_simplified cor(
+    nConExt=0,
+    nConExtWin=0,
+    nConPar=0,
+    nConBou=3,
+    nSurBou=0,
+    datConBou(
+      layers={conIntWal,conIntWal,conIntWal},
+      A={6.47,40.76,6.47}*hRoo,
+      til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
+    redeclare package MediumA = MediumA,
+    redeclare package MediumW = MediumW,
+    Q_flow_nominal=QCor_flow_nominal,
+    TRadSup_nominal=TChiWatSup_nominal,
+    TRadRet_nominal=TChiWatRet_nominal,
+    mRad_flow_nominal=mChiWatCor_flow_nominal,
+    V=VRooCor,
+    TAir_nominal=297.04,
+    mA_flow_nominal=mAirCor_flow_nominal,
+    mAChiBea_flow_nominal=mAChiBeaCor_flow_nominal) "Core zone"
+    annotation (Placement(transformation(extent={{180,240},{200,260}})));
+
+  Buildings.Examples.ChilledBeamSystem.BaseClasses.ZoneModel_simplified eas(
+    nConExt=0,
+    nConExtWin=0,
+    nConPar=0,
+    nConBou=3,
+    nSurBou=0,
+    datConBou(
+      layers={conIntWal,conIntWal,conIntWal},
+      A={6.47,40.76,6.47}*hRoo,
+      til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
+    redeclare package MediumA = MediumA,
+    redeclare package MediumW = MediumW,
+    Q_flow_nominal=QEas_flow_nominal,
+    TRadSup_nominal=TChiWatSup_nominal,
+    TRadRet_nominal=TChiWatRet_nominal,
+    mRad_flow_nominal=mChiWatEas_flow_nominal,
+    V=VRooEas,
+    TAir_nominal=297.04,
+    mA_flow_nominal=mAirEas_flow_nominal,
+    mAChiBea_flow_nominal=mAChiBeaEas_flow_nominal) "East zone"
+    annotation (Placement(transformation(extent={{240,240},{260,260}})));
+
+  Buildings.Examples.ChilledBeamSystem.BaseClasses.ZoneModel_simplified sou(
+    nConExt=0,
+    nConExtWin=0,
+    nConPar=0,
+    nConBou=3,
+    nSurBou=0,
+    datConBou(
+      layers={conIntWal,conIntWal,conIntWal},
+      A={6.47,40.76,6.47}*hRoo,
+      til={Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall,Buildings.Types.Tilt.Wall}),
+    redeclare package MediumA = MediumA,
+    redeclare package MediumW = MediumW,
+    Q_flow_nominal=QSou_flow_nominal,
+    TRadSup_nominal=TChiWatSup_nominal,
+    TRadRet_nominal=TChiWatRet_nominal,
+    mRad_flow_nominal=mChiWatSou_flow_nominal,
+    V=VRooSou,
+    TAir_nominal=297.04,
+    mA_flow_nominal=mAirSou_flow_nominal,
+    mAChiBea_flow_nominal=mAChiBeaSou_flow_nominal) "South zone"
+    annotation (Placement(transformation(extent={{180,180},{200,200}})));
+
   Buildings.BoundaryConditions.WeatherData.Bus zonMeaBus "Zone measurements bus" annotation (
     Placement(visible = true, transformation(origin = {0, 0}, extent = {{204, 262}, {224, 282}}, rotation = 0), iconTransformation(origin = {0, 0}, extent = {{0, 0}, {0, 0}}, rotation = 0)));
   Modelica.Blocks.Routing.Multiplex5 multiplex5_1 "Multiplexer for zone temperature measurements" annotation (
@@ -373,7 +468,7 @@ block TestBed "Testbed consisting of a 5-zone building model paired with DOAS an
   Fluid.FixedResistances.Junction jun21(redeclare package Medium = MediumW, m_flow_nominal = {mAirTot_flow_nominal, -mAirTot_flow_nominal, -mAirTot_flow_nominal}, dp_nominal = {0, 0, 0}) "Hot water splitter" annotation (
     Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = 90, origin = {320, 70})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput OutdoorAirTemp "Outdoor Air Dry Bulb Temperature" annotation (
-    Placement(visible = true, transformation(origin={8,-52},    extent = {{580, -200}, {620, -160}}, rotation = 0), iconTransformation(origin = {0, 4}, extent = {{100, -240}, {140, -200}}, rotation = 0)));
+    Placement(visible = true, transformation(origin={8,-52},    extent = {{580, -200}, {620, -160}}, rotation = 0), iconTransformation(origin={0,16},   extent = {{100, -240}, {140, -200}}, rotation = 0)));
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(delayTime = 10) annotation (
     Placement(visible = true, transformation(origin = {-288, 84}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput exhFanSta "Exhaust Fan Proven on" annotation (
@@ -384,40 +479,50 @@ block TestBed "Testbed consisting of a 5-zone building model paired with DOAS an
       Medium =                                                                         MediumA) annotation (
     Placement(visible = true, transformation(origin = {-130, 54}, extent = {{-10, -10}, {10, 10}}, rotation = 90)));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput bldgSP "Building Static Pressure SetPoint" annotation (
-    Placement(visible = true, transformation(origin = {0, -136}, extent = {{580, -200}, {620, -160}}, rotation = 0), iconTransformation(origin = {-480, -60}, extent = {{580, -200}, {620, -160}}, rotation = 0)));
-  Buildings.Fluid.MixingVolumes.MixingVolume vol(redeclare package Medium = MediumA, V = 1.2*100, energyDynamics = Modelica.Fluid.Types.Dynamics.FixedInitial, m_flow_nominal = mAirTot_flow_nominal, nPorts = 2) annotation (
-    Placement(visible = true, transformation(origin = {-216, 52}, extent = {{6, -16}, {26, 4}}, rotation = 0)));
-  Modelica.Thermal.HeatTransfer.Sources.PrescribedHeatFlow preHea annotation (
-    Placement(visible = true, transformation(origin = {-150, 44}, extent = {{-100, -10}, {-80, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin={4,-106},    extent = {{580, -200}, {620, -160}}, rotation = 0), iconTransformation(origin={-480,-44},    extent = {{580, -200}, {620, -160}}, rotation = 0)));
   Buildings.Fluid.Sensors.MassFlowRate senMasFlo(redeclare package Medium = MediumA) annotation (
-    Placement(visible = true, transformation(origin = {-236, -8}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Interfaces.RealInput deltaT annotation (
-    Placement(visible = true, transformation(origin = {-360, -16}, extent = {{-20, -20}, {20, 20}}, rotation = 0), iconTransformation(origin = {-120, 120}, extent = {{-20, -20}, {20, 20}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Reals.Multiply mul annotation (
-    Placement(visible = true, transformation(origin = {-256, 18}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter gai2(k = 1006) annotation (
-    Placement(visible = true, transformation(origin = {-312, -2}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin={-296,6},     extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput rAT annotation (
-    Placement(visible = true, transformation(origin = {0, -94}, extent = {{580, -200}, {620, -160}}, rotation = 0), iconTransformation(origin={0,36},   extent = {{100, -240}, {140, -200}}, rotation = 0)));
+    Placement(visible = true, transformation(origin={2,-76},    extent = {{580, -200}, {620, -160}}, rotation = 0), iconTransformation(origin={-2,44},  extent = {{100, -240}, {140, -200}}, rotation = 0)));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput erwsuphum "ERW supply relative humidity sensor" annotation (
     Placement(visible = true, transformation(origin = {0, -14}, extent = {{580, -200}, {620, -160}}, rotation = 0), iconTransformation(origin={0,94},    extent = {{100, -240}, {140, -200}}, rotation = 0)));
   Buildings.Fluid.Sensors.RelativeHumidityTwoPort senRelHum1(redeclare package
       Medium =                                                                          MediumA,
       m_flow_nominal=mAirTot_flow_nominal)                                                       annotation (
-    Placement(visible = true, transformation(origin={-180,8},    extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+    Placement(visible = true, transformation(origin={-186,16},   extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Buildings.Fluid.Movers.Preconfigured.SpeedControlled_y mov(redeclare package
       Medium =                                                                          MediumA, dp_nominal(displayUnit = "Pa") = 2000, m_flow_nominal = mAirTot_flow_nominal)  annotation (
     Placement(visible = true, transformation(origin = {-64, -18}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
   Buildings.Fluid.Movers.Preconfigured.SpeedControlled_y mov1(redeclare package
       Medium =                                                                           MediumW, dp_nominal(displayUnit = "Pa") = 60000, m_flow_nominal = mChiWatTot_flow_nominal)  annotation (
     Placement(visible = true, transformation(origin = {74, -116}, extent = {{-10, -10}, {10, 10}}, rotation = 90)));
+  Controls.OBC.CDL.Interfaces.RealInput uEneRecWheSpe
+    "Energy Recovery speed signal" annotation (Placement(transformation(
+          extent={{-380,-10},{-340,30}}), iconTransformation(extent={{
+            -142,-26},{-102,14}})));
+  Fluid.HeatExchangers.ThermalWheels.Sensible.SpeedControlled whe(
+    redeclare package Medium1 = MediumA,
+    redeclare package Medium2 = MediumA,
+    m1_flow_nominal=mAirTot_flow_nominal,
+    m2_flow_nominal=mAirTot_flow_nominal,
+    P_nominal=100)
+    annotation (Placement(transformation(extent={{-260,6},{-240,26}})));
+  Fluid.Sensors.TemperatureTwoPort senTemEneWhe(redeclare package Medium =
+        MediumA, m_flow_nominal=mAirTot_flow_nominal) annotation (
+      Placement(visible=true, transformation(
+        origin={-220,32},
+        extent={{-10,-10},{10,10}},
+        rotation=0)));
+  Controls.OBC.CDL.Interfaces.RealOutput           TEneWhe
+    "Temperature of air leaving the energy recovery wheel"                                    annotation (
+    Placement(visible = true, transformation(origin={2,-130},    extent = {{580, -200}, {620, -160}}, rotation = 0), iconTransformation(origin={-480,-66},    extent = {{580, -200}, {620, -160}}, rotation = 0)));
 equation
   connect(jun.port_3, val.port_a) annotation (
     Line(points = {{110, -40}, {120, -40}}, color = {0, 127, 255}));
   connect(weaDat.weaBus, weaBus) annotation (
-    Line(points = {{-304, -24}, {-304, -16}, {-286, -16}}, color = {255, 204, 51}, thickness = 0.5));
+    Line(points={{-330,-22},{-330,-16},{-286,-16}},        color = {255, 204, 51}, thickness = 0.5));
   connect(weaBus, amb.weaBus) annotation (
-    Line(points={{-286,-16},{-262,-16},{-262,-34.78},{-294,-34.78}},    color = {255, 204, 51}, thickness = 0.5));
+    Line(points={{-286,-16},{-300,-16},{-300,-30.78},{-312,-30.78}},    color = {255, 204, 51}, thickness = 0.5));
   connect(cooCoi.port_b1, sinCoo.ports[1]) annotation (
     Line(points={{-130,-12},{-140,-12},{-140,-60}},        color = {28, 108, 200}, thickness = 0.5));
   connect(heaCoi.port_b2, cooCoi.port_a2) annotation (
@@ -427,9 +532,9 @@ equation
   connect(heaCoi.port_b1, sinHea.ports[1]) annotation (
     Line(points = {{-174, -22}, {-212, -22}, {-212, -64}}, color = {28, 108, 200}, thickness = 0.5));
   connect(jun3.port_2, sinCoo1.ports[1]) annotation (
-    Line(points = {{250, -50}, {250, -166}, {248, -166}}, color = {0, 127, 255}));
+    Line(points={{250,-50},{250,-166},{251,-166}},        color = {0, 127, 255}));
   connect(senRelPre.port_b, sinCoo1.ports[2]) annotation (
-    Line(points = {{170, -70}, {252, -70}, {252, -166}}, color = {0, 127, 255}));
+    Line(points={{170,-70},{249,-70},{249,-166}},        color = {0, 127, 255}));
   connect(uPumSta, booToRea.u) annotation (
     Line(points = {{-360, -110}, {-322, -110}}, color = {255, 0, 255}));
   connect(booToRea.y, pro.u1) annotation (
@@ -449,15 +554,15 @@ equation
   connect(senTem.T, TDOASDis) annotation (
     Line(points = {{-30, 11}, {-30, 20}, {-10, 20}, {-10, -152}, {348, -152}, {348, -122}, {600, -122}}, color = {0, 0, 127}));
   connect(uFanSta, booToRea1.u) annotation (
-    Line(points = {{-360, 40}, {-341, 40}, {-341, 38}, {-330, 38}}, color = {255, 0, 255}));
+    Line(points={{-362,68},{-341,68},{-341,50},{-330,50}},          color = {255, 0, 255}));
   connect(booToRea1.y, pro1.u1) annotation (
-    Line(points={{-306,38},{-306,36},{-300,36}},                    color = {0, 0, 127}));
+    Line(points={{-306,50},{-306,36},{-300,36}},                    color = {0, 0, 127}));
   connect(uFanSpe, pro1.u2) annotation (
-    Line(points={{-360,10},{-330,10},{-330,24},{-300,24}},          color = {0, 0, 127}));
+    Line(points={{-360,38},{-330,38},{-330,24},{-300,24}},          color = {0, 0, 127}));
   connect(val.y_actual, mux1.u[1]) annotation (
-    Line(points = {{135, -33}, {154, -33}, {154, 85.6}, {160, 85.6}}, color = {0, 0, 127}));
+    Line(points={{135,-33},{154,-33},{154,77.2},{160,77.2}},          color = {0, 0, 127}));
   connect(demux.y[1], val.y) annotation (
-    Line(points={{62,-14.4},{130,-14.4},{130,-28}},        color = {0, 0, 127}));
+    Line(points={{62,-22.8},{130,-22.8},{130,-28}},        color = {0, 0, 127}));
   connect(senRelHum.port_a, jun5.port_1) annotation (
     Line(points = {{-80, 160}, {-40, 160}}, color = {0, 127, 255}));
   connect(senRelHum.phi, relHumDOASRet) annotation (
@@ -607,23 +712,23 @@ equation
   connect(uChiWatVal, demux.u) annotation (
     Line(points={{-360,180},{-240,180},{-240,140},{0,140},{0,-20},{40,-20}},              color = {0, 0, 127}));
   connect(demux.y[2], val1.y) annotation (
-    Line(points={{62,-17.2},{80,-17.2},{80,18},{130,18},{130,12}},            color = {0, 0, 127}));
+    Line(points={{62,-21.4},{80,-21.4},{80,18},{130,18},{130,12}},            color = {0, 0, 127}));
   connect(demux.y[3], val3.y) annotation (
     Line(points={{62,-20},{80,-20},{80,60},{130,60},{130,52}},            color = {0, 0, 127}));
   connect(demux.y[4], val4.y) annotation (
-    Line(points={{62,-22.8},{80,-22.8},{80,100},{130,100},{130,92}},            color = {0, 0, 127}));
+    Line(points={{62,-18.6},{80,-18.6},{80,100},{130,100},{130,92}},            color = {0, 0, 127}));
   connect(demux.y[5], val5.y) annotation (
-    Line(points={{62,-25.6},{80,-25.6},{80,138},{130,138},{130,132}},            color = {0, 0, 127}));
+    Line(points={{62,-17.2},{80,-17.2},{80,138},{130,138},{130,132}},            color = {0, 0, 127}));
   connect(uBypValPos, val2.y) annotation (
     Line(points = {{-360, 220}, {100, 220}, {100, 158}, {170, 158}, {170, 152}}, color = {0, 0, 127}));
   connect(val1.y_actual, mux1.u[2]) annotation (
-    Line(points = {{135, 7}, {154, 7}, {154, 82.8}, {160, 82.8}}, color = {0, 0, 127}));
+    Line(points={{135,7},{154,7},{154,78.6},{160,78.6}},          color = {0, 0, 127}));
   connect(val3.y_actual, mux1.u[3]) annotation (
     Line(points = {{135, 47}, {154, 47}, {154, 80}, {160, 80}}, color = {0, 0, 127}));
   connect(val4.y_actual, mux1.u[4]) annotation (
-    Line(points = {{135, 87}, {154, 87}, {154, 77.2}, {160, 77.2}}, color = {0, 0, 127}));
+    Line(points={{135,87},{154,87},{154,81.4},{160,81.4}},          color = {0, 0, 127}));
   connect(val5.y_actual, mux1.u[5]) annotation (
-    Line(points = {{135, 127}, {154, 127}, {154, 74.4}, {160, 74.4}}, color = {0, 0, 127}));
+    Line(points={{135,127},{154,127},{154,82.8},{160,82.8}},          color = {0, 0, 127}));
   connect(mux1.y, yChiWatVal) annotation (
     Line(points = {{181, 80}, {200, 80}, {200, -200}, {520, -200}, {520, 80}, {600, 80}}, color = {0, 0, 127}));
   connect(jun4.port_3, souCAVTer.port_aAir) annotation (
@@ -645,35 +750,35 @@ equation
   connect(jun17.port_2, corCAVTer.port_aAir) annotation (
     Line(points = {{350, 60}, {350, 108}, {410, 108}}, color = {0, 127, 255}));
   connect(demux1.y[1], souCAVTer.yVAV) annotation (
-    Line(points = {{320, -244.4}, {374, -244.4}, {374, -94}, {386, -94}}, color = {0, 0, 127}));
+    Line(points={{320,-252.8},{374,-252.8},{374,-94},{386,-94}},          color = {0, 0, 127}));
   connect(demux1.y[2], easCAVTer.yVAV) annotation (
-    Line(points = {{320, -247.2}, {374, -247.2}, {374, -34}, {386, -34}}, color = {0, 0, 127}));
+    Line(points={{320,-251.4},{374,-251.4},{374,-34},{386,-34}},          color = {0, 0, 127}));
   connect(demux1.y[3], norCAVTer.yVAV) annotation (
     Line(points = {{320, -250}, {374, -250}, {374, 26}, {386, 26}}, color = {0, 0, 127}));
   connect(demux1.y[4], wesCAVTer.yVAV) annotation (
-    Line(points = {{320, -252.8}, {374, -252.8}, {374, 86}, {386, 86}}, color = {0, 0, 127}));
+    Line(points={{320,-248.6},{374,-248.6},{374,86},{386,86}},          color = {0, 0, 127}));
   connect(demux1.y[5], corCAVTer.yVAV) annotation (
-    Line(points = {{320, -255.6}, {374, -255.6}, {374, 144}, {386, 144}}, color = {0, 0, 127}));
+    Line(points={{320,-247.2},{374,-247.2},{374,144},{386,144}},          color = {0, 0, 127}));
   connect(demux2.y[1], souCAVTer.yHea) annotation (
-    Line(points = {{320, -284.4}, {368, -284.4}, {368, -104}, {386, -104}}, color = {0, 0, 127}));
+    Line(points={{320,-292.8},{368,-292.8},{368,-104},{386,-104}},          color = {0, 0, 127}));
   connect(demux2.y[2], easCAVTer.yHea) annotation (
-    Line(points = {{320, -287.2}, {368, -287.2}, {368, -44}, {386, -44}}, color = {0, 0, 127}));
+    Line(points={{320,-291.4},{368,-291.4},{368,-44},{386,-44}},          color = {0, 0, 127}));
   connect(demux2.y[3], norCAVTer.yHea) annotation (
     Line(points = {{320, -290}, {368, -290}, {368, 16}, {386, 16}}, color = {0, 0, 127}));
   connect(demux2.y[4], wesCAVTer.yHea) annotation (
-    Line(points = {{320, -292.8}, {368, -292.8}, {368, 76}, {386, 76}}, color = {0, 0, 127}));
+    Line(points={{320,-288.6},{368,-288.6},{368,76},{386,76}},          color = {0, 0, 127}));
   connect(demux2.y[5], corCAVTer.yHea) annotation (
-    Line(points = {{320, -295.6}, {368, -295.6}, {368, 134}, {386, 134}}, color = {0, 0, 127}));
+    Line(points={{320,-287.2},{368,-287.2},{368,134},{386,134}},          color = {0, 0, 127}));
   connect(souCAVTer.y_actual, mux3.u[1]) annotation (
-    Line(points = {{432, -110}, {450, -110}, {450, -4.4}, {490, -4.4}}, color = {0, 0, 127}));
+    Line(points={{432,-110},{450,-110},{450,-12.8},{490,-12.8}},        color = {0, 0, 127}));
   connect(easCAVTer.y_actual, mux3.u[2]) annotation (
-    Line(points = {{432, -50}, {450, -50}, {450, -7.2}, {490, -7.2}}, color = {0, 0, 127}));
+    Line(points={{432,-50},{450,-50},{450,-11.4},{490,-11.4}},        color = {0, 0, 127}));
   connect(norCAVTer.y_actual, mux3.u[3]) annotation (
     Line(points = {{432, 10}, {450, 10}, {450, -10}, {490, -10}}, color = {0, 0, 127}));
   connect(wesCAVTer.y_actual, mux3.u[4]) annotation (
-    Line(points = {{432, 70}, {450, 70}, {450, -12.8}, {490, -12.8}}, color = {0, 0, 127}));
+    Line(points={{432,70},{450,70},{450,-8.6},{490,-8.6}},            color = {0, 0, 127}));
   connect(corCAVTer.y_actual, mux3.u[5]) annotation (
-    Line(points = {{432, 128}, {450, 128}, {450, -15.6}, {490, -15.6}}, color = {0, 0, 127}));
+    Line(points={{432,128},{450,128},{450,-7.2},{490,-7.2}},            color = {0, 0, 127}));
   connect(mux3.y, yDamPos) annotation (
     Line(points = {{511, -10}, {560, -10}, {560, 56}, {602, 56}}, color = {0, 0, 127}));
   connect(uCAVDam, demux1.u) annotation (
@@ -689,8 +794,7 @@ equation
   connect(wesCAVTer.port_bAir, wes.portAir_a) annotation (
     Line(points = {{410, 90}, {440, 90}, {440, 180}, {220, 180}, {220, 224}, {146, 224}, {146, 246}, {140, 246}}, color = {0, 127, 255}));
   connect(corCAVTer.port_bAir, cor.portAir_a) annotation (
-    Line(points={{410,148},{440,148},{440,128},{220,128},{220,172},{206,172},{
-          206,246},{200,246}},                                                                                      color = {0, 127, 255}));
+    Line(points = {{410, 148}, {440, 148}, {440, 180}, {220, 180}, {220, 224}, {206, 224}, {206, 246}, {200, 246}}, color = {0, 127, 255}));
   connect(val2.y_actual, yBypValPos) annotation (
     Line(points = {{175, 147}, {360, 147}, {360, 170}, {520, 170}, {520, 120}, {600, 120}}, color = {0, 0, 127}));
   connect(senRelPre1.p_rel, dPDOASAir) annotation (
@@ -702,15 +806,15 @@ equation
   connect(QFlo, demux3.u) annotation (
     Line(points = {{-360, 290}, {78, 290}}, color = {0, 0, 127}));
   connect(demux3.y[1], sou.QFlo) annotation (
-    Line(points = {{100, 295.6}, {106, 295.6}, {106, 194}, {178, 194}}, color = {0, 0, 127}));
+    Line(points={{100,287.2},{106,287.2},{106,194},{178,194}},          color = {0, 0, 127}));
   connect(demux3.y[2], eas.QFlo) annotation (
-    Line(points = {{100, 292.8}, {180, 292.8}, {180, 280}, {234, 280}, {234, 254}, {238, 254}}, color = {0, 0, 127}));
+    Line(points={{100,288.6},{180,288.6},{180,280},{234,280},{234,254},{238,254}},              color = {0, 0, 127}));
   connect(demux3.y[3], nor.QFlo) annotation (
     Line(points = {{100, 290}, {106, 290}, {106, 314}, {178, 314}}, color = {0, 0, 127}));
   connect(demux3.y[4], wes.QFlo) annotation (
-    Line(points = {{100, 287.2}, {106, 287.2}, {106, 254}, {118, 254}}, color = {0, 0, 127}));
+    Line(points={{100,291.4},{106,291.4},{106,254},{118,254}},          color = {0, 0, 127}));
   connect(demux3.y[5], cor.QFlo) annotation (
-    Line(points = {{100, 284.4}, {106, 284.4}, {106, 234}, {176, 234}, {176, 254}, {178, 254}}, color = {0, 0, 127}));
+    Line(points={{100,292.8},{106,292.8},{106,234},{176,234},{176,254},{178,254}},              color = {0, 0, 127}));
   connect(val.y_actual, sou.uVal) annotation (
     Line(points = {{135, -33}, {154, -33}, {154, 190}, {178, 190}}, color = {0, 0, 127}));
   connect(val1.y_actual, eas.uVal) annotation (
@@ -722,7 +826,7 @@ equation
   connect(val5.y_actual, cor.uVal) annotation (
     Line(points = {{135, 127}, {154, 127}, {154, 248}, {174, 248}, {174, 250}, {178, 250}}, color = {0, 0, 127}));
   connect(uFanSta, pre1.u) annotation (
-    Line(points = {{-360, 40}, {-336, 40}, {-336, 78}}, color = {255, 0, 255}));
+    Line(points={{-362,68},{-336,68},{-336,78}},        color = {255, 0, 255}));
   connect(pre1.y, yFanSta) annotation (
     Line(points={{-312,78},{-306,78},{-306,66},{-300,66},{-300,64},{-254,64},{
           -254,68},{-38,68},{-38,-174},{50,-174},{50,-208},{554,-208},{554,-18},
@@ -732,7 +836,7 @@ equation
   connect(mulMax.y, gaiM_flow.u) annotation (
     Line(points = {{122, -280}, {138, -280}}, color = {0, 0, 127}));
   connect(uCAVReh, mulMax.u[1:5]) annotation (
-    Line(points = {{-360, 100}, {-4, 100}, {-4, -281.6}, {98, -281.6}}, color = {0, 0, 127}));
+    Line(points={{-360,100},{-4,100},{-4,-279.2},{98,-279.2}},          color = {0, 0, 127}));
   connect(souTer.ports[1], jun18.port_1) annotation (
     Line(points = {{200, -280}, {260, -280}, {260, -230}, {320, -230}, {320, -90}}, color = {0, 127, 255}));
   connect(jun22.port_2, jun23.port_1) annotation (
@@ -753,18 +857,12 @@ equation
     Line(points = {{-312, 78}, {-300, 78}, {-300, 84}}, color = {255, 0, 255}));
   connect(senTem1.port_b, senRelHum.port_b) annotation (
     Line(points = {{-148, 160}, {-100, 160}}, color = {0, 127, 255}));
-  connect(amb.ports[1], senTem1.port_a) annotation (
-    Line(points={{-272,-31.7},{-216,-31.7},{-216,160},{-168,160}},      color = {0, 127, 255}));
   connect(cooCoi.port_a1, souCoo.ports[1]) annotation (
     Line(points = {{-110, -12}, {-100, -12}, {-100, -60}}, color = {0, 127, 255}));
   connect(eas.portAir_b, relativePressure.port_a) annotation (
     Line(points = {{240, 246}, {240, 44}, {-130, 44}}, color = {0, 127, 255}));
-  connect(amb.ports[2], senMasFlo.port_a) annotation (
-    Line(points={{-272,-33.9},{-272,-8},{-246,-8}},      color = {0, 127, 255}));
-  connect(senMasFlo.port_b, vol.ports[1]) annotation (
-    Line(points={{-226,-8},{-226,36},{-202,36}},        color = {0, 127, 255}));
-  connect(deltaT, gai2.u) annotation (
-    Line(points = {{-360, -16}, {-336, -16}, {-336, -2}, {-324, -2}}, color = {0, 0, 127}));
+  connect(amb.ports[1], senMasFlo.port_a) annotation (
+    Line(points={{-290,-32.8333},{-290,6},{-306,6}},     color = {0, 127, 255}));
   connect(jun21.port_2, corCAVTer.port_aHeaWat) annotation (
     Line(points = {{320, 80}, {320, 128}, {390, 128}}, color = {0, 127, 255}));
   connect(corCAVTer.port_bHeaWat, jun22.port_3) annotation (
@@ -786,12 +884,10 @@ equation
   connect(norCAVTer.port_bHeaWat, jun22.port_1) annotation (
     Line(points = {{390, -2}, {458, -2}, {458, 80}, {480, 80}}, color = {0, 127, 255}));
   connect(senTem1.T, rAT) annotation (
-    Line(points={{-158,171},{-114,171},{-114,172},{-68,172},{-68,-312},{470,
-          -312},{470,-274},{600,-274}},                                                          color = {0, 0, 127}));
-  connect(vol.ports[2], senRelHum1.port_a) annotation (
-    Line(points={{-198,36},{-190,36},{-190,8}},        color = {0, 127, 255}));
+    Line(points={{-158,171},{-114,171},{-114,172},{-68,172},{-68,-312},{
+          470,-312},{470,-256},{602,-256}},                                                      color = {0, 0, 127}));
   connect(senRelHum1.port_b, heaCoi.port_a2) annotation (
-    Line(points={{-170,8},{-174,8},{-174,-10}},        color = {0, 127, 255}));
+    Line(points={{-176,16},{-174,16},{-174,-10}},      color = {0, 127, 255}));
   connect(cooCoi.port_b2, mov.port_a) annotation (
     Line(points = {{-110, 0}, {-74, 0}, {-74, -18}}, color = {0, 127, 255}));
   connect(mov.port_b, senTem.port_a) annotation (
@@ -817,30 +913,43 @@ equation
       horizontalAlignment=TextAlignment.Right));
   connect(senTem.port_b, senRelPre1.port_a) annotation (Line(points={{-20,0},{
           -36,0},{-36,16},{-50,16},{-50,22}}, color={0,127,255}));
-  connect(gai2.y, mul.u1) annotation (Line(points={{-300,-2},{-288,-2},{-288,0},
-          {-276,0},{-276,24},{-268,24}}, color={0,0,127}));
-  connect(senMasFlo.m_flow, mul.u2) annotation (Line(points={{-236,3},{-254,3},
-          {-254,0},{-272,0},{-272,12},{-268,12}}, color={0,0,127}));
-  connect(mul.y, preHea.Q_flow) annotation (Line(points={{-244,18},{-234,18},{
-          -234,34},{-272,34},{-272,44},{-250,44}}, color={0,0,127}));
   connect(pro1.y, mov.y)
     annotation (Line(points={{-276,30},{-64,30},{-64,-6}}, color={0,0,127}));
-  connect(preHea.port, vol.heatPort) annotation (Line(points={{-230,44},{-220,
-          44},{-220,46},{-210,46}}, color={191,0,0}));
-  connect(relativePressure.p_rel, bldgSP) annotation (Line(points={{-121,54},{
-          -100,54},{-100,50},{-82,50},{-82,-340},{530,-340},{530,-316},{600,
-          -316}}, color={0,0,127}));
-  connect(senRelPre1.port_b, amb.ports[3]) annotation (Line(points={{-50,42},{
-          -54,42},{-54,74},{-180,74},{-180,24},{-222,24},{-222,-40},{-272,-40},
-          {-272,-36.1}}, color={0,127,255}));
-  connect(senRelHum1.phi, erwsuphum) annotation (Line(points={{-179.9,19},{-198,
-          19},{-198,-254},{272,-254},{272,-194},{600,-194}}, color={0,0,127}));
-  connect(relativePressure.port_b, amb.ports[4]) annotation (Line(points={{-130,
-          64},{-142,64},{-142,62},{-148,62},{-148,-38.3},{-272,-38.3}}, color={
+  connect(relativePressure.p_rel, bldgSP) annotation (Line(points={{-121,54},
+          {-100,54},{-100,50},{-82,50},{-82,-340},{530,-340},{530,-286},{
+          604,-286}},
+                  color={0,0,127}));
+  connect(senRelPre1.port_b, amb.ports[2]) annotation (Line(points={{-50,42},{24,
+          42},{24,88},{-102,88},{-102,38},{-170,38},{-170,-32.1},{-290,-32.1}},
+                         color={0,127,255}));
+  connect(senRelHum1.phi, erwsuphum) annotation (Line(points={{-185.9,27},
+          {-198,27},{-198,-254},{272,-254},{272,-194},{600,-194}},
+                                                             color={0,0,127}));
+  connect(relativePressure.port_b, amb.ports[3]) annotation (Line(points={{-130,64},
+          {-142,64},{-142,62},{-210,62},{-210,-31.3667},{-290,-31.3667}},
+                                                                        color={
           0,127,255}));
   connect(truDel.y, exhFanSta) annotation (Line(points={{-276,84},{-122,84},{
           -122,80},{28,80},{28,-130},{306,-130},{306,-180},{510,-180},{510,-50},
           {600,-50}}, color={255,0,255}));
+  connect(uEneRecWheSpe, whe.uSpe) annotation (Line(points={{-360,10},{
+          -326,10},{-326,16},{-262,16}}, color={0,0,127}));
+  connect(senMasFlo.port_b, whe.port_a1) annotation (Line(points={{-286,6},
+          {-246,6},{-246,22},{-260,22}},      color={0,127,255}));
+  connect(senTem1.port_a, whe.port_a2) annotation (Line(points={{-168,160},
+          {-192,160},{-192,10},{-240,10}}, color={0,127,255}));
+  connect(whe.port_b2, amb.ports[4]) annotation (Line(points={{-260,10},{-246,
+          10},{-246,0},{-264,0},{-264,-30.6333},{-290,-30.6333}},color={0,
+          127,255}));
+  connect(whe.port_b1, senTemEneWhe.port_a) annotation (Line(points={{
+          -240,22},{-236,22},{-236,32},{-230,32}}, color={0,127,255}));
+  connect(senTemEneWhe.port_b, senRelHum1.port_a) annotation (Line(points=
+         {{-210,32},{-204,32},{-204,16},{-196,16}}, color={0,127,255}));
+  connect(bldgSP, bldgSP)
+    annotation (Line(points={{604,-286},{604,-286}}, color={0,0,127}));
+  connect(senTemEneWhe.T, TEneWhe) annotation (Line(points={{-220,43},{
+          -184,43},{-184,-394},{556,-394},{556,-310},{602,-310}}, color={
+          0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -240}, {100, 240}}), graphics={  Text(textColor = {0, 0, 255}, extent = {{-140, 280}, {140, 240}}, textString = "%name"), Rectangle(origin = {-1, -5}, lineColor = {0, 0, 127}, fillColor = {255, 255, 255},
             fillPattern =                                                                                                                                                                                                        FillPattern.Solid, extent = {{-101, -247}, {101, 247}})}),
