@@ -205,11 +205,9 @@ block TestBed
     Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = 90, origin = {100, -174})));
   Buildings.Fluid.Sensors.TemperatureTwoPort senTem(redeclare package Medium = MediumA, final m_flow_nominal = mAirTot_flow_nominal) "AHU discharge air temperature sensor" annotation (
     Placement(transformation(extent = {{-40, -10}, {-20, 10}})));
-  Buildings.Fluid.Sensors.RelativePressure senRelPre(redeclare package Medium
-      =                                                                         MediumW) "Differential pressure sensor between chilled water supply and return" annotation (
+  Buildings.Fluid.Sensors.RelativePressure senRelPre(redeclare package Medium = MediumW) "Differential pressure sensor between chilled water supply and return" annotation (
     Placement(transformation(extent = {{150, -80}, {170, -60}})));
-  Buildings.Fluid.Sensors.RelativePressure senRelPre1(redeclare package Medium
-      =                                                                          MediumA) "Differential pressure sensor between AHU discharge and outdoor air" annotation (
+  Buildings.Fluid.Sensors.RelativePressure senRelPre1(redeclare package Medium = MediumA) "Differential pressure sensor between AHU discharge and outdoor air" annotation (
     Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = 90, origin={-50,32})));
   Modelica.Blocks.Routing.DeMultiplex demux(final n = 5) "Demultiplexer for chilled water valve signals" annotation (
     Placement(transformation(extent={{42,-30},{62,-10}})));

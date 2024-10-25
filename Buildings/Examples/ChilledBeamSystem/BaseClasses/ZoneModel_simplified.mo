@@ -144,7 +144,7 @@ block ZoneModel_simplified
     T_a_start=datConBou.T_a_start,
     T_b_start=datConBou.T_b_start,
     final stateAtSurface_a=datConBou.stateAtSurface_a,
-    final stateAtSurface_b=datConBou.stateAtSurface_b) if   haveConBou
+    final stateAtSurface_b=datConBou.stateAtSurface_b)   if haveConBou
     "Heat conduction through opaque constructions that have the boundary conditions of the other side exposed"
     annotation (Placement(transformation(extent={{-6,34},{-46,74}})));
   parameter ThermalZones.Detailed.BaseClasses.ParameterConstruction           datConBou[nConBou](
