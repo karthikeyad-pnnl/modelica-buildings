@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.FDE.DOAS;
+within Buildings.Controls.OBC.FDE.DOAS.Subsequences;
 block SupplyFanController "This block manages start, stop, status, and speed of the supply fan."
 
    parameter Boolean is_vav = true

@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.FDE.DOAS;
+within Buildings.Controls.OBC.FDE.DOAS.Subsequences;
 block EnergyWheel "This block commands the energy recovery wheel and associated bypass dampers."
 
   parameter Real dTThrEneRec(
@@ -238,11 +238,11 @@ equation
   connect(abs.y, hys.u)
     annotation (Line(points={{-14, 2}, {-4, 2}}, color={0,0,127}));
   connect(uFanSupPro, mulAndEneRecRegOpe.u[1]) annotation (Line(points={{-122,80},
-          {-70,80},{-70,88},{20,88},{20,22.6667},{64,22.6667}}, color={255,0,255}));
+          {-70,80},{-70,88},{20,88},{20,15.6667},{64,15.6667}}, color={255,0,255}));
   connect(not1.y, mulAndEneRecRegOpe.u[2]) annotation (Line(points={{-4,50},{10,
           50},{10,18},{64,18}}, color={255,0,255}));
   connect(EneWhe.y, mulAndEneRecRegOpe.u[3]) annotation (Line(points={{54,0},{
-          56,0},{56,13.3333},{64,13.3333}},
+          56,0},{56,20.3333},{64,20.3333}},
                                          color={255,0,255}));
   annotation (
     defaultComponentName = "ERWcon",

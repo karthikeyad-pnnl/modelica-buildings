@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.FDE.DOAS.Validation;
+within Buildings.Controls.OBC.FDE.DOAS.Subsequences.Validation;
 model SupplyTemperatureSetpoint "This model simulates TSupSet"
 
   parameter Real TSupLowSet(
@@ -49,7 +49,7 @@ model SupplyTemperatureSetpoint "This model simulates TSupSet"
     offset=296,
     startTime=1250)
     annotation (Placement(transformation(extent={{-40,-38},{-20,-18}})));
-  Buildings.Controls.OBC.FDE.DOAS.SupplyTemperatureSetpoint TSupSetpt(
+  Buildings.Controls.OBC.FDE.DOAS.Subsequences.SupplyTemperatureSetpoint TSupSetpt(
     TSupLowSet=TSupLowSet,
     TSupHigSet=TSupHigSet,
     THigZon=THigZon,

@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.FDE.DOAS.Validation;
+within Buildings.Controls.OBC.FDE.DOAS.Subsequences.Validation;
 model HeatingCoil "This model simulates HeatingCoil"
 
   parameter CDL.Types.SimpleController controllerTypeCoiHea=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
@@ -14,7 +14,7 @@ model HeatingCoil "This model simulates HeatingCoil"
 
   parameter Real TdCoiHea(
    final unit= "s")=0.1 "Time constant of derivative block";
-  Buildings.Controls.OBC.FDE.DOAS.HeatingCoil CoiHea(
+  Buildings.Controls.OBC.FDE.DOAS.Subsequences.HeatingCoil CoiHea(
     controllerTypeCoiHea=controllerTypeCoiHea,
     kCoiHea=kCoiHea,
     TiCoiHea=TiCoiHea,
@@ -61,8 +61,8 @@ FillPattern.Solid,points={{-36,60},{64,0},{-36,-60},{-36,60}})}),
     Documentation(info="<html>
 <p>
 This example simulates
-<a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.HeatingCoil\">
-Buildings.Controls.OBC.FDE.DOAS.HeatingCoil</a>.
+<a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.Subsequences.HeatingCoil\">
+Buildings.Controls.OBC.FDE.DOAS.Subsequences.HeatingCoil</a>.
 </p>
 </html>", revisions="<html>
 <ul>
@@ -71,6 +71,6 @@ September 25, 2020, by Henry Nickels:</br>
 First implementation.</li>
 </ul>
 </html>"),
-    __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Validation/HeatingCoil.mos"
+    __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Subsequences/Validation/HeatingCoil.mos"
     "Simulate and plot"));
 end HeatingCoil;

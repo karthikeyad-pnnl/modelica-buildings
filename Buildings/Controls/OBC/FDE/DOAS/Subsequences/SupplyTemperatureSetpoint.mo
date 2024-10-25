@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.FDE.DOAS;
+within Buildings.Controls.OBC.FDE.DOAS.Subsequences;
 block SupplyTemperatureSetpoint
   "This block caclulates the DOAS supply air temperature set point."
 

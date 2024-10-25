@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.FDE.DOAS;
+within Buildings.Controls.OBC.FDE.DOAS.Subsequences;
 block CoolingCoil "This block commands the cooling coil."
 
   parameter Real erwDPadj(

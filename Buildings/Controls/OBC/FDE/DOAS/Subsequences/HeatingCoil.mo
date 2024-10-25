@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.FDE.DOAS;
+within Buildings.Controls.OBC.FDE.DOAS.Subsequences;
 block HeatingCoil "This block commands the heating coil."
 
   parameter CDL.Types.SimpleController controllerTypeCoiHea=Buildings.Controls.OBC.CDL.Types.SimpleController.PI

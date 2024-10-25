@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.FDE.DOAS.Validation;
+within Buildings.Controls.OBC.FDE.DOAS.Subsequences.Validation;
 model SupplyFanController
   "This model simulates SupplyFanController"
  parameter Boolean is_vav = true
@@ -59,7 +59,7 @@ model SupplyFanController
   parameter CDL.Types.SimpleController controllerTypeFanSpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "Type of controller";
 
-  Buildings.Controls.OBC.FDE.DOAS.SupplyFanController SFcon(
+  Buildings.Controls.OBC.FDE.DOAS.Subsequences.SupplyFanController SFcon(
     is_vav=is_vav,
     yMinDamSet=yMinDamSet,
     yMaxDamSet=yMaxDamSet,
@@ -129,9 +129,9 @@ First implementation.</li>
 </html>", info="<html>
 <p>
 This example simulates
-<a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.SupplyFanController\">
-Buildings.Controls.OBC.FDE.DOAS.SupplyFanController</a>.
+<a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.Subsequences.SupplyFanController\">
+Buildings.Controls.OBC.FDE.DOAS.Subsequences.SupplyFanController</a>.
 </p>
-</html>"),__Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Validation/SupplyFanController.mos"
+</html>"),__Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Subsequences/Validation/SupplyFanController.mos"
     "Simulate and plot"));
 end SupplyFanController;

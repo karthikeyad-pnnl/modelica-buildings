@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.FDE.DOAS.Validation;
+within Buildings.Controls.OBC.FDE.DOAS.Subsequences.Validation;
 model ExhaustFan "This model simulates ExhaustFanController"
 
   parameter Real dPSetBui(
@@ -37,7 +37,7 @@ model ExhaustFan "This model simulates ExhaustFanController"
     offset=15)
     annotation (Placement(transformation(extent={{-34,-26},{-14,-6}})));
 
-  Buildings.Controls.OBC.FDE.DOAS.ExhaustFan EFcon(
+  Buildings.Controls.OBC.FDE.DOAS.Subsequences.ExhaustFan EFcon(
     dPSetBui=dPSetBui,
     kExhFan=kExhFan,
     TiExhFan=TiExhFan,
@@ -70,11 +70,11 @@ First implementation.</li>
 </html>", info="<html>
 <p>
 This example simulates
-<a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.ExhaustFanController\">
-Buildings.Controls.OBC.FDE.DOAS.ExhaustFanController</a>.
+<a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.Subsequences.ExhaustFanController\">
+Buildings.Controls.OBC.FDE.DOAS.Subsequences.ExhaustFanController</a>.
 </p>
 </html>"),
     experiment(StopTime=5760, __Dymola_Algorithm="Dassl"),
-    __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Validation/ExhaustFan.mos"
+    __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Subsequences/Validation/ExhaustFan.mos"
     "Simulate and plot"));
 end ExhaustFan;

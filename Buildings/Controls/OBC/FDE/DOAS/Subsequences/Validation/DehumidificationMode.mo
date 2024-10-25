@@ -1,5 +1,5 @@
-within Buildings.Controls.OBC.FDE.DOAS.Validation;
-model DehumMode "This model simulates DehumMode."
+within Buildings.Controls.OBC.FDE.DOAS.Subsequences.Validation;
+model DehumidificationMode "This model simulates DehumidificationMode."
 
   parameter Real dehumSet(
     final min=0,
@@ -21,7 +21,7 @@ model DehumMode "This model simulates DehumMode."
     final quantity="Time")=5
     "Continuous time period for which relative humidity rises above set point before dehumidifcation mode is enabled";
 
-  Buildings.Controls.OBC.FDE.DOAS.DehumMode DehumMod(
+  Buildings.Controls.OBC.FDE.DOAS.Subsequences.DehumidificationMode DehumMod(
     dehumSet=dehumSet,
     timThrDehDis=timThrDehDis,
     timDelDehEna=timDelDehEna,
@@ -68,9 +68,9 @@ First implementation.</li>
 </html>", info="<html>
 <p>
 This example simulates
-<a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.DehumMode\">
-Buildings.Controls.OBC.FDE.DOAS.DehumMode</a>.
+<a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.Subsequences.DehumidificationMode\">
+Buildings.Controls.OBC.FDE.DOAS.Subsequences.DehumidificationMode</a>.
 </p>
-</html>"),__Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Validation/DehumMode.mos"
+</html>"),__Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Subsequences/Validation/DehumidificationMode.mos"
     "Simulate and plot"));
-end DehumMode;
+end DehumidificationMode;

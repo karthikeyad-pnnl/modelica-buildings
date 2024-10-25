@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.FDE.DOAS;
+within Buildings.Controls.OBC.FDE.DOAS.Subsequences;
 block ExhaustFan "This block manages start, stop, and speed of the exhaust fan."
 
   parameter Real dPSetBui(

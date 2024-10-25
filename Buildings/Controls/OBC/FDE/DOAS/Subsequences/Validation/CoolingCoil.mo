@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.FDE.DOAS.Validation;
+within Buildings.Controls.OBC.FDE.DOAS.Subsequences.Validation;
 model CoolingCoil "This model simulates CoolingCoil"
 
    parameter Real erwDPadj(
@@ -55,7 +55,7 @@ model CoolingCoil "This model simulates CoolingCoil"
     final unit="s",
     final quantity="Time")=5
     "Continuous time period for which relative humidity rises above set point before dehumidifcation mode is enabled";
-  Buildings.Controls.OBC.FDE.DOAS.CoolingCoil CoiCoo(
+  Buildings.Controls.OBC.FDE.DOAS.Subsequences.CoolingCoil CoiCoo(
     erwDPadj(displayUnit="K") = erwDPadj,
     controllerTypeDeh=controllerTypeDeh,
     kDeh=kDeh,
@@ -159,11 +159,11 @@ First implementation.</li>
 </html>", info="<html>
 <p>
 This example simulates
-<a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.CoolingCoil\">
-Buildings.Controls.OBC.FDE.DOAS.CoolingCoil</a>.
+<a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.Subsequences.CoolingCoil\">
+Buildings.Controls.OBC.FDE.DOAS.Subsequences.CoolingCoil</a>.
 </p>
 </html>"),
     experiment(StopTime=5760, __Dymola_Algorithm="Dassl"),
-    __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Validation/CoolingCoil.mos"
+    __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Subsequences/Validation/CoolingCoil.mos"
     "Simulate and plot"));
 end CoolingCoil;

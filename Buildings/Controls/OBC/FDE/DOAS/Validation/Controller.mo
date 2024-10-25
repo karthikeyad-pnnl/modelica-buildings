@@ -1,5 +1,5 @@
 within Buildings.Controls.OBC.FDE.DOAS.Validation;
-model DOAScontroller "DOAS controller"
+model Controller "DOAS controller"
 
   parameter Real erwDPadj(
   final unit = "K",
@@ -238,7 +238,7 @@ model DOAScontroller "DOAS controller"
 
 
 
-  Buildings.Controls.OBC.FDE.DOAS.DOAScontroller DOAScon(
+  Buildings.Controls.OBC.FDE.DOAS.Controller DOAScon(
     erwDPadj=erwDPadj,
     controllerTypeDeh=controllerTypeDeh,
     kDeh=kDeh,
@@ -313,7 +313,7 @@ model DOAScontroller "DOAS controller"
   delayTime = 10,
   delayOnInit = true)
   "Simulates delay from initial fan start command to fan status proof."
-  annotation(Placement(visible = true, transformation(origin = {48, 8}, extent = {{-94, 14}, {-74, 34}}, rotation = 0)));
+  annotation(Placement(visible = true, transformation(origin={54,6},    extent = {{-94, 14}, {-74, 34}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Sin sensorDDSP(
   amplitude = 300,
@@ -324,7 +324,7 @@ model DOAScontroller "DOAS controller"
 
   Buildings.Controls.OBC.CDL.Reals.Switch swi
   "Logic switch selects DDSP generator when fan is proven otherwise selects 0."
-  annotation(Placement(transformation(extent = {{-52, -2}, {-32, 18}})));
+  annotation(Placement(transformation(extent={{-52,-10},{-32,10}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant con0(
   final k = 0)
@@ -408,81 +408,98 @@ model DOAScontroller "DOAS controller"
     annotation (Placement(transformation(extent={{110,-28},{130,-8}})));
 
   Buildings.Controls.OBC.CDL.Logical.Pre pre
-  annotation(Placement(visible = true, transformation(origin = {-68, 52}, extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  annotation(Placement(visible = true, transformation(origin={-70,30},    extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
 equation
   connect(OccGen.y,DOAScon.Occ)  annotation (
-    Line(points={{-20,86},{58,86},{58,27.6},{68,27.6}},      color = {255, 0, 255}));
+    Line(points={{-20,86},{58,86},{58,22.6875},{68,22.6875}},color = {255, 0, 255}));
 
-  connect(mostOpenDamGen.y, DOAScon.uDamMaxOpe) annotation (Line(points={{-20,
-          56},{54,56},{54,25.2},{68,25.2}}, color={0,0,127}));
+  connect(mostOpenDamGen.y, DOAScon.uDamMaxOpe) annotation (Line(points={{-20,56},
+          {54,56},{54,20.5625},{68,20.5625}},
+                                            color={0,0,127}));
 
-  connect(truDel.y, DOAScon.uFanSupPro) annotation (Line(points={{-24,32},{50,
-          32},{50,22.8},{68,22.8}}, color={255,0,255}));
+  connect(truDel.y, DOAScon.uFanSupPro) annotation (Line(points={{-18,30},{50,
+          30},{50,18.4375},{68,18.4375}},
+                                    color={255,0,255}));
 
   connect(truDel.y, swi.u2) annotation (
-    Line(points = {{-24, 32}, {-24, 18}, {-54, 18}, {-54, 8}}, color = {255, 0, 255}));
+    Line(points={{-18,30},{-10,30},{-10,18},{-60,18},{-60,0},{-54,0}},
+                                                               color = {255, 0, 255}));
 
   connect(sensorDDSP.y, swi.u1) annotation (
-    Line(points = {{-76, -8}, {-66, -8}, {-66, 16}, {-54, 16}}, color = {0, 0, 127}));
+    Line(points={{-76,-8},{-66,-8},{-66,8},{-54,8}},            color = {0, 0, 127}));
 
   connect(con0.y, swi.u3) annotation (
-    Line(points = {{-68, -48}, {-60, -48}, {-60, 0}, {-54, 0}}, color = {0, 0, 127}));
+    Line(points={{-68,-48},{-60,-48},{-60,-8},{-54,-8}},        color = {0, 0, 127}));
 
   connect(ralHumGen.y, DOAScon.phiAirRet) annotation (Line(points={{24,-6},{28,
-          -6},{28,18},{68,18}}, color={0,0,127}));
+          -6},{28,14.1875},{68,14.1875}},
+                                color={0,0,127}));
 
   connect(highSpaceTGen.y, DOAScon.TAirHig) annotation (Line(points={{-2,-18},{
-          30,-18},{30,15.4},{68,15.4}}, color={0,0,127}));
+          30,-18},{30,12.0625},{68,12.0625}},
+                                        color={0,0,127}));
 
-  connect(raTGen.y, DOAScon.TAirRet) annotation (Line(points={{-32,-28},{-28,-28},
-          {-28,10.4},{68,10.4}}, color={0,0,127}));
+  connect(raTGen.y, DOAScon.TAirRet) annotation (Line(points={{-32,-28},{-28,
+          -28},{-28,7.8125},{68,7.8125}},
+                                 color={0,0,127}));
 
   connect(erwHumGen.y, DOAScon.phiAirEneRecWhe) annotation (Line(points={{50,-24},
-          {56,-24},{56,2.8},{68,2.8}}, color={0,0,127}));
+          {56,-24},{56,1.4375},{68,1.4375}},
+                                       color={0,0,127}));
 
-  connect(DOAScon.yBypDam, ERWtemp.uBypDam) annotation (Line(points={{92.2,11},
-          {97.1,11},{97.1,-12},{107.6,-12}}, color={255,0,255}));
+  connect(DOAScon.yBypDam, ERWtemp.uBypDam) annotation (Line(points={{92,11},{
+          97.1,11},{97.1,-12},{107.6,-12}},  color={255,0,255}));
 
   connect(DOAScon.yEneRecWheEna, ERWtemp.uEneRecWheStart) annotation (Line(
-        points={{92.2,8},{98,8},{98,-16},{107.6,-16}}, color={255,0,255}));
+        points={{92,8.875},{98,8.875},{98,-16},{107.6,-16}},
+                                                       color={255,0,255}));
 
   connect(raTGen.y, ERWtemp.TAirRet) annotation (Line(points={{-32,-28},{38.8,-28},
           {38.8,-20},{107.6,-20}}, color={0,0,127}));
 
   connect(ERWtemp.yTSimEneRecWhe, DOAScon.TAirSupEneWhe) annotation (Line(
-        points={{132.4,-18},{134,-18},{134,-38},{60,-38},{60,0.4},{68,0.4}},
+        points={{132.4,-18},{134,-18},{134,-38},{60,-38},{60,-0.6875},{68,
+          -0.6875}},
         color={0,0,127}));
 
-  connect(DOAScon.yExhFanSta, truDel1.u) annotation (Line(points={{92.2,1.6},{
-          96,1.6},{96,-56},{106,-56}}, color={255,0,255}));
+  connect(DOAScon.yExhFanSta, truDel1.u) annotation (Line(points={{92,4.625},{
+          96,4.625},{96,-56},{106,-56}},
+                                       color={255,0,255}));
 
   connect(truDel1.y, DOAScon.uFanExhPro) annotation (Line(points={{130,-56},{
-          134,-56},{134,-74},{58,-74},{58,-2},{68,-2}}, color={255,0,255}));
+          134,-56},{134,-74},{58,-74},{58,-2.8125},{68,-2.8125}},
+                                                        color={255,0,255}));
 
   connect(bldgSP.y, DOAScon.dPAirStaBui) annotation (Line(points={{52,-82},{54,
-          -82},{54,-4.4},{68,-4.4}}, color={0,0,127}));
+          -82},{54,-4.9375},{68,-4.9375}},
+                                     color={0,0,127}));
 
   connect(oaTgen.y, DOAScon.TAirOut) annotation (Line(points={{26,-36},{32,-36},
-          {32,7.8},{68,7.8}}, color={0,0,127}));
+          {32,5.6875},{68,5.6875}},
+                              color={0,0,127}));
 
   connect(oaTgen.y, ERWtemp.TAirOut) annotation (Line(points={{26,-36},{62,-36},
           {62,-24},{107.6,-24}}, color={0,0,127}));
 
-  connect(swi.y, DOAScon.dPAirDucSta) annotation (Line(points={{-30,8},{16,8},{
-          16,20.4},{68,20.4}}, color={0,0,127}));
+  connect(swi.y, DOAScon.dPAirDucSta) annotation (Line(points={{-30,0},{0,0},{0,
+          16.3125},{68,16.3125}},
+                               color={0,0,127}));
 
   connect(saTGen.y, DOAScon.TAirSup) annotation (Line(points={{-2,-52},{26,-52},
-          {26,12.8},{68,12.8}}, color={0,0,127}));
+          {26,9.9375},{68,9.9375}},
+                                color={0,0,127}));
 
   connect(ccTGen.y, DOAScon.TAirDisCoiCoo) annotation (Line(points={{-2,-82},{
-          28,-82},{28,5.4},{68,5.4}}, color={0,0,127}));
+          28,-82},{28,3.5625},{68,3.5625}},
+                                      color={0,0,127}));
 
-  connect(DOAScon.yFanSup, pre.u) annotation (Line(points={{92.2,23.4},{-86,
-          23.4},{-86,52},{-80,52}}, color={255,0,255}));
+  connect(DOAScon.yFanSup, pre.u) annotation (Line(points={{92,19.5},{92,18},{
+          98,18},{98,34},{56,34},{56,70},{-88,70},{-88,30},{-82,30}},
+                                    color={255,0,255}));
 
   connect(pre.y, truDel.u) annotation (
-    Line(points = {{-56, 52}, {-56, 41}, {-48, 41}, {-48, 32}}, color = {255, 0, 255}));
+    Line(points={{-58,30},{-42,30}},                            color = {255, 0, 255}));
 
   annotation (
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics={  Ellipse(lineColor = {75, 138, 73}, fillColor = {255, 255, 255},
@@ -500,9 +517,9 @@ First implementation.</li>
 </html>", info = "<html>
 <p>
 This example simulates
-<a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.DOAScontroller\">
-Buildings.Controls.OBC.FDE.DOAS.DOAScontroller</a>.
+<a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.Controller\">
+Buildings.Controls.OBC.FDE.DOAS.Controller</a>.
 </p>
 </html>"),
     experiment(StopTime = 10800, __Dymola_Algorithm = "Dassl"));
-end DOAScontroller;
+end Controller;

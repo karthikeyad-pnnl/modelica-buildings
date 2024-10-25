@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.FDE.DOAS;
+within Buildings.Controls.OBC.FDE.DOAS.Subsequences;
 block EconomizerMode "This block calculates when economizer mode is active."
   parameter Real dTEcoThr(
   final unit = "K",

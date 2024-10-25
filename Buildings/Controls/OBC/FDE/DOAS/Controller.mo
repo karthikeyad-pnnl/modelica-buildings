@@ -1,5 +1,5 @@
 within Buildings.Controls.OBC.FDE.DOAS;
-block DOAScontroller "DOAS controller built from DOAS blocks."
+block Controller "DOAS controller built from DOAS blocks."
 
  parameter Real erwDPadj(
   final unit = "K",
@@ -442,7 +442,7 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
     "Exhaust fan speed command" annotation (Placement(transformation(extent={{100,
             -150},{140,-110}}),     iconTransformation(extent={{100,-180},{140,-140}})));
 
-  Buildings.Controls.OBC.FDE.DOAS.SupplyFanController SFcon(
+  Buildings.Controls.OBC.FDE.DOAS.Subsequences.SupplyFanController SFcon(
     is_vav=is_vav,
     yMinDamSet=yMinDamSet,
     yMaxDamSet=yMaxDamSet,
@@ -460,7 +460,7 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
     "This block manages start, stop, status, and speed of the supply fan."
     annotation(Placement(transformation(extent={{-10,140},{10,160}})));
 
-  Buildings.Controls.OBC.FDE.DOAS.EnergyWheel ERWcon(
+  Buildings.Controls.OBC.FDE.DOAS.Subsequences.EnergyWheel ERWcon(
     dTThrEneRec=dTThrEneRec,
     dThys=dThys,
     timDelEneRec=timDelEneRec,
@@ -475,7 +475,7 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
     "This block commands the energy recovery wheel and associated bypass dampers."
     annotation(Placement(transformation(extent={{60,-60},{80,-40}})));
 
-  Buildings.Controls.OBC.FDE.DOAS.CoolingCoil Cooling(
+  Buildings.Controls.OBC.FDE.DOAS.Subsequences.CoolingCoil Cooling(
     erwDPadj=erwDPadj,
     controllerTypeDeh=controllerTypeDeh,
     kDeh=kDeh,
@@ -488,7 +488,7 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
     "This block commands the cooling coil."
      annotation(Placement(transformation(extent={{52,50},{72,70}})));
 
-  Buildings.Controls.OBC.FDE.DOAS.HeatingCoil Heating(
+  Buildings.Controls.OBC.FDE.DOAS.Subsequences.HeatingCoil Heating(
     controllerTypeCoiHea=controllerTypeCoiHea,
     kCoiHea=kCoiHea,
     TiCoiHea=TiCoiHea,
@@ -496,7 +496,7 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
     "This block commands the heating coil."
     annotation(Placement(transformation(extent={{50,0},{70,20}})));
 
-  Buildings.Controls.OBC.FDE.DOAS.DehumMode DehumMod(
+  Buildings.Controls.OBC.FDE.DOAS.Subsequences.DehumidificationMode DehumMod(
     dehumSet=dehumSet,
     timThrDehDis=timThrDehDis,
     timDelDehEna=timDelDehEna,
@@ -504,16 +504,16 @@ block DOAScontroller "DOAS controller built from DOAS blocks."
     "This block calculates when dehumidification mode is active."
     annotation(Placement(transformation(extent={{-44,30},{-24,50}})));
 
-  ExhaustFan EFcon1(
+  Subsequences.ExhaustFan EFcon1(
     dPSetBui=dPSetBui,
     kExhFan=kExhFan,
     TiExhFan=TiExhFan,
     TdExhFan=TdExhFan,
     controllerTypeExhFan=controllerTypeExhFan)
     annotation (Placement(transformation(extent={{30,-130},{50,-110}})));
-  EconomizerMode EconMod1(dTEcoThr=dTEcoThr)
+  Subsequences.EconomizerMode EconMod1(dTEcoThr=dTEcoThr)
     annotation (Placement(transformation(extent={{30,-40},{50,-20}})));
-  SupplyTemperatureSetpoint TSupSetpt(
+  Subsequences.SupplyTemperatureSetpoint TSupSetpt(
     TSupLowSet=TSupLowSet,
     TSupHigSet=TSupHigSet,
     THigZon=THigZon,
@@ -717,4 +717,4 @@ supply fan controller
       StartTime=16848000,
       StopTime=17020800,
       __Dymola_Algorithm="Dassl"));
-end DOAScontroller;
+end Controller;

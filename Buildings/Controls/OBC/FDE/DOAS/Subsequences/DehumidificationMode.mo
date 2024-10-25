@@ -1,5 +1,5 @@
-within Buildings.Controls.OBC.FDE.DOAS;
-block DehumMode
+within Buildings.Controls.OBC.FDE.DOAS.Subsequences;
+block DehumidificationMode
   "This block calculates when dehumidification mode is active."
 
   parameter Real dehumSet(
@@ -99,9 +99,9 @@ FillPattern.Solid),Text(extent={{42,10},{96,-8}},lineColor={28,108,200},textStri
             fillPattern=
 FillPattern.Solid),Rectangle(extent={{4,-2},{8,-64}},lineColor={244,125,35},fillColor={244,125,35},
             fillPattern=
-FillPattern.Solid),Text(extent={{-2,42},{36,30}},lineColor={28,108,200},textString="On"),Text(extent={{-2,-38},{36,-50}},lineColor={28,108,200},textString="Off"),Text(extent={{-36,4},{2,-8}},lineColor={28,108,200},textString
-            =                                                                                                                                                                                           "%dehumSet"),Text(extent={{-96,80},{-52,66}},lineColor={28,108,200},textString
-            =                                                                                                                                                                                           "supFanProof")}),
+FillPattern.Solid),Text(extent={{-2,42},{36,30}},lineColor={28,108,200},textString="On"),Text(extent={{-2,-38},{36,-50}},lineColor={28,108,200},textString="Off"),Text(extent={{-36,4},{2,-8}},lineColor={28,108,200},textString=
+                                                                                                                                                                                                        "%dehumSet"),Text(extent={{-96,80},{-52,66}},lineColor={28,108,200},textString=
+                                                                                                                                                                                                        "supFanProof")}),
     Diagram(coordinateSystem(preserveAspectRatio=false)),
     Documentation(info="<html>
 <h4>Dehumidification Mode</h4>
@@ -119,4 +119,4 @@ First implementation.</li>
       Interval=600,
       Tolerance=1e-06,
       __Dymola_Algorithm="Cvode"));
-end DehumMode;
+end DehumidificationMode;

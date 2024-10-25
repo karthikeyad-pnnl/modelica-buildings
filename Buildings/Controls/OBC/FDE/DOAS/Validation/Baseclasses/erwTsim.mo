@@ -162,8 +162,7 @@ equation
   annotation (defaultComponentName="ERWtemp",
   Icon(coordinateSystem(preserveAspectRatio=false), graphics={Rectangle(extent={{-100,100},{100,-100}},lineColor={179,151,128},radius=10,fillColor={255,255,255},
             fillPattern=
-FillPattern.Solid),Text(extent={{-90,180},{90,76}},lineColor={28,108,200},textStyle={TextStyle.Bold},textString
-            =                                                                                                   "%name"),Text(extent={{-50,0},{40,-60}},lineColor={28,108,200},fillColor={28,108,200},
+FillPattern.Solid),Text(extent={{-90,180},{90,76}},lineColor={28,108,200},textStyle={TextStyle.Bold},textString="%name"),Text(extent={{-50,0},{40,-60}},lineColor={28,108,200},fillColor={28,108,200},
           fillPattern=
 FillPattern.Solid,textString="sim"),Text(extent={{-56,96},{52,-16}},lineColor={28,108,200},fillColor={28,108,200},
           fillPattern=

@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.FDE.DOAS.Validation;
+within Buildings.Controls.OBC.FDE.DOAS.Subsequences.Validation;
 model EconomizerMode "This model simulates EconMode."
 
   parameter Real dTEcoThr(
@@ -28,7 +28,7 @@ model EconomizerMode "This model simulates EconMode."
     startTime=960)
     annotation (Placement(transformation(extent={{-28,-50},{-8,-30}})));
 
-  Buildings.Controls.OBC.FDE.DOAS.EconomizerMode EconMod(dTEcoThr=dTEcoThr)
+  Buildings.Controls.OBC.FDE.DOAS.Subsequences.EconomizerMode EconMod(dTEcoThr=dTEcoThr)
     annotation (Placement(transformation(extent={{42,-14},{62,6}})));
 equation
 
@@ -63,6 +63,6 @@ Buildings.Controls.OBC.FDE.DOAS.EconimizerMode</a>.
 </p>
 </html>"),
     experiment(StopTime=5760, __Dymola_Algorithm="Dassl"),
-    __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Validation/EconomizerMode.mos"
+    __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Subsequences/Validation/EconomizerMode.mos"
     "Simulate and plot"));
 end EconomizerMode;

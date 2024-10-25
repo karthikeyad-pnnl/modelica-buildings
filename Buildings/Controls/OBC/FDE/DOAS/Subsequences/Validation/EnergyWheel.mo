@@ -1,4 +1,4 @@
-within Buildings.Controls.OBC.FDE.DOAS.Validation;
+within Buildings.Controls.OBC.FDE.DOAS.Subsequences.Validation;
 model EnergyWheel "This model simulates EnergyWheel."
 
 parameter Real dTThrEneRec(
@@ -47,7 +47,7 @@ parameter Real dTThrEneRec(
   final unit = "s") = 0.1
   "PID cooling loop time constant of derivative block";
 
-  Buildings.Controls.OBC.FDE.DOAS.EnergyWheel ERWcon(
+  Buildings.Controls.OBC.FDE.DOAS.Subsequences.EnergyWheel ERWcon(
     dTThrEneRec=dTThrEneRec,
     dThys=dThys,
     timDelEneRec=timDelEneRec,
@@ -129,10 +129,10 @@ First implementation.</li>
 </html>", info="<html>
 <p>
 This example simulates
-<a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.EnergyWheel\">
-Buildings.Controls.OBC.FDE.DOAS.EnergyWheel</a>.
+<a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.Subsequences.EnergyWheel\">
+Buildings.Controls.OBC.FDE.DOAS.Subsequences.EnergyWheel</a>.
 </p>
 </html>"),
-    __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Validation/EnergyWheel.mos"
+    __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Subsequences/Validation/EnergyWheel.mos"
     "Simulate and plot"));
 end EnergyWheel;
