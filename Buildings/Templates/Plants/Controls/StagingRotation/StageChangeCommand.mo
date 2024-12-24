@@ -1,4 +1,4 @@
-within Buildings.Templates.Plants.Controls.StagingRotation;
+﻿within Buildings.Templates.Plants.Controls.StagingRotation;
 block StageChangeCommand
   "Generate stage change command"
   parameter Buildings.Templates.Plants.Controls.Types.Application typ
@@ -69,8 +69,8 @@ block StageChangeCommand
   Buildings.Controls.OBC.CDL.Interfaces.RealInput uPlrSta(
     final unit="1",
     final min=0,
-    final max=1)
-    if have_inpPlrSta
+    final max=1) if
+       have_inpPlrSta
     "Input signal for staging part load ratio"
     annotation (Placement(transformation(extent={{-240,-240},{-200,-200}}),
       iconTransformation(extent={{-140,-120},{-100,-80}})));

@@ -1,4 +1,4 @@
-within Buildings.Templates.Plants.Controls.HeatPumps.Validation;
+﻿within Buildings.Templates.Plants.Controls.HeatPumps.Validation;
 model AirToWater
   final parameter Real capHea_nominal(
     final unit="W")=sum(ctl.capHeaHp_nominal)

@@ -2,6 +2,7 @@ within Buildings.Templates.Plants.HeatPumps;
 package Validation
   "Package with validation models"
   extends Modelica.Icons.ExamplesPackage;
+
   annotation (
     Documentation(
       info="<html>

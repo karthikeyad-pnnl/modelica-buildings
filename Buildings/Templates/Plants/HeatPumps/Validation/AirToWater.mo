@@ -1,4 +1,4 @@
-within Buildings.Templates.Plants.HeatPumps.Validation;
+﻿within Buildings.Templates.Plants.HeatPumps.Validation;
 model AirToWater
   "Validation of AWHP plant template"
   extends Modelica.Icons.Example;
@@ -45,8 +45,8 @@ model AirToWater
     final dp_nominal=0,
     final energyDynamics=energyDynamics,
     tau=300,
-    QMax_flow=pla.capCoo_nominal)
-    if have_chiWat
+    QMax_flow=pla.capCoo_nominal) if
+       have_chiWat
     "CHW system system approximated by prescribed return temperature"
     annotation (Placement(transformation(extent={{70,-70},{90,-50}})));
   Fluid.Actuators.Valves.TwoWayEqualPercentage valDisHeaWat(
@@ -60,8 +60,8 @@ model AirToWater
     redeclare final package Medium=Medium,
     m_flow_nominal=pla.mChiWat_flow_nominal,
     dpValve_nominal=3E4,
-    dpFixed_nominal=datAll.pla.ctl.dpChiWatRemSet_max[1] - 3E4)
-    if have_chiWat
+    dpFixed_nominal=datAll.pla.ctl.dpChiWatRemSet_max[1] - 3E4) if
+       have_chiWat
     "Distribution system approximated by variable flow resistance"
     annotation (Placement(transformation(extent={{110,-70},{130,-50}})));
   Buildings.Templates.Plants.HeatPumps.AirToWater pla(

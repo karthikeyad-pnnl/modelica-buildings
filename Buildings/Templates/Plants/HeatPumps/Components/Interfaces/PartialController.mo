@@ -183,14 +183,14 @@ block PartialController "Interface for heat pump plant controller"
     annotation (Placement(transformation(extent={{-20,-20},{20,20}},rotation=90,
       origin={-260,0}),
       iconTransformation(extent={{-20,-20},{20,20}},rotation=90,origin={-100,0})));
-  Buildings.Templates.AirHandlersFans.Interfaces.Bus busAirHan[nAirHan]
-    if nAirHan > 0
+  Buildings.Templates.AirHandlersFans.Interfaces.Bus busAirHan[nAirHan] if
+       nAirHan > 0
     "Air handling unit control bus"
     annotation (Placement(transformation(extent={{-20,-20},{20,20}},rotation=-90,
       origin={260,140}),
       iconTransformation(extent={{-20,-20},{20,20}},rotation=-90,origin={100,60})));
-  Buildings.Templates.ZoneEquipment.Interfaces.Bus busEquZon[nEquZon]
-    if nEquZon > 0
+  Buildings.Templates.ZoneEquipment.Interfaces.Bus busEquZon[nEquZon] if
+       nEquZon > 0
     "Terminal unit control bus"
     annotation (Placement(transformation(extent={{-20,-20},{20,20}},rotation=-90,
       origin={260,-140}),
@@ -200,8 +200,8 @@ protected
     "Heat pump control bus"
     annotation (Placement(transformation(extent={{-260,320},{-220,360}}),
       iconTransformation(extent={{-466,50},{-426,90}})));
-  Buildings.Templates.Components.Interfaces.Bus busPumHeaWatPri
-    if cfg.typPumHeaWatPri<>Buildings.Templates.Plants.HeatPumps.Types.PumpsPrimary.None
+  Buildings.Templates.Components.Interfaces.Bus busPumHeaWatPri if
+       cfg.typPumHeaWatPri<>Buildings.Templates.Plants.HeatPumps.Types.PumpsPrimary.None
     "Primary HW pump control bus"
     annotation (Placement(transformation(extent={{-260,60},{-220,100}}),
       iconTransformation(extent={{-466,50},{-426,90}})));
@@ -220,23 +220,23 @@ protected
     "Secondary CHW pump control bus"
     annotation (Placement(transformation(extent={{-260,-220},{-220,-180}}),
       iconTransformation(extent={{-466,50},{-426,90}})));
-  Buildings.Templates.Components.Interfaces.Bus busValHeaWatHpInlIso[nHp]
-    if cfg.have_heaWat and cfg.have_valHpInlIso
+  Buildings.Templates.Components.Interfaces.Bus busValHeaWatHpInlIso[nHp] if
+       cfg.have_heaWat and cfg.have_valHpInlIso
     "Heat pump inlet HW isolation valve control bus"
     annotation (Placement(transformation(extent={{-260,180},{-220,220}}),
       iconTransformation(extent={{-466,50},{-426,90}})));
-  Buildings.Templates.Components.Interfaces.Bus busValHeaWatHpOutIso[nHp]
-    if cfg.have_heaWat and cfg.have_valHpOutIso
+  Buildings.Templates.Components.Interfaces.Bus busValHeaWatHpOutIso[nHp] if
+       cfg.have_heaWat and cfg.have_valHpOutIso
     "Heat pump outlet HW isolation valve control bus"
     annotation (Placement(transformation(extent={{-260,140},{-220,180}}),
       iconTransformation(extent={{-466,50},{-426,90}})));
-  Buildings.Templates.Components.Interfaces.Bus busValChiWatHpInlIso[nHp]
-    if cfg.have_chiWat and cfg.have_valHpInlIso
+  Buildings.Templates.Components.Interfaces.Bus busValChiWatHpInlIso[nHp] if
+       cfg.have_chiWat and cfg.have_valHpInlIso
     "Heat pump inlet CHW isolation valve control bus"
     annotation (Placement(transformation(extent={{-260,-60},{-220,-20}}),
       iconTransformation(extent={{-466,50},{-426,90}})));
-  Buildings.Templates.Components.Interfaces.Bus busValChiWatHpOutIso[nHp]
-    if cfg.have_chiWat and cfg.have_valHpOutIso
+  Buildings.Templates.Components.Interfaces.Bus busValChiWatHpOutIso[nHp] if
+       cfg.have_chiWat and cfg.have_valHpOutIso
     "Heat pump outlet CHW isolation valve control bus"
     annotation (Placement(transformation(extent={{-260,-100},{-220,-60}}),
       iconTransformation(extent={{-466,50},{-426,90}})));

@@ -59,6 +59,10 @@ model Multiple "Multiple pumps in parallel"
         origin={20,70})));
   Controls.StatusEmulator sta[nPum] "Emulate pump status"
     annotation (Placement(transformation(extent={{-10,-70},{10,-50}})));
+  Buildings.Controls.OBC.CDL.Reals.MultiSum mulSum(nin=nPum)
+    annotation (Placement(transformation(extent={{26,26},{46,46}})));
+  Modelica.Blocks.Routing.RealPassThrough realPassThrough[nPum]
+    annotation (Placement(transformation(extent={{20,-50},{40,-30}})));
 equation
   connect(pum.port_b,valChe. port_a)
     annotation (Line(points={{10,0},{30,0},{30,20},{40,20}}, color={0,127,255}));
@@ -111,6 +115,12 @@ equation
       points={{0,100},{0,88},{-80,88},{-80,-60},{-12,-60}},
       color={255,204,51},
       thickness=0.5));
+  connect(pum.P, realPassThrough.u) annotation (Line(points={{11,9},{16,9},{16,-34},
+          {12,-34},{12,-40},{18,-40}}, color={0,0,127}));
+  connect(realPassThrough.y, mulSum.u) annotation (Line(points={{41,-40},{66,-40},
+          {66,2},{18,2},{18,36},{24,36}}, color={0,0,127}));
+  connect(mulSum.y, bus.P) annotation (Line(points={{48,36},{54,36},{54,54},{18,
+          54},{18,52},{0,52},{0,100}}, color={0,0,127}));
   annotation (
   defaultComponentName="pum",
   Documentation(info="<html>

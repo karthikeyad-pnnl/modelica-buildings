@@ -34,6 +34,8 @@ equation
     annotation (Line(points={{60,-72},{60,-96},{72,-96}},color={0,0,127}));
   connect(bus.y1, y1Rea.u)
     annotation (Line(points={{0,160},{0,110},{60,110},{60,102}},color={255,204,51},thickness=0.5));
+  connect(hp.P, bus.P) annotation (Line(points={{11,-6.2},{16,-6.2},{16,108},{0,
+          108},{0,160}}, color={0,0,127}));
   annotation (
     defaultComponentName="hp",
     Documentation(

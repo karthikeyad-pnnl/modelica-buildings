@@ -1,4 +1,4 @@
-within Buildings.Templates.Plants.HeatPumps;
+﻿within Buildings.Templates.Plants.HeatPumps;
 model AirToWater
   "Air-to-water heat pump plant"
   extends Buildings.Templates.Plants.HeatPumps.Interfaces.PartialHeatPumpPlant(
@@ -125,8 +125,8 @@ model AirToWater
     final nPum=nPumChiWatPri,
     final have_var=have_pumChiWatPriVar,
     final have_varCom=true,
-    final allowFlowReversal=allowFlowReversal)
-    if have_chiWat and typArrPumPri == Buildings.Templates.Components.Types.PumpArrangement.Headered
+    final allowFlowReversal=allowFlowReversal) if
+       have_chiWat and typArrPumPri == Buildings.Templates.Components.Types.PumpArrangement.Headered
     "Headered primary CHW pumps"
     annotation (Placement(transformation(extent={{-20,70},{0,90}})));
   Buildings.Templates.Components.Routing.SingleToMultiple inlPumChiWatPri(
@@ -351,8 +351,8 @@ model AirToWater
     final nPum=nPumHeaWatPri,
     final have_var=have_pumHeaWatPriVar,
     final have_varCom=true,
-    final allowFlowReversal=allowFlowReversal)
-    if have_heaWat and typArrPumPri == Buildings.Templates.Components.Types.PumpArrangement.Headered
+    final allowFlowReversal=allowFlowReversal) if
+       have_heaWat and typArrPumPri == Buildings.Templates.Components.Types.PumpArrangement.Headered
     "Headered primary HW pumps"
     annotation (Placement(transformation(extent={{-20,-290},{0,-270}})));
   Buildings.Templates.Components.Routing.MultipleToSingle outPumHeaWatPri(
@@ -479,8 +479,8 @@ model AirToWater
     final nPum=nPumHeaWatSec,
     final have_var=true,
     final have_varCom=true,
-    final dat=dat.pumHeaWatSec)
-    if typPumHeaWatSec == Buildings.Templates.Plants.HeatPumps.Types.PumpsSecondary.Centralized
+    final dat=dat.pumHeaWatSec) if
+       typPumHeaWatSec == Buildings.Templates.Plants.HeatPumps.Types.PumpsSecondary.Centralized
     "Secondary HW pumps"
     annotation (Placement(transformation(extent={{250,-290},{270,-270}})));
   Buildings.Templates.Components.Routing.SingleToMultiple inlPumHeaWatSec(
