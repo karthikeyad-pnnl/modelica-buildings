@@ -2,6 +2,8 @@ within Buildings.Templates.Plants.HeatPumps_PNNL.Components.Controls;
 block ExternalEnergyLoopOperationMode
   parameter Real THotRetLim;
   parameter Real TCooRetLim;
+  parameter Real dTHotHys;
+  parameter Real dTCooHys;
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotRet annotation (Placement(
         transformation(extent={{-140,-80},{-100,-40}}),
                                                      iconTransformation(extent={{-140,
@@ -19,7 +21,8 @@ block ExternalEnergyLoopOperationMode
     annotation (Placement(transformation(extent={{80,30},{100,50}})));
   Buildings.Controls.OBC.CDL.Integers.Switch intSwi1
     annotation (Placement(transformation(extent={{80,-50},{100,-30}})));
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys1(uLow=THotRetLim - 10,uHigh=
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys1(uLow=THotRetLim - dTHotHys,
+                                                                        uHigh=
         THotRetLim)
     annotation (Placement(transformation(extent={{-88,-70},{-68,-50}})));
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uReqHea annotation (

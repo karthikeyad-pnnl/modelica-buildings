@@ -121,8 +121,8 @@ block OpenLoopWithHeatRecoveryUnitController
     if cfg.typPumChiWatSec <> Buildings.Templates.Plants.HeatPumps.Types.PumpsSecondary.None
     "Secondary CHW pump speed signal"
     annotation (Placement(transformation(extent={{-140,-250},{-160,-230}})));
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant tru[nHp](
-    each final k=true)
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant tru[nHp](each final k=
+        false)
     if not cfg.is_rev
     "Constant"
     annotation (Placement(transformation(extent={{-80,250},{-100,270}})));
@@ -270,8 +270,8 @@ equation
   connect(integerPassThrough.y, heatingModeTemperatureSetpoint.uOpeMod)
     annotation (Line(points={{-169,90},{-169,88},{-84,88},{-84,184},{-34,184}},
         color={255,127,0}));
-  connect(realPassThrough.y, heatingModeTemperatureSetpoint.uSetHP) annotation
-    (Line(points={{-119,68},{-84,68},{-84,84},{-80,84},{-80,176},{-34,176}},
+  connect(realPassThrough.y, heatingModeTemperatureSetpoint.uSetHP) annotation (
+     Line(points={{-119,68},{-84,68},{-84,84},{-80,84},{-80,176},{-34,176}},
         color={0,0,127}));
   connect(heatingModeTemperatureSetpoint.TSetHP, reaScaRep.u) annotation (Line(
         points={{-10,180},{0,180},{0,230},{-36,230}}, color={0,0,127}));

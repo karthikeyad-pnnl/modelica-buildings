@@ -7,6 +7,10 @@ model ExternalEnergyLoop
   parameter Boolean allowFlowReversal = true
     "= false to simplify equations, assuming, but not enforcing, no flow reversal"
     annotation(Dialog(tab="Assumptions"), Evaluate=true);
+  parameter Real mConWat_flow;
+  parameter Real CoolingCapacity_nominal;
+  parameter Real mRehWat_flow;
+  parameter Real HeatingCapacity_nominal;
   Modelica.Fluid.Interfaces.FluidPort_a portCon_a(
     p(start=Medium.p_default),
     redeclare final package Medium = Medium,
@@ -57,8 +61,6 @@ model ExternalEnergyLoop
   CoolingTowerWHeatExchanger coolingTowerWHeatExchanger(
     redeclare package Medium = Buildings.Media.Water,
     mCooTowAir_flow_nominal=8,
-    mChiWat_flow_nominal=0.75,
-    mConWat_flow_nominal=15,
     dat=datCoolingTowerWHE)                             annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
@@ -81,10 +83,11 @@ model ExternalEnergyLoop
         rotation=270,
         origin={90,6})));
   Buildings.Templates.Components.Pumps.Single pum1(
-    have_var=false,
-    dat(m_flow_nominal=hp.mHeaWat_flow_nominal,
-    dp_nominal(displayUnit="Pa")=500e3,
-    redeclare Buildings.Fluid.Movers.Data.Pumps.Wilo.heatPumpPlant_CondensorPump per))
+    have_var=false, dat(
+      m_flow_nominal=hp.mHeaWat_flow_nominal,
+      dp_nominal(displayUnit="Pa") = 500e3,
+      redeclare
+        Buildings.Fluid.Movers.Data.Pumps.Wilo.heatPumpPlant_CondensorPump per))
     annotation (Placement(transformation(extent={{62,10},{82,30}})));
   BoundaryConditions.WeatherData.Bus           busWea
     "Weather bus"
@@ -99,11 +102,10 @@ model ExternalEnergyLoop
     final typ=hp.typ,
     final is_rev=hp.is_rev,
     final typMod=hp.typMod,
-    mHeaWat_flow_nominal=datHpAw.capHea_nominal/abs(datHpAw.THeaWatSup_nominal -
-        Buildings.Templates.Data.Defaults.THeaWatRetMed)/Buildings.Utilities.Psychrometrics.Constants.cpWatLiq,
+    mHeaWat_flow_nominal=mRehWat_flow,
     dpHeaWat_nominal=Buildings.Templates.Data.Defaults.dpHeaWatHp,
-    capHea_nominal=500E3,
-    THeaWatSup_nominal=Buildings.Templates.Data.Defaults.THeaWatSupMed,
+    capHea_nominal=HeatingCapacity_nominal,
+    THeaWatSup_nominal=313.15,
     TSouHea_nominal=Buildings.Templates.Data.Defaults.TOutHpHeaLow,
     perFit(hea(
         P=datHpAwNrv.capHea_nominal/Buildings.Templates.Data.Defaults.COPHpAwHea,
@@ -211,7 +213,7 @@ model ExternalEnergyLoop
         rotation=270,
         origin={-60,-50})));
   Buildings.Templates.Components.Actuators.Valve valve3(
-    redeclare package Medium = Media.Water,
+    redeclare package Medium = Buildings.Media.Water,
     typ=Buildings.Templates.Components.Types.Valve.TwoWayTwoPosition,
     dat(
       m_flow_nominal=hp.mHeaWat_flow_nominal,
@@ -221,7 +223,8 @@ model ExternalEnergyLoop
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={50,-50})));
-  parameter Data.CoolingTowerWHE datCoolingTowerWHE
+  parameter Data.CoolingTowerWHE datCoolingTowerWHE(CoolingCapacity_nominal=
+        CoolingCapacity_nominal, mWatCon_flow_nominal=mConWat_flow)
     annotation (Placement(transformation(extent={{-110,70},{-90,90}})));
   Modelica.Blocks.Routing.RealPassThrough realPassThrough
     annotation (Placement(transformation(extent={{-10,60},{10,80}})));
@@ -233,18 +236,18 @@ model ExternalEnergyLoop
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={90,-20})));
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(k=273.15 + 20)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(k=273.15 + 0)
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={128,10})));
   Modelica.Blocks.Routing.RealPassThrough realPassThrough1
     annotation (Placement(transformation(extent={{-10,30},{10,50}})));
-  Fluid.Sources.Boundary_pT bou2(redeclare package Medium = Media.Water, nPorts
-      =1)
+  Fluid.Sources.Boundary_pT bou2(redeclare package Medium = Media.Water, nPorts=
+       1)
     annotation (Placement(transformation(extent={{-142,30},{-122,50}})));
-  Fluid.Sources.Boundary_pT bou3(redeclare package Medium = Media.Water, nPorts
-      =1)
+  Fluid.Sources.Boundary_pT bou3(redeclare package Medium = Media.Water, nPorts=
+       1)
     annotation (Placement(transformation(extent={{120,50},{100,70}})));
 equation
   connect(valve.port_b, pum.port_a)

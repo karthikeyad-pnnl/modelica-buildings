@@ -15,9 +15,7 @@ package HeatPumpGroups
       each final is_rev=is_rev,
       final dat=datHp,
       each final allowFlowReversal=allowFlowReversal,
-      each final energyDynamics=energyDynamics,
-      each final have_preDroChiHeaWat=have_preDroChiHeaWat,
-      each final have_preDroSou=have_preDroSou)
+      each final energyDynamics=energyDynamics)
       "Heat pump unit"
       annotation (Placement(transformation(extent={{10,-10},{-10,10}})));
   equation
@@ -91,8 +89,8 @@ First implementation.
       final typMod=Buildings.Templates.Components.Types.HeatPumpModel.EquationFit);
 
     final parameter Buildings.Fluid.HeatPumps.Data.EquationFitReversible.Generic datPerFit(
-      dpHeaSou_nominal = if have_preDroSou then dat.perFit.dpHeaSou_nominal else 0,
-      dpHeaLoa_nominal = if have_preDroChiHeaWat then dat.perFit.dpHeaLoa_nominal else 0,
+      dpHeaSou_nominal = dat.perFit.dpHeaSou_nominal,
+      dpHeaLoa_nominal = dat.perFit.dpHeaLoa_nominal,
       hea(
         TRefLoa = dat.perFit.hea.TRefLoa,
         TRefSou = dat.perFit.hea.TRefSou,
@@ -119,7 +117,7 @@ First implementation.
           rotation=-90,
           origin={-80,130})));
     Buildings.Controls.OBC.CDL.Logical.Sources.Constant y1HeaNonRev(
-      final k=true) if not is_rev
+      k=true) if not is_rev
       "Placeholder signal for non-reversible heat pumps"
       annotation (Placement(transformation(extent={{-10,-10},{10,10}},
           rotation=-90,

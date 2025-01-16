@@ -1,16 +1,17 @@
 within Buildings.Templates.Plants.HeatPumps_PNNL.Components;
 model CoolingTowerWHeatExchanger
+  import Media;
   extends Buildings.Fluid.Interfaces.PartialTwoPortInterface(
-    final m_flow_nominal=mChiWat_flow_nominal);
+    final m_flow_nominal=dat.mWatCon_flow_nominal);
   parameter Real mCooTowAir_flow_nominal;
   Buildings.Templates.Components.Coolers.CoolingTower coo(typ=Buildings.Templates.Components.Types.Cooler.CoolingTowerOpen, dat(
       mConWat_flow_nominal=dat.mWatOxy_flow_nominal,
       dpConWatFri_nominal(displayUnit="Pa") = 14930 + 14930 + 74650,
       dpConWatSta_nominal(displayUnit="Pa") = 5000,
       mAir_flow_nominal=dat.mAir_flow_nominal,
-      TWetBulEnt_nominal=283.15,
-      TConWatRet_nominal=331.15,
-      TConWatSup_nominal=294.26,
+      TWetBulEnt_nominal=288.15,
+      TConWatRet_nominal=299.35,
+      TConWatSup_nominal=293.75,
       PFan_nominal=32000))                                annotation (Placement(
         transformation(
         extent={{10,-10},{-10,10}},
@@ -27,8 +28,7 @@ model CoolingTowerWHeatExchanger
   Fluid.Storage.ExpansionVessel           expVesChi(redeclare package Medium =
         Buildings.Media.Water, V_start=dat.mWatOxy_flow_nominal*600/1000)
     annotation (Placement(transformation(extent={{-94,-79},{-74,-59}})));
-  parameter Modelica.Units.SI.MassFlowRate mChiWat_flow_nominal
-    "Air mass flow rate";
+
   Buildings.Templates.Components.Coils.WaterBasedHeating waterBasedHeating(typVal=
         Buildings.Templates.Components.Types.Valve.ThreeWayModulating, dat(
       mAir_flow_nominal=dat.mWatCon_flow_nominal,
@@ -41,8 +41,6 @@ model CoolingTowerWHeatExchanger
       TAirEnt_nominal=328.15,
       wAirEnt_nominal=1))
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
-  parameter Modelica.Units.SI.MassFlowRate mConWat_flow_nominal=39.75
-    "CW mass flow rate";
   Buildings.Templates.Components.Sensors.Temperature temperature(redeclare
       package Medium = Buildings.Media.Water,
     m_flow_nominal=dat.mWatCon_flow_nominal,
@@ -105,6 +103,11 @@ equation
   connect(coo.port_b, waterBasedHeating.port_aSou) annotation (Line(points={{10,
           -70},{60,-70},{60,-30},{5,-30},{5,-10}}, color={0,127,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+        Rectangle(
+          extent={{-44,60},{48,-98}},
+          pattern=LinePattern.None,
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid),
         Rectangle(
           extent={{-40,-60},{40,-100}},
           lineColor={28,108,200},

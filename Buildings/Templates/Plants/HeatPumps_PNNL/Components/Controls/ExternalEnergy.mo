@@ -55,6 +55,17 @@ block ExternalEnergy
     annotation (Placement(transformation(extent={{100,-100},{120,-80}})));
   ASHPControl aSHPControl
     annotation (Placement(transformation(extent={{-80,100},{-60,120}})));
+  Buildings.Controls.OBC.CDL.Reals.Switch swi
+    annotation (Placement(transformation(extent={{-44,100},{-24,120}})));
+  Buildings.Controls.OBC.CDL.Logical.Latch lat
+    annotation (Placement(transformation(extent={{48,50},{68,70}})));
+  Buildings.Controls.OBC.CDL.Logical.FallingEdge falEdg
+    annotation (Placement(transformation(extent={{20,50},{40,70}})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(k=273.15 + 45)
+    annotation (Placement(transformation(extent={{-110,140},{-90,160}})));
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(uLow=273.15 + 32, uHigh=
+        273.15 + 42)
+    annotation (Placement(transformation(extent={{-50,134},{-30,154}})));
 equation
   connect(bus.heatingPumpBus.y1_actual, seqEveHea.u1PumHeaWatPri_actual)
     annotation (Line(
@@ -223,18 +234,41 @@ equation
       index=-1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
-  connect(aSHPControl.TSet, bus.heatPumpBus.TSet) annotation (Line(points={{-58,110},
-          {0.1,110},{0.1,140.1}},                        color={0,0,127}), Text(
-      string="%second",
-      index=1,
-      extent={{6,3},{6,3}},
-      horizontalAlignment=TextAlignment.Left));
   connect(intEqu1.y, or2.u1) annotation (Line(points={{-88,-10},{-74,-10},{-74,
           -26},{-38,-26},{-38,-20},{-32,-20}}, color={255,0,255}));
   connect(intEqu2.y, or2.u2) annotation (Line(points={{-88,-70},{-80,-70},{-80,
           -38},{-32,-38},{-32,-28}}, color={255,0,255}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-160,
-            -140},{160,140}}),                                  graphics={
+  connect(aSHPControl.TSet, swi.u3) annotation (Line(points={{-58,110},{-54,110},
+          {-54,102},{-46,102}}, color={0,0,127}));
+  connect(falEdg.y, lat.u)
+    annotation (Line(points={{42,60},{46,60}}, color={255,0,255}));
+  connect(lat.y, swi.u2) annotation (Line(points={{70,60},{80,60},{80,122},{-52,
+          122},{-52,110},{-46,110}}, color={255,0,255}));
+  connect(con.y, swi.u1) annotation (Line(points={{-88,150},{-82,150},{-82,124},
+          {-46,124},{-46,118}}, color={0,0,127}));
+  connect(hys.y, lat.clr) annotation (Line(points={{-28,144},{-28,150},{-22,150},
+          {-22,138},{-24,138},{-24,122},{-22,122},{-22,114},{-10,114},{-10,88},
+          {10,88},{10,44},{46,44},{46,54}}, color={255,0,255}));
+  connect(hys.y, falEdg.u) annotation (Line(points={{-28,144},{-22,144},{-22,
+          138},{-24,138},{-24,122},{-22,122},{-22,114},{-10,114},{-10,88},{10,
+          88},{10,60},{18,60}}, color={255,0,255}));
+  connect(bus.heatPumpBus.TLvg, hys.u) annotation (Line(
+      points={{0.1,140.1},{0.1,116},{-22,116},{-22,140},{-26,140},{-26,130},{
+          -58,130},{-58,144},{-52,144}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(aSHPControl.TSet, bus.heatPumpBus.TSet) annotation (Line(points={{-58,110},
+          {-54,110},{-54,96},{0.1,96},{0.1,140.1}},color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
+            -100},{100,100}}),                                  graphics={
           Rectangle(
           extent={{-100,100},{100,-100}},
           lineColor={0,0,0},
@@ -244,8 +278,7 @@ equation
           extent={{-150,-100},{150,-140}},
           textString="%name",
           textColor={0,0,255})}),           Diagram(coordinateSystem(
-          preserveAspectRatio=false, extent={{-160,-140},{160,140}}), graphics
-        ={
+          preserveAspectRatio=false, extent={{-160,-140},{160,140}}), graphics={
         Rectangle(
           extent={{-154,82},{-6,-108}},
           lineColor={28,108,200},

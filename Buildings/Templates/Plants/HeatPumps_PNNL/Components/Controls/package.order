@@ -12,3 +12,4 @@ HeatRecoveryUnitController_wBus
 ExternalEnergyLoopOperationMode
 ASHPControl
 HeatingModeTemperatureSetpoint
+DeEnergization

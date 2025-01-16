@@ -94,9 +94,10 @@ model ExternalEnergyLoopIntegration_Buffalo "Control Box Test"
   Buildings.Templates.Plants.HeatPumps_PNNL.Components.HeatPumpGroups.WaterToWater hpAwNrv(
     redeclare final package MediumHeaWat=Medium,
     nHp=1,
-    is_rev=false,
+    is_rev=true,
     final dat=datHpAwNrv,
-    final energyDynamics=energyDynamics)
+    final energyDynamics=energyDynamics,
+    hp(y1HeaNonRev(k=true)))
     "Non reversible AWHP"
     annotation (Placement(transformation(extent={{272,-114},{-208,-34}})));
   parameter HeatPumps.Components.Data.Controller                            datCtlHeaInl(
@@ -328,9 +329,11 @@ model ExternalEnergyLoopIntegration_Buffalo "Control Box Test"
       Medium = Buildings.Media.Water, m_flow_nominal=datHpAwNrv.mChiWatHp_flow_nominal)
     annotation (Placement(transformation(extent={{144,14},{124,34}})));
   Buildings.Templates.Plants.HeatPumps_PNNL.Components.ExternalEnergyLoop
-    externalEnergyLoop(datHpAwNrv(mHeaWat_flow_nominal=23, capHea_nominal=2*
-          datHpAwNrv.capHeaHp_nominal), datCoolingTowerWHE(
-        CoolingCapacity_nominal=1*datHpAwNrv.capCooHp_nominal))
+    externalEnergyLoop(
+    mConWat_flow=30*660,
+    CoolingCapacity_nominal=30*15e6,
+    mRehWat_flow=0.75*70.83,
+    HeatingCapacity_nominal=1.2*9.52e6)
     annotation (Placement(transformation(extent={{-2,210},{18,230}})));
   Controls.ExternalEnergy         externalEnergyOpenLoop
     annotation (Placement(transformation(extent={{48,240},{68,260}})));
@@ -398,8 +401,8 @@ model ExternalEnergyLoopIntegration_Buffalo "Control Box Test"
   Fluid.MixingVolumes.MixingVolume vol1(
     redeclare package Medium = Buildings.Media.Water,
     T_start=285.85,
-    m_flow_nominal=datHpAwNrv.mHeaWatHp_flow_nominal,
-    V=datHpAwNrv.mHeaWatHp_flow_nominal*3600/1000,
+    m_flow_nominal=datHpAwNrv.mChiWatHp_flow_nominal,
+    V=datHpAwNrv.mChiWatHp_flow_nominal*3600/1000,
     nPorts=3)
     annotation (Placement(transformation(extent={{320,40},{340,60}})));
   Buildings.Templates.Components.Actuators.Valve valve3(
@@ -447,8 +450,11 @@ model ExternalEnergyLoopIntegration_Buffalo "Control Box Test"
        1) annotation (Placement(transformation(extent={{22,116},{42,136}})));
   Buildings.Controls.OBC.CDL.Integers.Add addInt
     annotation (Placement(transformation(extent={{-442,-14},{-422,6}})));
-  Controls.ExternalEnergyLoopOperationMode extEneOpeMod(THotRetLim=273.15 + 70,
-      TCooRetLim=273.15 + 11)
+  Controls.ExternalEnergyLoopOperationMode extEneOpeMod(
+    THotRetLim=273.15 + 70,
+      TCooRetLim=273.15 + 11,
+    dTHotHys=1,
+    dTCooHys=1)
     annotation (Placement(transformation(extent={{-40,230},{-20,250}})));
   parameter Buildings.Templates.Components.Data.PumpMultiple datPumMulHea(
     final typ=Buildings.Templates.Components.Types.Pump.Multiple,
@@ -618,6 +624,12 @@ model ExternalEnergyLoopIntegration_Buffalo "Control Box Test"
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={154,100})));
+  Controls.DeEnergization deEnergization(
+    THotRetLim=273.15 + 70,
+    TCooRetLim=273.15 + 4,
+    dTHotHys=2,
+    dTCooHys=2)
+    annotation (Placement(transformation(extent={{-432,-102},{-412,-82}})));
 equation
   connect(ctlHeaInl.bus, valIsoHeaInl.bus) annotation (Line(
       points={{-68,-7.6},{-68,-6},{-24,-6},{-24,60},{-2,60}},
@@ -708,7 +720,7 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
   connect(pum1.ports_b, rou2.ports_b) annotation (Line(points={{-124,24},{-140,24}},
                           color={0,127,255}));
   connect(externalEnergyOpenLoop.bus,bus)  annotation (Line(
-      points={{58,257.143},{58,266},{38,266},{38,290}},
+      points={{58,260},{58,266},{38,266},{38,290}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%second",
@@ -816,19 +828,11 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
           -482,-76}},       color={255,0,255}));
   connect(con7.y, ena.TOut) annotation (Line(points={{-498,-100},{-482,-100},{
           -482,-84}},       color={0,0,127}));
-  connect(ena.y1, bus_sensor.uPlaEna) annotation (Line(points={{-458,-80},{-2,
-          -80},{-2,-42}},                                color={255,0,255}));
-  connect(ena.y1, resTSetCoo.u1Ena) annotation (Line(points={{-458,-80},{-420,
-          -80},{-420,-32},{-408,-32}},                  color={255,0,255}));
   connect(reaToInt.y, resdPSetHea.nReqRes) annotation (Line(points={{-452,10},{
           -374,10},{-374,-54}},   color={255,127,0}));
   connect(con5.y, resdPSetHea.u1StaPro) annotation (Line(points={{-458,-48},{
           -380,-48},{-380,-66},{-374,-66}},
                                        color={255,0,255}));
-  connect(ena.y1, resdPSetHea.u1Ena) annotation (Line(points={{-458,-80},{-420,
-          -80},{-420,-60},{-374,-60}},                       color={255,0,255}));
-  connect(ena.y1, resdPSetCoo.u1Ena) annotation (Line(points={{-458,-80},{386,
-          -80},{386,140},{416,140}},                  color={255,0,255}));
   connect(addInt.y, resTSetCoo.nReqRes) annotation (Line(points={{-420,-4},{
           -408,-4},{-408,-26}},
                            color={255,127,0}));
@@ -978,6 +982,30 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
           -140},{-332,-64},{-328,-64},{-328,-30},{-320,-30}}, color={0,0,127}));
   connect(resdPSetCoo.dpSet[1], dPSetCoo.u) annotation (Line(points={{440,146},
           {444,146},{444,140},{456,140}}, color={0,0,127}));
+  connect(deEnergization.yEna, bus_sensor.uPlaEna) annotation (Line(points={{-410,
+          -92},{-412,-92},{-412,-60},{-384,-60},{-384,-44},{-368,-44},{-368,-40},
+          {-324,-40},{-324,-48},{-228,-48},{-228,-42},{-2,-42}}, color={255,0,255}),
+      Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(deEnergization.yEna, resTSetCoo.u1Ena) annotation (Line(points={{-410,
+          -92},{-412,-92},{-412,-44},{-416,-44},{-416,-32},{-408,-32}}, color={255,
+          0,255}));
+  connect(deEnergization.yEna, resdPSetHea.u1Ena) annotation (Line(points={{-410,
+          -92},{-412,-92},{-412,-60},{-374,-60}}, color={255,0,255}));
+  connect(ena.y1, deEnergization.uEna) annotation (Line(points={{-458,-80},{
+          -448,-80},{-448,-96},{-434,-96}},
+                                       color={255,0,255}));
+  connect(deEnergization.yEna, resdPSetCoo.u1Ena) annotation (Line(points={{-410,
+          -92},{-412,-92},{-412,-60},{-384,-60},{-384,-44},{-368,-44},{-368,-40},
+          {-324,-40},{-324,-48},{-228,-48},{-228,-40},{-212,-40},{-212,-28},{
+          -28,-28},{-28,-8},{64,-8},{64,48},{192,48},{192,80},{336,80},{336,116},
+          {404,116},{404,128},{408,128},{408,140},{416,140}},
+                                                         color={255,0,255}));
+  connect(TRetHeaCon.y,deEnergization.TRetHeaCon);
+  connect(TRetCooCon.y,deEnergization.TRetCooCon);
   annotation (
     Diagram(
       coordinateSystem(
@@ -987,7 +1015,8 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
         "modelica://Buildings/Resources/Scripts/Dymola/Templates/Plants/HeatPumps/Components/Validation/HeatPumpGroupAirToWater.mos"
         "Simulate and plot"),
     experiment(
-      StopTime=2592000,
+      StartTime=28857600,
+      StopTime=31449600,
       Interval=60,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"),

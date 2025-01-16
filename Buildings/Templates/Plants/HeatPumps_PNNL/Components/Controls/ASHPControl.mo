@@ -4,16 +4,16 @@ block ASHPControl
     annotation (Placement(transformation(extent={{-30,10},{-10,30}})));
   Buildings.Controls.OBC.CDL.Reals.Line lin
     annotation (Placement(transformation(extent={{50,-10},{70,10}})));
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(k=273.15 + 20)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(k=273.15 + 23)
     annotation (Placement(transformation(extent={{-80,10},{-60,30}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant con5(k=0)
     annotation (Placement(transformation(extent={{0,50},{20,70}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant con4(k=1)
     annotation (Placement(transformation(extent={{0,-60},{20,-40}})));
-  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(p=10)
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(p=17)
     annotation (Placement(transformation(extent={{-40,-40},{-20,-20}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TRetCoo annotation (Placement(
-        transformation(extent={{-140,-20},{-100,20}}), iconTransformation(
+        transformation(extent={{-140,20},{-100,60}}),  iconTransformation(
           extent={{-140,-20},{-100,20}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput TSet annotation (Placement(
         transformation(extent={{100,-20},{140,20}}), iconTransformation(extent=
@@ -35,7 +35,8 @@ equation
   connect(addPar.y,lin. f2) annotation (Line(points={{-18,-30},{40,-30},{40,-8},
           {48,-8}},                                      color={0,0,127}));
   connect(TRetCoo, conPID1.u_m)
-    annotation (Line(points={{-120,0},{-20,0},{-20,8}}, color={0,0,127}));
+    annotation (Line(points={{-120,40},{-44,40},{-44,2},{-20,2},{-20,8}},
+                                                        color={0,0,127}));
   connect(lin.y, TSet)
     annotation (Line(points={{72,0},{120,0}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={

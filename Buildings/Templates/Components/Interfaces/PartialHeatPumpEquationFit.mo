@@ -145,6 +145,12 @@ equation
       points={{0,160},{0,110},{40,110},{40,118}},
       color={255,204,51},
       thickness=0.5));
+  connect(TChiHeaWatLvg.T, bus.TLvg) annotation (Line(points={{80,11},{68,11},{
+          68,76},{0,76},{0,160}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
   annotation (
   defaultComponentName="heaPum",
   Documentation(info="<html>

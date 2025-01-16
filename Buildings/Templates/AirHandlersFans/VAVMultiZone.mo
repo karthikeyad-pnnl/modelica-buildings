@@ -485,14 +485,14 @@ equation
           lineColor={0,0,0},
           fillPattern=FillPattern.Sphere,
           fillColor={0,100,199},
-          visible=typFanSup <> Buildings.Templates.Components.Types.Fan.None),
+          visible=fanSupDra.typ <> Buildings.Templates.Components.Types.Fan.None),
         Polygon(
           points={{130,-81},{130,-119},{149,-100},{130,-81}},
           lineColor={0,0,0},
           pattern=LinePattern.None,
           fillPattern=FillPattern.HorizontalCylinder,
           fillColor={255,255,255},
-          visible=typFanSup <> Buildings.Templates.Components.Types.Fan.None),
+          visible=fanSupDra.typ <> Buildings.Templates.Components.Types.Fan.None),
         Ellipse(
           extent={{-20,120},{20,80}},
           lineColor={0,0,0},
@@ -592,7 +592,20 @@ equation
           color={238,46,47},
           thickness=5,
           visible=have_souHeaWat,
-          pattern=LinePattern.Dash)}),
+          pattern=LinePattern.Dash),
+        Ellipse(
+          extent={{-122,-80},{-82,-120}},
+          lineColor={0,0,0},
+          fillPattern=FillPattern.Sphere,
+          fillColor={0,100,199},
+          visible=fanSupBlo.typ <> Buildings.Templates.Components.Types.Fan.None),
+        Polygon(
+          points={{-102,-81},{-102,-119},{-83,-100},{-102,-81}},
+          lineColor={0,0,0},
+          pattern=LinePattern.None,
+          fillPattern=FillPattern.HorizontalCylinder,
+          fillColor={255,255,255},
+          visible=fanSupBlo.typ <> Buildings.Templates.Components.Types.Fan.None)}),
 Diagram(
     coordinateSystem(preserveAspectRatio=false, extent={{-300,-280},{300,280}}),
       graphics={
