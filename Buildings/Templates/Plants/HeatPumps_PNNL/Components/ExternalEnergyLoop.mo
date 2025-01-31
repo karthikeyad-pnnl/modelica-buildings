@@ -53,7 +53,7 @@ model ExternalEnergyLoop
         extent={{-10,-10},{10,10}},
         rotation=90,
         origin={-100,-50})));
-  Buildings.Templates.Components.Pumps.Single pum(have_var=false, dat(
+  Buildings.Templates.Components.Pumps.Single pum(have_var=true,  dat(
         m_flow_nominal=datCoolingTowerWHE.mWatCon_flow_nominal, dp_nominal(
           displayUnit="Pa") = 5E5,
     redeclare Buildings.Fluid.Movers.Data.Pumps.Wilo.heatPumpPlant_CoolingTowerPump per))
@@ -82,8 +82,8 @@ model ExternalEnergyLoop
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={90,6})));
-  Buildings.Templates.Components.Pumps.Single pum1(
-    have_var=false, dat(
+  Buildings.Templates.Components.Pumps.Single pum1(have_var=true,
+                    dat(
       m_flow_nominal=hp.mHeaWat_flow_nominal,
       dp_nominal(displayUnit="Pa") = 500e3,
       redeclare
@@ -94,8 +94,8 @@ model ExternalEnergyLoop
     annotation (Placement(
         transformation(extent={{-50,80},{-10,120}}), iconTransformation(extent={{-50,90},
             {-30,110}})));
-  Interface.ExternalEnergyLoop bus annotation (Placement(transformation(extent={
-            {10,80},{50,120}}), iconTransformation(extent={{30,90},{50,110}})));
+  Interface.ExternalEnergyLoop bus annotation (Placement(transformation(extent=
+            {{10,80},{50,120}}), iconTransformation(extent={{30,90},{50,110}})));
   parameter Buildings.Templates.Components.Data.HeatPump datHpAwNrv(
     final cpHeaWat_default=hp.cpHeaWat_default,
     final cpSou_default=hp.cpSou_default,
@@ -236,7 +236,7 @@ model ExternalEnergyLoop
         extent={{-10,-10},{10,10}},
         rotation=270,
         origin={90,-20})));
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(k=273.15 + 0)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(k=273.15 + 30)
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=270,
@@ -249,6 +249,18 @@ model ExternalEnergyLoop
   Fluid.Sources.Boundary_pT bou3(redeclare package Medium = Media.Water, nPorts=
        1)
     annotation (Placement(transformation(extent={{120,50},{100,70}})));
+  Buildings.Templates.Components.Sensors.DifferentialPressure dPExtCoo(
+      redeclare package Medium = Buildings.Media.Water) annotation (Placement(
+        transformation(
+        extent={{10,10},{-10,-10}},
+        rotation=0,
+        origin={-80,-94})));
+  Buildings.Templates.Components.Sensors.DifferentialPressure dPExtHea(
+      redeclare package Medium = Buildings.Media.Water) annotation (Placement(
+        transformation(
+        extent={{10,10},{-10,-10}},
+        rotation=0,
+        origin={70,-96})));
 equation
   connect(valve.port_b, pum.port_a)
     annotation (Line(points={{-100,-40},{-100,20},{-90,20}},
@@ -408,6 +420,14 @@ equation
           40},{-108,20},{-90,20}}, color={0,127,255}));
   connect(bou3.ports[1], pum1.port_a) annotation (Line(points={{100,60},{84,60},
           {84,34},{54,34},{54,20},{62,20}}, color={0,127,255}));
+  connect(dPExtCoo.port_a, volumeFlowRate1.port_a) annotation (Line(points={{
+          -70,-94},{-66,-94},{-66,-100},{-60,-100}}, color={0,127,255}));
+  connect(dPExtCoo.port_b, volumeFlowRate.port_b) annotation (Line(points={{-90,
+          -94},{-94,-94},{-94,-100},{-100,-100}}, color={0,127,255}));
+  connect(dPExtHea.port_a, volumeFlowRate3.port_a) annotation (Line(points={{80,
+          -96},{86,-96},{86,-100},{90,-100}}, color={0,127,255}));
+  connect(dPExtHea.port_b, volumeFlowRate2.port_b) annotation (Line(points={{60,
+          -96},{56,-96},{56,-100},{50,-100}}, color={0,127,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}}), graphics={Rectangle(
           extent={{-100,100},{100,-100}},

@@ -90,13 +90,13 @@ model PrimaryOnlywLoads "Control Box Test"
     "Non-reversible AWHP parameters"
     annotation (Placement(transformation(extent={{-150,-192},{-130,-172}})));
 
-  Buildings.Templates.Plants.HeatPumps_PNNL.Components.HeatPumpGroups.WaterToWater hpAwNrv(
-    redeclare final package MediumHeaWat=Medium,
+  Buildings.Templates.Plants.HeatPumps_PNNL.Components.HeatPumpGroups.WaterToWater
+    hpAwNrv(
+    redeclare final package MediumHeaWat = Medium,
     nHp=1,
     is_rev=true,
     final dat=datHpAwNrv,
-    final energyDynamics=energyDynamics)
-    "Non reversible AWHP"
+    final energyDynamics=energyDynamics) "Non reversible AWHP"
     annotation (Placement(transformation(extent={{272,-114},{-208,-34}})));
   parameter HeatPumps.Components.Data.Controller                            datCtlHeaInl(
     cfg(
@@ -333,8 +333,8 @@ model PrimaryOnlywLoads "Control Box Test"
         "modelica://Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"),
       computeWetBulbTemperature=true)  "Weather data reader"
     annotation (Placement(transformation(extent={{-32,260},{-12,280}})));
-  Interface.ExternalEnergyLoop bus annotation (Placement(transformation(extent={{18,270},
-            {58,310}}),        iconTransformation(extent={{30,50},{70,90}})));
+  Interface.ExternalEnergyLoop bus annotation (Placement(transformation(extent=
+            {{18,270},{58,310}}), iconTransformation(extent={{30,50},{70,90}})));
   Fluid.MixingVolumes.MixingVolume vol(
     redeclare package Medium = Buildings.Media.Water,
     m_flow_nominal=datHpAwNrv.mHeaWatHp_flow_nominal,

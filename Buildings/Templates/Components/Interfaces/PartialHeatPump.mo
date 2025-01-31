@@ -215,7 +215,9 @@ Icon(graphics={
     Rectangle(
           extent={{100,60},{-100,-100}},
           lineColor={0,0,0},
-          lineThickness=1),
+          lineThickness=1,
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid),
     Bitmap(extent={{-20,60},{20,100}}, fileName=
     "modelica://Buildings/Resources/Images/Templates/Components/Boilers/ControllerOnboard.svg"),
     Text( extent={{-60,0},{60,-40}},

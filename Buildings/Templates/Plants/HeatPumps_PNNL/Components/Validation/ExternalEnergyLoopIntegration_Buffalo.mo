@@ -91,14 +91,14 @@ model ExternalEnergyLoopIntegration_Buffalo "Control Box Test"
     "Non-reversible AWHP parameters"
     annotation (Placement(transformation(extent={{-150,-192},{-130,-172}})));
 
-  Buildings.Templates.Plants.HeatPumps_PNNL.Components.HeatPumpGroups.WaterToWater hpAwNrv(
-    redeclare final package MediumHeaWat=Medium,
+  Buildings.Templates.Plants.HeatPumps_PNNL.Components.HeatPumpGroups.WaterToWater
+    hpAwNrv(
+    redeclare final package MediumHeaWat = Medium,
     nHp=1,
     is_rev=true,
     final dat=datHpAwNrv,
     final energyDynamics=energyDynamics,
-    hp(y1HeaNonRev(k=true)))
-    "Non reversible AWHP"
+    hp(y1HeaNonRev(k=true))) "Non reversible AWHP"
     annotation (Placement(transformation(extent={{272,-114},{-208,-34}})));
   parameter HeatPumps.Components.Data.Controller                            datCtlHeaInl(
     cfg(
@@ -342,8 +342,8 @@ model ExternalEnergyLoopIntegration_Buffalo "Control Box Test"
         "modelica://Buildings/Resources/weatherdata/USA_NY_Buffalo-Greater.Buffalo.Intl.AP.725280_TMY3.mos"),
       computeWetBulbTemperature=true)  "Weather data reader"
     annotation (Placement(transformation(extent={{-32,260},{-12,280}})));
-  Interface.ExternalEnergyLoop bus annotation (Placement(transformation(extent={{18,270},
-            {58,310}}),        iconTransformation(extent={{30,50},{70,90}})));
+  Interface.ExternalEnergyLoop bus annotation (Placement(transformation(extent=
+            {{18,270},{58,310}}), iconTransformation(extent={{30,50},{70,90}})));
   Buildings.Templates.Components.Sensors.Temperature TRetHea(redeclare package
       Medium = Buildings.Media.Water,
                             m_flow_nominal=datHpAwNrv.mHeaWatHp_flow_nominal)
@@ -819,8 +819,7 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
           {408,160},{408,146},{416,146}},
                                     color={255,127,0}));
   connect(extEneOpeMod.yOpeMod, bus.uOpeMod)
-    annotation (Line(points={{-20,237.692},{38,237.692},{38,290}},
-                                                           color={255,127,0}));
+    annotation (Line(points={{-18,240},{38,240},{38,290}}, color={255,127,0}));
   connect(addInt.y, ena.nReqPla) annotation (Line(points={{-420,-4},{-414,-4},{
           -414,-20},{-528,-20},{-528,-80},{-482,-80}},
                             color={255,127,0}));
@@ -872,11 +871,10 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
   connect(volumeFlowRate1.port_b, valve3.port_a) annotation (Line(points={{260,100},
           {270,100}},                      color={0,127,255}));
   connect(reaToInt.y, extEneOpeMod.uReqHea) annotation (Line(points={{-452,10},
-          {-342,10},{-342,8},{-310,8},{-310,108},{-288,108},{-288,242.308},{
-          -41.8182,242.308}},
+          {-342,10},{-342,8},{-310,8},{-310,108},{-288,108},{-288,246},{-42,246}},
         color={255,127,0}));
   connect(reaToInt1.y, extEneOpeMod.uReqCoo) annotation (Line(points={{360,160},
-          {360,186},{-48,186},{-48,239.231},{-41.8182,239.231}},
+          {360,186},{-48,186},{-48,242},{-42,242}},
                                          color={255,127,0}));
   connect(valve4.port_a, TRetHea.port_b) annotation (Line(points={{-156,74},{-172,
           74},{-172,98},{-178,98}},        color={0,127,255}));
@@ -887,9 +885,8 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
           -12},{102,24},{124,24}}, color={0,127,255}));
   connect(valve5.port_b, TRetCooCon.port_a) annotation (Line(points={{76,-12},{70,
           -12},{70,24},{60,24}},    color={0,127,255}));
-  connect(extEneOpeMod.yOpeMod, intEqu.u1) annotation (Line(points={{-20,
-          237.692},{38,237.692},{38,220},{98,220}},
-                                      color={255,127,0}));
+  connect(extEneOpeMod.yOpeMod, intEqu.u1) annotation (Line(points={{-18,240},{
+          38,240},{38,220},{98,220}}, color={255,127,0}));
   connect(conInt.y, intEqu.u2)
     annotation (Line(points={{82,200},{92,200},{92,212},{98,212}},
                                                           color={255,127,0}));
@@ -910,14 +907,13 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
     annotation (Line(points={{-206,230},{-200,230}}, color={255,0,255}));
   connect(conInt1.y, intEqu1.u2) annotation (Line(points={{-256,220},{-256,222},
           {-230,222}}, color={255,127,0}));
-  connect(extEneOpeMod.yOpeMod, intEqu1.u1) annotation (Line(points={{-20,
-          237.692},{-14,237.692},{-14,252},{-194,252},{-194,244},{-230,244},{
-          -230,230}},
+  connect(extEneOpeMod.yOpeMod, intEqu1.u1) annotation (Line(points={{-18,240},
+          {-14,240},{-14,252},{-194,252},{-194,244},{-230,244},{-230,230}},
                  color={255,127,0}));
   connect(not2.y, bus_HeaHEBypVal.y1) annotation (Line(points={{-176,230},{-166,
           230},{-166,190}},            color={255,0,255}));
-  connect(extEneOpeMod.yOpeMod, bus_sensor.uOpeMod) annotation (Line(points={{-20,
-          237.692},{-2,237.692},{-2,-42}},        color={255,127,0}));
+  connect(extEneOpeMod.yOpeMod, bus_sensor.uOpeMod) annotation (Line(points={{-18,240},
+          {-2,240},{-2,-42}},                     color={255,127,0}));
   connect(volumeFlowRate2.port_a, externalEnergyLoop.portEva_b) annotation (
       Line(points={{14,160},{14,193},{15,193},{15,210}},
                  color={0,127,255}));

@@ -5,18 +5,12 @@ block OpenLoopWithHeatRecoveryUnitController
   extends
     Buildings.Templates.Plants.HeatPumps_PNNL.Components.Controls.PartialController(
     final typ=Buildings.Templates.Plants.HeatPumps.Types.Controller.OpenLoop);
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant THeaWatSupSet[nHp](
-    y(each final unit="K",
-      each displayUnit="degC"),
-    each k=Buildings.Templates.Data.Defaults.THeaWatSupMed)
-    "Heat pump HW supply temperature set point"
-    annotation (Placement(transformation(extent={{-80,330},{-100,350}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant TChiWatSupSet[nHp](
     y(each final unit="K",
       each displayUnit="degC"),
     each k=Buildings.Templates.Data.Defaults.TChiWatSup)
     "Heat pump CHW supply temperature set point"
-    annotation (Placement(transformation(extent={{-80,290},{-100,310}})));
+    annotation (Placement(transformation(extent={{-140,330},{-160,350}})));
   Buildings.Controls.OBC.CDL.Logical.Sources.TimeTable y1ValHeaWatHpInlIso[nHp](
     each table=[0,1; 1,1; 3,1; 5,1],
     each timeScale=1000,
@@ -146,7 +140,7 @@ block OpenLoopWithHeatRecoveryUnitController
     "Dedicated primary CHW pump speed signal"
     annotation (Placement(transformation(extent={{-100,-210},{-120,-190}})));
   HeatRecoveryUnitController heatRecoveryUnitController
-    annotation (Placement(transformation(extent={{-48,-80},{42,116}})));
+    annotation (Placement(transformation(extent={{-50,-200},{40,-4}})));
   Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booScaRep
     annotation (Placement(transformation(extent={{80,20},{100,40}})));
   Modelica.Blocks.Routing.RealPassThrough realPassThrough
@@ -159,12 +153,26 @@ block OpenLoopWithHeatRecoveryUnitController
     annotation (Placement(transformation(extent={{-38,220},{-58,240}})));
   Modelica.Blocks.Routing.IntegerPassThrough integerPassThrough
     annotation (Placement(transformation(extent={{-190,80},{-170,100}})));
-  Buildings.Controls.OBC.CDL.Reals.Less les(h=2)
-    annotation (Placement(transformation(extent={{140,320},{160,340}})));
-  Buildings.Controls.OBC.CDL.Logical.And and2
-    annotation (Placement(transformation(extent={{180,300},{200,320}})));
-  HeatingModeTemperatureSetpoint heatingModeTemperatureSetpoint
-    annotation (Placement(transformation(extent={{-32,170},{-12,190}})));
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaScaRep1(nout=nHp)
+    annotation (Placement(transformation(extent={{-80,330},{-100,350}})));
+  Modelica.Blocks.Routing.RealPassThrough realPassThrough1
+    annotation (Placement(transformation(extent={{-140,30},{-120,50}})));
+  Buildings.Controls.OBC.CDL.Integers.Equal intEqu
+    annotation (Placement(transformation(extent={{0,80},{20,100}})));
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(k=-2)
+    annotation (Placement(transformation(extent={{-40,50},{-20,70}})));
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booScaRep1(nout=
+        nHp) annotation (Placement(transformation(extent={{80,220},{100,240}})));
+  Buildings.Controls.OBC.CDL.Logical.Not not1
+    annotation (Placement(transformation(extent={{70,190},{90,210}})));
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booScaRep2(nout=
+        nHp)
+    annotation (Placement(transformation(extent={{100,190},{120,210}})));
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booScaRep3(nout=
+        nHp)
+    annotation (Placement(transformation(extent={{100,-48},{120,-28}})));
+  CapacityLimiter capacityLimiter
+    annotation (Placement(transformation(extent={{60,80},{80,100}})));
 equation
   /* Control point connection - start */
   connect(y1PumHeaWatPri.y[1], busPumHeaWatPri.y1);
@@ -189,7 +197,6 @@ equation
 
 // Heat Recovery Unit Control Input Connection
   connect(bus.TSupCoo, heatRecoveryUnitController.TSupCoo);
-  connect(bus.TSupCoo, les.u2);
   connect(bus.TSupCooSet, heatRecoveryUnitController.TSupCooSet);
   connect(bus.TSupHea, heatRecoveryUnitController.TSupHea);
   connect(bus.TSupHeaSet, heatRecoveryUnitController.TSupHeaSet);
@@ -200,7 +207,6 @@ equation
   connect(bus_HeaPum.y1_actual[1], heatRecoveryUnitController.uHeaPumPro);
   connect(bus_CooPum.y1_actual[1], heatRecoveryUnitController.uCooPumPro);
 // Heat Recovery Unit Control Output Connection
-  connect(and2.y, busHp[1].y1);
   //connect(realPassThrough.y, busHp[1].TSet);
     connect(heatRecoveryUnitController.yVal, busValHeaWatHpInlIso[1].y1);
   connect(heatRecoveryUnitController.yVal, busValHeaWatHpOutIso[1].y1);
@@ -208,14 +214,16 @@ equation
     connect(heatRecoveryUnitController.yVal, busValChiWatHpInlIso[1].y1);
  // connect(heatRecoveryUnitController.yPum, bus_HeaPum.y1);
  //  connect(heatRecoveryUnitController.yPum, bus_CooPum.y1);
- connect(TSet.y, busHp.TSet);
+ connect(TSet.y, busHp.TSupSet);
 
 
 
-  connect(heatRecoveryUnitController.yPum, booScaRep.u) annotation (Line(points={{51,
-          30.25},{64.5,30.25},{64.5,30},{78,30}},     color={255,0,255}));
+  connect(heatRecoveryUnitController.yPum, booScaRep.u) annotation (Line(points={{49,
+          -89.75},{76,-89.75},{76,12},{64,12},{64,30},{78,30}},
+                                                      color={255,0,255}));
   connect(heatRecoveryUnitController.yPumSpeHea, bus_HeaPum.y) annotation (
-      Line(points={{51,5.75},{68,5.75},{68,-336},{-164,-336},{-164,-372}},
+      Line(points={{49,-114.25},{49,-112},{64,-112},{64,-324},{-164,-324},{-164,
+          -372}},
         color={0,0,127}), Text(
       string="%second",
       index=1,
@@ -229,7 +237,8 @@ equation
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(heatRecoveryUnitController.yPumSpeCoo, bus_CooPum.y) annotation (Line(
-        points={{51,-18.75},{51,-16},{70,-16},{70,-358}}, color={0,0,127}),
+        points={{49,-138.75},{49,-136},{70,-136},{70,-358}},
+                                                          color={0,0,127}),
       Text(
       string="%second",
       index=1,
@@ -243,44 +252,94 @@ equation
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(bus.uPlaEna, heatRecoveryUnitController.uEna) annotation (Line(
-      points={{-260,0},{-76,0},{-76,128.25},{-57,128.25}},
+      points={{-260,0},{-76,0},{-76,40},{-40,40},{-40,20.5},{-59,20.5}},
       color={255,204,51},
       thickness=0.5));
-  connect(bus.TSetHP, realPassThrough.u) annotation (Line(
-      points={{-260,0},{-152,0},{-152,68},{-142,68}},
-      color={255,204,51},
-      thickness=0.5));
-  connect(THeaWatSupSet.y, TSet.u1) annotation (Line(points={{-102,340},{-108,340},
-          {-108,318},{-118,318}}, color={0,0,127}));
-  connect(tru.y, TSet.u2) annotation (Line(points={{-102,260},{-108,260},{-108,310},
-          {-118,310}}, color={255,0,255}));
-  connect(y1HeaHp.y[1], TSet.u2) annotation (Line(points={{-202,300},{-202,316},
-          {-156,316},{-156,292},{-108,292},{-108,310},{-118,310}}, color={255,0,
-          255}));
   connect(reaScaRep.y, TSet.u3) annotation (Line(points={{-60,230},{-60,228},{
           -118,228},{-118,302}}, color={0,0,127}));
   connect(bus.uOpeMod, integerPassThrough.u) annotation (Line(
       points={{-260,0},{-200,0},{-200,90},{-192,90}},
       color={255,204,51},
       thickness=0.5));
-  connect(les.y, and2.u1) annotation (Line(points={{162,330},{162,324},{178,324},
-          {178,310}}, color={255,0,255}));
-  connect(heatRecoveryUnitController.yHP, and2.u2) annotation (Line(points={{51,
-          79.25},{51,76},{178,76},{178,302}}, color={255,0,255}));
-  connect(integerPassThrough.y, heatingModeTemperatureSetpoint.uOpeMod)
-    annotation (Line(points={{-169,90},{-169,88},{-84,88},{-84,184},{-34,184}},
-        color={255,127,0}));
-  connect(realPassThrough.y, heatingModeTemperatureSetpoint.uSetHP) annotation (
-     Line(points={{-119,68},{-84,68},{-84,84},{-80,84},{-80,176},{-34,176}},
-        color={0,0,127}));
-  connect(heatingModeTemperatureSetpoint.TSetHP, reaScaRep.u) annotation (Line(
-        points={{-10,180},{0,180},{0,230},{-36,230}}, color={0,0,127}));
-  connect(bus.TSupHea, heatingModeTemperatureSetpoint.TSupHea) annotation (Line(
-      points={{-260,0},{-72,0},{-72,180},{-34,180}},
+  connect(bus.TSetCoo, reaScaRep.u) annotation (Line(
+      points={{-260,0},{-84,0},{-84,208},{-20,208},{-20,230},{-36,230}},
       color={255,204,51},
-      thickness=0.5));
-  connect(heatingModeTemperatureSetpoint.TSetHP, les.u1) annotation (Line(
-        points={{-10,180},{0,180},{0,330},{138,330}}, color={0,0,127}));
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-3,-6},{-3,-6}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(reaScaRep1.y, TSet.u1) annotation (Line(points={{-102,340},{-108,340},
+          {-108,318},{-118,318}}, color={0,0,127}));
+  connect(bus.TSetHea, reaScaRep1.u) annotation (Line(
+      points={{-260,0},{-80,0},{-80,204},{-16,204},{-16,340},{-78,340}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(bus.TSetHea, realPassThrough.u) annotation (Line(
+      points={{-260,0},{-152,0},{-152,68},{-142,68}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(bus.TSetCoo, realPassThrough1.u) annotation (Line(
+      points={{-260,0},{-156,0},{-156,40},{-142,40}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(conInt.y, intEqu.u2) annotation (Line(points={{-18,60},{-18,68},{-2,68},
+          {-2,82}},  color={255,127,0}));
+  connect(integerPassThrough.y, intEqu.u1) annotation (Line(points={{-169,90},{-2,
+          90}},                             color={255,127,0}));
+  connect(booScaRep1.y, TSet.u2) annotation (Line(points={{102,230},{114,230},{114,
+          252},{-66,252},{-66,310},{-118,310}}, color={255,0,255}));
+  connect(not1.y, booScaRep2.u)
+    annotation (Line(points={{92,200},{98,200}}, color={255,0,255}));
+  connect(booScaRep2.y, busHp.y1Coo) annotation (Line(points={{122,200},{132,200},
+          {132,356},{-172,356},{-172,340},{-240,340}}, color={255,0,255}), Text(
+      string="%second",
+      index=1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(heatRecoveryUnitController.yHP, booScaRep3.u) annotation (Line(points=
+         {{49,-40.75},{49,-38},{98,-38}}, color={255,0,255}));
+  connect(booScaRep3.y, busHp.y1) annotation (Line(points={{122,-38},{140,-38},
+          {140,376},{-240,376},{-240,340}}, color={255,0,255}), Text(
+      string="%second",
+      index=1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(intEqu.y, capacityLimiter.uHea)
+    annotation (Line(points={{22,90},{44,90},{44,94},{58,94}},
+                                                       color={255,0,255}));
+  connect(bus.TSupCoo, capacityLimiter.TSupCoo) annotation (Line(
+      points={{-260,0},{56,0},{56,72},{48,72},{48,90},{58,90}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(bus.TSupHea, capacityLimiter.TSupHea) annotation (Line(
+      points={{-260,0},{52,0},{52,68},{44,68},{44,86},{58,86}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(capacityLimiter.yHea, booScaRep1.u) annotation (Line(points={{82,90},
+          {92,90},{92,180},{52,180},{52,230},{78,230}}, color={255,0,255}));
+  connect(capacityLimiter.yHea, not1.u) annotation (Line(points={{82,90},{92,90},
+          {92,180},{52,180},{52,200},{68,200}}, color={255,0,255}));
   annotation (
     defaultComponentName="ctl", Documentation(info="<html>
 <p>

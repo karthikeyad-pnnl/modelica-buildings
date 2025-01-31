@@ -1,7 +1,7 @@
 within Buildings.Templates.Plants.HeatPumps_PNNL.Components.Controls;
 block ExternalEnergyOpenLoop
-  Interface.ExternalEnergyLoop bus annotation (Placement(transformation(extent={{-20,120},
-            {20,160}}),          iconTransformation(extent={{-10,90},{10,110}})));
+  Interface.ExternalEnergyLoop bus annotation (Placement(transformation(extent=
+            {{-20,120},{20,160}}), iconTransformation(extent={{-10,90},{10,110}})));
   Buildings.Controls.OBC.CDL.Logical.Switch logSwi
     annotation (Placement(transformation(extent={{-10,60},{10,80}})));
   Buildings.Templates.Plants.Controls.StagingRotation.EventSequencing seqEveHea(

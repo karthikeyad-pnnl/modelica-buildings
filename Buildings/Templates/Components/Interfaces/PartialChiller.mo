@@ -107,7 +107,9 @@ First implementation.
         Rectangle(
           extent={{100,60},{-100,-60}},
           lineColor={0,0,0},
-          lineThickness=1),
+          lineThickness=1,
+          fillColor={255,255,255},
+          fillPattern=FillPattern.Solid),
         Bitmap(
           extent={{-20,60},{20,100}},
           fileName=

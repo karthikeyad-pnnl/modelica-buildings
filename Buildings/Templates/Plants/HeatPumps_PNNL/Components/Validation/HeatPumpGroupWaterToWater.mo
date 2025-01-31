@@ -112,13 +112,13 @@ model HeatPumpGroupWaterToWater
     final dat=datCtlPlaAwNrv)
     "Plant controller"
     annotation (Placement(transformation(extent={{10,170},{-10,190}})));
-  Buildings.Templates.Plants.HeatPumps_PNNL.Components.HeatPumpGroups.WaterToWater hpAwNrv(
-    redeclare final package MediumHeaWat=Medium,
+  Buildings.Templates.Plants.HeatPumps_PNNL.Components.HeatPumpGroups.WaterToWater
+    hpAwNrv(
+    redeclare final package MediumHeaWat = Medium,
     nHp=3,
     is_rev=false,
     final dat=datHpAwNrv,
-    final energyDynamics=energyDynamics)
-    "Non reversible AWHP"
+    final energyDynamics=energyDynamics) "Non reversible AWHP"
     annotation (Placement(transformation(extent={{280,40},{-200,120}})));
   Fluid.Sources.Boundary_pT inlHp2(
     redeclare final package Medium = Medium,

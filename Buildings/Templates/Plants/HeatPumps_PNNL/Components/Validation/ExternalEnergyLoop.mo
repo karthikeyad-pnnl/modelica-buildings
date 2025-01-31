@@ -6,8 +6,8 @@ model ExternalEnergyLoop
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
   Controls.ExternalEnergyOpenLoop externalEnergyOpenLoop
     annotation (Placement(transformation(extent={{40,20},{60,40}})));
-  Interface.ExternalEnergyLoop bus annotation (Placement(transformation(extent={
-            {10,50},{50,90}}), iconTransformation(extent={{30,50},{70,90}})));
+  Interface.ExternalEnergyLoop bus annotation (Placement(transformation(extent=
+            {{10,50},{50,90}}), iconTransformation(extent={{30,50},{70,90}})));
   BoundaryConditions.WeatherData.ReaderTMY3           weaDat(filNam=
         Modelica.Utilities.Files.loadResource("modelica://Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"),
       computeWetBulbTemperature=true)  "Weather data reader"

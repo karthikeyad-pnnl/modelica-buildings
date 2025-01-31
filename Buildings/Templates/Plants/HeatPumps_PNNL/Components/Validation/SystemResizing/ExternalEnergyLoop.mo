@@ -83,8 +83,9 @@ model ExternalEnergyLoop
         extent={{-10,-10},{10,10}},
         rotation=0,
         origin={-50,-66})));
-  Interface.ExternalEnergyLoop bus annotation (Placement(transformation(extent={
-            {-26,100},{14,140}}), iconTransformation(extent={{-248,60},{-208,100}})));
+  Interface.ExternalEnergyLoop bus annotation (Placement(transformation(extent=
+            {{-26,100},{14,140}}), iconTransformation(extent={{-248,60},{-208,
+            100}})));
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(k=-2)
     annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
   Fluid.Sensors.TemperatureTwoPort senTem(redeclare package Medium =

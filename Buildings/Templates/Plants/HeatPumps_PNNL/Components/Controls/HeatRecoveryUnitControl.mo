@@ -1,7 +1,7 @@
 within Buildings.Templates.Plants.HeatPumps_PNNL.Components.Controls;
 block HeatRecoveryUnitControl
-  Interface.HeatRecoveryUnit bus annotation (Placement(transformation(extent={{-20,
-            80},{20,120}}), iconTransformation(extent={{-20,80},{20,120}})));
+  Interface.HeatRecoveryUnit bus annotation (Placement(transformation(extent={{
+            -20,80},{20,120}}), iconTransformation(extent={{-20,80},{20,120}})));
   Buildings.Controls.OBC.CDL.Reals.Greater gre
     annotation (Placement(transformation(extent={{-60,40},{-40,60}})));
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(delayTime=300)

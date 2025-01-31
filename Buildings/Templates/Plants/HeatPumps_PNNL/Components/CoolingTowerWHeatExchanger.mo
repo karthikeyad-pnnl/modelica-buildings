@@ -46,8 +46,8 @@ model CoolingTowerWHeatExchanger
     m_flow_nominal=dat.mWatCon_flow_nominal,
     have_sen=true)
     annotation (Placement(transformation(extent={{60,-10},{80,10}})));
-  Interface.CoolingTowerWHEBus bus annotation (Placement(transformation(extent={
-            {10,80},{50,120}}), iconTransformation(extent={{30,90},{50,108}})));
+  Interface.CoolingTowerWHEBus bus annotation (Placement(transformation(extent=
+            {{10,80},{50,120}}), iconTransformation(extent={{30,90},{50,108}})));
   parameter Data.CoolingTowerWHE dat
     annotation (Placement(transformation(extent={{-92,60},{-72,80}})));
 equation

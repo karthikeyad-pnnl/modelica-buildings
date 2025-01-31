@@ -83,13 +83,13 @@ model HeatPumpPlantPrimarySecondary "Validation model for heat pump group"
     "Non-reversible AWHP parameters"
     annotation (Placement(transformation(extent={{-150,-192},{-130,-172}})));
 
-  Buildings.Templates.Plants.HeatPumps_PNNL.Components.HeatPumpGroups.WaterToWater hpAwNrv(
-    redeclare final package MediumHeaWat=Medium,
+  Buildings.Templates.Plants.HeatPumps_PNNL.Components.HeatPumpGroups.WaterToWater
+    hpAwNrv(
+    redeclare final package MediumHeaWat = Medium,
     nHp=1,
     is_rev=false,
     final dat=datHpAwNrv,
-    final energyDynamics=energyDynamics)
-    "Non reversible AWHP"
+    final energyDynamics=energyDynamics) "Non reversible AWHP"
     annotation (Placement(transformation(extent={{274,-152},{-206,-72}})));
   parameter HeatPumps.Components.Data.Controller                            datCtlHeaInl(
     cfg(

@@ -134,7 +134,7 @@ equation
   connect(not3.y, and3.u2) annotation (Line(points={{-28,-60},{12,-60},{12,-48},
           {18,-48}}, color={255,0,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -100},{120,160}}),                                  graphics={
+            -100},{100,100}}),                                  graphics={
           Rectangle(
           extent={{-100,100},{100,-100}},
           lineColor={0,0,0},

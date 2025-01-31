@@ -91,13 +91,13 @@ model ExternalEnergyLoopIntegration
     "Non-reversible AWHP parameters"
     annotation (Placement(transformation(extent={{-150,-190},{-130,-170}})));
 
-  Buildings.Templates.Plants.HeatPumps_PNNL.Components.HeatPumpGroups.WaterToWater hpAwNrv(
-    redeclare final package MediumHeaWat=Medium,
+  Buildings.Templates.Plants.HeatPumps_PNNL.Components.HeatPumpGroups.WaterToWater
+    hpAwNrv(
+    redeclare final package MediumHeaWat = Medium,
     nHp=1,
     is_rev=true,
     final dat=datHpAwNrv,
-    final energyDynamics=energyDynamics)
-    "Non reversible AWHP"
+    final energyDynamics=energyDynamics) "Non reversible AWHP"
     annotation (Placement(transformation(extent={{272,-114},{-208,-34}})));
   parameter HeatPumps.Components.Data.Controller                            datCtlHeaInl(
     cfg(
@@ -339,8 +339,8 @@ model ExternalEnergyLoopIntegration
         "modelica://Buildings/Resources/weatherdata/USA_NY_Buffalo-Greater.Buffalo.Intl.AP.725280_TMY3.mos"),
       computeWetBulbTemperature=true)  "Weather data reader"
     annotation (Placement(transformation(extent={{-32,260},{-12,280}})));
-  Interface.ExternalEnergyLoop bus annotation (Placement(transformation(extent={{18,270},
-            {58,310}}),        iconTransformation(extent={{30,50},{70,90}})));
+  Interface.ExternalEnergyLoop bus annotation (Placement(transformation(extent=
+            {{18,270},{58,310}}), iconTransformation(extent={{30,50},{70,90}})));
   Buildings.Templates.Components.Sensors.Temperature TRetHea(redeclare package
       Medium = Buildings.Media.Water,
                             m_flow_nominal=datHpAwNrv.mHeaWatHp_flow_nominal)
