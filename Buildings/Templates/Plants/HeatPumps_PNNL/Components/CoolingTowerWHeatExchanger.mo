@@ -18,7 +18,11 @@ model CoolingTowerWHeatExchanger
         rotation=180,
         origin={0,-70})));
   Buildings.Templates.Components.Pumps.Single pum(have_var=false, dat(
-        m_flow_nominal=dat.mWatOxy_flow_nominal, dp_nominal=200000))
+      m_flow_nominal=dat.mWatOxy_flow_nominal,
+      dp_nominal(displayUnit="Pa") = 5E5,
+      redeclare
+        Buildings.Fluid.Movers.Data.Pumps.Wilo.heatPumpPlant_CoolingTowerPump
+        per))
     annotation (Placement(transformation(extent={{-60,-80},{-40,-60}})));
   BoundaryConditions.WeatherData.Bus           busWea
     "Weather bus"
