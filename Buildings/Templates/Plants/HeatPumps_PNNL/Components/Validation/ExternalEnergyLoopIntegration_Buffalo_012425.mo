@@ -23,7 +23,7 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
     TConLvg_nominal=273.15 + 60,
     TConEnt_nominal=273.15 + 45,
     mChiWat_flow_nominal=120,
-    capCoo_nominal=2.5E6,
+    capCoo_nominal=2.5*2.5E6,
     TChiWatSup_nominal=273.15 + 6.68,
     dpChiWat_nominal(displayUnit="Pa") = Buildings.Templates.Data.Defaults.dpChiWatChi)
     "Non-reversible AWHP parameters"
@@ -244,7 +244,7 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
     mRehWat_flow=0.75*70.83,
     HeatingCapacity_nominal=1.2*9.52e6)
     annotation (Placement(transformation(extent={{-2,210},{18,230}})));
-  Controls.ExternalEnergy         externalEnergyOpenLoop(TExtCooSet=273.15 + 30)
+  Controls.ExternalEnergy         externalEnergyOpenLoop(TExtCooSet=273.15 + 18)
     annotation (Placement(transformation(extent={{46,240},{66,260}})));
   BoundaryConditions.WeatherData.ReaderTMY3           weaDat(filNam=
         Modelica.Utilities.Files.loadResource(
@@ -883,15 +883,15 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
       index=1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
-  connect(resCoo.dpSet[1], dPSetCoo.u) annotation (Line(points={{440,146},{444,
-          146},{444,140},{456,140}}, color={0,0,127}));
-  connect(resCoo.TSupSet, TSetCoo.u) annotation (Line(points={{440,134},{440,
-          132},{444,132},{444,148},{448,148},{448,190},{458,190}}, color={0,0,
-          127}));
-  connect(resHea.dpSet[1], dPSetHea.u) annotation (Line(points={{-350,-54},{
-          -332,-54},{-332,-66},{-322,-66}}, color={0,0,127}));
-  connect(resHea.TSupSet, TSetHea.u) annotation (Line(points={{-350,-66},{-336,
-          -66},{-336,-30},{-320,-30}}, color={0,0,127}));
+  connect(conTSetHP1.y, TSetCoo.u) annotation (Line(points={{442,210},{442,204},
+          {458,204},{458,190}}, color={0,0,127}));
+  connect(condPSet1.y, dPSetCoo.u) annotation (Line(points={{440,170},{440,168},
+          {456,168},{456,140}}, color={0,0,127}));
+  connect(condPSet.y, dPSetHea.u) annotation (Line(points={{-348,-100},{-332,
+          -100},{-332,-66},{-322,-66}}, color={0,0,127}));
+  connect(conTSetHP.y, TSetHea.u) annotation (Line(points={{-348,-140},{-292,
+          -140},{-292,-44},{-288,-44},{-288,-16},{-320,-16},{-320,-30}}, color=
+          {0,0,127}));
   annotation (
     Diagram(
       coordinateSystem(
