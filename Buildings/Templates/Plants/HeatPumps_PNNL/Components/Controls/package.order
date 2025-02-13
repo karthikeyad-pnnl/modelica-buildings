@@ -14,3 +14,4 @@ OpenLoopWithHeatRecoveryUnitController
 PartialController
 Validation
 CapacityLimiter
+FreeCooling

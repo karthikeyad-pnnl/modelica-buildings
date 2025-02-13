@@ -6,7 +6,7 @@ model WaterToWater_heatRecovery
     Buildings.Templates.Plants.HeatPumps_PNNL.Components.Interface.PartialHeatPumpGroup_WaterToWater_heatRecovery(
     final typ=Buildings.Templates.Components.Types.Chiller.WaterCooled);
   Buildings.Templates.Components.Chillers.Compression hp[nHp](
-    redeclare each final package MediumChiWat=MediumCon,
+    redeclare each final package MediumChiWat=MediumChiWat,
     redeclare each final package MediumCon=MediumCon,
     each final have_switchover=true,
     each final typ=Buildings.Templates.Components.Types.Chiller.WaterCooled,

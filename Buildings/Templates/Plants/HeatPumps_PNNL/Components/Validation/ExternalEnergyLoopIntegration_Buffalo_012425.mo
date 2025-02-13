@@ -5,7 +5,11 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
   extends Modelica.Icons.Example;
   replaceable package Medium=Buildings.Media.Water
     constrainedby Modelica.Media.Interfaces.PartialMedium
-    "CHW/HW medium";
+    "HW medium";
+  replaceable package MediumChiWat =
+      Buildings.Media.Antifreeze.PropyleneGlycolWater (
+         property_T=293.15, X_a=0.40)
+    "CHW medium";
   parameter Modelica.Fluid.Types.Dynamics energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial
     "Type of energy balance: dynamic (3 initialization options) or steady state"
     annotation (Evaluate=true,
@@ -25,13 +29,19 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
     mChiWat_flow_nominal=120,
     capCoo_nominal=2.5*2.5E6,
     TChiWatSup_nominal=273.15 + 6.68,
-    dpChiWat_nominal(displayUnit="Pa") = Buildings.Templates.Data.Defaults.dpChiWatChi)
+    dpChiWat_nominal(displayUnit="Pa") = Buildings.Templates.Data.Defaults.dpChiWatChi,
+    per(
+      capFunT={5.211989E-01,7.968670E-02,-1.488365E-03,1.974850E-02,-4.643458E-04,
+          -7.786719E-04},
+      EIRFunT={6.970381E-01,5.701647E-02,-2.272629E-04,8.496805E-03,
+          4.752264E-04,-2.759799E-03},
+      EIRFunPLR={7.280764E-01,-5.949776E-02,3.161338E-05,8.871893E-01,-1.081399E+00,
+          5.804626E-02,0.000000E+00,4.825053E-01,0.000000E+00,0.000000E+00}))
     "Non-reversible AWHP parameters"
     annotation (Placement(transformation(extent={{-150,-192},{-130,-172}})));
 
   Buildings.Templates.Plants.HeatPumps_PNNL.Components.HeatPumpGroups.WaterToWater_heatRecovery
     hpAwNrv(
-    redeclare final package MediumCon = Medium,
     nHp=1,
     final dat=datHpAwNrv,
     final energyDynamics=energyDynamics) "Non reversible AWHP"
@@ -107,15 +117,19 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
   Buildings.Templates.Plants.HeatPumps_PNNL.Components.Controls.OpenLoopWithHeatRecoveryUnitController
   ctlHeaInl(final cfg=
        datCtlHeaInl.cfg, final dat=datCtlHeaInl,
-    capacityLimiter(TSupHeaLim=273.15 + 80, greThr(h=10)))
+    capacityLimiter(
+      TSupHeaLim=273.15 + 70,
+      TSupCooLim=273.15 + 5,
+      greThr(h=5),
+      lesThr(h=2)))
     "Plant controller"
-    annotation (Placement(transformation(extent={{-68,-24},{-88,-4}})));
+    annotation (Placement(transformation(extent={{-60,-14},{-80,6}})));
 
   Buildings.Templates.Components.Pumps.Multiple pum(
     final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
     nPum=1,
     dat=datPumMulCoo,
-    redeclare final package Medium = Medium)
+    redeclare final package Medium = MediumChiWat)
     annotation (Placement(transformation(extent={{86,90},{106,110}})));
   parameter Buildings.Templates.Components.Data.PumpMultiple datPumMulCoo(
     final typ=Buildings.Templates.Components.Types.Pump.Multiple,
@@ -126,7 +140,7 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
                                                 "Multiple pump parameters"
     annotation (Placement(transformation(extent={{-110,-196},{-90,-176}})));
   Buildings.Templates.Components.Routing.SingleToMultiple rou(
-    redeclare package Medium = Medium,
+    redeclare package Medium = MediumChiWat,
     nPorts=pum.nPum,
     m_flow_nominal=datHpAwNrv.mChiWat_flow_nominal)
     annotation (Placement(transformation(extent={{54,90},{74,110}})));
@@ -168,7 +182,7 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
     dat(
       m_flow_nominal=datHpAwNrv.mCon_flow_nominal,
       dpValve_nominal=50,
-      dpFixed_nominal=0))
+      dpFixed_nominal=500))
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
@@ -178,7 +192,7 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
         transformation(
         extent={{-10,-10},{10,10}},
         rotation=90,
-        origin={-292,56})));
+        origin={-230,56})));
   Buildings.Templates.Components.Sensors.Temperature TSupHea(redeclare package
       Medium = Buildings.Media.Water, m_flow_nominal=datHpAwNrv.mCon_flow_nominal)
     annotation (Placement(transformation(extent={{-232,14},{-212,34}})));
@@ -186,12 +200,12 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
     annotation (Placement(transformation(extent={{-22,-62},{18,-22}}),
         iconTransformation(extent={{-340,110},{-300,150}})));
   Buildings.Templates.Components.Routing.SingleToMultiple rou3(
-    redeclare package Medium = Medium,
+    redeclare package Medium = MediumChiWat,
     nPorts=pum.nPum,
     m_flow_nominal=datHpAwNrv.mChiWat_flow_nominal)
     annotation (Placement(transformation(extent={{140,90},{120,110}})));
   Fluid.FixedResistances.Junction jun1(
-    redeclare package Medium = Buildings.Media.Water,
+    redeclare package Medium = MediumChiWat,
     m_flow_nominal={datHpAwNrv.mChiWat_flow_nominal,-datHpAwNrv.mChiWat_flow_nominal,
         -datHpAwNrv.mChiWat_flow_nominal},
     dp_nominal={0,0,0}) annotation (Placement(transformation(
@@ -199,7 +213,7 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
         rotation=180,
         origin={214,100})));
   Fluid.FixedResistances.Junction jun2(
-    redeclare package Medium = Buildings.Media.Water,
+    redeclare package Medium = MediumChiWat,
     m_flow_nominal={datHpAwNrv.mChiWat_flow_nominal,-datHpAwNrv.mChiWat_flow_nominal,
         -datHpAwNrv.mChiWat_flow_nominal},
     dp_nominal={0,0,0}) annotation (Placement(transformation(
@@ -207,12 +221,12 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
         rotation=180,
         origin={214,24})));
   Buildings.Templates.Components.Actuators.Valve valve1(
-    redeclare package Medium = Buildings.Media.Water,
+    redeclare package Medium = MediumChiWat,
     typ=Buildings.Templates.Components.Types.Valve.TwoWayModulating,
     dat(
       m_flow_nominal=datHpAwNrv.mChiWat_flow_nominal,
       dpValve_nominal=50,
-      dpFixed_nominal=0))
+      dpFixed_nominal=500))
     annotation (Placement(transformation(
         extent={{-10,10},{10,-10}},
         rotation=90,
@@ -222,9 +236,9 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
         transformation(
         extent={{10,-10},{-10,10}},
         rotation=90,
-        origin={232,48})));
+        origin={196,50})));
   Buildings.Templates.Components.Sensors.Temperature TSupCoo(redeclare package
-      Medium = Buildings.Media.Water, m_flow_nominal=datHpAwNrv.mChiWat_flow_nominal)
+      Medium = MediumChiWat,          m_flow_nominal=datHpAwNrv.mChiWat_flow_nominal)
     annotation (Placement(transformation(extent={{174,90},{194,110}})));
 
   Buildings.Templates.Components.Interfaces.Bus bus_HeaVal "Pump control bus"
@@ -235,7 +249,7 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
     annotation (Placement(transformation(extent={{216,122},{256,162}}),
         iconTransformation(extent={{-318,-118},{-278,-78}})));
   Buildings.Templates.Components.Sensors.Temperature TRetCoo(redeclare package
-      Medium = Buildings.Media.Water, m_flow_nominal=datHpAwNrv.mChiWat_flow_nominal)
+      Medium = MediumChiWat,          m_flow_nominal=datHpAwNrv.mChiWat_flow_nominal)
     annotation (Placement(transformation(extent={{182,14},{162,34}})));
   Buildings.Templates.Plants.HeatPumps_PNNL.Components.ExternalEnergyLoop
     externalEnergyLoop(
@@ -263,19 +277,19 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
         origin={-188,98})));
   Fluid.MixingVolumes.MixingVolume vol(
     redeclare package Medium = Buildings.Media.Water,
-    T_start=338.15,
+    T_start=305.37,
     m_flow_nominal=datHpAwNrv.mCon_flow_nominal,
     V=datHpAwNrv.mCon_flow_nominal*3600/1000,
     nPorts=3)
     annotation (Placement(transformation(extent={{-370,60},{-350,80}})));
   HeatTransfer.Sources.PrescribedHeatFlow preHeaFlo
     annotation (Placement(transformation(extent={{-408,30},{-388,50}})));
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant minFloHea(k=0.1*datHpAwNrv.mCon_flow_nominal
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant minFloHea(k=0.5*datHpAwNrv.mCon_flow_nominal
         /1000) "Pump speed command"
     annotation (Placement(transformation(extent={{-420,160},{-400,180}})));
   Buildings.Controls.OBC.CDL.Reals.PID conPID(k=0.2, Ti=150)
     annotation (Placement(transformation(extent={{-474,100},{-454,120}})));
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(k=273.15 + 60)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(k=273.15 + 32.22)
     annotation (Placement(transformation(extent={{-514,100},{-494,120}})));
   Fluid.Sensors.Temperature senTem(redeclare package Medium = Media.Water,
       warnAboutOnePortConnection=false)
@@ -289,7 +303,7 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
     dat(
       m_flow_nominal=datHpAwNrv.mCon_flow_nominal,
       dpValve_nominal=50,
-      dpFixed_nominal=0))
+      dpFixed_nominal=500))
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
@@ -301,19 +315,19 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
   Buildings.Controls.OBC.CDL.Logical.Sources.Constant con5(k=false)
     annotation (Placement(transformation(extent={{-480,-58},{-460,-38}})));
   Fluid.MixingVolumes.MixingVolume vol1(
-    redeclare package Medium = Buildings.Media.Water,
+    redeclare package Medium = MediumChiWat,
     T_start=285.85,
     m_flow_nominal=datHpAwNrv.mChiWat_flow_nominal,
     V=datHpAwNrv.mChiWat_flow_nominal*3600/1000,
     nPorts=3)
     annotation (Placement(transformation(extent={{320,40},{340,60}})));
   Buildings.Templates.Components.Actuators.Valve valve3(
-    redeclare package Medium = Buildings.Media.Water,
+    redeclare package Medium = MediumChiWat,
     typ=Buildings.Templates.Components.Types.Valve.TwoWayModulating,
     dat(
       m_flow_nominal=datHpAwNrv.mChiWat_flow_nominal,
       dpValve_nominal=50,
-      dpFixed_nominal=0))
+      dpFixed_nominal=500))
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
@@ -335,9 +349,14 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
   Buildings.Templates.Plants.Controls.Setpoints.PlantReset resCoo(
     nSenDpRem=1,
     dpSet_max={1000},
-    dpSet_min=500,
+    dpSet_min=1000,
     TSup_nominal=279.85,
-    TSupSetLim=285.85)
+    TSupSetLim=285.15,
+    resDp_max=0.01,
+    dtDel=120,
+    dtRes=120,
+    nReqResIgn=2,
+    tri=-0.02)
     annotation (Placement(transformation(extent={{418,130},{438,150}})));
   Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter gai3(k=5)
     annotation (Placement(transformation(extent={{308,150},{328,170}})));
@@ -348,16 +367,16 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
   Fluid.Sources.Boundary_pT bou(redeclare package Medium =
         Buildings.Media.Water, nPorts=1)
     annotation (Placement(transformation(extent={{-26,8},{-46,28}})));
-  Fluid.Sources.Boundary_pT bou1(redeclare package Medium = Media.Water, nPorts=
+  Fluid.Sources.Boundary_pT bou1(redeclare package Medium = MediumChiWat,nPorts=
        1) annotation (Placement(transformation(extent={{22,116},{42,136}})));
   Controls.ExternalEnergyLoopOperationMode extEneOpeMod(
-    THotRetLim=273.15 + 70,
-      TCooRetLim=273.15 + 11,
+    THotRetLim=273.15 + 80,
+    TCooRetLim=273.15 + 9,
     dTHotHys=5,
-    dTCooHys=1,
+    dTCooHys=3,
     intGreThr(t=3),
     intGreThr1(t=3))
-    annotation (Placement(transformation(extent={{-40,230},{-20,250}})));
+    annotation (Placement(transformation(extent={{-180,232},{-160,252}})));
   parameter Buildings.Templates.Components.Data.PumpMultiple datPumMulHea(
     final typ=Buildings.Templates.Components.Types.Pump.Multiple,
     final nPum=pum.nPum,
@@ -377,9 +396,14 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
   Buildings.Templates.Plants.Controls.Setpoints.PlantReset resHea(
     nSenDpRem=1,
     dpSet_max={1000},
-    dpSet_min=500,
-    TSup_nominal=338.15,
-    TSupSetLim=323.15)
+    dpSet_min=1000,
+    TSup_nominal=333.15,
+    TSupSetLim=308.15,
+    resDp_max=0.01,
+    dtDel=120,
+    dtRes=120,
+    nReqResIgn=2,
+    tri=-0.02)
     annotation (Placement(transformation(extent={{-372,-70},{-352,-50}})));
 
   Modelica.Blocks.Sources.CombiTimeTable datRea(
@@ -404,7 +428,7 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
     annotation (Placement(transformation(extent={{-136,94},{-156,114}})));
   Fluid.HeatExchangers.ConstantEffectiveness hex1(
     redeclare package Medium1 = Buildings.Media.Water,
-    redeclare package Medium2 = Buildings.Media.Water,
+    redeclare package Medium2 = MediumChiWat,
     m1_flow_nominal=datHpAwNrv.mChiWat_flow_nominal,
     m2_flow_nominal=datHpAwNrv.mChiWat_flow_nominal,
     dp1_nominal=5000,
@@ -418,7 +442,7 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
         rotation=0,
         origin={-70,98})));
   Buildings.Templates.Components.Sensors.Temperature TRetCooCon(redeclare
-      package Medium = Buildings.Media.Water, m_flow_nominal=datHpAwNrv.mChiWat_flow_nominal)
+      package Medium = MediumChiWat,          m_flow_nominal=datHpAwNrv.mChiWat_flow_nominal)
     annotation (Placement(transformation(extent={{60,14},{40,34}})));
   Buildings.Templates.Components.Sensors.VolumeFlowRate volumeFlowRate(
     redeclare package Medium = Buildings.Media.Water,
@@ -429,7 +453,7 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
         rotation=180,
         origin={-316,24})));
   Buildings.Templates.Components.Sensors.VolumeFlowRate volumeFlowRate1(
-    redeclare package Medium = Buildings.Media.Water,
+    redeclare package Medium = MediumChiWat,
     m_flow_nominal=datHpAwNrv.mChiWat_flow_nominal,
     final typ=Buildings.Templates.Components.Types.SensorVolumeFlowRate.FlowMeter)
     annotation (Placement(transformation(
@@ -449,7 +473,7 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
         rotation=0,
         origin={-108,98})));
   Buildings.Templates.Components.Actuators.Valve valve5(
-    redeclare package Medium = Buildings.Media.Water,
+    redeclare package Medium = MediumChiWat,
     typ=Buildings.Templates.Components.Types.Valve.ThreeWayModulating,
     dat(
       m_flow_nominal=datHpAwNrv.mChiWat_flow_nominal,
@@ -483,7 +507,7 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
     annotation (Placement(transformation(extent={{-318,-40},{-298,-20}})));
   Modelica.Blocks.Routing.RealPassThrough dPSetCoo
     annotation (Placement(transformation(extent={{458,130},{478,150}})));
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant conTSetHP(k=273.15 + 65)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant conTSetHP(k=273.15 + 60)
     annotation (Placement(transformation(extent={{-370,-150},{-350,-130}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant condPSet1(k=1000)
     annotation (Placement(transformation(extent={{418,160},{438,180}})));
@@ -498,12 +522,12 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
         rotation=180,
         origin={-188,24})));
   Buildings.Controls.OBC.CDL.Reals.PID conPIDBypCoo(k=0.2, Ti=150)
-    annotation (Placement(transformation(extent={{200,210},{220,230}})));
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant minFloCoo(k=datHpAwNrv.mChiWat_flow_nominal
+    annotation (Placement(transformation(extent={{180,250},{200,270}})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant minFloCoo(k=0.5*datHpAwNrv.mChiWat_flow_nominal
         /1000) "Pump speed command"
-    annotation (Placement(transformation(extent={{160,210},{180,230}})));
+    annotation (Placement(transformation(extent={{140,250},{160,270}})));
   Buildings.Templates.Components.Sensors.VolumeFlowRate volumeFlowRateCooPri(
-    redeclare package Medium = Buildings.Media.Water,
+    redeclare package Medium = MediumChiWat,
     m_flow_nominal=datHpAwNrv.mChiWat_flow_nominal,
     final typ=Buildings.Templates.Components.Types.SensorVolumeFlowRate.FlowMeter)
     annotation (Placement(transformation(
@@ -511,20 +535,37 @@ model ExternalEnergyLoopIntegration_Buffalo_012425
         rotation=0,
         origin={154,100})));
   Controls.DeEnergization deEnergization(
-    THotRetLim=273.15 + 70,
+    THotRetLim=273.15 + 85.5,
     TCooRetLim=273.15 + 4,
-    dTHotHys=2,
+    dTHotHys=10,
     dTCooHys=2)
-    annotation (Placement(transformation(extent={{-432,-102},{-412,-82}})));
+    annotation (Placement(transformation(extent={{-452,-130},{-432,-110}})));
   Modelica.Blocks.Routing.RealPassThrough TSetCoo
     annotation (Placement(transformation(extent={{460,180},{480,200}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant conTSetHP1(k=273.15 + 6.7)
     annotation (Placement(transformation(extent={{420,200},{440,220}})));
   Buildings.Controls.OBC.CDL.Integers.Add addInt
     annotation (Placement(transformation(extent={{-440,-20},{-420,0}})));
+  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter gai1(k=-1)
+    annotation (Placement(transformation(extent={{300,200},{280,220}})));
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar(p=1)
+    annotation (Placement(transformation(extent={{260,200},{240,220}})));
+  Buildings.Controls.OBC.CDL.Reals.AddParameter addPar1(p=1)
+    annotation (Placement(transformation(extent={{-360,200},{-340,220}})));
+  Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter gai2(k=-1)
+    annotation (Placement(transformation(extent={{-400,200},{-380,220}})));
+  Buildings.Controls.OBC.CDL.Integers.Add addInt1
+    annotation (Placement(transformation(extent={{-98,220},{-78,240}})));
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant
+                                                    minFloCoo1(k=0)
+               "Pump speed command"
+    annotation (Placement(transformation(extent={{-240,200},{-220,220}})));
+  Modelica.Blocks.Routing.BooleanPassThrough booleanPassThrough
+    annotation (Placement(transformation(extent={{-420,-80},{-400,-60}})));
 equation
   connect(ctlHeaInl.bus, valIsoHeaInl.bus) annotation (Line(
-      points={{-68,-7.6},{-68,-6},{-24,-6},{-24,60},{-2,60}},
+      points={{-60,2.4},{-60,-20},{-44,-20},{-44,4},{-48,4},{-48,64},{-32,64},{-32,
+          72},{-2,72},{-2,60}},
       color={255,204,51},
       thickness=0.5));
   connect(valIsoHeaInl.port_bChiWat, rou.port_a) annotation (Line(points={{20,54.12},
@@ -554,10 +595,6 @@ equation
       index=-1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(jun.port_2, dPHea.port_a) annotation (Line(points={{-268,24},{-292,24},
-          {-292,46}},                     color={0,127,255}));
-  connect(jun6.port_1, dPHea.port_b) annotation (Line(points={{-268,98},{-292,98},
-          {-292,66}},                     color={0,127,255}));
 
   connect(jun2.port_3, valve1.port_a)
     annotation (Line(points={{214,34},{214,50}}, color={0,127,255}));
@@ -571,23 +608,19 @@ equation
       index=-1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
-  connect(jun1.port_2, dPCoo.port_a)
-    annotation (Line(points={{224,100},{232,100},{232,58}},
-                                                          color={0,127,255}));
-  connect(jun2.port_1, dPCoo.port_b) annotation (Line(points={{224,24},{232,24},
-          {232,38}},                                   color={0,127,255}));
 
 connect(TSupHea.y, bus_sensor.TSupHea);
 connect(TSupCoo.y, bus_sensor.TSupCoo);
 connect(dPHea.y, bus_sensor.uDpHea);
 connect(dPCoo.y, bus_sensor.uDpCoo);
 connect(TRetHea.y,extEneOpeMod.THotRet);
+connect(TRetCoo.y,extEneOpeMod.TChiRet);
   connect(ctlHeaInl.bus, hpAwNrv.bus) annotation (Line(
-      points={{-68,-7.6},{-68,-6},{-24,-6},{-24,8},{32,8},{32,-34}},
+      points={{-60,2.4},{-60,-20},{-24,-20},{-24,-16},{32,-16},{32,-34}},
       color={255,204,51},
       thickness=0.5));
   connect(bus_sensor, ctlHeaInl.bus) annotation (Line(
-      points={{-2,-42},{-2,8},{-24,8},{-24,-7.6},{-68,-7.6}},
+      points={{-2,-42},{-2,-16},{-24,-16},{-24,-20},{-60,-20},{-60,2.4}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
@@ -595,11 +628,11 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(pum1.bus, ctlHeaInl.bus_HeaPum) annotation (Line(
-      points={{-114,34},{-120,34},{-120,42},{-62,42},{-62,-20},{-67.8,-20}},
+      points={{-114,34},{-52,34},{-52,-10},{-59.8,-10}},
       color={255,204,51},
       thickness=0.5));
   connect(pum.bus, ctlHeaInl.bus_CooPum) annotation (Line(
-      points={{96,110},{-52,110},{-52,-13.8},{-68,-13.8}},
+      points={{96,110},{44,110},{44,104},{-52,104},{-52,-3.8},{-60,-3.8}},
       color={255,204,51},
       thickness=0.5));
   connect(rou.ports_b, pum.ports_a) annotation (Line(points={{74,100},{86,100}},
@@ -700,8 +733,6 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
           {54,100}},                      color={0,127,255}));
   connect(reaToInt1.y, resCoo.nReqRes) annotation (Line(points={{360,160},{408,160},
           {408,146},{416,146}}, color={255,127,0}));
-  connect(extEneOpeMod.yOpeMod, bus.uOpeMod)
-    annotation (Line(points={{-18,240},{38,240},{38,290}}, color={255,127,0}));
   connect(con6.y, ena.u1Sch) annotation (Line(points={{-498,-60},{-482,-60},{
           -482,-76}},       color={255,0,255}));
   connect(con7.y, ena.TOut) annotation (Line(points={{-498,-100},{-482,-100},{
@@ -741,19 +772,17 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
           {240,100}},                  color={0,127,255}));
   connect(volumeFlowRate1.port_b, valve3.port_a) annotation (Line(points={{260,100},
           {270,100}},                      color={0,127,255}));
-  connect(reaToInt.y, extEneOpeMod.uReqHea) annotation (Line(points={{-452,10},{
-          -342,10},{-342,8},{-310,8},{-310,108},{-288,108},{-288,246},{-42,246}},
+  connect(reaToInt.y, extEneOpeMod.uReqHea) annotation (Line(points={{-452,10},
+          {-452,8},{-372,8},{-372,0},{-284,0},{-284,248},{-182,248}},
         color={255,127,0}));
   connect(reaToInt1.y, extEneOpeMod.uReqCoo) annotation (Line(points={{360,160},
-          {360,186},{-48,186},{-48,242},{-42,242}},
+          {360,184},{-200,184},{-200,244},{-182,244}},
                                          color={255,127,0}));
   connect(valve4.port_b, TRetHeaCon.port_a) annotation (Line(points={{-98,98},{-80,
           98}},                                                   color={0,127,
           255}));
   connect(valve5.port_b, TRetCooCon.port_a) annotation (Line(points={{72,24},{60,
           24}},                     color={0,127,255}));
-  connect(extEneOpeMod.yOpeMod, bus_sensor.uOpeMod) annotation (Line(points={{-18,240},
-          {-2,240},{-2,-42}},                     color={255,127,0}));
   connect(volumeFlowRate2.port_a, externalEnergyLoop.portEva_b) annotation (
       Line(points={{14,160},{14,193},{15,193},{15,210}},
                  color={0,127,255}));
@@ -780,8 +809,8 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
       index=1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
-  connect(dPSetCoo.y, bus_sensor.uDpCooSet) annotation (Line(points={{479,140},
-          {470,140},{470,-42},{-2,-42}},                     color={0,0,127}),
+  connect(dPSetCoo.y, bus_sensor.uDpCooSet) annotation (Line(points={{479,140},{
+          484,140},{484,-42},{-2,-42}},                      color={0,0,127}),
       Text(
       string="%second",
       index=1,
@@ -792,45 +821,18 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
   connect(volumeFlowRateHeaPri.port_a, rou2.port_a) annotation (Line(points={{-178,24},
           {-160,24}},                                             color={0,127,255}));
   connect(volumeFlowRateHeaPri.y, conPIDBypHea.u_m);
-  connect(conPIDBypHea.y, bus_HeaVal.y) annotation (Line(points={{-358,170},{-330,
-          170}},            color={0,0,127}), Text(
-      string="%second",
-      index=1,
-      extent={{-3,6},{-3,6}},
-      horizontalAlignment=TextAlignment.Right));
   connect(minFloHea.y, conPIDBypHea.u_s) annotation (Line(points={{-398,170},{-382,
           170}},                       color={0,0,127}));
   connect(minFloCoo.y, conPIDBypCoo.u_s)
-    annotation (Line(points={{182,220},{198,220}}, color={0,0,127}));
-  connect(conPIDBypCoo.y, bus_CooVal.y) annotation (Line(points={{222,220},{236,
-          220},{236,142}},                     color={0,0,127}), Text(
-      string="%second",
-      index=1,
-      extent={{-6,3},{-6,3}},
-      horizontalAlignment=TextAlignment.Right));
+    annotation (Line(points={{162,260},{178,260}}, color={0,0,127}));
   connect(volumeFlowRateCooPri.y, conPIDBypCoo.u_m);
   connect(rou3.port_a, volumeFlowRateCooPri.port_a) annotation (Line(points={{140,100},
           {144,100}},                                        color={0,127,255}));
   connect(volumeFlowRateCooPri.port_b, TSupCoo.port_a) annotation (Line(points={{164,100},
           {174,100}},                               color={0,127,255}));
-  connect(deEnergization.yEna, bus_sensor.uPlaEna) annotation (Line(points={{-410,
-          -92},{-412,-92},{-412,-60},{-384,-60},{-384,-44},{-368,-44},{-368,-40},
-          {-324,-40},{-324,-48},{-228,-48},{-228,-42},{-2,-42}}, color={255,0,255}),
-      Text(
-      string="%second",
-      index=1,
-      extent={{6,3},{6,3}},
-      horizontalAlignment=TextAlignment.Left));
-  connect(deEnergization.yEna, resHea.u1Ena) annotation (Line(points={{-410,-92},
-          {-412,-92},{-412,-60},{-374,-60}}, color={255,0,255}));
   connect(ena.y1, deEnergization.uEna) annotation (Line(points={{-458,-80},{
-          -448,-80},{-448,-96},{-434,-96}},
+          -448,-80},{-448,-100},{-464,-100},{-464,-124},{-454,-124}},
                                        color={255,0,255}));
-  connect(deEnergization.yEna, resCoo.u1Ena) annotation (Line(points={{-410,-92},
-          {-412,-92},{-412,-60},{-384,-60},{-384,-44},{-368,-44},{-368,-40},{-324,
-          -40},{-324,-48},{-228,-48},{-228,-40},{-212,-40},{-212,-28},{-28,-28},
-          {-28,-8},{64,-8},{64,48},{192,48},{192,80},{336,80},{336,116},{404,116},
-          {404,128},{408,128},{408,140},{416,140}}, color={255,0,255}));
   connect(TRetHeaCon.y,deEnergization.TRetHeaCon);
   connect(TRetCooCon.y,deEnergization.TRetCooCon);
   connect(TRetCooCon.y,bus_sensor.TRetCooCon);
@@ -874,24 +876,92 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
       index=-1,
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
-  connect(deEnergization.yEna, bus.uPlaEna) annotation (Line(points={{-410,-92},
-          {-412,-92},{-412,-60},{-384,-60},{-384,-44},{-368,-44},{-368,-40},{-324,
-          -40},{-324,-48},{-228,-48},{-228,-40},{-212,-40},{-212,-28},{-28,-28},
-          {-28,-8},{64,-8},{64,80},{76,80},{76,290},{38,290}}, color={255,0,255}),
-      Text(
+  connect(conPID1.y, gai1.u) annotation (Line(points={{400,90},{404,90},{404,210},
+          {302,210}}, color={0,0,127}));
+  connect(addPar.u, gai1.y)
+    annotation (Line(points={{262,210},{278,210}}, color={0,0,127}));
+  connect(gai2.y, addPar1.u)
+    annotation (Line(points={{-378,210},{-362,210}}, color={0,0,127}));
+  connect(addPar1.y, bus_HeaVal.y) annotation (Line(points={{-338,210},{-330,210},
+          {-330,170}}, color={0,0,127}), Text(
       string="%second",
       index=1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
-  connect(conTSetHP1.y, TSetCoo.u) annotation (Line(points={{442,210},{442,204},
-          {458,204},{458,190}}, color={0,0,127}));
-  connect(condPSet1.y, dPSetCoo.u) annotation (Line(points={{440,170},{440,168},
-          {456,168},{456,140}}, color={0,0,127}));
-  connect(condPSet.y, dPSetHea.u) annotation (Line(points={{-348,-100},{-332,
-          -100},{-332,-66},{-322,-66}}, color={0,0,127}));
-  connect(conTSetHP.y, TSetHea.u) annotation (Line(points={{-348,-140},{-292,
-          -140},{-292,-44},{-288,-44},{-288,-16},{-320,-16},{-320,-30}}, color=
-          {0,0,127}));
+  connect(conPID.y, gai2.u) annotation (Line(points={{-452,110},{-428,110},{-428,
+          210},{-402,210}}, color={0,0,127}));
+  connect(dPCoo.port_a, TSupCoo.port_b) annotation (Line(points={{196,60},{196,
+          80},{194,80},{194,100}}, color={0,127,255}));
+  connect(dPCoo.port_b, jun2.port_2) annotation (Line(points={{196,40},{196,32},
+          {204,32},{204,24}}, color={0,127,255}));
+  connect(dPHea.port_a, jun.port_1) annotation (Line(points={{-230,46},{-240,46},
+          {-240,24},{-248,24}}, color={0,127,255}));
+  connect(dPHea.port_b, jun6.port_2) annotation (Line(points={{-230,66},{-230,
+          98},{-248,98}}, color={0,127,255}));
+  connect(addPar.y, bus_CooVal.y) annotation (Line(points={{238,210},{228,210},
+          {228,172},{236,172},{236,142}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{-3,-6},{-3,-6}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(extEneOpeMod.yOpeMod, addInt1.u1) annotation (Line(points={{-158,242},
+          {-158,236},{-100,236}}, color={255,127,0}));
+  connect(addInt1.y, bus_sensor.uOpeMod) annotation (Line(points={{-76,230},{
+          -76,228},{-60,228},{-60,128},{-16,128},{-16,76},{-2,76},{-2,-42}},
+        color={255,127,0}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(addInt1.y, bus.uOpeMod) annotation (Line(points={{-76,230},{-76,212},
+          {-52,212},{-52,290},{38,290}}, color={255,127,0}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(minFloCoo1.y, addInt1.u2) annotation (Line(points={{-218,210},{-112,
+          210},{-112,224},{-100,224}}, color={255,127,0}));
+  connect(booleanPassThrough.y, resHea.u1Ena) annotation (Line(points={{-399,
+          -70},{-388,-70},{-388,-60},{-374,-60}}, color={255,0,255}));
+  connect(booleanPassThrough.y, bus_sensor.uPlaEna) annotation (Line(points={{
+          -399,-70},{-388,-70},{-388,-40},{-324,-40},{-324,-48},{-228,-48},{
+          -228,-42},{-2,-42}}, color={255,0,255}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(booleanPassThrough.y, bus.uPlaEna) annotation (Line(points={{-399,-70},
+          {-388,-70},{-388,-40},{-324,-40},{-324,-48},{-228,-48},{-228,-40},{
+          -212,-40},{-212,-28},{-40,-28},{-40,0},{-48,0},{-48,290},{38,290}},
+        color={255,0,255}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(booleanPassThrough.y, resCoo.u1Ena) annotation (Line(points={{-399,
+          -70},{-388,-70},{-388,-40},{-324,-40},{-324,-48},{-228,-48},{-228,-40},
+          {-212,-40},{-212,-28},{-40,-28},{-40,0},{-48,0},{-48,188},{380,188},{
+          380,152},{400,152},{400,140},{416,140}}, color={255,0,255}));
+  connect(ena.y1, booleanPassThrough.u) annotation (Line(points={{-458,-80},{
+          -440,-80},{-440,-70},{-422,-70}}, color={255,0,255}));
+  connect(bus, ctlHeaInl.bus_extEne) annotation (Line(
+      points={{38,290},{36,290},{36,236},{24,236},{24,192},{4,192},{4,184},{-4,184},
+          {-4,172},{-40,172},{-40,36},{-48,36},{-48,8},{-80,8},{-80,-3.8}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(resCoo.dpSet[1], dPSetCoo.u) annotation (Line(points={{440,146},{444,
+          146},{444,140},{456,140}}, color={0,0,127}));
+  connect(resCoo.TSupSet, TSetCoo.u) annotation (Line(points={{440,134},{440,
+          132},{444,132},{444,148},{448,148},{448,190},{458,190}}, color={0,0,
+          127}));
+  connect(resHea.dpSet[1], dPSetHea.u) annotation (Line(points={{-350,-54},{
+          -332,-54},{-332,-66},{-322,-66}}, color={0,0,127}));
+  connect(resHea.TSupSet, TSetHea.u) annotation (Line(points={{-350,-66},{-336,
+          -66},{-336,-30},{-320,-30}}, color={0,0,127}));
   annotation (
     Diagram(
       coordinateSystem(
@@ -901,8 +971,8 @@ connect(TRetHea.y,extEneOpeMod.THotRet);
         "modelica://Buildings/Resources/Scripts/Dymola/Templates/Plants/HeatPumps/Components/Validation/HeatPumpGroupAirToWater.mos"
         "Simulate and plot"),
     experiment(
-      StartTime=15638400,
-      StopTime=18316800,
+      StartTime=23587200,
+      StopTime=26265600,
       Interval=60,
       Tolerance=1e-06,
       __Dymola_Algorithm="Dassl"),

@@ -12,7 +12,7 @@ block DeEnergization
         iconTransformation(extent={{-140,-20},{-100,20}})));
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yEna annotation (
       Placement(transformation(extent={{100,-20},{140,20}}), iconTransformation(
-          extent={{100,-20},{140,20}})));
+          extent={{100,0},{140,40}})));
   Buildings.Controls.OBC.CDL.Reals.Hysteresis hys1(uLow=THotRetLim - dTHotHys,
                                                                          uHigh=
         THotRetLim)
@@ -35,6 +35,15 @@ block DeEnergization
     annotation (Placement(transformation(extent={{0,-30},{20,-10}})));
   Buildings.Controls.OBC.CDL.Logical.Or or1
     annotation (Placement(transformation(extent={{72,-10},{92,10}})));
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt(integerTrue=
+        -2) annotation (Placement(transformation(extent={{-40,60},{-20,80}})));
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1(integerTrue=
+       3) annotation (Placement(transformation(extent={{-40,-70},{-20,-50}})));
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yMod annotation (
+      Placement(transformation(extent={{100,-60},{140,-20}}),
+        iconTransformation(extent={{100,-40},{140,0}})));
+  Buildings.Controls.OBC.CDL.Integers.Add addInt
+    annotation (Placement(transformation(extent={{40,-70},{60,-50}})));
 equation
   connect(TRetHeaCon, hys1.u)
     annotation (Line(points={{-120,40},{-82,40}}, color={0,0,127}));
@@ -62,6 +71,17 @@ equation
     annotation (Line(points={{94,0},{120,0}}, color={255,0,255}));
   connect(uEna, or1.u2) annotation (Line(points={{-120,-40},{-10,-40},{-10,-34},
           {70,-34},{70,-8}}, color={255,0,255}));
+  connect(hys1.y, booToInt.u) annotation (Line(points={{-58,40},{-48,40},{-48,
+          70},{-42,70}}, color={255,0,255}));
+  connect(hys2.y, booToInt1.u) annotation (Line(points={{-58,0},{-48,0},{-48,
+          -60},{-42,-60}}, color={255,0,255}));
+  connect(booToInt1.y, addInt.u2) annotation (Line(points={{-18,-60},{30,-60},{
+          30,-66},{38,-66}}, color={255,127,0}));
+  connect(booToInt.y, addInt.u1) annotation (Line(points={{-18,70},{8,70},{8,38},
+          {10,38},{10,30},{12,30},{12,-6},{28,-6},{28,-54},{38,-54}}, color={
+          255,127,0}));
+  connect(addInt.y, yMod) annotation (Line(points={{62,-60},{84,-60},{84,-40},{
+          120,-40}}, color={255,127,0}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
           Rectangle(
           extent={{-100,100},{100,-100}},

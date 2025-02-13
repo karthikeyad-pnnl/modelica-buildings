@@ -4,7 +4,9 @@ model CoolingTowerWHeatExchanger
   extends Buildings.Fluid.Interfaces.PartialTwoPortInterface(
     final m_flow_nominal=dat.mWatCon_flow_nominal);
   parameter Real mCooTowAir_flow_nominal;
-  Buildings.Templates.Components.Coolers.CoolingTower coo(typ=Buildings.Templates.Components.Types.Cooler.CoolingTowerOpen, dat(
+  Buildings.Templates.Components.Coolers.CoolingTower coo(redeclare package MediumConWat =
+        Buildings.Media.Antifreeze.PropyleneGlycolWater (
+         property_T=293.15, X_a=0.40),typ=Buildings.Templates.Components.Types.Cooler.CoolingTowerOpen, dat(
       mConWat_flow_nominal=dat.mWatOxy_flow_nominal,
       dpConWatFri_nominal(displayUnit="Pa") = 14930 + 14930 + 74650,
       dpConWatSta_nominal(displayUnit="Pa") = 5000,
@@ -17,7 +19,9 @@ model CoolingTowerWHeatExchanger
         extent={{10,-10},{-10,10}},
         rotation=180,
         origin={0,-70})));
-  Buildings.Templates.Components.Pumps.Single pum(have_var=false, dat(
+  Buildings.Templates.Components.Pumps.Single pum(have_var=false,
+    redeclare package Medium = Buildings.Media.Antifreeze.PropyleneGlycolWater
+        (property_T=293.15, X_a=0.40),                            dat(
       m_flow_nominal=dat.mWatOxy_flow_nominal,
       dp_nominal(displayUnit="Pa") = 5E5,
       redeclare
@@ -33,7 +37,10 @@ model CoolingTowerWHeatExchanger
         Buildings.Media.Water, V_start=dat.mWatOxy_flow_nominal*600/1000)
     annotation (Placement(transformation(extent={{-94,-79},{-74,-59}})));
 
-  Buildings.Templates.Components.Coils.WaterBasedHeating waterBasedHeating(typVal=
+  Buildings.Templates.Components.Coils.WaterBasedHeating waterBasedHeating(redeclare
+      package                                                                                MediumHeaWat =
+        Buildings.Media.Antifreeze.PropyleneGlycolWater (
+         property_T=293.15, X_a=0.40),typVal=
         Buildings.Templates.Components.Types.Valve.ThreeWayModulating, dat(
       mAir_flow_nominal=dat.mWatCon_flow_nominal,
       dpAir_nominal=5000,
@@ -54,6 +61,9 @@ model CoolingTowerWHeatExchanger
             {{10,80},{50,120}}), iconTransformation(extent={{30,90},{50,108}})));
   parameter Data.CoolingTowerWHE dat
     annotation (Placement(transformation(extent={{-92,60},{-72,80}})));
+
+  Controls.FreeCooling freeCooling
+    annotation (Placement(transformation(extent={{-60,-120},{-40,-100}})));
 equation
   connect(busWea, coo.busWea) annotation (Line(
       points={{-30,100},{-30,-90},{-6,-90},{-6,-80}},
@@ -104,9 +114,20 @@ equation
       points={{70,12},{70,76},{30,76},{30,100}},
       color={255,204,51},
       thickness=0.5));
+  connect(freeCooling.bus_cooTow, coo.bus) annotation (Line(
+      points={{-60,-105},{-66,-105},{-66,-92},{-7.21645e-16,-92},{-7.21645e-16,-80}},
+      color={255,204,51},
+      thickness=0.5));
+
+  connect(freeCooling.bus_conPum, pum.bus) annotation (Line(
+      points={{-60,-115},{-70,-115},{-70,-68},{-66,-68},{-66,-52},{-50,-52},{-50,
+          -60}},
+      color={255,204,51},
+      thickness=0.5));
   connect(coo.port_b, waterBasedHeating.port_aSou) annotation (Line(points={{10,
-          -70},{60,-70},{60,-30},{5,-30},{5,-10}}, color={0,127,255}));
-  annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={
+          -70},{14,-70},{14,-14},{5,-14},{5,-10}}, color={0,127,255}));
+  annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-140},
+            {100,100}}),                                        graphics={
         Rectangle(
           extent={{-44,60},{48,-98}},
           pattern=LinePattern.None,
@@ -132,5 +153,5 @@ equation
           fileName="modelica://Buildings/Resources/Images/Templates/Components/Fans/Propeller.svg",
           origin={0,41},
           rotation=-90)}),                                       Diagram(
-        coordinateSystem(preserveAspectRatio=false)));
+        coordinateSystem(preserveAspectRatio=false, extent={{-100,-140},{100,100}})));
 end CoolingTowerWHeatExchanger;

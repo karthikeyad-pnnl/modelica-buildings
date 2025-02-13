@@ -37,6 +37,8 @@ block CoolingTowerControl
     annotation (Placement(transformation(extent={{-80,-50},{-60,-30}})));
   Buildings.Controls.OBC.CDL.Logical.And and1
     annotation (Placement(transformation(extent={{80,110},{100,130}})));
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con1(k=true)
+    annotation (Placement(transformation(extent={{40,120},{60,140}})));
 equation
   connect(swi.y, bus.heatExchBus.y) annotation (Line(points={{102,10},{110,10},{
           110,-110},{0.1,-110},{0.1,-139.9}},
@@ -87,9 +89,6 @@ equation
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(hys.y, and1.u1) annotation (Line(points={{-58,130},{70,130},{70,120},
-          {78,120}},
-        color={255,0,255}));
   connect(and1.y, bus.condenserPumpBus.y1) annotation (Line(points={{102,120},{
           134,120},{134,-112},{0.1,-112},{0.1,-139.9}},
                                    color={255,0,255}), Text(
@@ -129,6 +128,8 @@ equation
       index=-1,
       extent={{-3,-6},{-3,-6}},
       horizontalAlignment=TextAlignment.Right));
+  connect(con1.y, and1.u1) annotation (Line(points={{62,130},{72,130},{72,120},
+          {78,120}}, color={255,0,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
             -100},{100,100}}),                                  graphics={
           Rectangle(

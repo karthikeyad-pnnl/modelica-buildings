@@ -5,6 +5,11 @@ model ValvesIsolation_UpdatePorts
     constrainedby Modelica.Media.Interfaces.PartialMedium
     "Medium model"
     annotation (__ctrlFlow(enable=false));
+  replaceable package MediumChiWat =
+      Buildings.Media.Antifreeze.PropyleneGlycolWater (
+         property_T=293.15, X_a=0.40)
+    "Medium model"
+    annotation (__ctrlFlow(enable=false));
   final parameter Buildings.Templates.Components.Types.Valve typ=
     Buildings.Templates.Components.Types.Valve.TwoWayTwoPosition
     "Valve type"
@@ -167,7 +172,7 @@ model ValvesIsolation_UpdatePorts
     Dialog(tab="Advanced",
       enable=have_valHpInlIso or have_valHpOutIso));
   Modelica.Fluid.Interfaces.FluidPort_b port_bChiWat(
-    redeclare final package Medium=Medium,
+    redeclare final package Medium=MediumChiWat,
     m_flow(
       max=if allowFlowReversal then + Modelica.Constants.inf else 0),
     h_outflow(
@@ -184,7 +189,7 @@ model ValvesIsolation_UpdatePorts
 //      if
 //       have_chiWat
   Modelica.Fluid.Interfaces.FluidPort_a port_aChiWat(
-    redeclare final package Medium=Medium,
+    redeclare final package Medium=MediumChiWat,
     m_flow(
       min=if allowFlowReversal then - Modelica.Constants.inf else 0),
     h_outflow(
@@ -261,7 +266,7 @@ model ValvesIsolation_UpdatePorts
       //if
       // have_pumChiWatPriDed
   Modelica.Fluid.Interfaces.FluidPorts_a ports_aChiWatHp[nHp](
-    redeclare each final package Medium=Medium,
+    redeclare each final package Medium=MediumChiWat,
     each m_flow(
       min=if allowFlowReversal then - Modelica.Constants.inf else 0),
     each h_outflow(
@@ -295,7 +300,7 @@ model ValvesIsolation_UpdatePorts
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},rotation=90,
       origin={-2054,-140})));
   Buildings.Templates.Components.Actuators.Valve valChiWatHpOutIso[nHp](
-    redeclare each final package Medium=Medium,
+    redeclare each final package Medium=MediumChiWat,
     final dat=datValChiWatHpOutIso,
     each final typ=typ,
     each final init=init,
@@ -320,7 +325,7 @@ model ValvesIsolation_UpdatePorts
     annotation (Placement(transformation(extent={{10,10},{-10,-10}},rotation=90,
       origin={-1774,-140})));
   Buildings.Templates.Components.Actuators.Valve valChiWatHpInlIso[nHp](
-    redeclare each final package Medium=Medium,
+    redeclare each final package Medium=MediumChiWat,
     final dat=datValChiWatHpInlIso,
     each final typ=typ,
     each final init=init,
@@ -339,7 +344,7 @@ model ValvesIsolation_UpdatePorts
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},rotation=90,
       origin={-2034,-140})));
   Buildings.Templates.Components.Routing.PassThroughFluid pasChiWatHpOut[nHp](
-    redeclare each final package Medium=Medium)
+    redeclare each final package Medium=MediumChiWat)
     if not have_valHpOutIso
     "Direct fluid pass-through"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},rotation=90,
@@ -357,7 +362,7 @@ model ValvesIsolation_UpdatePorts
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},rotation=0,
       origin={-2034,-90})));
   Fluid.Delays.DelayFirstOrder junChiWatSup(
-    redeclare final package Medium=Medium,
+    redeclare final package Medium=MediumChiWat,
     final tau=tau,
     final m_flow_nominal=sum(mChiWatHp_flow_nominal),
     final energyDynamics=energyDynamics,
@@ -398,7 +403,7 @@ model ValvesIsolation_UpdatePorts
   at both inlet and outlet.
   */
     Fluid.FixedResistances.PressureDrop pasChiWatHpInl[nHp](
-    redeclare each final package Medium=Medium,
+    redeclare each final package Medium=MediumChiWat,
     final m_flow_nominal=mChiWatHp_flow_nominal,
     final dp_nominal=if not have_valHpInlIso and not have_valHpOutIso then dpFixedChiWat_nominal
       else fill(0, nHp))
@@ -408,7 +413,7 @@ model ValvesIsolation_UpdatePorts
       origin={-1714,-140})));
        //and have_chiWat
   Fluid.Delays.DelayFirstOrder junChiWatRet(
-    redeclare final package Medium=Medium,
+    redeclare final package Medium=MediumChiWat,
     final tau=tau,
     final m_flow_nominal=sum(mChiWatHp_flow_nominal),
     final energyDynamics=energyDynamics,
@@ -421,7 +426,7 @@ model ValvesIsolation_UpdatePorts
     //if
       // have_chiWat
   Modelica.Fluid.Interfaces.FluidPorts_b ports_bChiWatHp[nHp](
-    redeclare each final package Medium = Medium,
+    redeclare each final package Medium = MediumChiWat,
     each m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0),
     each h_outflow(start=Medium.h_default, nominal=Medium.h_default))
     "CHW return (HP entering)" annotation (Placement(transformation(

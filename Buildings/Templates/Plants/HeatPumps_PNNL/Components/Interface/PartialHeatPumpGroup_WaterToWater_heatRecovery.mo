@@ -7,7 +7,9 @@ model PartialHeatPumpGroup_WaterToWater_heatRecovery
   Non-reversible HP that can be controlled to produce either HW or CHW
   shall be modeled with chiller components (as a chiller/heater).
   */
-    final package MediumChiWat=Buildings.Media.Water
+    replaceable package MediumChiWat =
+      Buildings.Media.Antifreeze.PropyleneGlycolWater (
+         property_T=293.15, X_a=0.40)
     "CHW medium";
   /*
   Derived classes representing AWHP shall use:
@@ -118,7 +120,7 @@ model PartialHeatPumpGroup_WaterToWater_heatRecovery
 
   //End of dummy parameters
   Modelica.Fluid.Interfaces.FluidPorts_b ports_bChiWat[nHp](
-    redeclare each final package Medium = MediumCon,
+    redeclare each final package Medium = MediumChiWat,
     each m_flow(max=if allowFlowReversal then +Modelica.Constants.inf else 0),
     each h_outflow(start=MediumCon.h_default, nominal=MediumCon.h_default))
     "CHW supply (from heat pumps)" annotation (Placement(transformation(
@@ -130,7 +132,7 @@ model PartialHeatPumpGroup_WaterToWater_heatRecovery
         origin={-500,400})));
 
   Modelica.Fluid.Interfaces.FluidPorts_a ports_aChiWat[nHp](
-    redeclare each final package Medium = MediumCon,
+    redeclare each final package Medium = MediumChiWat,
     each m_flow(min=if allowFlowReversal then -Modelica.Constants.inf else 0),
     each h_outflow(start=MediumCon.h_default, nominal=MediumCon.h_default))
     "CHW Return (To heat pumps)" annotation (Placement(transformation(
