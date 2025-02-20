@@ -36,9 +36,13 @@ model ExternalEnergyLoopIntegration_Buffalo_021825
       EIRFunT={6.970381E-01,5.701647E-02,-2.272629E-04,8.496805E-03,
           4.752264E-04,-2.759799E-03},
       EIRFunPLR={7.280764E-01,-5.949776E-02,3.161338E-05,8.871893E-01,-1.081399E+00,
-          5.804626E-02,0.000000E+00,4.825053E-01,0.000000E+00,0.000000E+00}))
+          5.804626E-02,0.000000E+00,4.825053E-01,0.000000E+00,0.000000E+00},
+      TEvaLvgMin=279.15,
+      TEvaLvgMax=285.85,
+      TConLvgMin=303.15,
+      TConLvgMax=343.15))
     "Non-reversible AWHP parameters"
-    annotation (Placement(transformation(extent={{-150,-192},{-130,-172}})));
+    annotation (Placement(transformation(extent={{-152,-194},{-132,-174}})));
 
   Buildings.Templates.Plants.HeatPumps_PNNL.Components.HeatPumpGroups.WaterToWater_heatRecovery
     hpAwNrv(
