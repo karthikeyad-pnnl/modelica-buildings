@@ -8,12 +8,15 @@ def check():
     dat_fil = args[0].replace(".idf", ".dat")
     print(dat_fil)
 
-def main():
-    args = sys.argv[1:]
-    dat_fil = args[0].replace(".idf", ".dat")
+def main(file_name):
+    dat_fil = file_name.replace(".idf", ".dat")
     output_list =[
-    'Total heat transfer',
-    'Total cooling'
+    'HHW return temperature',
+    'HHW mass flowrate',
+    'HHW supply temperature',
+    'CHW supply temperature',
+    'CHW mass flowrate',
+    'CHW return temperature'
     ]
 
     e.energyplus_csv_to_mos(
@@ -23,4 +26,4 @@ def main():
     final_time=31536000)
 
 if __name__ == '__main__':
-    main()
+    main('loads.idf')

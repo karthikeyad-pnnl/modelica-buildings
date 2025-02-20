@@ -34,20 +34,22 @@ model CoolingTowerWHeatExchanger
         transformation(extent={{-50,80},{-10,120}}), iconTransformation(extent={{-50,90},
             {-30,110}})));
   Fluid.Storage.ExpansionVessel           expVesChi(redeclare package Medium =
-        Buildings.Media.Water, V_start=dat.mWatOxy_flow_nominal*600/1000)
+        Buildings.Media.Antifreeze.PropyleneGlycolWater (property_T=293.15, X_a
+          =0.40),              V_start=dat.mWatOxy_flow_nominal*600/1000)
     annotation (Placement(transformation(extent={{-94,-79},{-74,-59}})));
 
   Buildings.Templates.Components.Coils.WaterBasedHeating waterBasedHeating(redeclare
       package                                                                                MediumHeaWat =
         Buildings.Media.Antifreeze.PropyleneGlycolWater (
          property_T=293.15, X_a=0.40),typVal=
-        Buildings.Templates.Components.Types.Valve.ThreeWayModulating, dat(
+        Buildings.Templates.Components.Types.Valve.ThreeWayModulating,
+    dat(
       mAir_flow_nominal=dat.mWatCon_flow_nominal,
       dpAir_nominal=5000,
       mWat_flow_nominal=dat.mWatOxy_flow_nominal,
       dpWat_nominal=0,
       dpValve_nominal=1e-6,
-      cap_nominal=dat.CoolingCapacity_nominal,
+      cap_nominal=-dat.CoolingCapacity_nominal,
       TWatEnt_nominal=294.26,
       TAirEnt_nominal=328.15,
       wAirEnt_nominal=1))
