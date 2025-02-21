@@ -330,7 +330,8 @@ model ExternalEnergyLoopIntegration_Buffalo_021825
     dpSet_min=1000,
     TSup_nominal=279.85,
     TSupSetLim=285.15,
-    resDp_max=0.01,
+    dtDel=600,
+    dtRes=120,
     nReqResIgn=10)
     annotation (Placement(transformation(extent={{418,130},{438,150}})));
   Buildings.Controls.OBC.CDL.Reals.MultiplyByParameter gai3(k=20)
@@ -374,7 +375,8 @@ model ExternalEnergyLoopIntegration_Buffalo_021825
     dpSet_min=1000,
     TSup_nominal=333.15,
     TSupSetLim=308.15,
-    resDp_max=0.01,
+    dtDel=600,
+    dtRes=120,
     nReqResIgn=10)
     annotation (Placement(transformation(extent={{-372,-70},{-352,-50}})));
 
