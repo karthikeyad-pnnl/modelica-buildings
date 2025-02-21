@@ -1,19 +1,19 @@
 within Buildings.Templates.AirHandlersFans.Components.Data;
-record PartialController "Record for controller interface class"
+record PartialController "Record for controller interface class - This is a controller data record"
   extends Modelica.Icons.Record;
 
   parameter Buildings.Templates.AirHandlersFans.Types.Controller typ
     "Type of controller"
-    annotation (Evaluate=true, Dialog(group="Configuration", enable=false));
+    annotation (Evaluate=true, Dialog(tab="Non-configurable", group="Configuration", enable=false));
   parameter Buildings.Templates.Components.Types.Fan typFanSup
     "Type of supply fan"
-    annotation (Evaluate=true, Dialog(group="Configuration", enable=false));
+    annotation (Evaluate=true, Dialog(tab="Non-configurable", group="Configuration", enable=false));
   parameter Buildings.Templates.Components.Types.Fan typFanRel
     "Type of relief fan"
-    annotation (Evaluate=true, Dialog(group="Configuration", enable=false));
+    annotation (Evaluate=true, Dialog(tab="Non-configurable", group="Configuration", enable=false));
   parameter Buildings.Templates.Components.Types.Fan typFanRet
     "Type of return fan"
-    annotation (Evaluate=true, Dialog(group="Configuration", enable=false));
+    annotation (Evaluate=true, Dialog(tab="Non-configurable", group="Configuration", enable=false));
 
   annotation (Documentation(info="<html>
 <p>

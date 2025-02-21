@@ -62,16 +62,16 @@ equation
       index=-1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
+  connect(phi.y, hex.phi) annotation (Line(points={{-29,-20},{-20,-20},{-20,-8},
+          {19,-8}}, color={0,0,127}));
   connect(busWea.relHum, phi.u) annotation (Line(
       points={{-60,100},{-60,-20},{-52,-20}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
       index=-1,
-      extent={{-6,3},{-6,3}},
+      extent={{-3,-6},{-3,-6}},
       horizontalAlignment=TextAlignment.Right));
-  connect(phi.y, hex.phi) annotation (Line(points={{-29,-20},{-20,-20},{-20,-8},
-          {19,-8}}, color={0,0,127}));
   annotation (
     Diagram(
         coordinateSystem(preserveAspectRatio=false)), Documentation(info="<html>

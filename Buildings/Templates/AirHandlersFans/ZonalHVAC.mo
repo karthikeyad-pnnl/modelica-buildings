@@ -10,6 +10,19 @@ model ZonalHVAC
 */
   extends Buildings.Templates.AirHandlersFans.Interfaces.ZonalHVAC(
     redeclare Buildings.Templates.AirHandlersFans.Data.ZonalHVAC dat(
+      ctl(
+        has_fanOpeMod=false,
+        fanTyp=if fanSupBlo.typ == Buildings.Templates.Components.Types.Fan.SingleConstant or
+                  fanSupDra.typ == Buildings.Templates.Components.Types.Fan.SingleConstant then
+                  Buildings.Fluid.ZoneEquipment.BaseClasses.Types.FanTypes.conSpeFan elseif
+                  fanSupBlo.typ == Buildings.Templates.Components.Types.Fan.SingleVariable or
+                  fanSupDra.typ == Buildings.Templates.Components.Types.Fan.SingleVariable then
+                  Buildings.Fluid.ZoneEquipment.BaseClasses.Types.FanTypes.varSpeFan else 0,
+        heaCoiTyp=Buildings.Fluid.ZoneEquipment.BaseClasses.Types.HeaSou.heaPum,
+        cooCoiTyp=Buildings.Fluid.ZoneEquipment.BaseClasses.Types.CooSou.eleDX,
+        supHeaTyp=Buildings.Fluid.ZoneEquipment.BaseClasses.Types.SupHeaSou.hotWat,
+        minFanSpe=a,
+        TLocOut=a),
       typCoiHeaPre=coiHeaPre.typ,
       typCoiCoo=coiCoo.typ,
       typCoiHeaReh=coiHeaReh.typ,
@@ -20,9 +33,7 @@ model ZonalHVAC
       typDamOutMin=secOutRel.typDamOutMin,
       typDamRet=secOutRel.typDamRet,
       typDamRel=secOutRel.typDamRel,
-      typCtl=ctl.typ,
-      typFanRel=Buildings.Templates.Components.Types.Fan.None,
-      typFanRet=Buildings.Templates.Components.Types.Fan.None),
+      typCtl=ctl.typ),
     final have_porRel=true,
     final have_souChiWat=coiCoo.have_sou,
     final have_souHeaWat=coiHeaPre.have_sou or coiHeaReh.have_sou,
@@ -303,7 +314,12 @@ equation
   connect(fanSupBlo.bus, bus.fanSup);
   connect(coiHeaPre.bus, bus.coiHea);
   connect(coiCoo.bus, bus.coiCoo);
+  if dat.ctl.supHeaTyp == Buildings.Fluid.ZoneEquipment.BaseClasses.Types.SupHeaSou.noHea then
   connect(coiHeaReh.bus, bus.coiHea);
+  end if;
+  if dat.ctl.supHeaTyp <> Buildings.Fluid.ZoneEquipment.BaseClasses.Types.SupHeaSou.noHea then
+  connect(coiHeaReh.bus, bus.coiHeaReh);
+  end if;
   connect(secOutRel.bus, bus);
   /* Control point connection - stop */
 
@@ -322,14 +338,6 @@ equation
   connect(coiHeaReh.port_b, fanSupDra.port_a)
     annotation (Line(points={{150,-200},{172,-200}}, color={0,127,255}));
 
-  connect(ctl.bus, bus) annotation (Line(
-      points={{-220,0},{-300,0}},
-      color={255,204,51},
-      thickness=0.5), Text(
-      string="%second",
-      index=1,
-      extent={{-6,3},{-6,3}},
-      horizontalAlignment=TextAlignment.Right));
   connect(coiHeaPre.port_b, TAirCoiHeaLvg.port_a)
     annotation (Line(points={{30,-200},{40,-200}}, color={0,127,255}));
   connect(TAirCoiHeaLvg.port_b, coiCoo.port_a)
@@ -368,6 +376,22 @@ equation
     annotation (Line(points={{-30,-200},{10,-200}}, color={0,127,255}));
   connect(TAirRet.port_a, port_Ret)
     annotation (Line(points={{220,-80},{300,-80}}, color={0,127,255}));
+  connect(busWea, ctl.busWea) annotation (Line(
+      points={{0,280},{0,100},{-210,100},{-210,10}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-3,6},{-3,6}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(bus, ctl.bus) annotation (Line(
+      points={{-300,0},{-220,0}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
   annotation (
     defaultComponentName="VAV",
     Icon(coordinateSystem(preserveAspectRatio=false), graphics={

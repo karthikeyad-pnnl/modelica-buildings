@@ -41,7 +41,7 @@ model ZonalHVACBase
 
   Buildings.Fluid.Sources.Boundary_pT bouBui(
     redeclare final package Medium =MediumAir,
-    nPorts=3)
+    nPorts=4)
     "Boundary conditions for indoor environment"
     annotation (Placement(transformation(extent={{90,-40},{70,-20}})));
 
@@ -61,8 +61,7 @@ model ZonalHVACBase
     annotation (Placement(transformation(extent={{80,0},{60,20}})));
 
   BoundaryConditions.WeatherData.ReaderTMY3 weaDat(filNam=
-    Modelica.Utilities.Files.loadResource(
-    "modelica://Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"))
+        Modelica.Utilities.Files.loadResource("./Buildings/Resources/weatherdata/USA_IL_Chicago-OHare.Intl.AP.725300_TMY3.mos"))
     annotation (Placement(transformation(extent={{-100,-10},{-80,10}})));
 
   Fluid.FixedResistances.PressureDrop res2(
@@ -89,13 +88,15 @@ model ZonalHVACBase
     "Boundary conditions for CHW distribution system"
     annotation (Placement(transformation(extent={{-100,-110},{-80,-90}})));
 
-protected
-  Interfaces.Bus busAHU
-  "Gateway bus"
-  annotation (
-    Placement(
-      transformation(extent={{-40,-10},{0,30}}),iconTransformation(
-        extent={{-258,-26},{-238,-6}})));
+  Fluid.Sensors.Temperature senTem(redeclare package Medium = MediumAir)
+    annotation (Placement(transformation(extent={{40,20},{60,40}})));
+
+  Buildings.Templates.AirHandlersFans.Interfaces.ZonalHVACBus busAHU
+    "Gateway bus"
+    annotation (
+      Placement(
+        transformation(extent={{-40,-10},{0,30}}),iconTransformation(
+          extent={{-258,-26},{-238,-6}})));
 
 equation
   connect(bouHeaWat.ports[1], VAV_1.port_aHeaWat)
@@ -114,11 +115,10 @@ equation
     annotation (Line(points={{-30,-40},{-20,-40}}, color={0,127,255}));
   connect(VAV_1.port_Sup, res1.port_a)
     annotation (Line(points={{20,-40},{30,-40}}, color={0,127,255}));
-  connect(res1.port_b, bouBui.ports[1]) annotation (Line(points={{50,-40},{60,
-          -40},{60,-27.3333},{70,-27.3333}},
-                                        color={0,127,255}));
+  connect(res1.port_b, bouBui.ports[1]) annotation (Line(points={{50,-40},{60,-40},
+          {60,-27},{70,-27}},           color={0,127,255}));
   connect(bouBui.ports[2], pBui.port)
-    annotation (Line(points={{70,-30},{70,0}},           color={0,127,255}));
+    annotation (Line(points={{70,-29},{70,0}},           color={0,127,255}));
   connect(weaDat.weaBus, VAV_1.busWea) annotation (Line(
       points={{-80,0},{0,0},{0,-10}},
       color={255,204,51},
@@ -136,9 +136,8 @@ equation
   connect(VAV_1.port_Ret, res3.port_b)
     annotation (Line(points={{20,-20},{30,-20}},
                                                color={0,127,255}));
-  connect(res3.port_a, bouBui.ports[3]) annotation (Line(points={{50,-20},{60,
-          -20},{60,-32.6667},{70,-32.6667}},
-                                      color={0,127,255}));
+  connect(res3.port_a, bouBui.ports[3]) annotation (Line(points={{50,-20},{60,-20},
+          {60,-31},{70,-31}},         color={0,127,255}));
   connect(pBui.p, busAHU.pBui) annotation (Line(points={{59,10},{-20,10}},
         color={0,0,127}), Text(
       string="%second",
@@ -146,6 +145,10 @@ equation
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
 
+  connect(senTem.port, bouBui.ports[4])
+    annotation (Line(points={{50,20},{54,20},{54,-33},{70,-33}}, color={0,127,255}));
+
+  connect(senTem.T, busAHU.TZon);
   annotation (
   __Dymola_Commands(
   file="modelica://Buildings/Resources/Scripts/Dymola/Templates/AirHandlersFans/Validation/VAVMZBase.mos"

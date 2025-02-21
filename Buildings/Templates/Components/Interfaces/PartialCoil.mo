@@ -32,7 +32,8 @@ partial model PartialCoil "Interface class for coil"
     annotation (Evaluate=true, Dialog(group="Configuration"));
   final parameter Boolean have_weaBus=
     typ==Buildings.Templates.Components.Types.Coil.EvaporatorMultiStage or
-    typ==Buildings.Templates.Components.Types.Coil.EvaporatorVariableSpeed
+    typ==Buildings.Templates.Components.Types.Coil.EvaporatorVariableSpeed or
+    typ==Buildings.Templates.Components.Types.Coil.DXHeatingSingleSpeed
     "Set to true to use a weather bus"
     annotation (Evaluate=true, Dialog(group="Configuration"));
 

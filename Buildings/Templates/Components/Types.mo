@@ -14,14 +14,18 @@ package Types "Package with type definitions"
       "Evaporator coil with multi-stage compressor",
       EvaporatorVariableSpeed
       "Evaporator coil with variable speed compressor",
-      None
-      "No coil",
+      NoHeating
+      "No heating coil",
+      NoCooling
+      "No cooling coil",
       WaterBasedCooling
       "Chilled water coil",
       WaterBasedHeating
       "Hot water coil",
       DXHeatingSingleSpeed
-      "Heat-pump heating coil")
+      "Heat-pump heating coil",
+      None
+      "No heating coil")
     "Enumeration to configure the coil";
   type Cooler = enumeration(
       None

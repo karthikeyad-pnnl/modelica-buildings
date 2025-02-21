@@ -120,7 +120,7 @@ partial model ControllerInterfaces
     annotation (Placement(transformation(extent={{140,20},{180,60}}),
       iconTransformation(extent={{100,20},{140,60}})));
 
-protected
+// protected
   final parameter Boolean has_hea=(heaCoiTyp==Buildings.Fluid.ZoneEquipment.BaseClasses.Types.HeaSou.ele)
     or (heaCoiTyp==Buildings.Fluid.ZoneEquipment.BaseClasses.Types.HeaSou.hotWat)
     or (heaCoiTyp==Buildings.Fluid.ZoneEquipment.BaseClasses.Types.HeaSou.heaPum)
@@ -142,7 +142,7 @@ protected
   final parameter Boolean has_varFan = (fanTyp ==Buildings.Fluid.ZoneEquipment.BaseClasses.Types.FanTypes.varSpeFan)
     "Does the zone equipment have variable speed fan?";
 
-  parameter Boolean has_mulFan = (fanTyp ==Buildings.Fluid.ZoneEquipment.BaseClasses.Types.FanTypes.mulSpeFan)
+  final parameter Boolean has_mulFan = (fanTyp ==Buildings.Fluid.ZoneEquipment.BaseClasses.Types.FanTypes.mulSpeFan)
     "Does the zone equipment have multiple speed fan?"
     annotation(Evaluate=true);
 

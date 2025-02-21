@@ -1,5 +1,5 @@
 within Buildings.Templates.AirHandlersFans.Data;
-record PartialAirHandler "Record for air handler interface class"
+record PartialAirHandler "Record for air handler interface class - This is a system model data record"
   extends Modelica.Icons.Record;
 
   parameter Buildings.Templates.AirHandlersFans.Types.Configuration typ
@@ -44,9 +44,6 @@ record PartialAirHandler "Record for air handler interface class"
 
   replaceable parameter Buildings.Templates.AirHandlersFans.Components.Data.PartialController
     ctl(
-    final typFanSup=typFanSup,
-    final typFanRel=typFanRel,
-    final typFanRet=typFanRet,
     final typ=typCtl)
     "Controller"
     annotation (Dialog(group="Controls"));

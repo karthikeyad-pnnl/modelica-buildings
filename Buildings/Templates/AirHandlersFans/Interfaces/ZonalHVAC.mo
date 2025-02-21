@@ -179,7 +179,7 @@ partial model ZonalHVAC "Interface class for zonal HVAC"
     "HHW supply port" annotation (
       Placement(transformation(extent={{10,-290},{30,-270}}),
         iconTransformation(extent={{-60,-210},{-40,-190}})));
-  Buildings.Templates.AirHandlersFans.Interfaces.Bus bus
+  Buildings.Templates.AirHandlersFans.Interfaces.ZonalHVACBus bus
     "AHU control bus"
     annotation (Placement(transformation(
         extent={{-20,-20},{20,20}},

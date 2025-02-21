@@ -1,15 +1,10 @@
 within Buildings.Templates.AirHandlersFans.Interfaces;
-expandable connector Bus "Control bus for air handler"
+expandable connector ZonalHVACBus
+  "Control bus for zonal HVAC systems"
   extends Modelica.Icons.SignalBus;
 
   Buildings.Templates.Components.Interfaces.Bus fanSup
     "Supply fan points"
-    annotation (HideResult=false);
-  Buildings.Templates.Components.Interfaces.Bus fanRel
-    "Relief fan points"
-    annotation (HideResult=false);
-  Buildings.Templates.Components.Interfaces.Bus fanRet
-    "Return fan points"
     annotation (HideResult=false);
 
   Buildings.Templates.Components.Interfaces.Bus coiHea
@@ -22,9 +17,7 @@ expandable connector Bus "Control bus for air handler"
   Buildings.Templates.Components.Interfaces.Bus damOut
     "OA damper points"
     annotation (HideResult=false);
-  Buildings.Templates.Components.Interfaces.Bus damOutMin
-    "Minimum OA damper points"
-    annotation (HideResult=false);
+
   Buildings.Templates.Components.Interfaces.Bus damRel
     "Relief damper points"
     annotation (HideResult=false);
@@ -35,6 +28,9 @@ expandable connector Bus "Control bus for air handler"
   Buildings.Templates.Components.Interfaces.Bus coiHeaReh
     "Reheat coil connections (specifically used for reheat in PTHP"
     annotation(HideResult=false);
+  Real TZon;
+  Real TDryBul;
+  Real TAirSup;
 
   annotation (
     defaultComponentName="bus", Documentation(info="<html>
@@ -43,4 +39,4 @@ This expandable connector provides a standard interface for
 all control signals required by an air handler controller.
 </p>
 </html>"));
-end Bus;
+end ZonalHVACBus;
