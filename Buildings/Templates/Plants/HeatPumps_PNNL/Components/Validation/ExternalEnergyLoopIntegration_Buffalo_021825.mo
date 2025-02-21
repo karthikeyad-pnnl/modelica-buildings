@@ -470,7 +470,7 @@ model ExternalEnergyLoopIntegration_Buffalo_021825
         rotation=270,
         origin={-22,150})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant condPSet(k=1000)
-    annotation (Placement(transformation(extent={{-370,-110},{-350,-90}})));
+    annotation (Placement(transformation(extent={{-400,-110},{-380,-90}})));
   Modelica.Blocks.Routing.RealPassThrough dPSetHea
     annotation (Placement(transformation(extent={{-320,-76},{-300,-56}})));
   Modelica.Blocks.Routing.RealPassThrough TSetHea
@@ -478,9 +478,9 @@ model ExternalEnergyLoopIntegration_Buffalo_021825
   Modelica.Blocks.Routing.RealPassThrough dPSetCoo
     annotation (Placement(transformation(extent={{458,130},{478,150}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant conTSetHP(k=273.15 + 60)
-    annotation (Placement(transformation(extent={{-370,-150},{-350,-130}})));
+    annotation (Placement(transformation(extent={{-364,-30},{-344,-10}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant condPSet1(k=1000)
-    annotation (Placement(transformation(extent={{418,160},{438,180}})));
+    annotation (Placement(transformation(extent={{406,60},{426,80}})));
   Buildings.Controls.OBC.CDL.Reals.PID conPIDBypHea(k=0.2, Ti=150)
     annotation (Placement(transformation(extent={{-380,160},{-360,180}})));
   Buildings.Templates.Components.Sensors.VolumeFlowRate volumeFlowRateHeaPri(
@@ -574,6 +574,18 @@ model ExternalEnergyLoopIntegration_Buffalo_021825
     annotation (Placement(transformation(extent={{360,250},{380,270}})));
   Buildings.Controls.OBC.CDL.Reals.Add add1
     annotation (Placement(transformation(extent={{400,270},{420,290}})));
+  Buildings.Controls.OBC.CDL.Reals.Switch swi
+    annotation (Placement(transformation(extent={{-340,-110},{-320,-90}})));
+  Buildings.Controls.OBC.CDL.Integers.Equal intEqu
+    annotation (Placement(transformation(extent={{-372,-120},{-352,-100}})));
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(k=3)
+    annotation (Placement(transformation(extent={{-480,-150},{-460,-130}})));
+  Buildings.Controls.OBC.CDL.Reals.Switch swi1
+    annotation (Placement(transformation(extent={{430,100},{450,120}})));
+  Buildings.Controls.OBC.CDL.Integers.Equal intEqu1
+    annotation (Placement(transformation(extent={{440,20},{460,40}})));
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt1(k=-2)
+    annotation (Placement(transformation(extent={{392,20},{412,40}})));
 equation
   connect(ctlHeaInl.bus, valIsoHeaInl.bus) annotation (Line(
       points={{-60,2.4},{-60,-20},{-44,-20},{-44,4},{-48,4},{-48,64},{-32,64},{-32,
@@ -928,15 +940,6 @@ connect(TRetCoo.y,extEneOpeMod.TChiRet);
       index=-1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
-  connect(resCoo.dpSet[1], dPSetCoo.u) annotation (Line(points={{440,146},{444,
-          146},{444,140},{456,140}}, color={0,0,127}));
-  connect(resCoo.TSupSet, TSetCoo.u) annotation (Line(points={{440,134},{440,
-          132},{444,132},{444,148},{448,148},{448,190},{458,190}}, color={0,0,
-          127}));
-  connect(resHea.dpSet[1], dPSetHea.u) annotation (Line(points={{-350,-54},{
-          -332,-54},{-332,-66},{-322,-66}}, color={0,0,127}));
-  connect(resHea.TSupSet, TSetHea.u) annotation (Line(points={{-350,-66},{-336,
-          -66},{-336,-30},{-320,-30}}, color={0,0,127}));
   connect(valve3.port_b, loaChiWat.port_a) annotation (Line(points={{290,100},{
           310,100},{310,80}}, color={0,127,255}));
   connect(loaHeaWat.port_b, jun6.port_1) annotation (Line(points={{-360,78},{
@@ -978,6 +981,37 @@ connect(TRetCoo.y,extEneOpeMod.TChiRet);
   connect(add1.y, loaChiWat.TSet) annotation (Line(points={{422,280},{432,280},
           {432,228},{408,228},{408,116},{348,116},{348,82},{318,82}}, color={0,
           0,127}));
+  connect(swi.y, dPSetHea.u) annotation (Line(points={{-318,-100},{-322,-100},{
+          -322,-66}}, color={0,0,127}));
+  connect(condPSet.y, swi.u1) annotation (Line(points={{-378,-100},{-378,-92},{
+          -342,-92}}, color={0,0,127}));
+  connect(intEqu.y, swi.u2) annotation (Line(points={{-350,-110},{-342,-110},{
+          -342,-100}}, color={255,0,255}));
+  connect(conInt.y, intEqu.u2) annotation (Line(points={{-458,-140},{-412,-140},
+          {-412,-118},{-374,-118}}, color={255,127,0}));
+  connect(extEneOpeMod.yOpeMod, intEqu.u1) annotation (Line(points={{-158,240},
+          {-148,240},{-148,172},{-280,172},{-280,-132},{-368,-132},{-368,-128},
+          {-374,-128},{-374,-110}}, color={255,127,0}));
+  connect(swi1.y, dPSetCoo.u)
+    annotation (Line(points={{452,110},{456,110},{456,140}}, color={0,0,127}));
+  connect(condPSet1.y, swi1.u1) annotation (Line(points={{428,70},{428,68},{436,
+          68},{436,92},{416,92},{416,118},{428,118}}, color={0,0,127}));
+  connect(conInt1.y, intEqu1.u2) annotation (Line(points={{414,30},{424,30},{
+          424,22},{438,22}}, color={255,127,0}));
+  connect(extEneOpeMod.yOpeMod, intEqu1.u1) annotation (Line(points={{-158,240},
+          {-148,240},{-148,172},{-36,172},{-36,168},{196,168},{196,80},{288,80},
+          {288,52},{424,52},{424,30},{438,30}}, color={255,127,0}));
+  connect(intEqu1.y, swi1.u2) annotation (Line(points={{462,30},{472,30},{472,
+          88},{420,88},{420,110},{428,110}}, color={255,0,255}));
+  connect(resCoo.TSupSet, TSetCoo.u)
+    annotation (Line(points={{440,134},{440,190},{458,190}}, color={0,0,127}));
+  connect(resCoo.dpSet[1], swi1.u3) annotation (Line(points={{440,146},{440,144},
+          {408,144},{408,120},{412,120},{412,102},{428,102}}, color={0,0,127}));
+  connect(resHea.TSupSet, TSetHea.u) annotation (Line(points={{-350,-66},{-336,
+          -66},{-336,-30},{-320,-30}}, color={0,0,127}));
+  connect(resHea.dpSet[1], swi.u3) annotation (Line(points={{-350,-54},{-332,
+          -54},{-332,-80},{-312,-80},{-312,-88},{-308,-88},{-308,-108},{-342,
+          -108}}, color={0,0,127}));
   annotation (
     Diagram(
       coordinateSystem(
