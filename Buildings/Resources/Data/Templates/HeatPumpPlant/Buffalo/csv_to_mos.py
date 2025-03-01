@@ -16,7 +16,8 @@ def main(file_name):
     'HHW supply temperature',
     'CHW supply temperature',
     'CHW mass flowrate',
-    'CHW return temperature'
+    'CHW return temperature',
+    'Min temp'
     ]
 
     e.energyplus_csv_to_mos(
