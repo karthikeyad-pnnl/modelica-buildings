@@ -348,8 +348,8 @@ model ExternalEnergyLoopIntegration_Buffalo_021825
     TCooRetLim=273.15 + 9,
     dTHotHys=5,
     dTCooHys=3,
-    intGreThr(t=3),
-    intGreThr1(t=3))
+    intGreThr(t=5),
+    intGreThr1(t=5))
     annotation (Placement(transformation(extent={{-180,230},{-160,250}})));
   parameter Buildings.Templates.Components.Data.PumpMultiple datPumMulHea(
     final typ=Buildings.Templates.Components.Types.Pump.Multiple,
@@ -1036,15 +1036,15 @@ connect(TRetCoo.y,extEneOpeMod.TChiRet);
           -500,50},{-500,102},{-492,102}}, color={0,0,127}));
   connect(reqFloHea.TRet, loaHeaWat.TSet) annotation (Line(points={{-468,106},{
           -468,84},{-380,84},{-380,56},{-368,56}}, color={0,0,127}));
-  connect(resHea.TSupSet, TSetHea.u) annotation (Line(points={{-350,-66},{-336,
-          -66},{-336,-30},{-320,-30}}, color={0,0,127}));
   connect(datRea.y[2], conPID.u_s) annotation (Line(points={{-539,50},{-536,50},
           {-536,44},{-524,44},{-524,48},{-500,48},{-500,92},{-462,92},{-462,110}},
         color={0,0,127}));
   connect(reqFloCoo.mReq_flow, conPID1.u_s) annotation (Line(points={{362,94},{
           364,94},{364,90},{376,90}}, color={0,0,127}));
-  connect(resCoo.TSupSet, TSetCoo.u)
-    annotation (Line(points={{440,134},{440,190},{458,190}}, color={0,0,127}));
+  connect(conTSetHP.y, TSetHea.u) annotation (Line(points={{-342,-20},{-332,-20},
+          {-332,-30},{-320,-30}}, color={0,0,127}));
+  connect(conTSetHP1.y, TSetCoo.u) annotation (Line(points={{442,210},{442,204},
+          {458,204},{458,190}}, color={0,0,127}));
   annotation (
     Diagram(
       coordinateSystem(
@@ -1058,7 +1058,7 @@ connect(TRetCoo.y,extEneOpeMod.TChiRet);
       StopTime=10368000,
       Interval=60,
       Tolerance=1e-06,
-      __Dymola_Algorithm="Dassl"),
+      __Dymola_Algorithm="Cvode"),
     Documentation(
       info="<html>
 <p>

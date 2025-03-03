@@ -74,6 +74,12 @@ block ExternalEnergyLoopOperationMode
   Buildings.Controls.OBC.CDL.Logical.Sources.Constant
                                          not4(k=false)
     annotation (Placement(transformation(extent={{-10,-126},{10,-106}})));
+  Buildings.Controls.OBC.CDL.Integers.Equal intEqu2
+    annotation (Placement(transformation(extent={{-40,170},{-20,190}})));
+  Buildings.Controls.OBC.CDL.Logical.Not not5
+    annotation (Placement(transformation(extent={{20,120},{40,140}})));
+  Buildings.Controls.OBC.CDL.Logical.And and4
+    annotation (Placement(transformation(extent={{20,170},{40,190}})));
 equation
   connect(conInt.y, intSwi.u3) annotation (Line(points={{72,20},{76,20},{76,32},
           {78,32}}, color={255,127,0}));
@@ -123,8 +129,6 @@ equation
   connect(not2.u, or1.y)
     annotation (Line(points={{48,100},{42,100}},
                                                color={255,0,255}));
-  connect(and1.y, or1.u1) annotation (Line(points={{12,130},{16,130},{16,100},{
-          18,100}},                               color={255,0,255}));
   connect(and2.y, or1.u2) annotation (Line(points={{2,60},{10,60},{10,92},{18,
           92}},            color={255,0,255}));
   connect(not2.y, or3.u1) annotation (Line(points={{72,100},{84,100}},
@@ -154,6 +158,19 @@ equation
     annotation (Line(points={{42,-40},{78,-40}}, color={255,0,255}));
   connect(not4.y, or2.u2) annotation (Line(points={{12,-116},{18,-116},{18,-76},
           {-14,-76},{-14,-68}}, color={255,0,255}));
+  connect(uReqHea, intEqu2.u1) annotation (Line(points={{-120,134},{-84,134},{
+          -84,140},{-48,140},{-48,180},{-42,180}}, color={255,127,0}));
+  connect(uReqCoo, intEqu2.u2) annotation (Line(points={{-120,20},{-90,20},{-90,
+          102},{-48,102},{-48,144},{-46,144},{-46,166},{-42,166},{-42,172}},
+        color={255,127,0}));
+  connect(and1.y, not5.u)
+    annotation (Line(points={{12,130},{18,130}}, color={255,0,255}));
+  connect(not5.y, and4.u2) annotation (Line(points={{42,130},{48,130},{48,164},
+          {18,164},{18,172}}, color={255,0,255}));
+  connect(intEqu2.y, and4.u1)
+    annotation (Line(points={{-18,180},{18,180}}, color={255,0,255}));
+  connect(and4.y, or1.u1) annotation (Line(points={{42,180},{52,180},{52,114},{
+          12,114},{12,100},{18,100}}, color={255,0,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-100},
             {100,100}}),                                        graphics={
           Rectangle(

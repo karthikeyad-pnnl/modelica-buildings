@@ -34,8 +34,8 @@ model CoolingTowerWHeatExchanger
         transformation(extent={{-50,80},{-10,120}}), iconTransformation(extent={{-50,90},
             {-30,110}})));
   Fluid.Storage.ExpansionVessel           expVesChi(redeclare package Medium =
-        Buildings.Media.Antifreeze.PropyleneGlycolWater (property_T=293.15, X_a
-          =0.40),              V_start=dat.mWatOxy_flow_nominal*600/1000)
+        Buildings.Media.Antifreeze.PropyleneGlycolWater (property_T=293.15, X_a=
+           0.40),              V_start=dat.mWatOxy_flow_nominal*600/1000)
     annotation (Placement(transformation(extent={{-94,-79},{-74,-59}})));
 
   Buildings.Templates.Components.Coils.WaterBasedHeating waterBasedHeating(redeclare
