@@ -18,7 +18,7 @@ block EnergyWheel "This block commands the energy recovery wheel and associated 
   final quantity = "Time") = 300
   "Minimum delay after OAT/RAT delta falls below set point.";
 
-  parameter CDL.Types.SimpleController controllerTypeHeaREc=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+  parameter CDL.Types.SimpleController controllerTypeHeaRec=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
   "PI controller type for energy recovery wheel heating recovery loop";
 
   parameter Real kHeaRec(

@@ -447,10 +447,10 @@ block Controller "DOAS controller built from DOAS blocks."
     yMinDamSet=yMinDamSet,
     yMaxDamSet=yMaxDamSet,
     damSet=damSet,
-    kDam=kDam,
-    TiDam=TiDam,
-    TdDam=TdDam,
-    controllerTypeDam=controllerTypeDam,
+    kdPSetPoi=kdPSetPoi,
+    TidPSetPoi=TidPSetPoi,
+    TddPSetPoi=TddPSetPoi,
+    controllerTypedPSetPoi=controllerTypedPSetPoi,
     dPDucSetCV=dPDucSetCV,
     fanSpeMin=fanSpeMin,
     kFanSpe=kFanSpe,
@@ -464,27 +464,27 @@ block Controller "DOAS controller built from DOAS blocks."
     dTThrEneRec=dTThrEneRec,
     dThys=dThys,
     timDelEneRec=timDelEneRec,
-    controllerTypeEneWheHea=controllerTypeEneWheHea,
-    kEneWheHea=kEneWheHea,
-    TiEneWheHea=TiEneWheHea,
-    TdEneWheHea=TdEneWheHea,
-    kEneWheCoo=kEneWheCoo,
-    TiEneWheCoo=TiEneWheCoo,
-    controllerTypeEneWheCoo=controllerTypeEneWheCoo,
-    TdEneWheCoo=TdEneWheCoo)
+    controllerTypeHeaRec=controllerTypeHeaRec,
+    kHeaRec=kHeaRec,
+    TiHeaRec=TiHeaRec,
+    TdHeaRec=TdHeaRec,
+    kCooRec=kCooRec,
+    TiCooRec=TiCooRec,
+    controllerTypeCooRec=controllerTypeCooRec,
+    TdCooRec=TdCooRec)
     "This block commands the energy recovery wheel and associated bypass dampers."
     annotation(Placement(transformation(extent={{60,-60},{80,-40}})));
 
   Buildings.Controls.OBC.FDE.DOAS.Subsequences.CoolingCoil Cooling(
-    erwDPadj=erwDPadj,
-    controllerTypeDeh=controllerTypeDeh,
-    kDeh=kDeh,
-    TiDeh=TiDeh,
-    TdDeh=TdDeh,
-    controllerTypeRegOpe=controllerTypeRegOpe,
-    kRegOpe=kRegOpe,
-    TiRegOpe=TiRegOpe,
-    TdRegOpe=TdRegOpe)
+    dTEneWheDewPoi=dTEneWheDewPoi,
+    controllerTypeCoiCooDeh=controllerTypeCoiCooDeh,
+    kCoiCooDeh=kCoiCooDeh,
+    TiCoiCooDeh=TiCoiCooDeh,
+    TdCoiCooDeh=TdCoiCooDeh,
+    controllerTypeCoiCooRegOpe=controllerTypeCoiCooRegOpe,
+    kCoiCooRegOpe=kCoiCooRegOpe,
+    TiCoiCooRegOpe=TiCoiCooRegOpe,
+    TdCoiCooRegOpe=TdCoiCooRegOpe)
     "This block commands the cooling coil."
      annotation(Placement(transformation(extent={{52,50},{72,70}})));
 
@@ -498,6 +498,7 @@ block Controller "DOAS controller built from DOAS blocks."
 
   Buildings.Controls.OBC.FDE.DOAS.Subsequences.DehumidificationMode DehumMod(
     dehumSet=dehumSet,
+    dehumOff=dehumOff,
     timThrDehDis=timThrDehDis,
     timDelDehEna=timDelDehEna,
     timThrDehEna=timThrDehEna)

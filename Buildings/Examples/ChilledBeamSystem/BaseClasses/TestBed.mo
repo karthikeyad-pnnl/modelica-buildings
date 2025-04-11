@@ -975,8 +975,6 @@ equation
           0,0,127}));
   connect(uPumSta, booToRea.u) annotation (Line(points={{-362,-182},{-328,-182},
           {-328,-174}}, color={255,0,255}));
-  connect(pro1.u2, senMasFlo.m_flow) annotation (Line(points={{-186,30},{-200,
-          30},{-200,40},{-244,40},{-244,9}}, color={0,0,127}));
   connect(senMasFlo.port_b, whe.port_a1) annotation (Line(points={{-234,-2},{
           -224,-2},{-224,2},{-204,2}}, color={0,127,255}));
   connect(uEneRecWheSpe, whe.uSpe) annotation (Line(points={{-358,20},{-264,20},
@@ -993,8 +991,6 @@ equation
           128},{-144,128},{-144,144},{-134,144}}, color={0,127,255}));
   connect(dPDOASAir, dPDOASAir)
     annotation (Line(points={{600,20},{600,20}}, color={0,0,127}));
-  connect(cooCoi.port_b1, heaCoi.port_a1)
-    annotation (Line(points={{-82,-26},{-92,-26}}, color={0,127,255}));
   connect(senRelHum.phi, relHumDOASRet) annotation (Line(points={{-90.1,141},{
           -90.1,136},{-68,136},{-68,346},{526,346},{526,294},{554,294},{554,296},
           {600,296}}, color={0,0,127}));
