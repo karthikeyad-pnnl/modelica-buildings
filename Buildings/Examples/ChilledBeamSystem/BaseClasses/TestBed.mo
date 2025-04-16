@@ -966,8 +966,6 @@ equation
           -170,2}},                                color={0,127,255}));
   connect(senTemEneWhe.port_b, senRelHum1.port_a) annotation (Line(points={{-150,2},
           {-148,2},{-148,-2},{-140,-2}},            color={0,127,255}));
-  connect(bldgSP, bldgSP)
-    annotation (Line(points={{600,-300},{600,-300}}, color={0,0,127}));
   connect(senTemEneWhe.T, TEneWhe) annotation (Line(points={{-160,13},{-160,20},
           {-216,20},{-216,-348},{568,-348},{568,-340},{598,-340}},color={
           0,0,127}));
@@ -985,7 +983,6 @@ equation
   connect(whe.port_a2, senTem1.port_a) annotation (Line(points={{-184,-10},{
           -184,-24},{-228,-24},{-228,72},{-200,72},{-200,92},{-120,92},{-120,
           128},{-144,128},{-144,144},{-134,144}}, color={0,127,255}));
-  //connect(dPDOASAir, dPDOASAir)
   connect(senRelHum.phi, relHumDOASRet) annotation (Line(points={{-90.1,141},{
           -90.1,136},{-68,136},{-68,346},{526,346},{526,294},{554,294},{554,296},
           {600,296}}, color={0,0,127}));
@@ -993,7 +990,6 @@ equation
           -98},{-184,-102},{-110,-102},{-110,-90}}, color={0,0,127}));
   connect(amb.ports[4], senMasFlo.port_a) annotation (Line(points={{-268,-63.35},
           {-266,-63.35},{-266,-4},{-254,-4},{-254,-2}}, color={0,127,255}));
- // connect(rAT, rAT)
   connect(multiplex5_3.y, VDisAir_flow) annotation (Line(points={{321,220},{434,
           220},{434,216},{552,216},{552,180},{600,180}}, color={0,0,127}));
   connect(multiplex5_1.y, TZon) annotation (Line(points={{321,260},{414,260},{
