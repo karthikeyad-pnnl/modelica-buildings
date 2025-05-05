@@ -1,40 +1,32 @@
 within Buildings.Controls.OBC.FDE.DOAS.Subsequences;
 block CoolingCoil "This block commands the cooling coil."
 
-  parameter Real dTEneWheDewPoi(
-  final unit = "K",
-  final quantity = "TemperatureDifference") = 5
+  parameter Real dTEneWheDewPoi(unit="K")=5
   "Value subtracted from ERW supply air dewpoint.Value subtracted from ERW supply air dewpoint.";
 
 
   parameter CDL.Types.SimpleController controllerTypeCoiCooDeh=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "PID controller for cooling air in dehumidification mode";
 
-  parameter Real kCoiCooDeh(
-  final unit="1") = 1
+  parameter Real kCoiCooDeh(unit="1")=1
     "Gain of conPIDDeh controller";
 
-  parameter Real TiCoiCooDeh(
-  final unit="s") = 60
+  parameter Real TiCoiCooDeh(unit="s")=60
     "Time constant of integrator block for conPIDDeh controller";
 
-  parameter Real TdCoiCooDeh(
-  final unit="s") = 0.1
+  parameter Real TdCoiCooDeh(unit="s")=0.1
     "Time constant of derivative block for conPIDDeh controller";
 
   parameter CDL.Types.SimpleController controllerTypeCoiCooRegOpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "PID controller for regular cooling coil operation mode";
 
-  parameter Real kCoiCooRegOpe(
-  final unit="1") = 1
+  parameter Real kCoiCooRegOpe(unit="1")=1
     "Gain of conPIDRegOpe controller";
 
-  parameter Real TiCoiCooRegOpe(
-  final unit="s")=60
+  parameter Real TiCoiCooRegOpe(unit="s")=60
     "Time constant of integrator block for conPIDRegOpe controller";
 
-  parameter Real TdCoiCooRegOpe(
-  final unit="s")=0.1
+  parameter Real TdCoiCooRegOpe(unit="s")=0.1
     "Time constant of derivative block for conPIDRegOpe controller";
 
 

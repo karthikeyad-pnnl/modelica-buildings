@@ -5,55 +5,48 @@ block SupplyFanController "This block manages start, stop, status, and speed of 
   "True: System has zone terminals with variable damper position. False: System has zone terminals with constant damper position.";
 
   parameter Real yMinDamSet(
-  min = 0,
-  final unit = "Pa",
-  final quantity = "PressureDifference") = 125
+    min=0,
+    unit="Pa")=125
   "Minimum down duct static pressure reset value" annotation(Dialog(group = "DDSP range"));
 
   parameter Real yMaxDamSet(
-  min = 0,
-  final unit = "Pa",
-  final quantity = "PressureDifference") = 500
+    min=0,
+    unit="Pa")=500
   "Maximum down duct static pressure reset value" annotation(Dialog(group = "DDSP range"));
 
   parameter Real damSet(
-  min = 0,
-  max = 1,
-  final unit = "1") = 0.9
+    max=1,
+    min=0,
+    unit="1")=0.9
   "DDSP terminal damper percent open set point";
 
-  parameter Real kdPSetPoi(
-   final unit= "1") = 0.5
+  parameter Real kdPSetPoi(unit="1")=0.5
   "Damper position setpoint PI gain value k.";
 
-  parameter Real TidPSetPoi(
-   final unit= "s") = 60
+  parameter Real TidPSetPoi(unit="s")=60
   "Damper position setpoint PI time constant value Ti.";
 
-  parameter Real TddPSetPoi(
-   final unit= "s") = 0.1 "Time constant of derivative block for conPIDDam";
+  parameter Real TddPSetPoi(unit="s")=0.1
+                          "Time constant of derivative block for conPIDDam";
 
   parameter CDL.Types.SimpleController controllerTypedPSetPoi=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
   "PID controller type for differential setpoint controller";
 
   parameter Real dPDucSetCV(
-  min = 0,
-  final unit = "Pa",
-  final quantity = "PressureDifference") = 250 "Constant volume down duct static pressure set point";
+    min=0,
+    unit="Pa")=250                             "Constant volume down duct static pressure set point";
 
-  parameter Real fanSpeMin(
-   final unit= "m/s") = 0.0000001
+  parameter Real fanSpeMin(unit="m/s")=0.0000001
   "Minimum Fan Speed";
 
-  parameter Real kFanSpe(
-   final unit= "1") = 0.005 "
+  parameter Real kFanSpe(unit="1")=0.005
+                            "
   Fan speed set point SAT PI gain value k.";
 
-  parameter Real TdFanSpe(
-   final unit= "s") = 0 "Time constant of derivative block for conPIDFanSpe";
+  parameter Real TdFanSpe(unit="s")=0
+                        "Time constant of derivative block for conPIDFanSpe";
 
-  parameter Real TiFanSpe(
-   final unit= "s") = 10
+  parameter Real TiFanSpe(unit="s")=10
   "Fan speed set point SAT PI time constant value Ti.";
 
   parameter CDL.Types.SimpleController controllerTypeFanSpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI

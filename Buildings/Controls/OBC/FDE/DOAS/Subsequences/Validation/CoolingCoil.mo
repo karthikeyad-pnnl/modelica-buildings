@@ -55,17 +55,6 @@ model CoolingCoil "This model simulates CoolingCoil"
     final unit="s",
     final quantity="Time")=5
     "Continuous time period for which relative humidity rises above set point before dehumidifcation mode is enabled";
-  Buildings.Controls.OBC.FDE.DOAS.Subsequences.CoolingCoil CoiCoo(
-    erwDPadj(displayUnit="K") = erwDPadj,
-    controllerTypeDeh=controllerTypeDeh,
-    kDeh=kDeh,
-    TiDeh=TiDeh,
-    TdDeh=TdDeh,
-    controllerTypeRegOpe=controllerTypeRegOpe,
-    kRegOpe=kRegOpe,
-    TiRegOpe=TiRegOpe,
-    TdRegOpe=TdRegOpe)
-    annotation (Placement(transformation(extent={{48,-24},{68,-4}})));
 
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse SFproof(
     width=0.8,
@@ -117,28 +106,24 @@ model CoolingCoil "This model simulates CoolingCoil"
     startTime=1250)
     annotation (Placement(transformation(extent={{-26,-48},{-6,-28}})));
 
+  Buildings.Controls.OBC.FDE.DOAS.Subsequences.CoolingCoil conCoiCoo
+    annotation (Placement(transformation(extent={{52,-10},{72,10}})));
 equation
-  connect(SFproof.y, CoiCoo.uFanSupPro) annotation (Line(points={{-40,70},{18,70},
-          {18,-5.6},{45.8,-5.6}}, color={255,0,255}));
 
-  connect(saTGen.y, CoiCoo.TAirSup) annotation (Line(points={{-4,50},{12,50},{12,
-          -8.4},{45.8,-8.4}}, color={0,0,127}));
-
-  connect(TCoiCoo.y, CoiCoo.TAirDis) annotation (Line(points={{-38,-18},{14,-18},
-          {14,-17.2},{45.8,-17.2}}, color={0,0,127}));
-
-  connect(dehumMode.y, CoiCoo.uDeh) annotation (Line(points={{-4,4},{0,4},{0,-14.6},
-          {45.8,-14.6}}, color={255,0,255}));
-
-  connect(supCooGen.y, CoiCoo.TAirSupSetCoo) annotation (Line(points={{-40,26},{
-          6,26},{6,-11.2},{45.8,-11.2}}, color={0,0,127}));
-
-  connect(erwHumGen.y, CoiCoo.phiAirEneRecWhe) annotation (Line(points={{-4,-38},
-          {14,-38},{14,-19.8},{45.8,-19.8}}, color={0,0,127}));
-
-  connect(erwTGen.y, CoiCoo.TAirEneRecWhe) annotation (Line(points={{-38,-56},{18,
-          -56},{18,-22.4},{45.8,-22.4}}, color={0,0,127}));
-
+  connect(SFproof.y, conCoiCoo.uFanSupPro) annotation (Line(points={{-40,70},{
+          44,70},{44,16},{42,16},{42,8},{50,8}}, color={255,0,255}));
+  connect(saTGen.y, conCoiCoo.TAirSup)
+    annotation (Line(points={{-4,50},{40,50},{40,6},{50,6}}, color={0,0,127}));
+  connect(supCooGen.y, conCoiCoo.TAirSupSetCoo) annotation (Line(points={{-40,
+          26},{48,26},{48,16},{50,16},{50,4}}, color={0,0,127}));
+  connect(dehumMode.y, conCoiCoo.uDeh)
+    annotation (Line(points={{-4,4},{40,4},{40,0},{50,0}}, color={255,0,255}));
+  connect(TCoiCoo.y, conCoiCoo.TAirDis) annotation (Line(points={{-38,-18},{38,
+          -18},{38,-6},{48,-6},{48,-2},{50,-2}}, color={0,0,127}));
+  connect(erwHumGen.y, conCoiCoo.phiAirEneRecWhe) annotation (Line(points={{-4,
+          -38},{40,-38},{40,-4},{50,-4}}, color={0,0,127}));
+  connect(erwTGen.y, conCoiCoo.TAirEneRecWhe) annotation (Line(points={{-38,-56},
+          {48,-56},{48,-14},{50,-14},{50,-6.2}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio=false), graphics={Ellipse(lineColor = {75,138,73},
 fillColor={255,255,255},

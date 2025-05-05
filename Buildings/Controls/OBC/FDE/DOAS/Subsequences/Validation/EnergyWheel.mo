@@ -47,20 +47,6 @@ parameter Real dTThrEneRec(
   final unit = "s") = 0.1
   "PID cooling loop time constant of derivative block";
 
-  Buildings.Controls.OBC.FDE.DOAS.Subsequences.EnergyWheel ERWcon(
-    dTThrEneRec=dTThrEneRec,
-    dThys=dThys,
-    timDelEneRec=timDelEneRec,
-    controllerTypeEneWheHea=controllerTypeEneWheHea,
-    kEneWheHea=kEneWheHea,
-    TiEneWheHea=TiEneWheHea,
-    TdEneWheHea=TdEneWheHea,
-    kEneWheCoo=kEneWheCoo,
-    TiEneWheCoo=TiEneWheCoo,
-    controllerTypeEneWheCoo=controllerTypeEneWheCoo,
-    TdEneWheCoo=TdEneWheCoo)
-    annotation (Placement(transformation(extent={{50,-10},{70,10}})));
-
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse SFproof(
     width=0.75,
     period=5760)
@@ -96,21 +82,22 @@ parameter Real dTThrEneRec(
     offset=295,
     startTime=12)
     annotation (Placement(transformation(extent={{-62,-94},{-42,-74}})));
+  Buildings.Controls.OBC.FDE.DOAS.Subsequences.EnergyWheel ERWcon
+    annotation (Placement(transformation(extent={{14,-12},{34,8}})));
 equation
-  connect(SFproof.y, ERWcon.uFanSupPro) annotation (
-  Line(points={{-40,82},{4,82},{4,7.8},{47.8,7.8}}, color={255,0,255}));
 
-  connect(ecoMode.y, ERWcon.uEcoMod) annotation (
-    Line(points={{-40,50},{0,50},{0,4.8},{47.8,4.8}}, color={255,0,255}));
-
-  connect(raTGen.y, ERWcon.TAirRet) annotation (Line(points={{-40,14},{-20,14},{-20,
-          1.8},{47.8,1.8}}, color={0,0,127}));
-  connect(oaTGen.y, ERWcon.TAirOut) annotation (Line(points={{-40,-20},{-18,-20},{
-          -18,-2},{47.8,-2},{47.8,-1.8}}, color={0,0,127}));
-  connect(erwTGen.y, ERWcon.TAirSupEneWhe) annotation (Line(points={{-40,-52},{-22,-52},
-          {-22,-32},{-6,-32},{-6,-4.8},{47.8,-4.8}}, color={0,0,127}));
-  connect(supPrimGen.y, ERWcon.TAirSupSetEneWhe) annotation (Line(points={{-40,-84},{
-          -10,-84},{-10,-52},{10,-52},{10,-7.8},{47.8,-7.8}}, color={0,0,127}));
+  connect(SFproof.y, ERWcon.uFanSupPro) annotation (Line(points={{-40,82},{4,82},
+          {4,6},{12,6}}, color={255,0,255}));
+  connect(ecoMode.y, ERWcon.uEcoMod) annotation (Line(points={{-40,50},{2,50},{
+          2,4},{12,4}}, color={255,0,255}));
+  connect(raTGen.y, ERWcon.TAirRet) annotation (Line(points={{-40,14},{-2,14},{
+          -2,0},{12,0}}, color={0,0,127}));
+  connect(oaTGen.y, ERWcon.TAirOut) annotation (Line(points={{-40,-20},{4,-20},
+          {4,-4},{12,-4}}, color={0,0,127}));
+  connect(erwTGen.y, ERWcon.TAirSupEneWhe) annotation (Line(points={{-40,-52},{
+          -26,-52},{-26,-6},{12,-6}}, color={0,0,127}));
+  connect(supPrimGen.y, ERWcon.TAirSupSetEneWhe)
+    annotation (Line(points={{-40,-84},{12,-84},{12,-10}}, color={0,0,127}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={Ellipse(lineColor = {75,138,73},
 fillColor={255,255,255},
             fillPattern=
