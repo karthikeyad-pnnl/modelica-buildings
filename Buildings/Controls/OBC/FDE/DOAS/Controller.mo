@@ -217,12 +217,12 @@ block Controller "DOAS controller built from DOAS blocks."
   annotation(Dialog(tab="Setpoints", group = "Supply fan parameters"));
 
   parameter Real kdPSetPoi(
-   final unit= "1") = 0.5
+   final unit= "1") = 150
   "Damper position setpoint PI gain value k."
   annotation(Dialog(tab="Supply Fan", group = "Differential setpoint controller parameters"));
 
   parameter Real TidPSetPoi(
-   final unit= "s") = 60
+   final unit= "s") = 10
   "Damper position setpoint PI time constant value Ti."
   annotation(Dialog(tab="Supply Fan", group = "Differential setpoint controller parameters"));
 
@@ -442,24 +442,6 @@ block Controller "DOAS controller built from DOAS blocks."
     "Exhaust fan speed command" annotation (Placement(transformation(extent={{100,
             -150},{140,-110}}),     iconTransformation(extent={{100,-180},{140,-140}})));
 
-  Buildings.Controls.OBC.FDE.DOAS.Subsequences.SupplyFanController SFcon(
-    is_vav=is_vav,
-    yMinDamSet=yMinDamSet,
-    yMaxDamSet=yMaxDamSet,
-    damSet=damSet,
-    kdPSetPoi=kdPSetPoi,
-    TidPSetPoi=TidPSetPoi,
-    TddPSetPoi=TddPSetPoi,
-    controllerTypedPSetPoi=controllerTypedPSetPoi,
-    dPDucSetCV=dPDucSetCV,
-    fanSpeMin=fanSpeMin,
-    kFanSpe=kFanSpe,
-    TdFanSpe=TdFanSpe,
-    TiFanSpe=TiFanSpe,
-    controllerTypeFanSpe=controllerTypeFanSpe)
-    "This block manages start, stop, status, and speed of the supply fan."
-    annotation(Placement(transformation(extent={{-10,140},{10,160}})));
-
   Buildings.Controls.OBC.FDE.DOAS.Subsequences.EnergyWheel ERWcon(
     dTThrEneRec=dTThrEneRec,
     dThys=dThys,
@@ -534,24 +516,22 @@ block Controller "DOAS controller built from DOAS blocks."
     final quantity="ThermodynamicTemperature") "Zone cooling setpoint"
     annotation (Placement(transformation(extent={{-140,210},{-100,250}}),
         iconTransformation(extent={{-140,280},{-100,320}})));
+  Subsequences.SupplyFanController SFcon(
+    yMinDamSet=yMinDamSet,
+    yMaxDamSet=yMaxDamSet,
+    damSet=damSet,
+    kdPSetPoi=kdPSetPoi,
+    TidPSetPoi=TidPSetPoi,
+    TddPSetPoi=TddPSetPoi,
+    controllerTypedPSetPoi=controllerTypedPSetPoi,
+    dPDucSetCV=dPDucSetCV,
+    fanSpeMin=fanSpeMin,
+    kFanSpe=kFanSpe,
+    TdFanSpe=TdFanSpe,
+    TiFanSpe=TiFanSpe,
+    controllerTypeFanSpe=controllerTypeFanSpe)
+    annotation (Placement(transformation(extent={{12,168},{32,188}})));
 equation
-  connect(SFcon.Occ,Occ)  annotation (
-    Line(points={{-12,158},{-12,156},{-94,156},{-94,170},{-120,170}},
-                                                                 color = {255, 0, 255}));
-  connect(SFcon.uDamMaxOpe, uDamMaxOpe) annotation (Line(points={{-12,154},{-12,
-          152},{-82,152},{-82,140},{-120,140}},
-                                         color={0,0,127}));
-  connect(SFcon.dPAirDucSta, dPAirDucSta) annotation (Line(points={{-12,144},{-90,
-          144},{-90,80},{-120,80}},      color={0,0,127}));
-  connect(SFcon.yFanSup, yFanSup) annotation (Line(points={{12,156},{90,156},{90,
-          120},{120,120}},
-                     color={255,0,255}));
-  connect(SFcon.yFanSupSpe, yFanSupSpe) annotation (Line(points={{12,146},{80,146},
-          {80,90},{120,90}},       color={0,0,127}));
-//connect(SFcon.supFanProof, DehumMod.supFanProof) annotation (
-// Line(points={{-62,68},{-56,68},{-56,25.2},{-50.2,25.2}},color={255,0,255}));
-//connect(SFcon.supFanProof, Cooling.supFanProof) annotation (
-// Line(points={{-62,68},{-56,68},{-56,36.4},{55.8,36.4}},color={255,0,255}));
   connect(DehumMod.yDehMod, Cooling.uDeh) annotation (Line(points={{-22,40},{36,
           40},{36,60},{50,60}},            color={255,0,255}));
   connect(DehumMod.phiAirRet, phiAirRet) annotation (Line(points={{-46,40},{-62,
@@ -568,8 +548,6 @@ equation
                                                     color={0,0,127}));
   connect(Cooling.yCoiCoo, yCoiCoo) annotation (Line(points={{74,60},{120,60}},
                              color={0,0,127}));
-//connect(SFcon.supFanProof, Heating.supFanProof) annotation (
-//Line(points={{-62,68},{-56,68},{-56,-8},{55.8,-8}},color={255,0,255}));
   connect(TAirSup, Heating.TAirSup) annotation (Line(points={{-120,-20},{16,-20},
           {16,4},{48,4}},        color={0,0,127}));
   connect(Heating.yCoiHea, yCoiHea) annotation (Line(points={{72,10},{88,10},{88,
@@ -579,21 +557,12 @@ equation
                                                     color={255,0,255}));
   connect(ERWcon.yEneRecWheSpe, yEneRecWheSpe) annotation (Line(points={{82,-56},
           {92,-56},{92,-60},{120,-60}},      color={0,0,127}));
-// connect(SFcon.supFanProof, ERWcon.supFanProof) annotation (
-//Line(points={{-62,68},{-56,68},{-56,-46.2},{55.8,-46.2}},color={255,0,255}));
   connect(ERWcon.yBypDam, yBypDam) annotation (Line(points={{82,-44},{90,-44},{90,
           0},{120,0}},         color={255,0,255}));
-//connect(SFcon.supFanProof, EconMod.supFanProof) annotation (
-//Line(points={{-62,68},{-56,68},{-56,-25},{23.8,-25}}, color={255,0,255}));
   connect(TAirOut, ERWcon.TAirOut) annotation (Line(points={{-120,-80},{-22,-80},
           {-22,-52},{58,-52}},       color={0,0,127}));
   connect(TAirSupEneWhe, ERWcon.TAirSupEneWhe) annotation (Line(points={{-120,-170},
           {-16,-170},{-16,-54},{58,-54}},       color={0,0,127}));
-// connect(SFcon.supFanProof, EFcon.supFanProof) annotation (
-//Line(points={{-62,68},{-56,68},{-56,-90},{56,-90}}, color={255,0,255}));
-  connect(uFanSupPro, SFcon.uFanSupPro) annotation (Line(points={{-120,110},{-96,
-          110},{-96,140},{-24,140},{-24,148},{-12,148}},
-                                      color={255,0,255}));
   connect(uFanSupPro, DehumMod.uFanSupPro) annotation (Line(points={{-120,110},{
           -96,110},{-96,140},{-58,140},{-58,46},{-46,46}},
                                    color={255,0,255}));
@@ -645,6 +614,20 @@ equation
   connect(TZonCooSet, TSupSetpt.TZonCooSet) annotation (Line(points={{-120,230},
           {-88,230},{-88,54},{-80,54},{-80,20},{-12,20}},
                                      color={0,0,127}));
+  connect(SFcon.yFanSupSpe, yFanSupSpe) annotation (Line(points={{34,174},{42,174},
+          {42,146},{80,146},{80,90},{120,90}}, color={0,0,127}));
+  connect(SFcon.yFanSup, yFanSup) annotation (Line(points={{34,184},{90,184},{90,
+          120},{120,120}}, color={255,0,255}));
+  connect(Occ, SFcon.Occ) annotation (Line(points={{-120,170},{-94,170},{-94,156},
+          {-20,156},{-20,186},{10,186}}, color={255,0,255}));
+  connect(uDamMaxOpe, SFcon.uDamMaxOpe) annotation (Line(points={{-120,140},{-82,
+          140},{-82,152},{-22,152},{-22,182},{10,182}}, color={0,0,127}));
+  connect(uFanSupPro, SFcon.uFanSupPro) annotation (Line(points={{-120,110},{-96,
+          110},{-96,140},{-24,140},{-24,184},{-4,184},{-4,176},{10,176}}, color
+        ={255,0,255}));
+  connect(dPAirDucSta, SFcon.dPAirDucSta) annotation (Line(points={{-120,80},{-88,
+          80},{-88,144},{-84,144},{-84,188},{-2,188},{-2,172},{10,172}}, color={
+          0,0,127}));
   annotation (
     defaultComponentName = "DOAScon",
     Icon(coordinateSystem(preserveAspectRatio = false, extent={{-100,-320},{100,

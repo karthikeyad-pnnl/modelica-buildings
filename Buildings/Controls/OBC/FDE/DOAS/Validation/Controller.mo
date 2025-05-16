@@ -238,116 +238,58 @@ model Controller "DOAS controller"
 
 
 
-  Buildings.Controls.OBC.FDE.DOAS.Controller DOAScon(
-    erwDPadj=erwDPadj,
-    controllerTypeDeh=controllerTypeDeh,
-    kDeh=kDeh,
-    TiDeh=TiDeh,
-    TdDeh=TdDeh,
-    controllerTypeRegOpe=controllerTypeRegOpe,
-    kRegOpe=kRegOpe,
-    TiRegOpe=TiRegOpe,
-    TdRegOpe=TdRegOpe,
-    dehumSet=dehumSet,
-    timThrDehDis=timThrDehDis,
-    timDelDehEna=timDelDehEna,
-    timThrDehEna=timThrDehEna,
-    dTEcoThr=dTEcoThr,
-    dTThrEneRec=dTThrEneRec,
-    dThys=dThys,
-    timDelEneRec=timDelEneRec,
-    controllerTypeEneWheHea=controllerTypeEneWheHea,
-    kEneWheHea=kEneWheHea,
-    TiEneWheHea=TiEneWheHea,
-    TdEneWheHea=TdEneWheHea,
-    kEneWheCoo=kEneWheCoo,
-    TiEneWheCoo=TiEneWheCoo,
-    controllerTypeEneWheCoo=controllerTypeEneWheCoo,
-    TdEneWheCoo=TdEneWheCoo,
-    dPSetBui=dPSetBui,
-    kExhFan=kExhFan,
-    TiExhFan=TiExhFan,
-    TdExhFan=TdExhFan,
-    controllerTypeExhFan=Buildings.Controls.OBC.CDL.Types.SimpleController.P,
-    controllerTypeCoiHea=controllerTypeCoiHea,
-    kCoiHea=kCoiHea,
-    TiCoiHea=TiCoiHea,
-    TdCoiHea=TdCoiHea,
-    is_vav=is_vav,
-    yMinDamSet=yMinDamSet,
-    yMaxDamSet=yMaxDamSet,
-    damSet=damSet,
-    kDam=kDam,
-    TiDam=TiDam,
-    TdDam=TdDam,
-    controllerTypeDam=controllerTypeDam,
-    dPDucSetCV=dPDucSetCV,
-    fanSpeMin=fanSpeMin,
-    kFanSpe=kFanSpe,
-    TdFanSpe=TdFanSpe,
-    TiFanSpe=TiFanSpe,
-    controllerTypeFanSpe=controllerTypeFanSpe,
-    TSupLowSet=TSupLowSet,
-    TSupHigSet=TSupHigSet,
-    THigZon=THigZon,
-    TLowZon=TLowZon,
-    TSupCooOff=TSupCooOff,
-    TSupHeaOff=TSupHeaOff)
-  annotation(Placement(visible = true, transformation(origin = {6, 12}, extent = {{64, -18}, {84, 16}}, rotation = 0)));
-
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse OccGen(
   width = 0.8,
   period = 8000,
     shift=1000)
   "Simulates occupancy mode schedule."
-  annotation(Placement(transformation(extent = {{-42, 76}, {-22, 96}})));
+  annotation(Placement(transformation(extent={{-88,76},{-68,96}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Sin mostOpenDamGen(
-  amplitude = 4,
+    amplitude=0.1,
   freqHz = 1/5670,
-  offset = 90)
+    offset=0.9)
   "Simulates changing terminal unit most open damper position."
-  annotation(Placement(transformation(extent = {{-42, 46}, {-22, 66}})));
+  annotation(Placement(transformation(extent={{-50,60},{-30,80}})));
 
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(
   delayTime = 10,
   delayOnInit = true)
   "Simulates delay from initial fan start command to fan status proof."
-  annotation(Placement(visible = true, transformation(origin={54,6},    extent = {{-94, 14}, {-74, 34}}, rotation = 0)));
+  annotation(Placement(visible = true, transformation(origin={44,8},    extent = {{-94, 14}, {-74, 34}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Sin sensorDDSP(
   amplitude = 300,
   freqHz = 1/10800,
-  phase = 3.9269908169872,
+    phase=3.9269908169872,
   offset = 400)
   annotation(Placement(visible = true, transformation(origin = {-6, 0}, extent = {{-92, -18}, {-72, 2}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Reals.Switch swi
   "Logic switch selects DDSP generator when fan is proven otherwise selects 0."
-  annotation(Placement(transformation(extent={{-52,-10},{-32,10}})));
+  annotation(Placement(transformation(extent={{-52,-12},{-32,8}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant con0(
-  final k = 0)
-  "Real constant 0"
-  annotation(Placement(visible = true, transformation(origin = {2, -10}, extent = {{-92, -48}, {-72, -28}}, rotation = 0)));
+  final k = 0) "Real constant 0"
+  annotation(Placement(visible = true, transformation(origin={-2,-14},   extent = {{-92, -48}, {-72, -28}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Sin ralHumGen(
   amplitude = 10,
   freqHz = 1/10800,
-  phase = 1.5707963267949,
+    phase=1.5707963267949,
   offset = 60,
   startTime = 0)
   "Return humidity sensor simulator."
-  annotation(Placement(transformation(extent = {{2, -16}, {22, 4}})));
+  annotation(Placement(transformation(extent={{-14,52},{6,72}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Sin erwHumGen(
   amplitude = 5,
   freqHz = 1/7200,
-  phase = 1.5707963267949,
+    phase=1.5707963267949,
   offset = 60,
   startTime = 0)
   "ERW humidity sensor simulator."
-  annotation(Placement(visible = true, transformation(origin = {-4, -4}, extent = {{32, -30}, {52, -10}}, rotation = 0)));
+  annotation(Placement(visible = true, transformation(origin={-52,0},    extent = {{32, -30}, {52, -10}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel1(
   final delayTime = 10,
@@ -359,7 +301,7 @@ model Controller "DOAS controller"
   amplitude = 3,
   freqHz = 1/10800,
   offset = 15)
-  annotation(Placement(transformation(extent = {{30, -92}, {50, -72}})));
+  annotation(Placement(transformation(extent={{-58,-74},{-38,-54}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Sin ccTGen(
   amplitude = 7,
@@ -376,7 +318,7 @@ model Controller "DOAS controller"
   offset = 275,
   startTime = 500)
   "Outside air temperature generator."
-  annotation(Placement(transformation(extent = {{4, -46}, {24, -26}})));
+  annotation(Placement(transformation(extent={{24,-48},{44,-28}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Sin raTGen(
   amplitude = 5,
@@ -384,7 +326,7 @@ model Controller "DOAS controller"
   phase = 0.34906585039887,
   offset = 294, startTime = 0)
   "Return air temperature simulator."
-  annotation(Placement(visible = true, transformation(origin = {-2, -8}, extent = {{-52, -30}, {-32, -10}}, rotation = 0)));
+  annotation(Placement(visible = true, transformation(origin={80,-66},   extent = {{-52, -30}, {-32, -10}}, rotation = 0)));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Sin highSpaceTGen(
   amplitude = 3,
@@ -392,115 +334,97 @@ model Controller "DOAS controller"
   offset = 296,
   startTime = 1250)
   "Terminal unit high space temperature simulator."
-  annotation(Placement(transformation(extent = {{-24, -28}, {-4, -8}})));
+  annotation(Placement(transformation(extent={{-12,4},{8,24}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Sin saTGen(
-  amplitude = 15,
-  freqHz = 1/21600,
-  phase = 1.0471975511966,
-  offset = 285,
+    amplitude=3,
+    freqHz=1/4800,
+    phase=0.87266462599716,
+    offset=295,
   startTime = 0)
   "Supply air temperature simulator."
   annotation(Placement(transformation(extent = {{-24, -62}, {-4, -42}})));
 
   Buildings.Controls.OBC.FDE.DOAS.Validation.Baseclasses.erwTsim ERWtemp
     "Energy recovery wheel supply temperature simulator."
-    annotation (Placement(transformation(extent={{110,-28},{130,-8}})));
+    annotation (Placement(transformation(extent={{70,-30},{90,-10}})));
 
   Buildings.Controls.OBC.CDL.Logical.Pre pre
-  annotation(Placement(visible = true, transformation(origin={-70,30},    extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  annotation(Placement(visible = true, transformation(origin={-82,30},    extent = {{-10, -10}, {10, 10}}, rotation = 0)));
 
+  Buildings.Controls.OBC.FDE.DOAS.Controller DOAScon1
+    annotation (Placement(transformation(extent={{38,-12},{58,52}})));
+  CDL.Reals.Sources.Constant TCooSetPoi(k=296)
+    annotation (Placement(transformation(extent={{-132,44},{-112,64}})));
+  CDL.Reals.Sources.Constant THeaSetPoi(k=294)
+    annotation (Placement(transformation(extent={{-134,12},{-114,32}})));
 equation
-  connect(OccGen.y,DOAScon.Occ)  annotation (
-    Line(points={{-20,86},{58,86},{58,22.6875},{68,22.6875}},color = {255, 0, 255}));
-
-  connect(mostOpenDamGen.y, DOAScon.uDamMaxOpe) annotation (Line(points={{-20,56},
-          {54,56},{54,20.5625},{68,20.5625}},
-                                            color={0,0,127}));
-
-  connect(truDel.y, DOAScon.uFanSupPro) annotation (Line(points={{-18,30},{50,
-          30},{50,18.4375},{68,18.4375}},
-                                    color={255,0,255}));
 
   connect(truDel.y, swi.u2) annotation (
-    Line(points={{-18,30},{-10,30},{-10,18},{-60,18},{-60,0},{-54,0}},
+    Line(points={{-28,32},{-20,32},{-20,16},{-62,16},{-62,-2},{-54,-2}},
                                                                color = {255, 0, 255}));
 
   connect(sensorDDSP.y, swi.u1) annotation (
-    Line(points={{-76,-8},{-66,-8},{-66,8},{-54,8}},            color = {0, 0, 127}));
+    Line(points={{-76,-8},{-66,-8},{-66,6},{-54,6}},            color = {0, 0, 127}));
 
   connect(con0.y, swi.u3) annotation (
-    Line(points={{-68,-48},{-60,-48},{-60,-8},{-54,-8}},        color = {0, 0, 127}));
+    Line(points={{-72,-52},{-60,-52},{-60,-10},{-54,-10}},      color = {0, 0, 127}));
 
-  connect(ralHumGen.y, DOAScon.phiAirRet) annotation (Line(points={{24,-6},{28,
-          -6},{28,14.1875},{68,14.1875}},
-                                color={0,0,127}));
+  connect(raTGen.y, ERWtemp.TAirRet) annotation (Line(points={{50,-86},{58,-86},
+          {58,-22},{67.6,-22}},    color={0,0,127}));
 
-  connect(highSpaceTGen.y, DOAScon.TAirHig) annotation (Line(points={{-2,-18},{
-          30,-18},{30,12.0625},{68,12.0625}},
-                                        color={0,0,127}));
-
-  connect(raTGen.y, DOAScon.TAirRet) annotation (Line(points={{-32,-28},{-28,
-          -28},{-28,7.8125},{68,7.8125}},
-                                 color={0,0,127}));
-
-  connect(erwHumGen.y, DOAScon.phiAirEneRecWhe) annotation (Line(points={{50,-24},
-          {56,-24},{56,1.4375},{68,1.4375}},
-                                       color={0,0,127}));
-
-  connect(DOAScon.yBypDam, ERWtemp.uBypDam) annotation (Line(points={{92,11},{
-          97.1,11},{97.1,-12},{107.6,-12}},  color={255,0,255}));
-
-  connect(DOAScon.yEneRecWheEna, ERWtemp.uEneRecWheStart) annotation (Line(
-        points={{92,8.875},{98,8.875},{98,-16},{107.6,-16}},
-                                                       color={255,0,255}));
-
-  connect(raTGen.y, ERWtemp.TAirRet) annotation (Line(points={{-32,-28},{38.8,-28},
-          {38.8,-20},{107.6,-20}}, color={0,0,127}));
-
-  connect(ERWtemp.yTSimEneRecWhe, DOAScon.TAirSupEneWhe) annotation (Line(
-        points={{132.4,-18},{134,-18},{134,-38},{60,-38},{60,-0.6875},{68,
-          -0.6875}},
-        color={0,0,127}));
-
-  connect(DOAScon.yExhFanSta, truDel1.u) annotation (Line(points={{92,4.625},{
-          96,4.625},{96,-56},{106,-56}},
-                                       color={255,0,255}));
-
-  connect(truDel1.y, DOAScon.uFanExhPro) annotation (Line(points={{130,-56},{
-          134,-56},{134,-74},{58,-74},{58,-2.8125},{68,-2.8125}},
-                                                        color={255,0,255}));
-
-  connect(bldgSP.y, DOAScon.dPAirStaBui) annotation (Line(points={{52,-82},{54,
-          -82},{54,-4.9375},{68,-4.9375}},
-                                     color={0,0,127}));
-
-  connect(oaTgen.y, DOAScon.TAirOut) annotation (Line(points={{26,-36},{32,-36},
-          {32,5.6875},{68,5.6875}},
-                              color={0,0,127}));
-
-  connect(oaTgen.y, ERWtemp.TAirOut) annotation (Line(points={{26,-36},{62,-36},
-          {62,-24},{107.6,-24}}, color={0,0,127}));
-
-  connect(swi.y, DOAScon.dPAirDucSta) annotation (Line(points={{-30,0},{0,0},{0,
-          16.3125},{68,16.3125}},
-                               color={0,0,127}));
-
-  connect(saTGen.y, DOAScon.TAirSup) annotation (Line(points={{-2,-52},{26,-52},
-          {26,9.9375},{68,9.9375}},
-                                color={0,0,127}));
-
-  connect(ccTGen.y, DOAScon.TAirDisCoiCoo) annotation (Line(points={{-2,-82},{
-          28,-82},{28,3.5625},{68,3.5625}},
-                                      color={0,0,127}));
-
-  connect(DOAScon.yFanSup, pre.u) annotation (Line(points={{92,19.5},{92,18},{
-          98,18},{98,34},{56,34},{56,70},{-88,70},{-88,30},{-82,30}},
-                                    color={255,0,255}));
+  connect(oaTgen.y, ERWtemp.TAirOut) annotation (Line(points={{46,-38},{54,-38},
+          {54,-26},{67.6,-26}},  color={0,0,127}));
 
   connect(pre.y, truDel.u) annotation (
-    Line(points={{-58,30},{-42,30}},                            color = {255, 0, 255}));
+    Line(points={{-70,30},{-60,30},{-60,32},{-52,32}},          color = {255, 0, 255}));
 
+  connect(OccGen.y, DOAScon1.Occ) annotation (Line(points={{-66,86},{26,86},{26,
+          42},{36,42}}, color={255,0,255}));
+  connect(truDel.y, DOAScon1.uFanSupPro) annotation (Line(points={{-28,32},{26,
+          32},{26,34},{36,34}}, color={255,0,255}));
+  connect(DOAScon1.yExhFanSta, truDel1.u) annotation (Line(points={{60,8},{100,
+          8},{100,-48},{98,-48},{98,-56},{106,-56}}, color={255,0,255}));
+  connect(truDel1.y, DOAScon1.uFanExhPro) annotation (Line(points={{130,-56},{
+          138,-56},{138,-72},{54,-72},{54,-68},{14,-68},{14,-6},{36,-6}}, color
+        ={255,0,255}));
+  connect(DOAScon1.yBypDam, ERWtemp.uBypDam) annotation (Line(points={{60,20},{
+          68,20},{68,-6},{67.6,-6},{67.6,-14}}, color={255,0,255}));
+  connect(DOAScon1.yEneRecWheEna, ERWtemp.uEneRecWheStart) annotation (Line(
+        points={{60,16},{70,16},{70,-6},{92,-6},{92,-14},{96,-14},{96,-28},{88,
+          -28},{88,-34},{56,-34},{56,-32},{50,-32},{50,-24},{48,-24},{48,-18},{
+          67.6,-18}}, color={0,0,127}));
+  connect(ERWtemp.yTSimEneRecWhe, DOAScon1.TAirSupEneWhe) annotation (Line(
+        points={{92.4,-20},{98,-20},{98,58},{28,58},{28,-2},{36,-2}}, color={0,
+          0,127}));
+  connect(DOAScon1.yFanSup, pre.u) annotation (Line(points={{60,36},{98,36},{98,
+          62},{-32,62},{-32,42},{-52,42},{-52,30},{-94,30}}, color={255,0,255}));
+  connect(mostOpenDamGen.y, DOAScon1.uDamMaxOpe) annotation (Line(points={{-28,
+          70},{-18,70},{-18,38},{36,38}}, color={0,0,127}));
+  connect(highSpaceTGen.y, DOAScon1.TAirHig) annotation (Line(points={{10,14},{
+          24,14},{24,22},{36,22}}, color={0,0,127}));
+  connect(DOAScon1.phiAirEneRecWhe, erwHumGen.y) annotation (Line(points={{36,2},
+          {12,2},{12,-20},{2,-20}}, color={0,0,127}));
+  connect(DOAScon1.phiAirRet, ralHumGen.y) annotation (Line(points={{36,26},{20,
+          26},{20,62},{8,62}}, color={0,0,127}));
+  connect(DOAScon1.TAirDisCoiCoo, ccTGen.y) annotation (Line(points={{36,6},{18,
+          6},{18,-80},{-2,-80},{-2,-82}}, color={0,0,127}));
+  connect(DOAScon1.TAirSup, saTGen.y) annotation (Line(points={{36,18},{26,18},
+          {26,-8},{16,-8},{16,-52},{-2,-52}}, color={0,0,127}));
+  connect(raTGen.y, DOAScon1.TAirRet) annotation (Line(points={{50,-86},{58,-86},
+          {58,-22},{22,-22},{22,-10},{20,-10},{20,4},{24,4},{24,14},{36,14}},
+        color={0,0,127}));
+  connect(oaTgen.y, DOAScon1.TAirOut) annotation (Line(points={{46,-38},{54,-38},
+          {54,-20},{28,-20},{28,-4},{24,-4},{24,10},{36,10}}, color={0,0,127}));
+  connect(TCooSetPoi.y, DOAScon1.TZonCooSet) annotation (Line(points={{-110,54},
+          {-20,54},{-20,48},{24,48},{24,60},{36,60},{36,50}}, color={0,0,127}));
+  connect(THeaSetPoi.y, DOAScon1.TZonHeaSet) annotation (Line(points={{-112,22},
+          {-102,22},{-102,46},{36,46}}, color={0,0,127}));
+  connect(bldgSP.y, DOAScon1.dPAirStaBui) annotation (Line(points={{-36,-64},{
+          -28,-64},{-28,-66},{60,-66},{60,-16},{44,-16},{44,-18},{36,-18},{36,
+          -10}}, color={0,0,127}));
+  connect(swi.y, DOAScon1.dPAirDucSta) annotation (Line(points={{-30,-2},{-16,
+          -2},{-16,30},{36,30}}, color={0,0,127}));
   annotation (
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}), graphics={  Ellipse(lineColor = {75, 138, 73}, fillColor = {255, 255, 255},
             fillPattern=
@@ -521,5 +445,6 @@ This example simulates
 Buildings.Controls.OBC.FDE.DOAS.Controller</a>.
 </p>
 </html>"),
-    experiment(StopTime = 10800, __Dymola_Algorithm = "Dassl"));
+        __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Validation/Controller.mos"
+    "Simulate and plot"));
 end Controller;

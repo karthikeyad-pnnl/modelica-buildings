@@ -20,10 +20,10 @@ block SupplyFanController "This block manages start, stop, status, and speed of 
     unit="1")=0.9
   "DDSP terminal damper percent open set point";
 
-  parameter Real kdPSetPoi(unit="1")=0.5
+  parameter Real kdPSetPoi(unit="1")=150
   "Damper position setpoint PI gain value k.";
 
-  parameter Real TidPSetPoi(unit="s")=60
+  parameter Real TidPSetPoi(unit="s")=10
   "Damper position setpoint PI time constant value Ti.";
 
   parameter Real TddPSetPoi(unit="s")=0.1
@@ -91,7 +91,7 @@ block SupplyFanController "This block manages start, stop, status, and speed of 
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant conPDucSetCV(final k=
         dPDucSetCV)    if not is_vav
     "DDSP set point for constant volume systems."
-    annotation (Placement(transformation(extent={{-72,-64},{-52,-44}})));
+    annotation (Placement(transformation(extent={{-52,-34},{-32,-14}})));
   Buildings.Controls.OBC.CDL.Reals.Switch swiFanSpe
     "Swtich passes fan speed set point when true; 0 when false."
     annotation (Placement(transformation(extent={{60,-42},{80,-22}})));
@@ -147,12 +147,13 @@ equation
   connect(tim.passed, yFanSup)
     annotation (Line(points={{4,80},{122,80}}, color={255,0,255}));
 
-  connect(conPDucSetCV.y, conPIDFanSpe.u_s) annotation (Line(points={{-50,-54},{
-          -44,-54},{-44,-10},{8,-10}}, color={0,0,127}));
+  connect(conPDucSetCV.y, conPIDFanSpe.u_s) annotation (Line(points={{-30,-24},
+          {-6,-24},{-6,-10},{8,-10}},  color={0,0,127}));
   connect(conPIDdPSetPoi.y, conPIDFanSpe.u_s) annotation (Line(points={{-26,22},
           {-12,22},{-12,-10},{8,-10}}, color={0,0,127}));
-  connect(conPIDFanSpe.y, swiFanSpe.u1) annotation (Line(points={{32,-10},{30,-10},
-          {30,-24},{58,-24}}, color={0,0,127}));
+  connect(conPIDFanSpe.y, swiFanSpe.u1) annotation (Line(points={{32,-10},{40,
+          -10},{40,-20},{50,-20},{50,-24},{58,-24}},
+                              color={0,0,127}));
   connect(swiFanSpe.y, yFanSupSpe) annotation (Line(points={{82,-32},{88,-32},{88,
           -30},{122,-30}}, color={0,0,127}));
   connect(uFanSupPro, conPIDFanSpe.trigger) annotation (Line(points={{-122,42},
