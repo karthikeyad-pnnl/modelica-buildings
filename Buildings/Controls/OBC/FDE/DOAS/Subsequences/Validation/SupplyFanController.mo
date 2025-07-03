@@ -1,70 +1,63 @@
 within Buildings.Controls.OBC.FDE.DOAS.Subsequences.Validation;
-model SupplyFanController
-  "This model simulates SupplyFanController"
+model SupplyFanController "This model simulates SupplyFanController"
+ Buildings.Controls.OBC.FDE.DOAS.Subsequences.SupplyFanController SFcon
+    "Supply fan controller"
+    annotation (Placement(transformation(extent={{48,0},{68,20}})));
  parameter Boolean is_vav = true
-  "True: System has zone terminals with variable damper position. False: System has zone terminals with constant damper position.";
-
+   "True: System has zone terminals with variable damper position. False: System has zone terminals with constant damper position.";
   parameter Real yMinDamSet(
-    min=0,
-    unit="Pa")=125
+    final quantity = "Pressure",
+    final unit="Pa")=125
   "Minimum down duct static pressure reset value" annotation(Dialog(group = "DDSP range"));
-
   parameter Real yMaxDamSet(
-    min=0,
-    unit="Pa")=500
+    final quantity = "Pressure",
+    final unit="Pa")=500
   "Maximum down duct static pressure reset value" annotation(Dialog(group = "DDSP range"));
-
   parameter Real damSet(
     max=1,
     min=0,
     unit="1")=0.9
   "DDSP terminal damper percent open set point";
-
   parameter Real dPDucSetCV(
-    min=0,
-    unit="Pa")=250                             "Constant volume down duct static pressure set point";
-
-  parameter Real fanSpeMin(unit="m/s")=0.0000001
-  "Minimum Fan Speed";
-
-  parameter Real kFanSpe(unit="1")=0.5
-                          "
-  Fan speed set point SAT PI gain value k.";
-
-  parameter Real TdFanSpe(unit="s")=60
-                         "Time constant of derivative block for conPIDFanSpe";
-
-  parameter Real TiFanSpe(unit="s")=0.000025
-  "Fan speed set point SAT PI time constant value Ti.";
-
+    final quantity = "PressureDifference",
+    final unit="Pa")=250
+    "Constant volume down duct static pressure set point";
+  parameter Real fanSpeMin(
+    final unit="m/s",
+    final quantity = "Velocity")=0.0000001
+    "Minimum Fan Speed";
+  parameter Real kFanSpe(
+    unit="1")=0.5                     "
+    Fan speed set point SAT PI gain value k.";
+  parameter Real TdFanSpe(
+    final unit="s",
+    final quantity = "Time")=60
+    "Time constant of derivative block for conPIDFanSpe";
+  parameter Real TiFanSpe(
+    final unit="s",
+    final quantity = "Time")=0.000025
+    "Fan speed set point SAT PI time constant value Ti.";
   parameter CDL.Types.SimpleController controllerTypeFanSpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "Type of controller";
-
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(
     delayTime=10,
     delayOnInit=true)
     "Simulates delay between fan start command and status feedback."
     annotation (Placement(transformation(extent={{8,-34},{28,-14}})));
-
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse
-  OccGen(width=0.6, period=2*2880)
+    OccGen(width=0.6, period=2*2880)
   annotation (Placement(transformation(extent={{-66,32},{-46,52}})));
-
   Buildings.Controls.OBC.CDL.Reals.Sources.Sin
-  mostOpenDamGen(
+    mostOpenDamGen(
     amplitude=0.5,
     freqHz=1/5670,
-    offset=0.5)
+    offset=0.5) "Max damper open"
     annotation (Placement(transformation(extent={{-66,-2},{-46,18}})));
-
   Buildings.Controls.OBC.CDL.Reals.Sources.Sin sensorDDSP(
     amplitude=6,
     freqHz=1/6780,
-    offset=200)
+    offset=200) "Down duct static pressure"
     annotation (Placement(transformation(extent={{-66,-38},{-46,-18}})));
-
-  Buildings.Controls.OBC.FDE.DOAS.Subsequences.SupplyFanController SFcon
-    annotation (Placement(transformation(extent={{48,0},{68,20}})));
 equation
 
   connect(OccGen.y, SFcon.Occ) annotation (Line(points={{-44,42},{38,42},{38,18},
@@ -81,15 +74,23 @@ equation
             fillPattern=
 FillPattern.Solid,extent={{-100,-100},{100,100}}),Polygon(lineColor = {0,0,255},fillColor = {75,138,73},pattern = LinePattern.None,
             fillPattern=
-FillPattern.Solid,points={{-36,60},{64,0},{-36,-60},{-36,60}})}),
+FillPattern.Solid,points={{-36,60},{64,0},{-36,-60},{-36,60}}),                                          Text(textColor = {28, 108, 200}, extent={{-94,168},
+              {106,88}},                                                                                                                                                   textString = "%name", textStyle = {TextStyle.Bold})}),
 Diagram(coordinateSystem(preserveAspectRatio=false)),
     Documentation(revisions="<html>
 <ul>
 <li>
 September 11, 2020, by Henry Nickels:</br>
 First implementation.</li>
+
+<li>
+ June 12, 2025, by Cerrina Mouchref, Karthik Devaprasad:</br>
+ Improved code as per library conventions. 
+ </li>
+
 </ul>
-</html>", info="<html>
+</html>
+",        info="<html>
 <p>
 This example simulates
 <a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.Subsequences.SupplyFanController\">
