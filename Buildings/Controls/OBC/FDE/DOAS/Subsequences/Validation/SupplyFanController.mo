@@ -1,132 +1,96 @@
 within Buildings.Controls.OBC.FDE.DOAS.Subsequences.Validation;
-model SupplyFanController
-  "This model simulates SupplyFanController"
+model SupplyFanController "This model simulates SupplyFanController"
+ Buildings.Controls.OBC.FDE.DOAS.Subsequences.SupplyFanController SFcon
+    "Supply fan controller"
+    annotation (Placement(transformation(extent={{48,0},{68,20}})));
  parameter Boolean is_vav = true
-  "True: System has zone terminals with variable damper position. False: System has zone terminals with constant damper position.";
-
+   "True: System has zone terminals with variable damper position. False: System has zone terminals with constant damper position.";
   parameter Real yMinDamSet(
-  min = 0,
-  final unit = "Pa",
-  final quantity = "PressureDifference") = 125
+    final quantity = "Pressure",
+    final unit="Pa")=125
   "Minimum down duct static pressure reset value" annotation(Dialog(group = "DDSP range"));
-
   parameter Real yMaxDamSet(
-  min = 0,
-  final unit = "Pa",
-  final quantity = "PressureDifference") = 500
+    final quantity = "Pressure",
+    final unit="Pa")=500
   "Maximum down duct static pressure reset value" annotation(Dialog(group = "DDSP range"));
-
   parameter Real damSet(
-  min = 0,
-  max = 1,
-  final unit = "1") = 0.9
+    max=1,
+    min=0,
+    unit="1")=0.9
   "DDSP terminal damper percent open set point";
-
- parameter Real kDam(
-   final unit= "1") = 0.5
-  "Damper position setpoint PI gain value k.";
-
-  parameter Real TiDam(
-   final unit= "s") = 60
-  "Damper position setpoint PI time constant value Ti.";
-
-  parameter Real TdDam(
-   final unit= "s") = 0.1 "Time constant of derivative block for conPIDDam";
-
-  parameter CDL.Types.SimpleController controllerTypeDam=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
-  "Type of controller";
-
   parameter Real dPDucSetCV(
-  min = 0,
-  final unit = "Pa",
-  final quantity = "PressureDifference") = 250 "Constant volume down duct static pressure set point";
-
+    final quantity = "PressureDifference",
+    final unit="Pa")=250
+    "Constant volume down duct static pressure set point";
   parameter Real fanSpeMin(
-   final unit= "m/s") = 0.0000001
-  "Minimum Fan Speed";
-
+    final unit="m/s",
+    final quantity = "Velocity")=0.0000001
+    "Minimum Fan Speed";
   parameter Real kFanSpe(
-   final unit= "1") = 0.5 "
-  Fan speed set point SAT PI gain value k.";
-
+    unit="1")=0.5                     "
+    Fan speed set point SAT PI gain value k.";
   parameter Real TdFanSpe(
-   final unit= "s") = 60 "Time constant of derivative block for conPIDFanSpe";
-
+    final unit="s",
+    final quantity = "Time")=60
+    "Time constant of derivative block for conPIDFanSpe";
   parameter Real TiFanSpe(
-   final unit= "s") = 0.000025
-  "Fan speed set point SAT PI time constant value Ti.";
-
+    final unit="s",
+    final quantity = "Time")=0.000025
+    "Fan speed set point SAT PI time constant value Ti.";
   parameter CDL.Types.SimpleController controllerTypeFanSpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
     "Type of controller";
-
-  Buildings.Controls.OBC.FDE.DOAS.Subsequences.SupplyFanController SFcon(
-    is_vav=is_vav,
-    yMinDamSet=yMinDamSet,
-    yMaxDamSet=yMaxDamSet,
-    damSet=damSet,
-    kDam=kDam,
-    TiDam=TiDam,
-    TdDam=TdDam,
-    controllerTypeDam=controllerTypeDam,
-    dPDucSetCV=dPDucSetCV,
-    fanSpeMin=fanSpeMin,
-    kFanSpe=kFanSpe,
-    TdFanSpe=TdFanSpe,
-    TiFanSpe=TiFanSpe,
-    controllerTypeFanSpe=controllerTypeFanSpe)
-    annotation (Placement(transformation(extent={{40,-6},{60,14}})));
-
   Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(
     delayTime=10,
     delayOnInit=true)
     "Simulates delay between fan start command and status feedback."
     annotation (Placement(transformation(extent={{8,-34},{28,-14}})));
-
   Buildings.Controls.OBC.CDL.Logical.Sources.Pulse
-  OccGen(width=0.6, period=2*2880)
+    OccGen(width=0.6, period=2*2880)
   annotation (Placement(transformation(extent={{-66,32},{-46,52}})));
-
   Buildings.Controls.OBC.CDL.Reals.Sources.Sin
-  mostOpenDamGen(
+    mostOpenDamGen(
     amplitude=0.5,
     freqHz=1/5670,
-    offset=0.5)
+    offset=0.5) "Max damper open"
     annotation (Placement(transformation(extent={{-66,-2},{-46,18}})));
-
   Buildings.Controls.OBC.CDL.Reals.Sources.Sin sensorDDSP(
     amplitude=6,
     freqHz=1/6780,
-    offset=200)
+    offset=200) "Down duct static pressure"
     annotation (Placement(transformation(extent={{-66,-38},{-46,-18}})));
-
 equation
-  connect(SFcon.yFanSup, truDel.u) annotation (Line(points={{62,9.2},{66,9.2},{66,
-          -46},{0,-46},{0,-24},{6,-24}}, color={255,0,255}));
 
-  connect(truDel.y, SFcon.uFanSupPro) annotation (Line(points={{30,-24},{34,-24},
-          {34,0.4},{38,0.4}}, color={255,0,255}));
-
-  connect(OccGen.y, SFcon.Occ) annotation (Line(points={{-44,42},{-10,42},{-10,11},
-          {38,11}}, color={255,0,255}));
-
-  connect(mostOpenDamGen.y, SFcon.uDamMaxOpe) annotation (Line(points={{-44,8},{
-          -10,8},{-10,7.4},{38,7.4}}, color={0,0,127}));
-  connect(sensorDDSP.y, SFcon.dPAirDucSta) annotation (Line(points={{-44,-28},{-10,
-          -28},{-10,-3.2},{38,-3.2}}, color={0,0,127}));
-
+  connect(OccGen.y, SFcon.Occ) annotation (Line(points={{-44,42},{38,42},{38,18},
+          {46,18}}, color={255,0,255}));
+  connect(mostOpenDamGen.y, SFcon.uDamMaxOpe) annotation (Line(points={{-44,8},
+          {36,8},{36,14},{46,14}}, color={0,0,127}));
+  connect(truDel.y, SFcon.uFanSupPro) annotation (Line(points={{30,-24},{40,-24},
+          {40,-4},{38,-4},{38,8},{46,8}}, color={255,0,255}));
+  connect(sensorDDSP.y, SFcon.dPAirDucSta) annotation (Line(points={{-44,-28},{
+          -2,-28},{-2,-40},{46,-40},{46,4}}, color={0,0,127}));
+  connect(SFcon.yFanSup, truDel.u) annotation (Line(points={{70,16},{74,16},{74,
+          -66},{6,-66},{6,-24}}, color={255,0,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false), graphics={Ellipse(lineColor = {75,138,73},fillColor={255,255,255},
             fillPattern=
 FillPattern.Solid,extent={{-100,-100},{100,100}}),Polygon(lineColor = {0,0,255},fillColor = {75,138,73},pattern = LinePattern.None,
             fillPattern=
-FillPattern.Solid,points={{-36,60},{64,0},{-36,-60},{-36,60}})}),
+FillPattern.Solid,points={{-36,60},{64,0},{-36,-60},{-36,60}}),                                          Text(textColor = {28, 108, 200}, extent={{-94,168},
+              {106,88}},                                                                                                                                                   textString = "%name", textStyle = {TextStyle.Bold})}),
 Diagram(coordinateSystem(preserveAspectRatio=false)),
     Documentation(revisions="<html>
 <ul>
 <li>
 September 11, 2020, by Henry Nickels:</br>
 First implementation.</li>
+
+<li>
+ June 12, 2025, by Cerrina Mouchref, Karthik Devaprasad:</br>
+ Improved code as per library conventions. 
+ </li>
+
 </ul>
-</html>", info="<html>
+</html>
+",        info="<html>
 <p>
 This example simulates
 <a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.Subsequences.SupplyFanController\">

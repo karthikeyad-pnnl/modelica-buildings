@@ -1,51 +1,42 @@
 within Buildings.Controls.OBC.FDE.DOAS.Subsequences;
 block HeatingCoil "This block commands the heating coil."
-
   parameter CDL.Types.SimpleController controllerTypeCoiHea=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
-   "Type of controller";
-
+     "Type of controller";
   parameter Real kCoiHea(
-   final unit= "1") = 0.5
-  "Heating coil SAT PI gain value k.";
-
+     final unit= "1") = 0.5
+    "Heating coil SAT PI gain value k.";
   parameter Real TiCoiHea(
-   final unit= "s") = 60
-  "Heating coil SAT PI time constant value Ti.";
-
+    final unit= "s",
+    final quantity = "Time") = 60
+    "Heating coil SAT PI time constant value Ti.";
   parameter Real TdCoiHea(
-  final unit= "s") = 0.1 "Time constant of derivative block";
-
+    final unit= "s",
+    final quantity = "Time") = 0.1
+    "Time constant of derivative block";
   // ---inputs---
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uFanSupPro
     "True when supply fan is proven on." annotation (Placement(transformation(
           extent={{-140,-20},{-100,20}}), iconTransformation(extent={{-140,-20},
             {-100,20}})));
-
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirSup
     "Measured Supply air temperature" annotation (Placement(transformation(
           extent={{-142,-60},{-102,-20}}), iconTransformation(extent={{-140,-80},
             {-100,-40}})));
-
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TAirSupSetHea
     "Supply air temperature heating set point." annotation (Placement(
         transformation(extent={{-142,16},{-102,56}}), iconTransformation(extent={{-140,20},
             {-100,60}})));
-
   // ---outputs---
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yCoiHea
     "Heating coil command." annotation (Placement(transformation(extent={{100,-20},
             {140,20}}),      iconTransformation(extent={{100,-20},{140,20}})));
-
-
 protected
   Buildings.Controls.OBC.CDL.Reals.Switch swiCoiHea
     "Passes supply air heating coil control signal when supply fan is proven on"
     annotation (Placement(transformation(extent={{36,-12},{56,8}})));
-
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant conZer(final k=0)
     "Real constant 0"
     annotation (Placement(transformation(extent={{-20,-38},{0,-18}})));
-
   CDL.Reals.PIDWithReset               conPIDCoiHea(
     controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
     Ti=TiCoiHea,
@@ -57,20 +48,14 @@ protected
         origin={-30,24},
         extent={{-10,-10},{10,10}},
         rotation=0)));
-
-
 equation
-
   connect(swiCoiHea.u2, uFanSupPro) annotation (Line(points={{34,-2},{-62,-2},{
           -62,0},{-120,0}},
                         color={255,0,255}));
-
   connect(conZer.y, swiCoiHea.u3) annotation (Line(points={{2,-28},{12,-28},{12,
           -12},{28,-12},{28,-10},{34,-10}}, color={0,0,127}));
-
   connect(TAirSup, conPIDCoiHea.u_m)
     annotation (Line(points={{-122,-40},{-30,-40},{-30,12}}, color={0,0,127}));
-
   connect(conPIDCoiHea.y, swiCoiHea.u1) annotation (Line(points={{-18,24},{-4,24},
           {-4,6},{34,6}}, color={0,0,127}));
   connect(TAirSupSetHea, conPIDCoiHea.u_s) annotation (Line(points={{-122,36},{-86,
@@ -114,5 +99,18 @@ FillPattern.Solid, extent = {{36, -38}, {48, -48}}), Text(textColor = {28, 108, 
     Documentation(info="<html>
 <h4>Normal Operation</h4>
 <p>When the DOAS is energized (<span style=\"font-family: Courier New;\">uFanSupPro</span>) the heating coil will be commanded (<span style=\"font-family: Courier New;\">yCoiHea</span>) to maintain the supply air temperature (<span style=\"font-family: Courier New;\">TAirSup</span>) at the supply air temperature heating set point (<span style=\"font-family: Courier New;\">TAirSupSetHea</span>).</p>
-</html>"));
+</html>", revisions="<html>
+<ul>
+<li>
+September 17, 2020, by Henry Nickels:</br>
+First implementation.</li>
+
+<li>
+ June 12, 2025, by Cerrina Mouchref, Karthik Devaprasad:</br>
+ Improved code as per library conventions. 
+ </li>
+
+</ul>
+</html>
+"));
 end HeatingCoil;

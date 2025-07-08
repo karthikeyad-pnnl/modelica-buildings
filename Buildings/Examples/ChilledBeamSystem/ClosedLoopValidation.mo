@@ -2,7 +2,80 @@ within Buildings.Examples.ChilledBeamSystem;
 model ClosedLoopValidation
   extends Modelica.Icons.Example;
   parameter Real schTab[5, 2] = [0, 0; 8, 1; 18, 1; 21, 0; 24, 0] "Table defining schedule for enabling plant";
-  Buildings.Examples.ChilledBeamSystem.BaseClasses.TestBed chiBeaTesBed(
+  Buildings.Controls.OBC.CDL.Reals.MultiMax TZonMax(nin=5)
+    "Highest zone temperature"
+     annotation (
+    Placement(transformation(extent={{128,-4},{148,16}})));
+  Buildings.Controls.OBC.CDL.Reals.MultiMax yDamPosMax(nin=5)
+    "Maximum damper position "
+     annotation (
+    Placement(transformation(extent={{128,32},{148,52}})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.TimeTable enaSch(
+    final table = schTab,
+    final smoothness = Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments,
+    final timeScale = 3600) "Table defining when occupancy is expected"
+   annotation (
+    Placement(transformation(extent={{-142,48},{-122,68}})));
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(uLow = 0.45, uHigh = 0.5)
+    "Expected occupancy hysteresis"
+     annotation (
+    Placement(transformation(extent={{-108,44},{-88,64}})));
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(nout = 5)
+    "Boolean replicator for expected occupancy"
+     annotation (
+    Placement(transformation(extent={{-78,48},{-58,68}})));
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant uConSig[5](
+    k = fill(false, 5))
+    "Constant Boolean source"
+    annotation (
+    Placement(visible = true, transformation(origin={-14,-96}, extent = {{-90, 30}, {-70, 50}}, rotation = 0)));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant chiWatSupTem(
+    k = 273.15 + 7.22)
+    "Chilled water supply temperature"
+   annotation (
+    Placement(transformation(extent={{-142,-34},{-122,-14}})));
+  Modelica.Blocks.Sources.CombiTimeTable loads(
+    tableOnFile = true,
+    tableName = "tab1",
+    fileName=ModelicaServices.ExternalReferences.loadResource(
+        "./Buildings/Resources/Data/Examples/ChilledBeamSystem/zoneLoads.txt"),
+    columns = {2, 3, 4, 5, 6},
+    timeScale = 60)
+    "Table defining thermal loads for zone"
+    annotation (Placement(transformation(extent={{-142,-98},{-122,-78}})));
+  Buildings.Controls.SetPoints.OccupancySchedule occSch(
+    occupancy = 3600*{8, 18})
+    "Occupancy schedule"
+     annotation (
+    Placement(visible = true, transformation(origin={10,120},  extent = {{-152, -44}, {-132, -24}}, rotation = 0)));
+  Buildings.Controls.OBC.CDL.Reals.Sources.TimeTable TSetRooHea(
+    extrapolation = Buildings.Controls.OBC.CDL.Types.Extrapolation.Periodic,
+    smoothness = Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments,
+    table = [0, 15 + 273.15; 8*3600, 20 + 273.15; 18*3600, 15 + 273.15; 24*3600, 15 + 273.15])
+     "Zone heating setpoint"                                                                                                                                                                                                         annotation (
+    Placement(visible = true, transformation(origin={10,-46},   extent = {{-152, 40}, {-132, 60}}, rotation = 0)));
+  Buildings.Controls.OBC.CDL.Reals.Sources.TimeTable TSetRooCoo(
+    extrapolation = Buildings.Controls.OBC.CDL.Types.Extrapolation.Periodic,
+    smoothness = Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments,
+    table = [0, 30 + 273.15; 8*3600, 25 + 273.15; 18*3600, 30 + 273.15; 24*3600, 30 + 273.15])
+    "Cooling setpoint"                                                                                                                                                                                                         annotation (
+    Placement(visible = true, transformation(origin={10,12},     extent = {{-152, 10}, {-132, 30}}, rotation = 0)));
+  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booleanScalarReplicator(nout = 5)
+    "Replicator for occupancy schedule"
+     annotation (
+    Placement(visible = true, transformation(origin={-22,6},      extent = {{-90, 70}, {-70, 90}}, rotation = 0)));
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaScaRep(nout = 5)
+    "Scalar multiplier for zone heating setpoint"
+     annotation (
+    Placement(visible = true, transformation(origin={-94,-4},    extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator realScalarReplicator(nout = 5)
+    "Scalar multipler for zone cooling setpoint"
+     annotation (
+    Placement(visible = true, transformation(origin={-94,28},     extent = {{-10, -10}, {10, 10}}, rotation = 0)));
+  Controls.OBC.CDL.Reals.Sources.Constant ERW_drybulb_temp(k=295)
+    "Energy recovery wheel dry bulb temperature"
+    annotation (Placement(transformation(extent={{-142,-68},{-122,-48}})));
+    Buildings.Examples.ChilledBeamSystem.BaseClasses.TestBed chiBeaTesBed(
     TChiWatRet_nominal=273.15 + 25,
     mChiWatTot_flow_nominal=2.114,
     mAirTot_flow_nominal=1*0.676*1.225,
@@ -50,7 +123,7 @@ model ClosedLoopValidation
     resAmoVal=1,
     maxResVal=1,
     samPerVal=1,
-    delTimVal=60)                                                                                                                                   annotation (
+    delTimVal=60) "System Controller"                                                                                                               annotation (
     Placement(visible = true, transformation(origin={-46,12},    extent = {{10, -70}, {30, -50}}, rotation = 0)));
   Buildings.Controls.OBC.FDE.DOAS.Controller DOAScon(
     dehumSet=0.6,
@@ -67,45 +140,9 @@ model ClosedLoopValidation
     TdFanSpe=0,
     TiFanSpe=10,
     controllerTypeFanSpe=Buildings.Controls.OBC.CDL.Types.SimpleController.PI)
+    "DOAS Controller"
     annotation (Placement(visible = true,
       transformation(extent={{15,-50},{35,14}})));
-  Buildings.Controls.OBC.CDL.Reals.MultiMax TZonMax(nin=5)   annotation (
-    Placement(transformation(extent={{128,-4},{148,16}})));
-  Buildings.Controls.OBC.CDL.Reals.MultiMax yDamPosMax(nin=5)   annotation (
-    Placement(transformation(extent={{128,32},{148,52}})));
-  Buildings.Controls.OBC.CDL.Reals.Sources.TimeTable enaSch(final table = schTab, final smoothness = Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments, final timeScale = 3600) "Table defining when occupancy is expected" annotation (
-    Placement(transformation(extent={{-142,48},{-122,68}})));
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys(uLow = 0.45, uHigh = 0.5) annotation (
-    Placement(transformation(extent={{-108,44},{-88,64}})));
-  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booRep(nout = 5) annotation (
-    Placement(transformation(extent={{-78,48},{-58,68}})));
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant uConSig[5](k = fill(false, 5)) "Constant Boolean source" annotation (
-    Placement(visible = true, transformation(origin={-14,-96}, extent = {{-90, 30}, {-70, 50}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant chiWatSupTem(k = 273.15 + 7.22) "Chilled water supply temperature" annotation (
-    Placement(transformation(extent={{-142,-34},{-122,-14}})));
-  Modelica.Blocks.Sources.CombiTimeTable loads(
-    tableOnFile = true,
-    tableName = "tab1",
-    fileName=ModelicaServices.ExternalReferences.loadResource(
-        "./Buildings/Resources/Data/Examples/ChilledBeamSystem/zoneLoads.txt"),
-    columns = {2, 3, 4, 5, 6},
-    timeScale = 60)
-    "Table defining thermal loads for zone"
-    annotation (Placement(transformation(extent={{-142,-98},{-122,-78}})));
-  Buildings.Controls.SetPoints.OccupancySchedule occSch(occupancy = 3600*{8, 18}) annotation (
-    Placement(visible = true, transformation(origin={10,120},  extent = {{-152, -44}, {-132, -24}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Reals.Sources.TimeTable TSetRooHea(extrapolation = Buildings.Controls.OBC.CDL.Types.Extrapolation.Periodic, smoothness = Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments, table = [0, 15 + 273.15; 8*3600, 20 + 273.15; 18*3600, 15 + 273.15; 24*3600, 15 + 273.15]) annotation (
-    Placement(visible = true, transformation(origin={10,-46},   extent = {{-152, 40}, {-132, 60}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Reals.Sources.TimeTable TSetRooCoo(extrapolation = Buildings.Controls.OBC.CDL.Types.Extrapolation.Periodic, smoothness = Buildings.Controls.OBC.CDL.Types.Smoothness.ConstantSegments, table = [0, 30 + 273.15; 8*3600, 25 + 273.15; 18*3600, 30 + 273.15; 24*3600, 30 + 273.15]) annotation (
-    Placement(visible = true, transformation(origin={10,12},     extent = {{-152, 10}, {-132, 30}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booleanScalarReplicator(nout = 5) annotation (
-    Placement(visible = true, transformation(origin={-22,6},      extent = {{-90, 70}, {-70, 90}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaScaRep(nout = 5)  annotation (
-    Placement(visible = true, transformation(origin={-94,-4},    extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator realScalarReplicator(nout = 5) annotation (
-    Placement(visible = true, transformation(origin={-94,28},     extent = {{-10, -10}, {10, 10}}, rotation = 0)));
-  Controls.OBC.CDL.Reals.Sources.Constant ERW_drybulb_temp(k=295)
-    annotation (Placement(transformation(extent={{-142,-68},{-122,-48}})));
 equation
   connect(enaSch.y[1], hys.u) annotation (
     Line(points={{-120,58},{-120,66},{-110,66},{-110,54}},
@@ -113,8 +150,6 @@ equation
   connect(hys.y, booRep.u) annotation (
     Line(points={{-86,54},{-84,54},{-84,58},{-80,58}},
                                           color = {255, 0, 255}));
-//connect(booRep.y, terCon.uDetOcc) annotation(
-//Line(points = {{-68, 80}, {-4, 80}, {-4, 58}, {8, 58}}, color = {255, 0, 255}));
   connect(TSetRooHea.y[1], reaScaRep.u) annotation (
     Line(points={{-120,4},{-116,4},{-116,-4},{-106,-4}},          color = {0, 0, 127}));
   connect(realScalarReplicator.y, terCon.TZonCooSet) annotation (
@@ -237,7 +272,9 @@ equation
           {{98,-5.33333},{104,-5.33333},{104,26},{-6,26},{-6,-8},{13,-8}},
         color={0,0,127}));
   annotation (
-    Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}})),
+    Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -100}, {100, 100}}),
+        graphics={                                                                                       Text(textColor = {28, 108, 200}, extent={{-104,
+              172},{96,92}},                                                                                                                                               textString = "%name", textStyle = {TextStyle.Bold})}),
     Diagram(coordinateSystem(preserveAspectRatio = false, extent = {{-160, -100}, {160, 100}})),
     experiment(
       StartTime=19180800,
@@ -255,5 +292,12 @@ equation
 <p>The HVAC system is a constant air volume(CAV) system with an energy recovery wheel, economizer, and heating, and cooling coils in the air handling unit. The figure down below shows a schematic of the HVAC system.<img src=\"modelica://Buildings/Resources/Images/Examples/ChilledBeamSystem/chilledBeam_terminalControlSchematic.svg\" alt=\"image\"/> </p>
 <p>The chilled beam system is serviced by a single chilled water loop with an ideal source operated by the system controller. Each zone has a chilled beam manifold, an air circulation fan for cooling, and CAV terminal box with a hot water reheat coil and an exponential damper. The terminal controller operates the zone CAV terminal box as well as the zone chilled beam manifold control valve. The figure below shows  a schematic of the chilled beam system.</p>
 <img src=\"modelica://Buildings/Resources/Images/Examples/ChilledBeamSystem/chilledBeam_systemControlSchematic.svg\" alt=\"image\"/> </p>
-</html>"));
+</html>", revisions="<html>
+<ul>
+<li>
+June 12, 2025, by Cerrina Mouchref, Karthik Devaprasad:</br>
+First implementation.</li>
+</ul>
+</html>
+"));
 end ClosedLoopValidation;

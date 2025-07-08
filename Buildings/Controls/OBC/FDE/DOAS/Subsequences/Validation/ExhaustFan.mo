@@ -1,51 +1,43 @@
 within Buildings.Controls.OBC.FDE.DOAS.Subsequences.Validation;
 model ExhaustFan "This model simulates ExhaustFanController"
-
-  parameter Real dPSetBui(
-  final unit = "Pa",
-  final quantity = "PressureDifference") = 15
-  "Building static pressure difference set point";
-
-  parameter Real kExhFan(
-  final unit = "1") = 0.5
-  "PID heating loop gain value.";
-
-  parameter Real TiExhFan(
-  final unit = "s") = 60
-  "PID loop time constant of integrator.";
-
-  parameter Real TdExhFan(
-  final unit= "s") = 0.1 "Time constant of derivative block";
-
-   parameter CDL.Types.SimpleController controllerTypeExhFan=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
-    "Type of controller";
-
-  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(
-    delayTime=10,
-    delayOnInit=true)
-    "Simulates delay between fan start command and status feedback."
-      annotation (Placement(transformation(extent={{14,-40},{34,-20}})));
-
-  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse SFproof(
-    width=0.75,
-    period=5760)
-      annotation (Placement(transformation(extent={{-34,8},{-14,28}})));
-
-  Buildings.Controls.OBC.CDL.Reals.Sources.Sin bldgSP(
-    amplitude=3,
-    freqHz=1/3280,
-    offset=15)
-    annotation (Placement(transformation(extent={{-34,-26},{-14,-6}})));
-
   Buildings.Controls.OBC.FDE.DOAS.Subsequences.ExhaustFan EFcon(
     dPSetBui=dPSetBui,
     kExhFan=kExhFan,
     TiExhFan=TiExhFan,
     TdExhFan=TdExhFan,
-    controllerTypeExhFan=controllerTypeExhFan)
+    controllerTypeExhFan=controllerTypeExhFan) "Exhaust fan controller"
     annotation (Placement(transformation(extent={{44,-12},{64,8}})));
+  parameter Real dPSetBui(
+    final unit = "Pa",
+    final quantity = "PressureDifference") = 15
+    "Building static pressure difference set point";
+  parameter Real kExhFan(
+    final unit = "1") = 0.5
+    "PID heating loop gain value.";
+  parameter Real TiExhFan(
+    final unit = "s",
+    final quantity = "Time") = 60
+    "PID loop time constant of integrator.";
+  parameter Real TdExhFan(
+    final unit= "s",
+    final quantity = "Time") = 0.1 "Time constant of derivative block";
+  parameter CDL.Types.SimpleController controllerTypeExhFan=Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+    "Type of controller";
+  Buildings.Controls.OBC.CDL.Logical.TrueDelay truDel(
+    delayTime=10,
+    delayOnInit=true)
+    "Simulates delay between fan start command and status feedback."
+      annotation (Placement(transformation(extent={{14,-40},{34,-20}})));
+  Buildings.Controls.OBC.CDL.Logical.Sources.Pulse SFproof(
+    width=0.75,
+    period=5760) "Supply fan signal"
+      annotation (Placement(transformation(extent={{-34,8},{-14,28}})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Sin bldgSP(
+    amplitude=3,
+    freqHz=1/3280,
+    offset=15) "Building static pressure difference from outdoor"
+    annotation (Placement(transformation(extent={{-34,-26},{-14,-6}})));
 equation
-
   connect(SFproof.y, EFcon.uFanSupPro) annotation (Line(points={{-12,18},{16,18},
           {16,4},{42,4}}, color={255,0,255}));
   connect(bldgSP.y, EFcon.dPAirStaBui) annotation (Line(points={{-12,-16},{16,-16},
@@ -59,15 +51,23 @@ equation
             fillPattern=
 FillPattern.Solid,extent={{-100,-100},{100,100}}),Polygon(lineColor = {0,0,255},fillColor = {75,138,73}, pattern = LinePattern.None,
             fillPattern=
-FillPattern.Solid,points={{-36,60},{64,0},{-36,-60},{-36,60}})}),
+FillPattern.Solid,points={{-36,60},{64,0},{-36,-60},{-36,60}}),                                          Text(textColor = {28, 108, 200}, extent={{-100,
+              170},{100,90}},                                                                                                                                              textString = "%name", textStyle = {TextStyle.Bold})}),
     Diagram(coordinateSystem(preserveAspectRatio=false)),
     Documentation(revisions="<html>
 <ul>
 <li>
-September 14, 2020, by Henry Nickels:</br>
+September 15, 2020, by Henry Nickels:</br>
 First implementation.</li>
+
+<li>
+ June 12, 2025, by Cerrina Mouchref, Karthik Devaprasad:</br>
+ Improved code as per library conventions. 
+ </li>
+
 </ul>
-</html>", info="<html>
+</html>
+",        info="<html>
 <p>
 This example simulates
 <a href=\"modelica://Buildings.Controls.OBC.FDE.DOAS.Subsequences.ExhaustFanController\">

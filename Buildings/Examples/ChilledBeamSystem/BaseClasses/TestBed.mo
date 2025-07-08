@@ -215,11 +215,9 @@ block TestBed
     Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = 90, origin = {100, -174})));
   Buildings.Fluid.Sensors.TemperatureTwoPort senTem(redeclare package Medium = MediumA, final m_flow_nominal = mAirTot_flow_nominal) "AHU discharge air temperature sensor" annotation (
     Placement(transformation(extent={{-22,-28},{-2,-8}})));
-  Buildings.Fluid.Sensors.RelativePressure senRelPre(redeclare package Medium
-      =                                                                         MediumW) "Differential pressure sensor between chilled water supply and return" annotation (
+  Buildings.Fluid.Sensors.RelativePressure senRelPre(redeclare package Medium = MediumW) "Differential pressure sensor between chilled water supply and return" annotation (
     Placement(transformation(extent = {{150, -80}, {170, -60}})));
-  Buildings.Fluid.Sensors.RelativePressure senRelPre1(redeclare package Medium
-      =                                                                          MediumA) "Differential pressure sensor between AHU discharge and outdoor air" annotation (
+  Buildings.Fluid.Sensors.RelativePressure senRelPre1(redeclare package Medium = MediumA) "Differential pressure sensor between AHU discharge and outdoor air" annotation (
     Placement(transformation(extent = {{-10, -10}, {10, 10}}, rotation = 90, origin={-20,30})));
   Modelica.Blocks.Routing.DeMultiplex demux(final n = 5) "Demultiplexer for chilled water valve signals" annotation (
     Placement(transformation(extent={{42,-30},{62,-10}})));
@@ -968,21 +966,15 @@ equation
           -170,2}},                                color={0,127,255}));
   connect(senTemEneWhe.port_b, senRelHum1.port_a) annotation (Line(points={{-150,2},
           {-148,2},{-148,-2},{-140,-2}},            color={0,127,255}));
-  connect(bldgSP, bldgSP)
-    annotation (Line(points={{600,-300},{600,-300}}, color={0,0,127}));
   connect(senTemEneWhe.T, TEneWhe) annotation (Line(points={{-160,13},{-160,20},
           {-216,20},{-216,-348},{568,-348},{568,-340},{598,-340}},color={
           0,0,127}));
   connect(uPumSta, booToRea.u) annotation (Line(points={{-362,-182},{-328,-182},
           {-328,-174}}, color={255,0,255}));
-  connect(pro1.u2, senMasFlo.m_flow) annotation (Line(points={{-186,30},{-200,
-          30},{-200,40},{-244,40},{-244,9}}, color={0,0,127}));
   connect(senMasFlo.port_b, whe.port_a1) annotation (Line(points={{-234,-2},{
           -224,-2},{-224,2},{-204,2}}, color={0,127,255}));
   connect(uEneRecWheSpe, whe.uSpe) annotation (Line(points={{-358,20},{-264,20},
           {-264,12},{-212,12},{-212,-4},{-206,-4}}, color={0,0,127}));
-  connect(jun8.port_1, jun8.port_3) annotation (Line(points={{50,160},{50,154},
-          {60,154},{60,150}}, color={0,127,255}));
   connect(pre1.y, yFanSta) annotation (Line(points={{-276,128},{-218,128},{-218,
           352},{346,352},{346,196},{532,196},{532,120},{530,120},{530,-22},{598,
           -22}}, color={255,0,255}));
@@ -991,10 +983,6 @@ equation
   connect(whe.port_a2, senTem1.port_a) annotation (Line(points={{-184,-10},{
           -184,-24},{-228,-24},{-228,72},{-200,72},{-200,92},{-120,92},{-120,
           128},{-144,128},{-144,144},{-134,144}}, color={0,127,255}));
-  connect(dPDOASAir, dPDOASAir)
-    annotation (Line(points={{600,20},{600,20}}, color={0,0,127}));
-  connect(cooCoi.port_b1, heaCoi.port_a1)
-    annotation (Line(points={{-82,-26},{-92,-26}}, color={0,127,255}));
   connect(senRelHum.phi, relHumDOASRet) annotation (Line(points={{-90.1,141},{
           -90.1,136},{-68,136},{-68,346},{526,346},{526,294},{554,294},{554,296},
           {600,296}}, color={0,0,127}));
@@ -1002,14 +990,13 @@ equation
           -98},{-184,-102},{-110,-102},{-110,-90}}, color={0,0,127}));
   connect(amb.ports[4], senMasFlo.port_a) annotation (Line(points={{-268,-63.35},
           {-266,-63.35},{-266,-4},{-254,-4},{-254,-2}}, color={0,127,255}));
-  connect(rAT, rAT)
-    annotation (Line(points={{600,340},{600,340}}, color={0,0,127}));
   connect(multiplex5_3.y, VDisAir_flow) annotation (Line(points={{321,220},{434,
           220},{434,216},{552,216},{552,180},{600,180}}, color={0,0,127}));
   connect(multiplex5_1.y, TZon) annotation (Line(points={{321,260},{414,260},{
           414,250},{528,250},{528,226},{570,226},{570,218},{600,218}}, color={0,
           0,127}));
-  annotation (
+    annotation (Line(points={{600,20},{600,20}}, color={0,0,127}),
+                Line(points={{600,340},{600,340}}, color={0,0,127}),
     Icon(coordinateSystem(preserveAspectRatio = false, extent = {{-100, -360}, {100, 360}}), graphics={                                                                                           Rectangle(                   lineColor = {0, 0, 127}, fillColor = {255, 255, 255},
             fillPattern =                                                                                                                                                                                                        FillPattern.Solid, extent={{-100,
               -362},{100,360}}),                                                                         Text(textColor = {0, 0, 255}, extent={{-144,
