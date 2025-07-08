@@ -376,5 +376,8 @@ Buildings.Controls.OBC.FDE.DOAS.Controller</a>.
 </p>
 </html>"),
         __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Validation/Controller.mos"
-    "Simulate and plot"));
+    "Simulate and plot"),
+    experiment(
+      StopTime=10800,
+      Tolerance=1e-06));
 end Controller;
