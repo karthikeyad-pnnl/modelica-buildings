@@ -1,13 +1,12 @@
-simulateModel("Buildings.Controls.OBC.FDE.DOAS.Validation.Controller", method="Cvode", stopTime=10800, tolerance=1e-06, resultFile="Controller");
+﻿simulateModel("Buildings.Controls.OBC.FDE.DOAS.Validation.Controller", method="Cvode", stopTime=10800, tolerance=1e-06, resultFile="Controller");
 createPlot(id=1, position={18, 7, 594, 427}, y={"DOAScon1.Cooling.uDeh", "DOAScon1.Cooling.uFanSupPro"}, range={0.0, 11000.0, -0.5, 1.5}, grid=true, subPlot=101, colors={{28,108,200}, {28,108,200}}, timeUnit="s");
 createPlot(id=1, position={18, 7, 594, 427}, y={"DOAScon1.Cooling.TAirSup", "DOAScon1.Cooling.TAirSupSetCoo"}, range={0.0, 11000.0, 15.0, 30.0}, grid=true, subPlot=102, colors={{28,108,200}, {238,46,47}}, timeUnit="s", displayUnits={"degC", "degC"});
 createPlot(id=1, position={18, 7, 594, 427}, y={"DOAScon1.Cooling.yCoiCoo"}, range={0.0, 11000.0, -2.0, 2.0}, grid=true, subPlot=103, colors={{28,108,200}}, timeUnit="s");
-createPlot(id=2, position={32, 50, 611, 424}, y={"DOAScon1.Heating.yCoiHea", "DOAScon1.Heating.uFanSupPro"}, range={0.0, 11000.0, -0.2, 1.2000000000000002}, grid=true, subPlot=101, colors={{28,108,200}, {238,46,47}}, timeUnit="s");
+createPlot(id=2, position={32, 50, 611, 424}, y={"DOAScon1.Heating.yCoiHea", "DOAScon1.Heating.uFanSupPro"}, range={0.0, 11000.0, -0.2, 1.20}, grid=true, subPlot=101, colors={{28,108,200}, {238,46,47}}, timeUnit="s");
 createPlot(id=2, position={32, 50, 611, 424}, y={"DOAScon1.Heating.TAirSup", "DOAScon1.Heating.TAirSupSetHea"}, range={0.0, 11000.0, 290.0, 302.0}, grid=true, subPlot=102, colors={{28,108,200}, {238,46,47}}, timeUnit="s", displayUnits={"K", "K"});
 createPlot(id=3, position={93, 22, 594, 363}, y={"DOAScon1.EconMod1.yEcoMod", "DOAScon1.EconMod1.uFanSupPro"}, range={0.0, 11000.0, -0.5, 1.5}, grid=true, subPlot=101, colors={{28,108,200}, {28,108,200}}, timeUnit="s");
 createPlot(id=3, position={93, 22, 594, 363}, y={"DOAScon1.EconMod1.TAirOut", "DOAScon1.EconMod1.TAirSupSetCoo"}, range={0.0, 11000.0, 270.0, 310.0}, grid=true, subPlot=102, colors={{28,108,200}, {238,46,47}}, timeUnit="s", displayUnits={"K", "K"});
-createPlot(id=4, position={42, -7, 799, 450}, y={"DOAScon1.ERWcon.uEcoMod", "DOAScon1.ERWcon.uFanSupPro", "DOAScon1.ERWcon.yBypDam",
- "DOAScon1.ERWcon.yEneRecWheEna"}, range={0.0, 11000.0, -1.0, 2.0}, grid=true, subPlot=101, colors={{28,108,200}, {28,108,200}, {28,108,200}, {28,108,200}}, timeUnit="s");
+createPlot(id=4, position={42, -7, 799, 450}, y={"DOAScon1.ERWcon.uEcoMod", "DOAScon1.ERWcon.uFanSupPro", "DOAScon1.ERWcon.yBypDam","DOAScon1.ERWcon.yEneRecWheEna"}, range={0.0, 11000.0, -1.0, 2.0}, grid=true, subPlot=101, colors={{28,108,200}, {28,108,200}, {28,108,200}, {28,108,200}}, timeUnit="s");
 createPlot(id=4, position={42, -7, 799, 450}, y={"DOAScon1.ERWcon.TAirOut", "DOAScon1.ERWcon.TAirRet"}, range={0.0, 11000.0, 260.0, 320.0}, grid=true, subPlot=102, colors={{28,108,200}, {238,46,47}}, timeUnit="s", displayUnits={"K", "K"});
 createPlot(id=4, position={42, -7, 799, 450}, y={"DOAScon1.ERWcon.yEneRecWheSpe"}, range={0.0, 11000.0, -1.0, 2.0}, grid=true, subPlot=103, colors={{28,108,200}}, timeUnit="s", displayUnits={"1"});
 createPlot(id=4, position={42, -7, 799, 450}, y={"DOAScon1.ERWcon.TAirSupEneWhe", "DOAScon1.ERWcon.TAirSupSetEneWhe"}, range={0.0, 11000.0, 260.0, 320.0}, grid=true, subPlot=104, colors={{28,108,200}, {238,46,47}}, timeUnit="s", displayUnits={"K", "K"});
@@ -20,9 +19,7 @@ createPlot(id=6, position={0, -15, 998, 518}, y={"DOAScon1.SFcon.yMaxDamSet", "D
 createPlot(id=6, position={0, -15, 998, 518}, y={"DOAScon1.SFcon.dPAirDucSta", "DOAScon1.SFcon.conPIDdPSetPoi.y"}, range={0.0, 5800.0, 0.0, 1000.0}, grid=true, subPlot=105, colors={{238,46,47}, {28,108,200}}, timeUnit="s", displayUnits={"Pa", "Pa"});
 createPlot(id=6, position={0, -15, 998, 518}, y={"DOAScon1.SFcon.DamSet.y", "DOAScon1.SFcon.uDamMaxOpe"}, range={0.0, 5800.0, -1.0, 2.0}, grid=true, subPlot=103, colors={{28,108,200}, {238,46,47}}, timeUnit="s", displayUnits={"1", "1"});
 createPlot(id=7, position={35, 35, 594, 363}, y={"DOAScon1.TSupSetpt.uDehMod"}, range={0.0, 11000.0, -0.5, 1.5}, grid=true, subPlot=101, colors={{28,108,200}}, timeUnit="s");
-createPlot(id=7, position={35, 35, 594, 363}, y={"DOAScon1.TSupSetpt.ySupSet", "DOAScon1.TSupSetpt.ySupHeaSet", 
-"DOAScon1.TSupSetpt.ySupCooSet"}, range={0.0, 11000.0, 298.0, 302.0}, grid=true, subPlot=102, colors={{28,108,200}, {238,46,47}, {0,140,72}}, timeUnit="s", displayUnits={"K", "K", "K"});
-createPlot(id=7, position={35, 35, 594, 363}, y={"DOAScon1.TSupSetpt.THigZon", "DOAScon1.TSupSetpt.TLowZon", "DOAScon1.TSupSetpt.TAirHig"}, range={0.0, 11000.0, 290.0, 300.0}, grid=true, subPlot=103, colors={{28,108,200}, {238,46,47}, {0,140,72}}, timeUnit="s", displayUnits={"K", "K", "K"})
+createPlot(id=7, position={35, 35, 594, 363}, y={"DOAScon1.TSupSetpt.ySupSet", "DOAScon1.TSupSetpt.ySupHeaSet", "DOAScon1.TSupSetpt.ySupCooSet"}, range={0.0, 11000.0, 298.0, 302.0}, grid=true, subPlot=102, colors={{28,108,200}, {238,46,47}, {0,140,72}}, timeUnit="s", displayUnits={"K", "K", "K"});
+createPlot(id=7, position={35, 35, 594, 363}, y={"DOAScon1.TSupSetpt.THigZon", "DOAScon1.TSupSetpt.TLowZon", "DOAScon1.TSupSetpt.TAirHig"}, range={0.0, 11000.0, 290.0, 300.0}, grid=true, subPlot=103, colors={{28,108,200}, {238,46,47}, {0,140,72}}, timeUnit="s", displayUnits={"K", "K", "K"});
 
-;
 

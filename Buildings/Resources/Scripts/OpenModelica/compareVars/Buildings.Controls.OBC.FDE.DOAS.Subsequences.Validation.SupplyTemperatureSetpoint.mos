@@ -1,0 +1,10 @@
+compareVars :=
+  {
+    "TSupSetpt.uDehMod",
+    "TSupSetpt.ySupSet",
+    "TSupSetpt.ySupHeaSet",
+    "TSupSetpt.ySupCooSet",
+    "TSupSetpt.THigZon",
+    "TSupSetpt.TLowZon",
+    "TSupSetpt.TAirHig"
+  };

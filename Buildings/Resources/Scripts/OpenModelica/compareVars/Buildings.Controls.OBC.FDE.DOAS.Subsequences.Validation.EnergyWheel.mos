@@ -1,0 +1,12 @@
+compareVars :=
+  {
+    "ERWcon.uFanSupPro",
+    "ERWcon.uEcoMod",
+    "ERWcon.yBypDam",
+    "ERWcon.yEneRecWheEna",
+    "ERWcon.TAirRet",
+    "ERWcon.TAirOut",
+    "ERWcon.yEneRecWheSpe",
+    "ERWcon.TAirSupEneWhe",
+    "ERWcon.TAirSupSetEneWhe"
+  };

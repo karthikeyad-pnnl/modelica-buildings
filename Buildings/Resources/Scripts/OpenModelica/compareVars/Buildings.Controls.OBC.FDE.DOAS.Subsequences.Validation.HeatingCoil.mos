@@ -1,0 +1,7 @@
+compareVars :=
+  {
+    "CoiHea.uFanSupPro",
+    "CoiHea.yCoiHea",
+    "CoiHea.TAirSup",
+    "CoiHea.TAirSupSetHea"
+  };

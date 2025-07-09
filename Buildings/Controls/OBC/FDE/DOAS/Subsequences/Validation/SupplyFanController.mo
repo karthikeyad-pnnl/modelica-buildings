@@ -97,5 +97,9 @@ This example simulates
 Buildings.Controls.OBC.FDE.DOAS.Subsequences.SupplyFanController</a>.
 </p>
 </html>"),__Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Subsequences/Validation/SupplyFanController.mos"
-    "Simulate and plot"));
+    "Simulate and plot"),
+    experiment(
+      StopTime=5760,
+      Tolerance=1e-06,
+      __Dymola_Algorithm="Dassl"));
 end SupplyFanController;

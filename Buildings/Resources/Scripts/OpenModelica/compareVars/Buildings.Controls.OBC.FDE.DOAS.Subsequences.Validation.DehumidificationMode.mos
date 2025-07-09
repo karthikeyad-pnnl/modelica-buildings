@@ -1,0 +1,7 @@
+compareVars :=
+  {
+    "DehumMod.uFanSupPro",
+    "DehumMod.yDehMod",
+    "DehumMod.phiAirRet",
+    "DehumMod.dehumSet"
+  };

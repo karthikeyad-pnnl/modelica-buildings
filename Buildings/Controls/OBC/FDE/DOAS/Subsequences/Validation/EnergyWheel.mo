@@ -98,7 +98,10 @@ Polygon(lineColor = {0,0,255},fillColor = {75,138,73}, pattern = LinePattern.Non
 FillPattern.Solid,points={{-36,60},{64,0},{-36,-60},{-36,60}}),                                          Text(textColor = {28, 108, 200}, extent={{-98,170},
               {102,90}},                                                                                                                                                   textString = "%name", textStyle = {TextStyle.Bold})}),
 Diagram(coordinateSystem(preserveAspectRatio=false)),
-    experiment(StopTime=5760, __Dymola_Algorithm="Dassl"),
+    experiment(
+      StopTime=7200,
+      Tolerance=1e-06,
+      __Dymola_Algorithm="Dassl"),
     Documentation(revisions="<html>
 <ul>
 <li>

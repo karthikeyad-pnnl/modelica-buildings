@@ -74,7 +74,10 @@ This example simulates
 Buildings.Controls.OBC.FDE.DOAS.Subsequences.ExhaustFanController</a>.
 </p>
 </html>"),
-    experiment(StopTime=5760, __Dymola_Algorithm="Dassl"),
+    experiment(
+      StopTime=7200,
+      Tolerance=1e-06,
+      __Dymola_Algorithm="Dassl"),
     __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Subsequences/Validation/ExhaustFan.mos"
     "Simulate and plot"));
 end ExhaustFan;

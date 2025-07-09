@@ -73,5 +73,8 @@ This example simulates
 Buildings.Controls.OBC.FDE.DOAS.Subsequences.DehumidificationMode</a>.
 </p>
 </html>"),__Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/FDE/DOAS/Subsequences/Validation/DehumidificationMode.mos"
-    "Simulate and plot"));
+    "Simulate and plot"),
+    experiment(
+      StopTime=7200,
+      Tolerance=1e-06));
 end DehumidificationMode;

@@ -1,0 +1,8 @@
+compareVars :=
+  {
+    "EFcon.uFanSupPro",
+    "EFcon.uFanExhPro",
+    "EFcon.dPAirStaBui",
+    "EFcon.dPSetBui",
+    "EFcon.yExhFanSpe"
+  };

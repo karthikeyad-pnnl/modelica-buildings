@@ -1,0 +1,9 @@
+compareVars :=
+  {
+    "conCoiCoo.uFanSupPro",
+    "conCoiCoo.uDeh",
+    "conCoiCoo.TAirSup",
+    "conCoiCoo.TAirSupSetCoo",
+    "conCoiCoo.yCoiCoo",
+    "conCoiCoo.TAirDis"
+  };

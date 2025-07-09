@@ -1,0 +1,14 @@
+compareVars :=
+  {
+    "SFcon.yFanSupSpe",
+    "SFcon.Occ",
+    "SFcon.uFanSupPro",
+    "SFcon.yFanSup",
+    "SFcon.yMaxDamSet",
+    "SFcon.yMinDamSet",
+    "SFcon.conPIDdPSetPoi.y",
+    "SFcon.dPAirDucSta",
+    "SFcon.conPIDdPSetPoi.y",
+    "SFcon.DamSet.y",
+    "SFcon.uDamMaxOpe"
+  };

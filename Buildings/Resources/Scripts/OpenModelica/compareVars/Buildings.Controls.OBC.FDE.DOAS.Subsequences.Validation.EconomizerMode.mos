@@ -1,0 +1,7 @@
+compareVars :=
+  {
+    "EconMod.uFanSupPro",
+    "EconMod.yEcoMod",
+    "EconMod.TAirSupSetCoo",
+    "EconMod.TAirOut"
+  };

@@ -19,7 +19,7 @@ block DehumidificationMode
     "Continuous time period for which measured relative humidity needs to fall below relative humidity threshold before dehumidification mode is disabled";
   parameter Real timDelDehEna(
     final unit="s",
-    c)=180
+    final quantity="Time")=180
     "Continuous time period for which supply fan needs to be on before enabling dehumidifaction mode";
   parameter Real timThrDehEna(
     final unit="s",

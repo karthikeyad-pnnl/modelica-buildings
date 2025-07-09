@@ -1,7 +1,7 @@
 simulateModel("Buildings.Controls.OBC.FDE.DOAS.Subsequences.Validation.DehumidificationMode", method="Cvode", stopTime=7200, tolerance=1e-06, resultFile="DehumidificationMode");
 createPlot(id=1, position={103, 9, 611, 427}, y={"DehumMod.uFanSupPro", "DehumMod.yDehMod"}, range={0.0, 7200.0, -0.1, 1.1}, grid=true, colors={{28,108,200}, {28,108,200}});
-createPlot(id=1, position={103, 9, 611, 211}, y={"DehumMod.phiAirRet", "DehumMod.dehumSet"}, range={0.0, 7200.0, 290.0, 304.0}, grid=true, subPlot=2, colors={{28,108,200}, {238,46,47}})
+createPlot(id=1, position={103, 9, 611, 211}, y={"DehumMod.phiAirRet", "DehumMod.dehumSet"}, range={0.0, 7200.0, 290.0, 304.0}, grid=true, subPlot=2, colors={{28,108,200}, {238,46,47}});
 
-;
+
 
 
