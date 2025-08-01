@@ -2,7 +2,7 @@ within Buildings.Controls.OBC.ASHRAE.G36.Plants.Chillers.MinimumFlowBypass.Valid
 model Controller "Validate control of minimum bypass valve"
 
   Buildings.Controls.OBC.CDL.Examples.Task2
-    minBypValCon
+    minBypValCon(Td=1e-9)
     "Minimum bypass valve position"
     annotation (Placement(transformation(extent={{40,-10},{60,10}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Pulse chiFloSet(

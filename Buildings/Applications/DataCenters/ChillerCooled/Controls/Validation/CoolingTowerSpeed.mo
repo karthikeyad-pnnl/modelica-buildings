@@ -26,6 +26,10 @@ model CoolingTowerSpeed
   Modelica.Blocks.Sources.IntegerTable cooMod(table=[0,1; 360,2; 720,3])
     "Cooling mode"
     annotation (Placement(transformation(extent={{-60,40},{-40,60}})));
+  Buildings.Controls.OBC.CDL.Integers.Subtract intSub
+    annotation (Placement(transformation(extent={{0,30},{20,50}})));
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(k=1)
+    annotation (Placement(transformation(extent={{-90,20},{-70,40}})));
 equation
   connect(CWSTSet.y, cooTowSpeCon.TCWSupSet)
     annotation (Line(points={{-39,80},{-20,80},{-20,80},{-20,22},{-20,10},{-12,
@@ -39,9 +43,14 @@ equation
   connect(CHWST.y, cooTowSpeCon.TCHWSup)
     annotation (Line(points={{-39,-70},{-32,
           -70},{-24,-70},{-24,-7.77778},{-12,-7.77778}}, color={0,0,127}));
-  connect(cooMod.y, cooTowSpeCon.cooMod)
-    annotation (Line(points={{-39,50},{-26,
-          50},{-26,5.55556},{-12,5.55556}}, color={255,127,0}));
+  connect(intSub.y, cooTowSpeCon.cooMod)
+    annotation (Line(points={{22,40},{30,40},{30,20},{-24,20},{-24,5.55556},{
+          -12,5.55556}},                    color={255,127,0}));
+  connect(cooMod.y, intSub.u1) annotation (Line(points={{-39,50},{-10,50},{-10,
+          46},{-2,46}},
+                    color={255,127,0}));
+  connect(conInt.y, intSub.u2) annotation (Line(points={{-68,30},{-10,30},{-10,
+          34},{-2,34}}, color={255,127,0}));
   annotation (    __Dymola_Commands(file=
         "modelica://Buildings/Resources/Scripts/Dymola/Applications/DataCenters/ChillerCooled/Controls/Validation/CoolingTowerSpeed.mos"
         "Simulate and plot"),
