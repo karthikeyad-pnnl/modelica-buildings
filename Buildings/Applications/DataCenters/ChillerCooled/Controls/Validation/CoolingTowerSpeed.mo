@@ -3,8 +3,8 @@ model CoolingTowerSpeed
   "Test the model ChillerWSE.Examples.BaseClasses.CoolingTowerSpeedControl"
   extends Modelica.Icons.Example;
 
-  Buildings.Applications.DataCenters.ChillerCooled.Controls.CoolingTowerSpeed
-    cooTowSpeCon(controllerType=Modelica.Blocks.Types.SimpleController.PI)
+  Buildings.Controls.OBC.CDL.Examples.Task3
+    cooTowSpeCon
     "Cooling tower speed controller"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}})));
   Modelica.Blocks.Sources.Sine CHWST(

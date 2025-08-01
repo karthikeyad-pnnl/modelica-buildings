@@ -11,15 +11,15 @@ model ChillerSwitch "Test model for ChillerSwitch"
     amplitude=5,
     offset=15)
     annotation (Placement(transformation(extent={{-60,20},{-40,40}})));
-  Buildings.Examples.ChillerPlants.DataCenter.BaseClasses.Controls.ChillerSwitch
-    chiSwi(deaBan(displayUnit="K") = 3)
+  Buildings.Controls.OBC.CDL.Examples.Task1
+    chiSwi(TDeaBan=276.15)
     annotation (Placement(transformation(extent={{0,0},{20,20}})));
 equation
-  connect(TSet.y, chiSwi.TSet) annotation (Line(
+  connect(TSet.y, chiSwi.TChiSet) annotation (Line(
       points={{-39,-10},{-20,-10},{-20,5},{-1,5}},
       color={0,0,127},
       smooth=Smooth.None));
-  connect(CHWST.y, chiSwi.chiCHWST) annotation (Line(
+  connect(CHWST.y, chiSwi.TChi_CHWST) annotation (Line(
       points={{-39,30},{-20,30},{-20,17},{-1,17}},
       color={0,0,127},
       smooth=Smooth.None));

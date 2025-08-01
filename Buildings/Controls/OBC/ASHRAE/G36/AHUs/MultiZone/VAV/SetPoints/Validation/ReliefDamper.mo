@@ -2,11 +2,11 @@ within Buildings.Controls.OBC.ASHRAE.G36.AHUs.MultiZone.VAV.SetPoints.Validation
 model ReliefDamper
   "Validate model for calculating relief damper control"
 
-  Buildings.Controls.OBC.ASHRAE.G36.AHUs.MultiZone.VAV.SetPoints.ReliefDamper relDam(
-    final k=0.1) "Relief damper control"
+  Buildings.Controls.OBC.CDL.Examples.Task5 relDam(k=0.1)
+                 "Relief damper control"
     annotation (Placement(transformation(extent={{20,60},{40,80}})));
 
-  Buildings.Controls.OBC.ASHRAE.G36.AHUs.MultiZone.VAV.SetPoints.ReliefDamper relDam1
+  Buildings.Controls.OBC.CDL.Examples.Task5 relDam1(k=0.1)
     "Relief damper control"
     annotation (Placement(transformation(extent={{20,-40},{40,-20}})));
 
