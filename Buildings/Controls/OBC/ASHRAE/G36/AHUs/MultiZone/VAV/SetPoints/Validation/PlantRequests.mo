@@ -10,7 +10,7 @@ model PlantRequests
     annotation (Placement(transformation(extent={{60,-60},{80,-40}})));
 
   Buildings.Controls.OBC.CDL.Reals.Sources.Ramp supTem(
-    final height=8,
+    final height=10,
     final offset=273.15 + 15,
     final duration=3600) "Supply air temperature"
     annotation (Placement(transformation(extent={{-80,-30},{-60,-10}})));
@@ -45,6 +45,8 @@ model PlantRequests
     final k=0) "Cooling coil position"
     annotation (Placement(transformation(extent={{-80,30},{-60,50}})));
 
+  CDL.Reals.Subtract sub
+    annotation (Placement(transformation(extent={{40,-10},{60,10}})));
 equation
   connect(supTem.y, plaReq1.TAirSup) annotation (Line(points={{-58,-20},{20,-20},
           {20,-42},{58,-42}}, color={0,0,127}));
@@ -59,6 +61,10 @@ equation
   connect(cooCoi1.y, plaReq.uCooCoi) annotation (Line(points={{-58,40},{10,
           40},{10,57},{58,57}}, color={0,0,127}));
 
+  connect(supTem.y, sub.u1) annotation (Line(points={{-58,-20},{30,-20},{30,6},
+          {38,6}}, color={0,0,127}));
+  connect(supTemSet.y, sub.u2) annotation (Line(points={{-18,-40},{0,-40},{0,
+          -48},{34,-48},{34,-14},{38,-14},{38,-6}}, color={0,0,127}));
 annotation (
   experiment(StopTime=3600, Tolerance=1e-6),
   __Dymola_Commands(file="modelica://Buildings/Resources/Scripts/Dymola/Controls/OBC/ASHRAE/G36/AHUs/MultiZone/VAV/SetPoints/Validation/PlantRequests.mos"
