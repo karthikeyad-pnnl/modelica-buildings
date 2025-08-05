@@ -193,7 +193,7 @@ block DamperValves
     annotation (Placement(transformation(extent={{320,-180},{360,-140}}),
         iconTransformation(extent={{100,-160},{140,-120}})));
 
-protected
+// protected
   Buildings.Controls.OBC.CDL.Logical.And and4 "Logical and"
     annotation (Placement(transformation(extent={{-60,140},{-40,160}})));
   Buildings.Controls.OBC.CDL.Reals.Line lin
