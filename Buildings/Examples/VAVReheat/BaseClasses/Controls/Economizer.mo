@@ -106,7 +106,7 @@ block Economizer "Controller for economizer"
     "Constant 1"
     annotation (Placement(transformation(extent={{100,70},{120,90}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant con(k=0.3)
-    annotation (Placement(transformation(extent={{140,-60},{160,-40}})));
+    annotation (Placement(transformation(extent={{120,-60},{140,-40}})));
 equation
   connect(VOut_flow, gain.u) annotation (Line(
       points={{-120,-60},{-62,-60}},
@@ -162,10 +162,10 @@ equation
           {168,6}}, color={0,0,127}));
   connect(invSig.y, yRet)
     annotation (Line(points={{192,0},{220,0}}, color={0,0,127}));
-  connect(con.y, yOA) annotation (Line(points={{162,-50},{194,-50},{194,-60},{
-          220,-60}}, color={0,0,127}));
-  connect(con.y, invSig.u2) annotation (Line(points={{162,-50},{170,-50},{170,
-          -16},{160,-16},{160,-6},{168,-6}}, color={0,0,127}));
+  connect(swiModClo.y, invSig.u2) annotation (Line(points={{152,0},{160,0},{160,
+          -6},{168,-6}}, color={0,0,127}));
+  connect(swiModClo.y, yOA) annotation (Line(points={{152,0},{160,0},{160,-60},
+          {220,-60}}, color={0,0,127}));
   annotation (defaultComponentName="conEco",
     Diagram(coordinateSystem(preserveAspectRatio=true, extent={{-100,-100},{200,
             200}})),

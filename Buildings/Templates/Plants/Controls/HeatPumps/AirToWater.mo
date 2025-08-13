@@ -1163,8 +1163,7 @@ block AirToWater
       iconTransformation(extent={{200,-280},{240,-240}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y1EnaPla
-    if not have_heaWat or not have_chiWat
-    "Heat pump plant enable command"
+    if not have_heaWat or not have_chiWat "Heat pump plant enable command"
     annotation (Placement(transformation(extent={{300,380},{340,420}}),
       iconTransformation(extent={{200,360},{240,400}})));
 
@@ -1702,6 +1701,14 @@ block AirToWater
         nPumChiWatPri) if not has_fouPip
     "Replicate signal by number of chilled water primary pumps"
     annotation (Placement(transformation(extent={{10,410},{30,430}})));
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y1EnaHea if have_heaWat
+    "Heat pump plant enable command" annotation (Placement(transformation(
+          extent={{300,420},{340,460}}), iconTransformation(extent={{200,390},{
+            240,430}})));
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y1EnaCoo if have_chiWat
+    "Heat pump plant enable command" annotation (Placement(transformation(
+          extent={{300,462},{340,502}}), iconTransformation(extent={{200,420},{
+            240,460}})));
 equation
   connect(u1SchHea, enaHea.u1Sch)
     annotation (Line(points={{-280,380},{-180,380},{-180,364},{-112,364}},color={255,0,255}));
@@ -2168,8 +2175,9 @@ equation
                                                    color={255,0,255}));
   connect(enaCoo.y1, ctlPlaHyb.u1EnaCoo) annotation (Line(points={{-88,100},{-80,
           100},{-80,-40},{36,-40},{36,-90},{58,-90}}, color={255,0,255}));
-  connect(enaHea.y1, ctlPlaHyb.u1EnaHea) annotation (Line(points={{-88,360},{-84,
-          360},{-84,-94},{58,-94}}, color={255,0,255}));
+  connect(enaHea.y1, ctlPlaHyb.u1EnaHea) annotation (Line(points={{-88,360},{
+          -86,360},{-86,-94},{58,-94}},
+                                    color={255,0,255}));
   connect(y1HpPre.y, ctlPlaHyb.u1Hp) annotation (Line(points={{178,380},{-160,380},
           {-160,0},{-64,0},{-64,-98},{58,-98}}, color={255,0,255}));
   connect(seqEve.y1Hea, ctlPlaHyb.uMod) annotation (Line(points={{162,308},{176,
@@ -2263,6 +2271,10 @@ end if;
           -172,450},{8,450}}, color={255,0,255}));
   connect(con.y, booScaRep2.u) annotation (Line(points={{-178,410},{-172,410},{
           -172,450},{0,450},{0,420},{8,420}}, color={255,0,255}));
+  connect(enaHea.y1, y1EnaHea) annotation (Line(points={{-88,360},{-56,360},{
+          -56,400},{288,400},{288,440},{320,440}}, color={255,0,255}));
+  connect(enaCoo.y1, y1EnaCoo) annotation (Line(points={{-88,100},{114,100},{
+          114,482},{320,482}}, color={255,0,255}));
   annotation (
     defaultComponentName="ctl",
     Icon(

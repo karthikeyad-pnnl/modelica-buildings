@@ -1063,6 +1063,33 @@ equation
       index=-1,
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
+  connect(ctl.TChiWatSupSet, bus.TChiWatSupSet) annotation (Line(points={{
+          -345.714,-14.9302},{-345.714,-46},{-520,-46}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{-3,-6},{-3,-6}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(ctl.THeaWatSupSet, bus.THeaWatSupSet) annotation (Line(points={{
+          -345.714,-13.2558},{-336,-13.2558},{-336,-44},{-436,-44},{-436,-48},{
+          -520,-48},{-520,-46}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(ctl.y1EnaCoo, bus.y1EnaCoo) annotation (Line(points={{-345.714,
+          40.3256},{-344,40.3256},{-344,56},{-456,56},{-456,148},{-544,148},{
+          -544,136},{-520,136},{-520,-46}}, color={255,0,255}), Text(
+      string="%second",
+      index=1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(ctl.y1EnaHea, bus.y1EnaHea) annotation (Line(points={{-345.714,37.814},
+          {-316,37.814},{-316,48},{-312,48},{-312,144},{-352,144},{-352,224},{
+          -560,224},{-560,-80},{-520,-80},{-520,-46}}, color={255,0,255}), Text(
+      string="%second",
+      index=1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
   annotation (
     __Dymola_Commands(
       file=
