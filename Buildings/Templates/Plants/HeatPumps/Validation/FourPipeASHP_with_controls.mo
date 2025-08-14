@@ -100,11 +100,11 @@ public
     m_flow_nominal=datAll.pla.hp.mHeaWatHp_flow_nominal,
     dpValve_nominal=1e-9)
     annotation (Placement(transformation(extent={{-48,-290},{-28,-270}})));
-  Fluid.Movers.Preconfigured.SpeedControlled_y     mov1(redeclare package
+  Fluid.Movers.Preconfigured.FlowControlled_m_flow mov1(redeclare package
       Medium = Medium, m_flow_nominal=datAll.pla.hp.mHeaWatHp_flow_nominal,
     dp_nominal=datAll.pla.pumHeaWatPri.dp_nominal[1])
     annotation (Placement(transformation(extent={{-20,-270},{0,-290}})));
-  Fluid.Movers.Preconfigured.SpeedControlled_y     mov2(redeclare package
+  Fluid.Movers.Preconfigured.FlowControlled_m_flow mov2(redeclare package
       Medium = Medium,
     addPowerToMedium=false,
     m_flow_nominal=datAll.pla.hp.mChiWatHp_flow_nominal,
@@ -146,7 +146,7 @@ public
   Buildings.Controls.OBC.CDL.Reals.PIDWithReset
                                        conPIDHea(k=0.05, Ti=60)
     annotation (Placement(transformation(extent={{60,-340},{80,-320}})));
-  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea(realTrue=datAll.pla.hp.mChiWatHp_flow_nominal)
     annotation (Placement(transformation(extent={{152,-230},{132,-210}})));
   Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr(t=0.05, h=0.02)
     annotation (Placement(transformation(extent={{42,-250},{22,-230}})));
@@ -154,7 +154,8 @@ public
     annotation (Placement(transformation(extent={{-18,-354},{-38,-334}})));
   Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr2(t=50, h=10)
     annotation (Placement(transformation(extent={{132,-264},{152,-244}})));
-  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea1
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea1(realTrue=
+        datAll.pla.hp.mHeaWatHp_flow_nominal)
     annotation (Placement(transformation(extent={{152,-300},{132,-280}})));
   Buildings.Controls.OBC.CDL.Routing.IntegerExtractor extIndInt(nin=3)
     annotation (Placement(transformation(extent={{-320,-330},{-300,-310}})));
@@ -178,7 +179,7 @@ public
     annotation (Placement(transformation(extent={{62,-174},{82,-154}})));
   Fluid.Sources.Outside out(redeclare package Medium = MediumAir, nPorts=2)
     annotation (Placement(transformation(extent={{-478,-174},{-458,-154}})));
-  Fluid.Movers.Preconfigured.SpeedControlled_y     mov5(
+  Fluid.Movers.Preconfigured.FlowControlled_m_flow mov5(
     redeclare package Medium = MediumAir,
     addPowerToMedium=false,
     m_flow_nominal=10*hp1.mCon1_flow_nominal,
@@ -188,7 +189,8 @@ public
         origin={-86,-318})));
   Buildings.Controls.OBC.CDL.Logical.Xor xor
     annotation (Placement(transformation(extent={{-158,-324},{-138,-304}})));
-  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea7
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea7(realTrue=10*
+        hp1.mCon1_flow_nominal)
     annotation (Placement(transformation(extent={{-132,-324},{-112,-304}})));
 
   Fluid.Sensors.TemperatureTwoPort senTem8(redeclare package Medium = MediumAir,
@@ -312,19 +314,12 @@ equation
           -312},{96,-352},{70,-352},{70,-342}},
                                               color={0,0,127}));
 
-  connect(booToRea.y, mov2.y) annotation (Line(points={{130,-220},{130,-222},{62,
-          -222},{62,-248}},   color={0,0,127}));
-  connect(booToRea1.y, mov1.y) annotation (Line(points={{130,-290},{60,-290},{60,
-          -292},{-10,-292}},       color={0,0,127}));
-
   connect(out.ports[1], mov5.port_a) annotation (Line(points={{-458,-165},{-458,
           -264},{-106,-264},{-106,-318},{-96,-318}},              color={0,127,255}));
   connect(mov5.port_b, hp1.port_a3) annotation (Line(points={{-76,-318},{26,-318},
           {26,-282}},   color={0,127,255}));
   connect(xor.y, booToRea7.u)
     annotation (Line(points={{-136,-314},{-134,-314}}, color={255,0,255}));
-  connect(booToRea7.y, mov5.y) annotation (Line(points={{-110,-314},{-98,-314},{
-          -98,-306},{-86,-306}},    color={0,0,127}));
   connect(booToRea.u, xor.u1) annotation (Line(points={{154,-220},{162,-220},{162,
           -134},{-172,-134},{-172,-314},{-160,-314}},
                               color={255,0,255}));
@@ -425,6 +420,12 @@ equation
       index=-1,
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
+  connect(booToRea1.y, mov1.m_flow_in) annotation (Line(points={{130,-290},{88,
+          -290},{88,-308},{-10,-308},{-10,-292}}, color={0,0,127}));
+  connect(booToRea.y, mov2.m_flow_in) annotation (Line(points={{130,-220},{62,
+          -220},{62,-248}}, color={0,0,127}));
+  connect(booToRea7.y, mov5.m_flow_in) annotation (Line(points={{-110,-314},{
+          -100,-314},{-100,-306},{-86,-306}}, color={0,0,127}));
   annotation (
     __Dymola_Commands(
       file=
