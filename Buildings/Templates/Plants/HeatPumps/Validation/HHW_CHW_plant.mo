@@ -226,7 +226,7 @@ model HHW_CHW_plant "Validation of AWHP plant template"
          else Modelica.Fluid.Types.PortFlowDirection.Leaving)
     "Fluid junction"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},rotation=0,
-      origin={-168,-528})));
+      origin={-228,-508})));
   Buildings.Templates.Components.Routing.Junction junHeaWatBypSup2(
     redeclare final package Medium = Medium,
     final m_flow_nominal=datAll.pla.hp.mHeaWatHp_flow_nominal*{1,-1,-1},
@@ -240,7 +240,7 @@ model HHW_CHW_plant "Validation of AWHP plant template"
          else Modelica.Fluid.Types.PortFlowDirection.Leaving)
     "Fluid junction"
     annotation (Placement(transformation(extent={{10,10},{-10,-10}},rotation=0,
-      origin={-168,-588})));
+      origin={-230,-590})));
   Buildings.Templates.Components.Routing.Junction junHeaWatBypSup(
     redeclare final package Medium = Medium,
     final m_flow_nominal=datAll.pla.hp.mHeaWatHp_flow_nominal*{1,-1,-1},
@@ -385,19 +385,19 @@ model HHW_CHW_plant "Validation of AWHP plant template"
       Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=0,
-        origin={-140,-528})));
+        origin={-200,-508})));
   Fluid.Sensors.VolumeFlowRate senVolFlo2(redeclare package Medium = Medium,
       m_flow_nominal=3*datAll.pla.hp.mHeaWatHp_flow_nominal)
-    annotation (Placement(transformation(extent={{-120,-538},{-100,-518}})));
+    annotation (Placement(transformation(extent={{-180,-518},{-160,-498}})));
   Fluid.Sensors.VolumeFlowRate senVolFlo3(redeclare package Medium = Medium,
       m_flow_nominal=3*datAll.pla.hp.mHeaWatHp_flow_nominal)
-    annotation (Placement(transformation(extent={{-90,-598},{-110,-578}})));
+    annotation (Placement(transformation(extent={{-152,-600},{-172,-580}})));
   Fluid.Sensors.TemperatureTwoPort senTem5(redeclare package Medium = Medium,
       m_flow_nominal=3*datAll.pla.hp.mHeaWatHp_flow_nominal) annotation (
       Placement(transformation(
         extent={{10,-10},{-10,10}},
         rotation=0,
-        origin={-134,-588})));
+        origin={-196,-590})));
   BoundaryConditions.WeatherData.Bus
       weaBus "Weather data bus" annotation (Placement(transformation(extent={{-438,
             140},{-364,210}})));
@@ -530,6 +530,15 @@ public
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput nReqResHeaWat annotation (
       Placement(transformation(extent={{-740,-40},{-700,0}}),
         iconTransformation(extent={{-160,80},{-120,120}})));
+  Buildings.Controls.OBC.CDL.Reals.LessThreshold lesThr(t=ctl.THeaLocLow)
+    annotation (Placement(transformation(extent={{-400,-460},{-380,-440}})));
+  Buildings.Controls.OBC.CDL.Reals.Switch swi
+    annotation (Placement(transformation(extent={{-360,-460},{-340,-440}})));
+  Fluid.HeatExchangers.Heater_T hea(
+    redeclare package Medium = Medium,
+    m_flow_nominal=3*datAll.pla.hp.mHeaWatHp_flow_nominal,
+    dp_nominal=0)
+    annotation (Placement(transformation(extent={{-56,-516},{-36,-496}})));
 equation
   if have_chiWat then
   end if;
@@ -547,13 +556,13 @@ equation
   connect(hp.ports_aChiHeaWat, mov.port_b) annotation (Line(points={{-548,-260},
           {-548,-212},{-508,-212},{-508,-198}}, color={0,127,255}));
   connect(valIso.port_bHeaWat, junHeaWatBypSup1.port_3) annotation (Line(points={{-678,
-          -133},{-678,-206},{-676,-206},{-676,-560},{-168,-560},{-168,-538}},
+          -133},{-678,-206},{-676,-206},{-676,-560},{-228,-560},{-228,-518}},
                                                                       color={0,127,
           255}));
   connect(junHeaWatBypSup.port_3, junHeaWatBypRet.port_3)
     annotation (Line(points={{-72,-518},{-72,-578}}, color={0,127,255}));
-  connect(junHeaWatBypSup2.port_2, valIso.port_aHeaWat) annotation (Line(points={{-178,
-          -588},{-690,-588},{-690,-117.571},{-678,-117.571}},       color={0,127,
+  connect(junHeaWatBypSup2.port_2, valIso.port_aHeaWat) annotation (Line(points={{-240,
+          -590},{-690,-590},{-690,-117.571},{-678,-117.571}},       color={0,127,
           255}));
   connect(junChiWatBypSup.port_3, junChiWatBypRet.port_3)
     annotation (Line(points={{-72,-168},{-72,-196}}, color={0,127,255}));
@@ -700,8 +709,6 @@ equation
   connect(greThr3[:].y, ctl.u1PumChiWatPri_actual[1:2]) annotation (Line(points={{-490,
           -242},{-490,-252},{-440,-252},{-440,25.4233},{-377.143,25.4233}},
                                                 color={255,0,255}));
-  connect(booToRea6.y, mov.y) annotation (Line(points={{-400,-192},{-400,-200},{
-          -488,-200},{-488,-188},{-496,-188}}, color={0,0,127}));
   connect(or2.y, booToRea6.u)
     annotation (Line(points={{-400,-162},{-400,-168}}, color={255,0,255}));
   connect(ctl.y1PumHeaWatPri[1:2], or2.u1) annotation (Line(points={{-345.714,
@@ -726,17 +733,16 @@ equation
   connect(senTem3.port_a, senVolFlo1.port_b)
     annotation (Line(points={{-112,-206},{-108,-206}}, color={0,127,255}));
   connect(junHeaWatBypSup1.port_2, senTem4.port_a)
-    annotation (Line(points={{-158,-528},{-150,-528}}, color={0,127,255}));
+    annotation (Line(points={{-218,-508},{-210,-508}}, color={0,127,255}));
   connect(senTem4.port_b, senVolFlo2.port_a)
-    annotation (Line(points={{-130,-528},{-120,-528}}, color={0,127,255}));
-  connect(senVolFlo2.port_b, junHeaWatBypSup.port_1) annotation (Line(points={{-100,
-          -528},{-96,-528},{-96,-508},{-82,-508}}, color={0,127,255}));
+    annotation (Line(points={{-190,-508},{-180,-508}}, color={0,127,255}));
   connect(junHeaWatBypRet.port_2, senVolFlo3.port_a)
-    annotation (Line(points={{-82,-588},{-90,-588}}, color={0,127,255}));
+    annotation (Line(points={{-82,-588},{-118,-588},{-118,-590},{-152,-590}},
+                                                     color={0,127,255}));
   connect(senVolFlo3.port_b, senTem5.port_a)
-    annotation (Line(points={{-110,-588},{-124,-588}}, color={0,127,255}));
+    annotation (Line(points={{-172,-590},{-186,-590}}, color={0,127,255}));
   connect(senTem5.port_b, junHeaWatBypSup2.port_1)
-    annotation (Line(points={{-144,-588},{-158,-588}}, color={0,127,255}));
+    annotation (Line(points={{-206,-590},{-220,-590}}, color={0,127,255}));
   connect(weaBus.TDryBul, ctl.TOut) annotation (Line(
       points={{-400.815,175.175},{-410,175.175},{-410,8.51163},{-377.143,
           8.51163}},
@@ -845,13 +851,13 @@ equation
   connect(senTemCooSup.T, busSen.TChiWatSupSec) annotation (Line(points={{50,-149},
           {50,-140},{92,-140},{92,-300},{62,-300}},
                       color={0,0,127}));
-  connect(senTem4.T, busSen.THeaWatSupPri) annotation (Line(points={{-140,-517},
-          {-140,-330},{62,-330},{62,-300}},
+  connect(senTem4.T, busSen.THeaWatSupPri) annotation (Line(points={{-200,-497},
+          {-200,-330},{62,-330},{62,-300}},
                   color={0,0,127}));
-  connect(senTem5.T, busSen.THeaWatRetPri) annotation (Line(points={{-134,-577},
-          {-134,-566},{104,-566},{104,-300},{62,-300}},             color={0,0,127}));
-  connect(senVolFlo2.V_flow, busSen.VHeaWatPri_flow) annotation (Line(points={{-110,
-          -517},{-110,-346},{96,-346},{96,-300},{62,-300}},
+  connect(senTem5.T, busSen.THeaWatRetPri) annotation (Line(points={{-196,-579},
+          {-196,-566},{104,-566},{104,-300},{62,-300}},             color={0,0,127}));
+  connect(senVolFlo2.V_flow, busSen.VHeaWatPri_flow) annotation (Line(points={{-170,
+          -497},{-170,-346},{96,-346},{96,-300},{62,-300}},
         color={0,0,127}));
   connect(senTemHeaSup.T, busSen.THeaWatSupSec) annotation (Line(points={{140,-499},
           {110,-499},{110,-300},{62,-300}}, color={0,0,127}));
@@ -875,8 +881,6 @@ equation
           11.8605},{-326,11.8605},{-326,-76},{-346,-76}},
                                          color={255,0,255}));
 
-  connect(junHeaWatBypSup.port_2, inlPumHeaWatSec.port_a) annotation (Line(
-        points={{-62,-508},{-60,-506},{-30,-506}}, color={0,127,255}));
   connect(outPumHeaWatSec.port_b, senTemHeaSup.port_a) annotation (Line(points={
           {44,-506},{44,-508},{124,-508},{124,-510},{130,-510}}, color={0,127,255}));
   connect(outPumHeaWatSec.port_b, dpHeaWatRem[1].port_a) annotation (Line(
@@ -900,11 +904,13 @@ equation
           {30,-160},{40,-160}},
         color={0,127,255}));
   connect(junHeaWatBypSup2.port_3, fourPipeASHP_with_controls.port_a2)
-    annotation (Line(points={{-168,-578},{-168,-564},{-272,-564},{-272,-396},{-280,
-          -396}}, color={0,127,255}));
+    annotation (Line(points={{-230,-580},{-230,-564},{-272,-564},{-272,-396},{
+          -280,-396}},
+                  color={0,127,255}));
   connect(junHeaWatBypSup1.port_1, fourPipeASHP_with_controls.port_b2)
-    annotation (Line(points={{-178,-528},{-268,-528},{-268,-372},{-312,-372},{-312,
-          -396},{-300,-396}}, color={0,127,255}));
+    annotation (Line(points={{-238,-508},{-268,-508},{-268,-372},{-312,-372},{
+          -312,-396},{-300,-396}},
+                              color={0,127,255}));
   connect(junChiWatBypSup1.port_3, fourPipeASHP_with_controls.port_b1)
     annotation (Line(points={{-146,-168},{-172,-168},{-172,-384},{-280,-384}},
                               color={0,127,255}));
@@ -1090,6 +1096,32 @@ equation
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
+  connect(booToRea6.y, mov.y) annotation (Line(points={{-400,-192},{-400,-200},
+          {-488,-200},{-488,-188},{-496,-188}}, color={0,0,127}));
+  connect(weaBus.TDryBul, lesThr.u) annotation (Line(
+      points={{-400.815,175.175},{-400.815,-102},{-400,-102},{-400,174},{-610,
+          174},{-610,-450},{-402,-450}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-3,6},{-3,6}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(lesThr.y, swi.u2)
+    annotation (Line(points={{-378,-450},{-362,-450}}, color={255,0,255}));
+  connect(ctl.THeaWatSupSet, swi.u1) annotation (Line(points={{-345.714,
+          -13.2558},{-370,-13.2558},{-370,-442},{-362,-442}}, color={0,0,127}));
+  connect(swi.y, hea.TSet) annotation (Line(points={{-338,-450},{-332,-450},{
+          -332,-516},{-256,-516},{-256,-488},{-58,-488},{-58,-498}}, color={0,0,
+          127}));
+  connect(senVolFlo2.port_b, junHeaWatBypSup.port_1)
+    annotation (Line(points={{-160,-508},{-82,-508}}, color={0,127,255}));
+  connect(junHeaWatBypSup.port_2, hea.port_a) annotation (Line(points={{-62,
+          -508},{-60,-506},{-56,-506}}, color={0,127,255}));
+  connect(hea.port_b, inlPumHeaWatSec.port_a)
+    annotation (Line(points={{-36,-506},{-30,-506}}, color={0,127,255}));
+  connect(senTemHeaRet.T, swi.u3) annotation (Line(points={{144,-599},{144,-620},
+          {-370,-620},{-370,-458},{-362,-458}}, color={0,0,127}));
   annotation (
     __Dymola_Commands(
       file=
