@@ -7,7 +7,7 @@ block ExternalEnergyLoopOperationMode
   Buildings.Controls.OBC.CDL.Interfaces.RealInput THotRet annotation (Placement(
         transformation(extent={{-140,-140},{-100,-100}}),
                                                      iconTransformation(extent={{-140,
-            -40},{-100,0}})));
+            -60},{-100,-20}})));
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(k=0)
     annotation (Placement(transformation(extent={{200,40},{220,60}})));
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt1(k=3)
@@ -27,11 +27,11 @@ block ExternalEnergyLoopOperationMode
     annotation (Placement(transformation(extent={{-88,-130},{-68,-110}})));
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uReqHea annotation (
       Placement(transformation(extent={{-140,120},{-100,160}}),
-        iconTransformation(extent={{-140,40},{-100,80}})));
+        iconTransformation(extent={{-140,20},{-100,60}})));
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput uReqCoo annotation (
       Placement(transformation(extent={{-140,-80},{-100,-40}}),
                                                              iconTransformation(
-          extent={{-140,0},{-100,40}})));
+          extent={{-140,-20},{-100,20}})));
   Buildings.Controls.OBC.CDL.Integers.Subtract intSub
     annotation (Placement(transformation(extent={{-60,-74},{-40,-54}})));
   Buildings.Controls.OBC.CDL.Conversions.IntegerToReal intToRea
@@ -157,7 +157,7 @@ equation
   connect(or1.y, not2.u)
     annotation (Line(points={{142,20},{158,20}}, color={255,0,255}));
   annotation (Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,
-            -160},{280,160}}),                                  graphics={
+            -100},{100,100}}),                                  graphics={
           Rectangle(
           extent={{-100,100},{100,-100}},
           lineColor={0,0,0},
