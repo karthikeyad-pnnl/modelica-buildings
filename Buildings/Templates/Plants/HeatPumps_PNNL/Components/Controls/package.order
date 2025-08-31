@@ -1,9 +1,11 @@
 ASHPControl
+CapacityLimiter
 CoolingTowerControl
 DeEnergization
 ExternalEnergy
 ExternalEnergyLoopOperationMode
 ExternalEnergyOpenLoop
+FreeCooling
 HeatRecoveryUnitControl
 HeatRecoveryUnitController
 HeatRecoveryUnitController_wBus
@@ -12,7 +14,5 @@ HeatingModeTemperatureSetpoint
 OpenLoop
 OpenLoopWithHeatRecoveryUnitController
 PartialController
-Validation
-CapacityLimiter
-FreeCooling
 RequiredFlowrate
+Validation

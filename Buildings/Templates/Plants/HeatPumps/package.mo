@@ -1,7 +1,6 @@
 within Buildings.Templates.Plants;
 package HeatPumps "Heat pump plants"
   extends Modelica.Icons.Package;
-
   annotation (
     Documentation(
       info="<html>
