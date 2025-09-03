@@ -773,10 +773,10 @@ connect(TRetCoo.y,extEneOpeMod.TChiRet);
   connect(volumeFlowRate1.port_b, valve3.port_a) annotation (Line(points={{260,100},
           {270,100}},                      color={0,127,255}));
   connect(reaToInt.y, extEneOpeMod.uReqHea) annotation (Line(points={{-452,10},
-          {-452,8},{-372,8},{-372,0},{-284,0},{-284,248},{-182,248}},
+          {-452,8},{-372,8},{-372,0},{-284,0},{-284,246},{-182,246}},
         color={255,127,0}));
   connect(reaToInt1.y, extEneOpeMod.uReqCoo) annotation (Line(points={{360,160},
-          {360,184},{-200,184},{-200,244},{-182,244}},
+          {360,184},{-200,184},{-200,242},{-182,242}},
                                          color={255,127,0}));
   connect(valve4.port_b, TRetHeaCon.port_a) annotation (Line(points={{-98,98},{-80,
           98}},                                                   color={0,127,

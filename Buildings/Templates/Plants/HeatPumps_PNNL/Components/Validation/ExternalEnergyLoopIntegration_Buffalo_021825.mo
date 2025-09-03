@@ -98,7 +98,8 @@ model ExternalEnergyLoopIntegration_Buffalo_021825
         datCtlHeaInl.cfg.nSenDpChiWatRem),
     dpHeaWatRemSet_max=fill(Buildings.Templates.Data.Defaults.dpHeaWatRemSet_max,
         datCtlHeaInl.cfg.nSenDpHeaWatRem),
-    staEqu={fill(1, datCtlHeaInl.cfg.nHp)})
+    staEquCooHea={fill(1, datCtlHeaInl.cfg.nHp)},
+    staEquOneMod={fill(1, datCtlHeaInl.cfg.nHp)})
     "Controller parameters"
     annotation (Placement(transformation(extent={{-284,-192},{-264,-172}})));
 
@@ -645,7 +646,6 @@ connect(TSupCoo.y, bus_sensor.TSupCoo);
 connect(dPHea.y, bus_sensor.uDpHea);
 connect(dPCoo.y, bus_sensor.uDpCoo);
 connect(TRetHea.y,extEneOpeMod.THotRet);
-connect(TRetCoo.y,extEneOpeMod.TChiRet);
   connect(ctlHeaInl.bus, hpAwNrv.bus) annotation (Line(
       points={{-60,2.4},{-60,-20},{-24,-20},{-24,-16},{32,-16},{32,-34}},
       color={255,204,51},
@@ -766,11 +766,11 @@ connect(TRetCoo.y,extEneOpeMod.TChiRet);
           {240,100}},                  color={0,127,255}));
   connect(volumeFlowRate1.port_b, valve3.port_a) annotation (Line(points={{260,100},
           {270,100}},                      color={0,127,255}));
-  connect(reaToInt.y, extEneOpeMod.uReqHea) annotation (Line(points={{-452,10},
-          {-374,10},{-374,0},{-284,0},{-284,246},{-182,246}},
+  connect(reaToInt.y, extEneOpeMod.uReqHea) annotation (Line(points={{-452,10},{
+          -374,10},{-374,0},{-284,0},{-284,244},{-182,244}},
         color={255,127,0}));
   connect(reaToInt1.y, extEneOpeMod.uReqCoo) annotation (Line(points={{360,160},
-          {360,184},{-200,184},{-200,242},{-182,242}},
+          {360,184},{-200,184},{-200,240},{-182,240}},
                                          color={255,127,0}));
   connect(valve4.port_b, TRetHeaCon.port_a) annotation (Line(points={{-98,98},{-80,
           98}},                                                   color={0,127,

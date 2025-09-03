@@ -470,7 +470,7 @@ model PrimaryOnlywLoads "Control Box Test"
     annotation (Placement(transformation(extent={{60,170},{80,190}})));
 equation
   connect(ctlHeaInl.bus, valIsoHeaInl.bus) annotation (Line(
-      points={{-50,126.4},{-1.4,126.4},{-1.4,58.53}},
+      points={{-50,126.4},{-2,126.4},{-2,60}},
       color={255,204,51},
       thickness=0.5));
   connect(valIsoHeaInl.port_bChiWat, rou.port_a) annotation (Line(points={{20,54.12},

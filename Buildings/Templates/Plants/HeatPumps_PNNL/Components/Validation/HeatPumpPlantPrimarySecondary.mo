@@ -484,7 +484,7 @@ equation
       color={255,204,51},
       thickness=0.5));
   connect(bus2.plantControlBus, valIsoHeaInl.bus) annotation (Line(
-      points={{-9.95,110.05},{-9.95,110},{34,110},{34,20},{0.6,20},{0.6,20.53}},
+      points={{-9.95,110.05},{-9.95,110},{34,110},{34,20},{0,20},{0,22}},
       color={255,204,51},
       thickness=0.5));
   connect(bus2.plantControlBus, hpAwNrv.bus) annotation (Line(

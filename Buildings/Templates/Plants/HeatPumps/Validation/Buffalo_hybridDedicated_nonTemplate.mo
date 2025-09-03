@@ -1090,16 +1090,17 @@ equation
   connect(swi.y, conPIDHea.u_m) annotation (Line(points={{-78,-330},{-72,-330},{
           -72,-348},{-116,-348},{-116,-384},{-204,-384},{-204,-396},{-232,-396},
           {-232,-492},{-90,-492},{-90,-488}}, color={0,0,127}));
-  connect(ctlHea.y1PumHeaWatSec[1], booToRea5.u) annotation (Line(points={{-578,
-          43.25},{-176,43.25},{-176,-76},{-164,-76},{-164,-212},{12,-212},{12,-470},
-          {18,-470}},
+  connect(ctlHea.y1PumHeaWatSec[1], booToRea5.u) annotation (Line(points={{
+          -585.714,42.125},{-176,42.125},{-176,-76},{-164,-76},{-164,-212},{12,
+          -212},{12,-470},{18,-470}},
                   color={255,0,255}));
   connect(booToRea2.y, mul2.u1) annotation (Line(points={{-118,-40},{-118,-34},{
           -92,-34}}, color={0,0,127}));
   connect(booToRea5.y, mul3.u1)
     annotation (Line(points={{42,-470},{58,-470},{58,-474}}, color={0,0,127}));
-  connect(ctlHea.yPumHeaWatSec, mul3.u2) annotation (Line(points={{-578,30},{-194,
-          30},{-194,-486},{58,-486}}, color={0,0,127}));
+  connect(ctlHea.yPumHeaWatSec, mul3.u2) annotation (Line(points={{-585.714,
+          30.2},{-194,30.2},{-194,-486},{58,-486}},
+                                      color={0,0,127}));
   connect(junChiWatBypSup1.port_2, senTem2.port_a)
     annotation (Line(points={{-136,-92},{-132,-92}}, color={0,127,255}));
   connect(senTem2.port_b, senVolFlo.port_a)
@@ -1133,7 +1134,7 @@ equation
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
   connect(weaBus.TDryBul, ctlHea.TOut) annotation (Line(
-      points={{-400.815,175.175},{-636,175.175},{-636,38},{-622,38}},
+      points={{-400.815,175.175},{-636,175.175},{-636,37.4},{-617.143,37.4}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
@@ -1146,7 +1147,7 @@ equation
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.THeaWatRetPri, ctlHea.THeaWatPriRet) annotation (Line(
-      points={{-652,0},{-630,0},{-630,34},{-622,34}},
+      points={{-652,0},{-630,0},{-630,33.8},{-617.143,33.8}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
@@ -1154,15 +1155,15 @@ equation
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(busSen2.THeaWatSupPri, ctlHea.THeaWatPriSup) annotation (Line(
-      points={{-652,0},{-630,0},{-630,36},{-622,36}},
+      points={{-652,0},{-630,0},{-630,35.6},{-617.143,35.6}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.THeaWatSupSec, ctlHea.THeaWatSecSup) annotation (Line(
-      points={{-652,0},{-630,0},{-630,24},{-622,24}},
+      points={{-652,0},{-630,0},{-630,24.8},{-617.143,24.8}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.VHeaWatSec_flow, ctlHea.VHeaWatSec_flow) annotation (Line(
-      points={{-652,0},{-630,0},{-630,18},{-622,18}},
+      points={{-652,0},{-630,0},{-630,19.4},{-617.143,19.4}},
       color={255,204,51},
       thickness=0.5));
   connect(dpChiWatRem[1].p_rel, busSen.dpChiWatRem) annotation (Line(points={{30,-101},
@@ -1171,7 +1172,7 @@ equation
   connect(dpHeaWatRem[1].p_rel, busSen.dpHeaWatRem) annotation (Line(points={{61,
           -530},{61,-532},{4,-532},{4,-384},{62,-384},{62,-234}}, color={0,0,127}));
   connect(busSen2.dpHeaWatRem, ctlHea.dpHeaWatRem[1]) annotation (Line(
-      points={{-652,0},{-630,0},{-630,8},{-622,8}},
+      points={{-652,0},{-630,0},{-630,10.4},{-617.143,10.4}},
       color={255,204,51},
       thickness=0.5));
   connect(greThr2.y, busSen.y1HRC_actual) annotation (Line(points={{-8,-420},{62,
@@ -1228,10 +1229,12 @@ equation
   connect(reqPlaRes.yHotWatPlaReq, mulInt[4].u2) annotation (Line(points={{68,
           124},{12,124},{12,126},{2,126}}, color={255,127,0}));
   connect(mulInt[3].y, ctlHea.nReqResHeaWat) annotation (Line(points={{-22,132},
-          {-334,132},{-334,136},{-644,136},{-644,42},{-622,42}}, color={255,127,
+          {-334,132},{-334,136},{-644,136},{-644,41},{-617.143,41}},
+                                                                 color={255,127,
           0}));
   connect(mulInt[4].y, ctlHea.nReqPlaHeaWat) annotation (Line(points={{-22,132},
-          {-332,132},{-332,130},{-640,130},{-640,46},{-622,46}}, color={255,127,
+          {-332,132},{-332,130},{-640,130},{-640,44.6},{-617.143,44.6}},
+                                                                 color={255,127,
           0}));
   connect(booToRea.y, mov2.y) annotation (Line(points={{-32,-386},{-32,-388},{-100,
           -388},{-100,-414}}, color={0,0,127}));
@@ -1288,22 +1291,24 @@ equation
   connect(mov7.port_a, junHeaWatBypSup2.port_2) annotation (Line(points={{-600,-190},
           {-600,-192},{-648,-192},{-648,-588},{-178,-588}}, color={0,127,255}));
   connect(mulInt[1].y, ctlCoo.nReqResChiWat) annotation (Line(points={{-22,132},
-          {-400,132},{-400,-42},{-382,-42}}, color={255,127,0}));
+          {-400,132},{-400,-42.8},{-377.143,-42.8}},
+                                             color={255,127,0}));
   connect(mov.y_actual, greThr3.u) annotation (Line(points={{-499,-183},{-500,-183},
           {-500,-190},{-492,-190}}, color={0,0,127}));
   connect(mov7.y_actual, greThr6.u) annotation (Line(points={{-579,-183},{-580,-183},
           {-580,-190},{-572,-190}}, color={0,0,127}));
   connect(greThr3.y, ctlCoo.u1PumChiWatPri_actual[1]) annotation (Line(points={{-468,
-          -190},{-468,-192},{-440,-192},{-440,-22},{-396,-22},{-396,-23.8},{
-          -382,-23.8}},  color={255,0,255}));
-  connect(greThr6.y, ctlHea.u1PumHeaWatPri_actual[1]) annotation (Line(points={{
-          -548,-190},{-540,-190},{-540,-30},{-670,-30},{-670,60.2},{-622,60.2}},
+          -190},{-468,-192},{-440,-192},{-440,-22},{-396,-22},{-396,-26.42},{
+          -377.143,-26.42}},
+                         color={255,0,255}));
+  connect(greThr6.y, ctlHea.u1PumHeaWatPri_actual[1]) annotation (Line(points={{-548,
+          -190},{-540,-190},{-540,-30},{-670,-30},{-670,57.38},{-617.143,57.38}},
         color={255,0,255}));
-  connect(ctlCoo.y1PumChiWatSec[1], booToRea2.u) annotation (Line(points={{-338,
-          -40.75},{-336,-40},{-142,-40}},
+  connect(ctlCoo.y1PumChiWatSec[1], booToRea2.u) annotation (Line(points={{
+          -345.714,-41.675},{-336,-40},{-142,-40}},
                                        color={255,0,255}));
-  connect(ctlCoo.yPumChiWatSec, mul2.u2) annotation (Line(points={{-338,-54},{
-          -148,-54},{-148,-60},{-100,-60},{-100,-46},{-92,-46}},
+  connect(ctlCoo.yPumChiWatSec, mul2.u2) annotation (Line(points={{-345.714,
+          -53.6},{-148,-53.6},{-148,-60},{-100,-60},{-100,-46},{-92,-46}},
                                                             color={0,0,127}));
   connect(busChi, chiDed.bus) annotation (Line(
       points={{-412,-154},{-412,-288},{-490,-288},{-490,-280}},
@@ -1322,11 +1327,12 @@ equation
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(mulInt[2].y, ctlCoo.nReqPlaChiWat) annotation (Line(points={{-22,132},
-          {-400,132},{-400,-40},{-392,-40},{-392,-38},{-382,-38}}, color={255,127,
+          {-400,132},{-400,-40},{-392,-40},{-392,-39.2},{-377.143,-39.2}},
+                                                                   color={255,127,
           0}));
   connect(weaBus.TDryBul, ctlCoo.TOut) annotation (Line(
-      points={{-400.815,175.175},{-400,175.175},{-400,128},{-404,128},{-404,-44},
-          {-382,-44}},
+      points={{-400.815,175.175},{-400,175.175},{-400,128},{-404,128},{-404,
+          -44.6},{-377.143,-44.6}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
@@ -1334,7 +1340,8 @@ equation
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
   connect(busSen2.TChiWatSupPri, ctlCoo.TChiWatPriSup) annotation (Line(
-      points={{-652,0},{-630,0},{-630,-18},{-444,-18},{-444,-52},{-382,-52}},
+      points={{-652,0},{-630,0},{-630,-18},{-444,-18},{-444,-51.8},{-377.143,
+          -51.8}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
@@ -1342,92 +1349,102 @@ equation
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(busSen2.TChiWatRetPri, ctlCoo.TChiWatPriRet) annotation (Line(
-      points={{-652,0},{-630,0},{-630,-18},{-444,-18},{-444,-54},{-382,-54}},
+      points={{-652,0},{-630,0},{-630,-18},{-444,-18},{-444,-53.6},{-377.143,
+          -53.6}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.TChiWatSupSec, ctlCoo.TChiWatSecSup) annotation (Line(
-      points={{-652,0},{-630,0},{-630,-18},{-444,-18},{-444,-66},{-382,-66}},
+      points={{-652,0},{-630,0},{-630,-18},{-444,-18},{-444,-64.4},{-377.143,
+          -64.4}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.VChiWatSec_flow, ctlCoo.VChiWatSec_flow) annotation (Line(
-      points={{-652,0},{-630,0},{-630,-18},{-444,-18},{-444,-72},{-382,-72}},
+      points={{-652,0},{-630,0},{-630,-18},{-444,-18},{-444,-69.8},{-377.143,
+          -69.8}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.dpChiWatRem, ctlCoo.dpChiWatRem[1]) annotation (Line(
-      points={{-652,0},{-630,0},{-630,-18},{-444,-18},{-444,-80},{-382,-80}},
+      points={{-652,0},{-630,0},{-630,-18},{-444,-18},{-444,-77},{-377.143,-77}},
       color={255,204,51},
       thickness=0.5));
-  connect(ctlCoo.y1Hp[1], busChi.y1) annotation (Line(points={{-338,-16.5},{
-          -320,-16.5},{-320,-124},{-412,-124},{-412,-154}},
+  connect(ctlCoo.y1Hp[1], busChi.y1) annotation (Line(points={{-345.714,-19.85},
+          {-320,-19.85},{-320,-124},{-412,-124},{-412,-154}},
                                                        color={255,127,0}));
-  connect(ctlCoo.y1Hp[2], and1.u2) annotation (Line(points={{-338,-15.5},{-320,
-          -15.5},{-320,-124},{-376,-124},{-376,-376},{-428,-376},{-428,-368},{
-          -422,-368}},
+  connect(ctlCoo.y1Hp[2], and1.u2) annotation (Line(points={{-345.714,-18.95},{
+          -320,-18.95},{-320,-124},{-376,-124},{-376,-376},{-428,-376},{-428,
+          -368},{-422,-368}},
         color={255,0,255}));
-  connect(ctlHea.y1Hp[2], and3.u2) annotation (Line(points={{-578,66.5},{-576,
-          66.5},{-576,64},{-472,64},{-472,-132},{-448,-132},{-448,-444},{-422,
-          -444},{-422,-398}},
+  connect(ctlHea.y1Hp[2], and3.u2) annotation (Line(points={{-585.714,63.05},{
+          -576,63.05},{-576,64},{-472,64},{-472,-132},{-448,-132},{-448,-444},{
+          -422,-444},{-422,-398}},
         color={255,127,0}));
-  connect(ctlCoo.TSupSet[2], conPIDCoo.u_s) annotation (Line(points={{-338,
-          -67.5},{-188,-67.5},{-188,-312},{-172,-312},{-172,-330},{-178,-330}},
+  connect(ctlCoo.TSupSet[2], conPIDCoo.u_s) annotation (Line(points={{-345.714,
+          -65.75},{-188,-65.75},{-188,-312},{-172,-312},{-172,-330},{-178,-330}},
                                                                          color={
           0,0,127}));
-  connect(ctlHea.TSupSet[2], conPIDHea.u_s) annotation (Line(points={{-578,14.5},
-          {-432,14.5},{-432,-534},{-228,-534},{-228,-476},{-102,-476}}, color={0,
+  connect(ctlHea.TSupSet[2], conPIDHea.u_s) annotation (Line(points={{-585.714,
+          16.25},{-432,16.25},{-432,-534},{-228,-534},{-228,-476},{-102,-476}},
+                                                                        color={0,
           0,127}));
   connect(greThr.y, ctlCoo.u1PumChiWatPri_actual[2]) annotation (Line(points={{-142,
-          -406},{-230,-406},{-230,-90},{-440,-90},{-440,-22},{-382,-22},{-382,
-          -23.8}},
+          -406},{-230,-406},{-230,-90},{-440,-90},{-440,-22},{-377.143,-22},{
+          -377.143,-26.42}},
         color={255,0,255}));
-  connect(greThr1.y, ctlHea.u1PumHeaWatPri_actual[2]) annotation (Line(points={{
-          -202,-510},{-220,-510},{-220,-560},{-696,-560},{-696,42},{-660,42},{-660,
-          60.2},{-622,60.2}}, color={255,0,255}));
+  connect(greThr1.y, ctlHea.u1PumHeaWatPri_actual[2]) annotation (Line(points={{-202,
+          -510},{-220,-510},{-220,-560},{-696,-560},{-696,42},{-660,42},{-660,
+          57.38},{-617.143,57.38}},
+                              color={255,0,255}));
   connect(busSen2.y1HRC_actual, ctlHea.u1Hp_actual[2]) annotation (Line(
-      points={{-652,0},{-652,62.7},{-622,62.7}},
+      points={{-652,0},{-652,59.63},{-617.143,59.63}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.y1HRC_actual, ctlCoo.u1Hp_actual[2]) annotation (Line(
-      points={{-652,0},{-396,0},{-396,-19.3},{-382,-19.3}},
+      points={{-652,0},{-396,0},{-396,-22.37},{-377.143,-22.37}},
       color={255,204,51},
       thickness=0.5));
   connect(busHP.y1_actual, ctlHea.u1Hp_actual[1]) annotation (Line(
-      points={{-640,-160},{-684,-160},{-684,60},{-676,60},{-676,64},{-622,64},{-622,
-          61.7}},
+      points={{-640,-160},{-684,-160},{-684,60},{-676,60},{-676,64},{-617.143,
+          64},{-617.143,58.73}},
       color={255,204,51},
       thickness=0.5));
   connect(busChi.y1_actual, ctlCoo.u1Hp_actual[1]) annotation (Line(
       points={{-412,-154},{-412,-120},{-408,-120},{-408,-28},{-392,-28},{-392,
-          -20.3},{-382,-20.3}},
+          -23.27},{-377.143,-23.27}},
       color={255,204,51},
       thickness=0.5));
-  connect(ctlHea.y1Hp[1], busHP.y1) annotation (Line(points={{-578,65.5},{-472,65.5},
-          {-472,-88},{-628,-88},{-628,-128},{-640,-128},{-640,-160}}, color={255,
+  connect(ctlHea.y1Hp[1], busHP.y1) annotation (Line(points={{-585.714,62.15},{
+          -472,62.15},{-472,-88},{-628,-88},{-628,-128},{-640,-128},{-640,-160}},
+                                                                      color={255,
           0,255}));
-  connect(ctlHea.TSupSet[1], busHP.TSet) annotation (Line(points={{-578,13.5},{-568,
-          13.5},{-568,-108},{-608,-108},{-608,-160},{-640,-160}}, color={0,0,127}));
-  connect(ctlCoo.y1PumChiWatPri[1], booToRea6[1].u) annotation (Line(points={{-338,
-          -34},{-332,-34},{-332,-44},{-328,-44},{-328,-120},{-476,-120},{-476,
-          -138},{-470,-138}},
+  connect(ctlHea.TSupSet[1], busHP.TSet) annotation (Line(points={{-585.714,
+          15.35},{-568,15.35},{-568,-108},{-608,-108},{-608,-160},{-640,-160}},
+                                                                  color={0,0,127}));
+  connect(ctlCoo.y1PumChiWatPri[1], booToRea6[1].u) annotation (Line(points={{
+          -345.714,-35.6},{-332,-35.6},{-332,-44},{-328,-44},{-328,-120},{-476,
+          -120},{-476,-138},{-470,-138}},
                         color={255,0,255}));
-  connect(ctlHea.y1PumHeaWatPri[1], booToRea6[2].u) annotation (Line(points={{-578,
-          50},{-468,50},{-468,-120},{-476,-120},{-476,-138},{-470,-138}}, color
+  connect(ctlHea.y1PumHeaWatPri[1], booToRea6[2].u) annotation (Line(points={{
+          -585.714,48.2},{-468,48.2},{-468,-120},{-476,-120},{-476,-138},{-470,
+          -138}},                                                         color
         ={255,0,255}));
-  connect(ctlCoo.y1PumChiWatPri[2], booToRea.u) annotation (Line(points={{-338,
-          -34},{-332,-34},{-332,-44},{-328,-44},{-328,-60},{-180,-60},{-180,
-          -300},{0,-300},{0,-386},{-8,-386}},
+  connect(ctlCoo.y1PumChiWatPri[2], booToRea.u) annotation (Line(points={{
+          -345.714,-35.6},{-332,-35.6},{-332,-44},{-328,-44},{-328,-60},{-180,
+          -60},{-180,-300},{0,-300},{0,-386},{-8,-386}},
                                      color={255,0,255}));
-  connect(ctlHea.y1PumHeaWatPri[2], booToRea1.u) annotation (Line(points={{-578,
-          50},{-468,50},{-468,-124},{-452,-124},{-452,-452},{-436,-452},{-436,-496},
-          {-428,-496},{-428,-528},{-332,-528},{-332,-552},{-164,-552},{-164,-560},
-          {-56,-560},{-56,-512},{-4,-512},{-4,-456},{-8,-456}}, color={255,0,255}));
+  connect(ctlHea.y1PumHeaWatPri[2], booToRea1.u) annotation (Line(points={{
+          -585.714,48.2},{-468,48.2},{-468,-124},{-452,-124},{-452,-452},{-436,
+          -452},{-436,-496},{-428,-496},{-428,-528},{-332,-528},{-332,-552},{
+          -164,-552},{-164,-560},{-56,-560},{-56,-512},{-4,-512},{-4,-456},{-8,
+          -456}},                                               color={255,0,255}));
   connect(booToInt.y, mulInt1.u1) annotation (Line(points={{-518,90},{-508,90},{
           -508,96},{-502,96}}, color={255,127,0}));
-  connect(ctlHea.yMod[2], mulInt1.u2) annotation (Line(points={{-578,62.5},{-564,
-          62.5},{-564,60},{-512,60},{-512,84},{-502,84}}, color={255,127,0}));
+  connect(ctlHea.yMod[2], mulInt1.u2) annotation (Line(points={{-585.714,59.45},
+          {-564,59.45},{-564,60},{-512,60},{-512,84},{-502,84}},
+                                                          color={255,127,0}));
   connect(booToInt1.y, mulInt2.u1) annotation (Line(points={{-278,0},{-268,0},{-268,
           6},{-262,6}}, color={255,127,0}));
-  connect(ctlCoo.yMod[2], mulInt2.u2) annotation (Line(points={{-338,-19.5},{
-          -324,-19.5},{-324,-20},{-272,-20},{-272,-6},{-262,-6}},
+  connect(ctlCoo.yMod[2], mulInt2.u2) annotation (Line(points={{-345.714,-22.55},
+          {-324,-22.55},{-324,-20},{-272,-20},{-272,-6},{-262,-6}},
                                                              color={255,127,0}));
   connect(mulInt1.y, addInt.u1) annotation (Line(points={{-478,90},{-392,90},{
           -392,96},{-382,96}},
@@ -1439,12 +1456,13 @@ equation
           -252},{-472,-252},{-472,-264},{-480,-264}}, color={0,127,255}));
   connect(bou.ports[1], mov.port_a) annotation (Line(points={{-561,-150},{-561,-172},
           {-520,-172},{-520,-190}}, color={0,127,255}));
-  connect(ctlCoo.y1EnaPla, ctlHea.u1EnaCoo) annotation (Line(points={{-338,-12},
-          {-336,-12},{-336,72},{-564,72},{-564,80},{-622,80},{-622,70}}, color={
+  connect(ctlCoo.y1EnaPla, ctlHea.u1EnaCoo) annotation (Line(points={{-345.714,
+          -15.8},{-336,-15.8},{-336,72},{-564,72},{-564,80},{-617.143,80},{
+          -617.143,66.2}},                                               color={
           255,0,255}));
-  connect(ctlHea.y1EnaPla, ctlCoo.u1EnaHea) annotation (Line(points={{-578,70},
-          {-580,70},{-580,84},{-548,84},{-548,68},{-396,68},{-396,4},{-382,4},{
-          -382,-8}},
+  connect(ctlHea.y1EnaPla, ctlCoo.u1EnaHea) annotation (Line(points={{-585.714,
+          66.2},{-580,66.2},{-580,84},{-548,84},{-548,68},{-396,68},{-396,4},{
+          -377.143,4},{-377.143,-12.2}},
                 color={255,0,255}));
   connect(booToRea8.y, mov6.y) annotation (Line(points={{-550,-262},{-552,-262},
           {-552,-276},{-520,-276},{-520,-288}}, color={0,0,127}));
@@ -1478,14 +1496,17 @@ equation
   connect(ctlCoo.y1PumChiWatSec,busPumSecChiWat.y1);
   connect(ctlCoo.yPumChiWatSec,busPumSecChiWat.y);
 //   connect(ctlHea.u1PumHeaWatSec_actual,busPumSecHeaWat.y1_actual);
-  connect(ctlHea.y1PumHeaWatSec, pre.u) annotation (Line(points={{-578,44},{-568,
-          44},{-568,110},{-598,110}}, color={255,0,255}));
-  connect(pre.y, ctlHea.u1PumHeaWatSec_actual) annotation (Line(points={{-622,110},
-          {-632,110},{-632,56.2},{-622,56.2}}, color={255,0,255}));
-  connect(ctlHea.y1EnaPla, booToInt.u) annotation (Line(points={{-578,70},{-580,
-          70},{-580,84},{-552,84},{-552,90},{-542,90}}, color={255,0,255}));
-  connect(ctlCoo.y1EnaPla, booToInt1.u) annotation (Line(points={{-338,-12},{
-          -336,-12},{-336,16},{-312,16},{-312,0},{-302,0}},
+  connect(ctlHea.y1PumHeaWatSec, pre.u) annotation (Line(points={{-585.714,42.8},
+          {-568,42.8},{-568,110},{-598,110}},
+                                      color={255,0,255}));
+  connect(pre.y, ctlHea.u1PumHeaWatSec_actual) annotation (Line(points={{-622,
+          110},{-632,110},{-632,53.78},{-617.143,53.78}},
+                                               color={255,0,255}));
+  connect(ctlHea.y1EnaPla, booToInt.u) annotation (Line(points={{-585.714,66.2},
+          {-580,66.2},{-580,84},{-552,84},{-552,90},{-542,90}},
+                                                        color={255,0,255}));
+  connect(ctlCoo.y1EnaPla, booToInt1.u) annotation (Line(points={{-345.714,
+          -15.8},{-336,-15.8},{-336,16},{-312,16},{-312,0},{-302,0}},
                                                        color={255,0,255}));
   connect(inlPumChiWatSec.ports_b, pumChiWatSec.ports_a)
     annotation (Line(points={{-12,278},{-4,278}}, color={0,127,255}));
@@ -1501,13 +1522,14 @@ equation
       points={{-340,184},{-340,300},{6,300},{6,288}},
       color={255,204,51},
       thickness=0.5));
-  connect(ctlCoo.y1PumChiWatSec, pre1.u) annotation (Line(points={{-338,-40},{
-          -328,-40},{-328,0},{-340,0},{-340,10},{-348,10}},
+  connect(ctlCoo.y1PumChiWatSec, pre1.u) annotation (Line(points={{-345.714,-41},
+          {-328,-41},{-328,0},{-340,0},{-340,10},{-348,10}},
                                                        color={255,0,255}));
   connect(pre1.y, ctlCoo.u1PumChiWatSec_actual) annotation (Line(points={{-372,10},
-          {-388,10},{-388,0},{-392,0},{-392,-27.8},{-382,-27.8}}, color={255,0,255}));
-  connect(ctlCoo.TSupSet[1], busChi.TSupSet) annotation (Line(points={{-338,
-          -68.5},{-336,-68.5},{-336,-64},{-316,-64},{-316,-152},{-380,-152},{
+          {-388,10},{-388,0},{-392,0},{-392,-30.02},{-377.143,-30.02}},
+                                                                  color={255,0,255}));
+  connect(ctlCoo.TSupSet[1], busChi.TSupSet) annotation (Line(points={{-345.714,
+          -66.65},{-336,-66.65},{-336,-64},{-316,-64},{-316,-152},{-380,-152},{
           -380,-156},{-412,-156},{-412,-154}}, color={0,0,127}));
   connect(senVolFlo4.port_b, junChiWatBypSup1.port_1)
     annotation (Line(points={{-202,-92},{-156,-92}}, color={0,127,255}));
@@ -1545,12 +1567,14 @@ equation
           -350,74},{-292,74},{-292,72},{-222,72}}, color={255,127,0}));
   connect(conInt3.y, intSwi.u1) annotation (Line(points={{-298,90},{-240,90},{
           -240,88},{-222,88}}, color={255,127,0}));
-  connect(ctlCoo.y1EnaPla, and2.u1) annotation (Line(points={{-338,-12},{-336,
-          -12},{-336,16},{-312,16},{-312,-24},{-240,-24},{-240,-20},{-232,-20}},
+  connect(ctlCoo.y1EnaPla, and2.u1) annotation (Line(points={{-345.714,-15.8},{
+          -336,-15.8},{-336,16},{-312,16},{-312,-24},{-240,-24},{-240,-20},{
+          -232,-20}},
         color={255,0,255}));
-  connect(ctlHea.y1EnaPla, and2.u2) annotation (Line(points={{-578,70},{-580,70},
-          {-580,84},{-548,84},{-548,68},{-396,68},{-396,36},{-192,36},{-192,-44},
-          {-240,-44},{-240,-28},{-232,-28}}, color={255,0,255}));
+  connect(ctlHea.y1EnaPla, and2.u2) annotation (Line(points={{-585.714,66.2},{
+          -580,66.2},{-580,84},{-548,84},{-548,68},{-396,68},{-396,36},{-192,36},
+          {-192,-44},{-240,-44},{-240,-28},{-232,-28}},
+                                             color={255,0,255}));
   connect(and2.y, intSwi.u2) annotation (Line(points={{-208,-20},{-188,-20},{
           -188,64},{-232,64},{-232,80},{-222,80}}, color={255,0,255}));
   connect(datRea1.y[3], reqFloCoo.mRef_flow) annotation (Line(points={{-219,150},

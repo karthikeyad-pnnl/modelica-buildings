@@ -464,8 +464,7 @@ Buildings.Templates.Components.Pumps.Multiple pumHeaWatSec(
     annotation (Placement(transformation(extent={{-30,-516},{-10,-496}})));
 
   Buildings.Templates.Components.Interfaces.Bus busPumSecHeaWat annotation (
-      Placement(transformation(extent={{-260,160},{-220,200}}),
-        iconTransformation(extent={{-980,164},{-940,204}})));
+      Placement(transformation(extent={{-260,160},{-220,200}})));
   Buildings.Templates.Components.Routing.SingleToMultiple inlPumChiWatSec(
     redeclare final package Medium = Medium,
     final nPorts=pumChiWatSec.nPum,
@@ -497,8 +496,7 @@ Buildings.Templates.Components.Pumps.Multiple pumHeaWatSec(
     annotation (Placement(transformation(extent={{4,-170},{24,-150}})));
 
   Buildings.Templates.Components.Interfaces.Bus busPumSecChiWat annotation (
-      Placement(transformation(extent={{-320,160},{-280,200}}),
-        iconTransformation(extent={{-980,164},{-940,204}})));
+      Placement(transformation(extent={{-320,160},{-280,200}})));
 
 public
   FourPipeASHP_with_controls fourPipeASHP_with_controls(

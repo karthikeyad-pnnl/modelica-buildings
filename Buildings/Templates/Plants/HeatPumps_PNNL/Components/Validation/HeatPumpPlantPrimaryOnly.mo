@@ -440,7 +440,7 @@ equation
   connect(jun3.port_3, valve1.port_b)
     annotation (Line(points={{150,-2},{150,4}}, color={0,127,255}));
   connect(busIsoVal, valIsoHeaInl.bus) annotation (Line(
-      points={{0,100},{0,60.265},{0.6,60.265},{0.6,20.53}},
+      points={{0,100},{0,60.265},{0,60.265},{0,22}},
       color={255,204,51},
       thickness=0.5));
   connect(pum1.bus,busHeaPum)  annotation (Line(
@@ -475,21 +475,21 @@ equation
   connect(TSupHea.port_a, supHeaWat1.ports[1])
     annotation (Line(points={{-258,-16},{-280,-16}}, color={0,127,255}));
   connect(TSupHea.y, heatRecoveryUnitController.TSupHea)
-    annotation (Line(points={{-248,-4},{-122,-4},{-122,172},{-40,172},{-40,162},
-          {-12,162}},                                color={0,127,255}));
+    annotation (Line(points={{-248,-4},{-122,-4},{-122,172},{-40,172},{-40,164},
+          {-12,164}},                                color={0,127,255}));
   connect(TSupCooSet.y, heatRecoveryUnitController.TSupCooSet) annotation (Line(
-        points={{122,160},{128,160},{128,186},{-24,186},{-24,166},{-12,166}},
+        points={{122,160},{128,160},{128,186},{-24,186},{-24,168},{-12,168}},
         color={0,0,127}));
   connect(TSupHeaSet.y, heatRecoveryUnitController.TSupHeaSet) annotation (Line(
-        points={{-138,190},{-32,190},{-32,158},{-12,158}}, color={0,0,127}));
+        points={{-138,190},{-32,190},{-32,160},{-12,160}}, color={0,0,127}));
   connect(busHeaPum.y1_actual, heatRecoveryUnitController.uHeaPumPro)
     annotation (Line(
-      points={{-40,92},{-40,154},{-12,154}},
+      points={{-40,92},{-40,156},{-12,156}},
       color={255,204,51},
       thickness=0.5));
   connect(busCooPum.y1_actual, heatRecoveryUnitController.uCooPumPro)
     annotation (Line(
-      points={{84,100},{36,100},{36,124},{-20,124},{-20,150},{-12,150}},
+      points={{84,100},{36,100},{36,124},{-20,124},{-20,152},{-12,152}},
       color={255,204,51},
       thickness=0.5));
   connect(dPHea.port_b, jun1.port_1) annotation (Line(points={{-240,20},{-232,20},
@@ -501,10 +501,10 @@ equation
   connect(dPCoo.port_b, jun3.port_1) annotation (Line(points={{170,-3.55271e-15},
           {160,-3.55271e-15},{160,-12}}, color={0,127,255}));
   connect(dPHea.y, heatRecoveryUnitController.uDpHea) annotation (Line(
-        points={{-252,10},{186,10},{186,216},{-20,216},{-20,146},{-12,146}},
+        points={{-252,10},{186,10},{186,216},{-20,216},{-20,148},{-12,148}},
         color={0,0,127}));
   connect(dPCoo.y, heatRecoveryUnitController.uDpCoo) annotation (Line(
-        points={{182,10},{-32,10},{-32,142},{-12,142}},    color={0,0,127}));
+        points={{182,10},{-32,10},{-32,144},{-12,144}},    color={0,0,127}));
   connect(busHP, hpAwNrv.bus) annotation (Line(
       points={{40,76},{40,4},{34,4},{34,-72}},
       color={255,204,51},
