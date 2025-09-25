@@ -24,7 +24,7 @@ model ClosedLoopTest "Closed loop testing model"
     final Q_flow_nominal=boiDesCap,
     final boiCap1=(1 - boiCapRat)*boiDesCap,
     final boiCap2=boiCapRat*boiDesCap,
-    final mSec_flow_nominal=secLoo1.mRad_flow_nominal + secLoo2.mRad_flow_nominal,
+    final mSec_flow_nominal=(secLoo1.mRad_flow_nominal + secLoo2.mRad_flow_nominal),
     final TBoiSup_nominal=333.15,
     final TBoiRet_min=323.15,
     final dpValve_nominal_value(displayUnit="Pa") = 2000,
@@ -35,10 +35,8 @@ model ClosedLoopTest "Closed loop testing model"
     final controllerTypeBoi2=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
     final kBoi2=0.1,
     final TiBoi2=30,
-    final pum2(m_flow_nominal=2*boiPlaPri.mSec_flow_nominal,
-               dp_nominal=15000),
-    final pum1(m_flow_nominal=2*boiPlaPri.mSec_flow_nominal,
-               dp_nominal=15000))
+    final pum2(m_flow_nominal=boiPlaPri.mSec_flow_nominal, dp_nominal=30000),
+    final pum1(m_flow_nominal=boiPlaPri.mSec_flow_nominal, dp_nominal=30000))
     "Boiler plant primary loop model"
     annotation (Placement(transformation(extent={{40,-20},{60,12}})));
 
@@ -93,7 +91,9 @@ model ClosedLoopTest "Closed loop testing model"
     conPID(
       final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
       final k=0.05,
-      final Ti=180))
+      final Ti=180),
+    con(k=true),
+    pum(dp_nominal(displayUnit="Pa") = 30000))
     "Secondary loop-2"
     annotation (Placement(transformation(extent={{40,60},{60,80}})));
 
@@ -103,8 +103,9 @@ model ClosedLoopTest "Closed loop testing model"
     conPID(
       final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
       final k=0.05,
-      final Ti=180))
-    "Secondary loop-1"
+      final Ti=180),
+    con(k=true),
+    pum(dp_nominal(displayUnit="Pa") = 30000)) "Secondary loop-1"
     annotation (Placement(transformation(extent={{40,140},{60,160}})));
 
   Buildings.Controls.OBC.CDL.Integers.Add addIntReqPla
@@ -119,7 +120,7 @@ model ClosedLoopTest "Closed loop testing model"
     final nPum=1,
     final nSen=1,
     final VHotWat_flow_nominal=secLoo1.mRad_flow_nominal/1000,
-    final maxRemDp={5000},
+    final maxRemDp={22590.1},
     final k=1,
     final Ti=12.5,
     final speConTyp=Buildings.Controls.OBC.ASHRAE.G36.Plants.Boilers.Types.SecondaryPumpSpeedControl.RemoteDP,
@@ -135,7 +136,7 @@ model ClosedLoopTest "Closed loop testing model"
     final nPum=1,
     final nSen=1,
     final VHotWat_flow_nominal=secLoo1.mRad_flow_nominal/1000,
-    final maxRemDp={5000},
+    final maxRemDp={22590.1},
     final k=1,
     final Ti=12.5,
     final speConTyp=Buildings.Controls.OBC.ASHRAE.G36.Plants.Boilers.Types.SecondaryPumpSpeedControl.RemoteDP,
@@ -215,11 +216,6 @@ protected
     "Split load between two secondary loops"
     annotation (Placement(transformation(extent={{-80,90},{-60,110}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con1[2](
-    final k=fill(false, 2))
-    "Constant boiler availability status"
-    annotation (Placement(transformation(extent={{4,14},{24,34}})));
-
   Buildings.Controls.OBC.CDL.Logical.Edge edg[2]
     "Detect completion of valve open commands"
     annotation (Placement(transformation(extent={{-120,-40},{-100,-20}})));
@@ -232,6 +228,11 @@ protected
     "Sum reset requests from both secondary loops"
     annotation (Placement(transformation(extent={{100,140},{120,160}})));
 
+public
+  Controls.OBC.CDL.Integers.Sources.Constant conInt(k=0)
+    annotation (Placement(transformation(extent={{-120,20},{-100,40}})));
+  Controls.OBC.CDL.Logical.Sources.Constant con(k=true)
+    annotation (Placement(transformation(extent={{-80,140},{-60,160}})));
 equation
 
   connect(weaDat.weaBus,weaBus)  annotation (Line(
@@ -282,8 +283,6 @@ equation
           84,154},{84,36},{138,36}}, color={255,127,0}));
   connect(secLoo2.nReqPla, addIntReqPla.u2) annotation (Line(points={{62,74},{
           80,74},{80,24},{138,24}}, color={255,127,0}));
-  connect(addIntReqPla.y, conBoiPri.plaReq) annotation (Line(points={{162,30},{
-          170,30},{170,90},{-50,90},{-50,30},{-42,30}}, color={255,127,0}));
   connect(secLoo1.nReqPla, conPumSec1.plaReq) annotation (Line(points={{62,154},
           {70,154},{70,174},{-20,174},{-20,154},{-12,154}}, color={255,127,0}));
   connect(secLoo2.nReqPla, conPumSec2.plaReq) annotation (Line(points={{62,74},
@@ -301,10 +300,6 @@ equation
           {32,50},{32,64},{38,64}}, color={0,0,127}));
   connect(secLoo2.dPSec,conPumSec2. dpHotWat_remote[1]) annotation (Line(points={{62,62},
           {72,62},{72,88},{-20,88},{-20,50},{-10,50}},         color={0,0,127}));
-  connect(conBoiPri.yPla,conPumSec2. uPlaEna) annotation (Line(points={{-18,14},
-          {-16,14},{-16,70},{-10,70}}, color={255,0,255}));
-  connect(conBoiPri.yPla,conPumSec1. uPlaEna) annotation (Line(points={{-18,14},
-          {-16,14},{-16,158},{-12,158}}, color={255,0,255}));
   connect(secLoo2.yPumEna,conPumSec2. uHotWatPum[1]) annotation (Line(points={{62,70},
           {74,70},{74,92},{-22,92},{-22,74},{-10,74}},     color={255,0,255}));
   connect(secLoo1.yPumEna,conPumSec1. uHotWatPum[1]) annotation (Line(points={{62,150},
@@ -358,11 +353,19 @@ equation
   connect(secLoo1.nReqRes, addIntReqRes.u1) annotation (Line(points={{62,158},{
           90,158},{90,156},{98,156}}, color={255,127,0}));
   connect(secLoo2.nReqRes, addIntReqRes.u2) annotation (Line(points={{62,78},{
-          70,78},{70,32},{116,32},{116,136},{98,136},{98,144}}, color={255,127,
+          92,78},{92,144},{98,144}},                            color={255,127,
           0}));
   connect(addIntReqRes.y, conBoiPri.resReq) annotation (Line(points={{122,150},
           {130,150},{130,182},{-28,182},{-28,92},{-52,92},{-52,34},{-42,34}},
         color={255,127,0}));
+  connect(addIntReqPla.y, conBoiPri.plaReq)
+    annotation (Line(points={{162,30},{-42,30}}, color={255,127,0}));
+  connect(conBoiPri.yPla, conPumSec1.uPlaEna) annotation (Line(points={{-18,14},
+          {-10,14},{-10,36},{-14,36},{-14,42},{-18,42},{-18,48},{-26,48},{-26,
+          158},{-12,158}}, color={255,0,255}));
+  connect(conBoiPri.yPla, conPumSec2.uPlaEna) annotation (Line(points={{-18,14},
+          {-10,14},{-10,36},{-14,36},{-14,42},{-18,42},{-18,48},{-26,48},{-26,
+          70},{-10,70}}, color={255,0,255}));
   annotation (Documentation(info="<html>
 <p>
 This model couples the boiler plant model for a primary-secondary, condensing boiler

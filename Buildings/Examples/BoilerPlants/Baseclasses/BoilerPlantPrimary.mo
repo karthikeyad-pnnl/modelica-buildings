@@ -304,7 +304,8 @@ model BoilerPlantPrimary
     final addPowerToMedium=false,
     final riseTime=60,
     m_flow_nominal=mSec_flow_nominal/2,
-    dp_nominal(displayUnit="Pa") = 50000)
+    dp_nominal(displayUnit="Pa") = 2*(perBoi1.dp_nominal +
+      dpValve_nominal_value + dpFixed_nominal_value))
     "Hot water primary pump-1"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,
@@ -322,8 +323,11 @@ model BoilerPlantPrimary
 
   Buildings.Fluid.FixedResistances.Junction spl4(
     redeclare package Medium = MediumW,
-    final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
-    final m_flow_nominal={mSec_flow_nominal,-mSec_flow_nominal,-mSec_flow_nominal},
+    energyDynamics=Modelica.Fluid.Types.Dynamics.SteadyState,
+    portFlowDirection_1=Modelica.Fluid.Types.PortFlowDirection.Entering,
+    portFlowDirection_2=Modelica.Fluid.Types.PortFlowDirection.Leaving,
+    portFlowDirection_3=Modelica.Fluid.Types.PortFlowDirection.Leaving,
+    m_flow_nominal={mSec_flow_nominal,-mSec_flow_nominal,-mSec_flow_nominal},
     final dp_nominal={0,0,0})
     "Splitter"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
@@ -333,7 +337,7 @@ model BoilerPlantPrimary
   Buildings.Fluid.FixedResistances.Junction spl5(
     redeclare package Medium = MediumW,
     final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
-    final m_flow_nominal={mSec_flow_nominal,mSec_flow_nominal,-mSec_flow_nominal},
+    m_flow_nominal={mSec_flow_nominal,mSec_flow_nominal,-mSec_flow_nominal},
     final dp_nominal={0,0,0})
     "Splitter"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
@@ -421,17 +425,6 @@ model BoilerPlantPrimary
       rotation=0,
       origin={150,-150})));
 
-  Buildings.Fluid.FixedResistances.PlugFlowPipe pipe(
-    redeclare package Medium = MediumW,
-    final allowFlowReversal=false,
-    final m_flow_nominal=mSec_flow_nominal,
-    final have_pipCap=false,
-    final length=2000,
-    final dIns=0.0508,
-    final kIns=0.0389)
-    "Dynamic pipe element to represent duct loss"
-    annotation (Placement(transformation(extent={{130,110},{150,130}})));
-
   Modelica.Thermal.HeatTransfer.Sources.PrescribedTemperature TRoo
     "Room temperature of boiler room"
     annotation (Placement(transformation(extent={{-280,-80},{-260,-60}})));
@@ -485,7 +478,8 @@ model BoilerPlantPrimary
     final addPowerToMedium=false,
     final riseTime=60,
     m_flow_nominal=mSec_flow_nominal/2,
-    dp_nominal(displayUnit="Pa") = 50000)
+    dp_nominal(displayUnit="Pa") = 1.25*(perBoi1.dp_nominal +
+      dpValve_nominal_value + dpFixed_nominal_value))
     "Hot water primary pump-2"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,
@@ -608,9 +602,6 @@ equation
           {150,-160}}, color={0,127,255}));
   connect(TZon, TRoo.T)
     annotation (Line(points={{-340,-70},{-282,-70}}, color={0,0,127}));
-  connect(TRoo.port, pipe.heatPort) annotation (Line(points={{-260,-70},{-140,
-          -70},{-140,100},{100,100},{100,130},{140,130}},
-                                                   color={191,0,0}));
   connect(boi1.heatPort, TRoo.port) annotation (Line(points={{100,-142.8},{100,
           -86},{-120,-86},{-120,-70},{-260,-70}}, color={191,0,0}));
   connect(boi2.heatPort, TRoo.port) annotation (Line(points={{100,-202.8},{100,-180},
@@ -637,8 +628,6 @@ equation
 
   connect(spl5.port_2, senTem2.port_a)
     annotation (Line(points={{210,30},{210,0}}, color={0,127,255}));
-  connect(pipe.port_b, senTem4.port_a)
-    annotation (Line(points={{150,120},{180,120}}, color={0,127,255}));
   connect(senTem4.port_b, spl5.port_1) annotation (Line(points={{200,120},{210,
           120},{210,50}}, color={0,127,255}));
   connect(senTem2.T, yRetTem) annotation (Line(points={{221,-10},{250,-10},{250,
@@ -725,8 +714,6 @@ equation
   connect(spl3.port_2, senVolFlo.port_a)
     annotation (Line(points={{-66,-20},{-66,-8},{-52,-8},{-52,-22},{-30,-22},{
           -30,-20}},                               color={0,127,255}));
-  connect(port_a, pipe.port_a)
-    annotation (Line(points={{40,240},{40,120},{130,120}}, color={0,127,255}));
   connect(spl4.port_2, port_b) annotation (Line(points={{-30,50},{-32,50},{-32,
           224},{-40,224},{-40,240}}, color={0,127,255}));
   connect(val2.port_b, spl1.port_1) annotation (Line(points={{0,-210},{0,-212},
@@ -737,6 +724,8 @@ equation
           {48,-172},{28,-172},{28,-150},{20,-150}}, color={0,127,255}));
   connect(boi2.port_b, val2.port_a)
     annotation (Line(points={{90,-210},{20,-210}}, color={0,127,255}));
+  connect(port_a, senTem4.port_a)
+    annotation (Line(points={{40,240},{40,120},{180,120}}, color={0,127,255}));
   annotation (defaultComponentName="boiPlaPri",
     Documentation(info="<html>
       <p>

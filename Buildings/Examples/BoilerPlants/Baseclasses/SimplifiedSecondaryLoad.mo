@@ -88,8 +88,8 @@ model SimplifiedSecondaryLoad
     final allowFlowReversal=true,
     final addPowerToMedium=true,
     final riseTime=60,
-    final m_flow_nominal=mRad_flow_nominal,
-    final dp_nominal=6*dpRad_nominal)
+    m_flow_nominal=mRad_flow_nominal,
+    dp_nominal=1.1*dpRad_nominal + 1000)
     "Hot water secondary pump"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,
@@ -136,8 +136,7 @@ model SimplifiedSecondaryLoad
     "Determine if pump is proven on"
     annotation (Placement(transformation(extent={{60,20},{80,40}})));
 
-  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr(
-    final t=0.05)
+  Controls.OBC.CDL.Reals.Hysteresis                 hys2(uLow=0.05, uHigh=0.5)
     "Check if valve command exceeds threshold for sending plant requests"
     annotation (Placement(transformation(extent={{10,50},{30,70}})));
 
@@ -155,24 +154,29 @@ model SimplifiedSecondaryLoad
     "Convert Boolean to required integer format"
     annotation (Placement(transformation(extent={{70,90},{90,110}})));
 
+  Controls.OBC.CDL.Reals.Sources.Ramp ram(duration=10800, startTime=173700)
+    annotation (Placement(transformation(extent={{-90,36},{-70,56}})));
+  Controls.OBC.CDL.Reals.Sources.Constant con1(k=0)
+    annotation (Placement(transformation(extent={{-90,4},{-70,24}})));
+  Controls.OBC.CDL.Reals.Switch swi
+    annotation (Placement(transformation(extent={{-62,20},{-42,40}})));
+  Controls.OBC.CDL.Logical.Sources.Constant con(k=false)
+    annotation (Placement(transformation(extent={{-140,20},{-120,40}})));
+  Controls.OBC.CDL.Conversions.BooleanToReal booToRea1
+    annotation (Placement(transformation(extent={{-78,90},{-58,110}})));
+  Controls.OBC.CDL.Reals.Sources.Constant con2(k=1)
+    annotation (Placement(transformation(extent={{-90,66},{-70,86}})));
 equation
   connect(port_b,coo. port_b) annotation (Line(points={{80,-100},{80,0},{70,0}},
         color={0,127,255}));
   connect(uHotWat_flow, conPID.u_s)
     annotation (Line(points={{-120,60},{-52,60}}, color={0,0,127}));
-  connect(conPID.y, val.y)
-    annotation (Line(points={{-28,60},{0,60},{0,12}},      color={0,0,127}));
   connect(booToInt.y, nReqPla)
     annotation (Line(points={{92,60},{120,60}}, color={255,127,0}));
   connect(uPum, booToRea.u)
     annotation (Line(points={{-120,-40},{-92,-40}}, color={255,0,255}));
-  connect(mul.y, pum.y)
-    annotation (Line(points={{-38,-60},{-36,-60},{-36,-40},{-32,-40}},
-                                                   color={0,0,127}));
   connect(booToRea.y, mul.u1) annotation (Line(points={{-68,-40},{-66,-40},{-66,
           -54},{-62,-54}}, color={0,0,127}));
-  connect(uPumSpe, mul.u2) annotation (Line(points={{-120,-80},{-66,-80},{-66,
-          -66},{-62,-66}}, color={0,0,127}));
   connect(THotWatRet, coo.TSet) annotation (Line(points={{-120,0},{-40,0},{-40,-14},
           {46,-14},{46,8},{48,8}},
                           color={0,0,127}));
@@ -200,18 +204,32 @@ equation
     annotation (Line(points={{10,0},{20,0}}, color={0,127,255}));
   connect(val.port_a, pum.port_b)
     annotation (Line(points={{-10,0},{-20,0},{-20,-30}}, color={0,127,255}));
-  connect(conPID.y, greThr.u)
-    annotation (Line(points={{-28,60},{8,60}}, color={0,0,127}));
-  connect(greThr.y, tim.u)
+  connect(hys2.y, tim.u)
     annotation (Line(points={{32,60},{38,60}}, color={255,0,255}));
   connect(tim.passed, booToInt.u) annotation (Line(points={{62,52},{64,52},{64,60},
           {68,60}}, color={255,0,255}));
   connect(booToInt1.y, nReqRes)
     annotation (Line(points={{92,100},{120,100}}, color={255,127,0}));
-  connect(conPID.y, hys1.u) annotation (Line(points={{-28,60},{0,60},{0,100},{8,
-          100}}, color={0,0,127}));
   connect(hys1.y, booToInt1.u)
     annotation (Line(points={{32,100},{68,100}}, color={255,0,255}));
+  connect(val.y_actual, hys2.u) annotation (Line(points={{5,7},{14,7},{14,46},{0,
+          46},{0,60},{8,60}}, color={0,0,127}));
+  connect(val.y_actual, hys1.u) annotation (Line(points={{5,7},{14,7},{14,46},{0,
+          46},{0,100},{8,100}}, color={0,0,127}));
+  connect(con1.y, swi.u3) annotation (Line(points={{-68,14},{-68,16},{-64,16},{-64,
+          22}}, color={0,0,127}));
+  connect(con.y, swi.u2)
+    annotation (Line(points={{-118,30},{-64,30}}, color={255,0,255}));
+  connect(mul.y, pum.y) annotation (Line(points={{-38,-60},{-36,-60},{-36,-40},{
+          -32,-40}}, color={0,0,127}));
+  connect(con.y, booToRea1.u) annotation (Line(points={{-118,30},{-94,30},{-94,100},
+          {-80,100}}, color={255,0,255}));
+  connect(ram.y, swi.u1) annotation (Line(points={{-68,46},{-68,42},{-64,42},{
+          -64,38}}, color={0,0,127}));
+  connect(conPID.y, val.y) annotation (Line(points={{-28,60},{-18,60},{-18,22},
+          {0,22},{0,12}}, color={0,0,127}));
+  connect(uPumSpe, mul.u2) annotation (Line(points={{-120,-80},{-70,-80},{-70,
+          -66},{-62,-66}}, color={0,0,127}));
   annotation (defaultComponentName="secLoo",
     Icon(
       coordinateSystem(
