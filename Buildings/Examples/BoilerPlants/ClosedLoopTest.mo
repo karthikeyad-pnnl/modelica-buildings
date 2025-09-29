@@ -41,7 +41,7 @@ model ClosedLoopTest "Closed loop testing model"
     annotation (Placement(transformation(extent={{40,-20},{60,12}})));
 
   Buildings.Controls.OBC.ASHRAE.G36.Plants.Boilers.PrimaryController conBoiPri(
-    final controllerType_priPum=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
+    final controllerType_priPum=Buildings.Controls.OBC.CDL.Types.SimpleController.P,
     final controllerType_bypVal=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
     final have_priOnl=false,
     final have_heaPriPum=true,
@@ -78,8 +78,8 @@ model ClosedLoopTest "Closed loop testing model"
     final Ti_bypVal=90,
     final Td_bypVal=10e-9,
     final boiDesFlo=conBoiPri.maxFloSet,
-    final k_priPum=10,
-    final Ti_priPum=30,
+    final k_priPum=0.1,
+    final Ti_priPum=60,
     final minPriPumSpeSta={0,0,0},
     final speConTypPri=Buildings.Controls.OBC.ASHRAE.G36.Plants.Boilers.Types.PrimaryPumpSpeedControl.Flowrate)
     "Boiler plant primary loop controller"
@@ -92,7 +92,7 @@ model ClosedLoopTest "Closed loop testing model"
       final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
       final k=0.05,
       final Ti=180),
-    con(k=true),
+    con(k=false),
     pum(dp_nominal(displayUnit="Pa") = 30000))
     "Secondary loop-2"
     annotation (Placement(transformation(extent={{40,60},{60,80}})));
@@ -104,7 +104,7 @@ model ClosedLoopTest "Closed loop testing model"
       final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
       final k=0.05,
       final Ti=180),
-    con(k=true),
+    con(k=false),
     pum(dp_nominal(displayUnit="Pa") = 30000)) "Secondary loop-1"
     annotation (Placement(transformation(extent={{40,140},{60,160}})));
 
@@ -229,10 +229,12 @@ protected
     annotation (Placement(transformation(extent={{100,140},{120,160}})));
 
 public
-  Controls.OBC.CDL.Integers.Sources.Constant conInt(k=0)
+  Controls.OBC.CDL.Integers.Sources.Constant conInt(k=2)
     annotation (Placement(transformation(extent={{-120,20},{-100,40}})));
   Controls.OBC.CDL.Logical.Sources.Constant con(k=true)
     annotation (Placement(transformation(extent={{-80,140},{-60,160}})));
+  Controls.OBC.CDL.Reals.Sources.Ramp ram(duration=108000, startTime=173700)
+    annotation (Placement(transformation(extent={{0,16},{20,36}})));
 equation
 
   connect(weaDat.weaBus,weaBus)  annotation (Line(
@@ -275,8 +277,6 @@ equation
   connect(conBoiPri.TBoiHotWatSupSet, boiPlaPri.TBoiHotWatSupSet)
     annotation (Line(points={{-18,6},{10,6},{10,4},{38,4}},
                                               color={0,0,127}));
-  connect(conBoiPri.yPriPumSpe, boiPlaPri.uPumSpe) annotation (Line(points={{-18,-14},
-          {0,-14},{0,-12},{38,-12}},      color={0,0,127}));
   connect(con3[1].y, conBoiPri.uSchEna) annotation (Line(points={{-98,0},{-90,0},
           {-90,38},{-42,38}}, color={255,0,255}));
   connect(secLoo1.nReqPla, addIntReqPla.u1) annotation (Line(points={{62,154},{
@@ -358,14 +358,17 @@ equation
   connect(addIntReqRes.y, conBoiPri.resReq) annotation (Line(points={{122,150},
           {130,150},{130,182},{-28,182},{-28,92},{-52,92},{-52,34},{-42,34}},
         color={255,127,0}));
-  connect(addIntReqPla.y, conBoiPri.plaReq)
-    annotation (Line(points={{162,30},{-42,30}}, color={255,127,0}));
   connect(conBoiPri.yPla, conPumSec1.uPlaEna) annotation (Line(points={{-18,14},
           {-10,14},{-10,36},{-14,36},{-14,42},{-18,42},{-18,48},{-26,48},{-26,
           158},{-12,158}}, color={255,0,255}));
   connect(conBoiPri.yPla, conPumSec2.uPlaEna) annotation (Line(points={{-18,14},
           {-10,14},{-10,36},{-14,36},{-14,42},{-18,42},{-18,48},{-26,48},{-26,
           70},{-10,70}}, color={255,0,255}));
+  connect(conInt.y, conBoiPri.plaReq)
+    annotation (Line(points={{-98,30},{-42,30}}, color={255,127,0}));
+  connect(ram.y, boiPlaPri.uPumSpe) annotation (Line(points={{22,26},{32,26},{
+          32,16},{26,16},{26,12},{8,12},{8,8},{6,8},{6,-12},{38,-12}}, color={0,
+          0,127}));
   annotation (Documentation(info="<html>
 <p>
 This model couples the boiler plant model for a primary-secondary, condensing boiler

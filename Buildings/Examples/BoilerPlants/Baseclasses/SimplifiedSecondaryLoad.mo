@@ -226,10 +226,10 @@ equation
           {-80,100}}, color={255,0,255}));
   connect(ram.y, swi.u1) annotation (Line(points={{-68,46},{-68,42},{-64,42},{
           -64,38}}, color={0,0,127}));
-  connect(conPID.y, val.y) annotation (Line(points={{-28,60},{-18,60},{-18,22},
-          {0,22},{0,12}}, color={0,0,127}));
-  connect(uPumSpe, mul.u2) annotation (Line(points={{-120,-80},{-70,-80},{-70,
-          -66},{-62,-66}}, color={0,0,127}));
+  connect(booToRea1.y, val.y) annotation (Line(points={{-56,100},{-2,100},{-2,
+          22},{0,22},{0,12}}, color={0,0,127}));
+  connect(swi.y, mul.u2) annotation (Line(points={{-40,30},{-32,30},{-32,-16},{
+          -6,-16},{-6,-114},{-62,-114},{-62,-66}}, color={0,0,127}));
   annotation (defaultComponentName="secLoo",
     Icon(
       coordinateSystem(
