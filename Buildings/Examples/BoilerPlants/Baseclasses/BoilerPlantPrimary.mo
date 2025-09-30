@@ -465,7 +465,7 @@ model BoilerPlantPrimary
     redeclare package Medium = MediumW,
     final allowFlowReversal=false,
     final m_flow_nominal=mSec_flow_nominal,
-    dp_nominal=500)
+    dp_nominal=0)
     "Pipe element for decoupler leg"
     annotation (Placement(transformation(extent={{80,60},{100,80}})));
 
@@ -518,8 +518,7 @@ model BoilerPlantPrimary
   Buildings.Fluid.FixedResistances.CheckValve cheVal1(
     redeclare package Medium = MediumW,
     final m_flow_nominal=mSec_flow_nominal,
-    final dpValve_nominal=1e-6,
-    final l=1e-7)
+    final dpValve_nominal=500)
     "Check valve for primary pump-1"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,
@@ -528,8 +527,7 @@ model BoilerPlantPrimary
   Buildings.Fluid.FixedResistances.CheckValve cheVal2(
     redeclare package Medium = MediumW,
     final m_flow_nominal=mSec_flow_nominal,
-    final dpValve_nominal=1e-6,
-    final l=1e-7)
+    final dpValve_nominal=500)
     "Check valve for primary pump-2"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,

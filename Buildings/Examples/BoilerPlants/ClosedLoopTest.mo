@@ -5,7 +5,7 @@ model ClosedLoopTest "Closed loop testing model"
   replaceable package MediumW = Buildings.Media.Water
     "Medium model";
 
-  parameter Modelica.Units.SI.MassFlowRate mRad_flow_nominal=10
+  parameter Modelica.Units.SI.MassFlowRate mRad_flow_nominal=10.5
     "Radiator nominal mass flow rate";
 
   parameter Real boiDesCap(
@@ -50,6 +50,7 @@ model ClosedLoopTest "Closed loop testing model"
     final have_secFloSen_select=false,
     final have_priTemSen=true,
     final nLooSec=2,
+    nHotWatResReqIgn=0,
     final nSenPri=1,
     final nPumPri_nominal=1,
     final TPlaHotWatSetMax=273.15 + 50,
@@ -405,7 +406,6 @@ First implementation.
      "modelica://Buildings/Resources/Scripts/Dymola/Examples/BoilerPlants/ClosedLoopTest.mos"
         "Simulate and plot"),
     experiment(
-      StartTime=86400,
       StopTime=259200,
       Interval=60,
       Tolerance=1e-05,

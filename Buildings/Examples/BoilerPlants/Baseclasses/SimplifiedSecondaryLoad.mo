@@ -135,7 +135,7 @@ model SimplifiedSecondaryLoad
     "Determine if pump is proven on"
     annotation (Placement(transformation(extent={{60,20},{80,40}})));
 
-  Controls.OBC.CDL.Reals.Hysteresis                 hys2(uLow=0.1, uHigh=0.85)
+  Controls.OBC.CDL.Reals.Hysteresis                 hys2(uLow=0.05, uHigh=0.8)
     "Check if valve command exceeds threshold for sending plant requests"
     annotation (Placement(transformation(extent={{10,50},{30,70}})));
 
@@ -227,8 +227,8 @@ equation
           -64,38}}, color={0,0,127}));
   connect(uPumSpe, mul.u2) annotation (Line(points={{-120,-80},{-70,-80},{-70,
           -66},{-62,-66}}, color={0,0,127}));
-  connect(booToRea1.y, val.y) annotation (Line(points={{-56,100},{-2,100},{-2,
-          22},{0,22},{0,12}}, color={0,0,127}));
+  connect(conPID.y, val.y) annotation (Line(points={{-28,60},{-18,60},{-18,22},
+          {0,22},{0,12}}, color={0,0,127}));
   annotation (defaultComponentName="secLoo",
     Icon(
       coordinateSystem(
