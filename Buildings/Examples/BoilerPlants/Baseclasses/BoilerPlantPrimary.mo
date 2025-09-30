@@ -280,7 +280,7 @@ model BoilerPlantPrimary
     final p=100000,
     nPorts=1)
     "Source for pressure and to account for thermal expansion of water"
-    annotation (Placement(transformation(extent={{-120,-140},{-100,-120}})));
+    annotation (Placement(transformation(extent={{-120,-120},{-100,-100}})));
 
   Buildings.Fluid.Boilers.BoilerTable boi2(
     redeclare package Medium = MediumW,
@@ -313,8 +313,9 @@ model BoilerPlantPrimary
 
   Buildings.Fluid.FixedResistances.Junction spl1(
     redeclare package Medium = MediumW,
-    final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
-    final m_flow_nominal={mBoi_flow_nominal2,-mSec_flow_nominal,mBoi_flow_nominal1},
+    final energyDynamics=Modelica.Fluid.Types.Dynamics.SteadyState,
+    final m_flow_nominal={mBoi_flow_nominal2,-mSec_flow_nominal,
+        mBoi_flow_nominal1},
     final dp_nominal={0,0,0})
     "Splitter"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
@@ -336,7 +337,7 @@ model BoilerPlantPrimary
 
   Buildings.Fluid.FixedResistances.Junction spl5(
     redeclare package Medium = MediumW,
-    final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
+    final energyDynamics=Modelica.Fluid.Types.Dynamics.SteadyState,
     m_flow_nominal={mSec_flow_nominal,mSec_flow_nominal,-mSec_flow_nominal},
     final dp_nominal={0,0,0})
     "Splitter"
@@ -346,21 +347,21 @@ model BoilerPlantPrimary
 
   Buildings.Fluid.Actuators.Valves.TwoWayLinear val2(
     redeclare package Medium = MediumW,
-    final m_flow_nominal=mBoi_flow_nominal2,
-    final dpValve_nominal=dpValve_nominal_value,
+    m_flow_nominal=mBoi_flow_nominal2,
+    dpValve_nominal=dpValve_nominal_value,
     strokeTime=60,
     final init=Modelica.Blocks.Types.Init.InitialState,
-    final dpFixed_nominal=dpFixed_nominal_value)
+    dpFixed_nominal=dpFixed_nominal_value)
     "Isolation valve for boiler-2"
     annotation (Placement(transformation(extent={{20,-220},{0,-200}})));
 
   Buildings.Fluid.Actuators.Valves.TwoWayLinear val1(
     redeclare package Medium = MediumW,
-    final m_flow_nominal=mBoi_flow_nominal1,
-    final dpValve_nominal=dpValve_nominal_value,
+    m_flow_nominal=mBoi_flow_nominal1,
+    dpValve_nominal=dpValve_nominal_value,
     strokeTime=60,
     final init=Modelica.Blocks.Types.Init.InitialState,
-    final dpFixed_nominal=dpFixed_nominal_value)
+    dpFixed_nominal=dpFixed_nominal_value)
     "Isolation valve for boiler-1"
     annotation (Placement(transformation(extent={{20,-160},{0,-140}})));
 
@@ -417,8 +418,9 @@ model BoilerPlantPrimary
 
   Buildings.Fluid.FixedResistances.Junction spl6(
     redeclare package Medium = MediumW,
-    final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
-    final m_flow_nominal={-mBoi_flow_nominal1,mSec_flow_nominal,-mBoi_flow_nominal2},
+    final energyDynamics=Modelica.Fluid.Types.Dynamics.SteadyState,
+    final m_flow_nominal={-mBoi_flow_nominal1,mSec_flow_nominal,-
+        mBoi_flow_nominal2},
     final dp_nominal={0,0,0})
     "Splitter"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
@@ -431,7 +433,7 @@ model BoilerPlantPrimary
 
   Buildings.Controls.OBC.CDL.Logical.Edge edg[2]
     "Detect changes to boiler status setpoints"
-    annotation (Placement(transformation(extent={{-170,110},{-150,130}})));
+    annotation (Placement(transformation(extent={{-160,110},{-140,130}})));
 
   Buildings.Fluid.Sensors.TemperatureTwoPort senTem2(
     redeclare package Medium = MediumW,
@@ -515,7 +517,7 @@ model BoilerPlantPrimary
 
   Buildings.Fluid.FixedResistances.CheckValve cheVal1(
     redeclare package Medium = MediumW,
-    final m_flow_nominal=mSec_flow_nominal/2,
+    final m_flow_nominal=mSec_flow_nominal,
     final dpValve_nominal=1e-6,
     final l=1e-7)
     "Check valve for primary pump-1"
@@ -525,7 +527,7 @@ model BoilerPlantPrimary
 
   Buildings.Fluid.FixedResistances.CheckValve cheVal2(
     redeclare package Medium = MediumW,
-    final m_flow_nominal=mSec_flow_nominal/2,
+    final m_flow_nominal=mSec_flow_nominal,
     final dpValve_nominal=1e-6,
     final l=1e-7)
     "Check valve for primary pump-2"
@@ -553,18 +555,18 @@ model BoilerPlantPrimary
 
   Buildings.Fluid.FixedResistances.Junction spl2(
     redeclare package Medium = MediumW,
-    final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
+    final energyDynamics=Modelica.Fluid.Types.Dynamics.SteadyState,
     final m_flow_nominal={mBoi_flow_nominal2,-mSec_flow_nominal,
         mBoi_flow_nominal1},
     final dp_nominal={0,0,0})
     "Splitter"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,
-      origin={-30,-110})));
+      origin={-30,-104})));
 
   Buildings.Fluid.FixedResistances.Junction spl3(
     redeclare package Medium = MediumW,
-    final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
+    final energyDynamics=Modelica.Fluid.Types.Dynamics.SteadyState,
     final m_flow_nominal={mBoi_flow_nominal2,-mSec_flow_nominal,
         mBoi_flow_nominal1},
     final dp_nominal={0,0,0})
@@ -610,14 +612,15 @@ equation
     annotation (Line(points={{89,-142},{50,-142},{50,-132}}, color={0,0,127}));
   connect(boi2.T, conPIDBoi[2].u_m)
     annotation (Line(points={{89,-202},{50,-202},{50,-132}}, color={0,0,127}));
-  connect(uBoiSta, edg.u) annotation (Line(points={{-340,160},{-310,160},{-310,120},
-          {-172,120}},                       color={255,0,255}));
+  connect(uBoiSta, edg.u) annotation (Line(points={{-340,160},{-310,160},{-310,
+          120},{-162,120}},                  color={255,0,255}));
   connect(conPIDBoi[1].y, boi1.y) annotation (Line(points={{62,-120},{128,-120},
           {128,-142},{112,-142}}, color={0,0,127}));
   connect(conPIDBoi[2].y, boi2.y) annotation (Line(points={{62,-120},{128,-120},
           {128,-202},{112,-202}}, color={0,0,127}));
-  connect(edg.y, conPIDBoi.trigger) annotation (Line(points={{-148,120},{-80,120},
-          {-80,-190},{44,-190},{44,-132}}, color={255,0,255}));
+  connect(edg.y, conPIDBoi.trigger) annotation (Line(points={{-138,120},{-80,
+          120},{-80,-190},{44,-190},{44,-132}},
+                                           color={255,0,255}));
   connect(senTem2.port_b, spl6.port_2) annotation (Line(points={{210,-20},{210,
           -150},{160,-150}},
                        color={0,127,255}));
@@ -665,8 +668,8 @@ equation
         color={0,0,127}));
   connect(senTem4.T, TRetSec) annotation (Line(points={{190,131},{256,131},{256,
           240},{340,240}}, color={0,0,127}));
-  connect(preSou.ports[1], spl1.port_2) annotation (Line(points={{-100,-130},{
-          -100,-132},{-60,-132},{-60,-128},{-30,-128},{-30,-140}}, color={0,127,
+  connect(preSou.ports[1], spl1.port_2) annotation (Line(points={{-100,-110},{
+          -94,-110},{-94,-124},{-30,-124},{-30,-140}},             color={0,127,
           255}));
   connect(cheVal1.port_b, pum1.port_a)
     annotation (Line(points={{-30,-70},{-30,-60}}, color={0,127,255}));
@@ -674,18 +677,17 @@ equation
     annotation (Line(points={{0,-70},{0,-60}}, color={0,127,255}));
   connect(uHotIsoVal, booToRea2.u)
     annotation (Line(points={{-340,80},{-302,80}}, color={255,0,255}));
-  connect(booToRea2[1].y, val1.y) annotation (Line(points={{-278,80},{-160,80},{
-          -160,-106},{10,-106},{10,-138}}, color={0,0,127}));
+  connect(booToRea2[1].y, val1.y) annotation (Line(points={{-278,80},{-160,80},
+          {-160,-128},{10,-128},{10,-138}},color={0,0,127}));
   connect(booToRea2[2].y, val2.y) annotation (Line(points={{-278,80},{-160,80},{
           -160,-186},{10,-186},{10,-198}}, color={0,0,127}));
   connect(yHotWatIsoVal, greThr1.y)
     annotation (Line(points={{340,-150},{302,-150}}, color={255,0,255}));
-  connect(val1.y_actual, greThr1[1].u) annotation (Line(points={{5,-143},{16,
-          -143},{16,-100},{272,-100},{272,-150},{278,-150}},
+  connect(val1.y_actual, greThr1[1].u) annotation (Line(points={{5,-143},{-6,
+          -143},{-6,-100},{272,-100},{272,-150},{278,-150}},
                                                        color={0,0,127}));
-  connect(val2.y_actual, greThr1[2].u) annotation (Line(points={{5,-203},{16,
-          -203},{16,-168},{40,-168},{40,-140},{28,-140},{28,-132},{16,-132},{16,
-          -100},{272,-100},{272,-150},{278,-150}},
+  connect(val2.y_actual, greThr1[2].u) annotation (Line(points={{5,-203},{-6,
+          -203},{-6,-100},{272,-100},{272,-150},{278,-150}},
                                              color={0,0,127}));
   connect(uBoiSta, booToRea1.u)
     annotation (Line(points={{-340,160},{-162,160}}, color={255,0,255}));
@@ -700,11 +702,11 @@ equation
   connect(mul1[2].y, pum2.y) annotation (Line(points={{-238,20},{-100,20},{-100,
           -64},{-12,-64},{-12,-50}}, color={0,0,127}));
   connect(spl1.port_2, spl2.port_1)
-    annotation (Line(points={{-30,-140},{-30,-120}}, color={0,127,255}));
+    annotation (Line(points={{-30,-140},{-30,-114}}, color={0,127,255}));
   connect(spl2.port_2, cheVal1.port_a)
-    annotation (Line(points={{-30,-100},{-30,-90}}, color={0,127,255}));
+    annotation (Line(points={{-30,-94},{-30,-90}},  color={0,127,255}));
   connect(spl2.port_3, cheVal2.port_a)
-    annotation (Line(points={{-20,-110},{0,-110},{0,-90}}, color={0,127,255}));
+    annotation (Line(points={{-20,-104},{0,-104},{0,-90}}, color={0,127,255}));
   connect(spl3.port_1, pum1.port_b)
     annotation (Line(points={{-66,-40},{-68,-40},{-68,-48},{-48,-48},{-48,-28},
           {-30,-28},{-30,-40}},                    color={0,127,255}));
@@ -720,8 +722,8 @@ equation
           {-30,-212},{-30,-160}}, color={0,127,255}));
   connect(val1.port_b, spl1.port_3)
     annotation (Line(points={{0,-150},{-20,-150}}, color={0,127,255}));
-  connect(boi1.port_b, val1.port_a) annotation (Line(points={{90,-150},{48,-150},
-          {48,-172},{28,-172},{28,-150},{20,-150}}, color={0,127,255}));
+  connect(boi1.port_b, val1.port_a) annotation (Line(points={{90,-150},{20,-150}},
+                                                    color={0,127,255}));
   connect(boi2.port_b, val2.port_a)
     annotation (Line(points={{90,-210},{20,-210}}, color={0,127,255}));
   connect(port_a, senTem4.port_a)
