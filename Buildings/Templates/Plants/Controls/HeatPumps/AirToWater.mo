@@ -2287,17 +2287,17 @@ end if;
     annotation (Line(points={{170,432},{182,432}}, color={255,0,255}));
   connect(booScaRep3.y, and2.u1)
     annotation (Line(points={{206,432},{218,432}}, color={255,0,255}));
-  connect(seqEve.y1, y1HpPre.u) annotation (Line(points={{162,310},{164,310},{
-          164,404},{202,404},{202,380}}, color={255,0,255}));
+  connect(seqEve.y1, y1HpPre.u) annotation (Line(points={{162,310},{206,310},{
+          206,380},{202,380}},           color={255,0,255}));
   connect(seqEve.y1, ctlFloMin.u1Equ[0:0]) annotation (Line(points={{162,310},{
           264,310},{264,-212},{192,-212},{192,-220},{200,-220}}, color={255,0,
           255}));
-  connect(seqEve.y1, y1Hp) annotation (Line(points={{162,310},{264,310},{264,
-          380},{320,380}}, color={255,0,255}));
   connect(u1AvaHp.y, and2.u2) annotation (Line(points={{-218,206},{-162,206},{
           -162,404},{218,404},{218,424}}, color={255,0,255}));
   connect(and2.y, avaEquHeaCoo.u1Ava) annotation (Line(points={{242,432},{46,
           432},{46,220},{-154,220}}, color={255,0,255}));
+  connect(seqEve.y1, y1Hp) annotation (Line(points={{162,310},{264,310},{264,
+          380},{320,380}}, color={255,0,255}));
   annotation (
     defaultComponentName="ctl",
     Icon(
