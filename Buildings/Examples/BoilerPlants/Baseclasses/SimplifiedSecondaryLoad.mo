@@ -77,8 +77,8 @@ model SimplifiedSecondaryLoad
   Buildings.Fluid.HeatExchangers.SensibleCooler_T coo(
     redeclare package Medium = MediumW,
     final m_flow_nominal=mRad_flow_nominal,
-    final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial,
-    final dp_nominal=dpRad_nominal)
+    dp_nominal=0,
+    final energyDynamics=Modelica.Fluid.Types.Dynamics.FixedInitial)
     "Ideal cooler for heating loads"
     annotation (Placement(transformation(extent={{50,-10},{70,10}})));
 
@@ -89,7 +89,7 @@ model SimplifiedSecondaryLoad
     final addPowerToMedium=true,
     final riseTime=60,
     m_flow_nominal=mRad_flow_nominal,
-    dp_nominal=1.1*dpRad_nominal + 1000)
+    dp_nominal=2*dpRad_nominal)
     "Hot water secondary pump"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=90,
@@ -98,8 +98,8 @@ model SimplifiedSecondaryLoad
   Buildings.Fluid.Actuators.Valves.TwoWayLinear val(
     redeclare final package Medium = MediumW,
     final m_flow_nominal=mRad_flow_nominal,
-    final dpValve_nominal(displayUnit="Pa") = 0.1*dpRad_nominal,
-    final dpFixed_nominal(displayUnit="Pa") = 1000)
+    final dpValve_nominal(displayUnit="Pa") = dpRad_nominal,
+    final dpFixed_nominal(displayUnit="Pa") = dpRad_nominal)
     "Minimum flow bypass valve"
     annotation (Placement(transformation(extent={{-10,-10},{10,10}},
       rotation=0)));
@@ -135,19 +135,13 @@ model SimplifiedSecondaryLoad
     "Determine if pump is proven on"
     annotation (Placement(transformation(extent={{60,20},{80,40}})));
 
-  Controls.OBC.CDL.Reals.Hysteresis                 hys2(uLow=0.05, uHigh=0.8)
+  Controls.OBC.CDL.Reals.Hysteresis                 hys2(uLow=0.10, uHigh=0.95)
     "Check if valve command exceeds threshold for sending plant requests"
-    annotation (Placement(transformation(extent={{10,50},{30,70}})));
+    annotation (Placement(transformation(extent={{20,50},{40,70}})));
 
-  Buildings.Controls.OBC.CDL.Logical.Timer tim(
-    final t=300)
-    "Check if  minimum time threshold for generating plant request is exceeded"
-    annotation (Placement(transformation(extent={{40,50},{60,70}})));
-
-  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys1(
-    final uLow=0.75,
+  Buildings.Controls.OBC.CDL.Reals.Hysteresis hys1(final uLow=0.85,
     final uHigh=0.9)
-    annotation (Placement(transformation(extent={{10,90},{30,110}})));
+    annotation (Placement(transformation(extent={{20,90},{40,110}})));
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt1
     "Convert Boolean to required integer format"
@@ -203,32 +197,32 @@ equation
     annotation (Line(points={{10,0},{20,0}}, color={0,127,255}));
   connect(val.port_a, pum.port_b)
     annotation (Line(points={{-10,0},{-20,0},{-20,-30}}, color={0,127,255}));
-  connect(hys2.y, tim.u)
-    annotation (Line(points={{32,60},{38,60}}, color={255,0,255}));
-  connect(tim.passed, booToInt.u) annotation (Line(points={{62,52},{64,52},{64,60},
-          {68,60}}, color={255,0,255}));
   connect(booToInt1.y, nReqRes)
     annotation (Line(points={{92,100},{120,100}}, color={255,127,0}));
   connect(hys1.y, booToInt1.u)
-    annotation (Line(points={{32,100},{68,100}}, color={255,0,255}));
-  connect(val.y_actual, hys2.u) annotation (Line(points={{5,7},{14,7},{14,46},{0,
-          46},{0,60},{8,60}}, color={0,0,127}));
-  connect(val.y_actual, hys1.u) annotation (Line(points={{5,7},{14,7},{14,46},{0,
-          46},{0,100},{8,100}}, color={0,0,127}));
+    annotation (Line(points={{42,100},{68,100}}, color={255,0,255}));
+  connect(val.y_actual, hys2.u) annotation (Line(points={{5,7},{14,7},{14,46},{
+          0,46},{0,60},{18,60}},
+                              color={0,0,127}));
+  connect(val.y_actual, hys1.u) annotation (Line(points={{5,7},{14,7},{14,46},{
+          0,46},{0,100},{18,100}},
+                                color={0,0,127}));
   connect(con1.y, swi.u3) annotation (Line(points={{-68,14},{-68,16},{-64,16},{-64,
           22}}, color={0,0,127}));
   connect(con.y, swi.u2)
     annotation (Line(points={{-118,30},{-64,30}}, color={255,0,255}));
-  connect(mul.y, pum.y) annotation (Line(points={{-38,-60},{-36,-60},{-36,-40},{
-          -32,-40}}, color={0,0,127}));
   connect(con.y, booToRea1.u) annotation (Line(points={{-118,30},{-94,30},{-94,100},
           {-80,100}}, color={255,0,255}));
   connect(ram.y, swi.u1) annotation (Line(points={{-68,46},{-68,42},{-64,42},{
           -64,38}}, color={0,0,127}));
   connect(uPumSpe, mul.u2) annotation (Line(points={{-120,-80},{-70,-80},{-70,
           -66},{-62,-66}}, color={0,0,127}));
-  connect(conPID.y, val.y) annotation (Line(points={{-28,60},{-18,60},{-18,22},
-          {0,22},{0,12}}, color={0,0,127}));
+  connect(hys2.y, booToInt.u)
+    annotation (Line(points={{42,60},{68,60}}, color={255,0,255}));
+  connect(conPID.y, val.y) annotation (Line(points={{-28,60},{-6,60},{-6,22},{0,
+          22},{0,12}}, color={0,0,127}));
+  connect(mul.y, pum.y) annotation (Line(points={{-38,-60},{-6,-60},{-6,-26},{
+          -42,-26},{-42,-40},{-32,-40}}, color={0,0,127}));
   annotation (defaultComponentName="secLoo",
     Icon(
       coordinateSystem(

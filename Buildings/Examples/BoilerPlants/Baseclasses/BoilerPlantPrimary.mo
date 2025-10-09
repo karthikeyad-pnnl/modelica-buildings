@@ -74,7 +74,8 @@ model BoilerPlantPrimary
     final Q_flow_nominal = boiCap1,
     final VWat = boiCap1/perBoiOri.Q_flow_nominal*perBoiOri.VWat,
     final mDry = boiCap1/perBoiOri.Q_flow_nominal*perBoiOri.mDry,
-    final m_flow_nominal = boiCap1/perBoiOri.Q_flow_nominal*perBoiOri.m_flow_nominal)
+    final m_flow_nominal = boiCap1/perBoiOri.Q_flow_nominal*perBoiOri.m_flow_nominal,
+    dp_nominal=0)
     "Boiler performance data, scaled to while keeping dp_nominal constant"
     annotation (Placement(transformation(extent={{260,162},{280,182}})));
 
@@ -82,7 +83,8 @@ model BoilerPlantPrimary
     final Q_flow_nominal = boiCap2,
     final VWat = boiCap2/perBoiOri.Q_flow_nominal*perBoiOri.VWat,
     final mDry = boiCap2/perBoiOri.Q_flow_nominal*perBoiOri.mDry,
-    final m_flow_nominal = boiCap2/perBoiOri.Q_flow_nominal*perBoiOri.m_flow_nominal)
+    final m_flow_nominal = boiCap2/perBoiOri.Q_flow_nominal*perBoiOri.m_flow_nominal,
+    dp_nominal=0)
     "Boiler performance data, scaled to while keeping dp_nominal constant"
     annotation (Placement(transformation(extent={{260,192},{280,212}})));
 
@@ -412,7 +414,8 @@ model BoilerPlantPrimary
     final Td={TdBoi1,TdBoi2},
     final yMax=fill(1, 2),
     final yMin=fill(0, 2),
-    final xi_start=fill(0.2, 2))
+    final xi_start=fill(0.2, 2),
+    y_reset=0.2)
     "PI controller for operating boilers to regulating hot water supply temperature"
     annotation (Placement(transformation(extent={{40,-130},{60,-110}})));
 
