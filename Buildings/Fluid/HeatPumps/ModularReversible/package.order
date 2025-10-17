@@ -5,9 +5,12 @@ LargeScaleWaterToWater
 Modular
 Modular4Pipe
 TableData2D
+TableData2DLoadDep
+TableData2DLoadDepSHC
 Controls
 RefrigerantCycle
 Data
+Types
 Examples
 Validation
 BaseClasses

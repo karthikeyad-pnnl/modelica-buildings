@@ -5,3 +5,6 @@ PartialHeatPumpCycle
 PartialHeatPumpCycle2
 PartialRefrigerantCycle
 PartialTableData2D
+TableData2DLoadDep
+TableData2DLoadDepSHC
+Validation
