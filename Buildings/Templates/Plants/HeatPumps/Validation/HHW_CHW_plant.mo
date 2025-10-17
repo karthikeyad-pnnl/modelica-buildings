@@ -560,27 +560,38 @@ public
   Buildings.Controls.OBC.CDL.Reals.Multiply mul[2]
     annotation (Placement(transformation(extent={{-450,-200},{-470,-180}})));
   Buildings.Controls.OBC.CDL.Routing.RealScalarReplicator reaScaRep(nout=2)
-    annotation (Placement(transformation(extent={{-140,-480},{-160,-460}})));
+    annotation (Placement(transformation(extent={{-340,-200},{-360,-180}})));
   Fluid.Sources.Boundary_pT bou1(
     redeclare package Medium = Medium,
-    T=333.15,
-    nPorts=1)
-    annotation (Placement(transformation(extent={{-60,-540},{-40,-520}})));
+    T=333.15)
+    annotation (Placement(transformation(extent={{-120,-660},{-100,-640}})));
   Fluid.Sources.Boundary_pT bou2(
     redeclare package Medium = Medium,
-    T=303.15,
-    nPorts=1)
-    annotation (Placement(transformation(extent={{-60,-600},{-40,-580}})));
+    T=303.15)
+    annotation (Placement(transformation(extent={{-120,-700},{-100,-680}})));
   Fluid.Sources.Boundary_pT bou3(
     redeclare package Medium = Medium,
-    T=279.83,
-    nPorts=1)
-    annotation (Placement(transformation(extent={{-52,-204},{-32,-184}})));
+    T=279.83)
+    annotation (Placement(transformation(extent={{-120,-296},{-100,-276}})));
   Fluid.Sources.Boundary_pT bou4(
     redeclare package Medium = Medium,
-    T=288.15,
-    nPorts=1)
-    annotation (Placement(transformation(extent={{-52,-264},{-32,-244}})));
+    T=288.15)
+    annotation (Placement(transformation(extent={{-120,-326},{-100,-306}})));
+  Fluid.Sensors.VolumeFlowRate senVolFlo5(redeclare package Medium = Medium,
+      m_flow_nominal=3*datAll.pla.hp.mHeaWatHp_flow_nominal)
+    annotation (Placement(transformation(extent={{-10,-10},{10,10}},
+        rotation=270,
+        origin={-72,-182})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant
+                                                con2(k=0)
+    annotation (Placement(transformation(extent={{-60,-100},{-80,-80}})));
+  Buildings.Controls.OBC.CDL.Reals.PID conPID1(
+    k=0.1,
+    Ti=60,
+    r=3*datAll.pla.hp.mHeaWatHp_flow_nominal)
+    annotation (Placement(transformation(extent={{-100,-100},{-120,-80}})));
+  Buildings.Controls.OBC.CDL.Reals.Max max1
+    annotation (Placement(transformation(extent={{-200,-200},{-220,-180}})));
 equation
   if have_chiWat then
   end if;
@@ -604,8 +615,6 @@ equation
   connect(junHeaWatBypSup2.port_2, valIso.port_aHeaWat) annotation (Line(points={{-240,
           -590},{-690,-590},{-690,-117.571},{-678,-117.571}},       color={0,127,
           255}));
-  connect(junChiWatBypSup.port_3, junChiWatBypRet.port_3)
-    annotation (Line(points={{-72,-168},{-72,-196}}, color={0,127,255}));
   connect(valIso.port_bChiWat, junChiWatBypSup1.port_1) annotation (Line(points={{-420,
           -109.857},{-164,-109.857},{-164,-158},{-156,-158}},
                   color={0,127,255}));
@@ -1160,19 +1169,31 @@ equation
           {-436,-200},{-436,-196},{-448,-196}}, color={0,0,127}));
   connect(mul.y, mov.y) annotation (Line(points={{-472,-190},{-472,-188},{-496,
           -188}}, color={0,0,127}));
-  connect(conPID.y, reaScaRep.u)
-    annotation (Line(points={{-122,-470},{-138,-470}}, color={0,0,127}));
-  connect(reaScaRep.y, mul.u1) annotation (Line(points={{-162,-470},{-248,-470},
-          {-248,-208},{-420,-208},{-420,-184},{-448,-184}}, color={0,0,127}));
-  connect(bou1.ports[1], inlPumHeaWatSec.port_a) annotation (Line(points={{-40,
-          -530},{-30,-530},{-30,-508}}, color={0,127,255}));
-  connect(bou2.ports[1], pipHeaWat.port_b) annotation (Line(points={{-40,-590},
-          {-40,-592},{-8,-592},{-8,-588},{0,-588}}, color={0,127,255}));
-  connect(bou3.ports[1], inlPumChiWatSec.port_a) annotation (Line(points={{-32,
-          -194},{-32,-196},{-24,-196},{-24,-228},{-60,-228},{-60,-264},{-176,
-          -264},{-176,-104},{-50,-104},{-50,-160}}, color={0,127,255}));
-  connect(bou4.ports[1], pipChiWat.port_b) annotation (Line(points={{-32,-254},
-          {-32,-256},{28,-256},{28,-206},{36,-206}}, color={0,127,255}));
+  connect(junChiWatBypSup.port_2, inlPumChiWatSec.port_a) annotation (Line(
+        points={{-62,-158},{-60,-160},{-50,-160}}, color={0,127,255}));
+  connect(pipChiWat.port_b, junChiWatBypRet.port_1)
+    annotation (Line(points={{36,-206},{-62,-206}}, color={0,127,255}));
+  connect(hea.port_b, inlPumHeaWatSec.port_a)
+    annotation (Line(points={{-70,-508},{-30,-508}}, color={0,127,255}));
+  connect(junHeaWatBypRet.port_1, pipHeaWat.port_b) annotation (Line(points={{
+          -120,-590},{-120,-592},{-8,-592},{-8,-588},{0,-588}}, color={0,127,
+          255}));
+  connect(junChiWatBypRet.port_3, senVolFlo5.port_b)
+    annotation (Line(points={{-72,-196},{-72,-192}}, color={0,127,255}));
+  connect(junChiWatBypSup.port_3, senVolFlo5.port_a)
+    annotation (Line(points={{-72,-168},{-72,-172}}, color={0,127,255}));
+  connect(con2.y, conPID1.u_s)
+    annotation (Line(points={{-82,-90},{-98,-90}}, color={0,0,127}));
+  connect(senVolFlo5.V_flow, conPID1.u_m) annotation (Line(points={{-61,-182},{
+          -56,-182},{-56,-120},{-110,-120},{-110,-102}}, color={0,0,127}));
+  connect(reaScaRep.y, mul.u1) annotation (Line(points={{-362,-190},{-384,-190},
+          {-384,-208},{-420,-208},{-420,-184},{-448,-184}}, color={0,0,127}));
+  connect(reaScaRep.u, max1.y)
+    annotation (Line(points={{-338,-190},{-222,-190}}, color={0,0,127}));
+  connect(max1.u1, conPID1.y) annotation (Line(points={{-198,-184},{-180,-184},
+          {-180,-90},{-122,-90}}, color={0,0,127}));
+  connect(conPID.y, max1.u2) annotation (Line(points={{-122,-470},{-180,-470},{
+          -180,-196},{-198,-196}}, color={0,0,127}));
   annotation (
     __Dymola_Commands(
       file=
