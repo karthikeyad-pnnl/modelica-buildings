@@ -3,7 +3,6 @@ AirToWaterTableData2D
 CarnotWithLosses
 LargeScaleWaterToWater
 Modular
-Modular4Pipe
 TableData2D
 TableData2DLoadDep
 TableData2DLoadDepSHC
@@ -14,4 +13,3 @@ Types
 Examples
 Validation
 BaseClasses
-Types
