@@ -75,12 +75,14 @@ model FourPipeASHP_with_controls "Validation of AWHP plant template"
     dpValve_nominal=500,
     dpFixed_nominal=40000)
     annotation (Placement(transformation(extent={{-68,-290},{-48,-270}})));
-  Fluid.Movers.Preconfigured.SpeedControlled_y     mov1(redeclare package
-      Medium = Medium, m_flow_nominal=datAll.pla.hp.mHeaWatHp_flow_nominal,
+  Fluid.Movers.Preconfigured.SpeedControlled_y     mov1(
+    redeclare package Medium = Medium,
+    addPowerToMedium=false,
+    m_flow_nominal=datAll.pla.hp.mHeaWatHp_flow_nominal,
     dp_nominal=datAll.pla.pumHeaWatPri.dp_nominal[1])
     annotation (Placement(transformation(extent={{-40,-270},{-20,-290}})));
-  Fluid.Movers.Preconfigured.SpeedControlled_y     mov2(redeclare package
-      Medium = Medium,
+  Fluid.Movers.Preconfigured.SpeedControlled_y     mov2(
+    redeclare package Medium = Medium,
     addPowerToMedium=false,
     m_flow_nominal=datAll.pla.hp.mChiWatHp_flow_nominal,
     dp_nominal=datAll.pla.pumChiWatPri.dp_nominal[1])

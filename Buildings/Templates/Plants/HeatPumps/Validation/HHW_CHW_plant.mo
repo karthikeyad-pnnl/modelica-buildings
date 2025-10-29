@@ -165,8 +165,10 @@ model HHW_CHW_plant "Validation of AWHP plant template"
     annotation (Placement(transformation(extent={{-838,-340},{-358,-260}})));
   Fluid.Movers.Preconfigured.SpeedControlled_y mov[2](
     redeclare package Medium = Medium,
-    m_flow_nominal=datAll.pla.pumHeaWatPri.m_flow_nominal,
-    dp_nominal=datAll.pla.pumHeaWatPri.dp_nominal) annotation (Placement(
+    addPowerToMedium=false,
+    m_flow_nominal=datAll.pla.pumHeaWatPri.m_flow_nominal[1],
+    dp_nominal=datAll.pla.pumHeaWatPri.dp_nominal[1])
+                                                   annotation (Placement(
         transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
@@ -572,19 +574,23 @@ public
     annotation (Placement(transformation(extent={{-340,-200},{-360,-180}})));
   Fluid.Sources.Boundary_pT bou1(
     redeclare package Medium = Medium,
-    T=333.15)
+    T=333.15,
+    nPorts=1)
     annotation (Placement(transformation(extent={{-120,-660},{-100,-640}})));
   Fluid.Sources.Boundary_pT bou2(
     redeclare package Medium = Medium,
-    T=303.15)
+    T=303.15,
+    nPorts=1)
     annotation (Placement(transformation(extent={{-120,-700},{-100,-680}})));
   Fluid.Sources.Boundary_pT bou3(
     redeclare package Medium = Medium,
-    T=279.83)
+    T=279.83,
+    nPorts=1)
     annotation (Placement(transformation(extent={{-120,-296},{-100,-276}})));
   Fluid.Sources.Boundary_pT bou4(
     redeclare package Medium = Medium,
-    T=288.15)
+    T=288.15,
+    nPorts=1)
     annotation (Placement(transformation(extent={{-120,-326},{-100,-306}})));
   Fluid.Sensors.VolumeFlowRate senVolFlo5(redeclare package Medium = Medium,
       m_flow_nominal=3*datAll.pla.hp.mHeaWatHp_flow_nominal)
@@ -1116,15 +1122,6 @@ equation
           {-436,-200},{-436,-196},{-448,-196}}, color={0,0,127}));
   connect(mul.y, mov.y) annotation (Line(points={{-472,-190},{-472,-188},{-496,
           -188}}, color={0,0,127}));
-  connect(junChiWatBypSup.port_2, inlPumChiWatSec.port_a) annotation (Line(
-        points={{-62,-158},{-60,-160},{-50,-160}}, color={0,127,255}));
-  connect(pipChiWat.port_b, junChiWatBypRet.port_1)
-    annotation (Line(points={{36,-206},{-62,-206}}, color={0,127,255}));
-  connect(hea.port_b, inlPumHeaWatSec.port_a)
-    annotation (Line(points={{-70,-508},{-30,-508}}, color={0,127,255}));
-  connect(junHeaWatBypRet.port_1, pipHeaWat.port_b) annotation (Line(points={{
-          -120,-590},{-120,-592},{-8,-592},{-8,-588},{0,-588}}, color={0,127,
-          255}));
   connect(junChiWatBypRet.port_3, senVolFlo5.port_b)
     annotation (Line(points={{-72,-196},{-72,-192}}, color={0,127,255}));
   connect(junChiWatBypSup.port_3, senVolFlo5.port_a)
@@ -1213,6 +1210,17 @@ equation
     annotation (Line(points={{-400,-162},{-400,-168}}, color={255,0,255}));
   connect(max1.y, reaScaRep.u)
     annotation (Line(points={{-222,-190},{-338,-190}}, color={0,0,127}));
+  connect(bou1.ports[1], inlPumHeaWatSec.port_a) annotation (Line(points={{-100,
+          -650},{-100,-652},{-88,-652},{-88,-528},{-44,-528},{-44,-508},{-30,
+          -508}}, color={0,127,255}));
+  connect(bou2.ports[1], pipHeaWat.port_b) annotation (Line(points={{-100,-690},
+          {-100,-692},{-84,-692},{-84,-588},{0,-588}}, color={0,127,255}));
+  connect(bou3.ports[1], inlPumChiWatSec.port_a) annotation (Line(points={{-100,
+          -286},{-100,-288},{-92,-288},{-92,-268},{-176,-268},{-176,-120},{-116,
+          -120},{-116,-112},{-50,-112},{-50,-160}}, color={0,127,255}));
+  connect(bou4.ports[1], pipChiWat.port_b) annotation (Line(points={{-100,-316},
+          {-48,-316},{-48,-256},{28,-256},{28,-206},{36,-206}}, color={0,127,
+          255}));
   annotation (
     __Dymola_Commands(
       file=
