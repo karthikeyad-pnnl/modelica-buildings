@@ -440,13 +440,15 @@ model HHW_CHW_plant "Validation of AWHP plant template"
           extent={{-466,50},{-426,90}})));
 Buildings.Templates.Components.Pumps.Multiple pumHeaWatSec(
     have_valChe=true,
+    tau=60,
     final energyDynamics=energyDynamics,
     final allowFlowReversal=allowFlowReversal,
     redeclare final package Medium = Medium,
     final have_var=true,
     final have_varCom=true,
     nPum=4,
-    dat=datAll.pla.pumHeaWatSec) "Secondary HHW pumps"
+    dat=datAll.pla.pumHeaWatSec,
+    valChe(l=0.002))                   "Secondary HHW pumps"
     annotation (Placement(transformation(extent={{-2,-518},{18,-498}})));
   Buildings.Templates.Components.Routing.MultipleToSingle outPumHeaWatSec(
     redeclare final package Medium = Medium,
@@ -574,23 +576,19 @@ public
     annotation (Placement(transformation(extent={{-340,-200},{-360,-180}})));
   Fluid.Sources.Boundary_pT bou1(
     redeclare package Medium = Medium,
-    T=333.15,
-    nPorts=1)
+    T=333.15)
     annotation (Placement(transformation(extent={{-120,-660},{-100,-640}})));
   Fluid.Sources.Boundary_pT bou2(
     redeclare package Medium = Medium,
-    T=303.15,
-    nPorts=1)
+    T=303.15)
     annotation (Placement(transformation(extent={{-120,-700},{-100,-680}})));
   Fluid.Sources.Boundary_pT bou3(
     redeclare package Medium = Medium,
-    T=279.83,
-    nPorts=1)
+    T=279.83)
     annotation (Placement(transformation(extent={{-120,-296},{-100,-276}})));
   Fluid.Sources.Boundary_pT bou4(
     redeclare package Medium = Medium,
-    T=288.15,
-    nPorts=1)
+    T=288.15)
     annotation (Placement(transformation(extent={{-120,-326},{-100,-306}})));
   Fluid.Sensors.VolumeFlowRate senVolFlo5(redeclare package Medium = Medium,
       m_flow_nominal=3*datAll.pla.hp.mHeaWatHp_flow_nominal)
@@ -611,6 +609,9 @@ public
     annotation (Placement(transformation(extent={{-276,-300},{-296,-280}})));
   Buildings.Controls.OBC.CDL.Logical.Sources.Constant con5(k=true)
     annotation (Placement(transformation(extent={{-276,-250},{-296,-230}})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant
+                                                con3(k=1)
+    annotation (Placement(transformation(extent={{-174,140},{-194,160}})));
 equation
   if have_chiWat then
   end if;
@@ -1186,41 +1187,38 @@ equation
       index=1,
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
+  connect(ctl.y1Hp[3], fourPipeASHP_with_controls.uHeaPumEna) annotation (Line(
+        points={{-345.714,32.5116},{-318,32.5116},{-318,-390},{-302,-390}},
+        color={255,0,255}));
+  connect(junChiWatBypSup.port_2, inlPumChiWatSec.port_a) annotation (Line(
+        points={{-62,-158},{-60,-160},{-50,-160}}, color={0,127,255}));
+  connect(junChiWatBypRet.port_1, pipChiWat.port_b)
+    annotation (Line(points={{-62,-206},{36,-206}}, color={0,127,255}));
+  connect(hea.port_b, inlPumHeaWatSec.port_a)
+    annotation (Line(points={{-70,-508},{-30,-508}}, color={0,127,255}));
+  connect(junHeaWatBypRet.port_1, pipHeaWat.port_b) annotation (Line(points={{
+          -120,-590},{-120,-592},{-8,-592},{-8,-588},{0,-588}}, color={0,127,
+          255}));
   connect(ctl.yPumHeaWatSec, busPumSecHeaWat.y) annotation (Line(points={{
-          -345.714,1.81395},{-300,1.81395},{-300,16},{-280,16},{-280,148},{-240,
-          148},{-240,180}},
-                 color={0,0,127}), Text(
+          -345.714,1.81395},{-300,1.81395},{-300,-4},{-268,-4},{-268,148},{-240,
+          148},{-240,180}}, color={0,0,127}), Text(
       string="%second",
       index=1,
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
-  connect(conPID.y, fourPipeASHP_with_controls.uPumConSpe) annotation (Line(
-        points={{-122,-470},{-180,-470},{-180,-414},{-316,-414},{-316,-398},{-302,
-          -398}}, color={0,0,127}));
-  connect(ctl.y1Hp[3], fourPipeASHP_with_controls.uHeaPumEna) annotation (Line(
-        points={{-345.714,32.5116},{-318,32.5116},{-318,-390},{-302,-390}},
-        color={255,0,255}));
-  connect(ctl.y1PumHeaWatPri[3], fourPipeASHP_with_controls.u1PumConEna)
-    annotation (Line(points={{-345.714,18.5581},{-320,18.5581},{-320,-394},{
-          -302,-394}}, color={255,0,255}));
-  connect(ctl.y1PumChiWatPri[3], fourPipeASHP_with_controls.u1PumEvaEna)
-    annotation (Line(points={{-345.714,16.8837},{-328,16.8837},{-328,-402},{
-          -302,-402}}, color={255,0,255}));
-  connect(or2.y, booToRea6.u)
-    annotation (Line(points={{-400,-162},{-400,-168}}, color={255,0,255}));
   connect(max1.y, reaScaRep.u)
     annotation (Line(points={{-222,-190},{-338,-190}}, color={0,0,127}));
-  connect(bou1.ports[1], inlPumHeaWatSec.port_a) annotation (Line(points={{-100,
-          -650},{-100,-652},{-88,-652},{-88,-528},{-44,-528},{-44,-508},{-30,
-          -508}}, color={0,127,255}));
-  connect(bou2.ports[1], pipHeaWat.port_b) annotation (Line(points={{-100,-690},
-          {-100,-692},{-84,-692},{-84,-588},{0,-588}}, color={0,127,255}));
-  connect(bou3.ports[1], inlPumChiWatSec.port_a) annotation (Line(points={{-100,
-          -286},{-100,-288},{-92,-288},{-92,-268},{-176,-268},{-176,-120},{-116,
-          -120},{-116,-112},{-50,-112},{-50,-160}}, color={0,127,255}));
-  connect(bou4.ports[1], pipChiWat.port_b) annotation (Line(points={{-100,-316},
-          {-48,-316},{-48,-256},{28,-256},{28,-206},{36,-206}}, color={0,127,
-          255}));
+  connect(or2.y, booToRea6.u)
+    annotation (Line(points={{-400,-162},{-400,-168}}, color={255,0,255}));
+  connect(conPID.y, fourPipeASHP_with_controls.uPumConSpe) annotation (Line(
+        points={{-122,-470},{-180,-470},{-180,-420},{-320,-420},{-320,-398},{
+          -302,-398}}, color={0,0,127}));
+  connect(ctl.y1PumChiWatPri[3], fourPipeASHP_with_controls.u1PumEvaEna)
+    annotation (Line(points={{-345.714,16.8837},{-345.714,16},{-328,16},{-328,
+          -402},{-302,-402}}, color={255,0,255}));
+  connect(ctl.y1PumHeaWatPri[3], fourPipeASHP_with_controls.u1PumConEna)
+    annotation (Line(points={{-345.714,18.5581},{-345.714,-92},{-302,-92},{-302,
+          -394}}, color={255,0,255}));
   annotation (
     __Dymola_Commands(
       file=
@@ -1229,7 +1227,7 @@ equation
     experiment(
       StartTime=15638400,
       StopTime=16156800,
-      Tolerance=1e-06,
+      Tolerance=1e-05,
       __Dymola_Algorithm="Cvode"),
     Documentation(
       info="<html>
