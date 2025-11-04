@@ -251,6 +251,7 @@ block DamperValves
     final k=kVal,
     final Ti=TiVal,
     final Td=TdVal,
+    r=10,
     final yMax=1,
     final yMin=0,
     u_s(final unit="K", displayUnit="degC"),
