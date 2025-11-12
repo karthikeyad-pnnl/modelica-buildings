@@ -109,10 +109,10 @@ equation
   connect(TSupSet, con.u_m) annotation (Line(points={{-160,-40},{-100,-40},{-100,
           -12}},                color={0,0,127}));
   connect(con.y, mapOA.u)
-    annotation (Line(points={{-89,0},{8,0}}, color={0,0,127}));
+    annotation (Line(points={{-88,0},{8,0}}, color={0,0,127}));
   connect(con.y, mapCoo.u)
-    annotation (Line(points={{-89,0},{0,0},{0,-80},{8,-80}}, color={0,0,127}));
-  connect(con.y, mapHea.u) annotation (Line(points={{-89,0},{0,0},{0,80},{8,80}},
+    annotation (Line(points={{-88,0},{0,0},{0,-80},{8,-80}}, color={0,0,127}));
+  connect(con.y, mapHea.u) annotation (Line(points={{-88,0},{0,0},{0,80},{8,80}},
                  color={0,0,127}));
   connect(limInfHea.y, mapHea.x1) annotation (Line(points={{-28,120},{0,120},{0,
           88},{8,88}},    color={0,0,127}));

@@ -296,6 +296,7 @@ model HHW_CHW_plant "Validation of AWHP plant template"
         origin={-72,-206})));
 
   Controls.HeatPumps.AirToWater                ctl(
+    THeaLocLow=273.15 - 10,
     have_heaWat=true,
     have_chiWat=true,
     have_hrc_select=true,
@@ -344,7 +345,8 @@ model HHW_CHW_plant "Validation of AWHP plant template"
     COPHeaHrc_nominal=2.8,
     capCooHrc_min=ctl.capHeaHrc_min*(1 - 1/ctl.COPHeaHrc_nominal),
     capHeaHrc_min=0.3*0.5*sum(ctl.capHeaHp_nominal),
-    ctlPumHeaWatSec(ctlDpRem(y(start=1))))
+    ctlPumHeaWatSec(ctlDpRem(y(start=1))),
+    u1AvaHp(k=true))
     "Plant controller"
     annotation (Placement(transformation(extent={{-380,-30},{-340,42}})));
   Interfaces.Bus                                      bus
@@ -491,7 +493,8 @@ Buildings.Templates.Components.Pumps.Multiple pumHeaWatSec(
     final have_var=true,
     final have_varCom=true,
     nPum=4,
-    dat=datAll.pla.pumChiWatSec) "Secondary CHW pumps"
+    dat=datAll.pla.pumChiWatSec,
+    valChe(l=0.002))             "Secondary CHW pumps"
     annotation (Placement(transformation(extent={{-22,-170},{-2,-150}})));
   Buildings.Templates.Components.Routing.MultipleToSingle outPumChiWatSec(
     redeclare final package Medium = Medium,
@@ -546,7 +549,7 @@ public
       Placement(transformation(extent={{-740,-40},{-700,0}}),
         iconTransformation(extent={{-160,80},{-120,120}})));
   Buildings.Controls.OBC.CDL.Reals.LessThreshold lesThr(t=ctl.THeaLocLow)
-    annotation (Placement(transformation(extent={{-400,-460},{-380,-440}})));
+    annotation (Placement(transformation(extent={{-480,-460},{-460,-440}})));
   Buildings.Controls.OBC.CDL.Reals.Switch swi
     annotation (Placement(transformation(extent={{-360,-460},{-340,-440}})));
   Fluid.HeatExchangers.Heater_T hea(
@@ -601,7 +604,7 @@ public
   Buildings.Controls.OBC.CDL.Reals.PID conPID1(
     k=0.1,
     Ti=60,
-    r=3*datAll.pla.hp.mHeaWatHp_flow_nominal/1000)
+    r=3*datAll.pla.hp.mChiWatHp_flow_nominal/1000)
     annotation (Placement(transformation(extent={{-100,-100},{-120,-80}})));
   Buildings.Controls.OBC.CDL.Reals.Max max1
     annotation (Placement(transformation(extent={{-200,-200},{-220,-180}})));
@@ -612,6 +615,14 @@ public
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant
                                                 con3(k=1)
     annotation (Placement(transformation(extent={{-174,140},{-194,160}})));
+  Buildings.Controls.OBC.CDL.Integers.Equal intEqu
+    annotation (Placement(transformation(extent={{-480,-420},{-460,-400}})));
+  Buildings.Controls.OBC.CDL.Logical.Or or1
+    annotation (Placement(transformation(extent={{-420,-460},{-400,-440}})));
+  Buildings.Controls.OBC.CDL.Integers.Sources.Constant conInt(k=3)
+    annotation (Placement(transformation(extent={{-540,-420},{-520,-400}})));
+  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con6[4](k=true)
+    annotation (Placement(transformation(extent={{-200,100},{-220,120}})));
 equation
   if have_chiWat then
   end if;
@@ -743,8 +754,8 @@ equation
           18.5581},{-320,18.5581},{-320,-136},{-400,-136},{-400,-138}},
                                                     color={255,0,255}));
   connect(ctl.y1PumChiWatPri[1:2], or2.u2) annotation (Line(points={{-345.714,
-          16.8837},{-328,16.8837},{-328,-132},{-408,-132},{-408,-138}},
-                                                    color={255,0,255}));
+          16.8837},{-336,16.8837},{-336,16},{-326,16},{-326,-132},{-408,-132},{
+          -408,-138}},                              color={255,0,255}));
   connect(junChiWatBypSup1.port_2, senTem2.port_a)
     annotation (Line(points={{-136,-158},{-132,-158}},
                                                      color={0,127,255}));
@@ -977,21 +988,6 @@ equation
           255}));
   connect(senTemCooSup.port_b, port_b1) annotation (Line(points={{60,-160},{84,
           -160},{84,60},{100,60}},     color={0,127,255}));
-  connect(ctl.y1PumChiWatSec, busPumSecChiWat.y1) annotation (Line(points={{
-          -345.714,11.8605},{-338,11.8605},{-338,12},{-302,12},{-302,148},{-332,
-          148},{-332,180},{-300,180}},                            color={255,0,255}),
-      Text(
-      string="%second",
-      index=1,
-      extent={{6,3},{6,3}},
-      horizontalAlignment=TextAlignment.Left));
-  connect(ctl.yPumChiWatSec, busPumSecChiWat.y) annotation (Line(points={{
-          -345.714,0.139535},{-292,0.139535},{-292,148},{-300,148},{-300,180}},
-                                                      color={0,0,127}), Text(
-      string="%second",
-      index=1,
-      extent={{6,3},{6,3}},
-      horizontalAlignment=TextAlignment.Left));
   connect(senTemHeaSup.port_b, port_b2) annotation (Line(points={{150,-510},{
           160,-510},{160,-120},{80,-120},{80,-68},{-80,-68},{-80,-60},{-100,-60}},
         color={0,127,255}));
@@ -1090,20 +1086,17 @@ equation
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(weaBus.TDryBul, lesThr.u) annotation (Line(
-      points={{-400.815,175.175},{-400.815,-102},{-400,-102},{-400,174},{-610,
-          174},{-610,-450},{-402,-450}},
+      points={{-400.815,175.175},{-400.815,160},{-612,160},{-612,-450},{-482,-450}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
       index=-1,
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
-  connect(lesThr.y, swi.u2)
-    annotation (Line(points={{-378,-450},{-362,-450}}, color={255,0,255}));
   connect(ctl.THeaWatSupSet, swi.u1) annotation (Line(points={{-345.714,
           -13.2558},{-370,-13.2558},{-370,-442},{-362,-442}}, color={0,0,127}));
-  connect(swi.y, hea.TSet) annotation (Line(points={{-338,-450},{-332,-450},{
-          -332,-516},{-256,-516},{-256,-488},{-92,-488},{-92,-500}}, color={0,0,
+  connect(swi.y, hea.TSet) annotation (Line(points={{-338,-450},{-260,-450},{-260,
+          -488},{-92,-488},{-92,-500}},                              color={0,0,
           127}));
   connect(senVolFlo2.port_b, junHeaWatBypSup.port_1)
     annotation (Line(points={{-160,-508},{-140,-508}},color={0,127,255}));
@@ -1143,9 +1136,6 @@ equation
   connect(ctl.TChiWatSupSet, fourPipeASHP_with_controls.TChiWatSupSet)
     annotation (Line(points={{-345.714,-14.9302},{-308,-14.9302},{-308,-380},{
           -302,-380}}, color={0,0,127}));
-  connect(conPID1.y, fourPipeASHP_with_controls.uPumEvaSpe) annotation (Line(
-        points={{-122,-90},{-230,-90},{-230,-408},{-310,-408},{-310,-406},{-302,
-          -406}}, color={0,0,127}));
 
   connect(busValHeaWatHpOutIso, bus.valHeaWatHpOutIso) annotation (Line(
       points={{-502,28},{-520,28},{-520,-46}},
@@ -1190,35 +1180,72 @@ equation
   connect(ctl.y1Hp[3], fourPipeASHP_with_controls.uHeaPumEna) annotation (Line(
         points={{-345.714,32.5116},{-318,32.5116},{-318,-390},{-302,-390}},
         color={255,0,255}));
-  connect(junChiWatBypSup.port_2, inlPumChiWatSec.port_a) annotation (Line(
-        points={{-62,-158},{-60,-160},{-50,-160}}, color={0,127,255}));
-  connect(junChiWatBypRet.port_1, pipChiWat.port_b)
-    annotation (Line(points={{-62,-206},{36,-206}}, color={0,127,255}));
   connect(hea.port_b, inlPumHeaWatSec.port_a)
     annotation (Line(points={{-70,-508},{-30,-508}}, color={0,127,255}));
   connect(junHeaWatBypRet.port_1, pipHeaWat.port_b) annotation (Line(points={{
           -120,-590},{-120,-592},{-8,-592},{-8,-588},{0,-588}}, color={0,127,
           255}));
   connect(ctl.yPumHeaWatSec, busPumSecHeaWat.y) annotation (Line(points={{
-          -345.714,1.81395},{-300,1.81395},{-300,-4},{-268,-4},{-268,148},{-240,
-          148},{-240,180}}, color={0,0,127}), Text(
+          -345.714,1.81395},{-268,1.81395},{-268,148},{-240,148},{-240,180}},
+                            color={0,0,127}), Text(
       string="%second",
       index=1,
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
-  connect(max1.y, reaScaRep.u)
-    annotation (Line(points={{-222,-190},{-338,-190}}, color={0,0,127}));
-  connect(or2.y, booToRea6.u)
-    annotation (Line(points={{-400,-162},{-400,-168}}, color={255,0,255}));
   connect(conPID.y, fourPipeASHP_with_controls.uPumConSpe) annotation (Line(
         points={{-122,-470},{-180,-470},{-180,-420},{-320,-420},{-320,-398},{
           -302,-398}}, color={0,0,127}));
-  connect(ctl.y1PumChiWatPri[3], fourPipeASHP_with_controls.u1PumEvaEna)
-    annotation (Line(points={{-345.714,16.8837},{-345.714,16},{-328,16},{-328,
-          -402},{-302,-402}}, color={255,0,255}));
+  connect(bus.yHeaCooEna, ctl.u1EnaHeaCoo) annotation (Line(
+      points={{-520,-46},{-448,-46},{-448,38.6512},{-377.143,38.6512}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(lesThr.y, or1.u1)
+    annotation (Line(points={{-458,-450},{-422,-450}}, color={255,0,255}));
+  connect(or1.y, swi.u2)
+    annotation (Line(points={{-398,-450},{-362,-450}}, color={255,0,255}));
+  connect(intEqu.y, or1.u2) annotation (Line(points={{-458,-410},{-452,-410},{-452,
+          -458},{-422,-458}}, color={255,0,255}));
+  connect(conInt.y, intEqu.u1)
+    annotation (Line(points={{-518,-410},{-482,-410}}, color={255,127,0}));
+  connect(ctl.yIdxStaHea, intEqu.u2) annotation (Line(points={{-345.714,47.1907},
+          {-248,47.1907},{-248,-360},{-500,-360},{-500,-418},{-482,-418}},
+        color={255,127,0}));
+  connect(junChiWatBypSup.port_2, inlPumChiWatSec.port_a) annotation (Line(
+        points={{-62,-158},{-60,-160},{-50,-160}}, color={0,127,255}));
+  connect(junChiWatBypRet.port_1, pipChiWat.port_b)
+    annotation (Line(points={{-62,-206},{36,-206}}, color={0,127,255}));
+  connect(max1.y, reaScaRep.u)
+    annotation (Line(points={{-222,-190},{-338,-190}}, color={0,0,127}));
+  connect(conPID1.y, fourPipeASHP_with_controls.uPumEvaSpe) annotation (Line(
+        points={{-122,-90},{-180,-90},{-180,-184},{-192,-184},{-192,-280},{-244,
+          -280},{-244,-408},{-296,-408},{-296,-416},{-302,-416},{-302,-406}},
+        color={0,0,127}));
+  connect(or2.y, booToRea6.u)
+    annotation (Line(points={{-400,-162},{-400,-168}}, color={255,0,255}));
+  connect(ctl.y1PumChiWatSec, busPumSecChiWat.y1) annotation (Line(points={{
+          -345.714,11.8605},{-300,11.8605},{-300,180}},
+                                               color={255,0,255}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(ctl.yPumChiWatSec, busPumSecChiWat.y) annotation (Line(points={{
+          -345.714,0.139535},{-318,0.139535},{-318,0},{-282,0},{-282,180},{-300,
+          180}}, color={0,0,127}), Text(
+      string="%second",
+      index=1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
   connect(ctl.y1PumHeaWatPri[3], fourPipeASHP_with_controls.u1PumConEna)
-    annotation (Line(points={{-345.714,18.5581},{-345.714,-92},{-302,-92},{-302,
-          -394}}, color={255,0,255}));
+    annotation (Line(points={{-345.714,18.5581},{-320,18.5581},{-320,-394},{
+          -302,-394}}, color={255,0,255}));
+  connect(ctl.y1PumChiWatPri[3], fourPipeASHP_with_controls.u1PumEvaEna)
+    annotation (Line(points={{-345.714,16.8837},{-326,16.8837},{-326,-402},{
+          -302,-402}}, color={255,0,255}));
   annotation (
     __Dymola_Commands(
       file=

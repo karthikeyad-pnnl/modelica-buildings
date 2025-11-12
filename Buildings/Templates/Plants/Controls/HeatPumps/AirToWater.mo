@@ -906,17 +906,10 @@ block AirToWater
     annotation (Placement(transformation(extent={{-300,-360},{-260,-320}}),
       iconTransformation(extent={{-240,142},{-200,182}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput u1EnaHea
-    if not have_heaWat and have_chiWat
-    "Heating plant enable from external block"
-    annotation (Placement(transformation(extent={{-300,240},{-260,280}}),
-      iconTransformation(extent={{-240,400},{-200,440}})));
-
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput u1EnaCoo
-    if have_heaWat and not have_chiWat
-    "Cooling plant enable from external block"
-    annotation (Placement(transformation(extent={{-300,210},{-260,250}}),
-      iconTransformation(extent={{-240,360},{-200,400}})));
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput u1EnaHeaCoo
+    "Heating-cooling mode enable from external block" annotation (Placement(
+        transformation(extent={{-300,240},{-260,280}}), iconTransformation(
+          extent={{-240,400},{-200,440}})));
 
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput nReqPlaHeaWat
     if have_heaWat
@@ -1272,7 +1265,7 @@ block AirToWater
   Buildings.Controls.OBC.CDL.Logical.Sources.Constant u1AvaHp[nHp](
     each k=true)
     "Heat pump available signal – Block does not handle faulted equipment yet"
-    annotation (Placement(transformation(extent={{-240,196},{-220,216}}),
+    annotation (Placement(transformation(extent={{-240,220},{-220,240}}),
         iconTransformation(extent={{-240,220},{-200,260}})));
 
   Enabling.Enable enaHea(
@@ -1720,6 +1713,12 @@ block AirToWater
   Buildings.Controls.OBC.CDL.Routing.BooleanScalarReplicator booScaRep3(nout=
         nHp)
     annotation (Placement(transformation(extent={{184,422},{204,442}})));
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yIdxStaHea
+    "Heating mode staging index" annotation (Placement(transformation(extent={{
+            300,520},{340,560}}), iconTransformation(extent={{200,502},{240,542}})));
+  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yIdxStaCoo
+    "Cooling mode staging index" annotation (Placement(transformation(extent={{
+            300,580},{340,620}}), iconTransformation(extent={{200,462},{240,502}})));
 equation
   connect(u1SchHea, enaHea.u1Sch)
     annotation (Line(points={{-280,380},{-180,380},{-180,364},{-112,364}},color={255,0,255}));
@@ -2176,20 +2175,22 @@ equation
           200},{320,200}},                         color={255,0,255}));
   connect(or7.y, y1PumChiWatPri) annotation (Line(points={{262,180},{320,180}},
                                                    color={255,0,255}));
-  connect(enaCoo.y1, ctlPlaHyb.u1EnaCoo) annotation (Line(points={{-88,100},{-80,
-          100},{-80,-40},{36,-40},{36,-90},{58,-90}}, color={255,0,255}));
+  connect(enaCoo.y1, ctlPlaHyb.u1EnaCoo) annotation (Line(points={{-88,100},{
+          -80,100},{-80,-40},{36,-40},{36,-92},{58,-92}},
+                                                      color={255,0,255}));
   connect(enaHea.y1, ctlPlaHyb.u1EnaHea) annotation (Line(points={{-88,360},{
-          -86,360},{-86,-94},{58,-94}},
+          -86,360},{-86,-96},{58,-96}},
                                     color={255,0,255}));
-  connect(y1HpPre.y, ctlPlaHyb.u1Hp) annotation (Line(points={{178,380},{-160,380},
-          {-160,0},{-64,0},{-64,-98},{58,-98}}, color={255,0,255}));
+  connect(y1HpPre.y, ctlPlaHyb.u1Hp) annotation (Line(points={{178,380},{-160,
+          380},{-160,0},{-64,0},{-64,-100},{58,-100}},
+                                                color={255,0,255}));
   connect(seqEve.y1Hea, ctlPlaHyb.uMod) annotation (Line(points={{162,308},{176,
           308},{176,-44},{124,-44},{124,-104},{92,-104},{92,-124},{52,-124},{52,
-          -102},{58,-102}}, color={255,0,255}));
-  connect(staPumHeaWatPri.y1, ctlPlaHyb.u1PumPriHea) annotation (Line(points={{162,
-          200},{232,200},{232,-60},{48,-60},{48,-110},{58,-110}}, color={255,0,255}));
-  connect(staPumChiWatPri.y1, ctlPlaHyb.u1PumPriCoo) annotation (Line(points={{212,
-          180},{220,180},{220,-56},{44,-56},{44,-106},{58,-106}}, color={255,0,255}));
+          -104},{58,-104}}, color={255,0,255}));
+  connect(staPumHeaWatPri.y1, ctlPlaHyb.u1PumPriHea) annotation (Line(points={{162,200},
+          {232,200},{232,-60},{48,-60},{48,-112},{58,-112}},      color={255,0,255}));
+  connect(staPumChiWatPri.y1, ctlPlaHyb.u1PumPriCoo) annotation (Line(points={{212,180},
+          {220,180},{220,-56},{44,-56},{44,-108},{58,-108}},      color={255,0,255}));
   connect(ctlPlaHyb.y1PumPri, or6.u1) annotation (Line(points={{82,-88},{104,-88},
           {104,-80},{236,-80},{236,210},{238,210}}, color={255,0,255}));
   connect(ctlPlaHyb.y1PumPri, or7.u1) annotation (Line(points={{82,-88},{104,-88},
@@ -2292,12 +2293,19 @@ end if;
   connect(seqEve.y1, ctlFloMin.u1Equ[0:0]) annotation (Line(points={{162,310},{
           264,310},{264,-212},{192,-212},{192,-220},{200,-220}}, color={255,0,
           255}));
-  connect(u1AvaHp.y, and2.u2) annotation (Line(points={{-218,206},{-162,206},{
-          -162,404},{218,404},{218,424}}, color={255,0,255}));
+  connect(u1AvaHp.y, and2.u2) annotation (Line(points={{-218,230},{-192,230},{
+          -192,384},{-76,384},{-76,388},{-60,388},{-60,404},{218,404},{218,424}},
+                                          color={255,0,255}));
   connect(and2.y, avaEquHeaCoo.u1Ava) annotation (Line(points={{242,432},{46,
           432},{46,220},{-154,220}}, color={255,0,255}));
   connect(seqEve.y1, y1Hp) annotation (Line(points={{162,310},{264,310},{264,
           380},{320,380}}, color={255,0,255}));
+  connect(u1EnaHeaCoo, ctlPlaHyb.u1EnaHeaCoo) annotation (Line(points={{-280,
+          260},{-196,260},{-196,-88},{58,-88}}, color={255,0,255}));
+  connect(idxStaHea.y, yIdxStaHea) annotation (Line(points={{12,360},{158,360},
+          {158,540},{320,540}}, color={255,127,0}));
+  connect(idxStaCoo.y, yIdxStaCoo) annotation (Line(points={{12,100},{18,100},{
+          18,600},{320,600}}, color={255,127,0}));
   annotation (
     defaultComponentName="ctl",
     Icon(

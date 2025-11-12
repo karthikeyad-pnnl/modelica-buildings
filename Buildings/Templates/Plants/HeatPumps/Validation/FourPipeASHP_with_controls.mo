@@ -73,7 +73,8 @@ model FourPipeASHP_with_controls "Validation of AWHP plant template"
     redeclare package Medium = Medium,
     m_flow_nominal=datAll.pla.hp.mHeaWatHp_flow_nominal,
     dpValve_nominal=500,
-    dpFixed_nominal=40000)
+    dpFixed_nominal=30000,
+    l=0.002)
     annotation (Placement(transformation(extent={{-68,-290},{-48,-270}})));
   Fluid.Movers.Preconfigured.SpeedControlled_y     mov1(
     redeclare package Medium = Medium,
@@ -91,7 +92,8 @@ model FourPipeASHP_with_controls "Validation of AWHP plant template"
     redeclare package Medium = Medium,
     m_flow_nominal=datAll.pla.hp.mChiWatHp_flow_nominal,
     dpValve_nominal=500,
-    dpFixed_nominal=40000)
+    dpFixed_nominal=40000,
+    l=0.002)
     annotation (Placement(transformation(extent={{110,-260},{90,-240}})));
 
   Buildings.Controls.OBC.CDL.Conversions.BooleanToReal booToRea
@@ -165,8 +167,8 @@ model FourPipeASHP_with_controls "Validation of AWHP plant template"
     final energyDynamics=energyDynamics,
     nUni=3,
     use_preDro=false,
-    dpHw_nominal=30000,
-    dpChw_nominal=40000,
+    dpHw_nominal(displayUnit="Pa") = 0,
+    dpChw_nominal(displayUnit="Pa") = 0,
     final dat=dat,
     mCon_flow_nominal=mHw_flow_nominal,
     mEva_flow_nominal=mChw_flow_nominal,
@@ -209,6 +211,14 @@ model FourPipeASHP_with_controls "Validation of AWHP plant template"
     use_TEvaOutForTab=true,
     use_TConOutForTab=true) "Performance data"
     annotation (Placement(transformation(extent={{-264,-6},{-244,14}})));
+  Buildings.Controls.OBC.CDL.Integers.Equal intEqu
+    annotation (Placement(transformation(extent={{-260,-300},{-240,-280}})));
+  Buildings.Controls.OBC.CDL.Reals.Max max1
+    annotation (Placement(transformation(extent={{-320,-180},{-300,-160}})));
+  Buildings.Controls.OBC.CDL.Reals.Switch swi
+    annotation (Placement(transformation(extent={{-160,-180},{-140,-160}})));
+  Buildings.Controls.OBC.CDL.Reals.Switch swi1
+    annotation (Placement(transformation(extent={{-160,-440},{-140,-420}})));
 equation
   if have_chiWat then
   end if;
@@ -288,16 +298,36 @@ equation
                        color={255,0,255}));
   connect(booToRea1.y, mul1.u1) annotation (Line(points={{-58,-410},{-56,-410},
           {-56,-416},{-42,-416},{-42,-424}}, color={0,0,127}));
-  connect(uPumConSpe, mul1.u2) annotation (Line(points={{-560,-400},{-156,-400},
-          {-156,-436},{-42,-436}}, color={0,0,127}));
-  connect(uPumEvaSpe, mul.u1) annotation (Line(points={{-560,-200},{-276,-200},
-          {-276,-156},{-80,-156},{-80,-164},{-70,-164}}, color={0,0,127}));
   connect(mul1.y, mov1.y) annotation (Line(points={{-18,-430},{-12,-430},{-12,
           -344},{-16,-344},{-16,-300},{-30,-300},{-30,-292}}, color={0,0,127}));
   connect(booToRea.y, mul.u2) annotation (Line(points={{-98,-210},{-92,-210},{
           -92,-176},{-70,-176}}, color={0,0,127}));
   connect(mul.y, mov2.y) annotation (Line(points={{-46,-170},{64,-170},{64,-232},
           {70,-232},{70,-238}}, color={0,0,127}));
+  connect(extIndInt.y, intEqu.u2) annotation (Line(points={{-298,-320},{-262,
+          -320},{-262,-298}}, color={255,127,0}));
+  connect(conInt[3].y, intEqu.u1) annotation (Line(points={{-336,-320},{-336,
+          -290},{-262,-290}}, color={255,127,0}));
+  connect(uPumEvaSpe, max1.u1) annotation (Line(points={{-560,-200},{-332,-200},
+          {-332,-164},{-322,-164}}, color={0,0,127}));
+  connect(uPumConSpe, max1.u2) annotation (Line(points={{-560,-400},{-324,-400},
+          {-324,-340},{-368,-340},{-368,-176},{-322,-176}}, color={0,0,127}));
+  connect(swi.y, mul.u1) annotation (Line(points={{-138,-170},{-80,-170},{-80,
+          -164},{-70,-164}}, color={0,0,127}));
+  connect(max1.y, swi.u1) annotation (Line(points={{-298,-170},{-172,-170},{
+          -172,-162},{-162,-162}}, color={0,0,127}));
+  connect(uPumEvaSpe, swi.u3) annotation (Line(points={{-560,-200},{-162,-200},
+          {-162,-178}}, color={0,0,127}));
+  connect(intEqu.y, swi.u2) annotation (Line(points={{-238,-290},{-232,-290},{
+          -232,-176},{-168,-176},{-168,-170},{-162,-170}}, color={255,0,255}));
+  connect(uPumConSpe, swi1.u3) annotation (Line(points={{-560,-400},{-404,-400},
+          {-404,-438},{-162,-438}}, color={0,0,127}));
+  connect(swi1.y, mul1.u2) annotation (Line(points={{-138,-430},{-52,-430},{-52,
+          -436},{-42,-436}}, color={0,0,127}));
+  connect(max1.y, swi1.u1) annotation (Line(points={{-298,-170},{-288,-170},{
+          -288,-172},{-172,-172},{-172,-422},{-162,-422}}, color={0,0,127}));
+  connect(intEqu.y, swi1.u2) annotation (Line(points={{-238,-290},{-232,-290},{
+          -232,-430},{-162,-430}}, color={255,0,255}));
   annotation (
     __Dymola_Commands(
       file=

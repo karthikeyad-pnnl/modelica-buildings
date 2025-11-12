@@ -57,13 +57,15 @@ block ControlLoops "Heating and cooling control loops"
     final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
     final k=kCooCon,
     final Ti=TiCooCon,
+    r=4,
     final reverseActing=false)
     "Cooling controller"
     annotation (Placement(transformation(extent={{-80,90},{-60,110}})));
   Buildings.Controls.OBC.CDL.Reals.PIDWithReset conHea(
     final controllerType=Buildings.Controls.OBC.CDL.Types.SimpleController.PI,
     final k=kHeaCon,
-    final Ti=TiHeaCon)
+    final Ti=TiHeaCon,
+    r=4)
     "Heating controller"
     annotation (Placement(transformation(extent={{-80,-50},{-60,-30}})));
 
