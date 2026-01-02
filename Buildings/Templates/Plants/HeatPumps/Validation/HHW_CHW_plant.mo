@@ -297,6 +297,7 @@ model HHW_CHW_plant "Validation of AWHP plant template"
 
   Controls.HeatPumps.AirToWater                ctl(
     THeaLocLow=273.15 - 10,
+    has_mulCooLoa=false,
     have_heaWat=true,
     have_chiWat=true,
     have_hrc_select=true,
@@ -449,8 +450,7 @@ Buildings.Templates.Components.Pumps.Multiple pumHeaWatSec(
     final have_var=true,
     final have_varCom=true,
     nPum=4,
-    dat=datAll.pla.pumHeaWatSec,
-    valChe(l=0.002))                   "Secondary HHW pumps"
+    dat=datAll.pla.pumHeaWatSec)       "Secondary HHW pumps"
     annotation (Placement(transformation(extent={{-2,-518},{18,-498}})));
   Buildings.Templates.Components.Routing.MultipleToSingle outPumHeaWatSec(
     redeclare final package Medium = Medium,
@@ -652,23 +652,22 @@ equation
   connect(junChiWatBypRet1.port_2, valIso.port_aChiWat) annotation (Line(points={{-156,
           -206},{-168,-206},{-168,-125.286},{-420,-125.286}},
                       color={0,127,255}));
-  connect(ctl.y1HeaHp[1:2], busHp.y1Hea) annotation (Line(points={{-345.714,
-          30.2791},{-324,30.2791},{-324,136},{-504,136},{-504,104},{-502,104}},
+  connect(ctl.y1HeaHp[1:2], busHp.y1Hea) annotation (Line(points={{-338,38},{
+          -324,38},{-324,136},{-504,136},{-504,104},{-502,104}},
                                                             color={255,127,0}),
       Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(ctl.y1Hp[1:2], busHp.y1) annotation (Line(points={{-345.714,31.9535},
-          {-328,31.9535},{-328,104},{-502,104}},
-                                  color={255,0,255}), Text(
+  connect(ctl.y1Hp[1:2], busHp.y1) annotation (Line(points={{-338,40},{-328,40},
+          {-328,104},{-502,104}}, color={255,0,255}), Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(ctl.TSupSet[1:2], busHp.TSet) annotation (Line(points={{-345.714,
-          -11.5814},{-306,-11.5814},{-306,140},{-536,140},{-536,104},{-502,104}},
+  connect(ctl.TSupSet[1:2], busHp.TSet) annotation (Line(points={{-338,-12},{
+          -306,-12},{-306,140},{-536,140},{-536,104},{-502,104}},
                                                              color={0,0,127}),
       Text(
       string="%second",
@@ -676,7 +675,7 @@ equation
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(busHp.y1_actual, ctl.u1Hp_actual[1:2]) annotation (Line(
-      points={{-502,104},{-396,104},{-396,28.7721},{-377.143,28.7721}},
+      points={{-502,104},{-396,104},{-396,36.2},{-382,36.2}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
@@ -710,33 +709,29 @@ equation
       horizontalAlignment=TextAlignment.Right));
 
   connect(ctl.y1ValHeaWatHpInlIso[1:2], busValHeaWatHpInlIso[:].y1) annotation (Line(
-        points={{-345.714,26.9302},{-328,26.9302},{-328,-48},{-424,-48},{-424,
-          64},{-506,64}},
+        points={{-338,34},{-328,34},{-328,-48},{-424,-48},{-424,64},{-506,64}},
         color={255,0,255}), Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(ctl.y1ValHeaWatHpOutIso[1:2], busValHeaWatHpOutIso[:].y1) annotation (Line(
-        points={{-345.714,25.2558},{-324,25.2558},{-324,-52},{-428,-52},{-428,
-          28},{-502,28}},
+        points={{-338,32},{-324,32},{-324,-52},{-428,-52},{-428,28},{-502,28}},
         color={255,0,255}), Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(ctl.y1ValChiWatHpOutIso[1:2], busValChiWatHpOutIso[:].y1) annotation (Line(
-        points={{-345.714,21.907},{-316,21.907},{-316,-64},{-432,-64},{-432,-68},
-          {-464,-68},{-464,-66}},
-                       color={255,0,255}), Text(
+        points={{-338,28},{-316,28},{-316,-64},{-432,-64},{-432,-68},{-464,-68},
+          {-464,-66}}, color={255,0,255}), Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(ctl.y1ValChiWatHpInlIso[1:2], busValChiWatHpInlIso[:].y1) annotation (Line(
-        points={{-345.714,23.5814},{-312,23.5814},{-312,-48},{-320,-48},{-320,
-          -56},{-432,-56},{-432,-28},{-464,-28},{-464,-26}},
-                                             color={255,0,255}), Text(
+        points={{-338,30},{-312,30},{-312,-48},{-320,-48},{-320,-56},{-432,-56},
+          {-432,-28},{-464,-28},{-464,-26}}, color={255,0,255}), Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
@@ -745,17 +740,17 @@ equation
           {-490,-200},{-490,-218}},
                         color={0,0,127}));
   connect(greThr3[:].y, ctl.u1PumHeaWatPri_actual[1:2]) annotation (Line(points={{-490,
-          -242},{-490,-252},{-440,-252},{-440,27.0977},{-377.143,27.0977}},
+          -242},{-490,-252},{-440,-252},{-440,34.2},{-382,34.2}},
                                                 color={255,0,255}));
   connect(greThr3[:].y, ctl.u1PumChiWatPri_actual[1:2]) annotation (Line(points={{-490,
-          -242},{-490,-252},{-440,-252},{-440,25.4233},{-377.143,25.4233}},
+          -242},{-490,-252},{-440,-252},{-440,32.2},{-382,32.2}},
                                                 color={255,0,255}));
-  connect(ctl.y1PumHeaWatPri[1:2], or2.u1) annotation (Line(points={{-345.714,
-          18.5581},{-320,18.5581},{-320,-136},{-400,-136},{-400,-138}},
+  connect(ctl.y1PumHeaWatPri[1:2], or2.u1) annotation (Line(points={{-338,24},{
+          -320,24},{-320,-136},{-400,-136},{-400,-138}},
                                                     color={255,0,255}));
-  connect(ctl.y1PumChiWatPri[1:2], or2.u2) annotation (Line(points={{-345.714,
-          16.8837},{-336,16.8837},{-336,16},{-326,16},{-326,-132},{-408,-132},{
-          -408,-138}},                              color={255,0,255}));
+  connect(ctl.y1PumChiWatPri[1:2], or2.u2) annotation (Line(points={{-338,22},{
+          -336,22},{-336,16},{-326,16},{-326,-132},{-408,-132},{-408,-138}},
+                                                    color={255,0,255}));
   connect(junChiWatBypSup1.port_2, senTem2.port_a)
     annotation (Line(points={{-136,-158},{-132,-158}},
                                                      color={0,127,255}));
@@ -783,8 +778,7 @@ equation
   connect(senTem5.port_b, junHeaWatBypSup2.port_1)
     annotation (Line(points={{-206,-590},{-220,-590}}, color={0,127,255}));
   connect(weaBus.TDryBul, ctl.TOut) annotation (Line(
-      points={{-400.815,175.175},{-410,175.175},{-410,8.51163},{-377.143,
-          8.51163}},
+      points={{-400.815,175.175},{-410,175.175},{-410,12},{-382,12}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
@@ -796,7 +790,7 @@ equation
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.THeaWatRetPri, ctl.THeaWatPriRet) annotation (Line(
-      points={{-522,0},{-452,0},{-452,5.16279},{-377.143,5.16279}},
+      points={{-522,0},{-452,0},{-452,8},{-382,8}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
@@ -804,55 +798,55 @@ equation
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(busSen2.TChiWatSupPri, ctl.TChiWatPriSup) annotation (Line(
-      points={{-522,0},{-452,0},{-452,1.81395},{-377.143,1.81395}},
+      points={{-522,0},{-452,0},{-452,4},{-382,4}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.THeaWatSupPri, ctl.THeaWatPriSup) annotation (Line(
-      points={{-522,0},{-452,0},{-452,6.83721},{-377.143,6.83721}},
+      points={{-522,0},{-452,0},{-452,10},{-382,10}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.VHeaWatPri_flow, ctl.VHeaWatPri_flow) annotation (Line(
-      points={{-522,0},{-452,0},{-452,3.48837},{-377.143,3.48837}},
+      points={{-522,0},{-452,0},{-452,6},{-382,6}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.TChiWatRetPri, ctl.TChiWatPriRet) annotation (Line(
-      points={{-522,0},{-452,0},{-452,0.139535},{-377.143,0.139535}},
+      points={{-522,0},{-452,0},{-452,2},{-382,2}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.VChiWatPri_flow, ctl.VChiWatPri_flow) annotation (Line(
-      points={{-522,0},{-450,0},{-450,-1.53488},{-377.143,-1.53488}},
+      points={{-522,0},{-450,0},{-450,0},{-382,0}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.THeaWatSupSec, ctl.THeaWatSecSup) annotation (Line(
-      points={{-522,0},{-452,0},{-452,-3.2093},{-377.143,-3.2093}},
+      points={{-522,0},{-452,0},{-452,-2},{-382,-2}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.THeaWatRetSec, ctl.THeaWatSecRet) annotation (Line(
-      points={{-522,0},{-452,0},{-452,-4.88372},{-377.143,-4.88372}},
+      points={{-522,0},{-452,0},{-452,-4},{-382,-4}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.VHeaWatSec_flow, ctl.VHeaWatSec_flow) annotation (Line(
-      points={{-522,0},{-452,0},{-452,-8.23256},{-377.143,-8.23256}},
+      points={{-522,0},{-452,0},{-452,-8},{-382,-8}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.THeaWatRetSec, ctl.THeaWatRetUpsHrc) annotation (Line(
-      points={{-522,0},{-452,0},{-452,-6.55814},{-377.143,-6.55814}},
+      points={{-522,0},{-452,0},{-452,-6},{-382,-6}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.TChiWatSupSec, ctl.TChiWatSecSup) annotation (Line(
-      points={{-522,0},{-452,0},{-452,-9.90698},{-377.143,-9.90698}},
+      points={{-522,0},{-452,0},{-452,-10},{-382,-10}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.TChiWatRetSec, ctl.TChiWatSecRet) annotation (Line(
-      points={{-522,0},{-452,0},{-452,-11.5814},{-377.143,-11.5814}},
+      points={{-522,0},{-452,0},{-452,-12},{-382,-12}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.VChiWatSec_flow, ctl.VChiWatSec_flow) annotation (Line(
-      points={{-522,0},{-452,0},{-452,-14.9302},{-377.143,-14.9302}},
+      points={{-522,0},{-452,0},{-452,-16},{-382,-16}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.TChiWatRetSec, ctl.TChiWatRetUpsHrc) annotation (Line(
-      points={{-522,0},{-452,0},{-452,-13.2558},{-377.143,-13.2558}},
+      points={{-522,0},{-452,0},{-452,-14},{-382,-14}},
       color={255,204,51},
       thickness=0.5));
   connect(dpChiWatRem[1].p_rel, busSen.dpChiWatRem) annotation (Line(points={{21,-176},
@@ -861,22 +855,22 @@ equation
   connect(dpHeaWatRem[1].p_rel, busSen.dpHeaWatRem) annotation (Line(points={{61,-530},
           {52,-530},{52,-340},{62,-340},{62,-300}},               color={0,0,127}));
   connect(busSen2.dpHeaWatRem, ctl.dpHeaWatRem[1]) annotation (Line(
-      points={{-522,0},{-452,0},{-452,-16.6047},{-377.143,-16.6047}},
+      points={{-522,0},{-452,0},{-452,-18},{-382,-18}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.dpChiWatRem, ctl.dpChiWatRem[1]) annotation (Line(
-      points={{-522,0},{-452,0},{-452,-21.6279},{-377.143,-21.6279}},
+      points={{-522,0},{-452,0},{-452,-24},{-382,-24}},
       color={255,204,51},
       thickness=0.5));
   connect(busSen2.y1HRC_actual, ctl.u1Hp_actual[3]) annotation (Line(
-      points={{-522,0},{-464,0},{-464,44},{-396,44},{-396,29.3302},{-377.143,
-          29.3302}},
+      points={{-522,0},{-464,0},{-464,44},{-396,44},{-396,36.8667},{-382,
+          36.8667}},
       color={255,204,51},
       thickness=0.5));
 
   connect(busSen2.y1HRC_actual, ctl.u1Hrc_actual) annotation (Line(
       points={{-522,0},{-464,0},{-464,44},{-396,44},{-396,36},{-392,36},{-392,
-          20.4},{-377.143,20.4}},
+          26.2},{-382,26.2}},
       color={255,204,51},
       thickness=0.5));
   connect(senTem2.T, busSen.TChiWatSupPri) annotation (Line(points={{-122,-147},
@@ -907,17 +901,16 @@ equation
         color={0,127,255}));
   connect(dpHeaWatRem[1].port_b, pipHeaWat.port_b) annotation (Line(points={{70,
           -540},{70,-572},{-8,-572},{-8,-588},{0,-588}}, color={0,127,255}));
-  connect(ctl.y1PumHeaWatSec, pre.u) annotation (Line(points={{-345.714,13.5349},
-          {-308,13.5349},{-308,-100},{-346,-100}},
+  connect(ctl.y1PumHeaWatSec, pre.u) annotation (Line(points={{-338,18},{-308,
+          18},{-308,-100},{-346,-100}},
                                     color={255,0,255}));
   connect(pre.y, ctl.u1PumHeaWatSec_actual) annotation (Line(points={{-370,-100},
-          {-388,-100},{-388,23.7488},{-377.143,23.7488}},
+          {-388,-100},{-388,30.2},{-382,30.2}},
                                               color={255,0,255}));
   connect(pre1.y, ctl.u1PumChiWatSec_actual) annotation (Line(points={{-370,-76},
-          {-392,-76},{-392,22.0744},{-377.143,22.0744}},
-                                                  color={255,0,255}));
-  connect(ctl.y1PumChiWatSec, pre1.u) annotation (Line(points={{-345.714,
-          11.8605},{-338,11.8605},{-338,12},{-330,12},{-330,-76},{-346,-76}},
+          {-392,-76},{-392,28.2},{-382,28.2}},    color={255,0,255}));
+  connect(ctl.y1PumChiWatSec, pre1.u) annotation (Line(points={{-338,16},{-338,
+          16},{-338,12},{-330,12},{-330,-76},{-346,-76}},
                                          color={255,0,255}));
 
   connect(outPumHeaWatSec.port_b, senTemHeaSup.port_a) annotation (Line(points={{44,-508},
@@ -970,20 +963,19 @@ equation
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(ctl.yMod[3], fourPipeASHP_with_controls.uPlaOpeMod) annotation (Line(
-        points={{-345.714,29.1628},{-304,29.1628},{-304,-386},{-302,-386}},
-                                                                        color={255,
+        points={{-338,36.6667},{-304,36.6667},{-304,-386},{-302,-386}}, color={255,
           127,0}));
   connect(fourPipeASHP_with_controls.yPumEvaEnaPro, ctl.u1PumChiWatPri_actual[3])
     annotation (Line(points={{-278,-390},{-258,-390},{-258,72},{-380,72},{-380,
-          25.4233},{-377.143,25.4233}},
+          32.2},{-382,32.2}},
         color={255,0,255}));
   connect(fourPipeASHP_with_controls.yHPEnaPro, ctl.u1Hp_actual[3]) annotation
     (Line(points={{-278,-394},{-272,-394},{-272,36},{-304,36},{-304,44},{-320,
-          44},{-320,108},{-396,108},{-396,29.3302},{-377.143,29.3302}},
+          44},{-320,108},{-396,108},{-396,36.8667},{-382,36.8667}},
                                                                 color={255,0,255}));
   connect(fourPipeASHP_with_controls.yPumConEnaPro, ctl.u1PumHeaWatPri_actual[3])
     annotation (Line(points={{-278,-386},{-264,-386},{-264,52},{-316,52},{-316,
-          112},{-400,112},{-400,48},{-392,48},{-392,27.0977},{-377.143,27.0977}},
+          112},{-400,112},{-400,48},{-392,48},{-392,34.2},{-382,34.2}},
                                                                    color={255,0,
           255}));
   connect(senTemCooSup.port_b, port_b1) annotation (Line(points={{60,-160},{84,
@@ -1027,18 +1019,14 @@ equation
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
   connect(nReqPlaHeaWat, ctl.nReqPlaHeaWat) annotation (Line(points={{-720,60},
-          {-548,60},{-548,140},{-540,140},{-540,144},{-452,144},{-452,15.2093},
-          {-377.143,15.2093}},
-                color={255,127,0}));
+          {-548,60},{-548,140},{-540,140},{-540,144},{-452,144},{-452,20},{-382,
+          20}}, color={255,127,0}));
   connect(nReqPlaChiWat, ctl.nReqPlaChiWat) annotation (Line(points={{-720,20},
-          {-550,20},{-550,13.5349},{-377.143,13.5349}},
-                                          color={255,127,0}));
+          {-550,20},{-550,18},{-382,18}}, color={255,127,0}));
   connect(nReqResHeaWat, ctl.nReqResHeaWat) annotation (Line(points={{-720,-20},
-          {-549,-20},{-549,11.8605},{-377.143,11.8605}},
-                                           color={255,127,0}));
+          {-549,-20},{-549,16},{-382,16}}, color={255,127,0}));
   connect(nReqResChiWat, ctl.nReqResChiWat) annotation (Line(points={{-720,-60},
-          {-552,-60},{-552,10.186},{-377.143,10.186}},
-                                           color={255,127,0}));
+          {-552,-60},{-552,14},{-382,14}}, color={255,127,0}));
   connect(weaBus, hp.busWea) annotation (Line(
       points={{-401,175},{-556,175},{-556,32},{-564,32},{-564,-88},{-692,-88},{
           -692,-112},{-696,-112},{-696,-176},{-618,-176},{-618,-260}},
@@ -1058,29 +1046,29 @@ equation
       index=-1,
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
-  connect(ctl.TChiWatSupSet, bus.TChiWatSupSet) annotation (Line(points={{
-          -345.714,-14.9302},{-345.714,-46},{-520,-46}}, color={0,0,127}), Text(
+  connect(ctl.TChiWatSupSet, bus.TChiWatSupSet) annotation (Line(points={{-338,
+          -16},{-338,-46},{-520,-46}},                   color={0,0,127}), Text(
       string="%second",
       index=1,
       extent={{-3,-6},{-3,-6}},
       horizontalAlignment=TextAlignment.Right));
-  connect(ctl.THeaWatSupSet, bus.THeaWatSupSet) annotation (Line(points={{
-          -345.714,-13.2558},{-336,-13.2558},{-336,-44},{-436,-44},{-436,-48},{
-          -520,-48},{-520,-46}}, color={0,0,127}), Text(
+  connect(ctl.THeaWatSupSet, bus.THeaWatSupSet) annotation (Line(points={{-338,
+          -14},{-336,-14},{-336,-44},{-436,-44},{-436,-48},{-520,-48},{-520,-46}},
+                                 color={0,0,127}), Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(ctl.y1EnaCoo, bus.y1EnaCoo) annotation (Line(points={{-345.714,
-          40.3256},{-344,40.3256},{-344,56},{-456,56},{-456,148},{-544,148},{
-          -544,136},{-520,136},{-520,-46}}, color={255,0,255}), Text(
+  connect(ctl.y1EnaCoo, bus.y1EnaCoo) annotation (Line(points={{-338,50},{-344,
+          50},{-344,56},{-456,56},{-456,148},{-544,148},{-544,136},{-520,136},{
+          -520,-46}},                       color={255,0,255}), Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
       horizontalAlignment=TextAlignment.Right));
-  connect(ctl.y1EnaHea, bus.y1EnaHea) annotation (Line(points={{-345.714,37.814},
-          {-316,37.814},{-316,48},{-312,48},{-312,144},{-352,144},{-352,224},{
-          -560,224},{-560,-80},{-520,-80},{-520,-46}}, color={255,0,255}), Text(
+  connect(ctl.y1EnaHea, bus.y1EnaHea) annotation (Line(points={{-338,47},{-316,
+          47},{-316,48},{-312,48},{-312,144},{-352,144},{-352,224},{-560,224},{
+          -560,-80},{-520,-80},{-520,-46}},            color={255,0,255}), Text(
       string="%second",
       index=1,
       extent={{-6,3},{-6,3}},
@@ -1093,8 +1081,8 @@ equation
       index=-1,
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
-  connect(ctl.THeaWatSupSet, swi.u1) annotation (Line(points={{-345.714,
-          -13.2558},{-370,-13.2558},{-370,-442},{-362,-442}}, color={0,0,127}));
+  connect(ctl.THeaWatSupSet, swi.u1) annotation (Line(points={{-338,-14},{-370,
+          -14},{-370,-442},{-362,-442}},                      color={0,0,127}));
   connect(swi.y, hea.TSet) annotation (Line(points={{-338,-450},{-260,-450},{-260,
           -488},{-92,-488},{-92,-500}},                              color={0,0,
           127}));
@@ -1131,11 +1119,11 @@ equation
   connect(conPID.y, max1.u2) annotation (Line(points={{-122,-470},{-180,-470},{
           -180,-196},{-198,-196}}, color={0,0,127}));
   connect(ctl.THeaWatSupSet, fourPipeASHP_with_controls.THotWatSupSet)
-    annotation (Line(points={{-345.714,-13.2558},{-302,-13.2558},{-302,-376}},
+    annotation (Line(points={{-338,-14},{-302,-14},{-302,-376}},
         color={0,0,127}));
   connect(ctl.TChiWatSupSet, fourPipeASHP_with_controls.TChiWatSupSet)
-    annotation (Line(points={{-345.714,-14.9302},{-308,-14.9302},{-308,-380},{
-          -302,-380}}, color={0,0,127}));
+    annotation (Line(points={{-338,-16},{-308,-16},{-308,-380},{-302,-380}},
+                       color={0,0,127}));
 
   connect(busValHeaWatHpOutIso, bus.valHeaWatHpOutIso) annotation (Line(
       points={{-502,28},{-520,28},{-520,-46}},
@@ -1169,24 +1157,23 @@ equation
       index=-1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
-  connect(ctl.y1PumHeaWatSec, busPumSecHeaWat.y1) annotation (Line(points={{
-          -345.714,13.5349},{-276,13.5349},{-276,140},{-212,140},{-212,148},{
-          -208,148},{-208,180},{-240,180}},
-                            color={255,0,255}), Text(
+  connect(ctl.y1PumHeaWatSec, busPumSecHeaWat.y1) annotation (Line(points={{-338,18},
+          {-276,18},{-276,140},{-212,140},{-212,148},{-208,148},{-208,180},{
+          -240,180}},       color={255,0,255}), Text(
       string="%second",
       index=1,
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
   connect(ctl.y1Hp[3], fourPipeASHP_with_controls.uHeaPumEna) annotation (Line(
-        points={{-345.714,32.5116},{-318,32.5116},{-318,-390},{-302,-390}},
+        points={{-338,40.6667},{-318,40.6667},{-318,-390},{-302,-390}},
         color={255,0,255}));
   connect(hea.port_b, inlPumHeaWatSec.port_a)
     annotation (Line(points={{-70,-508},{-30,-508}}, color={0,127,255}));
   connect(junHeaWatBypRet.port_1, pipHeaWat.port_b) annotation (Line(points={{
           -120,-590},{-120,-592},{-8,-592},{-8,-588},{0,-588}}, color={0,127,
           255}));
-  connect(ctl.yPumHeaWatSec, busPumSecHeaWat.y) annotation (Line(points={{
-          -345.714,1.81395},{-268,1.81395},{-268,148},{-240,148},{-240,180}},
+  connect(ctl.yPumHeaWatSec, busPumSecHeaWat.y) annotation (Line(points={{-338,4},
+          {-268,4},{-268,148},{-240,148},{-240,180}},
                             color={0,0,127}), Text(
       string="%second",
       index=1,
@@ -1196,7 +1183,7 @@ equation
         points={{-122,-470},{-180,-470},{-180,-420},{-320,-420},{-320,-398},{
           -302,-398}}, color={0,0,127}));
   connect(bus.yHeaCooEna, ctl.u1EnaHeaCoo) annotation (Line(
-      points={{-520,-46},{-448,-46},{-448,38.6512},{-377.143,38.6512}},
+      points={{-520,-46},{-448,-46},{-448,48},{-382,48}},
       color={255,204,51},
       thickness=0.5), Text(
       string="%first",
@@ -1211,8 +1198,8 @@ equation
           -458},{-422,-458}}, color={255,0,255}));
   connect(conInt.y, intEqu.u1)
     annotation (Line(points={{-518,-410},{-482,-410}}, color={255,127,0}));
-  connect(ctl.yIdxStaHea, intEqu.u2) annotation (Line(points={{-345.714,47.1907},
-          {-248,47.1907},{-248,-360},{-500,-360},{-500,-418},{-482,-418}},
+  connect(ctl.yIdxStaHea, intEqu.u2) annotation (Line(points={{-338,58.2},{-248,
+          58.2},{-248,-360},{-500,-360},{-500,-418},{-482,-418}},
         color={255,127,0}));
   connect(junChiWatBypSup.port_2, inlPumChiWatSec.port_a) annotation (Line(
         points={{-62,-158},{-60,-160},{-50,-160}}, color={0,127,255}));
@@ -1226,26 +1213,33 @@ equation
         color={0,0,127}));
   connect(or2.y, booToRea6.u)
     annotation (Line(points={{-400,-162},{-400,-168}}, color={255,0,255}));
-  connect(ctl.y1PumChiWatSec, busPumSecChiWat.y1) annotation (Line(points={{
-          -345.714,11.8605},{-300,11.8605},{-300,180}},
-                                               color={255,0,255}), Text(
+  connect(ctl.y1PumChiWatSec, busPumSecChiWat.y1) annotation (Line(points={{-338,16},
+          {-300,16},{-300,180}},               color={255,0,255}), Text(
       string="%second",
       index=1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
-  connect(ctl.yPumChiWatSec, busPumSecChiWat.y) annotation (Line(points={{
-          -345.714,0.139535},{-318,0.139535},{-318,0},{-282,0},{-282,180},{-300,
-          180}}, color={0,0,127}), Text(
+  connect(ctl.yPumChiWatSec, busPumSecChiWat.y) annotation (Line(points={{-338,2},
+          {-318,2},{-318,0},{-282,0},{-282,180},{-300,180}},
+                 color={0,0,127}), Text(
       string="%second",
       index=1,
       extent={{6,3},{6,3}},
       horizontalAlignment=TextAlignment.Left));
   connect(ctl.y1PumHeaWatPri[3], fourPipeASHP_with_controls.u1PumConEna)
-    annotation (Line(points={{-345.714,18.5581},{-320,18.5581},{-320,-394},{
-          -302,-394}}, color={255,0,255}));
+    annotation (Line(points={{-338,24},{-320,24},{-320,-394},{-302,-394}},
+                       color={255,0,255}));
   connect(ctl.y1PumChiWatPri[3], fourPipeASHP_with_controls.u1PumEvaEna)
-    annotation (Line(points={{-345.714,16.8837},{-326,16.8837},{-326,-402},{
-          -302,-402}}, color={255,0,255}));
+    annotation (Line(points={{-338,22},{-326,22},{-326,-402},{-302,-402}},
+                       color={255,0,255}));
+  connect(bus.uCoiCooAHU, ctl.uCoiCooAHU) annotation (Line(
+      points={{-520,-46},{-448,-46},{-448,-32},{-382,-32}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
   annotation (
     __Dymola_Commands(
       file=

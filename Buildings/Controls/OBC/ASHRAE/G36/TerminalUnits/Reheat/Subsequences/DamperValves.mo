@@ -204,6 +204,7 @@ block DamperValves
     final k=kDam,
     final Ti=TiDam,
     final Td=TdDam,
+    r=4,
     final yMax=1,
     final yMin=0,
     final y_reset=iniDam)
@@ -435,6 +436,9 @@ block DamperValves
     "Check if the airflow setpoint should be overrided"
     annotation (Placement(transformation(extent={{0,280},{20,300}})));
 
+  CDL.Reals.Sources.Constant                        conZer1(final k=1)
+    "Constant zero"
+    annotation (Placement(transformation(extent={{200,-70},{220,-50}})));
 equation
   connect(uCoo, lin.u)
     annotation (Line(points={{-340,200},{-162,200}}, color={0,0,127}));
@@ -549,8 +553,6 @@ equation
           -132},{98,-132}}, color={0,0,127}));
   connect(conZer2.y, swi4.u3) annotation (Line(points={{-18,10},{20,10},{20,-148},
           {98,-148}},color={0,0,127}));
-  connect(conZer2.y, watValPosUno.u1) annotation (Line(points={{-18,10},{20,10},
-          {20,-92},{278,-92}}, color={0,0,127}));
   connect(swi4.y, watValPosUno.u3) annotation (Line(points={{122,-140},{140,-140},
           {140,-108},{278,-108}}, color={0,0,127}));
   connect(uOpeMod, isOcc.u2) annotation (Line(points={{-340,-480},{-240,-480},{-240,
@@ -667,6 +669,8 @@ equation
           {-2,290}}, color={255,0,255}));
   connect(or4.y, or1.u1) annotation (Line(points={{22,290},{40,290},{40,280},{58,
           280}}, color={255,0,255}));
+  connect(conZer1.y, watValPosUno.u1) annotation (Line(points={{222,-60},{272,
+          -60},{272,-92},{278,-92}}, color={0,0,127}));
 annotation (
   defaultComponentName="damVal",
   Diagram(coordinateSystem(preserveAspectRatio=false, extent={{-320,-500},{320,500}}),

@@ -173,7 +173,7 @@ model FourPipeASHP_with_controls "Validation of AWHP plant template"
     mCon_flow_nominal=mHw_flow_nominal,
     mEva_flow_nominal=mChw_flow_nominal,
     final QHea_flow_nominal=QHea_flow_nominal,
-    QCoo_flow_nominal=QCoo_flow_nominal,
+    QCoo_flow_nominal=-QCoo_flow_nominal,
     final QHeaShc_flow_nominal=QHeaShc_flow_nominal,
     final QCooShc_flow_nominal=QCooShc_flow_nominal,
     final TConHea_nominal=THwSup_nominal,

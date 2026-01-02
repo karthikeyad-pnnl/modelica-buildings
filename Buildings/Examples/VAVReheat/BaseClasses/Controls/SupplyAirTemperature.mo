@@ -17,22 +17,37 @@ block SupplyAirTemperature
           controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PD
            or controllerType == Buildings.Controls.OBC.CDL.Types.SimpleController.PID));
 
+  parameter Buildings.Controls.OBC.CDL.Types.SimpleController controllerTypeOA=
+         Buildings.Controls.OBC.CDL.Types.SimpleController.PI "Type of controller"
+    annotation(Dialog(group="OA PI control"));
+  parameter Real kOA(min=0) = 0.01 "Gain of controller"
+    annotation(Dialog(group="OA PI control"));
+  parameter Modelica.Units.SI.Time TiOA(min=Buildings.Controls.OBC.CDL.Constants.small)=
+       120 "Time constant of integrator block" annotation (Dialog(enable=
+          controllerTypeOA == Buildings.Controls.OBC.CDL.Types.SimpleController.PI
+           or controllerTypeOA == Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
+           group="OA PI control"));
+  parameter Modelica.Units.SI.Time TdOA(min=0) = 0.1
+    "Time constant of derivative block" annotation (Dialog(enable=
+          controllerTypeOA == Buildings.Controls.OBC.CDL.Types.SimpleController.PD
+           or controllerTypeOA == Buildings.Controls.OBC.CDL.Types.SimpleController.PID,
+           group="OA PI control"));
+
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput uEna
     "Signal enabling set point tracking"
     annotation (Placement(transformation(extent={{-180,-120},{-140,-80}}),
         iconTransformation(extent={{-140,-80},{-100,-40}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TSup(
     final unit="K",
-    displayUnit="degC")
-    "Supply air temperature measurement"
+    displayUnit="degC") "Supply air temperature measurement"
     annotation (Placement(transformation(extent={{-180,-20},{-140,20}}),
-        iconTransformation(extent={{-140,40},{-100,80}})));
+        iconTransformation(extent={{-140,0},{-100,40}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealInput TSupSet(
     final unit="K",
     displayUnit="degC")
     "Supply air temperature set point"
     annotation (Placement(transformation(extent={{-180,-60},{-140,-20}}),
-        iconTransformation(extent={{-140,-20},{-100,20}})));
+        iconTransformation(extent={{-140,-40},{-100,0}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput yHea(
     final unit="1") if have_heating
     "Control signal for heating coil valve" annotation (Placement(
@@ -51,6 +66,7 @@ block SupplyAirTemperature
     final k=k,
     final Ti=Ti,
     final Td=Td,
+    r=10,
     final yMax=1,
     final yMin=if have_heating then -1 else 0,
     y_reset=if have_heating then limSupHea.k else limInfOA.k,
@@ -67,7 +83,7 @@ block SupplyAirTemperature
     annotation (Placement(transformation(extent={{10,70},{30,90}})));
   Buildings.Controls.OBC.CDL.Reals.Line mapOA
     "Mapping function for actuating the outdoor air damper"
-    annotation (Placement(transformation(extent={{10,-10},{30,10}})));
+    annotation (Placement(transformation(extent={{10,-40},{30,-20}})));
   Buildings.Controls.OBC.CDL.Reals.Line mapCoo
     "Mapping function for actuating the cooling coil valve"
     annotation (Placement(transformation(extent={{10,-90},{30,-70}})));
@@ -79,10 +95,10 @@ block SupplyAirTemperature
     annotation (Placement(transformation(extent={{-50,70},{-30,90}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant limInfOA(k=0)
     "Inferior limit of the control signal for outdoor air damper control "
-    annotation (Placement(transformation(extent={{-50,30},{-30,50}})));
+    annotation (Placement(transformation(extent={{-62,30},{-42,50}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant limSupOA(k=0.5)
     "Superior limit of the control signal for outdoor air damper control "
-    annotation (Placement(transformation(extent={{-50,-30},{-30,-10}})));
+    annotation (Placement(transformation(extent={{-80,-30},{-60,-10}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant limSupCoo(k=1)
     "Superior limit of the control signal for cooling coil control "
     annotation (Placement(transformation(extent={{-50,-130},{-30,-110}})));
@@ -98,7 +114,7 @@ block SupplyAirTemperature
     annotation (Placement(transformation(extent={{70,-90},{90,-70}})));
   Buildings.Controls.OBC.CDL.Reals.Switch swiOA
     "Switch to close outdoor air damper"
-    annotation (Placement(transformation(extent={{70,-10},{90,10}})));
+    annotation (Placement(transformation(extent={{70,-40},{90,-20}})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant limInfCoo(
     k=limSupOA.k)
     "Inferior limit of the control signal for cooling coil control "
@@ -109,7 +125,8 @@ equation
   connect(TSupSet, con.u_m) annotation (Line(points={{-160,-40},{-100,-40},{-100,
           -12}},                color={0,0,127}));
   connect(con.y, mapOA.u)
-    annotation (Line(points={{-88,0},{8,0}}, color={0,0,127}));
+    annotation (Line(points={{-88,0},{-40,0},{-40,-30},{8,-30}},
+                                             color={0,0,127}));
   connect(con.y, mapCoo.u)
     annotation (Line(points={{-88,0},{0,0},{0,-80},{8,-80}}, color={0,0,127}));
   connect(con.y, mapHea.u) annotation (Line(points={{-88,0},{0,0},{0,80},{8,80}},
@@ -119,20 +136,24 @@ equation
   connect(limSupHea.y, mapHea.x2) annotation (Line(points={{-28,80},{-4,80},{-4,
           76},{8,76}},
                     color={0,0,127}));
-  connect(limInfOA.y, mapOA.x1) annotation (Line(points={{-28,40},{-16,40},{-16,
-          8},{8,8}}, color={0,0,127}));
-  connect(limSupOA.y, mapOA.x2) annotation (Line(points={{-28,-20},{-24,-20},{
-          -24,-4},{8,-4}}, color={0,0,127}));
+  connect(limInfOA.y, mapOA.x1) annotation (Line(points={{-40,40},{-30,40},{-30,
+          -22},{8,-22}},
+                     color={0,0,127}));
+  connect(limSupOA.y, mapOA.x2) annotation (Line(points={{-58,-20},{-50,-20},{
+          -50,-34},{8,-34}},
+                           color={0,0,127}));
   connect(limSupCoo.y, mapCoo.x2) annotation (Line(points={{-28,-120},{0,-120},
           {0,-84},{8,-84}}, color={0,0,127}));
   connect(one.y, mapCoo.f2) annotation (Line(points={{-78,-60},{-20,-60},{-20,
           -88},{8,-88}}, color={0,0,127}));
   connect(zero.y, mapHea.f2) annotation (Line(points={{-78,60},{-10,60},{-10,72},
           {8,72}}, color={0,0,127}));
-  connect(one.y, mapOA.f2) annotation (Line(points={{-78,-60},{-20,-60},{-20,-8},
-          {8,-8}}, color={0,0,127}));
-  connect(zero.y, mapOA.f1) annotation (Line(points={{-78,60},{-10,60},{-10,4},{
-          8,4}},  color={0,0,127}));
+  connect(one.y, mapOA.f2) annotation (Line(points={{-78,-60},{-20,-60},{-20,
+          -38},{8,-38}},
+                   color={0,0,127}));
+  connect(zero.y, mapOA.f1) annotation (Line(points={{-78,60},{-10,60},{-10,-26},
+          {8,-26}},
+                  color={0,0,127}));
   connect(one.y, mapHea.f1) annotation (Line(points={{-78,-60},{-20,-60},{-20,84},
           {8,84}},   color={0,0,127}));
   connect(zero.y, mapCoo.f1) annotation (Line(points={{-78,60},{-78,60.2941},{-10,
@@ -147,16 +168,17 @@ equation
           68,72}},  color={0,0,127}));
   connect(zero.y, swiCoo.u3) annotation (Line(points={{-78,60},{40,60},{40,-88},
           {68,-88}}, color={0,0,127}));
-  connect(swiOA.y, yOA)
-    annotation (Line(points={{92,0},{140,0}}, color={0,0,127}));
   connect(mapOA.y, swiOA.u1)
-    annotation (Line(points={{32,0},{50,0},{50,8},{68,8}}, color={0,0,127}));
-  connect(zero.y, swiOA.u3) annotation (Line(points={{-78,60},{40,60},{40,-8},{68,
-          -8}},    color={0,0,127}));
+    annotation (Line(points={{32,-30},{50,-30},{50,-22},{68,-22}},
+                                                           color={0,0,127}));
+  connect(zero.y, swiOA.u3) annotation (Line(points={{-78,60},{40,60},{40,-38},
+          {68,-38}},
+                   color={0,0,127}));
   connect(uEna, swiCoo.u2) annotation (Line(points={{-160,-100},{60,-100},{60,-80},
           {68,-80}},      color={255,0,255}));
-  connect(uEna, swiOA.u2) annotation (Line(points={{-160,-100},{60,-100},{60,0},
-          {68,0}}, color={255,0,255}));
+  connect(uEna, swiOA.u2) annotation (Line(points={{-160,-100},{60,-100},{60,
+          -30},{68,-30}},
+                   color={255,0,255}));
   connect(uEna, swiHea.u2) annotation (Line(points={{-160,-100},{60,-100},{60,80},
           {68,80}},       color={255,0,255}));
   connect(swiCoo.y, yCoo)
@@ -166,6 +188,8 @@ equation
           -4,-72},{8,-72}}, color={0,0,127}));
   connect(uEna, con.trigger) annotation (Line(points={{-160,-100},{-106,-100},{-106,
           -12}}, color={255,0,255}));
+  connect(swiOA.y, yOA) annotation (Line(points={{92,-30},{114,-30},{114,0},{
+          140,0}}, color={0,0,127}));
   annotation (
   defaultComponentName="conTSup",
   Icon(coordinateSystem(preserveAspectRatio=false)), Diagram(

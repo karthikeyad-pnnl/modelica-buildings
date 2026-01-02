@@ -5,9 +5,21 @@ block AirToWater
   parameter Real THeaLocLow = 273.15 - 5
     "Lower temperature limit below which heating operation of ASHP is locked out";
 
+  parameter Boolean has_noResetHea=false
+    "Hidden parameter to disable heating setpoint reset for ECM experiments";
+
+  parameter Boolean has_noResetCoo=false
+    "Hidden parameter to disable cooling setpoint reset for ECM experiments";
+
   final parameter Boolean has_sort=true
     "Does the staging order algorithm have sorting by runtime for equipment
     rotation?";
+
+  parameter Boolean has_mulHeaLoa=true
+    "Does the plant service multiple heating loads?";
+
+  parameter Boolean has_mulCooLoa=true
+    "Does the plant service multiple cooling loads?";
 
   parameter Boolean have_heaWat
     "Set to true for plants that provide HW"
@@ -1502,6 +1514,8 @@ block AirToWater
     "Check successful completion of heating stage change"
     annotation (Placement(transformation(extent={{-40,250},{-20,270}})));
   Setpoints.PlantReset resHeaWat(
+    has_mulLoa=has_mulHeaLoa,
+    has_noReset=has_noResetHea,
     final TSup_nominal=THeaWatSup_nominal,
     final TSupSetLim=THeaWatSupSet_min,
     final dpSet_max=dpHeaWatRemSet_max,
@@ -1521,6 +1535,8 @@ block AirToWater
     final tri=triHeaWat) if have_heaWat "HW plant reset"
     annotation (Placement(transformation(extent={{50,230},{70,250}})));
   Setpoints.PlantReset resChiWat(
+    has_mulLoa=has_mulCooLoa,
+    has_noReset=has_noResetCoo,
     final TSup_nominal=TChiWatSup_nominal,
     final TSupSetLim=TChiWatSupSet_max,
     final dpSet_max=dpChiWatRemSet_max,
@@ -1719,6 +1735,14 @@ block AirToWater
   Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yIdxStaCoo
     "Cooling mode staging index" annotation (Placement(transformation(extent={{
             300,580},{340,620}}), iconTransformation(extent={{200,462},{240,502}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uCoiCooAHU
+    if not has_mulCooLoa                                     annotation (
+      Placement(transformation(extent={{-300,-440},{-260,-400}}),
+        iconTransformation(extent={{-240,-400},{-200,-360}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uCoiHeaAHU
+    if not has_mulHeaLoa                                     annotation (
+      Placement(transformation(extent={{-300,-480},{-260,-440}}),
+        iconTransformation(extent={{-240,-440},{-200,-400}})));
 equation
   connect(u1SchHea, enaHea.u1Sch)
     annotation (Line(points={{-280,380},{-180,380},{-180,364},{-112,364}},color={255,0,255}));
@@ -1901,13 +1925,13 @@ equation
   connect(nReqResChiWat,resChiWat.nReqRes)
     annotation (Line(points={{-280,-380},{40,-380},{40,-34},{48,-34}},color={255,127,0}));
   connect(enaCoo.y1, resChiWat.u1Ena)
-    annotation (Line(points={{-88,100},{-80,100},{-80,-40},{48,-40}},color={255,0,255}));
+    annotation (Line(points={{-88,100},{-80,100},{-80,-38},{48,-38}},color={255,0,255}));
   connect(enaHea.y1, resHeaWat.u1Ena)
-    annotation (Line(points={{-88,360},{-82,360},{-82,240},{48,240}},color={255,0,255}));
+    annotation (Line(points={{-88,360},{-82,360},{-82,242},{48,242}},color={255,0,255}));
   connect(comStaHea.y1, resHeaWat.u1StaPro)
-    annotation (Line(points={{-18,254},{-10,254},{-10,234},{48,234}},color={255,0,255}));
+    annotation (Line(points={{-18,254},{-10,254},{-10,238},{48,238}},color={255,0,255}));
   connect(comStaCoo.y1, resChiWat.u1StaPro)
-    annotation (Line(points={{-18,-6},{-10,-6},{-10,-46},{48,-46}},color={255,0,255}));
+    annotation (Line(points={{-18,-6},{-10,-6},{-10,-42},{48,-42}},color={255,0,255}));
   connect(resChiWat.TSupSet, chaStaCoo.TSupSet)
     annotation (Line(points={{72,-46},{116,-46},{116,-20},{-52,-20},{-52,62},{
           -42,62}},
@@ -2306,12 +2330,16 @@ end if;
           {158,540},{320,540}}, color={255,127,0}));
   connect(idxStaCoo.y, yIdxStaCoo) annotation (Line(points={{12,100},{18,100},{
           18,600},{320,600}}, color={255,127,0}));
+  connect(uCoiCooAHU, resChiWat.uCoiAHU) annotation (Line(points={{-280,-420},{
+          20,-420},{20,-46},{48,-46}}, color={0,0,127}));
+  connect(uCoiHeaAHU, resHeaWat.uCoiAHU) annotation (Line(points={{-280,-460},{
+          14,-460},{14,234},{48,234}}, color={0,0,127}));
   annotation (
     defaultComponentName="ctl",
     Icon(
       coordinateSystem(
         preserveAspectRatio=true,
-        extent={{-260,-400},{300,460}}),
+        extent={{-200,-360},{200,360}}),
       graphics={
         Rectangle(
           extent={{-200,360},{200,-360}},
@@ -2324,7 +2352,7 @@ end if;
           textColor={0,0,255})}),
     Diagram(
       coordinateSystem(
-        extent={{-260,-400},{300,460}})),
+        extent={{-260,-520},{300,460}})),
     Documentation(
       info="<html>
 <p>

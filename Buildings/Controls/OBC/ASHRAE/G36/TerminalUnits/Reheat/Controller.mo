@@ -502,6 +502,15 @@ block Controller "Controller for room VAV box with reheat"
     if venStd == Buildings.Controls.OBC.ASHRAE.G36.Types.VentilationStandard.California_Title_24
     "Output the minimum outdoor airflow rate setpoint, when using Title 24"
     annotation (Placement(transformation(extent={{-100,80},{-80,100}})));
+  CDL.Integers.Multiply mulInt
+    if heaCoi == Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+    annotation (Placement(transformation(extent={{170,-100},{190,-80}})));
+  CDL.Conversions.BooleanToInteger booToInt(integerTrue=0, integerFalse=1)
+    annotation (Placement(transformation(extent={{120,-100},{140,-80}})));
+  CDL.Integers.Equal intEqu
+    annotation (Placement(transformation(extent={{-120,-230},{-100,-210}})));
+  CDL.Integers.Sources.Constant conInt(k=Buildings.Controls.OBC.ASHRAE.G36.Types.OperationModes.unoccupied)
+    annotation (Placement(transformation(extent={{-174,-220},{-154,-200}})));
 equation
   connect(TZon, timSup.TZon) annotation (Line(points={{-200,260},{-164,260},{-164,
           246},{-142,246}}, color={0,0,127}));
@@ -605,8 +614,6 @@ equation
           {150,-127},{150,-30},{220,-30}}, color={255,127,0}));
   connect(sysReq.yHeaValResReq, yHeaValResReq) annotation (Line(points={{142,-133},
           {154,-133},{154,-60},{220,-60}}, color={255,127,0}));
-  connect(sysReq.yHotWatPlaReq, yHotWatPlaReq) annotation (Line(points={{142,-138},
-          {158,-138},{158,-90},{220,-90}}, color={255,127,0}));
   connect(ala.yLowFloAla, yLowFloAla) annotation (Line(points={{142,-182},{168,-182},
           {168,-120},{220,-120}}, color={255,127,0}));
   connect(ala.yFloSenAla, yFloSenAla) annotation (Line(points={{142,-186},{172,-186},
@@ -663,6 +670,18 @@ equation
           -60,-31},{-2,-31}}, color={255,0,255}));
   connect(uOpeMod, ala.uOpeMod) annotation (Line(points={{-200,120},{-140,120},
           {-140,-187},{118,-187}}, color={255,127,0}));
+  connect(mulInt.y, yHotWatPlaReq)
+    annotation (Line(points={{192,-90},{220,-90}}, color={255,127,0}));
+  connect(sysReq.yHotWatPlaReq, mulInt.u2) annotation (Line(points={{142,-138},
+          {158,-138},{158,-96},{168,-96}}, color={255,127,0}));
+  connect(booToInt.y, mulInt.u1) annotation (Line(points={{142,-90},{160,-90},{
+          160,-84},{168,-84}}, color={255,127,0}));
+  connect(intEqu.y, booToInt.u) annotation (Line(points={{-98,-220},{110,-220},
+          {110,-90},{118,-90}}, color={255,0,255}));
+  connect(uOpeMod, intEqu.u1) annotation (Line(points={{-200,120},{-140,120},{
+          -140,-220},{-122,-220}}, color={255,127,0}));
+  connect(conInt.y, intEqu.u2) annotation (Line(points={{-152,-210},{-142,-210},
+          {-142,-228},{-122,-228}}, color={255,127,0}));
 annotation (defaultComponentName="rehBoxCon",
   Icon(coordinateSystem(preserveAspectRatio=false, extent={{-100,-200},
             {100,200}}), graphics={

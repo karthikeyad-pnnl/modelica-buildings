@@ -1,6 +1,12 @@
 within Buildings.Templates.Plants.Controls.Setpoints;
 block PlantReset
   "Plant reset logic"
+  parameter Boolean has_mulLoa=true
+    "Does the plant loop serve multiple loads?";
+
+  parameter Boolean has_noReset=false
+    "Hidden parameter to disable setpoint reset for ECM experiments";
+
   parameter Integer nSenDpRem(final min=1)
     "Number of remote loop differential pressure sensors used for pump speed control"
     annotation (Evaluate=true);
@@ -92,11 +98,11 @@ block PlantReset
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput u1Ena
     "Plant enable"
     annotation (Placement(transformation(extent={{-160,80},{-120,120}}),
-      iconTransformation(extent={{-140,-20},{-100,20}})));
+      iconTransformation(extent={{-140,0},{-100,40}})));
   Buildings.Controls.OBC.CDL.Interfaces.BooleanInput u1StaPro
     "Staging process in progress"
     annotation (Placement(transformation(extent={{-160,60},{-120,100}}),
-      iconTransformation(extent={{-140,-80},{-100,-40}})));
+      iconTransformation(extent={{-140,-40},{-100,0}})));
   Buildings.Controls.OBC.CDL.Interfaces.RealOutput TSupSet(
     final unit="K",
     displayUnit="degC")
@@ -120,10 +126,10 @@ block PlantReset
     final resAmo=rsp,
     final samplePeriod=dtRes,
     final triAmo=tri,
-    dtHol=dtHol)
+    dtHol=dtHol) if not has_noReset
     "Compute plant reset with trim and respond logic "
     annotation (Placement(transformation(extent={{-10,90},{10,110}})));
-  Buildings.Controls.OBC.CDL.Reals.Line resTSup
+  Buildings.Controls.OBC.CDL.Reals.Line resTSup if has_mulLoa
     "Supply temperature reset"
     annotation (Placement(transformation(extent={{80,-70},{100,-50}})));
   Buildings.Controls.OBC.CDL.Reals.Line resDp[nSenDpRem]
@@ -176,6 +182,26 @@ block PlantReset
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant TSupSetMinMax(final k=
         TSupSetLim) "Constant"
     annotation (Placement(transformation(extent={{-110,-70},{-90,-50}})));
+  Buildings.Controls.OBC.CDL.Interfaces.RealInput uCoiAHU
+    if (not has_mulLoa) and (not has_noReset)
+    annotation (Placement(transformation(extent={{-160,-170},{-120,-130}}),
+        iconTransformation(extent={{-140,-80},{-100,-40}})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con1(k=0) if not has_mulLoa
+    annotation (Placement(transformation(extent={{20,-130},{40,-110}})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con4(k=TSup_nominal)
+    if not has_mulLoa
+    annotation (Placement(transformation(extent={{-20,-190},{0,-170}})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con3(k=TSupSetLim)
+    if not has_mulLoa
+    annotation (Placement(transformation(extent={{-20,-140},{0,-120}})));
+  Buildings.Controls.OBC.CDL.Reals.Line linCoo if not has_mulLoa
+    annotation (Placement(transformation(extent={{60,-160},{80,-140}})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con2(k=1) if not has_mulLoa
+    annotation (Placement(transformation(extent={{20,-174},{40,-154}})));
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant one1(final k=1)
+    if has_noReset
+    "Constant"
+    annotation (Placement(transformation(extent={{-10,120},{10,140}})));
 equation
   connect(nReqRes, triRes.numOfReq)
     annotation (Line(points={{-140,120},{-60,120},{-60,92},{-12,92}},color={255,127,0}));
@@ -216,9 +242,27 @@ equation
           100},{-12,100}},     color={255,0,255}));
   connect(triRes.y, resTSup.u) annotation (Line(points={{12,100},{70,100},{70,-60},
           {78,-60}},      color={0,0,127}));
+  connect(uCoiAHU, linCoo.u)
+    annotation (Line(points={{-140,-150},{58,-150}}, color={0,0,127}));
+  connect(con1.y, linCoo.x1) annotation (Line(points={{42,-120},{50,-120},{50,
+          -142},{58,-142}}, color={0,0,127}));
+  connect(con3.y, linCoo.f1) annotation (Line(points={{2,-130},{14,-130},{14,
+          -146},{58,-146}}, color={0,0,127}));
+  connect(con2.y, linCoo.x2) annotation (Line(points={{42,-164},{50,-164},{50,
+          -154},{58,-154}}, color={0,0,127}));
+  connect(con4.y, linCoo.f2) annotation (Line(points={{2,-180},{54,-180},{54,
+          -158},{58,-158}}, color={0,0,127}));
+  connect(linCoo.y, TSupSet) annotation (Line(points={{82,-150},{114,-150},{114,
+          -60},{140,-60}}, color={0,0,127}));
+  connect(one1.y, rep1.u) annotation (Line(points={{12,130},{20,130},{20,80},{28,
+          80}}, color={0,0,127}));
+  connect(one1.y, resTSup.u) annotation (Line(points={{12,130},{20,130},{20,100},
+          {70,100},{70,-60},{78,-60}}, color={0,0,127}));
+  connect(one1.y, linCoo.u) annotation (Line(points={{12,130},{20,130},{20,-150},
+          {58,-150}}, color={0,0,127}));
   annotation (
     defaultComponentName="res",
-    Icon(
+    Icon(coordinateSystem(extent={{-100,-100},{100,100}}),
       graphics={
         Rectangle(
           extent={{-100,100},{100,-100}},
@@ -231,7 +275,7 @@ equation
           textColor={0,0,255})}),
     Diagram(
       coordinateSystem(
-        extent={{-120,-140},{120,140}})),
+        extent={{-120,-200},{120,140}})),
     Documentation(info="<html>
 <p>
 This logic is used in primary-only and primary-secondary systems

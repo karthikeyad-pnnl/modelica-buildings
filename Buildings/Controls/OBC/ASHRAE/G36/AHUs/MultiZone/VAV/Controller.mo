@@ -1063,8 +1063,8 @@ equation
     annotation (Line(points={{-58,187},{40,187},{40,-21},{60,-21}}, color={0,0,127}));
   connect(ecoCon.dpMinOutDam, dpMinOutDam) annotation (Line(points={{60,-38},{
           22,-38},{22,-50},{-380,-50}}, color={0,0,127}));
-  connect(supSig.uTSup, ecoCon.uTSup) annotation (Line(points={{-58,416},{-32,
-          416},{-32,-41},{60,-41}}, color={0,0,127}));
+  connect(supSig.uTSup, ecoCon.uTSup) annotation (Line(points={{-58,416},{-30,
+          416},{-30,-41},{60,-41}}, color={0,0,127}));
   connect(TOut, ecoCon.TOut) annotation (Line(points={{-380,450},{-320,450},{
           -320,-44},{60,-44}}, color={0,0,127}));
   connect(TAirRet, ecoCon.TAirRet) annotation (Line(points={{-380,-80},{28,-80},
