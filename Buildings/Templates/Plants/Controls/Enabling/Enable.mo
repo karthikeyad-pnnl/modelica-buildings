@@ -75,14 +75,14 @@ block Enable
     "Left limit (in discrete-time) of enable signal"
     annotation (Placement(transformation(extent={{-80,110},{-60,130}})));
   Buildings.Controls.OBC.CDL.Logical.Timer timEna(
-    final t=dtRun)
+    t=dtRun)
     "Return true if system has been enabled for specified duration"
     annotation (Placement(transformation(extent={{0,110},{20,130}})));
   Buildings.Controls.OBC.CDL.Logical.Not dis
     "Return true if disabled"
     annotation (Placement(transformation(extent={{-40,90},{-20,110}})));
   Buildings.Controls.OBC.CDL.Logical.Timer runDis(
-    final t=dtRun)
+    t=dtRun)
     "Return true if system has been disabled for specified duration"
     annotation (Placement(transformation(extent={{0,70},{20,90}})));
   Buildings.Controls.OBC.CDL.Logical.MultiAnd mulAnd(

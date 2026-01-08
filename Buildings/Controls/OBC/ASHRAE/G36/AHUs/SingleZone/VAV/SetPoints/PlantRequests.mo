@@ -67,7 +67,7 @@ block PlantRequests
     annotation (Placement(transformation(extent={{200,-240},{240,-200}}),
         iconTransformation(extent={{100,-100},{140,-60}})));
 
-protected
+// protected
   Buildings.Controls.OBC.CDL.Reals.Subtract cooSupTemDif
     "Find the cooling supply temperature difference to the setpoint"
     annotation (Placement(transformation(extent={{-160,190},{-140,210}})));
@@ -90,7 +90,7 @@ protected
     "Check if the input has been true for a certain time"
     annotation (Placement(transformation(extent={{-40,140},{-20,160}})));
   Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr2(
-    final t=0.95,
+    t=0.95,
     final h=posHys)
     "Check if the chilled water valve position is greater than a threshold value"
     annotation (Placement(transformation(extent={{-120,90},{-100,110}})));
@@ -108,7 +108,7 @@ protected
     "Constant 2"
     annotation (Placement(transformation(extent={{0,170},{20,190}})));
   Buildings.Controls.OBC.CDL.Reals.LessThreshold lesThr(
-    final t=0.85,
+    t=0.85,
     final h=posHys)
     "Check if the chilled water valve position is less than a threshold value"
     annotation (Placement(transformation(extent={{-120,50},{-100,70}})));
@@ -128,7 +128,7 @@ protected
     "Keep true signal until other condition becomes true"
     annotation (Placement(transformation(extent={{-40,10},{-20,30}})));
   Buildings.Controls.OBC.CDL.Reals.LessThreshold lesThr1(
-    final t=0.1,
+    t=0.1,
     final h=posHys)
     "Check if the chilled water valve position is less than a threshold value"
     annotation (Placement(transformation(extent={{-120,4},{-100,24}})));
