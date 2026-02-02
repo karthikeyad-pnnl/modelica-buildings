@@ -918,11 +918,6 @@ block AirToWater
     annotation (Placement(transformation(extent={{-300,-360},{-260,-320}}),
       iconTransformation(extent={{-240,142},{-200,182}})));
 
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput u1EnaHeaCoo
-    "Heating-cooling mode enable from external block" annotation (Placement(
-        transformation(extent={{-300,240},{-260,280}}), iconTransformation(
-          extent={{-240,400},{-200,440}})));
-
   Buildings.Controls.OBC.CDL.Interfaces.IntegerInput nReqPlaHeaWat
     if have_heaWat
     "Number of HW plant requests"
@@ -2324,8 +2319,6 @@ end if;
           432},{46,220},{-154,220}}, color={255,0,255}));
   connect(seqEve.y1, y1Hp) annotation (Line(points={{162,310},{264,310},{264,
           380},{320,380}}, color={255,0,255}));
-  connect(u1EnaHeaCoo, ctlPlaHyb.u1EnaHeaCoo) annotation (Line(points={{-280,
-          260},{-196,260},{-196,-88},{58,-88}}, color={255,0,255}));
   connect(idxStaHea.y, yIdxStaHea) annotation (Line(points={{12,360},{158,360},
           {158,540},{320,540}}, color={255,127,0}));
   connect(idxStaCoo.y, yIdxStaCoo) annotation (Line(points={{12,100},{18,100},{

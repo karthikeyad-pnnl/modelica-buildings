@@ -341,13 +341,6 @@ protected
     "Vectorize mode signal with dimnension equal to number of heat pumps"
     annotation (Placement(transformation(extent={{-120,190},{-100,210}})));
 
-public
-  Buildings.Controls.OBC.CDL.Logical.Or or2
-    annotation (Placement(transformation(extent={{-180,-100},{-160,-80}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput u1EnaHeaCoo
-    "External heating-cooling mode enable" annotation (Placement(transformation(
-          extent={{-300,-120},{-260,-80}}), iconTransformation(extent={{-140,
-            100},{-100,140}})));
 equation
   connect(booScaRep.y, booVecRep.u)
     annotation (Line(points={{-28,-260},{-12,-260}},
@@ -501,20 +494,16 @@ equation
           {258,352}}, color={255,0,255}));
   connect(or5.y, and9.u1)
     annotation (Line(points={{142,360},{258,360}}, color={255,0,255}));
-  connect(and2.y, or2.u1) annotation (Line(points={{-198,-20},{-192,-20},{-192,
-          -90},{-182,-90}}, color={255,0,255}));
-  connect(u1EnaHeaCoo, or2.u2) annotation (Line(points={{-280,-100},{-280,-98},
-          {-182,-98}}, color={255,0,255}));
-  connect(or2.y, yHeaCoo) annotation (Line(points={{-158,-90},{-150,-90},{-150,
-          -20},{340,-20}}, color={255,0,255}));
-  connect(or2.y, booToInt1.u)
-    annotation (Line(points={{-158,-90},{-62,-90}}, color={255,0,255}));
-  connect(or2.y, not1.u) annotation (Line(points={{-158,-90},{-150,-90},{-150,
+  connect(and2.y, yHeaCoo)
+    annotation (Line(points={{-198,-20},{340,-20}}, color={255,0,255}));
+  connect(and2.y, booToInt1.u) annotation (Line(points={{-198,-20},{-180,-20},{
+          -180,-90},{-62,-90}}, color={255,0,255}));
+  connect(and2.y, not1.u) annotation (Line(points={{-198,-20},{-180,-20},{-180,
           -150},{-116,-150}}, color={255,0,255}));
-  connect(or2.y, booScaRep.u) annotation (Line(points={{-158,-90},{-150,-90},{
-          -150,-260},{-52,-260}}, color={255,0,255}));
-  connect(or2.y, booScaRep1.u) annotation (Line(points={{-158,-90},{-150,-90},{
-          -150,-360},{-52,-360},{-52,-360}}, color={255,0,255}));
+  connect(and2.y, booScaRep.u) annotation (Line(points={{-198,-20},{-180,-20},{
+          -180,-260},{-52,-260}}, color={255,0,255}));
+  connect(and2.y, booScaRep1.u) annotation (Line(points={{-198,-20},{-180,-20},
+          {-180,-360},{-52,-360}}, color={255,0,255}));
   annotation (
     defaultComponentName="ctlPlaHyb",
     Icon(
