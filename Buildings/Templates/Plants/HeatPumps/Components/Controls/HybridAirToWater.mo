@@ -1,6 +1,5 @@
 within Buildings.Templates.Plants.HeatPumps.Components.Controls;
-model AirToWater
-  "Controller for AWHP plant"
+model HybridAirToWater "Controller for hybrid AWHP plant"
   extends
     Buildings.Templates.Plants.HeatPumps.Components.Interfaces.PartialController(
     final typ=Buildings.Templates.Plants.HeatPumps.Types.Controller.AirToWater);
@@ -191,38 +190,6 @@ model AirToWater
     if cfg.have_chiWat and not have_senDpChiWatRemWir
     "Local CHW DP reset"
     annotation (Placement(transformation(extent={{-70,-50},{-50,-30}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput y1HeaCooChiWatPum_actual
-    annotation (Placement(transformation(extent={{-300,260},{-260,300}}),
-        iconTransformation(extent={{-140,20},{-100,60}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput y1HeaCooHeaWatPum_actual
-    annotation (Placement(transformation(extent={{-300,220},{-260,260}}),
-        iconTransformation(extent={{-140,60},{-100,100}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yEnaHeaCooChiWatPum
-    annotation (Placement(transformation(extent={{260,320},{300,360}}),
-        iconTransformation(extent={{100,-40},{140,0}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yEnaHeaCooHeaWatPum
-    annotation (Placement(transformation(extent={{260,280},{300,320}}),
-        iconTransformation(extent={{100,0},{140,40}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanInput y1FourPipeASHP_actual
-    annotation (Placement(transformation(extent={{-300,300},{-260,340}}),
-        iconTransformation(extent={{-140,-80},{-100,-40}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput yEnaFourPipeASHP
-    annotation (Placement(transformation(extent={{260,240},{300,280}}),
-        iconTransformation(extent={{-20,-20},{20,20}},
-        rotation=-90,
-        origin={-40,-120})));
-  Buildings.Controls.OBC.CDL.Interfaces.IntegerOutput yModFourPipeASHP
-    annotation (Placement(transformation(extent={{260,200},{300,240}}),
-        iconTransformation(extent={{-20,-20},{20,20}},
-        rotation=-90,
-        origin={0,-120})));
-  Buildings.Controls.OBC.CDL.Interfaces.RealOutput TSetFourPipeASHP annotation (
-     Placement(transformation(extent={{260,160},{300,200}}), iconTransformation(
-          extent={{-20,-20},{20,20}},
-        rotation=-90,
-        origin={40,-120})));
-  Buildings.Controls.OBC.CDL.Logical.Sources.Constant con(k=false)
-    annotation (Placement(transformation(extent={{-190,-230},{-170,-210}})));
 equation
   /* Control point connection - start */
   // Inputs from plant control bus
@@ -248,39 +215,29 @@ equation
   connect(bus.dpHeaWatRem, ctl.dpHeaWatRem);
   connect(bus.dpHeaWatRem, resDpHeaWatLoc.dpRem);
 
-  connect(busHp[:].y1_actual, ctl.u1Hp_actual[1:nHp]);
-  connect(ctl.TSupSet[1:nHp], busHp[:].TSet);
-  connect(ctl.y1HeaHp[1:nHp], busHp[:].y1Hea);
-  connect(ctl.y1Hp[1:nHp], busHp[:].y1);
+  connect(busHp.y1_actual, ctl.u1Hp_actual);
+  connect(ctl.TSupSet, busHp.TSet);
+  connect(ctl.y1HeaHp, busHp.y1Hea);
+  connect(ctl.y1Hp, busHp.y1);
 
-  connect(y1FourPipeASHP_actual, ctl.u1Hp_actual[nHp+1]);
-  connect(ctl.TSupSet[nHp+1], TSetFourPipeASHP);
-  connect(ctl.yMod[nHp+1], yModFourPipeASHP);
-  connect(ctl.y1Hp[nHp+1], yEnaFourPipeASHP);
-
-  connect(ctl.y1ValChiWatHpInlIso[1:nHp], busValChiWatHpInlIso[:].y1);
-  connect(ctl.y1ValChiWatHpOutIso[1:nHp], busValChiWatHpOutIso[:].y1);
-  connect(ctl.y1ValHeaWatHpInlIso[1:nHp], busValHeaWatHpInlIso[:].y1);
-  connect(ctl.y1ValHeaWatHpOutIso[1:nHp], busValHeaWatHpOutIso[:].y1);
-  connect(busPumHeaWatPri.y1_actual, ctl.u1PumHeaWatPri_actual[1:nHp]);
-  connect(busPumHeaWatSec.y1_actual, ctl.u1PumHeaWatSec_actual[1:nHp]);
-  connect(busPumChiWatPri.y1_actual, ctl.u1PumChiWatPri_actual[1:nHp]);
-  connect(busPumChiWatSec.y1_actual, ctl.u1PumChiWatSec_actual[1:nHp]);
-  connect(ctl.y1PumHeaWatPri[1:nHp], busPumHeaWatPri.y1);
-  connect(ctl.y1PumHeaWatSec[1:nHp], busPumHeaWatSec.y1);
-  connect(ctl.y1PumChiWatPri[1:nHp], busPumChiWatPri.y1);
-  connect(ctl.y1PumChiWatSec[1:nHp], busPumChiWatSec.y1);
-  connect(ctl.yPumChiWatPriDed[1:nHp], busPumChiWatPri.y);
+  connect(ctl.y1ValChiWatHpInlIso, busValChiWatHpInlIso.y1);
+  connect(ctl.y1ValChiWatHpOutIso, busValChiWatHpOutIso.y1);
+  connect(ctl.y1ValHeaWatHpInlIso, busValHeaWatHpInlIso.y1);
+  connect(ctl.y1ValHeaWatHpOutIso, busValHeaWatHpOutIso.y1);
+  connect(busPumHeaWatPri.y1_actual, ctl.u1PumHeaWatPri_actual);
+  connect(busPumHeaWatSec.y1_actual, ctl.u1PumHeaWatSec_actual);
+  connect(busPumChiWatPri.y1_actual, ctl.u1PumChiWatPri_actual);
+  connect(busPumChiWatSec.y1_actual, ctl.u1PumChiWatSec_actual);
+  connect(ctl.y1PumHeaWatPri, busPumHeaWatPri.y1);
+  connect(ctl.y1PumHeaWatSec, busPumHeaWatSec.y1);
+  connect(ctl.y1PumChiWatPri, busPumChiWatPri.y1);
+  connect(ctl.y1PumChiWatSec, busPumChiWatSec.y1);
+  connect(ctl.yPumChiWatPriDed, busPumChiWatPri.y);
   connect(ctl.yPumChiWatPriHdr, busPumChiWatPri.y);
   connect(ctl.yPumChiWatSec, busPumChiWatSec.y);
-  connect(ctl.yPumHeaWatPriDed[1:nHp], busPumHeaWatPri.y);
+  connect(ctl.yPumHeaWatPriDed, busPumHeaWatPri.y);
   connect(ctl.yPumHeaWatPriHdr, busPumHeaWatPri.y);
   connect(ctl.yPumHeaWatSec, busPumHeaWatSec.y);
-
-  connect(y1HeaCooHeaWatPum_actual, ctl.u1PumHeaWatPri_actual[nHp+1]);
-  connect(y1HeaCooChiWatPum_actual, ctl.u1PumChiWatPri_actual[nHp+1]);
-  connect(ctl.y1PumChiWatPri[nHp+1], yEnaHeaCooChiWatPum);
-  connect(ctl.y1PumHeaWatPri[nHp+1], yEnaHeaCooHeaWatPum);
 
   connect(bus.u1SchCoo, ctl.u1SchCoo);
   connect(bus.u1SchHea, ctl.u1SchHea);
@@ -385,12 +342,6 @@ equation
   connect(ctl.dpHeaWatRemSet, resDpHeaWatLoc.dpRemSet) annotation (Line(points={
           {22,-10},{34,-10},{34,-10},{42,-10},{42,-62},{-82,-62},{-82,6},{-72,6}},
         color={0,0,127}));
-  connect(con.y, busHrc.y1_actual) annotation (Line(points={{-168,-220},{-160,
-          -220},{-160,-280},{-240,-280}}, color={255,0,255}), Text(
-      string="%second",
-      index=1,
-      extent={{-6,3},{-6,3}},
-      horizontalAlignment=TextAlignment.Right));
   annotation (
     defaultComponentName="ctl", Documentation(info="<html>
 <p>
@@ -442,4 +393,4 @@ AI signal (Integer), with a dimensionality of one
 </ul>
 </ul>
 </html>"));
-end AirToWater;
+end HybridAirToWater;
