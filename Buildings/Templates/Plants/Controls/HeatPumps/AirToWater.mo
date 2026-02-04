@@ -197,6 +197,22 @@ block AirToWater
   final parameter Boolean has_fouPip=Modelica.Math.BooleanVectors.anyTrue(is_fouPip)
     "Does the plant have a 4-pipe ASHP?";
 
+  function booleanArrayToIntegerArray
+    input Boolean booleanArray[:];
+    output Integer integerArray[size(booleanArray,1)];
+
+  algorithm
+    for i in 1:size(booleanArray,1) loop
+      if booleanArray[i] then
+        integerArray[i] := 1;
+      else
+        integerArray[i] := 0;
+      end if;
+    end for;
+  end booleanArrayToIntegerArray;
+  final parameter Integer nFouPip = sum(booleanArrayToIntegerArray(is_fouPip))
+    "How many four-pipe heat pumps does the plant have?";
+
   parameter Integer nPumHeaWatPri(
     min=if have_pumHeaWatPri then 1 else 0,
     start=0)=nHp
@@ -2292,10 +2308,10 @@ end if;
           268,164},{238,164},{238,180}}, color={255,0,255}));
   connect(con.y, booScaRep1.u) annotation (Line(points={{-178,410},{-172,410},{
           -172,450},{8,450}}, color={255,0,255}));
-  connect(con.y, booScaRep2.u) annotation (Line(points={{-178,410},{-172,410},{
-          -172,450},{0,450},{0,420},{8,420}}, color={255,0,255}));
-  connect(enaHea.y1, y1EnaHea) annotation (Line(points={{-88,360},{-56,360},{
-          -56,400},{288,400},{288,440},{320,440}}, color={255,0,255}));
+  connect(con.y, booScaRep2.u) annotation (Line(points={{-178,410},{-172,410},{-172,
+          450},{-20,450},{-20,420},{8,420}},  color={255,0,255}));
+  connect(enaHea.y1, y1EnaHea) annotation (Line(points={{-88,360},{-56,360},{-56,
+          400},{280,400},{280,440},{320,440}},     color={255,0,255}));
   connect(enaCoo.y1, y1EnaCoo) annotation (Line(points={{-88,100},{114,100},{
           114,482},{320,482}}, color={255,0,255}));
   connect(TOut, lesThr.u) annotation (Line(points={{-280,120},{-172,120},{-172,
@@ -2315,12 +2331,13 @@ end if;
   connect(u1AvaHp.y, and2.u2) annotation (Line(points={{-218,230},{-192,230},{
           -192,384},{-76,384},{-76,388},{-60,388},{-60,404},{218,404},{218,424}},
                                           color={255,0,255}));
-  connect(and2.y, avaEquHeaCoo.u1Ava) annotation (Line(points={{242,432},{46,
-          432},{46,220},{-154,220}}, color={255,0,255}));
+  connect(and2.y, avaEquHeaCoo.u1Ava) annotation (Line(points={{242,432},{254,432},
+          {254,474},{-164,474},{-164,220},{-154,220}},
+                                     color={255,0,255}));
   connect(seqEve.y1, y1Hp) annotation (Line(points={{162,310},{264,310},{264,
           380},{320,380}}, color={255,0,255}));
-  connect(idxStaHea.y, yIdxStaHea) annotation (Line(points={{12,360},{158,360},
-          {158,540},{320,540}}, color={255,127,0}));
+  connect(idxStaHea.y, yIdxStaHea) annotation (Line(points={{12,360},{20,360},{20,
+          540},{320,540}},      color={255,127,0}));
   connect(idxStaCoo.y, yIdxStaCoo) annotation (Line(points={{12,100},{18,100},{
           18,600},{320,600}}, color={255,127,0}));
   connect(uCoiCooAHU, resChiWat.uCoiAHU) annotation (Line(points={{-280,-420},{

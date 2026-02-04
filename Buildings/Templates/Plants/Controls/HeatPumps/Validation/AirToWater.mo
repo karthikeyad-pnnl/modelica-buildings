@@ -539,8 +539,8 @@ equation
     annotation (Line(points={{102,170},{188,170},{188,164}}, color={0,0,127}));
   connect(dTChiWat1.y, TChiWatRet1.u1) annotation (Line(points={{142,150},{148,150},
           {148,156},{158,156}}, color={0,0,127}));
-  connect(ctl1.y1Hp, y1Hp_actual1.y1) annotation (Line(points={{258,48},{258,44},
-          {260,44},{260,60},{278,60}},     color={255,0,255}));
+  connect(ctl1.y1Hp, y1Hp_actual1.y1) annotation (Line(points={{258,48},{260,48},
+          {260,60},{278,60}},              color={255,0,255}));
   connect(ctl1.y1PumHeaWatPri, y1PumHeaWatPri_actual2.y1) annotation (Line(
         points={{258,32},{274,32},{274,40},{308,40}},         color={255,0,255}));
   connect(ctl1.y1PumChiWatPri, y1PumChiWatPri_actual1.y1) annotation (Line(
