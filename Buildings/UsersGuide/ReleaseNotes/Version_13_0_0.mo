@@ -12,9 +12,12 @@ Version X.Y.Z is ... xxx
 The following <b style=\"color:blue\">new libraries</b> have been added:
 </p>
 <table class=\"releaseTable\" summary=\"summary\" border=\"1\" cellspacing=\"0\" cellpadding=\"2\">
-<tr><td valign=\"top\">xxx
+<tr><td valign=\"top\">Buidings.Utilities.IO.Python_3_12
     </td>
-    <td valign=\"top\">xxx.
+    <td valign=\"top\">Package to call Python 3.12 modules from a Modelica block.<br/>
+                       This package replaces <code>Buidings.Utilities.IO.Python_3_8</code> which has
+                       been moved to the <code>Buildings.Obsolete</code> package.<br/>
+                       This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/4347\">issue 4347</a>.
     </td>
     </tr>
 </table>
@@ -43,20 +46,24 @@ to <b style=\"color:blue\">existing</b> libraries:
                        <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/2885\">issue 2885</a>.
     </td>
 </tr>
-<tr><td colspan=\"2\"><b>xxx</b>
-    </td>
-</tr>
-<tr><td valign=\"top\">xxx
-    </td>
-    <td valign=\"top\">xxx.
-    </td>
-    </tr>
 <tr><td valign=\"top\">Buildings.Fluid.AirFilters
     </td>
     <td valign=\"top\">Package of models for air filters.<br/>
                        This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/3618\">issue 3618</a>.
     </td>
 </tr>
+<tr><td colspan=\"2\"><b>Buildings.Media.Antifreeze</b>
+    </td>
+</tr>
+<tr><td valign=\"top\">Buildings.Media.Antifreeze.Functions.EthyleneGlycolWater<br/>
+                       Buildings.Media.Antifreeze.Functions.PropyleneGlycolWater
+    </td>
+    <td valign=\"top\">Packages that allows function calls of media properties without
+                       having to instantiate a package. This allows calling the
+                       functions from a Modelica <code>record</code>.<br/>
+                       This is for <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/2115\">IBPSA, issue 2115</a>.
+    </td>
+    </tr>
 </table>
 <!-- Backward compatible changes -->
 <p>
@@ -65,6 +72,15 @@ have been <b style=\"color:blue\">improved</b> in a
 <b style=\"color:blue\">backward compatible</b> way:
 </p>
 <table class=\"releaseTable\" summary=\"summary\" border=\"1\" cellspacing=\"0\" cellpadding=\"2\" style=\"border-collapse:collapse;\">
+<tr><td colspan=\"2\"><b>Buildings.BoundaryConditions.WeatherData</b>
+    </td>
+</tr>
+<tr><td valign=\"top\">Buildings.BoundaryConditions.WeatherData.ReaderTMY3
+    </td>
+    <td valign=\"top\">Changed the class type from block to model.<br/>
+                       This is for <a href=\"https://github.com/ibpsa/modelica-ibpsa/issues/2091\">IBPSA, #2091</a>.
+    </td>
+</tr>
 <tr><td colspan=\"2\"><b>Buildings.Airflow</b>
     </td>
 </tr>
@@ -112,6 +128,25 @@ have been <b style=\"color:blue\">improved</b> in a
     </td>
     <td valign=\"top\">Explicitly assigned value to the roughness of the exterior constructions.<br/>
                        This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/4367\">issue 4367</a>.
+    </td>
+</tr>
+<tr><td colspan=\"2\"><b>Buildings.ThermalZones.EnergyPlus_24_2_0</b>
+    </td>
+</tr>
+<tr><td valign=\"top\">Buildings.ThermalZones.EnergyPlus_24_2_0.BaseClasses.ThermalZoneAdapter
+    </td>
+    <td valign=\"top\">Added an assertion that stops the simulation if the air pressure is unreasonable, which may
+                       be the case if a user provides fresh air but not exhaust air path.<br/>
+                       This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/3319\">issue 3319</a>.
+    </td>
+</tr>
+<tr><td colspan=\"2\"><b>Buildings.Utilities.IO.Python_3_8</b>
+    </td>
+</tr>
+<tr><td valign=\"top\">Buildings.Utilities.IO.Python_3_8.Functions.BaseClasses.exchange
+    </td>
+    <td valign=\"top\">Added missing header file.<br/>
+                       This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/4343\">issue 4343</a>.
     </td>
 </tr>
 <tr><td colspan=\"2\"><b>Buildings.Utilities.IO.Python_3_8</b>
@@ -243,7 +278,52 @@ have been <b style=\"color:blue\">improved</b> in a
     <td valign=\"top\">Moved to <code>Buildings.Controls.OBC.Utilities.PIDWithEnable</code> as there were two identical implementations.
     </td>
 </tr>
+<tr><td colspan=\"2\"><b>Buildings.Fluid</b>
+    </td>
+</tr>
+<tr><td valign=\"top\">Buildings.Fluid.Chillers.ModularReversible.RefrigerantCycle.TableData2DLoadDep<br/>
+                       Buildings.Fluid.Chillers.ModularReversible.TableData2DLoadDep<br/>
+                       Buildings.Fluid.HeatPumps.ModularReversible.RefrigerantCycle.TableData2DLoadDep<br/>
+                       Buildings.Fluid.HeatPumps.ModularReversible.TableData2DLoadDep
+    </td>
+    <td valign=\"top\">Refactored with two separate connectors for HW and CHW temperature setpoints.<br/>
+                       This is for
+                       <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/4507\">#4507</a>.
+    </td>
+</tr>
+<tr><td valign=\"top\">Buildings.Fluid.HeatPumps.ModularReversible.RefrigerantCycle.BaseClasses.TableData2DLoadDepSHC<br/>
+                       Buildings.Fluid.HeatPumps.ModularReversible.RefrigerantCycle.TableData2DLoadDepSHC<br/>
+                       Buildings.Fluid.HeatPumps.ModularReversible.TableData2DLoadDepSHC
+    </td>
+    <td valign=\"top\">Refactored with two separate connectors for heating and cooling on/off commands.<br/>
+                       This is for
+                       <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/4507\">#4507</a>.
+    </td>
+</tr>
 <tr><td colspan=\"2\"><b>Buildings.Templates</b>
+    </td>
+</tr>
+<tr><td valign=\"top\">Buildings.Templates.Components.BaseClasses.PartialHeatPumpTableData2DLoadDep<br/>
+                       Buildings.Templates.Components.Chillers.Compression<br/>
+                       Buildings.Templates.Plants.Controls.HeatPumps.AirToWater<br/>
+                       Buildings.Templates.Plants.HeatPumps.AirToWater<br/>
+                       Buildings.Templates.Plants.HeatPumps.Components.Controls.AirToWater<br/>
+                       Buildings.Templates.Plants.HeatPumps.Components.Controls.OpenLoop
+    </td>
+    <td valign=\"top\">Refactored with two separate connectors for HW and CHW temperature setpoints.<br/>
+                       This is for
+                       <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/4507\">#4507</a>.
+    </td>
+</tr>
+<tr><td valign=\"top\">Buildings.Templates.AirHandlersFans.Components.Controls.G36VAVMultiZone<br/>
+                       Buildings.Templates.AirHandlersFans.Components.Data.VAVMultiZoneController<br/>
+                       Buildings.Templates.AirHandlersFans.Configuration.PartialAirHandler<br/>
+                       Buildings.Templates.AirHandlersFans.Interfaces.PartialAirHandler<br/>
+                       Buildings.Templates.AirHandlersFans.Validation.VAVMultiZone
+    </td>
+    <td valign=\"top\">Moved zoning parameter declarations into controller data record.<br/>
+                       This is for
+                       <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/4497\">#4497</a>.
     </td>
 </tr>
 <tr><td valign=\"top\">Buildings.Templates.Components.Chillers.Compression<br/>
@@ -263,13 +343,14 @@ have been <b style=\"color:blue\">improved</b> in a
     <td valign=\"top\">Moved to <code>Buildings.Controls.OBC.Utilities.PIDWithEnable</code> as there were two identical implementations.
     </td>
 </tr>
-
-<tr><td colspan=\"2\"><b>xxx</b>
+ <tr><td colspan=\"2\"><b>Buildings.Utilities</b>
     </td>
 </tr>
-<tr><td valign=\"top\">xxx
+<tr><td valign=\"top\">Buildings.Utilities.IO.Python_3_8
     </td>
-    <td valign=\"top\">xxx.
+    <td valign=\"top\">Moved package to <code>Buildings.Obsolete.Utilities.IO.Python_3_8</code>
+                       as it is replaced by <code>Buildings.Utilities.IO.Python_3_12</code>.<br/>
+                       This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/4347\">issue 4347</a>.
     </td>
 </tr>
 </table>
