@@ -47,8 +47,10 @@ model StageChangeCommand
     annotation (Placement(transformation(extent={{-130,-50},{-110,-30}})));
   Buildings.Templates.Plants.Controls.StagingRotation.StageChangeCommand chaSta(
     typ=Buildings.Templates.Plants.Controls.Types.Application.Heating,
+    is_heaApp=false,
     have_pumSec=false,
     plrSta=0.9,
+    staEqu=[1,0,0; 0,1/2,1/2; 1,1/2,1/2; 0,1,1; 1,1,1],
     nSta=5,
     nEqu=3,
     capEqu=1E3*{100,450,450},
@@ -88,11 +90,8 @@ model StageChangeCommand
     final k=VHeaWat_flow_nominal)
     "Scale by design flow"
     annotation (Placement(transformation(extent={{-100,-50},{-80,-30}})));
-  StagingRotation.EquipmentEnable                                         enaEqu(
-    is_pumApp=true,
-    nEquAlt=2,
-    nSta=5,
-    nEqu=3)
+  Buildings.Templates.Plants.Controls.StagingRotation.EquipmentEnable enaEqu(
+    staEqu=[1,0,0; 0,1/2,1/2; 1,1/2,1/2; 0,1,1; 1,1,1])
     "Enable equipment"
     annotation (Placement(transformation(extent={{60,-10},{80,10}})));
   Buildings.Controls.OBC.CDL.Integers.Sources.Constant idxEquLeaLag[2](
@@ -111,9 +110,6 @@ model StageChangeCommand
     nin=3)
     "Check completion of stage change"
     annotation (Placement(transformation(extent={{-30,50},{-50,70}})));
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant con[5,3](k=[1,0,0; 0,1/2,1/2;
-        1,1/2,1/2; 0,1,1; 1,1,1])
-    annotation (Placement(transformation(extent={{-100,50},{-80,70}})));
 equation
   connect(TRet.y, chaSta.TRet)
     annotation (Line(points={{-108,0},{-104,0},{-104,-6},{-52,-6}},color={0,0,127}));
@@ -128,26 +124,27 @@ equation
   connect(u1AvaSta.y, idxSta.u1AvaSta)
     annotation (Line(points={{-108,-80},{-10,-80},{-10,-6},{-2,-6}},color={255,0,255}));
   connect(idxSta.y, chaSta.uSta)
-    annotation (Line(points={{22,0},{40,0},{40,20},{-56,20},{-56,10},{-52,10}},
+    annotation (Line(points={{22,0},{40,0},{40,20},{-56,20},{-56,8},{-52,8}},
       color={255,127,0}));
   connect(chaSta.y1Up, y1UpHol.u)
     annotation (Line(points={{-28,4},{-20,4},{-20,40},{-2,40}},color={255,0,255}));
   connect(chaSta.y1Dow, y1DowHol.u)
     annotation (Line(points={{-28,-4},{-20,-4},{-20,-40},{-2,-40}},color={255,0,255}));
   connect(u1AvaSta.y, chaSta.u1AvaSta)
-    annotation (Line(points={{-108,-80},{-60,-80},{-60,8},{-52,8}},color={255,0,255}));
+    annotation (Line(points={{-108,-80},{-60,-80},{-60,6},{-52,6}},color={255,0,255}));
   connect(ratV_flow.y[1], V_flow.u)
     annotation (Line(points={{-108,-40},{-102,-40}},color={0,0,127}));
   connect(V_flow.y, chaSta.V_flow)
     annotation (Line(points={{-78,-40},{-56,-40},{-56,-8},{-52,-8}},color={0,0,127}));
   connect(idxSta.y, enaEqu.uSta)
-    annotation (Line(points={{22,0},{58,0}},color={255,127,0}));
+    annotation (Line(points={{22,0},{40,0},{40,2},{58,2}},
+                                            color={255,127,0}));
   connect(u1AvaEqu.y, enaEqu.u1Ava)
-    annotation (Line(points={{-78,-100},{54,-100},{54,-4},{58,-4}},color={255,0,255}));
+    annotation (Line(points={{-78,-100},{54,-100},{54,-2},{58,-2}},color={255,0,255}));
   connect(enaEqu.y1, staEqu.y1)
     annotation (Line(points={{82,0},{98,0}},color={255,0,255}));
   connect(comSta.y1, chaSta.u1StaPro)
-    annotation (Line(points={{-52,54},{-58,54},{-58,4},{-52,4}},color={255,0,255}));
+    annotation (Line(points={{-52,54},{-58,54},{-58,2},{-52,2}},color={255,0,255}));
   connect(enaEqu.y1, comSta.u1)
     annotation (Line(points={{82,0},{90,0},{90,60},{-28,60}},         color={255,0,255}));
   connect(staEqu.y1_actual, comSta.u1_actual)
@@ -156,12 +153,8 @@ equation
     annotation (Line(points={{22,0},{40,0},{40,64},{-28,64}},color={255,127,0}));
   connect(TSupSet.y, chaSta.TPriSup) annotation (Line(points={{-108,40},{-100,
           40},{-100,-2},{-52,-2}}, color={0,0,127}));
-  connect(con.y, chaSta.staEqu) annotation (Line(points={{-78,60},{-64,60},{-64,
-          6},{-52,6}}, color={0,0,127}));
   connect(idxEquLeaLag.y, enaEqu.uIdxAltSor) annotation (Line(points={{-78,100},
-          {42,100},{42,8},{58,8}}, color={255,127,0}));
-  connect(con.y, enaEqu.staEqu) annotation (Line(points={{-78,60},{-64,60},{-64,
-          22},{38,22},{38,4},{58,4}}, color={0,0,127}));
+          {42,100},{42,6},{58,6}}, color={255,127,0}));
   annotation (
     __Dymola_Commands(
       file=
