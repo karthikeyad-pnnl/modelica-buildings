@@ -23,7 +23,7 @@ model Multiple "Multiple pumps in parallel"
     redeclare each final package Medium = Medium) if not have_valChe
     "Fluid pass through if no check valve"
     annotation (Placement(transformation(extent={{40,-30},{60,-10}})));
-  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal sigSta[nPum]
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal sigSta[nPum](realFalse=1)
     "Start/stop signal"
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
@@ -41,7 +41,7 @@ model Multiple "Multiple pumps in parallel"
       Placement(transformation(
         extent={{-10,-10},{10,10}},
         rotation=-90,
-        origin={-20,70})));
+        origin={-20,62})));
   Buildings.Controls.OBC.CDL.Reals.Sources.Constant speCst[nPum](
     final k=fill(1, nPum)) if not have_var
     "Constant signal in case of constant speed pump" annotation (Placement(
@@ -59,6 +59,12 @@ model Multiple "Multiple pumps in parallel"
         origin={20,70})));
   Controls.StatusEmulator sta[nPum] "Emulate pump status"
     annotation (Placement(transformation(extent={{-10,-70},{10,-50}})));
+  Buildings.Controls.OBC.CDL.Reals.Limiter lim(uMax=1, uMin=0.01)
+    if have_var and have_varCom                                   annotation (
+      Placement(transformation(
+        extent={{-10,-10},{10,10}},
+        rotation=270,
+        origin={-20,124})));
 equation
   connect(pum.port_b,valChe. port_a)
     annotation (Line(points={{10,0},{30,0},{30,20},{40,20}}, color={0,127,255}));
@@ -79,16 +85,8 @@ equation
       index=-1,
       extent={{-3,6},{-3,6}},
       horizontalAlignment=TextAlignment.Right));
-  connect(reaSpe.y, sigCon.u1) annotation (Line(points={{-20,58},{-20,50},{6,50},
+  connect(reaSpe.y, sigCon.u1) annotation (Line(points={{-20,50},{-8,50},{-8,42},
           {6,42}}, color={0,0,127}));
-  connect(bus.y, reaSpe.u) annotation (Line(
-      points={{0,100},{0,88},{-20,88},{-20,82}},
-      color={255,204,51},
-      thickness=0.5), Text(
-      string="%first",
-      index=-1,
-      extent={{-3,6},{-3,6}},
-      horizontalAlignment=TextAlignment.Right));
   connect(speCst.y, sigCon.u1)
     annotation (Line(points={{60,58},{60,50},{6,50},{6,42}}, color={0,0,127}));
   connect(bus.y, pasSpe.u) annotation (Line(
@@ -111,6 +109,16 @@ equation
       points={{0,100},{0,88},{-80,88},{-80,-60},{-12,-60}},
       color={255,204,51},
       thickness=0.5));
+  connect(bus.y, lim.u) annotation (Line(
+      points={{0,100},{0,146},{-20,146},{-20,136}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{6,3},{6,3}},
+      horizontalAlignment=TextAlignment.Left));
+  connect(lim.y, reaSpe.u) annotation (Line(points={{-20,112},{-24,112},{-24,74},
+          {-20,74}}, color={0,0,127}));
   annotation (
   defaultComponentName="pum",
   Documentation(info="<html>
