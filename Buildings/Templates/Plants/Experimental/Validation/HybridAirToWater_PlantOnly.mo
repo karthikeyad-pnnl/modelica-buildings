@@ -271,7 +271,8 @@ model HybridAirToWater_PlantOnly "Validation of AWHP plant template"
     nPum=2,
     dat(m_flow_nominal=fill(pla.mChiWat_flow_nominal/pumChiWatSec.dat.nPum,
           pumChiWatSec.dat.nPum), dp_nominal=fill(max(pla.hp.dpHeaWatHp_nominal,
-          pla.hp.dpChiWatHp_nominal), pumChiWatSec.dat.nPum)))
+          pla.hp.dpChiWatHp_nominal), pumChiWatSec.dat.nPum)),
+    sigSta(realFalse=1))
     "CHW secondary pumps"
     annotation (Placement(transformation(extent={{18,-10},{38,10}})));
   Buildings.Templates.Components.Pumps.Multiple pumHeaWatSec(
@@ -280,7 +281,8 @@ model HybridAirToWater_PlantOnly "Validation of AWHP plant template"
     nPum=2,
     dat(m_flow_nominal=fill(pla.mHeaWat_flow_nominal/pumHeaWatSec.dat.nPum,
           pumHeaWatSec.dat.nPum), dp_nominal=fill(max(pla.hp.dpHeaWatHp_nominal,
-          pla.hp.dpChiWatHp_nominal), pumHeaWatSec.dat.nPum)))
+          pla.hp.dpChiWatHp_nominal), pumHeaWatSec.dat.nPum)),
+    sigSta(realFalse=1))
     "HW secondary pumps"
     annotation (Placement(transformation(extent={{18,-90},{38,-70}})));
   Buildings.Templates.Components.Routing.SingleToMultiple pumChiWatSecInl(

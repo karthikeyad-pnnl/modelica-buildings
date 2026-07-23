@@ -23,7 +23,7 @@ model Multiple "Multiple pumps in parallel"
     redeclare each final package Medium = Medium) if not have_valChe
     "Fluid pass through if no check valve"
     annotation (Placement(transformation(extent={{40,-30},{60,-10}})));
-  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal sigSta[nPum](realFalse=1)
+  Buildings.Controls.OBC.CDL.Conversions.BooleanToReal sigSta[nPum]
     "Start/stop signal"
     annotation (Placement(transformation(
         extent={{-10,-10},{10,10}},
