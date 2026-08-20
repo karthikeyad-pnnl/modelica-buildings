@@ -17,6 +17,11 @@ The following <b style=\"color:blue\">new libraries</b> have been added:
     <td valign=\"top\">xxx.
     </td>
     </tr>
+<tr><td valign=\"top\">Buildings.Controls.OBC.ASHRAE.G36.Plants
+    </td>
+    <td valign=\"top\">Package of sequences for chiller plants
+    </td>
+    </tr>
 </table>
 <!-- New components for existing libraries -->
 <p>
@@ -118,42 +123,6 @@ have been <b style=\"color:blue\">improved</b> in a
     <td valign=\"top\">Removed deprecated <code>cardinality</code> function and replaced with <code>mayOnlyConnectOnce</code> annotation.<br/>
                        Removed protected parameter <code>flowDirection</code> as it was set to <code>Bidirectional</code> and had no effect on the model.<br/>
                        This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/4607\">Buildings, #4607</a>.
-    </td>
-</tr>
-<tr><td colspan=\"2\"><b>Buildings.Templates</b>
-    </td>
-</tr>
-<tr><td valign=\"top\">Buildings.Templates.Plants.Controls.HeatPumps.AirToWater
-    </td>
-    <td valign=\"top\">Refactored with a single instance of <code>SortRuntime</code> for both modes.<br/>
-                       This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/4624\">Buildings, #4624</a>.
-    </td>
-</tr>
-<tr><td valign=\"top\">Buildings.Templates.Plants.Controls.StagingRotation.EquipmentAvailability
-    </td>
-    <td valign=\"top\">Removed unnecessary <code>Or</code> and <code>And</code> blocks.<br/>
-                       This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/4624\">Buildings, #4624</a>.
-    </td>
-</tr>
-<tr><td valign=\"top\">Buildings.Templates.Plants.Controls.StagingRotation.EquipmentEnable
-    </td>
-    <td valign=\"top\">Added logic to remove unavailable equipment from staging order.
-                       Removed restriction on enable state updates.
-                       Modularized the implementation.<br/>
-                       This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/4624\">Buildings, #4624</a>.
-    </td>
-</tr>
-<tr><td valign=\"top\">Buildings.Templates.Plants.Controls.StagingRotation.SortRuntime
-    </td>
-    <td valign=\"top\">Corrected runtime weighting for unavailable units.
-                       Updated handling and default value of runtime initialization.<br/>
-                       This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/4624\">Buildings, #4624</a>.
-    </td>
-</tr>
-<tr><td valign=\"top\">Buildings.Templates.Plants.Controls.Utilities.TrueArrayConditional
-    </td>
-    <td valign=\"top\">Refactored using CDL Elementary Blocks.<br/>
-                       This is for <a href=\"https://github.com/lbl-srg/modelica-buildings/issues/4624\">Buildings, #4624</a>.
     </td>
 </tr>
 <tr><td colspan=\"2\"><b>Buildings.ThermalZones.EnergyPlus_24_2_0</b>
