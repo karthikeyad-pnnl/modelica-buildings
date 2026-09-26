@@ -5,26 +5,29 @@ package Buildings "Library with models for building energy and control systems"
 
 annotation (
 preferredView="info",
-version="13.0.0",
+version="13.0.1",
 versionDate="2025-05-29",
 dateModified="2025-05-29",
 uses(Modelica(version="4.0.0")),
 conversion(
-  noneFromVersion="12.1.0",
-  noneFromVersion="12.0.0",
   from(
     version={"11.0.0", "11.1.0"},
-    script="modelica://Buildings/Resources/Scripts/Conversion/ConvertBuildings_from_11_to_12.0.0.mos"),
+    script="modelica://Buildings/Resources/Scripts/Conversion/ConvertBuildings_from_11_to_12.0.0.mos",
+        to="13.0.0"),
   from(
     version={"10.0.0", "10.1.0", "10.1.1"},
-    script="modelica://Buildings/Resources/Scripts/Conversion/ConvertBuildings_from_10_to_11.0.0.mos"),
+    script="modelica://Buildings/Resources/Scripts/Conversion/ConvertBuildings_from_10_to_11.0.0.mos",
+        to="13.0.0"),
   from(
     version={"9.0.0", "9.1.0", "9.1.1", "9.1.2"},
-    script="modelica://Buildings/Resources/Scripts/Conversion/ConvertBuildings_from_9_to_10.0.0.mos"),
+    script="modelica://Buildings/Resources/Scripts/Conversion/ConvertBuildings_from_9_to_10.0.0.mos",
+        to="13.0.0"),
   from(
     version={"8.0.0", "8.1.0", "8.1.1", "8.1.2", "8.1.3"},
     to="9.0.0",
-    script="modelica://Buildings/Resources/Scripts/Conversion/ConvertBuildings_from_8_to_9.0.0.mos")),
+    script="modelica://Buildings/Resources/Scripts/Conversion/ConvertBuildings_from_8_to_9.0.0.mos"),
+      from(version={"13.0.0","12.1.0","12.0.0"}, script=
+            "modelica://Buildings/Resources/Scripts/ConvertFromBuildings_13.0.0.mos")),
 preferredView="info",
 Documentation(info="<html>
 <p>

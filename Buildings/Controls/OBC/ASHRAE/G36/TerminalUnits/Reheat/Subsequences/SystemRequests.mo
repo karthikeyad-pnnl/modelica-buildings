@@ -152,7 +152,7 @@ block SystemRequests "Output system requests for VAV terminal unit with reheat"
     annotation (Placement(transformation(extent={{180,-290},{220,-250}}),
         iconTransformation(extent={{100,-100},{140,-60}})));
 
-protected
+// protected
   Buildings.Controls.OBC.CDL.Reals.Less les(
     final h=dTHys) if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Check if discharge temperature is less than setpoint by a threshold"
@@ -305,9 +305,8 @@ protected
     if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Convert boolean to integer"
     annotation (Placement(transformation(extent={{0,-230},{20,-210}})));
-  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr6(
-    final t=0.95,
-    final h=0.85) if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
+  Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr6(t=0.95,
+    h=0.85)       if heaCoi==Buildings.Controls.OBC.ASHRAE.G36.Types.HeatingCoil.WaterBased
     "Check if valve position is greater than 0.95"
     annotation (Placement(transformation(extent={{-140,-280},{-120,-260}})));
   Buildings.Controls.OBC.CDL.Conversions.BooleanToInteger booToInt3

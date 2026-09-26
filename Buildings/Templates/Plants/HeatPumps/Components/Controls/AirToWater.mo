@@ -176,6 +176,8 @@ model AirToWater
     if cfg.have_chiWat and not have_senDpChiWatRemWir
     "Local CHW DP reset"
     annotation (Placement(transformation(extent={{-70,-50},{-50,-30}})));
+  Buildings.Controls.OBC.CDL.Integers.Add addInt
+    annotation (Placement(transformation(extent={{10,200},{-10,220}})));
 equation
   /* Control point connection - start */
   // Inputs from plant control bus
@@ -306,8 +308,6 @@ equation
           -160},{136,-160},{136,108},{112,108}}, color={255,127,0}));
   connect(phReqResChiWatEquZon.y, reqResChiWat.u2) annotation (Line(points={{148,
           -200},{134,-200},{134,68},{112,68}}, color={255,127,0}));
-  connect(reqPlaHeaWat.y, ctl.nReqPlaHeaWat) annotation (Line(points={{88,194},{
-          -40,194},{-40,18},{-22,18}}, color={255,127,0}));
   connect(reqPlaChiWat.y, ctl.nReqPlaChiWat) annotation (Line(points={{88,154},{
           -38,154},{-38,16},{-22,16}}, color={255,127,0}));
   connect(reqResHeaWat.y,ctl.nReqResHeaWat)  annotation (Line(points={{88,114},{
@@ -324,6 +324,18 @@ equation
   connect(ctl.dpHeaWatRemSet, resDpHeaWatLoc.dpRemSet) annotation (Line(points={{22,-6},
           {42,-6},{42,-62},{-82,-62},{-82,6},{-72,6}},
         color={0,0,127}));
+  connect(reqPlaHeaWat.y, addInt.u2) annotation (Line(points={{88,194},{24,194},
+          {24,204},{12,204}}, color={255,127,0}));
+  connect(addInt.y, ctl.nReqPlaHeaWat) annotation (Line(points={{-12,210},{-32,
+          210},{-32,18},{-22,18}}, color={255,127,0}));
+  connect(bus.tankReq, addInt.u1) annotation (Line(
+      points={{-260,0},{-92,0},{-92,232},{20,232},{20,216},{12,216}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
   annotation (
     defaultComponentName="ctl", Documentation(info="<html>
 <p>

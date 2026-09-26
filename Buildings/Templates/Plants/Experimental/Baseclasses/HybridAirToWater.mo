@@ -200,6 +200,12 @@ model HybridAirToWater "Controller for AWHP plant"
     if cfg.have_HpShc
     "Combine primary pump signals for heating and cooling mode"
     annotation (Placement(transformation(extent={{60,0},{80,20}})));
+  Buildings.Controls.OBC.CDL.Integers.Add reqPlaHeaWat1
+    "Sum of HW plant requests of all loads served"
+    annotation (Placement(transformation(extent={{60,180},{40,200}})));
+  Buildings.Controls.OBC.CDL.Integers.Add reqResHeaWat1
+    "Sum of HW plant requests of all loads served"
+    annotation (Placement(transformation(extent={{60,100},{40,120}})));
 protected
   Components.Interfaces.Bus                     busHpShc[nHpShc]
     if cfg.have_HpShc "SHC heat pump control bus" annotation (Placement(
@@ -352,12 +358,8 @@ equation
           -160},{136,-160},{136,108},{112,108}}, color={255,127,0}));
   connect(phReqResChiWatEquZon.y, reqResChiWat.u2) annotation (Line(points={{148,
           -200},{134,-200},{134,68},{112,68}}, color={255,127,0}));
-  connect(reqPlaHeaWat.y, ctl.nReqPlaHeaWat) annotation (Line(points={{88,194},
-          {-40,194},{-40,23},{-22,23}},color={255,127,0}));
   connect(reqPlaChiWat.y, ctl.nReqPlaChiWat) annotation (Line(points={{88,154},
           {-38,154},{-38,21},{-22,21}},color={255,127,0}));
-  connect(reqResHeaWat.y,ctl.nReqResHeaWat)  annotation (Line(points={{88,114},
-          {-36,114},{-36,19},{-22,19}},color={255,127,0}));
   connect(reqResChiWat.y,ctl.nReqResChiWat)  annotation (Line(points={{88,74},{
           -34,74},{-34,17},{-22,17}},
                                   color={255,127,0}));
@@ -386,6 +388,31 @@ equation
   connect(busPumShcHeaWatPri, bus.pumShcHeaWatPri);
   connect(busPumShcChiWatPri, bus.pumShcChiWatPri);
   connect(busHpShc,bus.hpShc);
+  connect(reqPlaHeaWat.y, reqPlaHeaWat1.u1)
+    annotation (Line(points={{88,194},{88,196},{62,196}}, color={255,127,0}));
+  connect(reqResHeaWat.y, reqResHeaWat1.u1)
+    annotation (Line(points={{88,114},{88,116},{62,116}}, color={255,127,0}));
+  connect(bus.tankReq, reqPlaHeaWat1.u2) annotation (Line(
+      points={{-260,0},{-92,0},{-92,168},{76,168},{76,184},{62,184}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(reqPlaHeaWat1.y, ctl.nReqPlaHeaWat) annotation (Line(points={{38,190},
+          {-32,190},{-32,23},{-22,23}}, color={255,127,0}));
+  connect(bus.tankReqRes, reqResHeaWat1.u2) annotation (Line(
+      points={{-260,0},{-228,0},{-228,8},{-88,8},{-88,80},{76,80},{76,104},{62,
+          104}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(reqResHeaWat1.y, ctl.nReqResHeaWat) annotation (Line(points={{38,110},
+          {-28,110},{-28,19},{-22,19}}, color={255,127,0}));
   annotation (
     defaultComponentName="ctl", Documentation(info="<html>
 <p>
