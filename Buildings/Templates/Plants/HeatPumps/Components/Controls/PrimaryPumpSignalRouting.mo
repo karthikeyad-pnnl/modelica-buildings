@@ -81,27 +81,18 @@ equation
   connect(y1Hdr, bus.y1)
     annotation(Line(points={{-120,80},{0,80},{0,100}},
       color={255,0,255}));
-  connect(yHdr, bus.y)
-    annotation(Line(points={{-120,60},{0,60},{0,100}},
-      color={0,0,127}));
   connect(y1Hdr_actual, bus.y1_actual)
     annotation(Line(points={{120,60},{0,60},{0,100}},
       color={255,0,255}));
   connect(y1DedHp, bus.y1[1:nHp])
     annotation(Line(points={{-120,0},{0,0},{0,100}},
       color={255,0,255}));
-  connect(yDedHp, bus.y[1:nHp])
-    annotation(Line(points={{-120,-20},{0,-20},{0,100}},
-      color={0,0,127}));
   connect(y1DedHp_actual, bus.y1_actual[1:nHp])
     annotation(Line(points={{120,0},{0,0},{0,100}},
       color={255,0,255}));
   connect(y1DedPhp, bus.y1[nPum - nPhp + 1:nPum])
     annotation(Line(points={{-120,-60},{0,-60},{0,100}},
       color={255,0,255}));
-  connect(yDedPhp, bus.y[nPum - nPhp + 1:nPum])
-    annotation(Line(points={{-120,-80},{0,-80},{0,100}},
-      color={0,0,127}));
   connect(y1DedPhp_actual, bus.y1_actual[nPum - nPhp + 1:nPum])
     annotation(Line(points={{120,-60},{0,-60},{0,100}},
       color={255,0,255}));

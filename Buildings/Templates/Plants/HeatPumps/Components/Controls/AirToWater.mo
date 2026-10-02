@@ -222,6 +222,12 @@ model AirToWater
     if have_senVChiWatLoo or have_senVChiWatSec
     "Select sensor based on plant configuration"
     annotation (Placement(transformation(extent={{-90,10},{-70,30}})));
+  Buildings.Controls.OBC.CDL.Integers.Add reqPlaHeaWat1
+    "Sum of HW plant requests of all loads served"
+    annotation(Placement(transformation(extent={{58,202},{38,222}})));
+  Buildings.Controls.OBC.CDL.Integers.Add reqResHeaWat1
+    "Sum of HW reset requests of all loads served"
+    annotation(Placement(transformation(extent={{58,122},{38,142}})));
 equation
   /* Control point connection - start */
   // Inputs from plant control bus
@@ -286,8 +292,8 @@ equation
   connect(ctl.y1ValChiWatPhpOutIso, busValChiWatPhpOutIso.y1);
   connect(ctl.y1ValHeaWatPhpInlIso, busValHeaWatPhpInlIso.y1);
   connect(ctl.y1ValHeaWatPhpOutIso, busValHeaWatPhpOutIso.y1);
-  connect(ctl.yValHeaWatMinByp, busValHeaWatMinByp.y);
-  connect(ctl.yValChiWatMinByp, busValChiWatMinByp.y);
+//   connect(ctl.yValHeaWatMinByp, busValHeaWatMinByp.y);
+//   connect(ctl.yValChiWatMinByp, busValChiWatMinByp.y);
   connect(ctl.yPumChiWatPriDedHp, rouPumChiWatPri.yDedHp);
   connect(ctl.yPumChiWatPriDedPhp, rouPumChiWatPri.yDedPhp);
   connect(ctl.yPumChiWatPriHdr, rouPumChiWatPri.yHdr);
@@ -383,14 +389,8 @@ equation
   connect(phReqResChiWatEquZon.y, reqResChiWat.u2)
     annotation(Line(points={{148,-200},{134,-200},{134,68},{112,68}},
       color={255,127,0}));
-  connect(reqPlaHeaWat.y, ctl.nReqPlaHeaWat)
-    annotation(Line(points={{88,194},{-40,194},{-40,2},{-22,2}},
-      color={255,127,0}));
   connect(reqPlaChiWat.y, ctl.nReqPlaChiWat)
     annotation(Line(points={{88,154},{-38,154},{-38,0},{-22,0}},
-      color={255,127,0}));
-  connect(reqResHeaWat.y, ctl.nReqResHeaWat)
-    annotation(Line(points={{88,114},{-36,114},{-36,-2},{-22,-2}},
       color={255,127,0}));
   connect(reqResChiWat.y, ctl.nReqResChiWat)
     annotation(Line(points={{88,74},{-34,74},{-34,-4},{-22,-4}},
@@ -452,6 +452,46 @@ equation
   connect(THeaWatLooOrSecRet.y, ctl.THeaWatLooOrSecRet) annotation (Line(points
         ={{-188,20},{-184,20},{-184,42},{-42,42},{-42,-22},{-22,-22}}, color={0,
           0,127}));
+  connect(reqPlaHeaWat.y, reqPlaHeaWat1.u1) annotation (Line(points={{88,194},{
+          68,194},{68,218},{60,218}}, color={255,127,0}));
+  connect(reqResHeaWat.y, reqResHeaWat1.u1) annotation (Line(points={{88,114},{
+          68,114},{68,138},{60,138}}, color={255,127,0}));
+  connect(reqPlaHeaWat1.y, ctl.nReqPlaHeaWat) annotation (Line(points={{36,212},
+          {-32,212},{-32,2},{-22,2}}, color={255,127,0}));
+  connect(reqResHeaWat1.y, ctl.nReqResHeaWat) annotation (Line(points={{36,132},
+          {-30,132},{-30,-2},{-22,-2}}, color={255,127,0}));
+  connect(bus.tankReq, reqPlaHeaWat1.u2) annotation (Line(
+      points={{-260,0},{-228,0},{-228,-8},{-104,-8},{-104,-84},{48,-84},{48,108},
+          {72,108},{72,206},{60,206}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(bus.tankReqRes, reqResHeaWat1.u2) annotation (Line(
+      points={{-260,0},{-208,0},{-208,-116},{56,-116},{56,116},{64,116},{64,126},
+          {60,126}},
+      color={255,204,51},
+      thickness=0.5), Text(
+      string="%first",
+      index=-1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(ctl.y1PlaEnaHea, bus.y1PlaEnaHea) annotation (Line(points={{22.4,40},
+          {32,40},{32,-64},{-48,-64},{-48,-44},{-56,-44},{-56,0},{-96,0},{-96,4},
+          {-232,4},{-232,0},{-260,0}}, color={255,0,255}), Text(
+      string="%second",
+      index=1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
+  connect(ctl.y1PlaEnaCoo, bus.y1PlaEnaCoo) annotation (Line(points={{22.4,42.2},
+          {22.4,44},{52,44},{52,-88},{-128,-88},{-128,-4},{-232,-4},{-232,0},{
+          -260,0}}, color={255,0,255}), Text(
+      string="%second",
+      index=1,
+      extent={{-6,3},{-6,3}},
+      horizontalAlignment=TextAlignment.Right));
 annotation(defaultComponentName="ctl",
   Documentation(
     info="<html>

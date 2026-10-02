@@ -193,7 +193,7 @@ block DamperValves
     annotation (Placement(transformation(extent={{320,-180},{360,-140}}),
         iconTransformation(extent={{100,-160},{140,-120}})));
 
-protected
+// protected
   Buildings.Controls.OBC.CDL.Logical.And and4 "Logical and"
     annotation (Placement(transformation(extent={{-60,140},{-40,160}})));
   Buildings.Controls.OBC.CDL.Reals.Line lin
@@ -294,8 +294,7 @@ protected
     final h=dTHys)
     "Check if discharge air temperature is less than lowest discharge air temperature"
     annotation (Placement(transformation(extent={{-260,-40},{-240,-20}})));
-  Buildings.Controls.OBC.CDL.Reals.Sources.Constant conZer2(
-    final k=0)
+  Buildings.Controls.OBC.CDL.Reals.Sources.Constant conZer2(final k=0.01)
     "Constant zero"
     annotation (Placement(transformation(extent={{-40,0},{-20,20}})));
   Buildings.Controls.OBC.CDL.Reals.GreaterThreshold greThr2(

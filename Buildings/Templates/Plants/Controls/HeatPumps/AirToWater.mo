@@ -1086,8 +1086,7 @@ block AirToWater
     "Secondary CHW pump start command"
     annotation(Placement(transformation(extent={{260,80},{300,120}}),
       iconTransformation(extent={{200,40},{240,80}})));
-  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y1Hp[nHp]
-    if have_hp
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y1Hp[nHp] if have_hp
     "Heat pump enable command"
     annotation(Placement(transformation(extent={{260,460},{300,500}}),
       iconTransformation(extent={{200,420},{240,460}})));
@@ -1915,6 +1914,12 @@ block AirToWater
     if have_hp
     "Assert HP minimum off-time"
     annotation(Placement(transformation(extent={{70,450},{50,470}})));
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y1PlaEnaHea
+    "Heat pump enable command" annotation (Placement(transformation(extent={{
+            260,540},{300,580}}), iconTransformation(extent={{204,440},{244,480}})));
+  Buildings.Controls.OBC.CDL.Interfaces.BooleanOutput y1PlaEnaCoo
+    "Heat pump enable command" annotation (Placement(transformation(extent={{
+            260,500},{300,540}}), iconTransformation(extent={{204,462},{244,502}})));
 equation
   connect(u1SchHea, enaHea.u1Sch)
     annotation(Line(points={{-280,380},{-180,380},{-180,364},{-112,364}},
@@ -2004,7 +2009,8 @@ equation
       color={255,0,255}));
   connect(staPumHeaWatPri.y1Hdr_actual, seqEve.u1PumHeaWatPriHdr_actual)
     annotation(Line(
-      points={{162,204},{200,204},{200,270},{132,270},{132,295.667},{138,295.667}},
+      points={{162,204},{200,204},{200,270},{132,270},{132,295.667},{138,
+          295.667}},
       color={255,0,255}));
   connect(staPumHeaWatPri.y1, y1PumHeaWatPriHdr)
     annotation(Line(points={{162,200},{222,200},{222,240},{280,240}},
@@ -2021,7 +2027,8 @@ equation
       color={255,0,255}));
   connect(staPumChiWatPri.y1Hdr_actual, seqEve.u1PumChiWatPriHdr_actual)
     annotation(Line(
-      points={{212,184},{214,184},{214,274},{136,274},{136,288.667},{138,288.667}},
+      points={{212,184},{214,184},{214,274},{136,274},{136,288.667},{138,
+          288.667}},
       color={255,0,255}));
   connect(staPumChiWatPri.y1, y1PumChiWatPriHdr)
     annotation(Line(points={{212,180},{280,180}},
@@ -2116,7 +2123,8 @@ equation
       color={255,0,255}));
   connect(seqEve.y1ValHeaWatInlIso, staPumHeaWatPri.u1ValInlIso)
     annotation(Line(
-      points={{162,300.333},{170,300.333},{170,216},{134,216},{134,206},{138,206}},
+      points={{162,300.333},{170,300.333},{170,216},{134,216},{134,206},{138,
+          206}},
       color={255,0,255}));
   connect(seqEve.y1ValHeaWatOutIso, staPumHeaWatPri.u1ValOutIso)
     annotation(Line(
@@ -2508,7 +2516,8 @@ equation
       color={255,0,255}));
   connect(seqEve.y1ValHeaWatInlIso, ctlFloMin.u1ValHeaWatInlIso)
     annotation(Line(
-      points={{162,300.333},{242,300.333},{242,-198},{194,-198},{194,-223.8},{200,-223.8}},
+      points={{162,300.333},{242,300.333},{242,-198},{194,-198},{194,-223.8},{
+          200,-223.8}},
       color={255,0,255}));
   connect(seqEve.y1ValHeaWatOutIso, ctlFloMin.u1ValHeaWatOutIso)
     annotation(Line(
@@ -2516,11 +2525,13 @@ equation
       color={255,0,255}));
   connect(seqEve.y1ValChiWatInlIso, ctlFloMin.u1ValChiWatInlIso)
     annotation(Line(
-      points={{162,295.667},{244,295.667},{244,-204},{196,-204},{196,-227.8},{200,-227.8}},
+      points={{162,295.667},{244,295.667},{244,-204},{196,-204},{196,-227.8},{
+          200,-227.8}},
       color={255,0,255}));
   connect(seqEve.y1ValChiWatOutIso, ctlFloMin.u1ValChiWatOutIso)
     annotation(Line(
-      points={{162,293.333},{246,293.333},{246,-206},{198,-206},{198,-229.8},{200,-229.8}},
+      points={{162,293.333},{246,293.333},{246,-206},{198,-206},{198,-229.8},{
+          200,-229.8}},
       color={255,0,255}));
   connect(u1PumHeaWatPriDedHp_actual, ctlFloMin.u1PumHeaWatPriDedHp_actual)
     annotation(Line(
@@ -2785,6 +2796,10 @@ equation
   connect(VHeaWatLooOrSec_flow, hrc.VHeaWatLoa_flow)
     annotation(Line(points={{-280,-120},{-142,-120},{-142,-318},{198,-318}},
       color={0,0,127}));
+  connect(enaCoo.y1, y1PlaEnaCoo) annotation (Line(points={{-88,100},{88,100},{
+          88,520},{280,520}}, color={255,0,255}));
+  connect(enaHea.y1, y1PlaEnaHea) annotation (Line(points={{-88,360},{90,360},{
+          90,560},{280,560}}, color={255,0,255}));
 annotation(defaultComponentName="ctl",
   Icon(coordinateSystem(preserveAspectRatio=true,
     extent={{-200,-460},{200,460}},
